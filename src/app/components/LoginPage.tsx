@@ -1,13 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loader2, ArrowRight } from 'lucide-react';
+import { useAuth } from '../layouts/RootLayout';
 
-interface LoginPageProps {
-  onLogin: () => void;
-  onNavigateRegister?: () => void;
-  onNavigateForget?: () => void;
-}
-
-export function LoginPage({ onLogin, onNavigateRegister, onNavigateForget }: LoginPageProps) {
+export function LoginPage() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -23,7 +21,8 @@ export function LoginPage({ onLogin, onNavigateRegister, onNavigateForget }: Log
     // Simulate API call
     setTimeout(() => {
       if (email && password) {
-        onLogin();
+        login();
+        navigate('/dashboard');
       } else {
         setError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
         setIsLoading(false);
@@ -120,7 +119,7 @@ export function LoginPage({ onLogin, onNavigateRegister, onNavigateForget }: Log
               </label>
               <button
                 type="button"
-                onClick={onNavigateForget}
+                onClick={() => navigate('/auth/forgot-password')}
                 className="text-sm text-primary hover:underline"
               >
                 نسيت كلمة المرور؟
@@ -151,7 +150,7 @@ export function LoginPage({ onLogin, onNavigateRegister, onNavigateForget }: Log
           <p className="mt-6 text-center text-sm text-muted-foreground">
             ليس لديك حساب؟{' '}
             <button
-              onClick={onNavigateRegister}
+              onClick={() => navigate('/auth/register')}
               className="text-primary hover:underline font-medium"
             >
               إنشاء حساب جديد

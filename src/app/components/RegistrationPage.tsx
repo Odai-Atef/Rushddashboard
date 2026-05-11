@@ -1,12 +1,11 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
+import { useAuth } from '../layouts/RootLayout';
 
-interface RegistrationPageProps {
-  onRegister: () => void;
-  onNavigateLogin?: () => void;
-}
-
-export function RegistrationPage({ onRegister, onNavigateLogin }: RegistrationPageProps) {
+export function RegistrationPage() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -48,7 +47,8 @@ export function RegistrationPage({ onRegister, onNavigateLogin }: RegistrationPa
 
     // Simulate API call
     setTimeout(() => {
-      onRegister();
+      login();
+      navigate('/dashboard');
     }, 2000);
   };
 
@@ -302,7 +302,7 @@ export function RegistrationPage({ onRegister, onNavigateLogin }: RegistrationPa
           <p className="mt-6 text-center text-sm text-muted-foreground">
             لديك حساب بالفعل؟{' '}
             <button
-              onClick={onNavigateLogin}
+              onClick={() => navigate('/auth/login')}
               className="text-primary hover:underline font-medium"
             >
               تسجيل الدخول

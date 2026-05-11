@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import { Mail, ArrowRight, CheckCircle, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 
-export function ForgetPasswordPage({ onBack }: { onBack: () => void }) {
+export function ForgetPasswordPage() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
@@ -102,7 +104,7 @@ export function ForgetPasswordPage({ onBack }: { onBack: () => void }) {
 
               {/* Back to Login */}
               <button
-                onClick={onBack}
+                onClick={() => navigate('/auth/login')}
                 className="mt-6 w-full text-center text-sm text-primary hover:underline"
               >
                 العودة إلى تسجيل الدخول
@@ -133,7 +135,7 @@ export function ForgetPasswordPage({ onBack }: { onBack: () => void }) {
                 {/* Actions */}
                 <div className="space-y-3">
                   <button
-                    onClick={onBack}
+                    onClick={() => navigate('/auth/login')}
                     className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     العودة إلى تسجيل الدخول

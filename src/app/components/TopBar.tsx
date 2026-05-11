@@ -1,25 +1,30 @@
-import { Search, Bell, Moon, Sun, Menu, Globe } from 'lucide-react';
+import { useNavigate } from 'react-router';
+import { Search, Bell, Moon, Sun, Menu, Globe, LogOut } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useAuth } from '../layouts/RootLayout';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Avatar from '@radix-ui/react-avatar';
 
 interface TopBarProps {
   theme: 'light' | 'dark';
-  language: 'ar' | 'en';
   onThemeToggle: () => void;
-  onLanguageToggle: () => void;
   onMenuClick: () => void;
   className?: string;
 }
 
 export function TopBar({
   theme,
-  language,
   onThemeToggle,
-  onLanguageToggle,
   onMenuClick,
   className
 }: TopBarProps) {
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/auth/login');
+  };
   return (
     <header className={cn("bg-card border-b border-border flex items-center justify-between px-4 h-16", className)}>
       {/* Mobile Menu Button */}
@@ -45,15 +50,6 @@ export function TopBar({
 
       {/* Actions */}
       <div className="flex items-center gap-2">
-        {/* Language Toggle */}
-        <button
-          onClick={onLanguageToggle}
-          className="p-2 hover:bg-accent rounded-lg transition-colors"
-          aria-label={language === 'ar' ? 'Switch to English' : 'التبديل للعربية'}
-        >
-          <Globe className="w-5 h-5" />
-        </button>
-
         {/* Theme Toggle */}
         <button
           onClick={onThemeToggle}
@@ -120,8 +116,12 @@ export function TopBar({
                 الإعدادات
               </DropdownMenu.Item>
               <DropdownMenu.Separator className="h-px bg-border my-2" />
-              <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none text-destructive">
-                تسجيل الخروج
+              <DropdownMenu.Item
+                className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none text-destructive flex items-center gap-2"
+                onSelect={handleLogout}
+              >
+                <LogOut className="w-4 h-4" />
+                <span>تسجيل الخروج</span>
               </DropdownMenu.Item>
             </DropdownMenu.Content>
           </DropdownMenu.Portal>

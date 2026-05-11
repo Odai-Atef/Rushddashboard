@@ -1,3 +1,4 @@
+import { NavLink } from 'react-router';
 import {
   LayoutDashboard,
   Users,
@@ -8,28 +9,36 @@ import {
   FileCheck,
   Lightbulb,
   X,
-  Sparkles
+  Sparkles,
+  DollarSign,
+  Warehouse,
+  Settings,
+  Bell
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useEffect } from 'react';
 
 interface MobileNavProps {
   isOpen: boolean;
-  activeItem: string;
-  onItemClick: (item: string) => void;
+  activeView: string;
   onClose: () => void;
 }
 
-export function MobileNav({ isOpen, activeItem, onItemClick, onClose }: MobileNavProps) {
+export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
   const navItems = [
-    { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard },
-    { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles },
-    { id: 'sales', label: 'لوحة المبيعات', icon: TrendingUp },
-    { id: 'customers', label: 'لوحة العملاء', icon: Users },
-    { id: 'operations', label: 'لوحة التشغيل', icon: Cog },
-    { id: 'marketing', label: 'لوحة التسويق', icon: TrendingUp },
-    { id: 'recommendations', label: 'لوحة التوصيات', icon: Lightbulb },
-    { id: 'opportunities', label: 'لوحة الفرص', icon: FileCheck },
+    { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
+    { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
+    { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
+    { id: 'sales', label: 'لوحة المبيعات', icon: TrendingUp, path: '/dashboard/sales' },
+    { id: 'customers', label: 'لوحة العملاء', icon: Users, path: '/dashboard/customers' },
+    { id: 'profitability', label: 'لوحة الربحية', icon: DollarSign, path: '/dashboard/profitability' },
+    { id: 'inventory', label: 'لوحة المخزون', icon: Warehouse, path: '/dashboard/inventory' },
+    { id: 'operations', label: 'لوحة التشغيل', icon: Cog, path: '/dashboard/operations' },
+    { id: 'hr', label: 'لوحة الموارد البشرية', icon: UserCog, path: '/dashboard/hr' },
+    { id: 'marketing', label: 'لوحة التسويق', icon: TrendingUp, path: '/dashboard/marketing' },
+    { id: 'recommendations', label: 'لوحة التوصيات', icon: Lightbulb, path: '/dashboard/recommendations' },
+    { id: 'opportunities', label: 'لوحة الفرص', icon: FileCheck, path: '/dashboard/opportunities' },
+    { id: 'settings', label: 'الإعدادات', icon: Settings, path: '/dashboard/settings' },
   ];
 
   useEffect(() => {
@@ -42,11 +51,6 @@ export function MobileNav({ isOpen, activeItem, onItemClick, onClose }: MobileNa
       document.body.style.overflow = '';
     };
   }, [isOpen]);
-
-  const handleItemClick = (id: string) => {
-    onItemClick(id);
-    onClose();
-  };
 
   if (!isOpen) return null;
 
@@ -80,12 +84,13 @@ export function MobileNav({ isOpen, activeItem, onItemClick, onClose }: MobileNa
           <ul className="space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeItem === item.id;
+              const isActive = activeView === item.id;
 
               return (
                 <li key={item.id}>
-                  <button
-                    onClick={() => handleItemClick(item.id)}
+                  <NavLink
+                    to={item.path}
+                    onClick={onClose}
                     className={cn(
                       "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-right",
                       isActive
@@ -95,7 +100,7 @@ export function MobileNav({ isOpen, activeItem, onItemClick, onClose }: MobileNa
                   >
                     <Icon className="w-5 h-5 flex-shrink-0" />
                     <span>{item.label}</span>
-                  </button>
+                  </NavLink>
                 </li>
               );
             })}
