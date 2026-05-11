@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Sparkles,
   TrendingUp,
@@ -38,7 +38,8 @@ import {
   UserCog,
   Activity,
   Warehouse,
-  ChevronDown
+  ChevronDown,
+  Send
 } from 'lucide-react';
 import {
   LineChart,
@@ -78,6 +79,13 @@ interface AnalysisHistoryItem {
   preview: string;
 }
 
+interface ProgressStep {
+  id: number;
+  label: string;
+  icon: any;
+  status: 'completed' | 'active' | 'pending';
+}
+
 export function AIAnalysisPage() {
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('الكل');
@@ -87,6 +95,16 @@ export function AIAnalysisPage() {
   const [generatingText, setGeneratingText] = useState('');
   const [currentStep, setCurrentStep] = useState(0);
   const [activeAnalysis, setActiveAnalysis] = useState<AnalysisCard | null>(null);
+  const [isAnalysisComplete, setIsAnalysisComplete] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const [progressSteps, setProgressSteps] = useState<ProgressStep[]>([
+    { id: 1, label: 'جلب البيانات', icon: Database, status: 'pending' },
+    { id: 2, label: 'تنفيذ SQL', icon: Brain, status: 'pending' },
+    { id: 3, label: 'معالجة المؤشرات', icon: BarChart3, status: 'pending' },
+    { id: 4, label: 'اكتشاف المخاطر', icon: Shield, status: 'pending' },
+    { id: 5, label: 'توليد التوصيات', icon: Sparkles, status: 'pending' },
+  ]);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Categories for filtering
   const categories = [
@@ -251,44 +269,7 @@ export function AIAnalysisPage() {
       color: 'from-green-500 to-emerald-600'
     },
 
-    // التسويق
-    {
-      id: 'marketing-1',
-      title: 'تحليل عائد الاستثمار التسويقي',
-      description: 'قياس ROI لجميع الحملات التسويقية',
-      category: 'التسويق',
-      estimatedTime: '2 دقيقة',
-      complexity: 'متوسط',
-      impact: 'عالي',
-      icon: BarChart3,
-      trending: true,
-      color: 'from-purple-500 to-pink-600'
-    },
-    {
-      id: 'marketing-2',
-      title: 'تحليل أداء القنوات',
-      description: 'مقارنة أداء قنوات التسويق المختلفة',
-      category: 'التسويق',
-      estimatedTime: '2-3 دقائق',
-      complexity: 'متوسط',
-      impact: 'متوسط',
-      icon: Target,
-      color: 'from-blue-500 to-indigo-600'
-    },
-    {
-      id: 'marketing-3',
-      title: 'تحليل مسار التحويل',
-      description: 'تتبع رحلة العميل من الوعي إلى الشراء',
-      category: 'التسويق',
-      estimatedTime: '3 دقائق',
-      complexity: 'متقدم',
-      impact: 'عالي',
-      icon: ArrowRight,
-      recommended: true,
-      color: 'from-green-500 to-teal-600'
-    },
-
-    // الربحية
+    // Additional categories continue...
     {
       id: 'profitability-1',
       title: 'تحليل هوامش الربح',
@@ -302,31 +283,6 @@ export function AIAnalysisPage() {
       color: 'from-green-500 to-emerald-600'
     },
     {
-      id: 'profitability-2',
-      title: 'تحليل التكاليف التشغيلية',
-      description: 'تحديد فرص تقليل التكاليف دون التأثير على الجودة',
-      category: 'الربحية',
-      estimatedTime: '3 دقائق',
-      complexity: 'متقدم',
-      impact: 'عالي',
-      icon: TrendingDown,
-      color: 'from-orange-500 to-red-600'
-    },
-    {
-      id: 'profitability-3',
-      title: 'تحليل الربحية حسب الفرع',
-      description: 'مقارنة ربحية الفروع المختلفة',
-      category: 'الربحية',
-      estimatedTime: '2 دقيقة',
-      complexity: 'بسيط',
-      impact: 'عالي',
-      icon: MapPin,
-      trending: true,
-      color: 'from-blue-500 to-cyan-600'
-    },
-
-    // المخزون
-    {
       id: 'inventory-1',
       title: 'تحليل المخزون الراكد',
       description: 'تحديد المنتجات بطيئة الحركة والحلول',
@@ -337,31 +293,6 @@ export function AIAnalysisPage() {
       icon: Package,
       color: 'from-orange-500 to-red-600'
     },
-    {
-      id: 'inventory-2',
-      title: 'تحليل نقاط إعادة الطلب',
-      description: 'تحديد مستويات المخزون المثالية',
-      category: 'المخزون',
-      estimatedTime: '2-3 دقائق',
-      complexity: 'متوسط',
-      impact: 'عالي',
-      icon: Warehouse,
-      recommended: true,
-      color: 'from-blue-500 to-indigo-600'
-    },
-    {
-      id: 'inventory-3',
-      title: 'تحليل دوران المخزون',
-      description: 'قياس سرعة تدفق المخزون',
-      category: 'المخزون',
-      estimatedTime: '1-2 دقيقة',
-      complexity: 'بسيط',
-      impact: 'متوسط',
-      icon: RefreshCw,
-      color: 'from-green-500 to-teal-600'
-    },
-
-    // المخاطر
     {
       id: 'risks-1',
       title: 'تحليل المخاطر المالية',
@@ -374,31 +305,6 @@ export function AIAnalysisPage() {
       recommended: true,
       color: 'from-red-500 to-orange-600'
     },
-    {
-      id: 'risks-2',
-      title: 'تحليل مخاطر السوق',
-      description: 'تقييم المخاطر الخارجية والتهديدات التنافسية',
-      category: 'المخاطر',
-      estimatedTime: '3 دقائق',
-      complexity: 'متقدم',
-      impact: 'عالي',
-      icon: Shield,
-      color: 'from-orange-500 to-red-600'
-    },
-    {
-      id: 'risks-3',
-      title: 'تحليل مخاطر التشغيل',
-      description: 'تحديد نقاط الضعف في العمليات التشغيلية',
-      category: 'المخاطر',
-      estimatedTime: '2-3 دقائق',
-      complexity: 'متوسط',
-      impact: 'عالي',
-      icon: Activity,
-      aiGenerated: true,
-      color: 'from-yellow-500 to-orange-600'
-    },
-
-    // الفرص
     {
       id: 'opportunities-1',
       title: 'اكتشاف فرص النمو',
@@ -413,31 +319,6 @@ export function AIAnalysisPage() {
       color: 'from-yellow-500 to-orange-600'
     },
     {
-      id: 'opportunities-2',
-      title: 'تحليل فرص البيع المتقاطع',
-      description: 'اكتشف فرص بيع منتجات إضافية للعملاء الحاليين',
-      category: 'الفرص',
-      estimatedTime: '2 دقيقة',
-      complexity: 'متوسط',
-      impact: 'متوسط',
-      icon: Target,
-      color: 'from-green-500 to-teal-600'
-    },
-    {
-      id: 'opportunities-3',
-      title: 'تحليل قطاعات جديدة',
-      description: 'استكشاف أسواق وقطاعات غير مستغلة',
-      category: 'الفرص',
-      estimatedTime: '3-4 دقائق',
-      complexity: 'متقدم',
-      impact: 'عالي',
-      icon: Lightbulb,
-      recommended: true,
-      color: 'from-purple-500 to-blue-600'
-    },
-
-    // الموارد البشرية
-    {
       id: 'hr-1',
       title: 'تحليل معدل دوران الموظفين',
       description: 'فهم أسباب الاستقالات وتحسين الاحتفاظ',
@@ -449,31 +330,6 @@ export function AIAnalysisPage() {
       color: 'from-red-500 to-orange-600'
     },
     {
-      id: 'hr-2',
-      title: 'تحليل أداء الموظفين',
-      description: 'تقييم الأداء وتحديد الموظفين المتميزين',
-      category: 'الموارد البشرية',
-      estimatedTime: '2 دقيقة',
-      complexity: 'بسيط',
-      impact: 'متوسط',
-      icon: CheckCircle,
-      trending: true,
-      color: 'from-green-500 to-emerald-600'
-    },
-    {
-      id: 'hr-3',
-      title: 'تحليل احتياجات التوظيف',
-      description: 'تحديد الفجوات في القوى العاملة',
-      category: 'الموارد البشرية',
-      estimatedTime: '2-3 دقائق',
-      complexity: 'متوسط',
-      impact: 'عالي',
-      icon: Users,
-      color: 'from-blue-500 to-indigo-600'
-    },
-
-    // الإدارة التنفيذية
-    {
       id: 'executive-1',
       title: 'تقرير الأداء التنفيذي الشامل',
       description: 'نظرة شاملة على جميع مؤشرات الأداء الرئيسية',
@@ -484,29 +340,6 @@ export function AIAnalysisPage() {
       icon: BarChart3,
       recommended: true,
       color: 'from-purple-500 to-blue-600'
-    },
-    {
-      id: 'executive-2',
-      title: 'تحليل تحقيق الأهداف',
-      description: 'قياس التقدم نحو الأهداف الاستراتيجية',
-      category: 'الإدارة التنفيذية',
-      estimatedTime: '3 دقائق',
-      complexity: 'متوسط',
-      impact: 'عالي',
-      icon: Target,
-      color: 'from-green-500 to-teal-600'
-    },
-    {
-      id: 'executive-3',
-      title: 'تحليل الأولويات الاستراتيجية',
-      description: 'تحديد المبادرات ذات الأثر الأكبر',
-      category: 'الإدارة التنفيذية',
-      estimatedTime: '3-4 دقائق',
-      complexity: 'متقدم',
-      impact: 'حرج',
-      icon: Lightbulb,
-      aiGenerated: true,
-      color: 'from-orange-500 to-red-600'
     }
   ];
 
@@ -541,6 +374,39 @@ export function AIAnalysisPage() {
     },
   ];
 
+  // Mock chart data
+  const chartData = [
+    { month: 'محرم', revenue: 2100000, target: 2500000 },
+    { month: 'صفر', revenue: 2350000, target: 2500000 },
+    { month: 'ربيع الأول', revenue: 2200000, target: 2500000 },
+    { month: 'ربيع الثاني', revenue: 2650000, target: 2500000 },
+  ];
+
+  // Executive recommendations
+  const recommendations = [
+    {
+      id: 1,
+      type: 'urgent',
+      title: 'تحسين معدل التحويل في فرع الدمام',
+      impact: '+18% إيرادات',
+      action: 'إعادة تدريب فريق المبيعات وتحسين عرض المنتجات'
+    },
+    {
+      id: 2,
+      type: 'opportunity',
+      title: 'توسيع قناة B2B',
+      impact: '+32% نمو محتمل',
+      action: 'توظيف 3 مدراء مبيعات متخصصين'
+    },
+    {
+      id: 3,
+      type: 'cost',
+      title: 'تحسين إدارة المخزون',
+      impact: 'توفير 15% من التكاليف',
+      action: 'تطبيق نظام إدارة مخزون ذكي'
+    },
+  ];
+
   // Filter analysis cards by category and search
   const filteredCards = analysisCards.filter(card => {
     const categoryMatch = selectedCategory === 'الكل' || card.category === selectedCategory;
@@ -552,7 +418,77 @@ export function AIAnalysisPage() {
 
   // Get recommended and recent analyses
   const recommendedAnalyses = analysisCards.filter(card => card.recommended).slice(0, 3);
-  const recentAnalyses = analysisHistory.slice(0, 3);
+
+  // Simulate AI text streaming
+  const streamText = (text: string) => {
+    setIsGenerating(true);
+    setGeneratingText('');
+    let index = 0;
+
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        setGeneratingText((prev) => prev + text[index]);
+        index++;
+      } else {
+        clearInterval(interval);
+        setIsGenerating(false);
+        setIsAnalysisComplete(true);
+      }
+    }, 20);
+  };
+
+  const stopGenerating = () => {
+    setIsGenerating(false);
+  };
+
+  const regenerateAnalysis = () => {
+    const fullText = 'بناءً على تحليل البيانات الشامل، تم رصد انخفاض بنسبة 12% في إيرادات فرع الدمام خلال الربع الأخير. السبب الرئيسي يعود إلى انخفاض معدل التحويل من 34.5% إلى 28.2%، مما أثر على الأداء العام للفرع. تم تحليل 2,450 عملية بيع و580 عميل محتمل خلال هذه الفترة.';
+    setIsAnalysisComplete(false);
+    streamText(fullText);
+  };
+
+  // Simulate analysis workflow
+  const startAnalysisWorkflow = async () => {
+    setIsAnalysisComplete(false);
+    setGeneratingText('');
+
+    // Step 1: Fetch data
+    setProgressSteps(steps => steps.map((s, i) =>
+      i === 0 ? { ...s, status: 'active' } : s
+    ));
+    await new Promise(resolve => setTimeout(resolve, 800));
+    setProgressSteps(steps => steps.map((s, i) =>
+      i === 0 ? { ...s, status: 'completed' } : i === 1 ? { ...s, status: 'active' } : s
+    ));
+
+    // Step 2: Execute SQL
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setProgressSteps(steps => steps.map((s, i) =>
+      i === 1 ? { ...s, status: 'completed' } : i === 2 ? { ...s, status: 'active' } : s
+    ));
+
+    // Step 3: Process KPIs
+    await new Promise(resolve => setTimeout(resolve, 900));
+    setProgressSteps(steps => steps.map((s, i) =>
+      i === 2 ? { ...s, status: 'completed' } : i === 3 ? { ...s, status: 'active' } : s
+    ));
+
+    // Step 4: Detect risks
+    await new Promise(resolve => setTimeout(resolve, 1100));
+    setProgressSteps(steps => steps.map((s, i) =>
+      i === 3 ? { ...s, status: 'completed' } : i === 4 ? { ...s, status: 'active' } : s
+    ));
+
+    // Step 5: Generate recommendations
+    await new Promise(resolve => setTimeout(resolve, 1200));
+    setProgressSteps(steps => steps.map((s, i) =>
+      i === 4 ? { ...s, status: 'completed' } : s
+    ));
+
+    // Start streaming text
+    const fullText = 'بناءً على تحليل البيانات الشامل، تم رصد انخفاض بنسبة 12% في إيرادات فرع الدمام خلال الربع الأخير. السبب الرئيسي يعود إلى انخفاض معدل التحويل من 34.5% إلى 28.2%، مما أثر على الأداء العام للفرع.\n\nتم تحليل 2,450 عملية بيع و580 عميل محتمل خلال هذه الفترة. النتائج تشير إلى أن المشكلة الأساسية تكمن في ضعف متابعة العملاء المحتملين بعد أول تواصل.';
+    streamText(fullText);
+  };
 
   // Complexity badge color
   const getComplexityColor = (complexity: string) => {
@@ -578,7 +514,10 @@ export function AIAnalysisPage() {
   const handleStartAnalysis = (card: AnalysisCard) => {
     setActiveAnalysis(card);
     setShowAnalysisLibrary(false);
-    // Start analysis workflow
+    // Reset progress
+    setProgressSteps(steps => steps.map(s => ({ ...s, status: 'pending' as const })));
+    // Start workflow
+    setTimeout(() => startAnalysisWorkflow(), 500);
   };
 
   const getStatusColor = (status: string) => {
@@ -606,6 +545,16 @@ export function AIAnalysisPage() {
         return status;
     }
   };
+
+  const handleSendMessage = () => {
+    if (!chatInput.trim()) return;
+    // Handle follow-up question
+    setChatInput('');
+  };
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [generatingText]);
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -762,46 +711,318 @@ export function AIAnalysisPage() {
         </div>
 
         {/* Main Workspace */}
-        <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
-          {!activeAnalysis ? (
+        {!activeAnalysis ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-gradient-to-br from-background to-muted/20">
             <div className="max-w-md">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl mb-6">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl mb-6 shadow-xl">
                 <Sparkles className="w-10 h-10 text-white" />
               </div>
               <h2 className="text-2xl font-bold mb-3">ابدأ تحليلاً ذكياً</h2>
               <p className="text-muted-foreground mb-6 leading-relaxed">
-                اختر تحليلاً من الكروت أعلاه أو استكشف المكتبة الكاملة للتحليلات
+                اختر تحليلاً من الكروت أعلاه أو استكشف المكتبة الكاملة للتحليلات المدعومة بالذكاء الاصطناعي
               </p>
               <button
                 onClick={() => setShowAnalysisLibrary(true)}
                 className="px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg hover:from-purple-600 hover:to-blue-700 transition-all flex items-center gap-2 mx-auto shadow-lg"
               >
                 <Plus className="w-5 h-5" />
-                <span>تحليل جديد</span>
+                <span>فتح مكتبة التحليلات</span>
               </button>
             </div>
-          ) : (
-            <div className="w-full max-w-4xl">
-              <div className="text-center mb-8">
-                <div className={cn('inline-flex p-4 rounded-2xl bg-gradient-to-br mb-4', activeAnalysis.color)}>
-                  <activeAnalysis.icon className="w-10 h-10 text-white" />
+          </div>
+        ) : (
+          <div className="flex-1 flex overflow-hidden">
+            {/* Center - AI Analysis Workspace */}
+            <div className="flex-1 flex flex-col overflow-hidden">
+              {/* Analysis Header */}
+              <div className="p-4 border-b border-border bg-card">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className={cn('p-2 rounded-lg bg-gradient-to-br', activeAnalysis.color)}>
+                      <activeAnalysis.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <h2 className="font-semibold">{activeAnalysis.title}</h2>
+                      <p className="text-xs text-muted-foreground">{activeAnalysis.category}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button className="p-2 hover:bg-accent rounded-lg transition-colors">
+                      <FileDown className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setActiveAnalysis(null)}
+                      className="p-2 hover:bg-accent rounded-lg transition-colors"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
                 </div>
-                <h2 className="text-2xl font-bold mb-2">{activeAnalysis.title}</h2>
-                <p className="text-muted-foreground">{activeAnalysis.description}</p>
               </div>
 
-              <div className="bg-card border border-border rounded-xl p-8">
-                <p className="text-muted-foreground mb-6">سيتم تطبيق سير عمل التحليل هنا...</p>
-                <button
-                  onClick={() => setActiveAnalysis(null)}
-                  className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors"
-                >
-                  إلغاء التحليل
-                </button>
+              {/* Progress Steps */}
+              <div className="p-4 border-b border-border bg-muted/30">
+                <div className="flex items-center justify-between gap-2">
+                  {progressSteps.map((step, index) => {
+                    const Icon = step.icon;
+                    return (
+                      <div key={step.id} className="flex items-center flex-1">
+                        <div className="flex items-center gap-2 flex-1">
+                          <div className={cn(
+                            'p-2 rounded-lg transition-all',
+                            step.status === 'completed' && 'bg-green-500/20',
+                            step.status === 'active' && 'bg-primary/20 animate-pulse',
+                            step.status === 'pending' && 'bg-muted'
+                          )}>
+                            {step.status === 'completed' ? (
+                              <Check className="w-4 h-4 text-green-600" />
+                            ) : step.status === 'active' ? (
+                              <Loader2 className="w-4 h-4 text-primary animate-spin" />
+                            ) : (
+                              <Icon className="w-4 h-4 text-muted-foreground" />
+                            )}
+                          </div>
+                          <span className={cn(
+                            'text-xs',
+                            step.status === 'completed' && 'text-green-600',
+                            step.status === 'active' && 'text-primary font-medium',
+                            step.status === 'pending' && 'text-muted-foreground'
+                          )}>
+                            {step.label}
+                          </span>
+                        </div>
+                        {index < progressSteps.length - 1 && (
+                          <div className={cn(
+                            'h-0.5 flex-1 mx-2 transition-all',
+                            step.status === 'completed' ? 'bg-green-500/40' : 'bg-muted'
+                          )} />
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
+
+              {/* Messages Area */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {/* User Question */}
+                <div className="flex justify-start">
+                  <div className="max-w-2xl">
+                    <div className="flex items-center gap-2 mb-2">
+                      <div className="p-1.5 bg-muted rounded-lg">
+                        <Users className="w-4 h-4" />
+                      </div>
+                      <span className="text-sm font-medium">أنت</span>
+                    </div>
+                    <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl">
+                      <p>{activeAnalysis.description}</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* AI Response */}
+                <div className="flex justify-end">
+                  <div className="max-w-3xl w-full">
+                    <div className="flex items-center gap-2 mb-2 justify-end">
+                      <span className="text-sm font-medium">المحلل الذكي</span>
+                      <div className="p-1.5 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+                        <Sparkles className="w-4 h-4 text-white" />
+                      </div>
+                    </div>
+
+                    <div className="p-5 bg-card border border-border rounded-xl">
+                      <div className="prose prose-sm max-w-none">
+                        <p className="whitespace-pre-wrap leading-relaxed">{generatingText}</p>
+                        {isGenerating && (
+                          <span className="inline-block w-2 h-4 bg-primary animate-pulse ml-1"></span>
+                        )}
+                      </div>
+
+                      {/* Embedded Analytics */}
+                      {isAnalysisComplete && (
+                        <div className="mt-6 space-y-6">
+                          {/* KPI Cards */}
+                          <div className="grid grid-cols-3 gap-4">
+                            <div className="p-4 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 border border-red-200 dark:border-red-800 rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <TrendingDown className="w-4 h-4 text-red-600" />
+                                <span className="text-xs text-muted-foreground">انخفاض الإيرادات</span>
+                              </div>
+                              <p className="text-2xl font-bold text-red-600">-12%</p>
+                            </div>
+
+                            <div className="p-4 bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/20 dark:to-yellow-950/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Target className="w-4 h-4 text-orange-600" />
+                                <span className="text-xs text-muted-foreground">معدل التحويل</span>
+                              </div>
+                              <p className="text-2xl font-bold text-orange-600">28.2%</p>
+                            </div>
+
+                            <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Users className="w-4 h-4 text-blue-600" />
+                                <span className="text-xs text-muted-foreground">العملاء المحتملون</span>
+                              </div>
+                              <p className="text-2xl font-bold text-blue-600">580</p>
+                            </div>
+                          </div>
+
+                          {/* Chart */}
+                          <div className="p-4 bg-muted/30 rounded-lg">
+                            <h4 className="text-sm font-medium mb-4">اتجاه الإيرادات vs الهدف</h4>
+                            <ResponsiveContainer width="100%" height={200}>
+                              <LineChart data={chartData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" style={{ fontSize: '12px' }} />
+                                <YAxis style={{ fontSize: '12px' }} />
+                                <Tooltip />
+                                <Line type="monotone" dataKey="revenue" stroke="var(--color-chart-1)" strokeWidth={2} />
+                                <Line type="monotone" dataKey="target" stroke="var(--color-chart-3)" strokeWidth={2} strokeDasharray="5 5" />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Action Buttons */}
+                    {isAnalysisComplete && (
+                      <div className="flex items-center gap-2 mt-3 justify-end">
+                        <button
+                          onClick={regenerateAnalysis}
+                          className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-1"
+                        >
+                          <RefreshCw className="w-3 h-3" />
+                          إعادة التوليد
+                        </button>
+                        <button className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-1">
+                          <Copy className="w-3 h-3" />
+                          نسخ
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {isGenerating && (
+                  <div className="flex justify-center">
+                    <button
+                      onClick={stopGenerating}
+                      className="px-4 py-2 bg-red-500/10 text-red-600 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
+                    >
+                      <StopCircle className="w-4 h-4" />
+                      إيقاف التوليد
+                    </button>
+                  </div>
+                )}
+
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Chat Input - Enabled after analysis */}
+              {isAnalysisComplete && (
+                <div className="p-4 border-t border-border bg-card">
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={chatInput}
+                      onChange={(e) => setChatInput(e.target.value)}
+                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                      placeholder="اطرح سؤالاً للمتابعة..."
+                      className="flex-1 px-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                    />
+                    <button
+                      onClick={handleSendMessage}
+                      disabled={!chatInput.trim()}
+                      className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>إرسال</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
-        </div>
+
+            {/* Right Sidebar - Insights & Recommendations */}
+            {isAnalysisComplete && (
+              <div className="w-96 border-r border-border bg-card flex flex-col overflow-hidden">
+                <div className="p-4 border-b border-border">
+                  <h3 className="font-semibold">الرؤى والتوصيات</h3>
+                </div>
+
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {/* Executive Summary */}
+                  <div className="p-4 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+                    <div className="flex items-center gap-2 mb-3">
+                      <Brain className="w-4 h-4 text-purple-600" />
+                      <h4 className="font-medium text-sm">ملخص تنفيذي</h4>
+                    </div>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      المشكلة الرئيسية: ضعف متابعة العملاء. الحل: تحسين عملية المبيعات وتدريب الفريق.
+                    </p>
+                  </div>
+
+                  {/* Recommendations */}
+                  <div>
+                    <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
+                      <Lightbulb className="w-4 h-4" />
+                      التوصيات التنفيذية
+                    </h4>
+                    <div className="space-y-3">
+                      {recommendations.map((rec) => (
+                        <div
+                          key={rec.id}
+                          className="p-4 bg-muted/50 border border-border rounded-lg hover:shadow-md transition-all"
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={cn(
+                              'p-2 rounded-lg',
+                              rec.type === 'urgent' && 'bg-red-500/10',
+                              rec.type === 'opportunity' && 'bg-green-500/10',
+                              rec.type === 'cost' && 'bg-blue-500/10'
+                            )}>
+                              {rec.type === 'urgent' && <AlertTriangle className="w-4 h-4 text-red-600" />}
+                              {rec.type === 'opportunity' && <Target className="w-4 h-4 text-green-600" />}
+                              {rec.type === 'cost' && <DollarSign className="w-4 h-4 text-blue-600" />}
+                            </div>
+                            <div className="flex-1">
+                              <h5 className="font-medium text-sm mb-1">{rec.title}</h5>
+                              <p className="text-xs text-green-600 mb-2">{rec.impact}</p>
+                              <p className="text-xs text-muted-foreground leading-relaxed">
+                                {rec.action}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Smart Follow-up Actions */}
+                  <div>
+                    <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
+                      <Zap className="w-4 h-4" />
+                      إجراءات ذكية مقترحة
+                    </h4>
+                    <div className="space-y-2">
+                      <button className="w-full px-3 py-2 bg-primary/10 border border-primary/20 hover:bg-primary/20 rounded-lg text-sm text-right transition-colors">
+                        تحليل عميق لفريق المبيعات
+                      </button>
+                      <button className="w-full px-3 py-2 bg-primary/10 border border-primary/20 hover:bg-primary/20 rounded-lg text-sm text-right transition-colors">
+                        مقارنة مع الفروع الأخرى
+                      </button>
+                      <button className="w-full px-3 py-2 bg-primary/10 border border-primary/20 hover:bg-primary/20 rounded-lg text-sm text-right transition-colors">
+                        تحليل سلوك العملاء
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Analysis Library Modal */}
