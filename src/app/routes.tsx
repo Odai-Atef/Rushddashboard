@@ -18,6 +18,9 @@ import { HRDashboard } from './components/HRDashboard';
 import { InventoryDashboard } from './components/InventoryDashboard';
 import { SettingsPage } from './components/SettingsPage';
 import { NotificationsPage } from './components/NotificationsPage';
+import { DataSourcesPage } from './components/DataSourcesPage';
+import { ComplianceRiskPage } from './components/ComplianceRiskPage';
+import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +108,18 @@ export const router = createBrowserRouter([
           {
             path: 'notifications',
             Component: NotificationsPage,
+          },
+          {
+            path: 'data-sources',
+            Component: DataSourcesPage,
+          },
+          {
+            path: 'compliance-risk',
+            Component: ComplianceRiskPage,
+          },
+          {
+            path: 'analysis-history',
+            Component: AnalysisHistoryPage,
           },
         ],
       },

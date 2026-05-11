@@ -12,7 +12,10 @@ import {
   DollarSign,
   Warehouse,
   Settings,
-  Bell
+  Bell,
+  Database,
+  ShieldAlert,
+  History
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -25,7 +28,10 @@ export function Sidebar({ activeView, className }: SidebarProps) {
   const navItems = [
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
+    { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
+    { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources' },
+    { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk' },
     { id: 'sales', label: 'لوحة المبيعات', icon: TrendingUp, path: '/dashboard/sales' },
     { id: 'customers', label: 'لوحة العملاء', icon: Users, path: '/dashboard/customers' },
     { id: 'profitability', label: 'لوحة الربحية', icon: DollarSign, path: '/dashboard/profitability' },
