@@ -1,29 +1,24 @@
 import { Outlet } from 'react-router';
 import { useState, useEffect, createContext, useContext } from 'react';
+import { AuthProvider } from '../hooks/useAuth';
 
-interface AuthContextType {
-  isAuthenticated: boolean;
-  login: () => void;
-  logout: () => void;
-}
+const ThemeContext = createContext<{
+  theme: 'light' | 'dark';
+  setTheme: (theme: 'light' | 'dark') => void;
+} | null>(null);
 
-const AuthContext = createContext<AuthContextType | null>(null);
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
+export const useTheme = () => {
+  const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useAuth must be used within RootLayout');
+    throw new Error('useTheme must be used within RootLayout');
   }
   return context;
 };
 
 export function RootLayout() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('rushd_auth') === 'true';
-  });
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('rushd_theme');
-    return (saved === 'dark' || saved === 'light') ? saved : 'light';
+    return saved === 'dark' || saved === 'light' ? saved : 'light';
   });
 
   useEffect(() => {
@@ -37,32 +32,13 @@ export function RootLayout() {
     localStorage.setItem('rushd_theme', theme);
   }, [theme]);
 
-  const login = () => {
-    setIsAuthenticated(true);
-    localStorage.setItem('rushd_auth', 'true');
-  };
-
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('rushd_auth');
-  };
-
-  const authValue = {
-    isAuthenticated,
-    login,
-    logout,
-  };
-
   return (
-    <AuthContext.Provider value={authValue}>
-      <div className={theme}>
-        <Outlet context={{ theme, setTheme }} />
-      </div>
-    </AuthContext.Provider>
+    <AuthProvider>
+      <ThemeContext.Provider value={{ theme, setTheme }}>
+        <div className={theme}>
+          <Outlet />
+        </div>
+      </ThemeContext.Provider>
+    </AuthProvider>
   );
 }
-
-export const useTheme = () => {
-  const context = useContext(AuthContext);
-  return context;
-};

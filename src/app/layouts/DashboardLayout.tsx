@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Outlet, Navigate, useOutletContext, useLocation } from 'react-router';
-import { useAuth } from './RootLayout';
+import { Outlet, useOutletContext, useLocation } from 'react-router';
+import { useAuth } from '../hooks/useAuth';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
 import { MobileNav } from '../components/MobileNav';
@@ -11,14 +11,9 @@ interface ThemeContext {
 }
 
 export function DashboardLayout() {
-  const { isAuthenticated } = useAuth();
   const context = useOutletContext<ThemeContext>();
   const location = useLocation();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
-
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" replace />;
-  }
 
   // Map URL paths to activeView values for Sidebar/MobileNav
   const pathToView: Record<string, string> = {

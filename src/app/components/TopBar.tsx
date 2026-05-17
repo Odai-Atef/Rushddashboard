@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router';
 import { Search, Bell, Moon, Sun, Menu, Globe, LogOut } from 'lucide-react';
 import { cn } from '../utils/cn';
-import { useAuth } from '../layouts/RootLayout';
+import { useAuth } from '../hooks/useAuth';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Avatar from '@radix-ui/react-avatar';
 

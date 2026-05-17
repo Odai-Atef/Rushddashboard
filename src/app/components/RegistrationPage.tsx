@@ -1,75 +1,53 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
-import { useAuth } from '../layouts/RootLayout';
+import { useAuth } from '../hooks/useAuth';
+import { register as registerApi } from '../services/auth';
+import { registerSchema, type RegisterFormData } from '../types/auth';
 
 export function RegistrationPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
-  const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    company: '',
-    password: '',
-    confirmPassword: '',
-    role: 'executive',
-    agreeToTerms: false
-  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [apiError, setApiError] = useState('');
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrors({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    setValue,
+    watch,
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: { role: 'executive' },
+  });
 
-    // Validation
-    const newErrors: Record<string, string> = {};
+  const selectedRole = watch('role');
 
-    if (!formData.fullName) newErrors.fullName = 'الاسم الكامل مطلوب';
-    if (!formData.email) newErrors.email = 'البريد الإلكتروني مطلوب';
-    if (!formData.phone) newErrors.phone = 'رقم الهاتف مطلوب';
-    if (!formData.company) newErrors.company = 'اسم الشركة مطلوب';
-    if (!formData.password) newErrors.password = 'كلمة المرور مطلوبة';
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'كلمات المرور غير متطابقة';
-    }
-    if (!formData.agreeToTerms) newErrors.agreeToTerms = 'يجب الموافقة على الشروط والأحكام';
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      login();
+  const onSubmit = async (data: RegisterFormData) => {
+    setApiError('');
+    try {
+      const { confirmPassword, agreeToTerms, ...registerData } = data;
+      const response = await registerApi(registerData);
+      login(response.user);
       navigate('/dashboard');
-    }, 2000);
-  };
-
-  const updateField = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    // Clear error when user starts typing
-    if (errors[field]) {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
-      });
+    } catch (error) {
+      setApiError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى');
     }
   };
+
+  const inputClass = (field: string) =>
+    `w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+      errors[field as keyof RegisterFormData] ? 'border-red-500' : 'border-border'
+    }`;
 
   return (
     <div className="min-h-screen flex">
-      {/* Left Side - Form */}
       <div className="flex-1 flex items-center justify-center p-8 bg-background overflow-y-auto">
         <div className="w-full max-w-md py-8">
-          {/* Logo */}
           <div className="mb-8">
             <div className="flex items-center gap-3 mb-2">
               <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
@@ -80,99 +58,42 @@ export function RegistrationPage() {
             <p className="text-muted-foreground">منصة القرارات الذكية</p>
           </div>
 
-          {/* Welcome Text */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold mb-2">إنشاء حساب جديد</h2>
             <p className="text-muted-foreground">انضم إلى منصة التحليل التنفيذي الذكي</p>
           </div>
 
-          {/* Registration Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name */}
-            <div>
-              <label htmlFor="fullName" className="block text-sm font-medium mb-2">
-                الاسم الكامل
-              </label>
-              <div className="relative">
-                <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="fullName"
-                  type="text"
-                  value={formData.fullName}
-                  onChange={(e) => updateField('fullName', e.target.value)}
-                  placeholder="أحمد محمد"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.fullName ? 'border-red-500' : 'border-border'
-                  }`}
-                />
-              </div>
-              {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
+          {apiError && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <p className="text-sm text-red-600 dark:text-red-400">{apiError}</p>
             </div>
+          )}
 
-            {/* Email */}
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium mb-2">
-                البريد الإلكتروني
-              </label>
-              <div className="relative">
-                <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => updateField('email', e.target.value)}
-                  placeholder="name@company.com"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.email ? 'border-red-500' : 'border-border'
-                  }`}
-                />
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+            {[
+              { name: 'fullName', label: 'الاسم الكامل', icon: User, placeholder: 'أحمد محمد', type: 'text' },
+              { name: 'email', label: 'البريد الإلكتروني', icon: Mail, placeholder: 'name@company.com', type: 'email' },
+              { name: 'phone', label: 'رقم الهاتف', icon: Phone, placeholder: '+966 50 123 4567', type: 'tel' },
+              { name: 'company', label: 'اسم الشركة', icon: Building, placeholder: 'شركة الرشد للاستثمار', type: 'text' },
+            ].map((field) => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className="block text-sm font-medium mb-2">{field.label}</label>
+                <div className="relative">
+                  <field.icon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    id={field.name}
+                    type={field.type}
+                    {...register(field.name as keyof RegisterFormData)}
+                    placeholder={field.placeholder}
+                    className={inputClass(field.name)}
+                  />
+                </div>
+                {errors[field.name as keyof RegisterFormData] && (
+                  <p className="text-xs text-red-600 mt-1">{errors[field.name as keyof RegisterFormData]?.message}</p>
+                )}
               </div>
-              {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
-            </div>
+            ))}
 
-            {/* Phone */}
-            <div>
-              <label htmlFor="phone" className="block text-sm font-medium mb-2">
-                رقم الهاتف
-              </label>
-              <div className="relative">
-                <Phone className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="phone"
-                  type="tel"
-                  value={formData.phone}
-                  onChange={(e) => updateField('phone', e.target.value)}
-                  placeholder="+966 50 123 4567"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.phone ? 'border-red-500' : 'border-border'
-                  }`}
-                />
-              </div>
-              {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone}</p>}
-            </div>
-
-            {/* Company */}
-            <div>
-              <label htmlFor="company" className="block text-sm font-medium mb-2">
-                اسم الشركة
-              </label>
-              <div className="relative">
-                <Building className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="company"
-                  type="text"
-                  value={formData.company}
-                  onChange={(e) => updateField('company', e.target.value)}
-                  placeholder="شركة الرشد للاستثمار"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.company ? 'border-red-500' : 'border-border'
-                  }`}
-                />
-              </div>
-              {errors.company && <p className="text-xs text-red-600 mt-1">{errors.company}</p>}
-            </div>
-
-            {/* Role Selection */}
             <div>
               <label className="block text-sm font-medium mb-2">الدور</label>
               <div className="grid grid-cols-3 gap-2">
@@ -184,9 +105,9 @@ export function RegistrationPage() {
                   <button
                     key={role.value}
                     type="button"
-                    onClick={() => updateField('role', role.value)}
+                    onClick={() => setValue('role', role.value)}
                     className={`px-4 py-2.5 rounded-lg border-2 transition-all text-sm ${
-                      formData.role === role.value
+                      selectedRole === role.value
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border hover:border-muted-foreground'
                     }`}
@@ -195,96 +116,63 @@ export function RegistrationPage() {
                   </button>
                 ))}
               </div>
+              {errors.role && <p className="text-xs text-red-600 mt-1">{errors.role.message}</p>}
             </div>
 
-            {/* Password */}
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium mb-2">
-                كلمة المرور
-              </label>
-              <div className="relative">
-                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="password"
-                  type={showPassword ? 'text' : 'password'}
-                  value={formData.password}
-                  onChange={(e) => updateField('password', e.target.value)}
-                  placeholder="••••••••"
-                  className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.password ? 'border-red-500' : 'border-border'
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
+            {[
+              { name: 'password', label: 'كلمة المرور', show: showPassword, setShow: setShowPassword },
+              { name: 'confirmPassword', label: 'تأكيد كلمة المرور', show: showConfirmPassword, setShow: setShowConfirmPassword },
+            ].map((field) => (
+              <div key={field.name}>
+                <label htmlFor={field.name} className="block text-sm font-medium mb-2">{field.label}</label>
+                <div className="relative">
+                  <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                  <input
+                    id={field.name}
+                    type={field.show ? 'text' : 'password'}
+                    {...register(field.name as keyof RegisterFormData)}
+                    placeholder="••••••••"
+                    className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                      errors[field.name as keyof RegisterFormData] ? 'border-red-500' : 'border-border'
+                    }`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => field.setShow(!field.show)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    {field.show ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                {errors[field.name as keyof RegisterFormData] && (
+                  <p className="text-xs text-red-600 mt-1">{errors[field.name as keyof RegisterFormData]?.message}</p>
+                )}
               </div>
-              {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password}</p>}
-            </div>
+            ))}
 
-            {/* Confirm Password */}
-            <div>
-              <label htmlFor="confirmPassword" className="block text-sm font-medium mb-2">
-                تأكيد كلمة المرور
-              </label>
-              <div className="relative">
-                <Lock className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="confirmPassword"
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  value={formData.confirmPassword}
-                  onChange={(e) => updateField('confirmPassword', e.target.value)}
-                  placeholder="••••••••"
-                  className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.confirmPassword ? 'border-red-500' : 'border-border'
-                  }`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-              {errors.confirmPassword && <p className="text-xs text-red-600 mt-1">{errors.confirmPassword}</p>}
-            </div>
-
-            {/* Terms and Conditions */}
             <div>
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={formData.agreeToTerms}
-                  onChange={(e) => updateField('agreeToTerms', e.target.checked)}
+                  {...register('agreeToTerms')}
                   className={`mt-0.5 w-4 h-4 rounded border text-primary focus:ring-2 focus:ring-primary ${
                     errors.agreeToTerms ? 'border-red-500' : 'border-border'
                   }`}
                 />
                 <span className="text-sm">
-                  أوافق على{' '}
-                  <a href="/terms" className="text-primary hover:underline">
-                    الشروط والأحكام
-                  </a>{' '}
-                  و{' '}
-                  <a href="/privacy" className="text-primary hover:underline">
-                    سياسة الخصوصية
-                  </a>
+                  أوافق على <a href="/terms" className="text-primary hover:underline">الشروط والأحكام</a> و{' '}
+                  <a href="/privacy" className="text-primary hover:underline">سياسة الخصوصية</a>
                 </span>
               </label>
-              {errors.agreeToTerms && <p className="text-xs text-red-600 mt-1">{errors.agreeToTerms}</p>}
+              {errors.agreeToTerms && <p className="text-xs text-red-600 mt-1">{errors.agreeToTerms.message}</p>}
             </div>
 
-            {/* Register Button */}
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isSubmitting}
               className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isLoading ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
                   <span>جاري إنشاء الحساب...</span>
@@ -298,22 +186,16 @@ export function RegistrationPage() {
             </button>
           </form>
 
-          {/* Login Link */}
           <p className="mt-6 text-center text-sm text-muted-foreground">
             لديك حساب بالفعل؟{' '}
-            <button
-              onClick={() => navigate('/auth/login')}
-              className="text-primary hover:underline font-medium"
-            >
+            <button onClick={() => navigate('/auth/login')} className="text-primary hover:underline font-medium">
               تسجيل الدخول
             </button>
           </p>
         </div>
       </div>
 
-      {/* Right Side - Benefits */}
       <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
-        {/* Decorative circles */}
         <div className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
         <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
 
@@ -323,36 +205,21 @@ export function RegistrationPage() {
             <br />
             والتنفيذيين
           </h2>
-          <p className="text-xl mb-8 text-white/90">
-            استفد من قوة الذكاء الاصطناعي لاتخاذ قرارات أعمال أفضل وأسرع
-          </p>
+          <p className="text-xl mb-8 text-white/90">استفد من قوة الذكاء الاصطناعي لاتخاذ قرارات أعمال أفضل وأسرع</p>
 
-          {/* Benefits */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <CheckCircle className="w-6 h-6 flex-shrink-0" />
-              <span>تحليل فوري للبيانات بدعم الذكاء الاصطناعي</span>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <CheckCircle className="w-6 h-6 flex-shrink-0" />
-              <span>لوحات تحكم تفاعلية وتقارير متقدمة</span>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <CheckCircle className="w-6 h-6 flex-shrink-0" />
-              <span>توصيات تنفيذية قابلة للتطبيق مباشرة</span>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <CheckCircle className="w-6 h-6 flex-shrink-0" />
-              <span>دعم فني متخصص 24/7</span>
-            </div>
-
-            <div className="flex items-center gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <CheckCircle className="w-6 h-6 flex-shrink-0" />
-              <span>أمان وحماية بيانات على مستوى المؤسسات</span>
-            </div>
+            {[
+              'تحليل فوري للبيانات بدعم الذكاء الاصطناعي',
+              'لوحات تحكم تفاعلية وتقارير متقدمة',
+              'توصيات تنفيذية قابلة للتطبيق مباشرة',
+              'دعم فني متخصص 24/7',
+              'أمان وحماية بيانات على مستوى المؤسسات',
+            ].map((text) => (
+              <div key={text} className="flex items-center gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
+                <CheckCircle className="w-6 h-6 flex-shrink-0" />
+                <span>{text}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>
