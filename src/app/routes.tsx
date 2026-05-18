@@ -23,6 +23,10 @@ import { DataSourcesPage } from './components/DataSourcesPage';
 import { ComplianceRiskPage } from './components/ComplianceRiskPage';
 import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
 import { ChatPage } from './components/chat/ChatPage';
+import { DashboardListPage } from './pages/Dashboard/DashboardListPage';
+import { DashboardDetailPage } from './pages/Dashboard/DashboardDetailPage';
+import { CreateDashboardPage } from './pages/Dashboard/CreateDashboardPage';
+import { EditDashboardPage } from './pages/Dashboard/EditDashboardPage';
 
 export const router = createBrowserRouter([
   {
@@ -65,7 +69,23 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            Component: ExecutiveDashboard,
+            Component: DashboardListPage,
+          },
+          {
+            path: 'list',
+            Component: DashboardListPage,
+          },
+          {
+            path: ':id',
+            Component: DashboardDetailPage,
+          },
+          {
+            path: 'new',
+            Component: CreateDashboardPage,
+          },
+          {
+            path: ':id/edit',
+            Component: EditDashboardPage,
           },
           {
             path: 'ai-analysis',

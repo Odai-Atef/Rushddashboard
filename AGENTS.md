@@ -2,7 +2,7 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/003-executive-analysis-backend/plan.md](specs/003-executive-analysis-backend/plan.md)
+**Current Plan**: [specs/004-dashboard-backend-integration/plan.md](specs/004-dashboard-backend-integration/plan.md)
 
 ## Project Structure
 
@@ -30,4 +30,13 @@ shell commands, and other important information, read the current plan:
 - **API Contracts**: specs/003-executive-analysis-backend/contracts/analysis-api.md
 - **Quick Start**: specs/003-executive-analysis-backend/quickstart.md
 - **Feature Branch**: 005-rushd-frontend-executive
+
+## Dashboard Feature Context
+
+- **Spec**: specs/004-dashboard-backend-integration/spec.md
+- **Plan**: specs/004-dashboard-backend-integration/plan.md
+- **Data Model**: specs/004-dashboard-backend-integration/data-model.md
+- **API Contracts**: specs/004-dashboard-backend-integration/contracts/dashboard-api.md
+- **Quick Start**: specs/004-dashboard-backend-integration/quickstart.md
+- **Feature Branch**: 006-rushd-frontend-dashboard
 <!-- SPECKIT END -->
