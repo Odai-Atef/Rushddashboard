@@ -22,6 +22,7 @@ import { NotificationsPage } from './components/NotificationsPage';
 import { DataSourcesPage } from './components/DataSourcesPage';
 import { ComplianceRiskPage } from './components/ComplianceRiskPage';
 import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
+import { ChatPage } from './components/chat/ChatPage';
 
 export const router = createBrowserRouter([
   {
@@ -125,6 +126,10 @@ export const router = createBrowserRouter([
           {
             path: 'analysis-history',
             Component: AnalysisHistoryPage,
+          },
+          {
+            path: 'chat',
+            Component: ChatPage,
           },
         ],
       },

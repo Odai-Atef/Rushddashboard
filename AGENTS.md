@@ -2,7 +2,7 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/001-frontend-jwt-auth/plan.md](specs/001-frontend-jwt-auth/plan.md)
+**Current Plan**: [specs/003-executive-analysis-backend/plan.md](specs/003-executive-analysis-backend/plan.md)
 
 ## Project Structure
 
@@ -13,12 +13,21 @@ shell commands, and other important information, read the current plan:
 - HTTP: Native fetch with typed service layer
 - Testing: Vitest, React Testing Library, Playwright
 
-## Auth Feature Context
+## Chat Feature Context
 
-- **Spec**: specs/001-frontend-jwt-auth/spec.md
-- **Plan**: specs/001-frontend-jwt-auth/plan.md
-- **Data Model**: specs/001-frontend-jwt-auth/data-model.md
-- **API Contracts**: specs/001-frontend-jwt-auth/contracts/auth-api.md
-- **Quick Start**: specs/001-frontend-jwt-auth/quickstart.md
-- **Feature Branch**: 001-rushd-frontend-auth
+- **Spec**: specs/002-chat-backend-integration/spec.md
+- **Plan**: specs/002-chat-backend-integration/plan.md
+- **Data Model**: specs/002-chat-backend-integration/data-model.md
+- **API Contracts**: specs/002-chat-backend-integration/contracts/chat-api.md
+- **Quick Start**: specs/002-chat-backend-integration/quickstart.md
+- **Feature Branch**: 004-rushd-frontend-executive
+
+## Executive Analysis Feature Context
+
+- **Spec**: specs/003-executive-analysis-backend/spec.md
+- **Plan**: specs/003-executive-analysis-backend/plan.md
+- **Data Model**: specs/003-executive-analysis-backend/data-model.md
+- **API Contracts**: specs/003-executive-analysis-backend/contracts/analysis-api.md
+- **Quick Start**: specs/003-executive-analysis-backend/quickstart.md
+- **Feature Branch**: 005-rushd-frontend-executive
 <!-- SPECKIT END -->

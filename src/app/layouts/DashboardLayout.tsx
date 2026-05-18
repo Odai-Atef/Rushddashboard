@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Outlet, useOutletContext, useLocation } from 'react-router';
 import { useAuth } from '../hooks/useAuth';
+import { AnalysisProvider } from '../hooks/useAnalysisContext';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
 import { MobileNav } from '../components/MobileNav';
@@ -49,7 +50,9 @@ export function DashboardLayout() {
         />
 
         <main className="flex-1 overflow-y-auto p-6">
-          <Outlet />
+          <AnalysisProvider>
+            <Outlet />
+          </AnalysisProvider>
         </main>
       </div>
 
