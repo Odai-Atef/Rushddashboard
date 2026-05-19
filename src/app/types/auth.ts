@@ -22,12 +22,22 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  fullName: string;
   email: string;
-  phone: string;
-  company: string;
   password: string;
-  role: string;
+  firstName: string;
+  lastName: string;
+  companyId: string;
+  roleId: string;
+}
+
+export interface Company {
+  id: string;
+  name: string;
+}
+
+export interface Role {
+  id: string;
+  name: string;
 }
 
 export interface FieldErrorMapEntry {
@@ -59,22 +69,31 @@ export const loginSchema = z.object({
   password: z.string().min(1, 'كلمة المرور مطلوبة'),
 });
 
-export const registerSchema = z.object({
-  fullName: z.string().min(1, 'الاسم الكامل مطلوب'),
+export const registerFormSchema = z.object({
+  firstName: z.string().min(1, 'الاسم الأول مطلوب').max(100, 'الاسم الأول يجب أن يكون 100 حرف أو أقل'),
+  lastName: z.string().min(1, 'اسم العائلة مطلوب').max(100, 'اسم العائلة يجب أن يكون 100 حرف أو أقل'),
   email: z.string().email('البريد الإلكتروني غير صالح'),
-  phone: z.string().min(1, 'رقم الهاتف مطلوب'),
-  company: z.string().min(1, 'اسم الشركة مطلوب'),
+  companyId: z.string().min(1, 'الشركة مطلوبة').uuid('يجب اختيار شركة صالحة'),
+  roleId: z.string().min(1, 'الدور مطلوب').uuid('يجب اختيار دور صالح'),
   password: z
     .string()
-    .min(8, 'كلمة المرور يجب أن تكون 8 أحرف على الأقل')
+    .min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل')
     .regex(/[a-zA-Z]/, 'كلمة المرور يجب أن تحتوي على حرف واحد على الأقل')
     .regex(/[0-9]/, 'كلمة المرور يجب أن تحتوي على رقم واحد على الأقل'),
   confirmPassword: z.string().min(1, 'تأكيد كلمة المرور مطلوب'),
-  role: z.string().min(1, 'الدور مطلوب'),
+  agreeToTerms: z.boolean().refine((val) => val === true, {
+    message: 'يجب الموافقة على الشروط والأحكام',
+  }),
 }).refine((data) => data.password === data.confirmPassword, {
   message: 'كلمات المرور غير متطابقة',
   path: ['confirmPassword'],
 });
 
+export const registerDtoSchema = registerFormSchema.omit({
+  confirmPassword: true,
+  agreeToTerms: true,
+});
+
 export type LoginFormData = z.infer<typeof loginSchema>;
-export type RegisterFormData = z.infer<typeof registerSchema>;
+export type RegisterFormData = z.infer<typeof registerFormSchema>;
+export type RegisterDto = z.infer<typeof registerDtoSchema>;

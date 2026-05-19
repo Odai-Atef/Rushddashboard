@@ -2,7 +2,7 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/009-registration-field-errors/plan.md](specs/009-registration-field-errors/plan.md)
+**Current Plan**: [specs/020-align-registration-dto/plan.md](specs/020-align-registration-dto/plan.md)
 
 ## Project Structure
 
@@ -48,4 +48,14 @@ shell commands, and other important information, read the current plan:
 - **API Contracts**: specs/009-registration-field-errors/contracts/auth-api-errors.md
 - **Quick Start**: specs/009-registration-field-errors/quickstart.md
 - **Feature Branch**: 018-rushd-frontend-show
+
+## Registration Payload Alignment Feature Context
+
+- **Spec**: specs/020-align-registration-dto/spec.md
+- **Plan**: specs/020-align-registration-dto/plan.md
+- **Data Model**: specs/020-align-registration-dto/data-model.md
+- **API Contracts**: specs/020-align-registration-dto/contracts/auth-api.md
+- **Quick Start**: specs/020-align-registration-dto/quickstart.md
+- **Feature Branch**: 020-align-registration-dto
+
 <!-- SPECKIT END -->

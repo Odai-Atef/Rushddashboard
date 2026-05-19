@@ -2,10 +2,21 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { register as registerApi, AuthError } from '../services/auth';
-import { registerSchema, type RegisterFormData } from '../types/auth';
+import { registerFormSchema, type RegisterFormData, type Company, type Role } from '../types/auth';
+
+const STATIC_COMPANIES: Company[] = [
+  { id: '550e8400-e29b-41d4-a716-446655440000', name: 'شركة الرشد' },
+  { id: '550e8400-e29b-41d4-a716-446655440001', name: 'الشركة الوطنية' },
+];
+
+const STATIC_ROLES: Role[] = [
+  { id: '550e8400-e29b-41d4-a716-446655440010', name: 'مستثمر' },
+  { id: '550e8400-e29b-41d4-a716-446655440011', name: 'تنفيذي' },
+  { id: '550e8400-e29b-41d4-a716-446655440012', name: 'محلل' },
+];
 
 export function RegistrationPage() {
   const navigate = useNavigate();
@@ -18,15 +29,14 @@ export function RegistrationPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    setValue,
     setError,
-    watch,
   } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
-    defaultValues: { role: 'executive' },
+    resolver: zodResolver(registerFormSchema),
+    defaultValues: {
+      companyId: '',
+      roleId: '',
+    },
   });
-
-  const selectedRole = watch('role');
 
   const onSubmit = async (data: RegisterFormData) => {
     setApiError('');
@@ -87,10 +97,9 @@ export function RegistrationPage() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
             {[
-              { name: 'fullName', label: 'الاسم الكامل', icon: User, placeholder: 'أحمد محمد', type: 'text' },
+              { name: 'firstName', label: 'الاسم الأول', icon: User, placeholder: 'أحمد', type: 'text' },
+              { name: 'lastName', label: 'اسم العائلة', icon: User, placeholder: 'محمد', type: 'text' },
               { name: 'email', label: 'البريد الإلكتروني', icon: Mail, placeholder: 'name@company.com', type: 'email' },
-              { name: 'phone', label: 'رقم الهاتف', icon: Phone, placeholder: '+966 50 123 4567', type: 'tel' },
-              { name: 'company', label: 'اسم الشركة', icon: Building, placeholder: 'شركة الرشد للاستثمار', type: 'text' },
             ].map((field) => (
               <div key={field.name}>
                 <label htmlFor={field.name} className="block text-sm font-medium mb-2">{field.label}</label>
@@ -110,29 +119,42 @@ export function RegistrationPage() {
               </div>
             ))}
 
+            {/* Company Selector */}
             <div>
-              <label className="block text-sm font-medium mb-2">الدور</label>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { value: 'investor', label: 'مستثمر' },
-                  { value: 'executive', label: 'تنفيذي' },
-                  { value: 'analyst', label: 'محلل' }
-                ].map((role) => (
-                  <button
-                    key={role.value}
-                    type="button"
-                    onClick={() => setValue('role', role.value)}
-                    className={`px-4 py-2.5 rounded-lg border-2 transition-all text-sm ${
-                      selectedRole === role.value
-                        ? 'border-primary bg-primary/10 text-primary'
-                        : 'border-border hover:border-muted-foreground'
-                    }`}
-                  >
-                    {role.label}
-                  </button>
-                ))}
+              <label htmlFor="companyId" className="block text-sm font-medium mb-2">الشركة</label>
+              <div className="relative">
+                <Building className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <select
+                  id="companyId"
+                  {...register('companyId')}
+                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${errors.companyId ? 'border-red-500' : 'border-border'}`}
+                >
+                  <option value="">اختر الشركة</option>
+                  {STATIC_COMPANIES.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
               </div>
-              {errors.role && <p className="text-xs text-red-600 mt-1">{errors.role.message}</p>}
+              {errors.companyId && <p className="text-xs text-red-600 mt-1">{errors.companyId.message}</p>}
+            </div>
+
+            {/* Role Selector */}
+            <div>
+              <label htmlFor="roleId" className="block text-sm font-medium mb-2">الدور</label>
+              <div className="relative">
+                <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <select
+                  id="roleId"
+                  {...register('roleId')}
+                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${errors.roleId ? 'border-red-500' : 'border-border'}`}
+                >
+                  <option value="">اختر الدور</option>
+                  {STATIC_ROLES.map((r) => (
+                    <option key={r.id} value={r.id}>{r.name}</option>
+                  ))}
+                </select>
+              </div>
+              {errors.roleId && <p className="text-xs text-red-600 mt-1">{errors.roleId.message}</p>}
             </div>
 
             {[

@@ -6,11 +6,12 @@ import type { FieldErrorMapEntry, ParsedFieldError, BackendValidationErrorRespon
  * Supports multiple backend fields mapping to the same frontend field (e.g. firstName + lastName → fullName).
  */
 export const FIELD_ERROR_MAP: FieldErrorMapEntry[] = [
-  { backendField: 'firstName', frontendField: 'fullName', label: 'الاسم الكامل' },
-  { backendField: 'lastName', frontendField: 'fullName', label: 'الاسم الكامل' },
+  { backendField: 'firstName', frontendField: 'firstName', label: 'الاسم الأول' },
+  { backendField: 'lastName', frontendField: 'lastName', label: 'اسم العائلة' },
   { backendField: 'password', frontendField: 'password', label: 'كلمة المرور' },
-  { backendField: 'companyId', frontendField: 'company', label: 'اسم الشركة' },
-  { backendField: 'roleId', frontendField: 'role', label: 'الدور' },
+  { backendField: 'companyId', frontendField: 'companyId', label: 'الشركة' },
+  { backendField: 'roleId', frontendField: 'roleId', label: 'الدور' },
+  { backendField: 'email', frontendField: 'email', label: 'البريد الإلكتروني' },
 ];
 
 /**
