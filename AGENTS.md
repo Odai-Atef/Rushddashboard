@@ -2,7 +2,7 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/020-align-registration-dto/plan.md](specs/020-align-registration-dto/plan.md)
+**Current Plan**: [specs/021-fix-zod-omit-schema/plan.md](specs/021-fix-zod-omit-schema/plan.md)
 
 ## Project Structure
 
