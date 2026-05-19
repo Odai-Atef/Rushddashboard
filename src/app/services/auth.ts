@@ -1,5 +1,6 @@
-import type { LoginRequest, RegisterRequest, AuthResponse } from '../types/auth';
+import type { LoginRequest, RegisterRequest, AuthResponse, BackendValidationErrorResponse } from '../types/auth';
 import { getRefreshToken, setTokens, clearTokens, setUser } from '../utils/auth';
+import { parseFieldErrors, groupFieldErrors } from '../utils/fieldErrorMap';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
 
@@ -7,7 +8,8 @@ class AuthError extends Error {
   constructor(
     message: string,
     public statusCode: number,
-    public code: string
+    public code: string,
+    public fieldErrors?: Record<string, string[]>
   ) {
     super(message);
     this.name = 'AuthError';
@@ -17,6 +19,23 @@ class AuthError extends Error {
 async function handleResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
+
+    // Handle 400 Bad Request with array-style validation messages
+    if (response.status === 400 && Array.isArray(error.message) && error.message.length > 0) {
+      const { parsed, unmapped } = parseFieldErrors(error as BackendValidationErrorResponse);
+      const fieldErrors = groupFieldErrors(parsed);
+      const bannerMessage = unmapped.length > 0
+        ? unmapped.join('; ')
+        : error.message[0];
+
+      throw new AuthError(
+        bannerMessage,
+        response.status,
+        error.error || 'VALIDATION_ERROR',
+        Object.keys(fieldErrors).length > 0 ? fieldErrors : undefined
+      );
+    }
+
     throw new AuthError(
       error.message || 'حدث خطأ غير متوقع',
       response.status,

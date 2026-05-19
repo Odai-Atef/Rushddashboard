@@ -2,7 +2,7 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/004-dashboard-backend-integration/plan.md](specs/004-dashboard-backend-integration/plan.md)
+**Current Plan**: [specs/009-registration-field-errors/plan.md](specs/009-registration-field-errors/plan.md)
 
 ## Project Structure
 
@@ -39,4 +39,13 @@ shell commands, and other important information, read the current plan:
 - **API Contracts**: specs/004-dashboard-backend-integration/contracts/dashboard-api.md
 - **Quick Start**: specs/004-dashboard-backend-integration/quickstart.md
 - **Feature Branch**: 006-rushd-frontend-dashboard
+
+## Registration Field Errors Feature Context
+
+- **Spec**: specs/009-registration-field-errors/spec.md
+- **Plan**: specs/009-registration-field-errors/plan.md
+- **Data Model**: specs/009-registration-field-errors/data-model.md
+- **API Contracts**: specs/009-registration-field-errors/contracts/auth-api-errors.md
+- **Quick Start**: specs/009-registration-field-errors/quickstart.md
+- **Feature Branch**: 018-rushd-frontend-show
 <!-- SPECKIT END -->

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { register as registerApi } from '../services/auth';
+import { register as registerApi, AuthError } from '../services/auth';
 import { registerSchema, type RegisterFormData } from '../types/auth';
 
 export function RegistrationPage() {
@@ -19,6 +19,7 @@ export function RegistrationPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     setValue,
+    setError,
     watch,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -35,7 +36,22 @@ export function RegistrationPage() {
       login(response.user);
       navigate('/dashboard');
     } catch (error) {
-      setApiError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى');
+      if (error instanceof AuthError && error.fieldErrors) {
+        // Attach each mapped field error to its related input
+        for (const [field, messages] of Object.entries(error.fieldErrors)) {
+          const message = messages.join('; ');
+          setError(field as keyof RegisterFormData, {
+            type: 'server',
+            message,
+          });
+        }
+        // Show unmapped/general errors in the banner
+        if (!error.fieldErrors || Object.keys(error.fieldErrors).length === 0 || error.message) {
+          setApiError(error.message);
+        }
+      } else {
+        setApiError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى');
+      }
     }
   };
 

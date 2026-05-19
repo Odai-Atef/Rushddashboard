@@ -30,6 +30,24 @@ export interface RegisterRequest {
   role: string;
 }
 
+export interface FieldErrorMapEntry {
+  backendField: string;
+  frontendField: string;
+  label?: string;
+}
+
+export interface ParsedFieldError {
+  backendField: string;
+  frontendField: string;
+  message: string;
+}
+
+export interface BackendValidationErrorResponse {
+  statusCode: number;
+  message: string | string[];
+  error: string;
+}
+
 export interface AuthState {
   user: UserProfile | null;
   isAuthenticated: boolean;
