@@ -2,20 +2,14 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Mail, Lock, User, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Building, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { register as registerApi, AuthError } from '../services/auth';
-import { registerFormSchema, type RegisterFormData, type Company, type Role } from '../types/auth';
+import { registerFormSchema, type RegisterFormData, type Company } from '../types/auth';
 
 const STATIC_COMPANIES: Company[] = [
   { id: '550e8400-e29b-41d4-a716-446655440000', name: 'شركة الرشد' },
   { id: '550e8400-e29b-41d4-a716-446655440001', name: 'الشركة الوطنية' },
-];
-
-const STATIC_ROLES: Role[] = [
-  { id: '550e8400-e29b-41d4-a716-446655440010', name: 'مستثمر' },
-  { id: '550e8400-e29b-41d4-a716-446655440011', name: 'تنفيذي' },
-  { id: '550e8400-e29b-41d4-a716-446655440012', name: 'محلل' },
 ];
 
 export function RegistrationPage() {
@@ -34,7 +28,6 @@ export function RegistrationPage() {
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
       companyId: '',
-      roleId: '',
     },
   });
 

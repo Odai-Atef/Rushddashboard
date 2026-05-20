@@ -2,7 +2,18 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/022-fix-registration-validation-errors/plan.md](specs/022-fix-registration-validation-errors/plan.md)
+**Current Plan**: [specs/023-remove-registration-role/plan.md](specs/023-remove-registration-role/plan.md)
+
+## Current Feature Context
+
+- **Spec**: specs/023-remove-registration-role/spec.md
+- **Plan**: specs/023-remove-registration-role/plan.md
+- **Data Model**: specs/023-remove-registration-role/data-model.md
+- **API Contracts**: specs/023-remove-registration-role/contracts/auth-api.md
+- **Quick Start**: specs/023-remove-registration-role/quickstart.md
+- **Feature Branch**: 023-rushd-frontend-backend
+
+## Previous Feature Contexts
 
 ## Project Structure
 

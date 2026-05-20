@@ -27,7 +27,6 @@ export interface RegisterRequest {
   firstName: string;
   lastName: string;
   companyId: string;
-  roleId: string;
 }
 
 export interface Company {
@@ -77,7 +76,6 @@ const registerBaseSchema = z.object({
   lastName: z.string().min(1, 'اسم العائلة مطلوب').max(100, 'اسم العائلة يجب أن يكون 100 حرف أو أقل'),
   email: z.string().email('البريد الإلكتروني غير صالح'),
   companyId: z.string().min(1, 'الشركة مطلوبة').uuid('يجب اختيار شركة صالحة'),
-  roleId: z.string().min(1, 'الدور مطلوب').uuid('يجب اختيار دور صالح'),
   password: z
     .string()
     .min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل')
