@@ -16,7 +16,7 @@ class AuthError extends Error {
   }
 }
 
-async function handleResponse<T>(response: Response): Promise<T> {
+async function handleResponse(response: Response): Promise<unknown> {
   if (!response.ok) {
     const error = await response.json().catch(() => ({}));
 

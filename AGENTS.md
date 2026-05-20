@@ -6,12 +6,12 @@ shell commands, and other important information, read the current plan:
 
 ## Current Feature Context
 
-- **Spec**: specs/023-remove-registration-role/spec.md
-- **Plan**: specs/023-remove-registration-role/plan.md
-- **Data Model**: specs/023-remove-registration-role/data-model.md
-- **API Contracts**: specs/023-remove-registration-role/contracts/auth-api.md
-- **Quick Start**: specs/023-remove-registration-role/quickstart.md
-- **Feature Branch**: 023-rushd-frontend-backend
+- **Spec**: specs/024-settings-user-info/spec.md
+- **Plan**: specs/024-settings-user-info/plan.md
+- **Data Model**: specs/024-settings-user-info/data-model.md
+- **API Contracts**: specs/024-settings-user-info/contracts/auth-api.md
+- **Quick Start**: specs/024-settings-user-info/quickstart.md
+- **Feature Branch**: 024-rushd-frontend-update
 
 ## Previous Feature Contexts
 

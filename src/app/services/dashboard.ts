@@ -20,7 +20,7 @@ export async function getDashboards(
   const params = new URLSearchParams();
   if (companyId) params.append('companyId', companyId);
   params.append('limit', limit.toString());
-  params.append('offset', offset.toString());
+  if (offset > 0) params.append('offset', offset.toString());
 
   const queryString = params.toString();
   const url = queryString

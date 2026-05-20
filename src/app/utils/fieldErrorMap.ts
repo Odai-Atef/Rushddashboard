@@ -9,7 +9,7 @@ export const FIELD_ERROR_MAP: FieldErrorMapEntry[] = [
   { backendField: 'firstName', frontendField: 'firstName', label: 'الاسم الأول' },
   { backendField: 'lastName', frontendField: 'lastName', label: 'اسم العائلة' },
   { backendField: 'password', frontendField: 'password', label: 'كلمة المرور' },
-  { backendField: 'companyId', frontendField: 'companyId', label: 'الشركة' },
+  { backendField: 'companyName', frontendField: 'companyName', label: 'الشركة' },
   { backendField: 'roleId', frontendField: 'roleId', label: 'الدور' },
   { backendField: 'email', frontendField: 'email', label: 'البريد الإلكتروني' },
 ];

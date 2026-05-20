@@ -54,8 +54,7 @@ describe('RegistrationPage', () => {
       fireEvent.change(screen.getByPlaceholderText('أحمد'), { target: { value: 'أحمد' } });
       fireEvent.change(screen.getByPlaceholderText('محمد'), { target: { value: 'محمد' } });
       fireEvent.change(screen.getByPlaceholderText('name@company.com'), { target: { value: 'test@example.com' } });
-      fireEvent.change(screen.getByLabelText('الشركة'), { target: { value: '550e8400-e29b-41d4-a716-446655440000' } });
-      fireEvent.change(screen.getByLabelText('الدور'), { target: { value: '550e8400-e29b-41d4-a716-446655440010' } });
+      fireEvent.change(screen.getByPlaceholderText('شركة الرشد'), { target: { value: 'شركة الرشد' } });
       const pwInputs = screen.getAllByPlaceholderText('••••••••');
       fireEvent.change(pwInputs[0], { target: { value: 'password123' } });
       fireEvent.change(pwInputs[1], { target: { value: 'password123' } });
@@ -72,52 +71,17 @@ describe('RegistrationPage', () => {
     });
   });
 
-  describe('US2: Role field error rendering and highlighting', () => {
-    it('renders role backend error under role select and applies red border', async () => {
-      const mockedRegister = vi.mocked(authService.register);
-      mockedRegister.mockRejectedValue(
-        new authService.AuthError(
-          'property roleId should not exist',
-          400,
-          'VALIDATION_ERROR',
-          { roleId: ['should not exist'] }
-        )
-      );
-
-      renderPage();
-
-      fireEvent.change(screen.getByPlaceholderText('أحمد'), { target: { value: 'أحمد' } });
-      fireEvent.change(screen.getByPlaceholderText('محمد'), { target: { value: 'محمد' } });
-      fireEvent.change(screen.getByPlaceholderText('name@company.com'), { target: { value: 'test@example.com' } });
-      fireEvent.change(screen.getByLabelText('الشركة'), { target: { value: '550e8400-e29b-41d4-a716-446655440000' } });
-      fireEvent.change(screen.getByLabelText('الدور'), { target: { value: '550e8400-e29b-41d4-a716-446655440010' } });
-      const pwInputs = screen.getAllByPlaceholderText('••••••••');
-      fireEvent.change(pwInputs[0], { target: { value: 'Password123' } });
-      fireEvent.change(pwInputs[1], { target: { value: 'Password123' } });
-      fireEvent.click(screen.getByRole('checkbox'));
-
-      fireEvent.click(screen.getByText('إنشاء حساب'));
-
-      await waitFor(() => {
-        expect(screen.getByText('should not exist')).toBeInTheDocument();
-      });
-
-      const roleSelect = screen.getByLabelText('الدور') as HTMLSelectElement;
-      expect(roleSelect.className).toContain('border-red-500');
-    });
-  });
-
-  describe('US3: Summary banner shows all messages', () => {
+  describe('US2: Summary banner shows all messages', () => {
     it('renders top summary with all backend messages including mapped field errors', async () => {
       const mockedRegister = vi.mocked(authService.register);
       mockedRegister.mockRejectedValue(
         new authService.AuthError(
-          'password must contain at least one uppercase letter; property roleId should not exist; unknownField is invalid',
+          'password must contain at least one uppercase letter; companyName should not be empty; unknownField is invalid',
           400,
           'VALIDATION_ERROR',
           {
             password: ['must contain at least one uppercase letter'],
-            roleId: ['should not exist'],
+            companyName: ['should not be empty'],
           }
         )
       );
@@ -127,8 +91,7 @@ describe('RegistrationPage', () => {
       fireEvent.change(screen.getByPlaceholderText('أحمد'), { target: { value: 'أحمد' } });
       fireEvent.change(screen.getByPlaceholderText('محمد'), { target: { value: 'محمد' } });
       fireEvent.change(screen.getByPlaceholderText('name@company.com'), { target: { value: 'test@example.com' } });
-      fireEvent.change(screen.getByLabelText('الشركة'), { target: { value: '550e8400-e29b-41d4-a716-446655440000' } });
-      fireEvent.change(screen.getByLabelText('الدور'), { target: { value: '550e8400-e29b-41d4-a716-446655440010' } });
+      fireEvent.change(screen.getByPlaceholderText('شركة الرشد'), { target: { value: 'شركة الرشد' } });
       const pwInputs = screen.getAllByPlaceholderText('••••••••');
       fireEvent.change(pwInputs[0], { target: { value: 'password123' } });
       fireEvent.change(pwInputs[1], { target: { value: 'password123' } });
@@ -143,22 +106,22 @@ describe('RegistrationPage', () => {
 
       // Summary should contain all three messages
       const banner = summary.closest('div');
-      expect(banner?.textContent).toContain('should not exist');
+      expect(banner?.textContent).toContain('should not be empty');
       expect(banner?.textContent).toContain('unknownField is invalid');
     });
   });
 
-  describe('US4: Granular field clearing', () => {
-    it('clears password error when password is edited but keeps role error', async () => {
+  describe('US3: Granular field clearing', () => {
+    it('clears password error when password is edited but keeps company error', async () => {
       const mockedRegister = vi.mocked(authService.register);
       mockedRegister.mockRejectedValueOnce(
         new authService.AuthError(
-          'password must contain at least one uppercase letter; property roleId should not exist',
+          'password must contain at least one uppercase letter; companyName should not be empty',
           400,
           'VALIDATION_ERROR',
           {
             password: ['must contain at least one uppercase letter'],
-            roleId: ['should not exist'],
+            companyName: ['should not be empty'],
           }
         )
       );
@@ -168,8 +131,7 @@ describe('RegistrationPage', () => {
       fireEvent.change(screen.getByPlaceholderText('أحمد'), { target: { value: 'أحمد' } });
       fireEvent.change(screen.getByPlaceholderText('محمد'), { target: { value: 'محمد' } });
       fireEvent.change(screen.getByPlaceholderText('name@company.com'), { target: { value: 'test@example.com' } });
-      fireEvent.change(screen.getByLabelText('الشركة'), { target: { value: '550e8400-e29b-41d4-a716-446655440000' } });
-      fireEvent.change(screen.getByLabelText('الدور'), { target: { value: '550e8400-e29b-41d4-a716-446655440010' } });
+      fireEvent.change(screen.getByPlaceholderText('شركة الرشد'), { target: { value: 'شركة الرشد' } });
       const pwInputs = screen.getAllByPlaceholderText('••••••••');
       fireEvent.change(pwInputs[0], { target: { value: 'password123' } });
       fireEvent.change(pwInputs[1], { target: { value: 'password123' } });
@@ -190,8 +152,8 @@ describe('RegistrationPage', () => {
         expect(screen.queryByText('must contain at least one uppercase letter')).not.toBeInTheDocument();
       });
 
-      // Role error should remain
-      expect(screen.getByText('should not exist')).toBeInTheDocument();
+      // Company error should remain
+      expect(screen.getByText('should not be empty')).toBeInTheDocument();
     });
   });
 
@@ -212,8 +174,7 @@ describe('RegistrationPage', () => {
       fireEvent.change(screen.getByPlaceholderText('أحمد'), { target: { value: 'أحمد' } });
       fireEvent.change(screen.getByPlaceholderText('محمد'), { target: { value: 'محمد' } });
       fireEvent.change(screen.getByPlaceholderText('name@company.com'), { target: { value: 'test@example.com' } });
-      fireEvent.change(screen.getByLabelText('الشركة'), { target: { value: '550e8400-e29b-41d4-a716-446655440000' } });
-      fireEvent.change(screen.getByLabelText('الدور'), { target: { value: '550e8400-e29b-41d4-a716-446655440010' } });
+      fireEvent.change(screen.getByPlaceholderText('شركة الرشد'), { target: { value: 'شركة الرشد' } });
       const pwInputs = screen.getAllByPlaceholderText('••••••••');
       fireEvent.change(pwInputs[0], { target: { value: 'password123' } });
       fireEvent.change(pwInputs[1], { target: { value: 'password123' } });
@@ -244,8 +205,7 @@ describe('RegistrationPage', () => {
       fireEvent.change(screen.getByPlaceholderText('أحمد'), { target: { value: 'أحمد' } });
       fireEvent.change(screen.getByPlaceholderText('محمد'), { target: { value: 'محمد' } });
       fireEvent.change(screen.getByPlaceholderText('name@company.com'), { target: { value: 'test@example.com' } });
-      fireEvent.change(screen.getByLabelText('الشركة'), { target: { value: '550e8400-e29b-41d4-a716-446655440000' } });
-      fireEvent.change(screen.getByLabelText('الدور'), { target: { value: '550e8400-e29b-41d4-a716-446655440010' } });
+      fireEvent.change(screen.getByPlaceholderText('شركة الرشد'), { target: { value: 'شركة الرشد' } });
       const pwInputs = screen.getAllByPlaceholderText('••••••••');
       fireEvent.change(pwInputs[0], { target: { value: 'Password123' } });
       fireEvent.change(pwInputs[1], { target: { value: 'Password123' } });

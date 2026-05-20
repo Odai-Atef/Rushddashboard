@@ -36,7 +36,7 @@ export function RootLayout() {
     <AuthProvider>
       <ThemeContext.Provider value={{ theme, setTheme }}>
         <div className={theme}>
-          <Outlet />
+          <Outlet context={{ theme, setTheme }} />
         </div>
       </ThemeContext.Provider>
     </AuthProvider>

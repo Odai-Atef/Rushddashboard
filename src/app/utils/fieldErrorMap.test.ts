@@ -119,7 +119,7 @@ describe('fieldErrorMap', () => {
       expect(fields).toContain('lastName');
       expect(fields).toContain('email');
       expect(fields).toContain('password');
-      expect(fields).toContain('companyId');
+      expect(fields).toContain('companyName');
       expect(fields).toContain('roleId');
     });
   });

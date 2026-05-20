@@ -3,6 +3,9 @@ import { z } from 'zod';
 export interface UserProfile {
   id: string;
   email: string;
+  firstName?: string;
+  lastName?: string;
+  companyName?: string;
 }
 
 export interface AuthTokens {
@@ -26,7 +29,7 @@ export interface RegisterRequest {
   password: string;
   firstName: string;
   lastName: string;
-  companyId: string;
+  companyName: string;
 }
 
 export interface Company {
@@ -75,7 +78,7 @@ const registerBaseSchema = z.object({
   firstName: z.string().min(1, 'الاسم الأول مطلوب').max(100, 'الاسم الأول يجب أن يكون 100 حرف أو أقل'),
   lastName: z.string().min(1, 'اسم العائلة مطلوب').max(100, 'اسم العائلة يجب أن يكون 100 حرف أو أقل'),
   email: z.string().email('البريد الإلكتروني غير صالح'),
-  companyId: z.string().min(1, 'الشركة مطلوبة').uuid('يجب اختيار شركة صالحة'),
+  companyName: z.string().min(1, 'الشركة مطلوبة'),
   password: z
     .string()
     .min(6, 'كلمة المرور يجب أن تكون 6 أحرف على الأقل')
