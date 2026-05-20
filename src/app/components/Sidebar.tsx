@@ -18,6 +18,8 @@ import {
   History
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useAuth } from '../hooks/useAuth';
+import { getDisplayName } from '../utils/getDisplayName';
 
 interface SidebarProps {
   activeView: string;
@@ -25,6 +27,9 @@ interface SidebarProps {
 }
 
 export function Sidebar({ activeView, className }: SidebarProps) {
+  const { user, isLoading } = useAuth();
+  const display = getDisplayName(user);
+
   const navItems = [
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
@@ -78,6 +83,28 @@ export function Sidebar({ activeView, className }: SidebarProps) {
           })}
         </ul>
       </nav>
+
+      {/* User Identity */}
+      <div className="p-4 border-t border-sidebar-border">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center flex-shrink-0 text-sm">
+            {isLoading ? '' : display.initials}
+          </div>
+          <div className="min-w-0">
+            {isLoading ? (
+              <div className="space-y-1">
+                <div className="h-4 w-20 bg-sidebar-accent/50 rounded animate-pulse" />
+                <div className="h-3 w-28 bg-sidebar-accent/50 rounded animate-pulse" />
+              </div>
+            ) : (
+              <>
+                <p className="text-sidebar-foreground text-sm font-medium truncate">{display.name}</p>
+                <p className="text-sidebar-foreground/70 text-xs truncate">{user?.email}</p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Footer */}
       <div className="p-4 border-t border-sidebar-border">

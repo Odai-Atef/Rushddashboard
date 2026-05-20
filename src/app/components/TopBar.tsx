@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router';
 import { Search, Bell, Moon, Sun, Menu, Globe, LogOut } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../hooks/useAuth';
+import { getDisplayName } from '../utils/getDisplayName';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Avatar from '@radix-ui/react-avatar';
 
@@ -19,12 +20,14 @@ export function TopBar({
   className
 }: TopBarProps) {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+  const display = getDisplayName(user);
 
   const handleLogout = () => {
     logout();
     navigate('/auth/login');
   };
+
   return (
     <header className={cn("bg-card border-b border-border flex items-center justify-between px-4 h-16", className)}>
       {/* Mobile Menu Button */}
@@ -95,7 +98,7 @@ export function TopBar({
           <DropdownMenu.Trigger asChild>
             <button className="flex items-center gap-2 p-1 hover:bg-accent rounded-lg transition-colors">
               <Avatar.Root className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                <Avatar.Fallback className="text-sm">أح</Avatar.Fallback>
+                <Avatar.Fallback className="text-sm">{display.initials}</Avatar.Fallback>
               </Avatar.Root>
             </button>
           </DropdownMenu.Trigger>
@@ -106,8 +109,8 @@ export function TopBar({
               align="end"
             >
               <div className="px-3 py-2 border-b border-border mb-2">
-                <p className="font-medium">أحمد محمد</p>
-                <p className="text-muted-foreground text-sm">ahmed@rushd.ai</p>
+                <p className="font-medium">{display.name}</p>
+                <p className="text-muted-foreground text-sm">{user?.email}</p>
               </div>
               <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">
                 الملف الشخصي

@@ -2,9 +2,17 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/023-remove-registration-role/plan.md](specs/023-remove-registration-role/plan.md)
+**Current Plan**: [specs/026-dashboard-user-identity/plan.md](specs/026-dashboard-user-identity/plan.md)
 
 ## Current Feature Context
+
+- **Spec**: specs/026-dashboard-user-identity/spec.md
+- **Plan**: specs/026-dashboard-user-identity/plan.md
+- **Data Model**: specs/026-dashboard-user-identity/data-model.md
+- **Quick Start**: specs/026-dashboard-user-identity/quickstart.md
+- **Feature Branch**: 026-dashboard-user-identity
+
+## Previous Feature Contexts
 
 - **Spec**: specs/024-settings-user-info/spec.md
 - **Plan**: specs/024-settings-user-info/plan.md
@@ -12,17 +20,6 @@ shell commands, and other important information, read the current plan:
 - **API Contracts**: specs/024-settings-user-info/contracts/auth-api.md
 - **Quick Start**: specs/024-settings-user-info/quickstart.md
 - **Feature Branch**: 024-rushd-frontend-update
-
-## Previous Feature Contexts
-
-## Project Structure
-
-- Frontend: React 18.3+ SPA with TypeScript, Vite 6.x, Tailwind CSS 4.x
-- Routing: React Router 7.x
-- State: React Context + hooks
-- Forms: React Hook Form with Zod validation
-- HTTP: Native fetch with typed service layer
-- Testing: Vitest, React Testing Library, Playwright
 
 ## Chat Feature Context
 
@@ -77,5 +74,23 @@ shell commands, and other important information, read the current plan:
 - **API Contracts**: specs/022-fix-registration-validation-errors/contracts/auth-api-errors.md
 - **Quick Start**: specs/022-fix-registration-validation-errors/quickstart.md
 - **Feature Branch**: 022-rushd-frontend-fix
+
+## Remove Registration Role Feature Context
+
+- **Spec**: specs/023-remove-registration-role/spec.md
+- **Plan**: specs/023-remove-registration-role/plan.md
+- **Data Model**: specs/023-remove-registration-role/data-model.md
+- **API Contracts**: specs/023-remove-registration-role/contracts/auth-api.md
+- **Quick Start**: specs/023-remove-registration-role/quickstart.md
+- **Feature Branch**: 023-remove-registration-role
+
+## Settings User Info Feature Context
+
+- **Spec**: specs/024-settings-user-info/spec.md
+- **Plan**: specs/024-settings-user-info/plan.md
+- **Data Model**: specs/024-settings-user-info/data-model.md
+- **API Contracts**: specs/024-settings-user-info/contracts/auth-api.md
+- **Quick Start**: specs/024-settings-user-info/quickstart.md
+- **Feature Branch**: 024-rushd-frontend-update
 
 <!-- SPECKIT END -->
