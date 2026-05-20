@@ -2,7 +2,7 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/021-fix-zod-omit-schema/plan.md](specs/021-fix-zod-omit-schema/plan.md)
+**Current Plan**: [specs/022-fix-registration-validation-errors/plan.md](specs/022-fix-registration-validation-errors/plan.md)
 
 ## Project Structure
 
@@ -57,5 +57,14 @@ shell commands, and other important information, read the current plan:
 - **API Contracts**: specs/020-align-registration-dto/contracts/auth-api.md
 - **Quick Start**: specs/020-align-registration-dto/quickstart.md
 - **Feature Branch**: 020-align-registration-dto
+
+## Fix Registration Error Rendering Feature Context
+
+- **Spec**: specs/022-fix-registration-validation-errors/spec.md
+- **Plan**: specs/022-fix-registration-validation-errors/plan.md
+- **Data Model**: specs/022-fix-registration-validation-errors/data-model.md
+- **API Contracts**: specs/022-fix-registration-validation-errors/contracts/auth-api-errors.md
+- **Quick Start**: specs/022-fix-registration-validation-errors/quickstart.md
+- **Feature Branch**: 022-rushd-frontend-fix
 
 <!-- SPECKIT END -->

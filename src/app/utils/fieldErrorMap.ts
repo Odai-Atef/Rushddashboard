@@ -30,17 +30,24 @@ export function parseFieldErrors(
     const trimmed = raw.trim();
     if (!trimmed) continue;
 
+    // Handle "property {fieldName} should not exist" pattern
+    // e.g. "property roleId should not exist"
+    let working = trimmed;
+    if (working.startsWith('property ')) {
+      working = working.slice(9); // remove "property " prefix
+    }
+
     // Extract leading identifier: everything up to the first space.
     // Handles dotted paths like "user.email must be valid".
-    const firstSpace = trimmed.indexOf(' ');
+    const firstSpace = working.indexOf(' ');
     if (firstSpace === -1) {
       // Cannot extract a field name — treat as unmapped
       unmapped.push(trimmed);
       continue;
     }
 
-    const backendField = trimmed.slice(0, firstSpace);
-    const message = trimmed.slice(firstSpace + 1).trim();
+    const backendField = working.slice(0, firstSpace);
+    const message = working.slice(firstSpace + 1).trim();
 
     const entry = FIELD_ERROR_MAP.find((m) => m.backendField === backendField);
     if (entry) {

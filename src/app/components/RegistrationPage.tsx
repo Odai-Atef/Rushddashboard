@@ -46,18 +46,19 @@ export function RegistrationPage() {
       login(response.user);
       navigate('/dashboard');
     } catch (error) {
-      if (error instanceof AuthError && error.fieldErrors) {
+      if (error instanceof AuthError) {
+        // Always show summary with all backend messages
+        setApiError(error.message);
+
         // Attach each mapped field error to its related input
-        for (const [field, messages] of Object.entries(error.fieldErrors)) {
-          const message = messages.join('; ');
-          setError(field as keyof RegisterFormData, {
-            type: 'server',
-            message,
-          });
-        }
-        // Show unmapped/general errors in the banner
-        if (!error.fieldErrors || Object.keys(error.fieldErrors).length === 0 || error.message) {
-          setApiError(error.message);
+        if (error.fieldErrors) {
+          for (const [field, messages] of Object.entries(error.fieldErrors)) {
+            const message = messages.join('; ');
+            setError(field as keyof RegisterFormData, {
+              type: 'server',
+              message,
+            });
+          }
         }
       } else {
         setApiError(error instanceof Error ? error.message : 'حدث خطأ غير متوقع، يرجى المحاولة مرة أخرى');

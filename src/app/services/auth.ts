@@ -24,9 +24,7 @@ async function handleResponse<T>(response: Response): Promise<T> {
     if (response.status === 400 && Array.isArray(error.message) && error.message.length > 0) {
       const { parsed, unmapped } = parseFieldErrors(error as BackendValidationErrorResponse);
       const fieldErrors = groupFieldErrors(parsed);
-      const bannerMessage = unmapped.length > 0
-        ? unmapped.join('; ')
-        : error.message[0];
+      const bannerMessage = (error.message as string[]).join('; ');
 
       throw new AuthError(
         bannerMessage,
