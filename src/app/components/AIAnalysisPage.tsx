@@ -54,14 +54,16 @@ import {
 } from 'recharts';
 import { cn } from '../utils/cn';
 import { useCategories } from '../hooks/useCategories';
-import { useMemo } from 'react';
+import { CategorySelector } from './analysis/CategorySelector';
+import { EmptyState } from './analysis/EmptyState';
+import { ErrorState } from './analysis/ErrorState';
+import type { AnalysisCategory } from '../types/analysis';
 
 interface AnalysisCard {
   id: string;
   title: string;
   description: string;
   category: string;
-  categoryKey: string;
   estimatedTime: string;
   complexity: 'بسيط' | 'متوسط' | 'متقدم';
   impact: 'منخفض' | 'متوسط' | 'عالي' | 'حرج';
@@ -91,11 +93,13 @@ interface ProgressStep {
 
 export function AIAnalysisPage() {
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('الكل');
+  const { categories, isLoading, error, fetchCategories } = useCategories();
+  const [selectedCategory, setSelectedCategory] = useState<AnalysisCategory | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingText, setGeneratingText] = useState('');
+  const [currentStep, setCurrentStep] = useState(0);
   const [activeAnalysis, setActiveAnalysis] = useState<AnalysisCard | null>(null);
   const [isAnalysisComplete, setIsAnalysisComplete] = useState(false);
   const [chatInput, setChatInput] = useState('');
@@ -108,30 +112,297 @@ export function AIAnalysisPage() {
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Dynamic categories from API
-  const {
-    categories: apiCategories,
-    isLoading: isLoadingCategories,
-    error: categoriesError,
-    fetchCategories
-  } = useCategories();
 
-  // Build filter chips: prepend aggregate "all" then API categories sorted by sortOrder
-  const filterChips = useMemo(() => {
-    const all = [{ key: 'all', label: 'الكل', count: undefined as number | undefined, id: 'all' }];
-    const mapped = apiCategories.map(c => ({
-      key: c.key,
-      label: c.nameAr || c.name,
-      count: typeof c.count === 'number' ? c.count : undefined,
-      id: c.id,
-    }));
-    return [...all, ...mapped];
-  }, [apiCategories]);
 
-  // Map selected label back to key for filtering
-  const selectedKey = filterChips.find(c => c.label === selectedCategory)?.key;
+  // Comprehensive Analysis Cards Library
+  const analysisCards: AnalysisCard[] = [
+    // المبيعات
+    {
+      id: 'sales-1',
+      title: 'تحليل انخفاض الإيرادات',
+      description: 'تحديد أسباب انخفاض الإيرادات وتقديم حلول فورية',
+      category: 'المبيعات',
+      estimatedTime: '2-3 دقائق',
+      complexity: 'متوسط',
+      impact: 'حرج',
+      icon: TrendingDown,
+      recommended: true,
+      color: 'from-red-500 to-orange-600'
+    },
+    {
+      id: 'sales-2',
+      title: 'تحليل أفضل المنتجات',
+      description: 'اكتشف المنتجات الأكثر ربحية وفرص النمو',
+      category: 'المبيعات',
+      estimatedTime: '1-2 دقيقة',
+      complexity: 'بسيط',
+      impact: 'متوسط',
+      icon: Target,
+      trending: true,
+      color: 'from-green-500 to-emerald-600'
+    },
+    {
+      id: 'sales-3',
+      title: 'تحليل الفروع الضعيفة',
+      description: 'تحديد الفروع ذات الأداء المنخفض والأسباب الجذرية',
+      category: 'المبيعات',
+      estimatedTime: '3-4 دقائق',
+      complexity: 'متقدم',
+      impact: 'عالي',
+      icon: MapPin,
+      color: 'from-orange-500 to-red-600'
+    },
+    {
+      id: 'sales-4',
+      title: 'تحليل معدل التحويل',
+      description: 'قياس وتحسين معدلات تحويل العملاء المحتملين',
+      category: 'المبيعات',
+      estimatedTime: '2 دقيقة',
+      complexity: 'متوسط',
+      impact: 'عالي',
+      icon: ArrowRight,
+      recommended: true,
+      color: 'from-blue-500 to-cyan-600'
+    },
+    {
+      id: 'sales-5',
+      title: 'تحليل اتجاهات الإيرادات',
+      description: 'توقع الإيرادات المستقبلية بناءً على الأنماط الحالية',
+      category: 'المبيعات',
+      estimatedTime: '2-3 دقائق',
+      complexity: 'متوسط',
+      impact: 'متوسط',
+      icon: TrendingUp,
+      aiGenerated: true,
+      color: 'from-purple-500 to-pink-600'
+    },
+
+    // العملاء
+    {
+      id: 'customers-1',
+      title: 'تحليل تسرب العملاء',
+      description: 'فهم أسباب فقدان العملاء وتقديم استراتيجيات الاحتفاظ',
+      category: 'العملاء',
+      estimatedTime: '3 دقائق',
+      complexity: 'متقدم',
+      impact: 'حرج',
+      icon: Users,
+      recommended: true,
+      color: 'from-red-500 to-pink-600'
+    },
+    {
+      id: 'customers-2',
+      title: 'تحليل رضا العملاء',
+      description: 'قياس مستوى رضا العملاء وتحديد نقاط التحسين',
+      category: 'العملاء',
+      estimatedTime: '2 دقيقة',
+      complexity: 'بسيط',
+      impact: 'متوسط',
+      icon: MessageSquare,
+      color: 'from-blue-500 to-indigo-600'
+    },
+    {
+      id: 'customers-3',
+      title: 'تحليل القيمة الدائمة للعميل',
+      description: 'حساب LTV وتحديد العملاء الأكثر قيمة',
+      category: 'العملاء',
+      estimatedTime: '2-3 دقائق',
+      complexity: 'متوسط',
+      impact: 'عالي',
+      icon: DollarSign,
+      trending: true,
+      color: 'from-green-500 to-teal-600'
+    },
+    {
+      id: 'customers-4',
+      title: 'تحليل شرائح العملاء',
+      description: 'تقسيم العملاء إلى مجموعات متجانسة للاستهداف الأمثل',
+      category: 'العملاء',
+      estimatedTime: '3-4 دقائق',
+      complexity: 'متقدم',
+      impact: 'عالي',
+      icon: Target,
+      aiGenerated: true,
+      color: 'from-purple-500 to-blue-600'
+    },
+
+    // التشغيل
+    {
+      id: 'operations-1',
+      title: 'تحليل كفاءة العمليات',
+      description: 'قياس كفاءة العمليات التشغيلية وتحديد الاختناقات',
+      category: 'التشغيل',
+      estimatedTime: '3 دقائق',
+      complexity: 'متوسط',
+      impact: 'عالي',
+      icon: Activity,
+      color: 'from-orange-500 to-red-600'
+    },
+    {
+      id: 'operations-2',
+      title: 'تحليل أوقات التسليم',
+      description: 'تقييم سرعة التنفيذ وتحسين عملية التوصيل',
+      category: 'التشغيل',
+      estimatedTime: '2 دقيقة',
+      complexity: 'بسيط',
+      impact: 'متوسط',
+      icon: Clock,
+      recommended: true,
+      color: 'from-blue-500 to-cyan-600'
+    },
+    {
+      id: 'operations-3',
+      title: 'تحليل جودة الخدمة',
+      description: 'قياس جودة الخدمات المقدمة ومعدلات الأخطاء',
+      category: 'التشغيل',
+      estimatedTime: '2-3 دقائق',
+      complexity: 'متوسط',
+      impact: 'عالي',
+      icon: CheckCircle,
+      color: 'from-green-500 to-emerald-600'
+    },
+
+    // Additional categories continue...
+    {
+      id: 'profitability-1',
+      title: 'تحليل هوامش الربح',
+      description: 'تحليل هوامش الربح حسب المنتج والخدمة',
+      category: 'الربحية',
+      estimatedTime: '2-3 دقائق',
+      complexity: 'متوسط',
+      impact: 'حرج',
+      icon: DollarSign,
+      recommended: true,
+      color: 'from-green-500 to-emerald-600'
+    },
+    {
+      id: 'inventory-1',
+      title: 'تحليل المخزون الراكد',
+      description: 'تحديد المنتجات بطيئة الحركة والحلول',
+      category: 'المخزون',
+      estimatedTime: '2 دقيقة',
+      complexity: 'بسيط',
+      impact: 'متوسط',
+      icon: Package,
+      color: 'from-orange-500 to-red-600'
+    },
+    {
+      id: 'risks-1',
+      title: 'تحليل المخاطر المالية',
+      description: 'تحديد وتقييم المخاطر المالية المحتملة',
+      category: 'المخاطر',
+      estimatedTime: '3-4 دقائق',
+      complexity: 'متقدم',
+      impact: 'حرج',
+      icon: AlertTriangle,
+      recommended: true,
+      color: 'from-red-500 to-orange-600'
+    },
+    {
+      id: 'opportunities-1',
+      title: 'اكتشاف فرص النمو',
+      description: 'تحديد فرص التوسع والنمو الجديدة',
+      category: 'الفرص',
+      estimatedTime: '3 دقائق',
+      complexity: 'متقدم',
+      impact: 'عالي',
+      icon: Zap,
+      trending: true,
+      aiGenerated: true,
+      color: 'from-yellow-500 to-orange-600'
+    },
+    {
+      id: 'hr-1',
+      title: 'تحليل معدل دوران الموظفين',
+      description: 'فهم أسباب الاستقالات وتحسين الاحتفاظ',
+      category: 'الموارد البشرية',
+      estimatedTime: '2-3 دقائق',
+      complexity: 'متوسط',
+      impact: 'عالي',
+      icon: UserCog,
+      color: 'from-red-500 to-orange-600'
+    },
+    {
+      id: 'executive-1',
+      title: 'تقرير الأداء التنفيذي الشامل',
+      description: 'نظرة شاملة على جميع مؤشرات الأداء الرئيسية',
+      category: 'الإدارة التنفيذية',
+      estimatedTime: '4-5 دقائق',
+      complexity: 'متقدم',
+      impact: 'حرج',
+      icon: BarChart3,
+      recommended: true,
+      color: 'from-purple-500 to-blue-600'
+    }
+  ];
+
+  // Analysis history
+  const analysisHistory: AnalysisHistoryItem[] = [
+    {
+      id: 'analysis-1',
+      title: 'تحليل انخفاض الإيرادات',
+      type: 'Revenue Analysis',
+      date: '2026-05-11',
+      time: '10:30 ص',
+      status: 'completed',
+      preview: 'انخفضت الإيرادات بنسبة 12% في فرع الدمام بسبب ضعف التحويل...'
+    },
+    {
+      id: 'analysis-2',
+      title: 'تحليل تسرب العملاء',
+      type: 'Customer Churn',
+      date: '2026-05-10',
+      time: '03:15 م',
+      status: 'completed',
+      preview: '42% من الاستقالات بسبب فرص أفضل في السوق...'
+    },
+    {
+      id: 'analysis-3',
+      title: 'أداء الحملات التسويقية',
+      type: 'Marketing Performance',
+      date: '2026-05-09',
+      time: '11:45 ص',
+      status: 'running',
+      preview: 'جاري تحليل ROI للحملات الأخيرة...'
+    },
+  ];
+
+  // Mock chart data
+  const chartData = [
+    { month: 'محرم', revenue: 2100000, target: 2500000 },
+    { month: 'صفر', revenue: 2350000, target: 2500000 },
+    { month: 'ربيع الأول', revenue: 2200000, target: 2500000 },
+    { month: 'ربيع الثاني', revenue: 2650000, target: 2500000 },
+  ];
+
+  // Executive recommendations
+  const recommendations = [
+    {
+      id: 1,
+      type: 'urgent',
+      title: 'تحسين معدل التحويل في فرع الدمام',
+      impact: '+18% إيرادات',
+      action: 'إعادة تدريب فريق المبيعات وتحسين عرض المنتجات'
+    },
+    {
+      id: 2,
+      type: 'opportunity',
+      title: 'توسيع قناة B2B',
+      impact: '+32% نمو محتمل',
+      action: 'توظيف 3 مدراء مبيعات متخصصين'
+    },
+    {
+      id: 3,
+      type: 'cost',
+      title: 'تحسين إدارة المخزون',
+      impact: 'توفير 15% من التكاليف',
+      action: 'تطبيق نظام إدارة مخزون ذكي'
+    },
+  ];
+
+  // Filter analysis cards by category and search
   const filteredCards = analysisCards.filter(card => {
-    const categoryMatch = selectedKey === 'all' || selectedKey === undefined || card.categoryKey === selectedKey;
+    const categoryMatch = !selectedCategory || card.category === (selectedCategory.nameAr || selectedCategory.name);
     const searchMatch = searchQuery === '' ||
       card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       card.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -792,59 +1063,46 @@ export function AIAnalysisPage() {
               </div>
             </div>
 
-            {/* Category Filters */}
+            {/* Category Filters and Results */}
             <div className="px-6 py-4 border-b border-border bg-muted/30">
               <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                {/* Loading skeleton */}
-                {isLoadingCategories && (
-                  <>
+                {/* "الكل" Aggregate Chip */}
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className={cn(
+                    'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+                    !selectedCategory
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-card border border-border hover:border-primary/50'
+                  )}
+                >
+                  الكل
+                </button>
+
+                {/* API-driven categories */}
+                {isLoading ? (
+                  <div className="flex gap-2">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <div key={i} className="h-9 w-24 bg-muted animate-pulse rounded-lg flex-shrink-0" />
+                      <div
+                        key={i}
+                        className="h-10 w-32 bg-muted animate-pulse rounded-lg flex-shrink-0"
+                      />
                     ))}
-                  </>
-                )}
-
-                {/* Error state */}
-                {!isLoadingCategories && categoriesError && (
-                  <div className="flex items-center gap-3 text-sm text-red-600">
-                    <span>حدث خطأ أثناء تحميل التصنيفات</span>
-                    <button
-                      onClick={fetchCategories}
-                      className="px-3 py-1.5 bg-primary text-primary-foreground rounded-lg text-xs hover:bg-primary/90"
-                    >
-                      إعادة المحاولة
-                    </button>
                   </div>
-                )}
-
-                {/* Empty state */}
-                {!isLoadingCategories && !categoriesError && filterChips.length <= 1 && (
-                  <span className="text-sm text-muted-foreground">لا توجد تصنيفات متاحة</span>
-                )}
-
-                {/* Category chips */}
-                {!isLoadingCategories && !categoriesError && filterChips.length > 1 && (
-                  <>
-                    {filterChips.map((chip) => (
-                      <button
-                        key={chip.id}
-                        onClick={() => setSelectedCategory(chip.label)}
-                        className={cn(
-                          'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all flex items-center gap-2',
-                          selectedCategory === chip.label
-                            ? 'bg-primary text-primary-foreground'
-                            : 'bg-card border border-border hover:border-primary/50'
-                        )}
-                      >
-                        <span>{chip.label}</span>
-                        {typeof chip.count === 'number' && (
-                          <span className="px-2 py-0.5 bg-black/10 rounded-full text-xs">
-                            {chip.count}
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </>
+                ) : error ? (
+                  <ErrorState message={error} onRetry={fetchCategories} />
+                ) : categories.length === 0 ? (
+                  <EmptyState
+                    title="لا توجد تصنيفات"
+                    description="لم يتم العثور على تصنيفات تحليل"
+                    icon="folder"
+                  />
+                ) : (
+                  <CategorySelector
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    onSelectCategory={setSelectedCategory}
+                  />
                 )}
               </div>
             </div>
