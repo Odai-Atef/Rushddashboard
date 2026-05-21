@@ -2,12 +2,15 @@ import { z } from 'zod';
 
 export const AnalysisCategorySchema = z.object({
   id: z.string().uuid(),
+  key: z.string().max(100),
   name: z.string().max(100),
   nameAr: z.string().max(100),
   description: z.string().max(500).optional(),
+  descriptionAr: z.string().max(500).optional(),
   icon: z.string().optional(),
   sortOrder: z.number().int().nonnegative(),
-  isActive: z.boolean(),
+  count: z.number().int().nonnegative().optional(),
+  isActive: z.boolean().optional(),
 });
 
 export const KPIBlockSchema = z.object({

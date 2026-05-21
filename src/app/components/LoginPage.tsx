@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { login as loginApi } from '../services/auth';
+import { login as loginApi, AuthError } from '../services/auth';
 import { loginSchema, type LoginFormData } from '../types/auth';
 
 export function LoginPage() {
@@ -28,10 +28,14 @@ export function LoginPage() {
       login(response.user);
       navigate('/dashboard');
     } catch (error) {
-      if (error instanceof Error) {
+      if (error instanceof AuthError) {
+        setApiError(error.message);
+      } else if (error instanceof Error && error.message === 'Failed to fetch') {
+        setApiError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+      } else if (error instanceof Error) {
         setApiError(error.message);
       } else {
-        setApiError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+        setApiError('حدث خطأ غير متوقع');
       }
     }
   };

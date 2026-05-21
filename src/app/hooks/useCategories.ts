@@ -1,39 +1,34 @@
 import { useState, useCallback, useEffect } from 'react';
 import { toast } from 'sonner';
 import { getCategories } from '../services/analysis';
-import { useAnalysisContext } from './useAnalysisContext';
 import type { AnalysisCategory } from '../types/analysis';
 
 export function useCategories() {
-  const {
-    categories,
-    setCategories,
-    isLoadingCategories,
-    setIsLoadingCategories,
-    categoriesError,
-    setCategoriesError,
-  } = useAnalysisContext();
-
+  const [categories, setCategories] = useState<AnalysisCategory[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [hasFetched, setHasFetched] = useState(false);
 
   const fetchCategories = useCallback(async () => {
     if (hasFetched && categories.length > 0) return;
-
-    setIsLoadingCategories(true);
-    setCategoriesError(null);
+    setIsLoading(true);
+    setError(null);
 
     try {
       const response = await getCategories();
-      setCategories(response.categories);
+      const sorted = [...(response.categories || [])].sort(
+        (a, b) => a.sortOrder - b.sortOrder
+      );
+      setCategories(sorted);
       setHasFetched(true);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'فشل في تحميل التصنيفات';
-      setCategoriesError(message);
+      setError(message);
       toast.error(message);
     } finally {
-      setIsLoadingCategories(false);
+      setIsLoading(false);
     }
-  }, [categories.length, hasFetched, setCategories, setCategoriesError, setIsLoadingCategories]);
+  }, [categories.length, hasFetched]);
 
   useEffect(() => {
     fetchCategories();
@@ -41,8 +36,8 @@ export function useCategories() {
 
   return {
     categories,
-    isLoading: isLoadingCategories,
-    error: categoriesError,
+    isLoading,
+    error,
     fetchCategories,
   };
 }

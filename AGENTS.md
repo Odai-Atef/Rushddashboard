@@ -2,24 +2,24 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/026-dashboard-user-identity/plan.md](specs/026-dashboard-user-identity/plan.md)
+**Current Plan**: [specs/027-ai-analysis-categories/plan.md](specs/027-ai-analysis-categories/plan.md)
 
 ## Current Feature Context
+
+- **Spec**: specs/027-ai-analysis-categories/spec.md
+- **Plan**: specs/027-ai-analysis-categories/plan.md
+- **Data Model**: specs/027-ai-analysis-categories/data-model.md
+- **API Contracts**: specs/027-ai-analysis-categories/contracts/analysis-api.md
+- **Quick Start**: specs/027-ai-analysis-categories/quickstart.md
+- **Feature Branch**: 027-ai-analysis-categories
+
+## Previous Feature Contexts
 
 - **Spec**: specs/026-dashboard-user-identity/spec.md
 - **Plan**: specs/026-dashboard-user-identity/plan.md
 - **Data Model**: specs/026-dashboard-user-identity/data-model.md
 - **Quick Start**: specs/026-dashboard-user-identity/quickstart.md
 - **Feature Branch**: 026-dashboard-user-identity
-
-## Previous Feature Contexts
-
-- **Spec**: specs/024-settings-user-info/spec.md
-- **Plan**: specs/024-settings-user-info/plan.md
-- **Data Model**: specs/024-settings-user-info/data-model.md
-- **API Contracts**: specs/024-settings-user-info/contracts/auth-api.md
-- **Quick Start**: specs/024-settings-user-info/quickstart.md
-- **Feature Branch**: 024-rushd-frontend-update
 
 ## Chat Feature Context
 
