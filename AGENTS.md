@@ -2,9 +2,18 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-**Current Plan**: [specs/029-ai-analysis-categories/plan.md](specs/029-ai-analysis-categories/plan.md)
+**Current Plan**: [specs/030-session-expiry-logout/plan.md](specs/030-session-expiry-logout/plan.md)
 
 ## Current Feature Context
+
+- **Spec**: specs/030-session-expiry-logout/spec.md
+- **Plan**: specs/030-session-expiry-logout/plan.md
+- **Data Model**: specs/030-session-expiry-logout/data-model.md
+- **API Contracts**: specs/030-session-expiry-logout/contracts/auth-api.md
+- **Quick Start**: specs/030-session-expiry-logout/quickstart.md
+- **Feature Branch**: 031-session-expiry-logout
+
+## Previous Feature Contexts
 
 - **Spec**: specs/029-ai-analysis-categories/spec.md
 - **Plan**: specs/029-ai-analysis-categories/plan.md
@@ -12,8 +21,6 @@ shell commands, and other important information, read the current plan:
 - **API Contracts**: specs/029-ai-analysis-categories/contracts/analysis-api.md
 - **Quick Start**: specs/029-ai-analysis-categories/quickstart.md
 - **Feature Branch**: 029-ai-analysis-categories
-
-## Previous Feature Contexts
 
 - **Spec**: specs/027-ai-analysis-categories/spec.md
 - **Plan**: specs/027-ai-analysis-categories/plan.md
