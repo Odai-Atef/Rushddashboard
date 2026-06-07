@@ -1,4 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router';
+// Router configuration - Updated 2026-06-07
 import { RootLayout } from './layouts/RootLayout';
 import { AuthLayout } from './layouts/AuthLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
@@ -23,6 +24,7 @@ import { ComplianceRiskPage } from './components/ComplianceRiskPage';
 import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
 import { ProjectJourneyPage } from './components/ProjectJourneyPage';
 import { CharityAssessmentPage } from './components/CharityAssessmentPage';
+import { CharityOnboardingFlow } from './components/CharityOnboardingFlow';
 
 export const router = createBrowserRouter([
   {
@@ -130,6 +132,10 @@ export const router = createBrowserRouter([
           {
             path: 'charity-assessment',
             Component: CharityAssessmentPage,
+          },
+          {
+            path: 'onboarding',
+            Component: CharityOnboardingFlow,
           },
         ],
       },
