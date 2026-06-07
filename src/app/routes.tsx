@@ -25,6 +25,7 @@ import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
 import { ProjectJourneyPage } from './components/ProjectJourneyPage';
 import { CharityAssessmentPage } from './components/CharityAssessmentPage';
 import { CharityOnboardingFlow } from './components/CharityOnboardingFlow';
+import { ProjectManagementModule } from './components/ProjectManagementModule';
 
 export const router = createBrowserRouter([
   {
@@ -136,6 +137,10 @@ export const router = createBrowserRouter([
           {
             path: 'onboarding',
             Component: CharityOnboardingFlow,
+          },
+          {
+            path: 'project-management',
+            Component: ProjectManagementModule,
           },
         ],
       },
