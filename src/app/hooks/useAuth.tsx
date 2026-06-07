@@ -1,6 +1,8 @@
 import { useState, useEffect, createContext, useContext, useCallback } from 'react';
+import { useNavigate, useLocation } from 'react-router';
 import type { UserProfile } from '../types/auth';
 import { getUser, hasTokens, clearTokens } from '../utils/auth';
+import { useAuthSessionPoller } from './useAuthSessionPoller';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -24,6 +26,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const restoreAuth = () => {
@@ -42,6 +46,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     restoreAuth();
   }, []);
 
+  const handleSessionExpired = useCallback(() => {
+    clearTokens();
+    setUser(null);
+    setIsAuthenticated(false);
+
+    const returnPath = encodeURIComponent(location.pathname + location.search);
+    navigate(`/auth/login?next=${returnPath}`, { replace: true });
+  }, [navigate, location.pathname, location.search]);
+
+  const { startPolling, stopPolling } = useAuthSessionPoller({
+    onSessionExpired: handleSessionExpired,
+    isAuthenticated,
+    pathname: location.pathname,
+  });
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+    return () => stopPolling();
+  }, [isAuthenticated, startPolling, stopPolling]);
+
   const login = useCallback((userData: UserProfile) => {
     setUser(userData);
     setIsAuthenticated(true);
@@ -51,7 +79,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     clearTokens();
     setUser(null);
     setIsAuthenticated(false);
-  }, []);
+    navigate('/auth/login', { replace: true });
+  }, [navigate]);
 
   const value: AuthContextType = {
     isAuthenticated,

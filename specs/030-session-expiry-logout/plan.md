@@ -1,42 +1,44 @@
-# Implementation Plan: Global Session Expiry Check and Auto Logout
+# Implementation Plan: [FEATURE]
 
-**Branch**: `031-session-expiry-logout` | **Date**: Friday, May 22, 2026 | **Spec**: [specs/030-session-expiry-logout/spec.md](specs/030-session-expiry-logout/spec.md)
-**Input**: Feature specification from `/specs/030-session-expiry-logout/spec.md`
+**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
+**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
 
 **Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
 
 ## Summary
 
-Add centralized periodic session validity checks (every 15 seconds) while the user is on protected pages. When the session token is expired or invalid, automatically log the user out, clear auth/session state, redirect to the login screen, and display a localized toast message. Background tabs should use `document.visibilitychange` to pause/resume polling. Cross-tab logout is coordinated via `localStorage` events to ensure only one toast appears.
+[Extract from feature spec: primary requirement + technical approach from research]
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.x targeting ES2022 via Vite 6.x
-**Primary Dependencies**: React 18.3+, React Router 7.x, React Context + hooks for state management
-**Storage**: N/A (memory + `localStorage` for cross-tab coordination signal)
-**Testing**: Vitest + React Testing Library for unit/component tests; Playwright for E2E
-**Target Platform**: Modern evergreen browsers (Chrome, Firefox, Safari, Edge)
-**Project Type**: Web application (React SPA — frontend monolith)
-**Performance Goals**: Timer interval MUST not degrade page performance or cause unnecessary reflows
-**Constraints**: Timer logic must not exceed 50 lines per function; polling interval (15s) is a configurable constant
-**Scale/Scope**: Single-tenant frontend; cross-tab behavior limited to same-origin tabs
+<!--
+  ACTION REQUIRED: Replace the content in this section with the technical details
+  for the project. The structure here is presented in advisory capacity to guide
+  the iteration process.
+-->
+
+**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
+**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
+**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
+**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
+**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
+**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
+**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
+**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
+**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-checked after Phase 1 design.*
+*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-1. **Component-First Architecture** - `useAuthSessionPoller` hook extracted into `src/hooks/`; auth provider owns timer lifecycle; no per-page duplication. ✅
-2. **Clean Code & Quality Standards** - Maximum 50 lines for `checkSessionValid` and `logout` helpers; magic number 15 extracted to `SESSION_POLL_INTERVAL_MS` in config. ✅
-3. **API Integration & Resilience** - Network errors must not trigger false logouts; 401/403 treated as explicit expiry. ✅
-4. **Performance & Responsive Design** - Visibility API used to pause polling in background tabs; no performance degradation expected. ✅
-5. **Containerization & Environment Consistency** - No Docker changes needed; purely frontend logic. ✅
+[Gates determined based on constitution file]
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/030-session-expiry-logout/
+specs/[###-feature]/
 ├── plan.md              # This file (/speckit.plan command output)
 ├── research.md          # Phase 0 output (/speckit.plan command)
 ├── data-model.md        # Phase 1 output (/speckit.plan command)
@@ -46,23 +48,57 @@ specs/030-session-expiry-logout/
 ```
 
 ### Source Code (repository root)
+<!--
+  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
+  for this feature. Delete unused options and expand the chosen structure with
+  real paths (e.g., apps/admin, packages/something). The delivered plan must
+  not include Option labels.
+-->
 
 ```text
+# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── components/          # Reusable UI components (toast notification listener)
-│   └── ui/             # shadcn/ui primitives
-│   └── toast/          # Notification listener for SESSION_EXPIRED events
-├── pages/              # Route-level page components (public vs protected)
-├── services/           # API service layer (GET /auth/me)
-├── hooks/              # Custom React hooks (useAuthSessionPoller)
-├── utils/              # Helper functions and utilities
-├── types/              # Shared TypeScript types and Zod schemas
-├── stores/             # State management (auth provider, locale state)
-└── lib/                # Third-party configurations (i18n)
+├── models/
+├── services/
+├── cli/
+└── lib/
+
+tests/
+├── contract/
+├── integration/
+└── unit/
+
+# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
+backend/
+├── src/
+│   ├── models/
+│   ├── services/
+│   └── api/
+└── tests/
+
+frontend/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   └── services/
+└── tests/
+
+# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
+api/
+└── [same as backend above]
+
+ios/ or android/
+└── [platform-specific structure: feature modules, UI flows, platform tests]
 ```
 
-**Structure Decision**: Single-project React application aligned with existing root structure. Timer logic lives in `src/hooks/useAuthSessionPoller.ts` and is consumed by the existing auth provider.
+**Structure Decision**: [Document the selected structure and reference the real
+directories captured above]
 
 ## Complexity Tracking
 
-> **No violations identified.** All logic fits within component-first and clean-code limits. Timer logic is centralized, deduplicated, and functions stay under 50 lines.
+> **Fill ONLY if Constitution Check has violations that must be justified**
+
+| Violation | Why Needed | Simpler Alternative Rejected Because |
+|-----------|------------|-------------------------------------|
+| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
+| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |

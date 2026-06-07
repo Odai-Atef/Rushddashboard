@@ -1,5 +1,5 @@
-import type { LoginRequest, RegisterRequest, AuthResponse, BackendValidationErrorResponse } from '../types/auth';
-import { getRefreshToken, setTokens, clearTokens, setUser } from '../utils/auth';
+import type { LoginRequest, RegisterRequest, AuthResponse, BackendValidationErrorResponse, UserProfile } from '../types/auth';
+import { getRefreshToken, setTokens, clearTokens, setUser, getAccessToken } from '../utils/auth';
 import { parseFieldErrors, groupFieldErrors } from '../utils/fieldErrorMap';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api/v1';
@@ -50,7 +50,7 @@ export async function login(credentials: LoginRequest): Promise<AuthResponse> {
     body: JSON.stringify(credentials),
   });
 
-  const data = await handleResponse<AuthResponse>(response);
+  const data = await handleResponse(response) as AuthResponse;
   setTokens(data);
   setUser(data.user);
   return data;
@@ -63,7 +63,7 @@ export async function register(data: RegisterRequest): Promise<AuthResponse> {
     body: JSON.stringify(data),
   });
 
-  const result = await handleResponse<AuthResponse>(response);
+  const result = await handleResponse(response) as AuthResponse;
   setTokens(result);
   setUser(result.user);
   return result;
@@ -81,9 +81,31 @@ export async function refreshToken(): Promise<AuthResponse> {
     body: JSON.stringify({ refreshToken: refresh }),
   });
 
-  const data = await handleResponse<AuthResponse>(response);
+  const data = await handleResponse(response) as AuthResponse;
   setTokens(data);
   return data;
+}
+
+export async function getMe(): Promise<UserProfile> {
+  const token = getAccessToken();
+  const response = await fetch(`${API_BASE_URL}/auth/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json().catch(() => ({}));
+    throw new AuthError(
+      error.message || 'Session check failed',
+      response.status,
+      error.error || 'SESSION_CHECK_ERROR'
+    );
+  }
+
+  return (await response.json()) as UserProfile;
 }
 
 export function logout(): void {

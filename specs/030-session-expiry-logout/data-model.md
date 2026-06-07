@@ -35,4 +35,3 @@ Represents the outcome of a single periodic validity verification.
 - `isPolling` MUST be `false` when the user is on a public page or not authenticated.
 - `logoutSignal.timestamp` MUST be within a short grace window (e.g., < 3 seconds) for other tabs to treat it as handled by a prior tab.
 - `hasNotifiedExpiry` MUST be reset to `false` only upon successful authentication (login), NOT on page navigation or re-render.
-

@@ -27,6 +27,15 @@ Notes
 - Implement in a centralized auth/session layer, not separately per page
 - Integrate with existing route guards / auth provider / interceptor if available"
 
+## Clarifications
+
+### Session 2026-05-23
+
+- Q: How exactly should the 15-second periodic validity check be performed? → A: Active backend validation request every 15 seconds.
+- Q: On session expiry redirect to login, should the original protected route be preserved for post-login return? → A: Yes, preserve via `?next=` parameter.
+- Q: On expiry logout, should all frontend application state be cleared or only auth/session state? → A: Only auth/session state.
+- Q: Should the redirect to login after session expiry be a full page reload or a client-side (router) redirect? → A: Client-side (router) redirect.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Protected Page Session Expiry Alert (Priority: P1)
@@ -77,7 +86,7 @@ As a site visitor on a public page, I am not affected by session expiry checks o
 ### Edge Cases
 
 - What happens if the user attempts to navigate between protected pages during a token expiry event? — The check runs across all protected routes; only one logout/redirect/toast sequence should execute.
-- How does the system handle intermittent network failures during the validity check? — It should not treat a network error as an expired token; only explicit invalid/expired token responses trigger logout.
+- How does the system handle intermittent network failures during the validity check? — Network errors during the periodic backend validation request must not be treated as expired tokens; only explicit invalid/expired token responses from the backend trigger logout.
 - What happens when multiple tabs are open? — Each tab may have its own check, but duplicate logout loops must be avoided (e.g., via debouncing or a shared flag).
 - How is the 15-second interval managed to avoid duplicate polling when navigating or when components re-mount? — A single, shared timer instance should be used.
 - If the token is renewed/refreshed by another process while on a protected page, does the check reflect the updated token? — The check must evaluate the current token at each interval.
@@ -88,8 +97,8 @@ As a site visitor on a public page, I am not affected by session expiry checks o
 
 - **FR-001**: System MUST periodically verify session/token validity every 15 seconds while the user is on any protected/authenticated page.
 - **FR-002**: System MUST NOT perform session validity checks on public/unauthenticated pages.
-- **FR-003**: When an invalid or expired token is detected, System MUST log the user out immediately and clear all auth/session state.
-- **FR-004**: Following a detected token expiry or invalidity, System MUST redirect the user to the login screen.
+- **FR-003**: When an invalid or expired token is detected, System MUST log the user out immediately and clear all auth/session state, including access token, refresh token, user profile, and auth status, while preserving unrelated application data and the user's language preference.
+- **FR-004**: Following a detected token expiry or invalidity, System MUST redirect the user to the login screen, preserving the current protected route via a `?next=` query parameter so the user can return after re-authenticating.
 - **FR-005**: System MUST display a localized toast message upon token expiry, using the current selected language of the user.
   - English: “Session expired, please login again”
   - Arabic: “انتهت الجلسة، يرجى تسجيل الدخول مرة أخرى”
