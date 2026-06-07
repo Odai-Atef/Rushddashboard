@@ -27,6 +27,7 @@ import { CharityAssessmentPage } from './components/CharityAssessmentPage';
 import { CharityOnboardingFlow } from './components/CharityOnboardingFlow';
 import { ProjectManagementModule } from './components/ProjectManagementModule';
 import { AIProjectInnovationModule } from './components/AIProjectInnovationModule';
+import { ProjectCollaborationModule } from './components/ProjectCollaborationModule';
 
 export const router = createBrowserRouter([
   {
@@ -146,6 +147,10 @@ export const router = createBrowserRouter([
           {
             path: 'ai-innovation',
             Component: AIProjectInnovationModule,
+          },
+          {
+            path: 'collaboration',
+            Component: ProjectCollaborationModule,
           },
         ],
       },

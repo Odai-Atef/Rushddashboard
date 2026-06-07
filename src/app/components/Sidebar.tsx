@@ -19,7 +19,8 @@ import {
   Briefcase,
   ClipboardCheck,
   UserPlus,
-  Brain
+  Brain,
+  MessageSquare
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -36,6 +37,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history' },
     { id: 'project-journey', label: 'رحلة المشروع', icon: Briefcase, path: '/dashboard/project-journey' },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+    { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
     { id: 'onboarding', label: 'تسجيل المؤسسات', icon: UserPlus, path: '/dashboard/onboarding' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
