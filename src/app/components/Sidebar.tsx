@@ -17,7 +17,8 @@ import {
   ShieldAlert,
   History,
   Briefcase,
-  ClipboardCheck
+  ClipboardCheck,
+  UserPlus
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -33,6 +34,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history' },
     { id: 'project-journey', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-journey' },
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
+    { id: 'onboarding', label: 'تسجيل المؤسسات', icon: UserPlus, path: '/dashboard/onboarding' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources' },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk' },

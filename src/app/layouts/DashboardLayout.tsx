@@ -29,6 +29,7 @@ export function DashboardLayout() {
     '/dashboard/analysis-history': 'analysis-history',
     '/dashboard/project-journey': 'project-journey',
     '/dashboard/charity-assessment': 'charity-assessment',
+    '/dashboard/onboarding': 'onboarding',
     '/dashboard/notifications': 'notifications',
     '/dashboard/data-sources': 'data-sources',
     '/dashboard/compliance-risk': 'compliance-risk',

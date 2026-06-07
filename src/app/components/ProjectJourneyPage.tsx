@@ -1,9 +1,10 @@
 export function ProjectJourneyPage() {
+  console.log('✓ ProjectJourneyPage component rendered successfully');
   return (
     <div className="space-y-6 p-6">
       <div>
-        <h1 className="text-3xl font-bold mb-2">إدارة رحلة المشروع</h1>
-        <p className="text-muted-foreground">منصة تعاون لإدارة دورة حياة المشاريع الخيرية</p>
+        <h1 className="text-3xl font-bold mb-2">إدارة رحلة المشروع ✓</h1>
+        <p className="text-muted-foreground">منصة تعاون لإدارة دورة حياة المشاريع الخيرية - الصفحة نشطة وتعمل</p>
       </div>
 
       <div className="bg-card border border-border rounded-lg p-8 text-center">

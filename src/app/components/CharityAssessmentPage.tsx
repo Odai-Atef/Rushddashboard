@@ -73,6 +73,7 @@ interface RoadmapItem {
 }
 
 export function CharityAssessmentPage() {
+  console.log('✓ CharityAssessmentPage component rendered successfully');
   const [currentView, setCurrentView] = useState<'start' | 'assessment' | 'results' | 'roadmap'>('start');
   const [currentStep, setCurrentStep] = useState(0);
   const [showAIInsights, setShowAIInsights] = useState(true);
