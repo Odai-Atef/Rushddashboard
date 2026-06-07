@@ -18,7 +18,10 @@ export const useAuth = () => {
 };
 
 export function RootLayout() {
+  const noAuth = import.meta.env.VITE_NO_AUTH !== 'false';
+
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    if (noAuth) return true;
     return localStorage.getItem('rushd_auth') === 'true';
   });
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -43,6 +46,10 @@ export function RootLayout() {
   };
 
   const logout = () => {
+    if (noAuth) {
+      setIsAuthenticated(true);
+      return;
+    }
     setIsAuthenticated(false);
     localStorage.removeItem('rushd_auth');
   };
