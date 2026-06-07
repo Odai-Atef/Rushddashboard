@@ -19,7 +19,8 @@ import {
   History,
   Briefcase,
   ClipboardCheck,
-  UserPlus
+  UserPlus,
+  Brain
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useEffect } from 'react';
@@ -34,6 +35,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
   const navItems = [
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
+    { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation' },
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history' },
     { id: 'project-journey', label: 'رحلة المشروع', icon: Briefcase, path: '/dashboard/project-journey' },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },

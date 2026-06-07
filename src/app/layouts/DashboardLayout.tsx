@@ -24,6 +24,7 @@ export function DashboardLayout() {
   const pathToView: Record<string, string> = {
     '/dashboard': 'executive',
     '/dashboard/ai-analysis': 'ai-analysis',
+    '/dashboard/ai-innovation': 'ai-innovation',
     '/dashboard/analysis-history': 'analysis-history',
     '/dashboard/project-journey': 'project-journey',
     '/dashboard/project-management': 'project-management',

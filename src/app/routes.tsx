@@ -26,6 +26,7 @@ import { ProjectJourneyPage } from './components/ProjectJourneyPage';
 import { CharityAssessmentPage } from './components/CharityAssessmentPage';
 import { CharityOnboardingFlow } from './components/CharityOnboardingFlow';
 import { ProjectManagementModule } from './components/ProjectManagementModule';
+import { AIProjectInnovationModule } from './components/AIProjectInnovationModule';
 
 export const router = createBrowserRouter([
   {
@@ -141,6 +142,10 @@ export const router = createBrowserRouter([
           {
             path: 'project-management',
             Component: ProjectManagementModule,
+          },
+          {
+            path: 'ai-innovation',
+            Component: AIProjectInnovationModule,
           },
         ],
       },
