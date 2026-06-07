@@ -22,11 +22,8 @@ export function TopBar({
   const { logout } = useAuth();
 
   const handleLogout = () => {
-    const noAuth = import.meta.env.VITE_NO_AUTH !== 'false';
     logout();
-    if (!noAuth) {
-      navigate('/auth/login');
-    }
+    navigate('/auth/login');
   };
   return (
     <header className={cn("bg-card border-b border-border flex items-center justify-between px-4 h-16", className)}>

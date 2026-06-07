@@ -16,9 +16,7 @@ export function DashboardLayout() {
   const location = useLocation();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
-  const noAuth = import.meta.env.VITE_NO_AUTH !== 'false';
-
-  if (!isAuthenticated && !noAuth) {
+  if (!isAuthenticated) {
     return <Navigate to="/auth/login" replace />;
   }
 

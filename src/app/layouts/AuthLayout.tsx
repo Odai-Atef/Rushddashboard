@@ -10,9 +10,7 @@ export function AuthLayout() {
   const { isAuthenticated } = useAuth();
   const context = useOutletContext<ThemeContext>();
 
-  const noAuth = import.meta.env.VITE_NO_AUTH !== 'false';
-
-  if (isAuthenticated && !noAuth) {
+  if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
 
