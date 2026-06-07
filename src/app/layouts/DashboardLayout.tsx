@@ -29,6 +29,7 @@ export function DashboardLayout() {
     '/dashboard/project-journey': 'project-journey',
     '/dashboard/project-management': 'project-management',
     '/dashboard/collaboration': 'collaboration',
+    '/dashboard/donors': 'donors',
     '/dashboard/charity-assessment': 'charity-assessment',
     '/dashboard/onboarding': 'onboarding',
     '/dashboard/notifications': 'notifications',

@@ -28,6 +28,7 @@ import { CharityOnboardingFlow } from './components/CharityOnboardingFlow';
 import { ProjectManagementModule } from './components/ProjectManagementModule';
 import { AIProjectInnovationModule } from './components/AIProjectInnovationModule';
 import { ProjectCollaborationModule } from './components/ProjectCollaborationModule';
+import { DonorDatabaseModule } from './components/DonorDatabaseModule';
 
 export const router = createBrowserRouter([
   {
@@ -151,6 +152,10 @@ export const router = createBrowserRouter([
           {
             path: 'collaboration',
             Component: ProjectCollaborationModule,
+          },
+          {
+            path: 'donors',
+            Component: DonorDatabaseModule,
           },
         ],
       },
