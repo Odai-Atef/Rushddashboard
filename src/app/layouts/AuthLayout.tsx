@@ -1,5 +1,5 @@
 import { Outlet, Navigate, useOutletContext } from 'react-router';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from './RootLayout';
 
 interface ThemeContext {
   theme: 'light' | 'dark';

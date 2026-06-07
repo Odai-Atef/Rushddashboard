@@ -1,43 +1,33 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loader2, ArrowRight } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
-import { login as loginApi, AuthError } from '../services/auth';
-import { loginSchema, type LoginFormData } from '../types/auth';
+import { useAuth } from '../layouts/RootLayout';
 
 export function LoginPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [apiError, setApiError] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-  });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setIsLoading(true);
 
-  const onSubmit = async (data: LoginFormData) => {
-    setApiError('');
-    try {
-      const response = await loginApi(data);
-      login(response.user);
-      navigate('/dashboard');
-    } catch (error) {
-      if (error instanceof AuthError) {
-        setApiError(error.message);
-      } else if (error instanceof Error && error.message === 'Failed to fetch') {
-        setApiError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-      } else if (error instanceof Error) {
-        setApiError(error.message);
+    // Simulate API call
+    setTimeout(() => {
+      if (email && password) {
+        login();
+        navigate('/dashboard');
       } else {
-        setApiError('حدث خطأ غير متوقع');
+        setError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
+        setIsLoading(false);
       }
-    }
+    }, 1500);
   };
 
   return (
@@ -63,14 +53,14 @@ export function LoginPage() {
           </div>
 
           {/* Error Message */}
-          {apiError && (
+          {error && (
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-              <p className="text-sm text-red-600 dark:text-red-400">{apiError}</p>
+              <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
             </div>
           )}
 
           {/* Login Form */}
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium mb-2">
@@ -81,14 +71,13 @@ export function LoginPage() {
                 <input
                   id="email"
                   type="email"
-                  {...register('email')}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="name@company.com"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.email ? 'border-red-500' : 'border-border'
-                  }`}
+                  className="w-full pr-11 pl-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  required
                 />
               </div>
-              {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email.message}</p>}
             </div>
 
             {/* Password Field */}
@@ -101,11 +90,11 @@ export function LoginPage() {
                 <input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
-                  {...register('password')}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.password ? 'border-red-500' : 'border-border'
-                  }`}
+                  className="w-full pr-11 pl-11 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                  required
                 />
                 <button
                   type="button"
@@ -115,7 +104,6 @@ export function LoginPage() {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
-              {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password.message}</p>}
             </div>
 
             {/* Remember Me & Forgot Password */}
@@ -123,6 +111,8 @@ export function LoginPage() {
               <label className="flex items-center gap-2 cursor-pointer">
                 <input
                   type="checkbox"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
                   className="w-4 h-4 rounded border-border text-primary focus:ring-2 focus:ring-primary"
                 />
                 <span className="text-sm">تذكرني</span>
@@ -139,10 +129,10 @@ export function LoginPage() {
             {/* Login Button */}
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isLoading}
               className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isSubmitting ? (
+              {isLoading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
                   <span>جاري تسجيل الدخول...</span>

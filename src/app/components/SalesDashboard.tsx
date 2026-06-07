@@ -91,7 +91,7 @@ export function SalesDashboard() {
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       {/* Header */}
       <div>
         <h2 className="text-3xl mb-2">لوحة المبيعات</h2>

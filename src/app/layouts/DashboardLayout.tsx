@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import { Outlet, useOutletContext, useLocation } from 'react-router';
-import { useAuth } from '../hooks/useAuth';
-import { AnalysisProvider } from '../hooks/useAnalysisContext';
+import { Outlet, Navigate, useOutletContext, useLocation } from 'react-router';
+import { useAuth } from './RootLayout';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
 import { MobileNav } from '../components/MobileNav';
@@ -12,15 +11,22 @@ interface ThemeContext {
 }
 
 export function DashboardLayout() {
+  const { isAuthenticated } = useAuth();
   const context = useOutletContext<ThemeContext>();
   const location = useLocation();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/auth/login" replace />;
+  }
 
   // Map URL paths to activeView values for Sidebar/MobileNav
   const pathToView: Record<string, string> = {
     '/dashboard': 'executive',
     '/dashboard/ai-analysis': 'ai-analysis',
     '/dashboard/analysis-history': 'analysis-history',
+    '/dashboard/project-journey': 'project-journey',
+    '/dashboard/charity-assessment': 'charity-assessment',
     '/dashboard/notifications': 'notifications',
     '/dashboard/data-sources': 'data-sources',
     '/dashboard/compliance-risk': 'compliance-risk',
@@ -49,10 +55,8 @@ export function DashboardLayout() {
           onMenuClick={() => setIsMobileNavOpen(true)}
         />
 
-        <main className="flex-1 overflow-y-auto p-6">
-          <AnalysisProvider>
-            <Outlet />
-          </AnalysisProvider>
+        <main className="flex-1 overflow-y-auto">
+          <Outlet />
         </main>
       </div>
 

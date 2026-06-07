@@ -2,7 +2,6 @@ import { createBrowserRouter, Navigate } from 'react-router';
 import { RootLayout } from './layouts/RootLayout';
 import { AuthLayout } from './layouts/AuthLayout';
 import { DashboardLayout } from './layouts/DashboardLayout';
-import { ProtectedRoute } from './components/ProtectedRoute';
 import { LoginPage } from './components/LoginPage';
 import { RegistrationPage } from './components/RegistrationPage';
 import { ForgetPasswordPage } from './components/ForgetPasswordPage';
@@ -22,11 +21,8 @@ import { NotificationsPage } from './components/NotificationsPage';
 import { DataSourcesPage } from './components/DataSourcesPage';
 import { ComplianceRiskPage } from './components/ComplianceRiskPage';
 import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
-import { ChatPage } from './components/chat/ChatPage';
-import { DashboardListPage } from './pages/Dashboard/DashboardListPage';
-import { DashboardDetailPage } from './pages/Dashboard/DashboardDetailPage';
-import { CreateDashboardPage } from './pages/Dashboard/CreateDashboardPage';
-import { EditDashboardPage } from './pages/Dashboard/EditDashboardPage';
+import { ProjectJourneyPage } from './components/ProjectJourneyPage';
+import { CharityAssessmentPage } from './components/CharityAssessmentPage';
 
 export const router = createBrowserRouter([
   {
@@ -61,31 +57,11 @@ export const router = createBrowserRouter([
       },
       {
         path: 'dashboard',
-        element: (
-          <ProtectedRoute>
-            <DashboardLayout />
-          </ProtectedRoute>
-        ),
+        Component: DashboardLayout,
         children: [
           {
             index: true,
-            Component: DashboardListPage,
-          },
-          {
-            path: 'list',
-            Component: DashboardListPage,
-          },
-          {
-            path: ':id',
-            Component: DashboardDetailPage,
-          },
-          {
-            path: 'new',
-            Component: CreateDashboardPage,
-          },
-          {
-            path: ':id/edit',
-            Component: EditDashboardPage,
+            Component: ExecutiveDashboard,
           },
           {
             path: 'ai-analysis',
@@ -148,8 +124,12 @@ export const router = createBrowserRouter([
             Component: AnalysisHistoryPage,
           },
           {
-            path: 'chat',
-            Component: ChatPage,
+            path: 'project-journey',
+            Component: ProjectJourneyPage,
+          },
+          {
+            path: 'charity-assessment',
+            Component: CharityAssessmentPage,
           },
         ],
       },

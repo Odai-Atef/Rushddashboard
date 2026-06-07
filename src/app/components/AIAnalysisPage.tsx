@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Sparkles,
   TrendingUp,
@@ -53,11 +53,6 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { cn } from '../utils/cn';
-import { useCategories } from '../hooks/useCategories';
-import { CategorySelector } from './analysis/CategorySelector';
-import { EmptyState } from './analysis/EmptyState';
-import { ErrorState } from './analysis/ErrorState';
-import type { AnalysisCategory } from '../types/analysis';
 
 interface AnalysisCard {
   id: string;
@@ -93,8 +88,7 @@ interface ProgressStep {
 
 export function AIAnalysisPage() {
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
-  const { categories, isLoading, error, fetchCategories } = useCategories();
-  const [selectedCategory, setSelectedCategory] = useState<AnalysisCategory | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState('الكل');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -112,7 +106,20 @@ export function AIAnalysisPage() {
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-
+  // Categories for filtering
+  const categories = [
+    'الكل',
+    'المبيعات',
+    'العملاء',
+    'التشغيل',
+    'التسويق',
+    'الربحية',
+    'المخزون',
+    'المخاطر',
+    'الفرص',
+    'الموارد البشرية',
+    'الإدارة التنفيذية'
+  ];
 
   // Comprehensive Analysis Cards Library
   const analysisCards: AnalysisCard[] = [
@@ -402,7 +409,7 @@ export function AIAnalysisPage() {
 
   // Filter analysis cards by category and search
   const filteredCards = analysisCards.filter(card => {
-    const categoryMatch = !selectedCategory || card.category === (selectedCategory.nameAr || selectedCategory.name);
+    const categoryMatch = selectedCategory === 'الكل' || card.category === selectedCategory;
     const searchMatch = searchQuery === '' ||
       card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       card.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -1063,47 +1070,28 @@ export function AIAnalysisPage() {
               </div>
             </div>
 
-            {/* Category Filters and Results */}
+            {/* Category Filters */}
             <div className="px-6 py-4 border-b border-border bg-muted/30">
               <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                {/* "الكل" Aggregate Chip */}
-                <button
-                  onClick={() => setSelectedCategory(null)}
-                  className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
-                    !selectedCategory
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card border border-border hover:border-primary/50'
-                  )}
-                >
-                  الكل
-                </button>
-
-                {/* API-driven categories */}
-                {isLoading ? (
-                  <div className="flex gap-2">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <div
-                        key={i}
-                        className="h-10 w-32 bg-muted animate-pulse rounded-lg flex-shrink-0"
-                      />
-                    ))}
-                  </div>
-                ) : error ? (
-                  <ErrorState message={error} onRetry={fetchCategories} />
-                ) : categories.length === 0 ? (
-                  <EmptyState
-                    title="لا توجد تصنيفات"
-                    description="لم يتم العثور على تصنيفات تحليل"
-                    icon="folder"
-                  />
-                ) : (
-                  <CategorySelector
-                    categories={categories}
-                    selectedCategory={selectedCategory}
-                    onSelectCategory={setSelectedCategory}
-                  />
-                )}
+                {categories.map((category) => (
+                  <button
+                    key={category}
+                    onClick={() => setSelectedCategory(category)}
+                    className={cn(
+                      'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+                      selectedCategory === category
+                        ? 'bg-primary text-primary-foreground'
+                        : 'bg-card border border-border hover:border-primary/50'
+                    )}
+                  >
+                    {category}
+                    {category !== 'الكل' && (
+                      <span className="ml-2 px-2 py-0.5 bg-black/10 rounded-full text-xs">
+                        {analysisCards.filter(c => c.category === category).length}
+                      </span>
+                    )}
+                  </button>
+                ))}
               </div>
             </div>
 

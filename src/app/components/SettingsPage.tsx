@@ -20,7 +20,6 @@ import {
   Settings as SettingsIcon
 } from 'lucide-react';
 import { cn } from '../utils/cn';
-import { useAuth } from '../hooks/useAuth';
 
 type SettingsSection =
   | 'profile'
@@ -36,7 +35,6 @@ type SettingsSection =
   | 'services';
 
 export function SettingsPage() {
-  const { user, isLoading } = useAuth();
   const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
   const [showApiKey, setShowApiKey] = useState(false);
   const [copiedKey, setCopiedKey] = useState(false);
@@ -61,7 +59,7 @@ export function SettingsPage() {
   };
 
   return (
-    <div className="h-full flex gap-6">
+    <div className="h-full flex gap-6 p-6">
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-card border border-border rounded-lg p-4 flex-shrink-0 h-fit sticky top-6">
         <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
@@ -108,7 +106,7 @@ export function SettingsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-center gap-6 mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
-                  {isLoading ? '...' : `${(user?.firstName?.[0] || user?.email?.[0] || '').toUpperCase()}${(user?.lastName?.[0] || '').toUpperCase()}`}
+                  أح
                 </div>
                 <div>
                   <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -118,13 +116,13 @@ export function SettingsPage() {
                 </div>
               </div>
 
-              <div className="space-y-4">  
+              <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">الاسم الأول</label>
                     <input
                       type="text"
-                      defaultValue={!isLoading ? (user?.firstName || '') : ''}
+                      defaultValue="أحمد"
                       className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
@@ -132,7 +130,7 @@ export function SettingsPage() {
                     <label className="block text-sm font-medium mb-2">الاسم الأخير</label>
                     <input
                       type="text"
-                      defaultValue={!isLoading ? (user?.lastName || '') : ''}
+                      defaultValue="محمد"
                       className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
@@ -142,7 +140,7 @@ export function SettingsPage() {
                   <label className="block text-sm font-medium mb-2">البريد الإلكتروني</label>
                   <input
                     type="email"
-                    defaultValue={!isLoading ? (user?.email || '') : ''}
+                    defaultValue="ahmed@rushd.ai"
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -151,7 +149,7 @@ export function SettingsPage() {
                   <label className="block text-sm font-medium mb-2">رقم الهاتف</label>
                   <input
                     type="tel"
-                    defaultValue=""
+                    defaultValue="+966 50 123 4567"
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -160,7 +158,7 @@ export function SettingsPage() {
                   <label className="block text-sm font-medium mb-2">المسمى الوظيفي</label>
                   <input
                     type="text"
-                    defaultValue=""
+                    defaultValue="مدير تنفيذي"
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -189,7 +187,7 @@ export function SettingsPage() {
                 <label className="block text-sm font-medium mb-2">اسم الشركة</label>
                 <input
                   type="text"
-                  defaultValue={!isLoading ? (user?.companyName || '') : ''}
+                  defaultValue="شركة الرشد للاستثمار"
                   className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                 />
               </div>
@@ -220,7 +218,7 @@ export function SettingsPage() {
                   <label className="block text-sm font-medium mb-2">المقر الرئيسي</label>
                   <input
                     type="text"
-                    defaultValue=""
+                    defaultValue="الرياض، المملكة العربية السعودية"
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
