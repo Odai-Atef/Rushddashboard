@@ -18,7 +18,6 @@ import { ApiResponse, ApiError } from '../types';
 export interface LoginCredentials {
   email: string;
   password: string;
-  rememberMe?: boolean;
 }
 
 export interface RegisterData {
@@ -46,7 +45,7 @@ export interface UserProfile {
 }
 
 export class AuthService {
-  private baseEndpoint = '/auth';
+  private baseEndpoint = '/api/v1/auth';
 
   /**
    * Authenticate user with credentials
