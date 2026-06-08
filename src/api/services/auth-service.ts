@@ -56,6 +56,32 @@ export class AuthService {
   private baseEndpoint = '/api/v1/auth';
 
   /**
+   * Normalize a backend response that may be double-wrapped.
+   *
+   * The backend returns `{ success: true, data: T, message: '...' }`,
+   * but `apiClient` already wraps again into `{ data: BackendResponse }`.
+   * This helper unwraps the nested payload so callers receive the real `T`.
+   */
+  private unwrap<T>(response: ApiResponse<any>): ApiResponse<T> {
+    const raw = response.data;
+    const isWrapped =
+      raw && typeof raw === 'object' && 'data' in raw;
+
+    const payload: T = isWrapped ? (raw.data as T) : (raw as T);
+    const backendSuccess = isWrapped ? (raw.success ?? true) : true;
+
+    return {
+      success: response.success && backendSuccess,
+      data: payload,
+      message:
+        isWrapped && raw.message !== undefined
+          ? String(raw.message)
+          : response.message,
+      meta: response.meta,
+    };
+  }
+
+  /**
    * Authenticate user with credentials
    */
   async login(credentials: LoginCredentials): Promise<ApiResponse<AuthTokens>> {
@@ -64,11 +90,12 @@ export class AuthService {
       credentials
     );
 
-    if (response.success && response.data.accessToken) {
-      apiClient.setAuthToken(response.data.accessToken);
+    const unwrapped = this.unwrap<AuthTokens>(response);
+    if (unwrapped.success && unwrapped.data.accessToken) {
+      apiClient.setAuthToken(unwrapped.data.accessToken);
     }
 
-    return response;
+    return unwrapped;
   }
 
   /**
@@ -80,11 +107,12 @@ export class AuthService {
       data
     );
 
-    if (response.success && response.data.accessToken) {
-      apiClient.setAuthToken(response.data.accessToken);
+    const unwrapped = this.unwrap<AuthTokens>(response);
+    if (unwrapped.success && unwrapped.data.accessToken) {
+      apiClient.setAuthToken(unwrapped.data.accessToken);
     }
 
-    return response;
+    return unwrapped;
   }
 
   /**
@@ -109,11 +137,12 @@ export class AuthService {
       { refreshToken }
     );
 
-    if (response.success && response.data.accessToken) {
-      apiClient.setAuthToken(response.data.accessToken);
+    const unwrapped = this.unwrap<AuthTokens>(response);
+    if (unwrapped.success && unwrapped.data.accessToken) {
+      apiClient.setAuthToken(unwrapped.data.accessToken);
     }
 
-    return response;
+    return unwrapped;
   }
 
   /**
@@ -127,20 +156,7 @@ export class AuthService {
    */
   async getProfile(): Promise<ApiResponse<UserProfile>> {
     const response = await apiClient.get<any>(`${this.baseEndpoint}/me`);
-    const raw = response.data;
-
-    // Detect wrapped envelope (common NestJS / standard API pattern)
-    const profile: UserProfile =
-      raw && typeof raw === 'object' && 'data' in raw && raw.data !== undefined
-        ? (raw.data as UserProfile)
-        : (raw as UserProfile);
-
-    return {
-      success: response.success,
-      data: profile,
-      message: response.message,
-      meta: response.meta,
-    };
+    return this.unwrap<UserProfile>(response);
   }
 
   /**

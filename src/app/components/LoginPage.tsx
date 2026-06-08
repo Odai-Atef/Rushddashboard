@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
+import { authService } from '@/api/services/auth-service';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -9,7 +10,6 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -18,16 +18,23 @@ export function LoginPage() {
     setError('');
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      if (email && password) {
+    try {
+      const response = await authService.login({ email, password });
+      if (response.success) {
         login();
         navigate('/dashboard');
       } else {
-        setError('البريد الإلكتروني أو كلمة المرور غير صحيحة');
-        setIsLoading(false);
+        setError(response.message || 'حدث خطأ أثناء تسجيل الدخول');
       }
-    }, 1500);
+    } catch (err: any) {
+      if (err?.message === 'Failed to fetch') {
+        setError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+      } else {
+        setError(err?.message || 'البريد الإلكتروني أو كلمة المرور غير صحيحة');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,7 +56,7 @@ export function LoginPage() {
           {/* Welcome Text */}
           <div className="mb-8">
             <h2 className="text-2xl font-bold mb-2">مرحباً بعودتك</h2>
-            <p className="text-muted-foreground">سجّل الدخول للوصول إلى لوحة التحكم التنفيذية</p>
+            <p className="text-muted-foreground">سجل الدخول للوصول إلى لوحة التحكم التنفيذية</p>
           </div>
 
           {/* Error Message */}
@@ -106,17 +113,8 @@ export function LoginPage() {
               </div>
             </div>
 
-            {/* Remember Me & Forgot Password */}
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)}
-                  className="w-4 h-4 rounded border-border text-primary focus:ring-2 focus:ring-primary"
-                />
-                <span className="text-sm">تذكرني</span>
-              </label>
+            {/* Forgot Password */}
+            <div className="flex items-center justify-end">
               <button
                 type="button"
                 onClick={() => navigate('/auth/forgot-password')}
