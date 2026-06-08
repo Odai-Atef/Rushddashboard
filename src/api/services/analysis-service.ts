@@ -18,12 +18,31 @@ export interface Category {
   id: string;
   key: string;
   name: string;
-  nameAr: Record<string, unknown> | null;
-  description: Record<string, unknown> | null;
-  descriptionAr: Record<string, unknown> | null;
-  icon: Record<string, unknown> | null;
+  nameAr: string | null;
+  description: string | null;
+  descriptionAr: string | null;
+  icon: string | null;
   sortOrder: number;
   count: number;
+}
+
+/** Represents a single analysis library item returned by the backend. */
+export interface AnalysisLibraryItem {
+  id: string;
+  categoryId: string;
+  key: string;
+  title: string;
+  titleAr: string | null;
+  description: string | null;
+  descriptionAr: string | null;
+  complexity: string;
+  impact: string;
+  duration: string;
+  badges: string[];
+  sortOrder: number;
+  isActive: boolean;
+  icon: string;
+  iconBackground: string;
 }
 
 export class AnalysisService {
@@ -39,6 +58,29 @@ export class AnalysisService {
    */
   async getCategories(): Promise<ApiResponse<Category[]>> {
     return apiClient.get<Category[]>(`${this.baseEndpoint}/categories`);
+  }
+
+  /**
+   * Fetch active analysis library items for a specific category.
+   *
+   * @param categoryId - The backend UUID of the selected category.
+   * @returns A typed `ApiResponse` wrapping an array of `AnalysisLibraryItem` objects.
+   */
+  async getLibraryItems(categoryId: string): Promise<ApiResponse<AnalysisLibraryItem[]>> {
+    return apiClient.get<AnalysisLibraryItem[]>(
+      `${this.baseEndpoint}/categories/${categoryId}/library-items`
+    );
+  }
+
+  /**
+   * Fetch all active analysis library items across all categories.
+   *
+   * @returns A typed `ApiResponse` wrapping an array of `AnalysisLibraryItem` objects.
+   */
+  async getAllLibraryItems(): Promise<ApiResponse<AnalysisLibraryItem[]>> {
+    return apiClient.get<AnalysisLibraryItem[]>(
+      `${this.baseEndpoint}/library-items`
+    );
   }
 }
 

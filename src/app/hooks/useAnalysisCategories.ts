@@ -30,8 +30,10 @@ export function useAnalysisCategories(): UseAnalysisCategoriesResult {
 
     try {
       const response = await analysisService.getCategories();
-      if (response.success && Array.isArray(response.data)) {
-        const sorted = [...response.data].sort(
+      const payload = response.data;
+      const list = Array.isArray(payload) ? payload : (payload as { data?: Category[] } | undefined)?.data;
+      if (response.success && Array.isArray(list)) {
+        const sorted = [...list].sort(
           (a, b) => (a.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.sortOrder ?? Number.MAX_SAFE_INTEGER)
         );
         setCategories(sorted);

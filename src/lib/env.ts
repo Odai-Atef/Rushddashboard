@@ -55,7 +55,7 @@ class EnvManager {
     if (value === undefined && defaultValue === undefined) {
       throw new Error(`Missing required environment variable: ${key}`);
     }
-    return (value as string) || defaultValue!;
+    return value !== undefined ? (value as string) : defaultValue!;
   }
 
   private getEnvVarAsBool(key: string, defaultValue: boolean = false): boolean {

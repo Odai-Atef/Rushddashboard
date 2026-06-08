@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Mail, ArrowRight, CheckCircle, AlertCircle, Loader2, Sparkles } from 'lucide-react';
+import { authService } from '@/api/services/auth-service';
 
 export function ForgetPasswordPage() {
   const navigate = useNavigate();
@@ -15,16 +16,25 @@ export function ForgetPasswordPage() {
     setStatus('idle');
     setErrorMessage('');
 
-    // Simulate API call
-    setTimeout(() => {
-      if (email.includes('@')) {
+    try {
+      const response = await authService.forgotPassword(email);
+      if (response.success) {
         setStatus('success');
       } else {
         setStatus('error');
-        setErrorMessage('البريد الإلكتروني غير صحيح');
+        setErrorMessage(response.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
       }
+    } catch (err: any) {
+      if (err?.message === 'Failed to fetch') {
+        setStatus('error');
+        setErrorMessage('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+      } else {
+        setStatus('error');
+        setErrorMessage(err?.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
+      }
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
 
   return (

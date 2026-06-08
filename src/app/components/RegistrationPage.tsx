@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
+import { authService } from '@/api/services/auth-service';
 
 export function RegistrationPage() {
   const navigate = useNavigate();
@@ -20,10 +21,12 @@ export function RegistrationPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [apiError, setApiError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
+    setApiError('');
 
     // Validation
     const newErrors: Record<string, string> = {};
@@ -45,11 +48,28 @@ export function RegistrationPage() {
 
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
-      login();
-      navigate('/dashboard');
-    }, 2000);
+    try {
+      const response = await authService.register({
+        email: formData.email,
+        password: formData.password,
+        fullName: formData.fullName,
+        company: formData.company,
+      });
+      if (response.success) {
+        login();
+        navigate('/dashboard');
+      } else {
+        setApiError(response.message || 'حدث خطأ أثناء إنشاء الحساب');
+      }
+    } catch (err: any) {
+      if (err?.message === 'Failed to fetch') {
+        setApiError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+      } else {
+        setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const updateField = (field: string, value: any) => {
@@ -85,6 +105,13 @@ export function RegistrationPage() {
             <h2 className="text-2xl font-bold mb-2">إنشاء حساب جديد</h2>
             <p className="text-muted-foreground">انضم إلى منصة التحليل التنفيذي الذكي</p>
           </div>
+
+          {/* API Error */}
+          {apiError && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <p className="text-sm text-red-600 dark:text-red-400">{apiError}</p>
+            </div>
+          )}
 
           {/* Registration Form */}
           <form onSubmit={handleSubmit} className="space-y-5">

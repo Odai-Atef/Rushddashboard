@@ -23,8 +23,6 @@ import {
   MoreVertical,
   Copy,
   Trash2,
-  Play,
-  StopCircle,
   RefreshCw,
   Check,
   Loader2,
@@ -34,13 +32,15 @@ import {
   X,
   Star,
   Filter,
-  Flame,
   UserCog,
   Activity,
   Warehouse,
   ChevronDown,
   Send
 } from 'lucide-react';
+import { AnalysisLibraryModal } from './analysis/AnalysisLibraryModal';
+import { AnalysisLibraryItem } from '@/api/services/analysis-service';
+import { resolveIcon } from '@/app/utils/icon-map';
 import {
   LineChart,
   Line,
@@ -91,8 +91,6 @@ interface ProgressStep {
 export function AIAnalysisPage() {
   const { categories: apiCategories, isLoading: categoriesLoading, error: categoriesError, retry: retryCategories } = useAnalysisCategories();
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState('الكل');
-  const [searchQuery, setSearchQuery] = useState('');
   const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingText, setGeneratingText] = useState('');
@@ -395,18 +393,6 @@ export function AIAnalysisPage() {
     },
   ];
 
-  // Filter analysis cards by category and search
-  const filteredCards = analysisCards.filter(card => {
-    const selectedCategoryName = selectedCategory === 'الكل'
-      ? 'الكل'
-      : apiCategories.find(c => c.key === selectedCategory)?.name || selectedCategory;
-    const categoryMatch = selectedCategory === 'الكل' || card.category === selectedCategoryName;
-    const searchMatch = searchQuery === '' ||
-      card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      card.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return categoryMatch && searchMatch;
-  });
-
   // Get recommended and recent analyses
   const recommendedAnalyses = analysisCards.filter(card => card.recommended).slice(0, 3);
 
@@ -509,6 +495,22 @@ export function AIAnalysisPage() {
     setProgressSteps(steps => steps.map(s => ({ ...s, status: 'pending' as const })));
     // Start workflow
     setTimeout(() => startAnalysisWorkflow(), 500);
+  };
+
+  const handleSelectLibraryItem = (item: AnalysisLibraryItem) => {
+    const categoryName = apiCategories.find(c => c.id === item.categoryId)?.nameAr || '';
+    const card: AnalysisCard = {
+      id: item.id,
+      title: item.titleAr || item.title,
+      description: item.descriptionAr || item.description || '',
+      category: categoryName,
+      estimatedTime: item.duration,
+      complexity: item.complexity as AnalysisCard['complexity'],
+      impact: item.impact as AnalysisCard['impact'],
+      icon: resolveIcon(item.icon),
+      color: item.iconBackground,
+    };
+    handleStartAnalysis(card);
   };
 
   const getStatusColor = (status: string) => {
@@ -1016,188 +1018,15 @@ export function AIAnalysisPage() {
         )}
       </div>
 
-      {/* Analysis Library Modal */}
-      {showAnalysisLibrary && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-card border border-border rounded-2xl w-full max-w-7xl h-[90vh] flex flex-col overflow-hidden shadow-2xl">
-            {/* Modal Header */}
-            <div className="p-6 border-b border-border">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
-                    <Brain className="w-6 h-6 text-white" />
-                  </div>
-                  <div>
-                    <h2 className="text-xl font-bold">مكتبة التحليلات الذكية</h2>
-                    <p className="text-sm text-muted-foreground">استكشف {analysisCards.length} تحليلاً متقدماً</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => setShowAnalysisLibrary(false)}
-                  className="p-2 hover:bg-accent rounded-lg transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Search Bar */}
-              <div className="relative">
-                <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  type="text"
-                  placeholder="ابحث عن التحليلات..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pr-12 pl-4 py-3 bg-muted border border-border rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-primary"
-                />
-                {searchQuery && (
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 p-1 hover:bg-accent rounded"
-                  >
-                    <X className="w-4 h-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Category Filters */}
-            <div className="px-6 py-4 border-b border-border bg-muted/30">
-              <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                {categoriesLoading && (
-                  <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>جاري تحميل الفئات...</span>
-                  </div>
-                )}
-
-                {!categoriesLoading && categoriesError && (
-                  <button
-                    onClick={retryCategories}
-                    className="flex items-center gap-1 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <RefreshCw className="w-4 h-4" />
-                    إعادة المحاولة
-                  </button>
-                )}
-
-                {/* Always show "All" */}
-                <button
-                  key="all"
-                  onClick={() => setSelectedCategory('الكل')}
-                  className={cn(
-                    'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
-                    selectedCategory === 'الكل'
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card border border-border hover:border-primary/50'
-                  )}
-                >
-                  {'الكل'}
-                </button>
-
-                {/* Dynamic API categories */}
-                {apiCategories.map((cat: Category) => (
-                  <button
-                    key={cat.key}
-                    onClick={() => setSelectedCategory(cat.key)}
-                    className={cn(
-                      'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
-                      selectedCategory === cat.key
-                        ? 'bg-primary text-primary-foreground'
-                        : 'bg-card border border-border hover:border-primary/50'
-                    )}
-                  >
-                    {cat.name}
-                    {cat.count > 0 && (
-                      <span className="ml-2 px-2 py-0.5 bg-black/10 rounded-full text-xs">
-                        {cat.count}
-                      </span>
-                    )}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Analysis Cards Grid */}
-            <div className="flex-1 overflow-y-auto p-6">
-              {filteredCards.length === 0 ? (
-                <div className="flex flex-col items-center justify-center h-full text-center">
-                  <Search className="w-16 h-16 text-muted-foreground mb-4" />
-                  <h3 className="text-lg font-medium mb-2">لا توجد نتائج</h3>
-                  <p className="text-muted-foreground">جرب البحث بكلمات مختلفة أو اختر فئة أخرى</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {filteredCards.map((card) => {
-                    const Icon = card.icon;
-                    return (
-                      <div
-                        key={card.id}
-                        className="group p-5 bg-card border border-border rounded-xl hover:shadow-xl hover:border-primary/50 transition-all cursor-pointer"
-                      >
-                        <div className="flex items-start gap-3 mb-3">
-                          <div className={cn('p-3 rounded-xl bg-gradient-to-br shadow-lg', card.color)}>
-                            <Icon className="w-6 h-6 text-white" />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1 flex-wrap">
-                              <h3 className="font-semibold">{card.title}</h3>
-                              {card.recommended && (
-                                <span className="px-2 py-0.5 bg-yellow-500/10 text-yellow-600 border border-yellow-500/20 rounded-full text-xs flex items-center gap-1">
-                                  <Star className="w-3 h-3 fill-yellow-600" />
-                                  موصى به
-                                </span>
-                              )}
-                              {card.trending && (
-                                <span className="px-2 py-0.5 bg-orange-500/10 text-orange-600 border border-orange-500/20 rounded-full text-xs flex items-center gap-1">
-                                  <Flame className="w-3 h-3" />
-                                  رائج
-                                </span>
-                              )}
-                              {card.aiGenerated && (
-                                <span className="px-2 py-0.5 bg-purple-500/10 text-purple-600 border border-purple-500/20 rounded-full text-xs flex items-center gap-1">
-                                  <Sparkles className="w-3 h-3" />
-                                  AI
-                                </span>
-                              )}
-                            </div>
-                            <p className="text-xs text-muted-foreground">{card.category}</p>
-                          </div>
-                        </div>
-
-                        <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
-                          {card.description}
-                        </p>
-
-                        <div className="flex items-center gap-2 mb-4 flex-wrap">
-                          <span className={cn('px-2 py-1 rounded text-xs border', getComplexityColor(card.complexity))}>
-                            {card.complexity}
-                          </span>
-                          <span className={cn('px-2 py-1 rounded text-xs border', getImpactColor(card.impact))}>
-                            تأثير: {card.impact}
-                          </span>
-                          <span className="text-xs text-muted-foreground flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {card.estimatedTime}
-                          </span>
-                        </div>
-
-                        <button
-                          onClick={() => handleStartAnalysis(card)}
-                          className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 group-hover:shadow-lg"
-                        >
-                          <Play className="w-4 h-4" />
-                          <span>بدء التحليل</span>
-                        </button>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <AnalysisLibraryModal
+        open={showAnalysisLibrary}
+        onClose={() => setShowAnalysisLibrary(false)}
+        categories={apiCategories}
+        categoriesLoading={categoriesLoading}
+        categoriesError={categoriesError}
+        retryCategories={retryCategories}
+        onSelectAnalysis={handleSelectLibraryItem}
+      />
     </div>
   );
 }
