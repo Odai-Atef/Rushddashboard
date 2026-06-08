@@ -53,6 +53,8 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import { cn } from '../utils/cn';
+import { useAnalysisCategories } from '@/app/hooks/useAnalysisCategories';
+import { Category } from '@/api/services/analysis-service';
 
 interface AnalysisCard {
   id: string;
@@ -87,6 +89,7 @@ interface ProgressStep {
 }
 
 export function AIAnalysisPage() {
+  const { categories: apiCategories, isLoading: categoriesLoading, error: categoriesError, retry: retryCategories } = useAnalysisCategories();
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('الكل');
   const [searchQuery, setSearchQuery] = useState('');
@@ -105,21 +108,6 @@ export function AIAnalysisPage() {
     { id: 5, label: 'توليد التوصيات', icon: Sparkles, status: 'pending' },
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Categories for filtering
-  const categories = [
-    'الكل',
-    'المبيعات',
-    'العملاء',
-    'التشغيل',
-    'التسويق',
-    'الربحية',
-    'المخزون',
-    'المخاطر',
-    'الفرص',
-    'الموارد البشرية',
-    'الإدارة التنفيذية'
-  ];
 
   // Comprehensive Analysis Cards Library
   const analysisCards: AnalysisCard[] = [
@@ -409,7 +397,10 @@ export function AIAnalysisPage() {
 
   // Filter analysis cards by category and search
   const filteredCards = analysisCards.filter(card => {
-    const categoryMatch = selectedCategory === 'الكل' || card.category === selectedCategory;
+    const selectedCategoryName = selectedCategory === 'الكل'
+      ? 'الكل'
+      : apiCategories.find(c => c.key === selectedCategory)?.name || selectedCategory;
+    const categoryMatch = selectedCategory === 'الكل' || card.category === selectedCategoryName;
     const searchMatch = searchQuery === '' ||
       card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       card.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -1073,21 +1064,53 @@ export function AIAnalysisPage() {
             {/* Category Filters */}
             <div className="px-6 py-4 border-b border-border bg-muted/30">
               <div className="flex items-center gap-2 overflow-x-auto pb-2">
-                {categories.map((category) => (
+                {categoriesLoading && (
+                  <div className="flex items-center gap-2 px-3 py-2 text-sm text-muted-foreground">
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>جاري تحميل الفئات...</span>
+                  </div>
+                )}
+
+                {!categoriesLoading && categoriesError && (
                   <button
-                    key={category}
-                    onClick={() => setSelectedCategory(category)}
+                    onClick={retryCategories}
+                    className="flex items-center gap-1 px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    إعادة المحاولة
+                  </button>
+                )}
+
+                {/* Always show "All" */}
+                <button
+                  key="all"
+                  onClick={() => setSelectedCategory('الكل')}
+                  className={cn(
+                    'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
+                    selectedCategory === 'الكل'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-card border border-border hover:border-primary/50'
+                  )}
+                >
+                  {'الكل'}
+                </button>
+
+                {/* Dynamic API categories */}
+                {apiCategories.map((cat: Category) => (
+                  <button
+                    key={cat.key}
+                    onClick={() => setSelectedCategory(cat.key)}
                     className={cn(
                       'px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-all',
-                      selectedCategory === category
+                      selectedCategory === cat.key
                         ? 'bg-primary text-primary-foreground'
                         : 'bg-card border border-border hover:border-primary/50'
                     )}
                   >
-                    {category}
-                    {category !== 'الكل' && (
+                    {cat.name}
+                    {cat.count > 0 && (
                       <span className="ml-2 px-2 py-0.5 bg-black/10 rounded-full text-xs">
-                        {analysisCards.filter(c => c.category === category).length}
+                        {cat.count}
                       </span>
                     )}
                   </button>
