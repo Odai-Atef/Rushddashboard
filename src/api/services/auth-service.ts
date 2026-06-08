@@ -117,17 +117,30 @@ export class AuthService {
   }
 
   /**
-   * Get current user profile
+   * Get current user profile.
+   *
+   * The endpoint may return the profile either:
+   * - wrapped in an envelope (`{ data: UserProfile, ... }`), or
+   * - as a plain JSON object (`UserProfile`).
+   *
+   * This method normalizes both shapes to `ApiResponse<UserProfile>`.
    */
   async getProfile(): Promise<ApiResponse<UserProfile>> {
-    const response = await apiClient.get<UserProfile>(`${this.baseEndpoint}/me`);
-    // Handle both wrapped ({ data: UserProfile }) and unwrapped (UserProfile) responses
-    const payload = response.data as unknown;
-    const profile =
-      payload && typeof payload === 'object' && 'data' in payload && payload.data
-        ? (payload.data as UserProfile)
-        : (payload as UserProfile);
-    return { ...response, data: profile };
+    const response = await apiClient.get<any>(`${this.baseEndpoint}/me`);
+    const raw = response.data;
+
+    // Detect wrapped envelope (common NestJS / standard API pattern)
+    const profile: UserProfile =
+      raw && typeof raw === 'object' && 'data' in raw && raw.data !== undefined
+        ? (raw.data as UserProfile)
+        : (raw as UserProfile);
+
+    return {
+      success: response.success,
+      data: profile,
+      message: response.message,
+      meta: response.meta,
+    };
   }
 
   /**
