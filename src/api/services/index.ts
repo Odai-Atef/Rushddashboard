@@ -7,10 +7,12 @@
 
 import { AuthService, authService } from './auth-service';
 import { DashboardService, dashboardService } from './dashboard-service';
+import { DonorService, donorService } from './donor-service';
 
 export interface Services {
   auth: AuthService;
   dashboard: DashboardService;
+  donor: DonorService;
 }
 
 class ServiceRegistry {
@@ -27,12 +29,17 @@ class ServiceRegistry {
   getDashboardService(): DashboardService {
     return this.services.dashboard;
   }
+
+  getDonorService(): DonorService {
+    return this.services.donor;
+  }
 }
 
 // Default service registry with singleton instances
 const defaultServices: Services = {
   auth: authService,
   dashboard: dashboardService,
+  donor: donorService,
 };
 
 // Export singleton registry
@@ -43,3 +50,4 @@ export default serviceRegistry;
 export { AuthService, authService } from './auth-service';
 export { DashboardService, dashboardService } from './dashboard-service';
 export { AnalysisService, analysisService } from './analysis-service';
+export { DonorService, donorService } from './donor-service';
