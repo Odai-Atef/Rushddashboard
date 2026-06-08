@@ -112,7 +112,7 @@ export class AuthService {
    * Get current user profile
    */
   async getProfile(): Promise<ApiResponse<UserProfile>> {
-    return apiClient.get<UserProfile>(`${this.baseEndpoint}/profile`);
+    return apiClient.get<UserProfile>(`${this.baseEndpoint}/me`);
   }
 
   /**
