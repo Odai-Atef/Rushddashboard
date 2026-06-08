@@ -12,6 +12,14 @@ interface TopBarProps {
   className?: string;
 }
 
+function getInitials(fullName: string | undefined): string {
+  if (!fullName) return '؟';
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length === 0) return '؟';
+  if (parts.length === 1) return parts[0].slice(0, 2);
+  return (parts[0][0] ?? '') + (parts[parts.length - 1][0] ?? '');
+}
+
 export function TopBar({
   theme,
   onThemeToggle,
@@ -19,7 +27,7 @@ export function TopBar({
   className
 }: TopBarProps) {
   const navigate = useNavigate();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -95,7 +103,7 @@ export function TopBar({
           <DropdownMenu.Trigger asChild>
             <button className="flex items-center gap-2 p-1 hover:bg-accent rounded-lg transition-colors">
               <Avatar.Root className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                <Avatar.Fallback className="text-sm">أح</Avatar.Fallback>
+                <Avatar.Fallback className="text-sm">{getInitials(user?.fullName)}</Avatar.Fallback>
               </Avatar.Root>
             </button>
           </DropdownMenu.Trigger>
@@ -106,8 +114,8 @@ export function TopBar({
               align="end"
             >
               <div className="px-3 py-2 border-b border-border mb-2">
-                <p className="font-medium">أحمد محمد</p>
-                <p className="text-muted-foreground text-sm">ahmed@rushd.ai</p>
+                <p className="font-medium">{user?.fullName ?? 'المستخدم'}</p>
+                <p className="text-muted-foreground text-sm">{user?.email ?? ''}</p>
               </div>
               <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">
                 الملف الشخصي

@@ -1,10 +1,18 @@
 import { Outlet } from 'react-router';
-import { useState, useEffect, createContext, useContext } from 'react';
+import { useState, useEffect, createContext, useContext, useCallback } from 'react';
+import apiClient from '@/api/client';
+import { authService, UserProfile } from '@/api/services/auth-service';
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  user: UserProfile | null;
   login: () => void;
   logout: () => void;
+}
+
+interface ThemeContext {
+  theme: 'light' | 'dark';
+  setTheme: (theme: 'light' | 'dark') => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -18,13 +26,25 @@ export const useAuth = () => {
 };
 
 export function RootLayout() {
-  const [isAuthenticated, setIsAuthenticated] = useState(() => {
-    return localStorage.getItem('rushd_auth') === 'true';
-  });
+  const [isAuthenticated, setIsAuthenticated] = useState(() => apiClient.isAuthenticated());
+  const [user, setUser] = useState<UserProfile | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('rushd_theme');
     return (saved === 'dark' || saved === 'light') ? saved : 'light';
   });
+
+  // Load user profile on mount if authenticated
+  useEffect(() => {
+    if (apiClient.isAuthenticated()) {
+      authService.getProfile().then((response) => {
+        if (response.success && response.data) {
+          setUser(response.data);
+        }
+      }).catch(() => {
+        // Silently ignore profile fetch errors
+      });
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute('dir', 'rtl');
@@ -37,18 +57,32 @@ export function RootLayout() {
     localStorage.setItem('rushd_theme', theme);
   }, [theme]);
 
-  const login = () => {
+  const login = useCallback(() => {
     setIsAuthenticated(true);
-    localStorage.setItem('rushd_auth', 'true');
-  };
+    authService.getProfile().then((response) => {
+      if (response.success && response.data) {
+        setUser(response.data);
+      }
+    }).catch(() => {
+      // Silently ignore profile fetch errors
+    });
+  }, []);
 
-  const logout = () => {
-    setIsAuthenticated(false);
-    localStorage.removeItem('rushd_auth');
-  };
+  const logout = useCallback(async () => {
+    try {
+      await authService.logout();
+    } catch {
+      // If the server call fails, still clear local token state
+      apiClient.clearAuthToken();
+    } finally {
+      setIsAuthenticated(false);
+      setUser(null);
+    }
+  }, []);
 
   const authValue = {
     isAuthenticated,
+    user,
     login,
     logout,
   };
@@ -56,7 +90,7 @@ export function RootLayout() {
   return (
     <AuthContext.Provider value={authValue}>
       <div className={theme}>
-        <Outlet context={{ theme, setTheme }} />
+        <Outlet context={{ theme, setTheme } satisfies ThemeContext} />
       </div>
     </AuthContext.Provider>
   );

@@ -20,6 +20,7 @@ import {
   Settings as SettingsIcon
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useAuth } from '../layouts/RootLayout';
 
 type SettingsSection =
   | 'profile'
@@ -34,7 +35,16 @@ type SettingsSection =
   | 'api'
   | 'services';
 
+function getInitials(fullName: string | undefined): string {
+  if (!fullName) return '؟';
+  const parts = fullName.trim().split(/\s+/);
+  if (parts.length === 0) return '؟';
+  if (parts.length === 1) return parts[0].slice(0, 2);
+  return (parts[0][0] ?? '') + (parts[parts.length - 1][0] ?? '');
+}
+
 export function SettingsPage() {
+  const { user } = useAuth();
   const [activeSection, setActiveSection] = useState<SettingsSection>('profile');
   const [showApiKey, setShowApiKey] = useState(false);
   const [copiedKey, setCopiedKey] = useState(false);
@@ -106,7 +116,7 @@ export function SettingsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-center gap-6 mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
-                  أح
+                  {getInitials(user?.fullName)}
                 </div>
                 <div>
                   <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -122,7 +132,7 @@ export function SettingsPage() {
                     <label className="block text-sm font-medium mb-2">الاسم الأول</label>
                     <input
                       type="text"
-                      defaultValue="أحمد"
+                      defaultValue={user?.fullName ? user.fullName.trim().split(/\s+/)[0] : ''}
                       className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
@@ -130,7 +140,7 @@ export function SettingsPage() {
                     <label className="block text-sm font-medium mb-2">الاسم الأخير</label>
                     <input
                       type="text"
-                      defaultValue="محمد"
+                      defaultValue={user?.fullName ? user.fullName.trim().split(/\s+/).slice(1).join(' ') : ''}
                       className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
@@ -140,7 +150,7 @@ export function SettingsPage() {
                   <label className="block text-sm font-medium mb-2">البريد الإلكتروني</label>
                   <input
                     type="email"
-                    defaultValue="ahmed@rushd.ai"
+                    defaultValue={user?.email ?? ''}
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -149,7 +159,7 @@ export function SettingsPage() {
                   <label className="block text-sm font-medium mb-2">رقم الهاتف</label>
                   <input
                     type="tel"
-                    defaultValue="+966 50 123 4567"
+                    placeholder="+966 50 123 4567"
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
@@ -158,7 +168,7 @@ export function SettingsPage() {
                   <label className="block text-sm font-medium mb-2">المسمى الوظيفي</label>
                   <input
                     type="text"
-                    defaultValue="مدير تنفيذي"
+                    placeholder="مدير تنفيذي"
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>
