@@ -79,7 +79,7 @@ export class AnalysisService {
    */
   async getAllLibraryItems(): Promise<ApiResponse<AnalysisLibraryItem[]>> {
     return apiClient.get<AnalysisLibraryItem[]>(
-      `${this.baseEndpoint}/library-items`
+      `${this.baseEndpoint}/categories/library-items`
     );
   }
 }
