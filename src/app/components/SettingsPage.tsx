@@ -35,9 +35,10 @@ type SettingsSection =
   | 'api'
   | 'services';
 
-function getInitials(fullName: string | undefined): string {
-  if (!fullName) return '؟';
-  const parts = fullName.trim().split(/\s+/);
+function getInitials(fullName: string | null | undefined, firstName?: string | null, lastName?: string | null): string {
+  const name = fullName ?? (firstName && lastName ? `${firstName} ${lastName}` : firstName ?? lastName ?? '');
+  if (!name) return '؟';
+  const parts = name.trim().split(/\s+/);
   if (parts.length === 0) return '؟';
   if (parts.length === 1) return parts[0].slice(0, 2);
   return (parts[0][0] ?? '') + (parts[parts.length - 1][0] ?? '');
@@ -116,7 +117,7 @@ export function SettingsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-center gap-6 mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
-                  {getInitials(user?.fullName)}
+                  {getInitials(user?.fullName, user?.firstName, user?.lastName)}
                 </div>
                 <div>
                   <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 transition-colors">
