@@ -36,12 +36,20 @@ export interface AuthTokens {
 export interface UserProfile {
   id: string;
   email: string;
-  fullName: string;
-  company?: string;
-  role: 'admin' | 'manager' | 'analyst' | 'viewer';
-  avatar?: string;
+  firstName: string | null;
+  lastName: string | null;
+  fullName: string | null;
+  phone?: string | null;
+  jobTitle?: string | null;
+  avatarUrl?: string | null;
+  preferredLanguage?: string | null;
+  timezone?: string | null;
+  status?: string;
+  role?: string | null;
+  company?: string | null;
+  lastLoginAt?: string | null;
   createdAt: string;
-  lastLoginAt?: string;
+  updatedAt?: string;
 }
 
 export class AuthService {
@@ -112,7 +120,14 @@ export class AuthService {
    * Get current user profile
    */
   async getProfile(): Promise<ApiResponse<UserProfile>> {
-    return apiClient.get<UserProfile>(`${this.baseEndpoint}/me`);
+    const response = await apiClient.get<UserProfile>(`${this.baseEndpoint}/me`);
+    // Handle both wrapped ({ data: UserProfile }) and unwrapped (UserProfile) responses
+    const payload = response.data as unknown;
+    const profile =
+      payload && typeof payload === 'object' && 'data' in payload && payload.data
+        ? (payload.data as UserProfile)
+        : (payload as UserProfile);
+    return { ...response, data: profile };
   }
 
   /**

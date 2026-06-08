@@ -132,7 +132,7 @@ export function SettingsPage() {
                     <label className="block text-sm font-medium mb-2">الاسم الأول</label>
                     <input
                       type="text"
-                      defaultValue={user?.fullName ? user.fullName.trim().split(/\s+/)[0] : ''}
+                      defaultValue={user?.firstName ?? (user?.fullName ? user.fullName.trim().split(/\s+/)[0] : '')}
                       className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
@@ -140,7 +140,7 @@ export function SettingsPage() {
                     <label className="block text-sm font-medium mb-2">الاسم الأخير</label>
                     <input
                       type="text"
-                      defaultValue={user?.fullName ? user.fullName.trim().split(/\s+/).slice(1).join(' ') : ''}
+                      defaultValue={user?.lastName ?? (user?.fullName ? user.fullName.trim().split(/\s+/).slice(1).join(' ') : '')}
                       className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                     />
                   </div>
