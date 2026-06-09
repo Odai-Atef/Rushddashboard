@@ -6,6 +6,7 @@ import { DashboardLayout } from './layouts/DashboardLayout';
 import { LoginPage } from './components/LoginPage';
 import { RegistrationPage } from './components/RegistrationPage';
 import { ForgetPasswordPage } from './components/ForgetPasswordPage';
+import { ResetPasswordPage } from './components/ResetPasswordPage';
 import { ExecutiveDashboard } from './components/ExecutiveDashboard';
 import { AIAnalysisPage } from './components/AIAnalysisPage';
 import { SalesDashboard } from './components/SalesDashboard';
@@ -58,6 +59,10 @@ export const router = createBrowserRouter([
           {
             path: 'forgot-password',
             Component: ForgetPasswordPage,
+          },
+          {
+            path: 'reset-password',
+            Component: ResetPasswordPage,
           },
         ],
       },

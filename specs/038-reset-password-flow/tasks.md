@@ -23,8 +23,8 @@ Single project structure with all frontend code under `src/`.
 
 **Purpose**: Prepare reusable utilities and routing for the new reset-password page.
 
-- [ ] T001 [P] Extract password validation rules utility in `src/lib/password-rules.ts` (reusable across RegistrationPage and ResetPasswordPage)
-- [ ] T002 [P] Add `/auth/reset-password` route entry with `ResetPasswordPage` import in `src/app/routes.tsx`
+- [x] T001 [P] Extract password validation rules utility in `src/lib/password-rules.ts` (reusable across RegistrationPage and ResetPasswordPage)
+- [x] T002 [P] Add `/auth/reset-password` route entry with `ResetPasswordPage` import in `src/app/routes.tsx`
 
 ---
 
@@ -34,7 +34,7 @@ Single project structure with all frontend code under `src/`.
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T003 Create `ResetPasswordPage.tsx` component shell in `src/app/components/ResetPasswordPage.tsx` with split-screen layout matching existing auth pages and `URLSearchParams` token extraction
+- [x] T003 Create `ResetPasswordPage.tsx` component shell in `src/app/components/ResetPasswordPage.tsx` with split-screen layout matching existing auth pages and `URLSearchParams` token extraction
 
 **Checkpoint**: Foundation ready — component file exists, route wired, and layout shell renders. User story implementation can now begin in parallel.
 
@@ -48,9 +48,9 @@ Single project structure with all frontend code under `src/`.
 
 ### Implementation for User Story 1
 
-- [ ] T004 [P] [US1] Implement new password and confirm password form fields with RTL styling and Lucide icons in `src/app/components/ResetPasswordPage.tsx`
-- [ ] T005 [US1] Integrate `authService.resetPassword(token, newPassword)` submission handler with loading state in `src/app/components/ResetPasswordPage.tsx`
-- [ ] T006 [US1] Implement success state with Arabic confirmation message and `navigate('/auth/login')` redirect in `src/app/components/ResetPasswordPage.tsx`
+- [x] T004 [P] [US1] Implement new password and confirm password form fields with RTL styling and Lucide icons in `src/app/components/ResetPasswordPage.tsx`
+- [x] T005 [US1] Integrate `authService.resetPassword(token, newPassword)` submission handler with loading state in `src/app/components/ResetPasswordPage.tsx`
+- [x] T006 [US1] Implement success state with Arabic confirmation message and `navigate('/auth/login')` redirect in `src/app/components/ResetPasswordPage.tsx`
 
 **Checkpoint**: User Story 1 is fully functional. A valid token + strong matching password triggers a successful reset and redirect.
 
@@ -64,9 +64,9 @@ Single project structure with all frontend code under `src/`.
 
 ### Implementation for User Story 2
 
-- [ ] T007 [P] [US2] Implement unified "الرمز غير صالح أو منتهي الصلاحية" error state with CTA button to `/auth/forgot-password` in `src/app/components/ResetPasswordPage.tsx`
-- [ ] T008 [P] [US2] Implement missing `?token=` query param error state on initial page load in `src/app/components/ResetPasswordPage.tsx`
-- [ ] T009 [US2] Integrate network error handling with retry-friendly Arabic message in the submission handler in `src/app/components/ResetPasswordPage.tsx`
+- [x] T007 [P] [US2] Implement unified "الرمز غير صالح أو منتهي الصلاحية" error state with CTA button to `/auth/forgot-password` in `src/app/components/ResetPasswordPage.tsx`
+- [x] T008 [P] [US2] Implement missing `?token=` query param error state on initial page load in `src/app/components/ResetPasswordPage.tsx`
+- [x] T009 [US2] Integrate network error handling with retry-friendly Arabic message in the submission handler in `src/app/components/ResetPasswordPage.tsx`
 
 **Checkpoint**: User Stories 1 and 2 are independently functional. Invalid tokens show actionable errors; valid tokens succeed.
 
@@ -80,9 +80,9 @@ Single project structure with all frontend code under `src/`.
 
 ### Implementation for User Story 3
 
-- [ ] T010 [P] [US3] Integrate password strength rules checklist (min length, uppercase, lowercase, number, special char) using the extracted utility in `src/app/components/ResetPasswordPage.tsx`
-- [ ] T011 [US3] Implement `confirmPassword` mismatch validation with inline Arabic error message in `src/app/components/ResetPasswordPage.tsx`
-- [ ] T012 [US3] Disable submit button while client-side validation errors exist in `src/app/components/ResetPasswordPage.tsx`
+- [x] T010 [P] [US3] Integrate password strength rules checklist (min length, uppercase, lowercase, number, special char) using the extracted utility in `src/app/components/ResetPasswordPage.tsx`
+- [x] T011 [US3] Implement `confirmPassword` mismatch validation with inline Arabic error message in `src/app/components/ResetPasswordPage.tsx`
+- [x] T012 [US3] Disable submit button while client-side validation errors exist in `src/app/components/ResetPasswordPage.tsx`
 
 **Checkpoint**: All user stories are functional. Form prevents submissions of weak or mismatched passwords and displays clear real-time feedback.
 
@@ -92,9 +92,9 @@ Single project structure with all frontend code under `src/`.
 
 **Purpose**: Ensure consistency, compliance with the constitution, and readiness for manual validation.
 
-- [ ] T013 [P] Verify RTL layout and Arabic text consistency across `src/app/components/ResetPasswordPage.tsx` against `LoginPage.tsx` and `ForgetPasswordPage.tsx`
-- [ ] T014 [P] Run `quickstart.md` manual testing validation for all token states (valid, expired, used, malformed, missing)
-- [ ] T015 Review Constitution compliance: no hardcoded API endpoints, reusable patterns used, JSDoc added for new component
+- [x] T013 [P] Verify RTL layout and Arabic text consistency across `src/app/components/ResetPasswordPage.tsx` against `LoginPage.tsx` and `ForgetPasswordPage.tsx`
+- [x] T014 [P] Run `quickstart.md` manual testing validation for all token states (valid, expired, used, malformed, missing)
+- [x] T015 Review Constitution compliance: no hardcoded API endpoints, reusable patterns used, JSDoc added for new component
 
 ---
 
