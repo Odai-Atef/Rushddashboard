@@ -5,7 +5,7 @@
 
 ## Summary
 
-Build a paginated, searchable donors list table at `/dashboard/donors` that fetches real donor data from the backend API (`GET /api/v1/donors`), replacing the current mock-data `DonorDatabaseModule`. The table will support pagination, client-side search/filtering, RTL Arabic content, mobile responsiveness, and a side drawer for donor detail views.
+Build a paginated, searchable donors list table at `/dashboard/donors` that fetches real donor data from the backend API (`GET /api/v1/api/v1/donors`), replacing the current mock-data `DonorDatabaseModule`. The table will support pagination, client-side search/filtering, RTL Arabic content, mobile responsiveness, and a side drawer for donor detail views.
 
 ## Technical Context
 

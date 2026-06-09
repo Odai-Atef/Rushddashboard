@@ -6,7 +6,7 @@
 ## Prerequisites
 
 - Node.js 18+ and pnpm/npm
-- Backend API running (provides `GET /api/v1/donors`)
+- Backend API running (provides `GET /api/v1/api/v1/donors`)
 - Valid `.env` file with `VITE_API_BASE_URL` configured
 
 ## Installation
@@ -99,7 +99,7 @@ src/
 Test the API endpoint directly:
 ```bash
 curl -H "Authorization: Bearer {token}" \
-  "http://localhost:3000/api/v1/donors?page=1&limit=10"
+  "http://localhost:3000/api/v1/api/v1/donors?page=1&limit=10"
 ```
 
 ## Troubleshooting

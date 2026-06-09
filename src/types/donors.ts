@@ -2,7 +2,7 @@
  * Donor TypeScript Types
  *
  * Type definitions for the Donors List Table feature.
- * Matches the backend API contract for GET /api/v1/donors
+ * Matches the backend API contract for GET /api/v1/api/v1/donors
  */
 
 export interface FundingArea {

@@ -18,7 +18,7 @@ import { ApiResponse } from '../types';
 import { PaginatedDonorList } from '../../types/donors';
 
 export class DonorService {
-  private baseEndpoint = '/v1/donors';
+  private baseEndpoint = '/api/v1/api/v1/donors';
 
   /**
    * Fetch paginated list of donors

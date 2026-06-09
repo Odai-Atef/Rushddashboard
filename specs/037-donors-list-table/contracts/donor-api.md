@@ -1,6 +1,6 @@
 # API Contract: Donors
 
-**Endpoint**: `GET /api/v1/donors`  
+**Endpoint**: `GET /api/v1/api/v1/donors`  
 **Feature**: Donors List Table  
 **Date**: 2026-06-08
 
@@ -10,7 +10,7 @@
 GET
 
 ### URL
-`/api/v1/donors`
+`/api/v1/api/v1/donors`
 
 ### Query Parameters
 
@@ -142,7 +142,7 @@ import { ApiResponse } from '../types';
 import { Donor, PaginatedDonorList } from '../../types/donors';
 
 export class DonorService {
-  private baseEndpoint = '/v1/donors';
+  private baseEndpoint = '/api/v1/api/v1/donors';
 
   async getDonors(
     page: number = 1, 

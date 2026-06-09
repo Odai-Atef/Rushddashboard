@@ -169,7 +169,7 @@ No state transitions for this read-only feature. The data model is static from t
 
 ## Data Flow
 
-1. **API Request**: `GET /api/v1/donors?page=1&limit=10`
+1. **API Request**: `GET /api/v1/api/v1/donors?page=1&limit=10`
 2. **API Response**: `PaginatedDonorList` JSON
 3. **Service Layer**: `DonorService.getDonors(page, limit)` returns typed `ApiResponse<PaginatedDonorList>`
 4. **React Query Hook**: `useDonors(page, limit)` manages caching, refetching, and loading states
