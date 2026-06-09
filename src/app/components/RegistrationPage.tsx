@@ -8,13 +8,14 @@ export function RegistrationPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
-    company: '',
+    companyName: '',
     password: '',
     confirmPassword: '',
-    role: 'executive',
+    roleSlug: 'executive',
     agreeToTerms: false
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -31,10 +32,11 @@ export function RegistrationPage() {
     // Validation
     const newErrors: Record<string, string> = {};
 
-    if (!formData.fullName) newErrors.fullName = 'الاسم الكامل مطلوب';
+    if (!formData.firstName) newErrors.firstName = 'الاسم الأول مطلوب';
+    if (!formData.lastName) newErrors.lastName = 'اسم العائلة مطلوب';
     if (!formData.email) newErrors.email = 'البريد الإلكتروني مطلوب';
     if (!formData.phone) newErrors.phone = 'رقم الهاتف مطلوب';
-    if (!formData.company) newErrors.company = 'اسم الشركة مطلوب';
+    if (!formData.companyName) newErrors.companyName = 'اسم الشركة مطلوب';
     if (!formData.password) newErrors.password = 'كلمة المرور مطلوبة';
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'كلمات المرور غير متطابقة';
@@ -52,8 +54,11 @@ export function RegistrationPage() {
       const response = await authService.register({
         email: formData.email,
         password: formData.password,
-        fullName: formData.fullName,
-        company: formData.company,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        companyName: formData.companyName,
+        roleSlug: formData.roleSlug,
+        phone: formData.phone,
       });
       if (response.success) {
         login();
@@ -115,25 +120,46 @@ export function RegistrationPage() {
 
           {/* Registration Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Full Name */}
+            {/* First Name */}
             <div>
-              <label htmlFor="fullName" className="block text-sm font-medium mb-2">
-                الاسم الكامل
+              <label htmlFor="firstName" className="block text-sm font-medium mb-2">
+                الاسم الأول
               </label>
               <div className="relative">
                 <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
-                  id="fullName"
+                  id="firstName"
                   type="text"
-                  value={formData.fullName}
-                  onChange={(e) => updateField('fullName', e.target.value)}
-                  placeholder="أحمد محمد"
+                  value={formData.firstName}
+                  onChange={(e) => updateField('firstName', e.target.value)}
+                  placeholder="أحمد"
                   className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.fullName ? 'border-red-500' : 'border-border'
+                    errors.firstName ? 'border-red-500' : 'border-border'
                   }`}
                 />
               </div>
-              {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
+              {errors.firstName && <p className="text-xs text-red-600 mt-1">{errors.firstName}</p>}
+            </div>
+
+            {/* Last Name */}
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium mb-2">
+                اسم العائلة
+              </label>
+              <div className="relative">
+                <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <input
+                  id="lastName"
+                  type="text"
+                  value={formData.lastName}
+                  onChange={(e) => updateField('lastName', e.target.value)}
+                  placeholder="محمد"
+                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                    errors.lastName ? 'border-red-500' : 'border-border'
+                  }`}
+                />
+              </div>
+              {errors.lastName && <p className="text-xs text-red-600 mt-1">{errors.lastName}</p>}
             </div>
 
             {/* Email */}
@@ -180,23 +206,23 @@ export function RegistrationPage() {
 
             {/* Company */}
             <div>
-              <label htmlFor="company" className="block text-sm font-medium mb-2">
+              <label htmlFor="companyName" className="block text-sm font-medium mb-2">
                 اسم الشركة
               </label>
               <div className="relative">
                 <Building className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
-                  id="company"
+                  id="companyName"
                   type="text"
-                  value={formData.company}
-                  onChange={(e) => updateField('company', e.target.value)}
+                  value={formData.companyName}
+                  onChange={(e) => updateField('companyName', e.target.value)}
                   placeholder="شركة الرشد للاستثمار"
                   className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.company ? 'border-red-500' : 'border-border'
+                    errors.companyName ? 'border-red-500' : 'border-border'
                   }`}
                 />
               </div>
-              {errors.company && <p className="text-xs text-red-600 mt-1">{errors.company}</p>}
+              {errors.companyName && <p className="text-xs text-red-600 mt-1">{errors.companyName}</p>}
             </div>
 
             {/* Role Selection */}
@@ -211,9 +237,9 @@ export function RegistrationPage() {
                   <button
                     key={role.value}
                     type="button"
-                    onClick={() => updateField('role', role.value)}
+                    onClick={() => updateField('roleSlug', role.value)}
                     className={`px-4 py-2.5 rounded-lg border-2 transition-all text-sm ${
-                      formData.role === role.value
+                      formData.roleSlug === role.value
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border hover:border-muted-foreground'
                     }`}

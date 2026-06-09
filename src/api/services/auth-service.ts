@@ -23,8 +23,11 @@ export interface LoginCredentials {
 export interface RegisterData {
   email: string;
   password: string;
-  fullName: string;
-  company?: string;
+  firstName: string;
+  lastName: string;
+  companyName: string;
+  roleSlug: string;
+  phone: string;
 }
 
 export interface AuthTokens {

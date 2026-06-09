@@ -36,7 +36,8 @@ import {
   Activity,
   Warehouse,
   ChevronDown,
-  Send
+  Send,
+  StopCircle
 } from 'lucide-react';
 import { AnalysisLibraryModal } from './analysis/AnalysisLibraryModal';
 import { AnalysisLibraryItem } from '@/api/services/analysis-service';
