@@ -19,8 +19,8 @@
 
 **Purpose**: Verify project structure and dependencies are ready for history implementation
 
-- [ ] T001 Verify `IntersectionObserver` API is available in target browser matrix (no polyfill needed for modern browsers)
-- [ ] T002 Confirm `src/api/services/analysis-service.ts` has base endpoint `/api/v1/analysis` for history URL construction
+- [X] T001 Verify `IntersectionObserver` API is available in target browser matrix (no polyfill needed for modern browsers)
+- [X] T002 Confirm `src/api/services/analysis-service.ts` has base endpoint `/api/v1/analysis` for history URL construction
 
 ---
 
@@ -30,12 +30,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T003 [P] Add `getHistory(page, limit)` and `getRunDetail(runId)` methods to `src/api/services/analysis-service.ts`
-- [ ] T004 Create `src/app/hooks/useAnalysisHistory.ts` with state types (`AnalysisHistoryEntry`, `HistoryPaginationState`) and hook interface (`fetchHistory`, `loadSession`, `retry`, `reset`)
-- [ ] T005 [P] Implement `fetchHistory` action in `src/app/hooks/useAnalysisHistory.ts`: GET history, append entries, update pagination state, handle errors
-- [ ] T006 [P] Implement `loadSession` action in `src/app/hooks/useAnalysisHistory.ts`: GET detail, convert results to chat messages, set active session ID
-- [ ] T007 [P] Implement pagination logic in `src/app/hooks/useAnalysisHistory.ts`: track `hasMore`, `isLoading`, prevent concurrent fetches
-- [ ] T008 Add `useEffect` cleanup in `src/app/hooks/useAnalysisHistory.ts` to abort in-flight requests on unmount
+- [X] T003 [P] Add `getHistory(page, limit)` and `getRunDetail(runId)` methods to `src/api/services/analysis-service.ts`
+- [X] T004 Create `src/app/hooks/useAnalysisHistory.ts` with state types (`AnalysisHistoryEntry`, `HistoryPaginationState`) and hook interface (`fetchHistory`, `loadSession`, `retry`, `reset`)
+- [X] T005 [P] Implement `fetchHistory` action in `src/app/hooks/useAnalysisHistory.ts`: GET history, append entries, update pagination state, handle errors
+- [X] T006 [P] Implement `loadSession` action in `src/app/hooks/useAnalysisHistory.ts`: GET detail, convert results to chat messages, set active session ID
+- [X] T007 [P] Implement pagination logic in `src/app/hooks/useAnalysisHistory.ts`: track `hasMore`, `isLoading`, prevent concurrent fetches
+- [X] T008 Add `useEffect` cleanup in `src/app/hooks/useAnalysisHistory.ts` to abort in-flight requests on unmount
 
 **Checkpoint**: Foundation ready — `useAnalysisHistory` hook is fully functional and can be imported by `AIAnalysisPage.tsx`
 
@@ -49,12 +49,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [P] [US1] Replace hardcoded `analysisHistory` array in `src/app/components/AIAnalysisPage.tsx` with `useAnalysisHistory()` hook
-- [ ] T010 [P] [US1] Render history items from `history.entries` in `src/app/components/AIAnalysisPage.tsx`: title, status badge, date, preview
-- [ ] T011 [US1] Implement status badge color mapping in `src/app/components/AIAnalysisPage.tsx`: COMPLETED=green, RUNNING=blue, FAILED=red, PENDING=gray
-- [ ] T012 [US1] Show loading skeleton/spinner while `history.isLoading` in `src/app/components/AIAnalysisPage.tsx` with Arabic text "جاري تحميل سجل التحليلات..."
-- [ ] T013 [US1] Show empty state when `history.entries.length === 0` in `src/app/components/AIAnalysisPage.tsx` with Arabic text "لا توجد تحليلات سابقة. ابدأ بإنشاء تحليل جديد"
-- [ ] T014 [US1] Show error banner with retry button when `history.error` is set in `src/app/components/AIAnalysisPage.tsx` with Arabic text "فشل في تحميل السجل"
+- [X] T009 [P] [US1] Replace hardcoded `analysisHistory` array in `src/app/components/AIAnalysisPage.tsx` with `useAnalysisHistory()` hook
+- [X] T010 [P] [US1] Render history items from `history.entries` in `src/app/components/AIAnalysisPage.tsx`: title, status badge, date, preview
+- [X] T011 [US1] Implement status badge color mapping in `src/app/components/AIAnalysisPage.tsx`: COMPLETED=green, RUNNING=blue, FAILED=red, PENDING=gray
+- [X] T012 [US1] Show loading skeleton/spinner while `history.isLoading` in `src/app/components/AIAnalysisPage.tsx` with Arabic text "جاري تحميل سجل التحليلات..."
+- [X] T013 [US1] Show empty state when `history.entries.length === 0` in `src/app/components/AIAnalysisPage.tsx` with Arabic text "لا توجد تحليلات سابقة. ابدأ بإنشاء تحليل جديد"
+- [X] T014 [US1] Show error banner with retry button when `history.error` is set in `src/app/components/AIAnalysisPage.tsx` with Arabic text "فشل في تحميل السجل"
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently. The MVP is complete.
 
@@ -68,12 +68,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T015 [US2] Wire history item click handler in `src/app/components/AIAnalysisPage.tsx` to call `history.loadSession(item.id)`
-- [ ] T016 [US2] Show confirmation dialog when clicking history item while a live stream is active (`streaming.status === 'streaming'` or `'connecting'`) in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T017 [US2] Display loaded session messages in chat area from `streaming.messages` (set by `loadSession`) in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T018 [US2] Ensure loaded session messages render as complete text (no streaming cursor) in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T019 [US2] Show inline loading state while session detail is loading in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T020 [US2] Show inline error state if session detail fetch fails in `src/app/components/AIAnalysisPage.tsx`
+- [X] T015 [US2] Wire history item click handler in `src/app/components/AIAnalysisPage.tsx` to call `history.loadSession(item.id)`
+- [X] T016 [US2] Show confirmation dialog when clicking history item while a live stream is active (`streaming.status === 'streaming'` or `'connecting'`) in `src/app/components/AIAnalysisPage.tsx`
+- [X] T017 [US2] Display loaded session messages in chat area from `streaming.messages` (set by `loadSession`) in `src/app/components/AIAnalysisPage.tsx`
+- [X] T018 [US2] Ensure loaded session messages render as complete text (no streaming cursor) in `src/app/components/AIAnalysisPage.tsx`
+- [X] T019 [US2] Show inline loading state while session detail is loading in `src/app/components/AIAnalysisPage.tsx`
+- [X] T020 [US2] Show inline error state if session detail fetch fails in `src/app/components/AIAnalysisPage.tsx`
 
 **Checkpoint**: User Story 2 works independently. Clicking a history item replays the session in the chat area.
 
@@ -87,9 +87,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T021 [US3] Enable chat input when a historical session is loaded (`history.selectedId` is set and `streaming.status === 'complete'`) in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T022 [US3] Wire `handleSendMessage` in `src/app/components/AIAnalysisPage.tsx` to call `streaming.sendFollowUp(chatInput)` using the loaded session's `sessionId`
-- [ ] T023 [US3] Ensure follow-up questions append to the chat thread below the loaded session messages in `src/app/components/AIAnalysisPage.tsx`
+- [X] T021 [US3] Enable chat input when a historical session is loaded (`history.selectedId` is set and `streaming.status === 'complete'`) in `src/app/components/AIAnalysisPage.tsx`
+- [X] T022 [US3] Wire `handleSendMessage` in `src/app/components/AIAnalysisPage.tsx` to call `streaming.sendFollowUp(chatInput)` using the loaded session's `sessionId`
+- [X] T023 [US3] Ensure follow-up questions append to the chat thread below the loaded session messages in `src/app/components/AIAnalysisPage.tsx`
 
 **Checkpoint**: User Story 3 works independently. Follow-up questions are sent and answers are appended to the loaded session.
 
@@ -103,10 +103,10 @@
 
 ### Implementation for User Story 4
 
-- [ ] T024 [US4] Add `IntersectionObserver` to the bottom of the history sidebar in `src/app/components/AIAnalysisPage.tsx` to detect scroll-to-bottom
-- [ ] T025 [US4] Wire scroll-to-bottom event to call `history.fetchHistory(nextPage)` in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T026 [US4] Show inline loading indicator at bottom while fetching next page in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T027 [US4] Ensure no further page requests are sent when `history.pagination.hasMore === false` in `src/app/components/AIAnalysisPage.tsx`
+- [X] T024 [US4] Add `IntersectionObserver` to the bottom of the history sidebar in `src/app/components/AIAnalysisPage.tsx` to detect scroll-to-bottom
+- [X] T025 [US4] Wire scroll-to-bottom event to call `history.fetchHistory(nextPage)` in `src/app/components/AIAnalysisPage.tsx`
+- [X] T026 [US4] Show inline loading indicator at bottom while fetching next page in `src/app/components/AIAnalysisPage.tsx`
+- [X] T027 [US4] Ensure no further page requests are sent when `history.pagination.hasMore === false` in `src/app/components/AIAnalysisPage.tsx`
 
 **Checkpoint**: User Story 4 works independently. Pagination loads next pages on scroll.
 
@@ -116,14 +116,14 @@
 
 **Purpose**: Clean up, verify integration, and ensure no hardcoded data remains
 
-- [ ] T028 [P] Remove any remaining hardcoded `analysisHistory` data or mock constants from `src/app/components/AIAnalysisPage.tsx`
-- [ ] T029 [P] Verify `src/api/services/analysis-service.ts` endpoints match `contracts/history-api.md`
-- [ ] T030 [P] Verify `useAnalysisHistory` hook handles empty `results` / `insights` arrays gracefully (no crash)
-- [ ] T031 [P] Verify preview text derivation logic in `src/app/components/AIAnalysisPage.tsx` (first 100 chars of `insightText` or `summary` fallback)
-- [ ] T032 [P] Verify `AbortController` is used for all history and detail requests in `src/app/hooks/useAnalysisHistory.ts`
-- [ ] T033 [P] Verify confirmation dialog Arabic text is correct: "تحليل قيد التشغيل. هل تريد الانتقال إلى التحليل المحدد؟"
-- [ ] T034 [P] Run linting (`eslint`) and TypeScript compilation (`tsc --noEmit`) to verify no type errors
-- [ ] T035 [P] Update `AGENTS.md` to point to the current feature plan and spec
+- [X] T028 [P] Remove any remaining hardcoded `analysisHistory` data or mock constants from `src/app/components/AIAnalysisPage.tsx`
+- [X] T029 [P] Verify `src/api/services/analysis-service.ts` endpoints match `contracts/history-api.md`
+- [X] T030 [P] Verify `useAnalysisHistory` hook handles empty `results` / `insights` arrays gracefully (no crash)
+- [X] T031 [P] Verify preview text derivation logic in `src/app/components/AIAnalysisPage.tsx` (first 100 chars of `insightText` or `summary` fallback)
+- [X] T032 [P] Verify `AbortController` is used for all history and detail requests in `src/app/hooks/useAnalysisHistory.ts`
+- [X] T033 [P] Verify confirmation dialog Arabic text is correct: "تحليل قيد التشغيل. هل تريد الانتقال إلى التحليل المحدد؟"
+- [X] T034 [P] Run linting (`eslint`) and TypeScript compilation (`tsc --noEmit`) to verify no type errors
+- [X] T035 [P] Update `AGENTS.md` to point to the current feature plan and spec
 
 ---
 
