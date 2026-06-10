@@ -94,10 +94,16 @@ export class AnalysisService {
    */
   connectToStream(sessionId: string): EventSource {
     const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) || '';
+    
+    if (!token) {
+      console.error('[SSE] No auth token found in localStorage. User may need to log in.');
+      throw new Error('Authentication required. Please log in.');
+    }
+    
+    const url = `${apiClient.defaults.baseURL}${this.baseEndpoint}/stream/${sessionId}?token=${encodeURIComponent(token)}`;
+    console.log('[SSE] Connecting to:', url.substring(0, url.indexOf('?') + 7) + '...');
     // Pass token as query param since EventSource doesn't support headers
-    return new EventSource(
-      `${apiClient.defaults.baseURL}${this.baseEndpoint}/stream/${sessionId}?token=${encodeURIComponent(token)}`
-    );
+    return new EventSource(url);
   }
 
   /**

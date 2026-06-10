@@ -169,9 +169,15 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
         }
       };
 
-      eventSource.onerror = () => {
+      eventSource.onopen = () => {
+        console.log('[SSE] Connection opened successfully');
+      };
+
+      eventSource.onerror = (error) => {
+        console.error('[SSE] Connection error:', error);
+        // EventSource doesn't expose HTTP status, but 401/403 typically close immediately
         setStatus('error');
-        setError('Connection to analysis stream failed');
+        setError('فشل الاتصال بتحليل البث المباشر. تأكد من تسجيل الدخول.');
         eventSource.close();
         eventSourceRef.current = null;
       };
