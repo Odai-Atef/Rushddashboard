@@ -467,9 +467,6 @@ export function AIAnalysisPage() {
     handleStartAnalysis(card);
   };
 
-  const isHistoricalSessionLoaded = history.selectedId !== null && streaming.status === 'complete' && streaming.sessionId === history.selectedId;
-  const isChatEnabled = isAnalysisComplete || hasError || isHistoricalSessionLoaded;
-
   const handleSendMessage = () => {
     if (!chatInput.trim()) return;
     streaming.sendFollowUp(chatInput);
@@ -538,6 +535,8 @@ export function AIAnalysisPage() {
   const isStreamingActive = streaming.status === 'streaming' || streaming.status === 'connecting';
   const isAnalysisComplete = streaming.status === 'complete';
   const hasError = streaming.status === 'error';
+  const isHistoricalSessionLoaded = history.selectedId !== null && streaming.status === 'complete' && streaming.sessionId === history.selectedId;
+  const isChatEnabled = isAnalysisComplete || hasError || isHistoricalSessionLoaded;
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
