@@ -164,12 +164,24 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
   }, []);
 
   const fetchHistory = useCallback(async (page?: number) => {
-    const targetPage = page ?? state.pagination.page;
+    // Always read from current state via functional update to avoid stale closure
+    let targetPage = page ?? 1;
+    let currentLimit = 20;
+    let hasMore = true;
+    let isCurrentlyLoading = false;
+
+    setState(prev => {
+      currentLimit = prev.pagination?.limit ?? 20;
+      hasMore = prev.pagination?.hasMore ?? true;
+      isCurrentlyLoading = prev.isLoading;
+      targetPage = page ?? prev.pagination?.page ?? 1;
+      return prev;
+    });
 
     // Prevent concurrent fetches
-    if (state.isLoading) return;
-    // Prevent fetching if no more pages
-    if (page && page > 1 && !state.pagination.hasMore) return;
+    if (isCurrentlyLoading) return;
+    // Prevent fetching if no more pages (only when requesting a specific page > 1)
+    if (page && page > 1 && !hasMore) return;
 
     // Abort any in-flight request
     abortControllerRef.current?.abort();
@@ -183,7 +195,7 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
     }));
 
     try {
-      const response = await analysisService.getHistory(targetPage, state.pagination.limit);
+      const response = await analysisService.getHistory(targetPage, currentLimit);
       const { data, meta } = response.data;
 
       if (abortController.signal.aborted) return;
@@ -193,9 +205,9 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
         entries: targetPage === 1 ? data : [...prev.entries, ...data],
         pagination: {
           page: targetPage,
-          limit: meta.limit,
-          total: meta.total,
-          hasMore: meta.hasMore,
+          limit: meta?.limit ?? currentLimit,
+          total: meta?.total ?? data.length,
+          hasMore: meta?.hasMore ?? false,
         },
         isLoading: false,
         error: null,
@@ -213,7 +225,7 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
         abortControllerRef.current = null;
       }
     }
-  }, [state.pagination.page, state.pagination.limit, state.pagination.hasMore, state.isLoading]);
+  }, []);
 
   const loadSession = useCallback(async (runId: string): Promise<StreamMessage[]> => {
     // Abort any in-flight detail request
