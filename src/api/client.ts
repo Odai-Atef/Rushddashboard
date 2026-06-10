@@ -18,7 +18,7 @@ import {
 import { AUTH_CONFIG } from './config';
 
 class ApiClient {
-  private baseURL: string;
+  private _baseURL: string;
   private defaultTimeout: number;
   private maxRetries: number;
   private retryDelayMs: number;
@@ -28,10 +28,20 @@ class ApiClient {
     defaultTimeout: number = ENV.API_TIMEOUT,
     maxRetries: number = ENV.API_RETRY_ATTEMPTS
   ) {
-    this.baseURL = baseURL.replace(/\/$/, ''); // Remove trailing slash
+    this._baseURL = baseURL.replace(/\/$/, ''); // Remove trailing slash
     this.defaultTimeout = defaultTimeout;
     this.maxRetries = maxRetries;
     this.retryDelayMs = 1000;
+  }
+
+  /**
+   * Expose base URL for external URL construction (e.g., EventSource SSE streams)
+   */
+  get defaults() {
+    return {
+      baseURL: this._baseURL,
+      timeout: this.defaultTimeout,
+    };
   }
 
   /**
@@ -67,7 +77,7 @@ class ApiClient {
     endpoint: string, 
     params?: Record<string, string | number | boolean | undefined>
   ): string {
-    const url = new URL(`${this.baseURL}${endpoint}`);
+    const url = new URL(`${this._baseURL}${endpoint}`);
     
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
