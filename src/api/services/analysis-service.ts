@@ -12,6 +12,7 @@
 
 import apiClient from '../client';
 import { ApiResponse } from '../types';
+import { AUTH_CONFIG } from '../config';
 
 /** Represents a single analysis category returned by the backend. */
 export interface Category {
@@ -92,7 +93,7 @@ export class AnalysisService {
    * Returns an EventSource instance - caller must handle onmessage/onerror.
    */
   connectToStream(sessionId: string): EventSource {
-    const token = localStorage.getItem('access_token') || '';
+    const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) || '';
     // Pass token as query param since EventSource doesn't support headers
     return new EventSource(
       `${apiClient.defaults.baseURL}${this.baseEndpoint}/stream/${sessionId}?token=${encodeURIComponent(token)}`
