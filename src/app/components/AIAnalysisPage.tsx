@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   Sparkles,
   TrendingUp,
@@ -90,6 +92,7 @@ export function AIAnalysisPage() {
   const [activeAnalysis, setActiveAnalysis] = useState<AnalysisCard | null>(null);
   const [activeLibraryItem, setActiveLibraryItem] = useState<AnalysisLibraryItem | null>(null);
   const [chatInput, setChatInput] = useState('');
+  const [pendingRetryQuestion, setPendingRetryQuestion] = useState<string | null>(null);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [pendingHistoryId, setPendingHistoryId] = useState<string | null>(null);
   const [progressSteps, setProgressSteps] = useState<ProgressStep[]>([
@@ -468,9 +471,16 @@ export function AIAnalysisPage() {
   };
 
   const handleSendMessage = () => {
-    if (!chatInput.trim()) return;
+    if (!chatInput.trim() || streaming.isLoading) return;
+    setPendingRetryQuestion(chatInput);
     streaming.sendFollowUp(chatInput);
     setChatInput('');
+  };
+
+  const handleRetryFollowUp = () => {
+    if (!pendingRetryQuestion || streaming.isLoading) return;
+    streaming.sendFollowUp(pendingRetryQuestion);
+    setPendingRetryQuestion(null);
   };
 
   const handleRegenerate = () => {
@@ -539,6 +549,18 @@ export function AIAnalysisPage() {
   const isChatEnabled = isAnalysisComplete || hasError || isHistoricalSessionLoaded;
 
   useEffect(() => {
+    if (streaming.status === 'complete') {
+      setPendingRetryQuestion(null);
+    }
+  }, [streaming.status]);
+
+  useEffect(() => {
+    if (!hasError) {
+      setPendingRetryQuestion(null);
+    }
+  }, [hasError]);
+
+  useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [streaming.messages, streaming.status]);
 
@@ -572,8 +594,10 @@ export function AIAnalysisPage() {
           </div>
 
           <div className="p-5 bg-card border border-border rounded-xl">
-            <div className="prose prose-sm max-w-none">
-              <p className="whitespace-pre-wrap leading-relaxed">{message.content}</p>
+            <div className="prose prose-sm max-w-none text-right">
+              <Markdown remarkPlugins={[remarkGfm]}>
+                {message.content || '\u00A0'}
+              </Markdown>
               {message.isStreaming && (
                 <span className="inline-block w-2 h-4 bg-primary animate-pulse ml-1"></span>
               )}
@@ -933,18 +957,32 @@ export function AIAnalysisPage() {
                     </div>
                   )}
 
-                  {/* Error Banner */}
-                  {hasError && streaming.error && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                      <div className="flex items-center gap-2 mb-2">
-                        <AlertTriangle className="w-4 h-4" />
-                        <span className="font-medium">حدث خطأ</span>
-                      </div>
-                      <p>{streaming.error}</p>
-                    </div>
-                  )}
+                  {/* Error Banner inside messages area removed — shown above chat input instead */}
 
                   <div ref={messagesEndRef} />
+                </div>
+              )}
+
+              {/* Error Banner above Chat Input */}
+              {hasError && streaming.error && (
+                <div className="p-4 border-t border-border bg-card">
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertTriangle className="w-4 h-4" />
+                      <span className="font-medium">حدث خطأ</span>
+                    </div>
+                    <p className="mb-3">{streaming.error}</p>
+                    {pendingRetryQuestion && (
+                      <button
+                        onClick={handleRetryFollowUp}
+                        disabled={streaming.isLoading}
+                        className="px-3 py-1.5 text-xs bg-red-100 hover:bg-red-200 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        إعادة المحاولة
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
 
@@ -958,7 +996,8 @@ export function AIAnalysisPage() {
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                       placeholder="اطرح سؤالاً للمتابعة..."
-                      className="flex-1 px-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      disabled={streaming.isLoading}
+                      className="flex-1 px-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     <button
                       onClick={handleSendMessage}

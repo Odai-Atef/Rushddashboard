@@ -175,9 +175,11 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
 
       eventSource.onerror = (error) => {
         console.error('[SSE] Connection error:', error);
-        // EventSource doesn't expose HTTP status, but 401/403 typically close immediately
-        setStatus('error');
-        setError('فشل الاتصال بتحليل البث المباشر. تأكد من تسجيل الدخول.');
+        // Only treat as error if we haven't received complete yet
+        if (status !== 'complete') {
+          setStatus('error');
+          setError('فشل الاتصال بتحليل البث المباشر. تأكد من تسجيل الدخول.');
+        }
         eventSource.close();
         eventSourceRef.current = null;
       };
@@ -191,9 +193,13 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
 
   const sendFollowUp = useCallback(async (question: string) => {
     if (!sessionId) {
-      setError('No active analysis session. Start an analysis first.');
+      setError('لا يوجد جلسة تحليل نشطة. ابدأ تحليلاً أولاً.');
       return;
     }
+
+    // Clear any previous error and set loading state
+    setError(null);
+    setStatus('streaming');
 
     // Add user question to messages
     const userMessageId = generateMessageId();
@@ -218,13 +224,14 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
       const response = await analysisService.askFollowUp(question, sessionId);
       const { answer, sql, data, fallback } = response.data;
 
+      setStatus('complete');
       setMessages(prev => {
         const updated = [...prev];
         const lastIndex = updated.length - 1;
         if (updated[lastIndex]?.role === 'assistant') {
           updated[lastIndex] = {
             ...updated[lastIndex],
-            content: answer || 'No answer received',
+            content: answer || 'لم يتم استلام إجابة',
             isStreaming: false,
             sql,
             data,
@@ -234,13 +241,16 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
         return updated;
       });
     } catch (err: any) {
+      const errorMessage = err.message || 'فشل في الحصول على إجابة المتابعة';
+      setStatus('error');
+      setError(errorMessage);
       setMessages(prev => {
         const updated = [...prev];
         const lastIndex = updated.length - 1;
         if (updated[lastIndex]?.role === 'assistant') {
           updated[lastIndex] = {
             ...updated[lastIndex],
-            content: `Error: ${err.message || 'Failed to get follow-up answer'}`,
+            content: errorMessage,
             isStreaming: false,
           };
         }

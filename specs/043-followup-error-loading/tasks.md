@@ -39,10 +39,10 @@
 
 ### Implementation for User Story 1
 
-- [ ] T001 [US1] Set `status = 'streaming'` at the start of `sendFollowUp()` in `src/app/hooks/useAnalysisStreaming.ts`
-- [ ] T002 [US1] Reset `status = 'complete'` after a successful follow-up response in `src/app/hooks/useAnalysisStreaming.ts`
-- [ ] T003 [US1] Reset `status = 'error'` after a failed follow-up response in `src/app/hooks/useAnalysisStreaming.ts`
-- [ ] T004 [P] [US1] Disable chat input and submit button while `streaming.isLoading` is `true` in `src/app/components/AIAnalysisPage.tsx`
+- [x] T001 [US1] Set `status = 'streaming'` at the start of `sendFollowUp()` in `src/app/hooks/useAnalysisStreaming.ts`
+- [x] T002 [US1] Reset `status = 'complete'` after a successful follow-up response in `src/app/hooks/useAnalysisStreaming.ts`
+- [x] T003 [US1] Reset `status = 'error'` after a failed follow-up response in `src/app/hooks/useAnalysisStreaming.ts`
+- [x] T004 [P] [US1] Disable chat input and submit button while `streaming.isLoading` is `true` in `src/app/components/AIAnalysisPage.tsx`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional. Clicking "إرسال" during a follow-up request disables the button and shows a loading state.
 
@@ -56,9 +56,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T005 [US1] On `askFollowUp()` throw, update the last assistant placeholder message with Arabic-localized error text and set `isStreaming: false` in `src/app/hooks/useAnalysisStreaming.ts`
-- [ ] T006 [P] [US2] Render a distinct visual error banner above the chat input when `hasError` is true in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T007 [P] [US2] Ensure the error banner uses existing Arabic-localized error strings and Tailwind red color tokens in `src/app/components/AIAnalysisPage.tsx`
+- [x] T005 [US1] On `askFollowUp()` throw, update the last assistant placeholder message with Arabic-localized error text and set `isStreaming: false` in `src/app/hooks/useAnalysisStreaming.ts`
+- [x] T006 [P] [US2] Render a distinct visual error banner above the chat input when `hasError` is true in `src/app/components/AIAnalysisPage.tsx`
+- [x] T007 [P] [US2] Ensure the error banner uses existing Arabic-localized error strings and Tailwind red color tokens in `src/app/components/AIAnalysisPage.tsx`
 
 **Checkpoint**: At this point, User Story 2 should be fully functional. A 404/500 error shows a visible error banner above the chat input, not just text inside the message bubble.
 
@@ -72,8 +72,8 @@
 
 ### Implementation for User Story 3
 
-- [ ] T008 [US3] Add `pendingRetryQuestion` component state to track the last failed follow-up question in `src/app/components/AIAnalysisPage.tsx`
-- [ ] T009 [US3] Add retry button to the error banner that calls `streaming.sendFollowUp(pendingRetryQuestion)` and clears the question state in `src/app/components/AIAnalysisPage.tsx`
+- [x] T008 [US3] Add `pendingRetryQuestion` component state to track the last failed follow-up question in `src/app/components/AIAnalysisPage.tsx`
+- [x] T009 [US3] Add retry button to the error banner that calls `streaming.sendFollowUp(pendingRetryQuestion)` and clears the question state in `src/app/components/AIAnalysisPage.tsx`
 
 **Checkpoint**: At this point, User Story 3 should be fully functional. The error banner includes a retry button that re-sends the same question.
 
@@ -83,8 +83,8 @@
 
 **Purpose**: Verify no regressions and ensure completeness.
 
-- [ ] T010 [P] Verify `startAnalysis()` SSE streaming flow remains unchanged by code inspection in `src/app/hooks/useAnalysisStreaming.ts`
-- [ ] T011 Run quickstart validation steps from `specs/043-followup-error-loading/quickstart.md`
+- [x] T010 [P] Verify `startAnalysis()` SSE streaming flow remains unchanged by code inspection in `src/app/hooks/useAnalysisStreaming.ts`
+- [x] T011 Run quickstart validation steps from `specs/043-followup-error-loading/quickstart.md`
 
 ---
 
