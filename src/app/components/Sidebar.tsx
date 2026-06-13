@@ -21,7 +21,12 @@ import {
   UserPlus,
   Brain,
   MessageSquare,
-  HeartHandshake
+  HeartHandshake,
+  BarChart3,
+  Building2,
+  FolderKanban,
+  Activity,
+  Handshake
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -33,6 +38,12 @@ interface SidebarProps {
 export function Sidebar({ activeView, className }: SidebarProps) {
   const navItems = [
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
+    { id: 'incubator-overview', label: 'نظرة شاملة للحاضنة', icon: BarChart3, path: '/dashboard/incubator-overview' },
+    { id: 'charity-analytics', label: 'تحليلات الجمعيات', icon: Building2, path: '/dashboard/charity-analytics' },
+    { id: 'project-analytics', label: 'تحليلات المشاريع', icon: FolderKanban, path: '/dashboard/project-analytics' },
+    { id: 'funding-analytics', label: 'تحليلات التمويل والمانحين', icon: DollarSign, path: '/dashboard/funding-analytics' },
+    { id: 'operations-analytics', label: 'تحليلات التشغيل والأداء', icon: Activity, path: '/dashboard/operations-analytics' },
+    { id: 'donor-matching', label: 'التطابق الذكي مع المانحين', icon: Handshake, path: '/dashboard/donor-matching' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
     { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation' },
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history' },

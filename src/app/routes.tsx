@@ -30,6 +30,12 @@ import { ProjectManagementModule } from './components/ProjectManagementModule';
 import { AIProjectInnovationModule } from './components/AIProjectInnovationModule';
 import { ProjectCollaborationModule } from './components/ProjectCollaborationModule';
 import { DonorsPage } from './components/donors/DonorsPage';
+import { IncubatorOverviewDashboard } from './components/IncubatorOverviewDashboard';
+import { CharityAnalyticsDashboard } from './components/CharityAnalyticsDashboard';
+import { ProjectAnalyticsDashboard } from './components/ProjectAnalyticsDashboard';
+import { FundingDonorAnalytics } from './components/FundingDonorAnalytics';
+import { OperationsPerformanceDashboard } from './components/OperationsPerformanceDashboard';
+import { DonorMatchingModule } from './components/donor-matching/DonorMatchingModule';
 
 export const router = createBrowserRouter([
   {
@@ -161,6 +167,30 @@ export const router = createBrowserRouter([
           {
             path: 'donors',
             Component: DonorsPage,
+          },
+          {
+            path: 'incubator-overview',
+            Component: IncubatorOverviewDashboard,
+          },
+          {
+            path: 'charity-analytics',
+            Component: CharityAnalyticsDashboard,
+          },
+          {
+            path: 'project-analytics',
+            Component: ProjectAnalyticsDashboard,
+          },
+          {
+            path: 'funding-analytics',
+            Component: FundingDonorAnalytics,
+          },
+          {
+            path: 'operations-analytics',
+            Component: OperationsPerformanceDashboard,
+          },
+          {
+            path: 'donor-matching',
+            Component: DonorMatchingModule,
           },
         ],
       },
