@@ -12,6 +12,7 @@
 
 import apiClient from '../client';
 import { ApiResponse } from '../types';
+import { AUTH_CONFIG } from '../config';
 
 /** Represents a single analysis category returned by the backend. */
 export interface Category {
@@ -50,11 +51,6 @@ export class AnalysisService {
 
   /**
    * Fetch all available analysis categories from the backend.
-   *
-   * Categories are sorted by `sortOrder` ascending by the caller (UI layer)
-   * after receiving the raw response.
-   *
-   * @returns A typed `ApiResponse` wrapping an array of `Category` objects.
    */
   async getCategories(): Promise<ApiResponse<Category[]>> {
     return apiClient.get<Category[]>(`${this.baseEndpoint}/categories`);
@@ -62,9 +58,6 @@ export class AnalysisService {
 
   /**
    * Fetch active analysis library items for a specific category.
-   *
-   * @param categoryId - The backend UUID of the selected category.
-   * @returns A typed `ApiResponse` wrapping an array of `AnalysisLibraryItem` objects.
    */
   async getLibraryItems(categoryId: string): Promise<ApiResponse<AnalysisLibraryItem[]>> {
     return apiClient.get<AnalysisLibraryItem[]>(
@@ -74,13 +67,109 @@ export class AnalysisService {
 
   /**
    * Fetch all active analysis library items across all categories.
-   *
-   * @returns A typed `ApiResponse` wrapping an array of `AnalysisLibraryItem` objects.
    */
   async getAllLibraryItems(): Promise<ApiResponse<AnalysisLibraryItem[]>> {
     return apiClient.get<AnalysisLibraryItem[]>(
       `${this.baseEndpoint}/categories/library-items`
     );
+  }
+
+  /**
+   * Trigger a streaming AI analysis run.
+   * Returns sessionId to connect to SSE stream.
+   */
+  async triggerStreamingRun(
+    analysisItemId: string,
+    filters?: Record<string, any>
+  ): Promise<ApiResponse<{ analysisRunId: string; sessionId: string; status: string; isNew: boolean }>> {
+    return apiClient.post(`${this.baseEndpoint}/streaming-run`, {
+      analysisItemId,
+      filters,
+    });
+  }
+
+  /**
+   * Connect to SSE stream for AI tokens.
+   * Returns an EventSource instance - caller must handle onmessage/onerror.
+   */
+  connectToStream(sessionId: string): EventSource {
+    const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) || '';
+    
+    if (!token) {
+      console.error('[SSE] No auth token found in localStorage. User may need to log in.');
+      throw new Error('Authentication required. Please log in.');
+    }
+    
+    const url = `${apiClient.defaults.baseURL}${this.baseEndpoint}/stream/${sessionId}?token=${encodeURIComponent(token)}`;
+    console.log('[SSE] Connecting to:', url.substring(0, url.indexOf('?') + 7) + '...');
+    // Pass token as query param since EventSource doesn't support headers
+    return new EventSource(url);
+  }
+
+  /**
+   * Ask a follow-up question about the analysis results.
+   */
+  async askFollowUp(
+    question: string,
+    sessionId?: string
+  ): Promise<ApiResponse<{ answer: string; sql?: string; data?: any[]; fallback?: boolean }>> {
+    return apiClient.post(`${this.baseEndpoint}/follow-up`, {
+      question,
+      sessionId,
+    });
+  }
+
+  /**
+   * Fetch paginated analysis history.
+   */
+  async getHistory(
+    page: number = 1,
+    limit: number = 20
+  ): Promise<ApiResponse<{
+    data: Array<{
+      id: string;
+      title: string;
+      summary: string | null;
+      status: 'COMPLETED' | 'RUNNING' | 'FAILED' | 'PENDING';
+      durationMs: number | null;
+      startedAt: string;
+      completedAt: string | null;
+      insightsCount: number | null;
+      recommendationsCount: number | null;
+    }>;
+    meta: {
+      page: number;
+      limit: number;
+      total: number;
+      hasMore: boolean;
+    };
+  }>> {
+    return apiClient.get(`${this.baseEndpoint}/history`, {
+      params: { page, limit },
+    });
+  }
+
+  /**
+   * Fetch full detail for a specific analysis run.
+   */
+  async getRunDetail(runId: string): Promise<ApiResponse<{
+    id: string;
+    title: string;
+    status: 'COMPLETED' | 'RUNNING' | 'FAILED' | 'PENDING';
+    insights: Array<{
+      id: string;
+      title: string;
+      content: string;
+      type: string | null;
+    }>;
+    results: Array<{
+      id: string;
+      insightText: string;
+      dimensionData: Record<string, any> | null;
+      recommendationText: string | null;
+    }>;
+  }>> {
+    return apiClient.get(`${this.baseEndpoint}/history/${runId}`);
   }
 }
 

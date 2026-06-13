@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import {
   Sparkles,
   TrendingUp,
@@ -56,6 +58,8 @@ import {
 import { cn } from '../utils/cn';
 import { useAnalysisCategories } from '@/app/hooks/useAnalysisCategories';
 import { Category } from '@/api/services/analysis-service';
+import { useAnalysisStreaming } from '@/app/hooks/useAnalysisStreaming';
+import { useAnalysisHistory, AnalysisHistoryStatus, formatDateTime, getPreview } from '@/app/hooks/useAnalysisHistory';
 
 interface AnalysisCard {
   id: string;
@@ -72,16 +76,6 @@ interface AnalysisCard {
   color: string;
 }
 
-interface AnalysisHistoryItem {
-  id: string;
-  title: string;
-  type: string;
-  date: string;
-  time: string;
-  status: 'completed' | 'running' | 'failed';
-  preview: string;
-}
-
 interface ProgressStep {
   id: number;
   label: string;
@@ -91,14 +85,16 @@ interface ProgressStep {
 
 export function AIAnalysisPage() {
   const { categories: apiCategories, isLoading: categoriesLoading, error: categoriesError, retry: retryCategories } = useAnalysisCategories();
+  const streaming = useAnalysisStreaming();
+  const history = useAnalysisHistory();
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
   const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [generatingText, setGeneratingText] = useState('');
-  const [currentStep, setCurrentStep] = useState(0);
   const [activeAnalysis, setActiveAnalysis] = useState<AnalysisCard | null>(null);
-  const [isAnalysisComplete, setIsAnalysisComplete] = useState(false);
+  const [activeLibraryItem, setActiveLibraryItem] = useState<AnalysisLibraryItem | null>(null);
   const [chatInput, setChatInput] = useState('');
+  const [pendingRetryQuestion, setPendingRetryQuestion] = useState<string | null>(null);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [pendingHistoryId, setPendingHistoryId] = useState<string | null>(null);
   const [progressSteps, setProgressSteps] = useState<ProgressStep[]>([
     { id: 1, label: 'جلب البيانات', icon: Database, status: 'pending' },
     { id: 2, label: 'تنفيذ SQL', icon: Brain, status: 'pending' },
@@ -107,6 +103,89 @@ export function AIAnalysisPage() {
     { id: 5, label: 'توليد التوصيات', icon: Sparkles, status: 'pending' },
   ]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const historyListRef = useRef<HTMLDivElement>(null);
+  const observerTargetRef = useRef<HTMLDivElement>(null);
+
+  // Fetch history on mount
+  useEffect(() => {
+    history.fetchHistory(1);
+  }, []);
+
+  // Sync streaming status to progress steps
+  useEffect(() => {
+    if (streaming.status === 'connecting') {
+      setProgressSteps(steps => steps.map((s, i) =>
+        i === 0 ? { ...s, status: 'active' as const } : { ...s, status: 'pending' as const }
+      ));
+    } else if (streaming.status === 'streaming') {
+      setProgressSteps(steps => steps.map((s, i) =>
+        i === 0 ? { ...s, status: 'completed' as const } :
+        i === 1 ? { ...s, status: 'completed' as const } :
+        i === 2 ? { ...s, status: 'completed' as const } :
+        i === 3 ? { ...s, status: 'completed' as const } :
+        i === 4 ? { ...s, status: 'active' as const } :
+        { ...s, status: 'pending' as const }
+      ));
+    } else if (streaming.status === 'complete' || streaming.status === 'error') {
+      setProgressSteps(steps => steps.map(s => ({ ...s, status: 'completed' as const })));
+    }
+  }, [streaming.status]);
+
+  // Auto-scroll to bottom when messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [streaming.messages, streaming.status]);
+
+  // IntersectionObserver for infinite scroll pagination
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && history.pagination.hasMore && !history.isLoading) {
+          history.fetchHistory(history.pagination.page + 1);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (observerTargetRef.current) {
+      observer.observe(observerTargetRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [history.pagination.hasMore, history.isLoading, history.pagination.page]);
+
+  const handleHistoryItemClick = (itemId: string) => {
+    const isStreamingActive = streaming.status === 'streaming' || streaming.status === 'connecting';
+    if (isStreamingActive) {
+      setPendingHistoryId(itemId);
+      setShowConfirmDialog(true);
+      return;
+    }
+    loadHistorySession(itemId);
+  };
+
+  const loadHistorySession = async (itemId: string) => {
+    setSelectedAnalysis(itemId);
+    setActiveAnalysis(null);
+    const messages = await history.loadSession(itemId);
+    if (messages.length > 0) {
+      streaming.loadMessages(messages, itemId);
+    }
+  };
+
+  const handleConfirmSwitch = () => {
+    if (pendingHistoryId) {
+      streaming.reset();
+      loadHistorySession(pendingHistoryId);
+    }
+    setShowConfirmDialog(false);
+    setPendingHistoryId(null);
+  };
+
+  const handleCancelSwitch = () => {
+    setShowConfirmDialog(false);
+    setPendingHistoryId(null);
+  };
 
   // Comprehensive Analysis Cards Library
   const analysisCards: AnalysisCard[] = [
@@ -330,37 +409,6 @@ export function AIAnalysisPage() {
     }
   ];
 
-  // Analysis history
-  const analysisHistory: AnalysisHistoryItem[] = [
-    {
-      id: 'analysis-1',
-      title: 'تحليل انخفاض الإيرادات',
-      type: 'Revenue Analysis',
-      date: '2026-05-11',
-      time: '10:30 ص',
-      status: 'completed',
-      preview: 'انخفضت الإيرادات بنسبة 12% في فرع الدمام بسبب ضعف التحويل...'
-    },
-    {
-      id: 'analysis-2',
-      title: 'تحليل تسرب العملاء',
-      type: 'Customer Churn',
-      date: '2026-05-10',
-      time: '03:15 م',
-      status: 'completed',
-      preview: '42% من الاستقالات بسبب فرص أفضل في السوق...'
-    },
-    {
-      id: 'analysis-3',
-      title: 'أداء الحملات التسويقية',
-      type: 'Marketing Performance',
-      date: '2026-05-09',
-      time: '11:45 ص',
-      status: 'running',
-      preview: 'جاري تحليل ROI للحملات الأخيرة...'
-    },
-  ];
-
   // Mock chart data
   const chartData = [
     { month: 'محرم', revenue: 2100000, target: 2500000 },
@@ -397,105 +445,11 @@ export function AIAnalysisPage() {
   // Get recommended and recent analyses
   const recommendedAnalyses = analysisCards.filter(card => card.recommended).slice(0, 3);
 
-  // Simulate AI text streaming
-  const streamText = (text: string) => {
-    setIsGenerating(true);
-    setGeneratingText('');
-    let index = 0;
-
-    const interval = setInterval(() => {
-      if (index < text.length) {
-        setGeneratingText((prev) => prev + text[index]);
-        index++;
-      } else {
-        clearInterval(interval);
-        setIsGenerating(false);
-        setIsAnalysisComplete(true);
-      }
-    }, 20);
-  };
-
-  const stopGenerating = () => {
-    setIsGenerating(false);
-  };
-
-  const regenerateAnalysis = () => {
-    const fullText = 'بناءً على تحليل البيانات الشامل، تم رصد انخفاض بنسبة 12% في إيرادات فرع الدمام خلال الربع الأخير. السبب الرئيسي يعود إلى انخفاض معدل التحويل من 34.5% إلى 28.2%، مما أثر على الأداء العام للفرع. تم تحليل 2,450 عملية بيع و580 عميل محتمل خلال هذه الفترة.';
-    setIsAnalysisComplete(false);
-    streamText(fullText);
-  };
-
-  // Simulate analysis workflow
-  const startAnalysisWorkflow = async () => {
-    setIsAnalysisComplete(false);
-    setGeneratingText('');
-
-    // Step 1: Fetch data
-    setProgressSteps(steps => steps.map((s, i) =>
-      i === 0 ? { ...s, status: 'active' } : s
-    ));
-    await new Promise(resolve => setTimeout(resolve, 800));
-    setProgressSteps(steps => steps.map((s, i) =>
-      i === 0 ? { ...s, status: 'completed' } : i === 1 ? { ...s, status: 'active' } : s
-    ));
-
-    // Step 2: Execute SQL
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setProgressSteps(steps => steps.map((s, i) =>
-      i === 1 ? { ...s, status: 'completed' } : i === 2 ? { ...s, status: 'active' } : s
-    ));
-
-    // Step 3: Process KPIs
-    await new Promise(resolve => setTimeout(resolve, 900));
-    setProgressSteps(steps => steps.map((s, i) =>
-      i === 2 ? { ...s, status: 'completed' } : i === 3 ? { ...s, status: 'active' } : s
-    ));
-
-    // Step 4: Detect risks
-    await new Promise(resolve => setTimeout(resolve, 1100));
-    setProgressSteps(steps => steps.map((s, i) =>
-      i === 3 ? { ...s, status: 'completed' } : i === 4 ? { ...s, status: 'active' } : s
-    ));
-
-    // Step 5: Generate recommendations
-    await new Promise(resolve => setTimeout(resolve, 1200));
-    setProgressSteps(steps => steps.map((s, i) =>
-      i === 4 ? { ...s, status: 'completed' } : s
-    ));
-
-    // Start streaming text
-    const fullText = 'بناءً على تحليل البيانات الشامل، تم رصد انخفاض بنسبة 12% في إيرادات فرع الدمام خلال الربع الأخير. السبب الرئيسي يعود إلى انخفاض معدل التحويل من 34.5% إلى 28.2%، مما أثر على الأداء العام للفرع.\n\nتم تحليل 2,450 عملية بيع و580 عميل محتمل خلال هذه الفترة. النتائج تشير إلى أن المشكلة الأساسية تكمن في ضعف متابعة العملاء المحتملين بعد أول تواصل.';
-    streamText(fullText);
-  };
-
-  // Complexity badge color
-  const getComplexityColor = (complexity: string) => {
-    switch (complexity) {
-      case 'بسيط': return 'bg-green-500/10 text-green-600 border-green-500/20';
-      case 'متوسط': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
-      case 'متقدم': return 'bg-purple-500/10 text-purple-600 border-purple-500/20';
-      default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
-    }
-  };
-
-  // Impact badge color
-  const getImpactColor = (impact: string) => {
-    switch (impact) {
-      case 'حرج': return 'bg-red-500/10 text-red-600 border-red-500/20';
-      case 'عالي': return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
-      case 'متوسط': return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
-      case 'منخفض': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
-      default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
-    }
-  };
-
   const handleStartAnalysis = (card: AnalysisCard) => {
     setActiveAnalysis(card);
     setShowAnalysisLibrary(false);
-    // Reset progress
-    setProgressSteps(steps => steps.map(s => ({ ...s, status: 'pending' as const })));
-    // Start workflow
-    setTimeout(() => startAnalysisWorkflow(), 500);
+    // Start real streaming
+    streaming.startAnalysis(card.id, {});
   };
 
   const handleSelectLibraryItem = (item: AnalysisLibraryItem) => {
@@ -511,17 +465,44 @@ export function AIAnalysisPage() {
       icon: resolveIcon(item.icon),
       color: item.iconBackground,
     };
+    // Reset any active stream and start new one
+    streaming.reset();
     handleStartAnalysis(card);
+  };
+
+  const handleSendMessage = () => {
+    if (!chatInput.trim() || streaming.isLoading) return;
+    setPendingRetryQuestion(chatInput);
+    streaming.sendFollowUp(chatInput);
+    setChatInput('');
+  };
+
+  const handleRetryFollowUp = () => {
+    if (!pendingRetryQuestion || streaming.isLoading) return;
+    streaming.sendFollowUp(pendingRetryQuestion);
+    setPendingRetryQuestion(null);
+  };
+
+  const handleRegenerate = () => {
+    if (!activeAnalysis) return;
+    streaming.reset();
+    streaming.startAnalysis(activeAnalysis.id, {});
+  };
+
+  const handleStop = () => {
+    streaming.stopStreaming();
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'COMPLETED':
         return 'bg-green-500/20 text-green-600 dark:text-green-400';
-      case 'running':
+      case 'RUNNING':
         return 'bg-blue-500/20 text-blue-600 dark:text-blue-400';
-      case 'failed':
+      case 'FAILED':
         return 'bg-red-500/20 text-red-600 dark:text-red-400';
+      case 'PENDING':
+        return 'bg-gray-500/10 text-gray-600 dark:text-gray-400';
       default:
         return 'bg-muted text-muted-foreground';
     }
@@ -529,26 +510,120 @@ export function AIAnalysisPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'completed':
+      case 'COMPLETED':
         return 'مكتمل';
-      case 'running':
+      case 'RUNNING':
         return 'قيد التشغيل';
-      case 'failed':
+      case 'FAILED':
         return 'فشل';
+      case 'PENDING':
+        return 'معلق';
       default:
         return status;
     }
   };
 
-  const handleSendMessage = () => {
-    if (!chatInput.trim()) return;
-    // Handle follow-up question
-    setChatInput('');
+  const getImpactColor = (impact: string) => {
+    switch (impact) {
+      case 'حرج': return 'bg-red-500/10 text-red-600 border-red-500/20';
+      case 'عالي': return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
+      case 'متوسط': return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
+      case 'منخفض': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
+      default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
+    }
   };
+
+  const getComplexityColor = (complexity: string) => {
+    switch (complexity) {
+      case 'بسيط': return 'bg-green-500/10 text-green-600 border-green-500/20';
+      case 'متوسط': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
+      case 'متقدم': return 'bg-purple-500/10 text-purple-600 border-purple-500/20';
+      default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
+    }
+  };
+
+  const isStreamingActive = streaming.status === 'streaming' || streaming.status === 'connecting';
+  const isAnalysisComplete = streaming.status === 'complete';
+  const hasError = streaming.status === 'error';
+  const isHistoricalSessionLoaded = history.selectedId !== null && streaming.status === 'complete' && streaming.sessionId === history.selectedId;
+  const isChatEnabled = isAnalysisComplete || hasError || isHistoricalSessionLoaded;
+
+  useEffect(() => {
+    if (streaming.status === 'complete') {
+      setPendingRetryQuestion(null);
+    }
+  }, [streaming.status]);
+
+  useEffect(() => {
+    if (!hasError) {
+      setPendingRetryQuestion(null);
+    }
+  }, [hasError]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [generatingText]);
+  }, [streaming.messages, streaming.status]);
+
+  const renderMessage = (message: any, index: number) => {
+    if (message.role === 'user') {
+      return (
+        <div key={message.id || index} className="flex justify-start">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="p-1.5 bg-muted rounded-lg">
+                <Users className="w-4 h-4" />
+              </div>
+              <span className="text-sm font-medium">أنت</span>
+            </div>
+            <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl">
+              <p>{message.content}</p>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div key={message.id || index} className="flex justify-end">
+        <div className="max-w-3xl w-full">
+          <div className="flex items-center gap-2 mb-2 justify-end">
+            <span className="text-sm font-medium">المحلل الذكي</span>
+            <div className="p-1.5 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+          </div>
+
+          <div className="p-5 bg-card border border-border rounded-xl">
+            <div className="prose prose-sm max-w-none text-right">
+              <Markdown remarkPlugins={[remarkGfm]}>
+                {message.content || '\u00A0'}
+              </Markdown>
+              {message.isStreaming && (
+                <span className="inline-block w-2 h-4 bg-primary animate-pulse ml-1"></span>
+              )}
+            </div>
+
+            {/* Action Buttons for completed assistant messages */}
+            {!message.isStreaming && index === streaming.messages.length - 1 && message.role === 'assistant' && (
+              <div className="flex items-center gap-2 mt-3 justify-end">
+                <button
+                  onClick={handleRegenerate}
+                  className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-1"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  إعادة التوليد
+                </button>
+                <button className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-1">
+                  <Copy className="w-3 h-3" />
+                  نسخ
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="h-full flex flex-col overflow-hidden">
@@ -663,44 +738,99 @@ export function AIAnalysisPage() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-2">
-            {analysisHistory.map((item) => (
-              <div
-                key={item.id}
-                onClick={() => setSelectedAnalysis(item.id)}
-                className={`group p-3 rounded-lg mb-2 cursor-pointer transition-all ${
-                  selectedAnalysis === item.id
-                    ? 'bg-primary/10 border-2 border-primary'
-                    : 'hover:bg-muted/50 border-2 border-transparent'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <div className="flex-1">
-                    <h3 className="font-medium text-sm mb-1 line-clamp-1">{item.title}</h3>
-                    <p className="text-xs text-muted-foreground">{item.type}</p>
-                  </div>
-                  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-1 hover:bg-accent rounded">
-                      <MoreVertical className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
-
-                <p className="text-xs text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
-                  {item.preview}
-                </p>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <Clock className="w-3 h-3" />
-                    <span>{item.time}</span>
-                  </div>
-                  <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusColor(item.status)}`}>
-                    {getStatusLabel(item.status)}
-                  </span>
-                </div>
+          <div className="flex-1 overflow-y-auto p-2" ref={historyListRef}>
+            {/* Loading State */}
+            {history.isLoading && history.entries.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-8 space-y-3">
+                <Loader2 className="w-6 h-6 text-primary animate-spin" />
+                <p className="text-sm text-muted-foreground">جاري تحميل سجل التحليلات...</p>
               </div>
-            ))}
+            )}
+
+            {/* Error State */}
+            {history.error && history.entries.length === 0 && (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                <div className="flex items-center gap-2 mb-2">
+                  <AlertTriangle className="w-4 h-4" />
+                  <span className="font-medium">فشل في تحميل السجل</span>
+                </div>
+                <p className="mb-3">{history.error}</p>
+                <button
+                  onClick={() => history.retry()}
+                  className="px-3 py-1.5 text-xs bg-red-100 hover:bg-red-200 rounded-lg transition-colors flex items-center gap-1"
+                >
+                  <RefreshCw className="w-3 h-3" />
+                  إعادة المحاولة
+                </button>
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!history.isLoading && !history.error && history.entries.length === 0 && (
+              <div className="flex flex-col items-center justify-center py-8 text-center">
+                <div className="p-3 bg-muted rounded-xl mb-3">
+                  <Clock className="w-6 h-6 text-muted-foreground" />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  لا توجد تحليلات سابقة. ابدأ بإنشاء تحليل جديد
+                </p>
+              </div>
+            )}
+
+            {/* History Items */}
+            {history.entries.map((item) => {
+              const { date, time } = formatDateTime(item.startedAt);
+              const preview = getPreview(item);
+              return (
+                <div
+                  key={item.id}
+                  onClick={() => handleHistoryItemClick(item.id)}
+                  className={`group p-3 rounded-lg mb-2 cursor-pointer transition-all ${
+                    selectedAnalysis === item.id
+                      ? 'bg-primary/10 border-2 border-primary'
+                      : 'hover:bg-muted/50 border-2 border-transparent'
+                  }`}
+                >
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <h3 className="font-medium text-sm mb-1 line-clamp-1">{item.title}</h3>
+                      <p className="text-xs text-muted-foreground">{date}</p>
+                    </div>
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button className="p-1 hover:bg-accent rounded">
+                        <MoreVertical className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
+
+                  {preview && (
+                    <p className="text-xs text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
+                      {preview}
+                    </p>
+                  )}
+
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                      <Clock className="w-3 h-3" />
+                      <span>{time}</span>
+                    </div>
+                    <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusColor(item.status)}`}>
+                      {getStatusLabel(item.status)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+
+            {/* Inline Loading for Next Page */}
+            {history.isLoading && history.entries.length > 0 && (
+              <div className="flex items-center justify-center py-4">
+                <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+              </div>
+            )}
+
+            {/* Observer Target for Infinite Scroll */}
+            <div ref={observerTargetRef} className="h-4" />
           </div>
         </div>
 
@@ -797,125 +927,67 @@ export function AIAnalysisPage() {
                 </div>
               </div>
 
-              {/* Messages Area */}
-              <div className="flex-1 overflow-y-auto p-6 space-y-6">
-                {/* User Question */}
-                <div className="flex justify-start">
-                  <div className="max-w-2xl">
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className="p-1.5 bg-muted rounded-lg">
-                        <Users className="w-4 h-4" />
-                      </div>
-                      <span className="text-sm font-medium">أنت</span>
-                    </div>
-                    <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl">
-                      <p>{activeAnalysis.description}</p>
-                    </div>
+              {/* Loading Skeleton */}
+              {streaming.status === 'connecting' && (
+                <div className="flex-1 flex items-center justify-center p-6">
+                  <div className="w-full max-w-2xl space-y-4 animate-pulse">
+                    <div className="h-4 bg-muted rounded w-3/4"></div>
+                    <div className="h-4 bg-muted rounded w-full"></div>
+                    <div className="h-4 bg-muted rounded w-5/6"></div>
+                    <div className="h-4 bg-muted rounded w-2/3"></div>
                   </div>
                 </div>
+              )}
 
-                {/* AI Response */}
-                <div className="flex justify-end">
-                  <div className="max-w-3xl w-full">
-                    <div className="flex items-center gap-2 mb-2 justify-end">
-                      <span className="text-sm font-medium">المحلل الذكي</span>
-                      <div className="p-1.5 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
-                        <Sparkles className="w-4 h-4 text-white" />
-                      </div>
+              {/* Messages Area */}
+              {streaming.status !== 'connecting' && (
+                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                  {streaming.messages.map((msg, index) => renderMessage(msg, index))}
+
+                  {/* Stop Button */}
+                  {isStreamingActive && (
+                    <div className="flex justify-center">
+                      <button
+                        onClick={handleStop}
+                        className="px-4 py-2 bg-red-500/10 text-red-600 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
+                      >
+                        <StopCircle className="w-4 h-4" />
+                        إيقاف التوليد
+                      </button>
                     </div>
+                  )}
 
-                    <div className="p-5 bg-card border border-border rounded-xl">
-                      <div className="prose prose-sm max-w-none">
-                        <p className="whitespace-pre-wrap leading-relaxed">{generatingText}</p>
-                        {isGenerating && (
-                          <span className="inline-block w-2 h-4 bg-primary animate-pulse ml-1"></span>
-                        )}
-                      </div>
+                  {/* Error Banner inside messages area removed — shown above chat input instead */}
 
-                      {/* Embedded Analytics */}
-                      {isAnalysisComplete && (
-                        <div className="mt-6 space-y-6">
-                          {/* KPI Cards */}
-                          <div className="grid grid-cols-3 gap-4">
-                            <div className="p-4 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 border border-red-200 dark:border-red-800 rounded-lg">
-                              <div className="flex items-center gap-2 mb-2">
-                                <TrendingDown className="w-4 h-4 text-red-600" />
-                                <span className="text-xs text-muted-foreground">انخفاض الإيرادات</span>
-                              </div>
-                              <p className="text-2xl font-bold text-red-600">-12%</p>
-                            </div>
+                  <div ref={messagesEndRef} />
+                </div>
+              )}
 
-                            <div className="p-4 bg-gradient-to-br from-orange-50 to-yellow-50 dark:from-orange-950/20 dark:to-yellow-950/20 border border-orange-200 dark:border-orange-800 rounded-lg">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Target className="w-4 h-4 text-orange-600" />
-                                <span className="text-xs text-muted-foreground">معدل التحويل</span>
-                              </div>
-                              <p className="text-2xl font-bold text-orange-600">28.2%</p>
-                            </div>
-
-                            <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-950/20 dark:to-cyan-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Users className="w-4 h-4 text-blue-600" />
-                                <span className="text-xs text-muted-foreground">العملاء المحتملون</span>
-                              </div>
-                              <p className="text-2xl font-bold text-blue-600">580</p>
-                            </div>
-                          </div>
-
-                          {/* Chart */}
-                          <div className="p-4 bg-muted/30 rounded-lg">
-                            <h4 className="text-sm font-medium mb-4">اتجاه الإيرادات vs الهدف</h4>
-                            <ResponsiveContainer width="100%" height={200}>
-                              <LineChart data={chartData}>
-                                <CartesianGrid strokeDasharray="3 3" />
-                                <XAxis dataKey="month" style={{ fontSize: '12px' }} />
-                                <YAxis style={{ fontSize: '12px' }} />
-                                <Tooltip />
-                                <Line type="monotone" dataKey="revenue" stroke="var(--color-chart-1)" strokeWidth={2} />
-                                <Line type="monotone" dataKey="target" stroke="var(--color-chart-3)" strokeWidth={2} strokeDasharray="5 5" />
-                              </LineChart>
-                            </ResponsiveContainer>
-                          </div>
-                        </div>
-                      )}
+              {/* Error Banner above Chat Input */}
+              {hasError && streaming.error && (
+                <div className="p-4 border-t border-border bg-card">
+                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertTriangle className="w-4 h-4" />
+                      <span className="font-medium">حدث خطأ</span>
                     </div>
-
-                    {/* Action Buttons */}
-                    {isAnalysisComplete && (
-                      <div className="flex items-center gap-2 mt-3 justify-end">
-                        <button
-                          onClick={regenerateAnalysis}
-                          className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-1"
-                        >
-                          <RefreshCw className="w-3 h-3" />
-                          إعادة التوليد
-                        </button>
-                        <button className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-1">
-                          <Copy className="w-3 h-3" />
-                          نسخ
-                        </button>
-                      </div>
+                    <p className="mb-3">{streaming.error}</p>
+                    {pendingRetryQuestion && (
+                      <button
+                        onClick={handleRetryFollowUp}
+                        disabled={streaming.isLoading}
+                        className="px-3 py-1.5 text-xs bg-red-100 hover:bg-red-200 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        إعادة المحاولة
+                      </button>
                     )}
                   </div>
                 </div>
+              )}
 
-                {isGenerating && (
-                  <div className="flex justify-center">
-                    <button
-                      onClick={stopGenerating}
-                      className="px-4 py-2 bg-red-500/10 text-red-600 border border-red-500/20 rounded-lg hover:bg-red-500/20 transition-colors flex items-center gap-2"
-                    >
-                      <StopCircle className="w-4 h-4" />
-                      إيقاف التوليد
-                    </button>
-                  </div>
-                )}
-
-                <div ref={messagesEndRef} />
-              </div>
-
-              {/* Chat Input - Enabled after analysis */}
-              {isAnalysisComplete && (
+              {/* Chat Input - Enabled after analysis completes or for loaded historical sessions */}
+              {isChatEnabled && (
                 <div className="p-4 border-t border-border bg-card">
                   <div className="flex gap-2">
                     <input
@@ -924,11 +996,12 @@ export function AIAnalysisPage() {
                       onChange={(e) => setChatInput(e.target.value)}
                       onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                       placeholder="اطرح سؤالاً للمتابعة..."
-                      className="flex-1 px-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                      disabled={streaming.isLoading}
+                      className="flex-1 px-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
                     />
                     <button
                       onClick={handleSendMessage}
-                      disabled={!chatInput.trim()}
+                      disabled={!chatInput.trim() || streaming.isLoading}
                       className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
                       <Send className="w-4 h-4" />
@@ -954,7 +1027,7 @@ export function AIAnalysisPage() {
                       <h4 className="font-medium text-sm">ملخص تنفيذي</h4>
                     </div>
                     <p className="text-sm leading-relaxed text-muted-foreground">
-                      المشكلة الرئيسية: ضعف متابعة العملاء. الحل: تحسين عملية المبيعات وتدريب الفريق.
+                      {streaming.messages.filter(m => m.role === 'assistant').pop()?.content?.slice(0, 200) || 'جاري التحليل...'}
                     </p>
                   </div>
 
@@ -1028,6 +1101,37 @@ export function AIAnalysisPage() {
         retryCategories={retryCategories}
         onSelectAnalysis={handleSelectLibraryItem}
       />
+
+      {/* Confirmation Dialog for Switching from Active Stream */}
+      {showConfirmDialog && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="p-2 bg-yellow-500/10 rounded-lg">
+                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+              </div>
+              <h3 className="font-semibold text-lg">تحليل قيد التشغيل</h3>
+            </div>
+            <p className="text-muted-foreground mb-6 leading-relaxed">
+              هل تريد الانتقال إلى التحليل المحدد؟ سيؤدي ذلك إلى إيقاف التحليل الحالي وفقدان البيانات غير المحفوظة.
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={handleCancelSwitch}
+                className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors"
+              >
+                إلغاء
+              </button>
+              <button
+                onClick={handleConfirmSwitch}
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+              >
+                الانتقال
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
