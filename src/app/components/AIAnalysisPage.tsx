@@ -167,9 +167,11 @@ export function AIAnalysisPage() {
   const loadHistorySession = async (itemId: string) => {
     setSelectedAnalysis(itemId);
     setActiveAnalysis(null);
-    const messages = await history.loadSession(itemId);
+    const entry = history.entries.find(e => e.id === itemId);
+    const sessionId = entry?.sessionId || itemId;
+    const messages = await history.loadSession(itemId, sessionId);
     if (messages.length > 0) {
-      streaming.loadMessages(messages, itemId);
+      streaming.loadMessages(messages, sessionId);
     }
   };
 
@@ -835,7 +837,7 @@ export function AIAnalysisPage() {
         </div>
 
         {/* Main Workspace */}
-        {!activeAnalysis ? (
+        {!activeAnalysis && !isHistoricalSessionLoaded ? (
           <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-gradient-to-br from-background to-muted/20">
             <div className="max-w-md">
               <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl mb-6 shadow-xl">
@@ -862,12 +864,22 @@ export function AIAnalysisPage() {
               <div className="p-4 border-b border-border bg-card">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className={cn('p-2 rounded-lg bg-gradient-to-br', activeAnalysis.color)}>
-                      <activeAnalysis.icon className="w-5 h-5 text-white" />
-                    </div>
+                    {activeAnalysis ? (
+                      <div className={cn('p-2 rounded-lg bg-gradient-to-br', activeAnalysis.color)}>
+                        <activeAnalysis.icon className="w-5 h-5 text-white" />
+                      </div>
+                    ) : (
+                      <div className="p-2 rounded-lg bg-gradient-to-br from-gray-500 to-gray-600">
+                        <Clock className="w-5 h-5 text-white" />
+                      </div>
+                    )}
                     <div>
-                      <h2 className="font-semibold">{activeAnalysis.title}</h2>
-                      <p className="text-xs text-muted-foreground">{activeAnalysis.category}</p>
+                      <h2 className="font-semibold">
+                        {activeAnalysis ? activeAnalysis.title : (history.entries.find(e => e.id === history.selectedId)?.title || 'تحليل سابق')}
+                      </h2>
+                      <p className="text-xs text-muted-foreground">
+                        {activeAnalysis ? activeAnalysis.category : 'سجل التحليلات'}
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -875,7 +887,13 @@ export function AIAnalysisPage() {
                       <FileDown className="w-4 h-4" />
                     </button>
                     <button
-                      onClick={() => setActiveAnalysis(null)}
+                      onClick={() => {
+                        setActiveAnalysis(null);
+                        if (isHistoricalSessionLoaded) {
+                          history.reset();
+                          streaming.reset();
+                        }
+                      }}
                       className="p-2 hover:bg-accent rounded-lg transition-colors"
                     >
                       <X className="w-4 h-4" />
@@ -1013,7 +1031,7 @@ export function AIAnalysisPage() {
             </div>
 
             {/* Right Sidebar - Insights & Recommendations */}
-            {isAnalysisComplete && (
+            {isAnalysisComplete && activeAnalysis !== null && (
               <div className="w-96 border-r border-border bg-card flex flex-col overflow-hidden">
                 <div className="p-4 border-b border-border">
                   <h3 className="font-semibold">الرؤى والتوصيات</h3>

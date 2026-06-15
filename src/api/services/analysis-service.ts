@@ -46,6 +46,16 @@ export interface AnalysisLibraryItem {
   iconBackground: string;
 }
 
+/** Represents a single chat message record from the backend for an analysis session. */
+export interface AnalysisMessage {
+  id: string;
+  sessionId: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  sequenceNo: number;
+  createdAt: string;
+}
+
 export class AnalysisService {
   private baseEndpoint = '/api/v1/analysis';
 
@@ -128,6 +138,7 @@ export class AnalysisService {
   ): Promise<ApiResponse<{
     data: Array<{
       id: string;
+      sessionId: string | null;
       title: string;
       summary: string | null;
       status: 'COMPLETED' | 'RUNNING' | 'FAILED' | 'PENDING';
@@ -150,6 +161,15 @@ export class AnalysisService {
   }
 
   /**
+   * Fetch chat messages for a specific analysis session.
+   */
+  async getSessionMessages(sessionId: string): Promise<ApiResponse<AnalysisMessage[]>> {
+    return apiClient.get<AnalysisMessage[]>(
+      `${this.baseEndpoint}/sessions/${sessionId}/messages`
+    );
+  }
+
+  /**
    * Fetch full detail for a specific analysis run.
    */
   async getRunDetail(runId: string): Promise<ApiResponse<{
@@ -159,7 +179,7 @@ export class AnalysisService {
     insights: Array<{
       id: string;
       title: string;
-      content: string;
+      description: string;
       type: string | null;
     }>;
     results: Array<{

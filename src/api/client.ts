@@ -17,6 +17,9 @@ import {
 } from './types';
 import { AUTH_CONFIG } from './config';
 
+// Module-level flag to prevent concurrent 401 redirects
+let isRedirecting = false;
+
 class ApiClient {
   private _baseURL: string;
   private defaultTimeout: number;
@@ -32,6 +35,27 @@ class ApiClient {
     this.defaultTimeout = defaultTimeout;
     this.maxRetries = maxRetries;
     this.retryDelayMs = 1000;
+  }
+
+  /**
+   * Handle 401 Unauthorized by clearing tokens and redirecting to login page
+   */
+  private handleUnauthorized(): void {
+    if (isRedirecting) {
+      return;
+    }
+
+    // Avoid redirect loop if already on login page
+    if (window.location.pathname === '/auth/login') {
+      return;
+    }
+
+    isRedirecting = true;
+    this.clearAuthToken();
+
+    const currentPath = window.location.pathname + window.location.search;
+    const redirectUrl = `/auth/login?expired=true&redirect=${encodeURIComponent(currentPath)}`;
+    window.location.href = redirectUrl;
   }
 
   /**
@@ -176,6 +200,11 @@ class ApiClient {
     } catch (error) {
       const apiError = error as ApiError;
       
+      // Handle 401 Unauthorized: clear tokens and redirect to login
+      if (apiError.statusCode === 401 && !config?.skipAuthRedirect) {
+        this.handleUnauthorized();
+      }
+      
       // Don't retry client errors (4xx) or if max retries reached
       if (apiError.statusCode && apiError.statusCode >= 400 && apiError.statusCode < 500) {
         throw error;
@@ -203,6 +232,7 @@ class ApiClient {
         code: data.code || 'UNKNOWN_ERROR',
         message: data.message || `HTTP Error ${response.status}`,
         details: data.details,
+        errors: data.errors,
         statusCode: response.status,
       };
     } catch {

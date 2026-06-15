@@ -1,17 +1,28 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
 
 export function LoginPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const isExpired = searchParams.get('expired') === 'true';
+  const redirectParam = searchParams.get('redirect');
+
+  const getSafeRedirectPath = (): string => {
+    if (redirectParam && redirectParam.startsWith('/')) {
+      return redirectParam;
+    }
+    return '/dashboard';
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,7 +33,7 @@ export function LoginPage() {
       const response = await authService.login({ email, password });
       if (response.success) {
         login();
-        navigate('/dashboard');
+        navigate(getSafeRedirectPath());
       } else {
         setError(response.message || 'حدث خطأ أثناء تسجيل الدخول');
       }
@@ -58,6 +69,15 @@ export function LoginPage() {
             <h2 className="text-2xl font-bold mb-2">مرحباً بعودتك</h2>
             <p className="text-muted-foreground">سجل الدخول للوصول إلى لوحة التحكم التنفيذية</p>
           </div>
+
+          {/* Session Expired Message */}
+          {isExpired && (
+            <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+              <p className="text-sm text-amber-700 dark:text-amber-400">
+                انتهت صلاحية جلستك، يرجى تسجيل الدخول مرة أخرى
+              </p>
+            </div>
+          )}
 
           {/* Error Message */}
           {error && (

@@ -1,11 +1,12 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { analysisService } from '@/api/services/analysis-service';
+import { analysisService, AnalysisMessage } from '@/api/services/analysis-service';
 import { StreamMessage } from '@/app/hooks/useAnalysisStreaming';
 
 export type AnalysisHistoryStatus = 'COMPLETED' | 'RUNNING' | 'FAILED' | 'PENDING';
 
 export interface AnalysisHistoryEntry {
   id: string;
+  sessionId: string | null;
   title: string;
   summary: string | null;
   status: AnalysisHistoryStatus;
@@ -30,7 +31,7 @@ export interface AnalysisSessionDetail {
   insights: Array<{
     id: string;
     title: string;
-    content: string;
+    description: string;
     type: string | null;
   }>;
   results: Array<{
@@ -54,7 +55,7 @@ export interface HistoryListState {
 
 export interface UseAnalysisHistoryReturn extends HistoryListState {
   fetchHistory: (page?: number) => Promise<void>;
-  loadSession: (runId: string) => Promise<StreamMessage[]>;
+  loadSession: (runId: string, sessionId?: string) => Promise<StreamMessage[]>;
   retry: () => Promise<void>;
   reset: () => void;
 }
@@ -99,12 +100,12 @@ function sessionDetailToMessages(detail: AnalysisSessionDetail): StreamMessage[]
     timestamp: baseTimestamp,
   });
 
-  // Convert insights to assistant messages
+  // Convert insights to assistant messages using `description` (corrected DTO field)
   detail.insights?.forEach((insight, index) => {
     messages.push({
       id: generateMessageId(),
       role: 'assistant',
-      content: `**${insight.title}**\n\n${insight.content}`,
+      content: `**${insight.title}**\n\n${insight.description}`,
       isStreaming: false,
       timestamp: new Date(baseTimestamp.getTime() + index * 1000),
     });
@@ -133,6 +134,36 @@ function sessionDetailToMessages(detail: AnalysisSessionDetail): StreamMessage[]
   });
 
   return messages;
+}
+
+function messagesToStreamMessages(analysisMessages: AnalysisMessage[]): StreamMessage[] {
+  if (!analysisMessages || analysisMessages.length === 0) {
+    return [];
+  }
+
+  // Sort by sequenceNo ascending; fall back to createdAt for stability
+  const sorted = [...analysisMessages].sort((a, b) => {
+    if (a.sequenceNo !== b.sequenceNo) {
+      return a.sequenceNo - b.sequenceNo;
+    }
+    return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+  });
+
+  return sorted.map((msg) => {
+    const roleLower = msg.role?.toLowerCase() ?? '';
+    const validRole: StreamMessage['role'] =
+      roleLower === 'user' || roleLower === 'assistant' || roleLower === 'system'
+        ? roleLower
+        : 'assistant';
+
+    return {
+      id: msg.id || generateMessageId(),
+      role: validRole,
+      content: msg.content ?? '',
+      isStreaming: false,
+      timestamp: new Date(msg.createdAt || Date.now()),
+    };
+  });
 }
 
 export function useAnalysisHistory(): UseAnalysisHistoryReturn {
@@ -227,7 +258,7 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
     }
   }, []);
 
-  const loadSession = useCallback(async (runId: string): Promise<StreamMessage[]> => {
+  const loadSession = useCallback(async (runId: string, sessionId?: string): Promise<StreamMessage[]> => {
     // Abort any in-flight detail request
     detailAbortControllerRef.current?.abort();
     const abortController = new AbortController();
@@ -241,6 +272,29 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
     }));
 
     try {
+      // Primary: try to load actual chat messages via sessionId
+      const effectiveSessionId = sessionId || runId;
+      if (effectiveSessionId) {
+        try {
+          const msgResponse = await analysisService.getSessionMessages(effectiveSessionId);
+          if (abortController.signal.aborted) return [];
+
+          const messages = messagesToStreamMessages(msgResponse.data);
+
+          setState(prev => ({
+            ...prev,
+            isLoadingDetail: false,
+            detailError: null,
+          }));
+
+          return messages;
+        } catch (sessionErr: any) {
+          // If 404 or endpoint unavailable, fall back to legacy behavior
+          console.warn('[History] getSessionMessages failed, falling back to getRunDetail:', sessionErr?.message || sessionErr);
+        }
+      }
+
+      // Fallback: load structured run detail and reconstruct messages
       const response = await analysisService.getRunDetail(runId);
       const detail = response.data;
 

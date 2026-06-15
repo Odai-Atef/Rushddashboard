@@ -23,6 +23,7 @@ export interface ApiError {
   code: string;
   message: string;
   details?: Record<string, string[]>;
+  errors?: Array<{ field?: string; message?: string; value?: unknown }> | Record<string, string[]>;
   statusCode: number;
 }
 
@@ -31,6 +32,7 @@ export interface RequestConfig {
   params?: Record<string, string | number | boolean | undefined>;
   timeout?: number;
   signal?: AbortSignal;
+  skipAuthRedirect?: boolean;
 }
 
 export interface PaginatedRequest {

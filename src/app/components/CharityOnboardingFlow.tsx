@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Sparkles,
   Award,
@@ -39,6 +39,8 @@ import {
   Link2,
   Activity
 } from 'lucide-react';
+import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration';
+import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 
 type ViewType = 'landing' | 'registration' | 'profile' | 'assessment' | 'documents' | 'processing' | 'results' | 'analysis' | 'roadmap' | 'decision';
@@ -81,6 +83,17 @@ interface UploadedFile {
 }
 
 export function CharityOnboardingFlow() {
+  // ── Hook: JWT-based onboarding ──────────────────────────────
+  const {
+    organization,
+    isLoading,
+    error,
+    fieldErrors,
+    loadOrganization,
+    saveOrganization,
+    clearError,
+  } = useOnboardingRegistration();
+
   const [currentView, setCurrentView] = useState<ViewType>('landing');
   const [registrationData, setRegistrationData] = useState<RegistrationData>({
     orgName: '',
@@ -108,6 +121,73 @@ export function CharityOnboardingFlow() {
   const [processingProgress, setProcessingProgress] = useState(0);
   const [overallScore, setOverallScore] = useState(78);
   const [qualificationStatus, setQualificationStatus] = useState<'qualified' | 'conditional' | 'not-qualified'>('conditional');
+
+  // ── Effect: load existing organization on registration mount ────
+  useEffect(() => {
+    if (currentView === 'registration') {
+      loadOrganization();
+    }
+  }, [currentView, loadOrganization]);
+
+  // ── Effect: pre-fill form when organization data arrives ──────
+  useEffect(() => {
+    if (organization) {
+      setRegistrationData({
+        orgName: organization.name || '',
+        licenseNumber: organization.licenseNumber || '',
+        registrationDate: organization.registrationDate
+          ? organization.registrationDate.slice(0, 10)
+          : '',
+        orgType: organization.type || '',
+        city: organization.city || '',
+        website: organization.website || '',
+        contactPerson: organization.contactPerson || '',
+        email: organization.email || '',
+        mobile: organization.mobile || '',
+      });
+    }
+  }, [organization]);
+
+  // ── Effect: display server/network errors via toast ───────────
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+    }
+  }, [error]);
+
+  // ── Helper: map form state to CreateOrganizationDto ─────────────
+  const buildOrganizationDto = (): import('@/api/services/onboarding-service').CreateOrganizationDto => ({
+    name: registrationData.orgName.trim(),
+    licenseNumber: registrationData.licenseNumber.trim(),
+    registrationDate: registrationData.registrationDate,
+    type: registrationData.orgType.toUpperCase() as import('@/api/services/onboarding-service').OrganizationType,
+    city: registrationData.city.trim(),
+    website: registrationData.website.trim() || undefined,
+    contactPerson: registrationData.contactPerson.trim(),
+    email: registrationData.email.trim(),
+    mobile: registrationData.mobile.trim(),
+  });
+
+  // ── Helper: handle Next / Save ──────────────────────────────
+  const handleSaveAndProceed = async () => {
+    clearError();
+    const dto = buildOrganizationDto();
+    try {
+      await saveOrganization(dto);
+      setCurrentView('profile');
+    } catch (err: any) {
+      // Error already handled by hook (fieldErrors + toast via effect)
+      // Keep form data intact — no reset here
+    }
+  };
+
+  // ── Helper: clear error on field change ─────────────────────
+  const handleFieldChange = (field: keyof RegistrationData, value: string) => {
+    if (fieldErrors[field]) {
+      clearError();
+    }
+    setRegistrationData((prev) => ({ ...prev, [field]: value }));
+  };
 
   // Assessment categories
   const assessmentCategories = [
@@ -227,6 +307,11 @@ export function CharityOnboardingFlow() {
   // SCREEN 2: Charity Registration
   const RegistrationView = () => (
     <div className="min-h-full bg-gray-50 p-6">
+      {isLoading && (
+        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        </div>
+      )}
       <div className="max-w-3xl mx-auto">
         {/* Progress */}
         <div className="mb-8">
@@ -255,11 +340,12 @@ export function CharityOnboardingFlow() {
                 <input
                   type="text"
                   value={registrationData.orgName}
-                  onChange={(e) => setRegistrationData({ ...registrationData, orgName: e.target.value })}
+                  onChange={(e) => handleFieldChange('orgName', e.target.value)}
                   className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="مثال: جمعية البر الخيرية"
                 />
               </div>
+              {fieldErrors['name'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['name']}</p>}
             </div>
 
             {/* License Number & Registration Date */}
@@ -269,10 +355,11 @@ export function CharityOnboardingFlow() {
                 <input
                   type="text"
                   value={registrationData.licenseNumber}
-                  onChange={(e) => setRegistrationData({ ...registrationData, licenseNumber: e.target.value })}
+                  onChange={(e) => handleFieldChange('licenseNumber', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="١٢٣٤٥٦"
                 />
+                {fieldErrors['licenseNumber'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['licenseNumber']}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">تاريخ التسجيل *</label>
@@ -281,10 +368,11 @@ export function CharityOnboardingFlow() {
                   <input
                     type="date"
                     value={registrationData.registrationDate}
-                    onChange={(e) => setRegistrationData({ ...registrationData, registrationDate: e.target.value })}
+                    onChange={(e) => handleFieldChange('registrationDate', e.target.value)}
                     className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
+                {fieldErrors['registrationDate'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['registrationDate']}</p>}
               </div>
             </div>
 
@@ -294,7 +382,7 @@ export function CharityOnboardingFlow() {
                 <label className="block text-sm font-medium mb-2">نوع المؤسسة *</label>
                 <select
                   value={registrationData.orgType}
-                  onChange={(e) => setRegistrationData({ ...registrationData, orgType: e.target.value })}
+                  onChange={(e) => handleFieldChange('orgType', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">اختر نوع المؤسسة</option>
@@ -303,6 +391,7 @@ export function CharityOnboardingFlow() {
                   <option value="ngo">منظمة غير ربحية</option>
                   <option value="coop">جمعية تعاونية</option>
                 </select>
+                {fieldErrors['type'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['type']}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">المدينة / المنطقة *</label>
@@ -311,11 +400,12 @@ export function CharityOnboardingFlow() {
                   <input
                     type="text"
                     value={registrationData.city}
-                    onChange={(e) => setRegistrationData({ ...registrationData, city: e.target.value })}
+                    onChange={(e) => handleFieldChange('city', e.target.value)}
                     className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="الرياض"
                   />
                 </div>
+                {fieldErrors['city'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['city']}</p>}
               </div>
             </div>
 
@@ -327,24 +417,26 @@ export function CharityOnboardingFlow() {
                 <input
                   type="url"
                   value={registrationData.website}
-                  onChange={(e) => setRegistrationData({ ...registrationData, website: e.target.value })}
+                  onChange={(e) => handleFieldChange('website', e.target.value)}
                   className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="https://example.org"
                 />
               </div>
+              {fieldErrors['website'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['website']}</p>}
             </div>
 
             {/* Contact Person */}
             <div>
               <label className="block text-sm font-medium mb-2">اسم الشخص المسؤول *</label>
-              <input
-                type="text"
-                value={registrationData.contactPerson}
-                onChange={(e) => setRegistrationData({ ...registrationData, contactPerson: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="أحمد محمد"
-              />
-            </div>
+                <input
+                  type="text"
+                  value={registrationData.contactPerson}
+                  onChange={(e) => handleFieldChange('contactPerson', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="أحمد محمد"
+                />
+                {fieldErrors['contactPerson'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['contactPerson']}</p>}
+              </div>
 
             {/* Email & Mobile */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -355,11 +447,12 @@ export function CharityOnboardingFlow() {
                   <input
                     type="email"
                     value={registrationData.email}
-                    onChange={(e) => setRegistrationData({ ...registrationData, email: e.target.value })}
+                    onChange={(e) => handleFieldChange('email', e.target.value)}
                     className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="email@example.com"
                   />
                 </div>
+                {fieldErrors['email'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['email']}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">رقم الجوال *</label>
@@ -368,12 +461,13 @@ export function CharityOnboardingFlow() {
                   <input
                     type="tel"
                     value={registrationData.mobile}
-                    onChange={(e) => setRegistrationData({ ...registrationData, mobile: e.target.value })}
+                    onChange={(e) => handleFieldChange('mobile', e.target.value)}
                     className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     placeholder="+966 5X XXX XXXX"
                     dir="ltr"
                   />
                 </div>
+                {fieldErrors['mobile'] && <p className="text-red-500 text-xs mt-1">{fieldErrors['mobile']}</p>}
               </div>
             </div>
 
@@ -390,15 +484,18 @@ export function CharityOnboardingFlow() {
               <div className="flex gap-3">
                 <button
                   type="button"
-                  className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2"
+                  onClick={handleSaveAndProceed}
+                  disabled={isLoading}
+                  className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <Save className="w-5 h-5" />
                   حفظ المسودة
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCurrentView('profile')}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                  onClick={handleSaveAndProceed}
+                  disabled={isLoading}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   التالي
                   <ChevronLeft className="w-5 h-5" />
@@ -406,12 +503,6 @@ export function CharityOnboardingFlow() {
               </div>
             </div>
           </form>
-        </div>
-
-        {/* Auto-save indicator */}
-        <div className="text-center mt-4 text-sm text-gray-500 flex items-center justify-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-green-500" />
-          <span>تم الحفظ تلقائياً</span>
         </div>
       </div>
     </div>
@@ -631,11 +722,24 @@ export function CharityOnboardingFlow() {
                   </div>
                 );
               })}
-            </div>
           </div>
+        </div>
 
-          {/* Assessment Card */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        {/* Error / Retry */}
+        {error && !organization && !isLoading && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center justify-between">
+            <span className="text-red-700">{error}</span>
+            <button
+              onClick={loadOrganization}
+              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"
+            >
+              إعادة المحاولة
+            </button>
+          </div>
+        )}
+
+        {/* Form Card */}
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
             {/* Category Header */}
             <div className="flex items-center gap-4 mb-8">
               <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${currentCategory.color}20` }}>
@@ -1628,16 +1732,16 @@ export function CharityOnboardingFlow() {
   // Main render
   return (
     <div className="min-h-full">
-      {currentView === 'landing' && <LandingView />}
-      {currentView === 'registration' && <RegistrationView />}
-      {currentView === 'profile' && <ProfileView />}
-      {currentView === 'assessment' && <AssessmentView />}
-      {currentView === 'documents' && <DocumentsView />}
-      {currentView === 'processing' && <ProcessingView />}
-      {currentView === 'results' && <ResultsView />}
-      {currentView === 'analysis' && <AnalysisView />}
-      {currentView === 'roadmap' && <RoadmapView />}
-      {currentView === 'decision' && <DecisionView />}
+      {currentView === 'landing' && LandingView()}
+      {currentView === 'registration' && RegistrationView()}
+      {currentView === 'profile' && ProfileView()}
+      {currentView === 'assessment' && AssessmentView()}
+      {currentView === 'documents' && DocumentsView()}
+      {currentView === 'processing' && ProcessingView()}
+      {currentView === 'results' && ResultsView()}
+      {currentView === 'analysis' && AnalysisView()}
+      {currentView === 'roadmap' && RoadmapView()}
+      {currentView === 'decision' && DecisionView()}
     </div>
   );
 }
