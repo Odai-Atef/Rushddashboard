@@ -2165,8 +2165,8 @@ export function CharityOnboardingFlow() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${statusOption.bgClass.replace('bg-', 'bg-opacity-10 bg-').replace('-400', '-50')}`}>
-                  <statusOption.icon className={`w-8 h-8 ${statusOption.textClass.replace('text-', 'text-').replace('900', '600')}`} />
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center bg-opacity-10 ${statusOption.bgClass.replace('bg-', 'bg-').replace('-400', '-50')}`}>
+                  <statusOption.icon className={`w-8 h-8 ${statusOption.textClass.replace('900', '600')}`} />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold mb-1">{displayMessage}</h2>
@@ -2204,25 +2204,41 @@ export function CharityOnboardingFlow() {
               )}
             </div>
 
-            {/* Bar Chart */}
+            {/* Dimension Cards */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-              <h3 className="text-lg font-semibold mb-4">النتائج حسب المحور</h3>
-              {categoryScores.length > 0 ? (
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={categoryScores} layout="horizontal">
-                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                    <XAxis type="number" domain={[0, 100]} tick={{ fill: '#6b7280' }} />
-                    <YAxis type="category" dataKey="categoryName" width={120} tick={{ fill: '#6b7280', fontSize: 11 }} />
-                    <Tooltip />
-                    <Bar dataKey="score" radius={[0, 8, 8, 0]}>
-                      {categoryScores.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={entry.color} />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
+              <h3 className="text-lg font-semibold mb-4">الأبعاد التفصيلية</h3>
+              {isivResult?.dimensions && isivResult.dimensions.length > 0 ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {isivResult.dimensions.map((dim) => (
+                    <div
+                      key={dim.dimension}
+                      className="rounded-lg border border-gray-200 p-4"
+                      style={{ borderRightWidth: 4, borderRightColor: dim.color }}
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-sm font-medium text-gray-700">
+                          {dim.symbol} — {dim.dimensionLabelAr}
+                        </span>
+                        <span
+                          className="px-2 py-1 rounded-full text-xs font-medium"
+                          style={{ backgroundColor: `${dim.color}20`, color: dim.color }}
+                        >
+                          {dim.tierLabelAr}
+                        </span>
+                      </div>
+                      <div className="flex items-end justify-between">
+                        <div className="text-2xl font-bold" style={{ color: dim.color }}>
+                          {dim.score}
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          {dim.percentage}%
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               ) : (
-                <p className="text-gray-500 text-center py-12">لا توجد بيانات للرسم البياني</p>
+                <p className="text-gray-500 text-center py-12">لا توجد بيانات للأبعاد</p>
               )}
             </div>
           </div>
