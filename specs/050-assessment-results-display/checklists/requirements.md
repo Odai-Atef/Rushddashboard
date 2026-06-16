@@ -31,7 +31,8 @@
 
 ## Notes
 
-- Items marked incomplete require spec updates before `/speckit.clarify` or `/speckit.plan`
+- All checklist items passed after specification clarification.
+- Clarifications recorded in `## Clarifications` section of spec.md.
 
 
 ## Validation Results
