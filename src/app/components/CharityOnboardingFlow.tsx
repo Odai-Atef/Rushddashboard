@@ -2243,35 +2243,80 @@ export function CharityOnboardingFlow() {
             </div>
           </div>
 
-          {/* Benchmark Comparison */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-            <h3 className="text-lg font-semibold mb-4">المقارنة المعيارية</h3>
-            <div className="space-y-4">
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">مؤسستك</span>
-                  <span className="text-sm font-bold text-blue-600">{benchmarks.yourScore}٪</span>
+          {/* Diagnostic Feedback */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+            <div className="lg:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-3">التشخيص</h3>
+              <p className="text-gray-700 leading-relaxed">{isivResult?.diagnosis || 'لا يوجد تشخيص متاح.'}</p>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-3 flex items-center gap-2 text-green-700">
+                <CheckCircle2 className="w-5 h-5" />
+                نقاط القوة
+              </h3>
+              {isivResult?.strengths && isivResult.strengths.length > 0 ? (
+                <ul className="space-y-2">
+                  {isivResult.strengths.map((strength, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700">
+                      <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                      <span>{strength}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500">لا توجد نقاط قوة مسجلة.</p>
+              )}
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-3 flex items-center gap-2 text-red-700">
+                <AlertCircle className="w-5 h-5" />
+                مجالات التحسين
+              </h3>
+              {isivResult?.weaknesses && isivResult.weaknesses.length > 0 ? (
+                <ul className="space-y-2">
+                  {isivResult.weaknesses.map((weakness, idx) => (
+                    <li key={idx} className="flex items-start gap-2 text-gray-700">
+                      <X className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                      <span>{weakness}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500">لا توجد مجالات تحسين مسجلة.</p>
+              )}
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold mb-4">المقارنة المعيارية</h3>
+              <div className="space-y-4">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">مؤسستك</span>
+                    <span className="text-sm font-bold text-blue-600">{benchmarks.yourScore}٪</span>
+                  </div>
+                  <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-blue-600" style={{ width: `${benchmarks.yourScore}%` }}></div>
+                  </div>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600" style={{ width: `${benchmarks.yourScore}%` }}></div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">متوسط القطاع</span>
+                    <span className="text-sm font-bold text-gray-600">{benchmarks.sectorAverage}٪</span>
+                  </div>
+                  <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-gray-400" style={{ width: `${benchmarks.sectorAverage}%` }}></div>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">متوسط القطاع</span>
-                  <span className="text-sm font-bold text-gray-600">{benchmarks.sectorAverage}٪</span>
-                </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gray-400" style={{ width: `${benchmarks.sectorAverage}%` }}></div>
-                </div>
-              </div>
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">المؤسسات الرائدة</span>
-                  <span className="text-sm font-bold text-green-600">{benchmarks.topPerformer}٪</span>
-                </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-green-500" style={{ width: `${benchmarks.topPerformer}%` }}></div>
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm font-medium">المؤسسات الرائدة</span>
+                    <span className="text-sm font-bold text-green-600">{benchmarks.topPerformer}٪</span>
+                  </div>
+                  <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                    <div className="h-full bg-green-500" style={{ width: `${benchmarks.topPerformer}%` }}></div>
+                  </div>
                 </div>
               </div>
             </div>
