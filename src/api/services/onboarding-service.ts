@@ -343,6 +343,7 @@ export class OnboardingService {
   async uploadOrganizationDocument(
     file: File,
     documentType: string,
+    organizationId: string,
     description?: string
   ): Promise<ApiResponse<OrganizationDocument>> {
     const formData = new FormData();
@@ -354,8 +355,10 @@ export class OnboardingService {
 
     const token = typeof localStorage !== 'undefined' ? localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) : null;
     const baseURL = ENV.API_BASE_URL.replace(/\/$/, '');
+    const url = new URL(`${baseURL}/api/v1/onboarding/documents/upload`);
+    url.searchParams.append('organizationId', organizationId);
 
-    const response = await fetch(`${baseURL}/api/v1/onboarding/documents/upload`, {
+    const response = await fetch(url.toString(), {
       method: 'POST',
       headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       body: formData,

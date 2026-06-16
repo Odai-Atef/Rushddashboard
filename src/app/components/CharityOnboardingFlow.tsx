@@ -1515,7 +1515,12 @@ export function CharityOnboardingFlow() {
     }, 250);
 
     try {
-      const res = await onboardingService.uploadOrganizationDocument(file, docType, documentSlots.find((s) => s.id === slotId)?.label);
+      const res = await onboardingService.uploadOrganizationDocument(
+        file,
+        docType,
+        organization?.id || '',
+        documentSlots.find((s) => s.id === slotId)?.label
+      );
       clearInterval(progressInterval);
 
       if (!res.success) {
