@@ -569,8 +569,8 @@ export function AIAnalysisPage() {
   const renderMessage = (message: any, index: number) => {
     if (message.role === 'user') {
       return (
-        <div key={message.id || index} className="flex justify-start">
-          <div className="max-w-2xl">
+        <div key={message.id || index} className="flex justify-start w-full">
+          <div className="max-w-4xl w-full">
             <div className="flex items-center gap-2 mb-2">
               <div className="p-1.5 bg-muted rounded-lg">
                 <Users className="w-4 h-4" />
@@ -578,7 +578,7 @@ export function AIAnalysisPage() {
               <span className="text-sm font-medium">أنت</span>
             </div>
             <div className="p-4 bg-primary/10 border border-primary/20 rounded-xl">
-              <p>{message.content}</p>
+              <p className="whitespace-pre-wrap break-words">{message.content}</p>
             </div>
           </div>
         </div>
@@ -586,8 +586,8 @@ export function AIAnalysisPage() {
     }
 
     return (
-      <div key={message.id || index} className="flex justify-end">
-        <div className="max-w-3xl w-full">
+      <div key={message.id || index} className="flex justify-end w-full">
+        <div className="max-w-5xl w-full">
           <div className="flex items-center gap-2 mb-2 justify-end">
             <span className="text-sm font-medium">المحلل الذكي</span>
             <div className="p-1.5 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
@@ -595,8 +595,8 @@ export function AIAnalysisPage() {
             </div>
           </div>
 
-          <div className="p-5 bg-card border border-border rounded-xl">
-            <div className="prose prose-sm max-w-none text-right">
+          <div className="p-5 bg-card border border-border rounded-xl w-full">
+            <div className="prose prose-sm max-w-none text-right w-full break-words">
               <Markdown remarkPlugins={[remarkGfm]}>
                 {message.content || '\u00A0'}
               </Markdown>

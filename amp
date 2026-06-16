@@ -1,0 +1,2 @@
+Usage: .specify/extensions/git/scripts/bash/create-new-feature.sh [--json] [--dry-run] [--allow-existing-branch] [--short-name <name>] [--number N] [--timestamp] <feature_description>
+Usage: .specify/extensions/git/scripts/bash/create-new-feature.sh [--json] [--dry-run] [--allow-existing-branch] [--short-name <name>] [--number N] [--timestamp] <feature_description>

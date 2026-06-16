@@ -522,7 +522,7 @@ export function CharityOnboardingFlow() {
               <FileText className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" />
               <div>
                 <p className="font-medium">عدد الأسئلة</p>
-                <p className="text-sm text-gray-600">٤٥ سؤالاً موزعة على ٩ محاور</p>
+                <p className="text-sm text-gray-600">٢٤ سؤالاً موزعة على ٦ محاور</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -742,7 +742,7 @@ export function CharityOnboardingFlow() {
                 رجوع
               </button>
               <div className="flex gap-3">
-                <button
+                {/* <button
                   type="button"
                   onClick={handleSaveAndProceed}
                   disabled={isLoading}
@@ -750,7 +750,7 @@ export function CharityOnboardingFlow() {
                 >
                   <Save className="w-5 h-5" />
                   حفظ المسودة
-                </button>
+                </button> */}
                 <button
                   type="button"
                   onClick={handleSaveAndProceed}
@@ -921,13 +921,13 @@ export function CharityOnboardingFlow() {
                 رجوع
               </button>
               <div className="flex gap-3">
-                <button
+                {/* <button
                   type="button"
                   className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2"
                 >
                   <Save className="w-5 h-5" />
                   حفظ المسودة
-                </button>
+                </button> */}
                 <button
                   type="button"
                   onClick={handleProfileNext}
