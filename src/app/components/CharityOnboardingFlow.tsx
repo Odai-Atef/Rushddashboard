@@ -134,6 +134,7 @@ export function CharityOnboardingFlow() {
   const [assessmentStatus, setAssessmentStatus] = useState<AssessmentStatus | null>(null);
   const [isLoadingResults, setIsLoadingResults] = useState(false);
   const [resultsError, setResultsError] = useState<string | null>(null);
+  const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
 
   // Ref to guard auto-navigation so it only fires once on initial data load
   const hasRestoredStepRef = useRef(false);
@@ -1642,21 +1643,54 @@ export function CharityOnboardingFlow() {
   };
 
   // ── Handler: proceed from documents step ───────────────────
-  const handleDocumentsNext = () => {
-    if (!isDocumentsComplete || hasPendingUploads) return;
+  const handleDocumentsNext = async () => {
+    if (!isDocumentsComplete || hasPendingUploads || isSubmittingAssessment) return;
+    if (!organization?.id) {
+      toast.error('لم يتم العثور على معرف المؤسسة');
+      return;
+    }
+
+    setIsSubmittingAssessment(true);
     setCurrentView('processing');
     setProcessingProgress(0);
-    const interval = setInterval(() => {
-      setProcessingProgress((prev) => {
-        const next = prev + 10;
-        if (next >= 100) {
-          clearInterval(interval);
-          setTimeout(() => setCurrentView('results'), 500);
-          return 100;
-        }
-        return next;
-      });
-    }, 300);
+    setResultsError(null);
+
+    let progressInterval: ReturnType<typeof setInterval> | null = null;
+    const startProgress = () => {
+      setProcessingProgress(0);
+      progressInterval = setInterval(() => {
+        setProcessingProgress((prev) => {
+          const next = prev + 10;
+          if (next >= 90) {
+            if (progressInterval) clearInterval(progressInterval);
+            return 90;
+          }
+          return next;
+        });
+      }, 300);
+    };
+    const stopProgress = () => {
+      if (progressInterval) clearInterval(progressInterval);
+      setProcessingProgress(100);
+    };
+
+    startProgress();
+
+    try {
+      await onboardingService.submitAssessment(organization.id);
+      const evalRes = await onboardingService.getIsivAssessmentResults(organization.id);
+      stopProgress();
+      setAssessmentResult(evalRes.data);
+      setCurrentView('results');
+    } catch (err: any) {
+      stopProgress();
+      const message = err?.message || 'فشل في تقييم المؤسسة. يرجى المحاولة مرة أخرى.';
+      setResultsError(message);
+      toast.error(message);
+      setCurrentView('documents');
+    } finally {
+      setIsSubmittingAssessment(false);
+    }
   };
 
   // SCREEN 5: Document Upload Center
@@ -1938,11 +1972,20 @@ export function CharityOnboardingFlow() {
             </button>
             <button
               onClick={handleDocumentsNext}
-              disabled={!isDocumentsComplete}
+              disabled={!isDocumentsComplete || isSubmittingAssessment}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              إرسال التقييم
-              <ChevronLeft className="w-5 h-5" />
+              {isSubmittingAssessment ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin" />
+                  جارٍ الإرسال...
+                </>
+              ) : (
+                <>
+                  إرسال التقييم
+                  <ChevronLeft className="w-5 h-5" />
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -2017,14 +2060,16 @@ export function CharityOnboardingFlow() {
 
   // SCREEN 7: Readiness Results Dashboard
   const ResultsView = () => {
-    const displayScore = assessmentResult?.overallScore ?? overallScore;
-    const displayStatus = assessmentResult?.qualificationStatus ?? qualificationStatus;
-    const displayMessage = assessmentResult?.qualificationMessage ?? 'مؤهل مع خطة تحسين';
-    const radarData = assessmentResult?.radarData ?? [];
-    const categoryScores = assessmentResult?.categoryScores.map((c) => ({ ...c, color: c.color || getScoreColor(c.score) })) ?? [];
-    const benchmarks = assessmentResult?.benchmarks ?? { yourScore: displayScore, sectorAverage: 65, topPerformer: 92 };
+    const isivResult = assessmentResult;
+    const displayScore = isivResult?.overallScore ?? overallScore;
+    const displayStatus = isivResult?.qualificationStatus ?? qualificationStatus;
+    const statusOption = getQualificationStatusOption(isivResult?.qualificationStatus);
+    const displayMessage = statusOption.labelAr;
+    const radarData = isivResult?.dimensions.map((d) => ({ category: d.symbol, fullMark: 100, score: d.percentage })) ?? [];
+    const categoryScores = isivResult?.dimensions.map((d) => ({ categoryName: d.dimensionLabelAr, score: d.percentage, color: d.color })) ?? [];
+    const benchmarks = { yourScore: Math.round((displayScore / 120) * 100), sectorAverage: 65, topPerformer: 92 };
 
-    const isQualified = displayStatus === 'QUALIFIED' || displayStatus === 'QUALIFIED_WITH_IMPROVEMENT' || displayStatus === 'qualified' || displayStatus === 'conditional';
+    const isQualified = displayStatus.toUpperCase() === 'QUALIFIED' || displayStatus.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT' || displayStatus.toUpperCase() === 'WITH_IMPROVEMENT';
 
     if (isLoadingResults) {
       return (
@@ -2105,10 +2150,10 @@ export function CharityOnboardingFlow() {
                 <div className="w-32 h-32 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-2">
                   <div>
                     <div className="text-5xl font-bold">{displayScore}</div>
-                    <div className="text-sm">من ١٠٠</div>
+                    <div className="text-sm">من ١٢٠</div>
                   </div>
                 </div>
-                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-medium ${displayStatus === 'QUALIFIED' || displayStatus === 'qualified' ? 'bg-green-400 text-green-900' : displayStatus === 'NOT_QUALIFIED' || displayStatus === 'not-qualified' ? 'bg-red-400 text-red-900' : 'bg-yellow-400 text-yellow-900'}`}>
+                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-medium ${statusOption.bgClass} ${statusOption.textClass}`}>
                   <Award className="w-4 h-4" />
                   <span>{displayMessage}</span>
                 </div>
@@ -2120,18 +2165,12 @@ export function CharityOnboardingFlow() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${displayStatus === 'QUALIFIED' || displayStatus === 'qualified' ? 'bg-green-50' : displayStatus === 'NOT_QUALIFIED' || displayStatus === 'not-qualified' ? 'bg-red-50' : 'bg-yellow-50'}`}>
-                  {displayStatus === 'QUALIFIED' || displayStatus === 'qualified' ? (
-                    <CheckCircle2 className="w-8 h-8 text-green-600" />
-                  ) : displayStatus === 'NOT_QUALIFIED' || displayStatus === 'not-qualified' ? (
-                    <AlertCircle className="w-8 h-8 text-red-600" />
-                  ) : (
-                    <AlertTriangle className="w-8 h-8 text-yellow-600" />
-                  )}
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${statusOption.bgClass.replace('bg-', 'bg-opacity-10 bg-').replace('-400', '-50')}`}>
+                  <statusOption.icon className={`w-8 h-8 ${statusOption.textClass.replace('text-', 'text-').replace('900', '600')}`} />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold mb-1">{displayMessage}</h2>
-                  <p className="text-gray-600">{assessmentResult?.qualificationMessage}</p>
+                  <p className="text-gray-600">{isivResult?.diagnosis}</p>
                 </div>
               </div>
               {isQualified && (
