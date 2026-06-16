@@ -2090,14 +2090,32 @@ export function CharityOnboardingFlow() {
             <h2 className="text-xl font-bold mb-2">تعذر تحميل النتائج</h2>
             <p className="text-gray-600 mb-6">{resultsError}</p>
             <button
-              onClick={() => {
-                if (organization?.id) {
-                  setCurrentView('results');
+              onClick={async () => {
+                if (!organization?.id) return;
+                setIsLoadingResults(true);
+                setResultsError(null);
+                try {
+                  const evalRes = await onboardingService.getIsivAssessmentResults(organization.id);
+                  setAssessmentResult(evalRes.data);
+                } catch (err: any) {
+                  const message = err?.message || 'فشل في تحميل النتائج. يرجى المحاولة مرة أخرى.';
+                  setResultsError(message);
+                  toast.error(message);
+                } finally {
+                  setIsLoadingResults(false);
                 }
               }}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              disabled={isLoadingResults}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              إعادة المحاولة
+              {isLoadingResults ? (
+                <>
+                  <Loader2 className="w-5 h-5 animate-spin inline-block ml-2" />
+                  جارٍ المحاولة...
+                </>
+              ) : (
+                'إعادة المحاولة'
+              )}
             </button>
           </div>
         </div>
