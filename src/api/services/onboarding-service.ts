@@ -252,6 +252,35 @@ export interface AssessmentStatus {
   completedAt: string | null;
 }
 
+/** ISIV dimension returned by the evaluation results endpoint */
+export interface IsivDimension {
+  dimension: string;
+  dimensionLabelAr: string;
+  symbol: string;
+  score: number;
+  percentage: number;
+  tier: string;
+  tierLabelAr: string;
+  color: string;
+}
+
+/** ISIV 4-layer assessment result returned by the evaluation results endpoint */
+export interface IsivAssessmentResult {
+  overallScore: number;
+  qualificationStatus: string;
+  dimensions: IsivDimension[];
+  diagnosis: string;
+  strengths: string[];
+  weaknesses: string[];
+}
+
+/** Response from the assessment submission endpoint */
+export interface AssessmentSubmissionResponse {
+  organizationId: string;
+  status: string;
+  submittedAt: string;
+}
+
 /** Document type enum used by the backend document upload API */
 export type DocumentType = 'registration' | 'financial' | 'other';
 
@@ -494,10 +523,22 @@ export class OnboardingService {
   }
 
   /**
-   * Get assessment results for an organization
+   * Submit the assessment for evaluation
+   * POST /api/v1/onboarding/assessment/submit?organizationId=...
+   */
+  async submitAssessment(
+    organizationId: string
+  ): Promise<ApiResponse<AssessmentSubmissionResponse>> {
+    return apiClient.post('/api/v1/onboarding/assessment/submit', undefined, {
+      params: { organizationId },
+    });
+  }
+
+  /**
+   * Get ISIV assessment results for an organization
    * GET /api/v1/onboarding/assessments/:organizationId/results
    */
-  async getAssessmentResults(organizationId: string): Promise<ApiResponse<AssessmentResult>> {
+  async getIsivAssessmentResults(organizationId: string): Promise<ApiResponse<IsivAssessmentResult>> {
     return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/results`);
   }
 
