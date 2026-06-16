@@ -1,44 +1,34 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: Assessment Results Display
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
+**Branch**: `051-charity-onboarding-assessment-results` | **Date**: 2026-06-16 | **Spec**: [specs/050-assessment-results-display/spec.md](spec.md)
+**Input**: Feature specification from `/specs/050-assessment-results-display/spec.md`
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Wire the charity onboarding flow so that clicking **إرسال التقييم** on the documents step submits the assessment, fetches the ISIV 4-layer evaluation result, and renders a results view with the overall score, qualification status, static radar chart, tier badges, Arabic diagnosis, strengths, and weaknesses. Persisted backend results support returning users without resubmission.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: TypeScript 5.x (package.json lists `^6.0.3`, but the toolchain uses a 5.x-compatible release)  
+**Primary Dependencies**: React 18.3.1, Vite 6.3.5, Tailwind CSS 4.1.12, Radix UI primitives, MUI icons, `recharts`, `sonner`  
+**Storage**: N/A (frontend relies on backend persistence via onboarding API)  
+**Testing**: TypeScript type checks (`tsc --noEmit`) and manual/runtime validation via `vite dev`/`build`; no test framework currently installed  
+**Target Platform**: Modern web browsers (client-side React SPA)  
+**Project Type**: Web frontend SPA (`/dashboard/onboarding` route)  
+**Performance Goals**: Results view visible within 5 seconds of submission under normal network conditions  
+**Constraints**: Manual retry only (no silent auto-retry), static radar chart, Arabic RTL UI  
+**Scale/Scope**: Single organization assessment at a time; evaluation result fetched per organization  
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
-
-[Gates determined based on constitution file]
+The project constitution file is a placeholder and does not enforce active gates. The only applicable gate for this planning command is that no `[NEEDS CLARIFICATION]` markers remain in the Technical Context. All technical unknowns were resolved in [research.md](research.md).
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/[###-feature]/
+specs/050-assessment-results-display/
 ├── plan.md              # This file (/speckit.plan command output)
 ├── research.md          # Phase 0 output (/speckit.plan command)
 ├── data-model.md        # Phase 1 output (/speckit.plan command)
@@ -48,57 +38,43 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
+├── api/
+│   ├── client.ts              # HTTP client
 │   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+│       └── onboarding-service.ts # Assessment service layer
+├── app/
+│   ├── components/
+│   │   └── CharityOnboardingFlow.tsx  # Onboarding flow + results view
+│   └── hooks/
+│       └── useOnboardingRegistration.ts  # Organization/profile state
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: This is a frontend-only feature. All changes live in the existing React SPA under `src/`. No new top-level projects or backend code are required.
 
 ## Complexity Tracking
 
-> **Fill ONLY if Constitution Check has violations that must be justified**
+No constitution violations. No additional complexity justification needed.
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+## Research Summary
+
+See [research.md](research.md) for full details. Key decisions:
+
+1. **Backend response shape**: Introduce a new `IsivAssessmentResult` interface matching the provided 4-layer contract; do not reuse the legacy `AssessmentResult` shape.
+2. **Submit endpoint**: Add `onboardingService.submitAssessment(organizationId)` calling `POST /api/v1/onboarding/assessment/submit?organizationId={id}`.
+3. **Persistence**: Rely on backend persistence; refetch results when the results view mounts.
+4. **Radar chart**: Continue using the already-installed `recharts` library for a static radar chart.
+
+## Deliverables
+
+- [research.md](research.md)
+- [data-model.md](data-model.md)
+- [contracts/api-contracts.md](contracts/api-contracts.md)
+- [quickstart.md](quickstart.md)
+- Updated `AGENTS.md` pointing to this feature's plan
+
+## Next Step
+
+Run `/speckit.tasks` to generate implementation tasks.
