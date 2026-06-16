@@ -13,6 +13,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   'profile',
   'assessment',
   'documents',
+  'preloader',
   'processing',
   'results',
   'analysis',
@@ -61,6 +62,7 @@ function stepName(step: OnboardingStep): string {
     case 'profile': return 'الملف التعريفي';
     case 'assessment': return 'التقييم';
     case 'documents': return 'المستندات';
+    case 'preloader': return 'تحليل البيانات';
     case 'processing': return 'المعالجة';
     case 'results': return 'النتائج';
     case 'analysis': return 'التحليل';
@@ -85,6 +87,7 @@ function isStepCompleted(step: OnboardingStep, progress: StepProgress): boolean 
       return !!progress.assessmentCompleted;
     case 'documents':
       return !!progress.documentsCompleted;
+    case 'preloader':
     case 'processing':
       return !!progress.processingCompleted;
     case 'results':
@@ -103,6 +106,7 @@ function getFurthestCompletedStep(progress: StepProgress): OnboardingStep {
     'profile',
     'assessment',
     'documents',
+    'preloader',
     'processing',
     'results',
   ];
@@ -118,10 +122,16 @@ function getFurthestCompletedStep(progress: StepProgress): OnboardingStep {
   return furthest;
 }
 
-function getAllowedNextStep(furthestCompleted: OnboardingStep): OnboardingStep | null {
+function getAllowedNextSteps(furthestCompleted: OnboardingStep): OnboardingStep[] {
   const nextOrder = getStepOrder(furthestCompleted) + 1;
-  if (nextOrder >= ONBOARDING_STEPS.length) return null;
-  return ONBOARDING_STEPS[nextOrder];
+  if (nextOrder >= ONBOARDING_STEPS.length) return [];
+  const next = ONBOARDING_STEPS[nextOrder];
+  // Preloader is the transition screen between documents and results,
+  // so allow it whenever documents is reachable.
+  if (next === 'documents') {
+    return ['documents', 'preloader'];
+  }
+  return [next];
 }
 
 export function evaluateStepGuard(
@@ -143,13 +153,13 @@ export function evaluateStepGuard(
   }
 
   const furthestCompleted = getFurthestCompletedStep(progress);
-  const nextAllowed = getAllowedNextStep(furthestCompleted);
+  const allowedNextSteps = getAllowedNextSteps(furthestCompleted);
 
-  if (nextAllowed && requestedStep === nextAllowed) {
+  if (allowedNextSteps.includes(requestedStep)) {
     return { allowed: true };
   }
 
-  const redirectTo = nextAllowed ?? furthestCompleted;
+  const redirectTo = allowedNextSteps[0] ?? furthestCompleted;
   return {
     allowed: false,
     redirectTo,

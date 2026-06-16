@@ -270,7 +270,7 @@ export function DocumentsPage() {
     input.click();
   };
 
-  const handleDocumentsNext = async () => {
+  const handleDocumentsNext = () => {
     if (
       !isDocumentsComplete ||
       hasPendingUploads ||
@@ -280,30 +280,7 @@ export function DocumentsPage() {
       return;
 
     setIsSubmittingAssessment(true);
-    goToStep('processing');
-
-    try {
-      const { onboardingService } = await import('@/api/services');
-      await onboardingService.submitAssessment(activeOrganizationId);
-      const evalRes = await onboardingService.getIsivAssessmentResults(
-        activeOrganizationId
-      );
-      const resultData = (evalRes.data as any)?.data ?? evalRes.data;
-      setAssessmentResult(resultData);
-      setAssessmentStatus({
-        status: 'COMPLETED',
-        overallScore: resultData?.overallScore ?? null,
-        completedAt: resultData?.assessedAt ?? null,
-      });
-      goToStep('results');
-    } catch (err: any) {
-      const message =
-        err?.message || 'فشل في تقييم المؤسسة. يرجى المحاولة مرة أخرى.';
-      toast.error(message);
-      goToStep('documents');
-    } finally {
-      setIsSubmittingAssessment(false);
-    }
+    goToStep('preloader');
   };
 
   if (!activeOrganizationId) {

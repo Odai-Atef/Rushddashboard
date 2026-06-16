@@ -43,6 +43,7 @@ const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/Registr
 const OnboardingProfilePage = lazy(() => import('./pages/onboarding/ProfilePage').then(m => ({ default: m.ProfilePage })));
 const OnboardingAssessmentPage = lazy(() => import('./pages/onboarding/AssessmentPage').then(m => ({ default: m.AssessmentPage })));
 const OnboardingDocumentsPage = lazy(() => import('./pages/onboarding/DocumentsPage').then(m => ({ default: m.DocumentsPage })));
+const OnboardingPreloaderPage = lazy(() => import('./pages/onboarding/PreloaderPage').then(m => ({ default: m.PreloaderPage })));
 const OnboardingProcessingPage = lazy(() => import('./pages/onboarding/ProcessingPage').then(m => ({ default: m.ProcessingPage })));
 const OnboardingResultsPage = lazy(() => import('./pages/onboarding/ResultsPage').then(m => ({ default: m.ResultsPage })));
 const OnboardingAnalysisPage = lazy(() => import('./pages/onboarding/AnalysisPage').then(m => ({ default: m.AnalysisPage })));
@@ -193,6 +194,10 @@ export const router = createBrowserRouter([
               {
                 path: 'documents',
                 element: <OnboardingPageShell><OnboardingDocumentsPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'preloader',
+                element: <OnboardingPageShell><OnboardingPreloaderPage /></OnboardingPageShell>,
               },
               {
                 path: 'processing',
