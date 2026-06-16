@@ -133,6 +133,76 @@ export interface SetFundingAreasRequest {
   customAreas?: CustomFundingArea[];
 }
 
+/** Question options for multiple choice */
+export interface QuestionOptions {
+  choices: string[];
+}
+
+/** Assessment question */
+export interface AssessmentQuestion {
+  id: string;
+  questionText: string;
+  questionType: 'SCALE' | 'YES_NO' | 'MULTIPLE_CHOICE' | 'FILE_UPLOAD' | string;
+  options: QuestionOptions | null;
+  isRequired: boolean;
+  sortOrder: number;
+}
+
+/** Assessment category with embedded questions */
+export interface AssessmentCategory {
+  id: string;
+  name: string;
+  nameEn: string;
+  icon: string;
+  color: string;
+  sortOrder: number;
+  questions: AssessmentQuestion[];
+}
+
+/** Payload to save an assessment answer */
+export interface SaveAnswerPayload {
+  questionId: string;
+  answerNumeric: number | null;
+  answerValue: string | null;
+  selectedOptions: string[] | null;
+}
+
+/** Answer returned inside the assessment state endpoint */
+export interface AssessmentStateAnswer {
+  questionId: string;
+  questionType: 'SCALE' | 'YES_NO' | 'MULTIPLE_CHOICE' | 'FILE_UPLOAD' | string;
+  answerValue: string | null;
+  answerNumeric: number | null;
+  selectedOptions: string[] | null;
+  fileUrl: string | null;
+}
+
+/** Category returned inside the assessment state endpoint */
+export interface AssessmentStateCategory {
+  categoryId: string;
+  categoryName: string;
+  totalQuestions: number;
+  answeredQuestions: number;
+  isComplete: boolean;
+  questions?: AssessmentQuestion[];
+  answers: AssessmentStateAnswer[];
+}
+
+/** Full assessment state returned by the state endpoint */
+export interface AssessmentState {
+  organizationId: string;
+  categories: AssessmentStateCategory[];
+  overallProgress: number;
+}
+
+/** Saved/loaded assessment answer shape used by the component */
+export interface SavedAnswer extends SaveAnswerPayload {
+  id?: string;
+  organizationId?: string;
+  createdAt?: string;
+  questionType?: 'SCALE' | 'YES_NO' | 'MULTIPLE_CHOICE' | 'FILE_UPLOAD' | string;
+}
+
 /**
  * Onboarding Service class
  * Encapsulates all onboarding API operations
@@ -208,6 +278,37 @@ export class OnboardingService {
    */
   async getFundingAreas(): Promise<ApiResponse<FundingArea[]>> {
     return apiClient.get('/api/v1/donors/funding-areas', { skipAuthRedirect: true });
+  }
+
+  /**
+   * Get assessment categories with embedded questions
+   * GET /api/v1/onboarding/assessment/categories
+   */
+  async getAssessmentCategories(): Promise<ApiResponse<AssessmentCategory[]>> {
+    return apiClient.get('/api/v1/onboarding/assessment/categories');
+  }
+
+  /**
+   * Get full assessment state including categories, questions, and saved answers
+   * GET /api/v1/onboarding/assessment/state?organizationId=...
+   */
+  async getAssessmentState(organizationId?: string): Promise<ApiResponse<AssessmentState>> {
+    return apiClient.get('/api/v1/onboarding/assessment/state', {
+      params: organizationId ? { organizationId } : undefined,
+    });
+  }
+
+  /**
+   * Save assessment answers for the authenticated organization (batch upsert)
+   * PUT /api/v1/onboarding/assessment/answers?organizationId=...
+   */
+  async saveAssessmentAnswers(
+    answers: SaveAnswerPayload[],
+    organizationId?: string
+  ): Promise<ApiResponse<SavedAnswer[]>> {
+    return apiClient.put('/api/v1/onboarding/assessment/answers', { answers }, {
+      params: organizationId ? { organizationId } : undefined,
+    });
   }
 }
 

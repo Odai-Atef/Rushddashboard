@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   Sparkles,
   Award,
@@ -37,11 +37,15 @@ import {
   PlayCircle,
   BookOpen,
   Link2,
-  Activity
+  Activity,
+  Circle,
+  Building,
+  Info
 } from 'lucide-react';
 import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration';
 import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
+import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer } from '@/api/services/onboarding-service';
 
 type ViewType = 'landing' | 'registration' | 'profile' | 'assessment' | 'documents' | 'processing' | 'results' | 'analysis' | 'roadmap' | 'decision';
 
@@ -70,7 +74,7 @@ interface ProfileData {
 interface AssessmentAnswer {
   categoryId: string;
   questionId: string;
-  answer: number | string;
+  answer: number | string | string[] | File | null;
 }
 
 interface UploadedFile {
@@ -86,11 +90,16 @@ export function CharityOnboardingFlow() {
   // ── Hook: JWT-based onboarding ──────────────────────────────
   const {
     organization,
+    fundingAreas,
     isLoading,
+    isSaving,
     error,
     fieldErrors,
     loadOrganization,
     saveOrganization,
+    createProfile,
+    saveFundingAreas,
+    loadFundingAreas,
     clearError,
   } = useOnboardingRegistration();
 
@@ -122,12 +131,27 @@ export function CharityOnboardingFlow() {
   const [overallScore, setOverallScore] = useState(78);
   const [qualificationStatus, setQualificationStatus] = useState<'qualified' | 'conditional' | 'not-qualified'>('conditional');
 
-  // ── Effect: load existing organization on registration mount ────
+  // Ref to guard auto-navigation so it only fires once on initial data load
+  const hasRestoredStepRef = useRef(false);
+
+  // ── Effect: load existing organization on mount ─────────────
+  useEffect(() => {
+    loadOrganization();
+  }, [loadOrganization]);
+
+  // ── Effect: load existing organization when navigating to registration ────
   useEffect(() => {
     if (currentView === 'registration') {
       loadOrganization();
     }
   }, [currentView, loadOrganization]);
+
+  // ── Effect: load funding areas when profile view mounts ───────
+  useEffect(() => {
+    if (currentView === 'profile') {
+      loadFundingAreas();
+    }
+  }, [currentView, loadFundingAreas]);
 
   // ── Effect: pre-fill form when organization data arrives ──────
   useEffect(() => {
@@ -138,7 +162,7 @@ export function CharityOnboardingFlow() {
         registrationDate: organization.registrationDate
           ? organization.registrationDate.slice(0, 10)
           : '',
-        orgType: organization.type || '',
+        orgType: organization.type ? organization.type.toLowerCase() : '',
         city: organization.city || '',
         website: organization.website || '',
         contactPerson: organization.contactPerson || '',
@@ -147,6 +171,150 @@ export function CharityOnboardingFlow() {
       });
     }
   }, [organization]);
+
+  // ── Effect: pre-fill profile form when embedded profile arrives ─
+  useEffect(() => {
+    if (organization?.profile) {
+      const p = organization.profile;
+      setProfileData({
+        overview: p.overview || '',
+        targetBeneficiaries: p.targetBeneficiaries || '',
+        geographicCoverage: p.geographicCoverage ? p.geographicCoverage.toLowerCase() : '',
+        employeeCount: p.employeeCount != null ? String(p.employeeCount) : '',
+        volunteerCount: p.volunteerCount != null ? String(p.volunteerCount) : '',
+        activeProjects: p.activeProjects != null ? String(p.activeProjects) : '',
+        areasOfWork: (p.fundingAreas || []).map((fa) => fa.fundingAreaId).filter(Boolean),
+      });
+    }
+  }, [organization?.profile]);
+
+  // ── Effect: navigate to saved onboarding step on initial load ──
+  useEffect(() => {
+    if (organization?.currentStep && !hasRestoredStepRef.current) {
+      const step = organization.currentStep.toLowerCase();
+      const validSteps: ViewType[] = [
+        'landing', 'registration', 'profile', 'assessment',
+        'documents', 'processing', 'results', 'analysis', 'roadmap', 'decision',
+      ];
+      if (validSteps.includes(step as ViewType)) {
+        setCurrentView(step as ViewType);
+        hasRestoredStepRef.current = true;
+      }
+    }
+  }, [organization?.currentStep]);
+
+  // ── Effect: load assessment state (categories + saved answers) when entering assessment view ──────
+  const abortControllerRef = useRef<AbortController | null>(null);
+  useEffect(() => {
+    if (currentView !== 'assessment') {
+      setAssessmentCategories([]);
+      setAssessmentProgress({});
+      setOverallProgress(0);
+      setCurrentAssessmentStep(0);
+      setIsLoadingAssessment(false);
+      setAssessmentError(null);
+      setAnswersLoadError(null);
+      return;
+    }
+
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+    setIsLoadingAssessment(true);
+    setAssessmentError(null);
+    setAnswersLoadError(null);
+
+    const orgId = organization?.id;
+    onboardingService.getAssessmentState(orgId)
+      .then((res) => {
+        if (controller.signal.aborted) return;
+        const state = res.data;
+        if (!state) return;
+
+        setOverallProgress(state.overallProgress ?? 0);
+
+        if (!state.categories || state.categories.length === 0) {
+          setAssessmentCategories([]);
+          setAssessmentProgress({});
+          return;
+        }
+
+        // Build progress map and flatten saved answers from the state response
+        const progress: Record<string, { answered: number; total: number; isComplete: boolean }> = {};
+        const flattenedAnswers: SavedAnswer[] = [];
+
+        state.categories.forEach((cat) => {
+          progress[cat.categoryId] = {
+            answered: cat.answeredQuestions ?? 0,
+            total: cat.totalQuestions ?? 0,
+            isComplete: cat.isComplete ?? false,
+          };
+
+          cat.answers?.forEach((ans) => {
+            flattenedAnswers.push({
+              id: ans.questionId,
+              organizationId: state.organizationId,
+              questionId: ans.questionId,
+              questionType: ans.questionType,
+              answerNumeric: ans.answerNumeric ?? null,
+              answerValue: ans.answerValue ?? ans.fileUrl ?? null,
+              selectedOptions: ans.selectedOptions ?? null,
+            });
+          });
+        });
+
+        setAssessmentProgress(progress);
+        mergeSavedAnswers(flattenedAnswers, false);
+
+        // Map state categories to AssessmentCategory shape if they include questions,
+        // otherwise keep the existing categories list empty and load categories separately.
+        const stateCategories: AssessmentCategory[] | undefined = state.categories
+          .filter((cat) => Array.isArray(cat.questions) && cat.questions.length > 0)
+          .map((cat) => ({
+            id: cat.categoryId,
+            name: cat.categoryName,
+            nameEn: cat.categoryName,
+            icon: '',
+            color: '#3B82F6',
+            sortOrder: 0,
+            questions: cat.questions || [],
+          }));
+
+        if (stateCategories && stateCategories.length > 0) {
+          setAssessmentCategories(stateCategories);
+        } else {
+          // Fallback: load categories separately if state does not include questions
+          return onboardingService.getAssessmentCategories().then((catRes) => {
+            if (controller.signal.aborted) return;
+            if (catRes.data) {
+              setAssessmentCategories(catRes.data);
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        if (controller.signal.aborted) return;
+        const message = err?.message || 'حدث خطأ أثناء تحميل التقييم';
+        if (err?.statusCode === 401) {
+          setAssessmentError(message);
+        } else if (err?.statusCode === 404) {
+          // No organization: show empty assessment without blocking
+          setAssessmentCategories([]);
+          setAssessmentProgress({});
+          setOverallProgress(0);
+        } else {
+          setAnswersLoadError(message);
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setIsLoadingAssessment(false);
+        }
+      });
+
+    return () => {
+      controller.abort();
+    };
+  }, [currentView]);
 
   // ── Effect: display server/network errors via toast ───────────
   useEffect(() => {
@@ -181,6 +349,52 @@ export function CharityOnboardingFlow() {
     }
   };
 
+  // ── Helper: handle profile Next ─────────────────────────────
+  const handleProfileNext = async () => {
+    clearError();
+
+    // Validation
+    if (!profileData.overview.trim()) {
+      toast.error('نبذة عن المؤسسة مطلوبة');
+      return;
+    }
+    if (!profileData.targetBeneficiaries.trim()) {
+      toast.error('الفئات المستهدفة مطلوبة');
+      return;
+    }
+    if (!profileData.geographicCoverage) {
+      toast.error('النطاق الجغرافي مطلوب');
+      return;
+    }
+    if (profileData.areasOfWork.length === 0) {
+      toast.error('مجالات العمل مطلوبة');
+      return;
+    }
+
+    if (!organization?.id) {
+      toast.error('لم يتم العثور على معرف المؤسسة. يرجى إكمال التسجيل أولاً.');
+      return;
+    }
+
+    const payload: import('@/api/services/onboarding-service').OrganizationProfile = {
+      overview: profileData.overview.trim(),
+      targetBeneficiaries: profileData.targetBeneficiaries.trim(),
+      geographicCoverage: profileData.geographicCoverage.toUpperCase() as import('@/api/services/onboarding-service').GeographicCoverage,
+      employeeCount: profileData.employeeCount ? parseInt(profileData.employeeCount, 10) : undefined,
+      volunteerCount: profileData.volunteerCount ? parseInt(profileData.volunteerCount, 10) : undefined,
+      activeProjects: profileData.activeProjects ? parseInt(profileData.activeProjects, 10) : undefined,
+      areasOfWork: profileData.areasOfWork,
+    };
+
+    try {
+      await createProfile(payload);
+      await saveFundingAreas(profileData.areasOfWork);
+      setCurrentView('assessment');
+    } catch {
+      // Errors are already handled by hook (toast via effect)
+    }
+  };
+
   // ── Helper: clear error on field change ─────────────────────
   const handleFieldChange = (field: keyof RegistrationData, value: string) => {
     if (fieldErrors[field]) {
@@ -189,18 +403,31 @@ export function CharityOnboardingFlow() {
     setRegistrationData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Assessment categories
-  const assessmentCategories = [
-    { id: 'governance', name: 'الحوكمة والامتثال', icon: Shield, color: '#3b82f6' },
-    { id: 'financial', name: 'الإدارة المالية', icon: DollarSign, color: '#10b981' },
-    { id: 'hr', name: 'الموارد البشرية', icon: Users, color: '#f59e0b' },
-    { id: 'volunteers', name: 'إدارة المتطوعين', icon: Heart, color: '#ec4899' },
-    { id: 'projects', name: 'إدارة المشاريع', icon: Briefcase, color: '#8b5cf6' },
-    { id: 'technology', name: 'الجاهزية التقنية', icon: Zap, color: '#06b6d4' },
-    { id: 'strategy', name: 'التخطيط الاستراتيجي', icon: Target, color: '#14b8a6' },
-    { id: 'impact', name: 'قياس الأثر', icon: BarChart3, color: '#f97316' },
-    { id: 'fundraising', name: 'جاهزية جمع التبرعات', icon: TrendingUp, color: '#84cc16' }
-  ];
+  // Icon name → Lucide component mapping (dynamic categories use string icon names)
+  const iconMap: Record<string, React.ElementType> = {
+    shield: Shield,
+    dollarSign: DollarSign,
+    users: Users,
+    heart: Heart,
+    briefcase: Briefcase,
+    zap: Zap,
+    target: Target,
+    barChart3: BarChart3,
+    trendingUp: TrendingUp,
+    building: Building,
+  };
+  const resolveIcon = (name?: string) => (name && iconMap[name]) ? iconMap[name] : Circle;
+
+  // Dynamic assessment categories (fetched from API)
+  const [assessmentCategories, setAssessmentCategories] = useState<AssessmentCategory[]>([]);
+  const [isLoadingAssessment, setIsLoadingAssessment] = useState(false);
+  const [assessmentError, setAssessmentError] = useState<string | null>(null);
+  const [answersLoadError, setAnswersLoadError] = useState<string | null>(null);
+  const [isSavingAnswers, setIsSavingAnswers] = useState(false);
+  const [saveAnswersError, setSaveAnswersError] = useState<string | null>(null);
+  const [assessmentProgress, setAssessmentProgress] = useState<Record<string, { answered: number; total: number; isComplete: boolean }>>({});
+  const [overallProgress, setOverallProgress] = useState(0);
+  const locallyEditedQuestionIds = useRef<Set<string>>(new Set());
 
   // SCREEN 1: Landing & Assessment Entry
   const LandingView = () => (
@@ -511,6 +738,11 @@ export function CharityOnboardingFlow() {
   // SCREEN 3: Organization Profile Information
   const ProfileView = () => (
     <div className="min-h-full bg-gray-50 p-6">
+      {(isLoading || isSaving) && (
+        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
+          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        </div>
+      )}
       <div className="max-w-3xl mx-auto">
         {/* Progress */}
         <div className="mb-8">
@@ -547,22 +779,25 @@ export function CharityOnboardingFlow() {
             {/* Areas of Work */}
             <div>
               <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+              {fundingAreas.length === 0 && !isLoading && (
+                <p className="text-sm text-gray-500 mb-2">لا توجد مجالات عمل متاحة حالياً. يرجى المحاولة لاحقاً.</p>
+              )}
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {['الإغاثة الإنسانية', 'التعليم والتدريب', 'الصحة', 'الأيتام والأسر', 'المسنين', 'ذوي الإعاقة', 'التنمية المجتمعية', 'البيئة', 'أخرى'].map((area) => (
-                  <label key={area} className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
+                {fundingAreas.map((area) => (
+                  <label key={area.id} className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer">
                     <input
                       type="checkbox"
-                      checked={profileData.areasOfWork.includes(area)}
+                      checked={profileData.areasOfWork.includes(area.id)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setProfileData({ ...profileData, areasOfWork: [...profileData.areasOfWork, area] });
+                          setProfileData({ ...profileData, areasOfWork: [...profileData.areasOfWork, area.id] });
                         } else {
-                          setProfileData({ ...profileData, areasOfWork: profileData.areasOfWork.filter(a => a !== area) });
+                          setProfileData({ ...profileData, areasOfWork: profileData.areasOfWork.filter(a => a !== area.id) });
                         }
                       }}
                       className="w-4 h-4 text-blue-600 rounded"
                     />
-                    <span className="text-sm">{area}</span>
+                    <span className="text-sm">{area.name}</span>
                   </label>
                 ))}
               </div>
@@ -662,8 +897,9 @@ export function CharityOnboardingFlow() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => setCurrentView('assessment')}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                  onClick={handleProfileNext}
+                  disabled={isLoading || isSaving}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   التالي
                   <ChevronLeft className="w-5 h-5" />
@@ -676,23 +912,203 @@ export function CharityOnboardingFlow() {
     </div>
   );
 
+  // Helpers for dynamic assessment rendering
+  const getAnswer = (questionId: string) =>
+    assessmentAnswers.find((a) => a.questionId === questionId)?.answer;
+
+  const setAnswer = (categoryId: string, questionId: string, answer: AssessmentAnswer['answer']) => {
+    locallyEditedQuestionIds.current.add(questionId);
+    setSaveAnswersError(null);
+    setAssessmentAnswers((prev) => {
+      const filtered = prev.filter((a) => a.questionId !== questionId);
+      return [...filtered, { categoryId, questionId, answer }];
+    });
+  };
+
+  const mergeSavedAnswers = (savedAnswers: SavedAnswer[], overwriteLocal: boolean) => {
+    setAssessmentAnswers((prev) => {
+      const next = [...prev];
+      savedAnswers.forEach((saved) => {
+        if (!overwriteLocal && locallyEditedQuestionIds.current.has(saved.questionId)) {
+          return;
+        }
+        let answer: AssessmentAnswer['answer'] = null;
+        switch (saved.questionType) {
+          case 'SCALE':
+            answer = saved.answerNumeric;
+            break;
+          case 'YES_NO':
+          case 'FILE_UPLOAD':
+            answer = saved.answerValue;
+            break;
+          case 'MULTIPLE_CHOICE':
+            answer = saved.selectedOptions;
+            break;
+        }
+        const idx = next.findIndex((a) => a.questionId === saved.questionId);
+        const categoryId = assessmentCategories.find((cat) =>
+          cat.questions.some((q) => q.id === saved.questionId)
+        )?.id || '';
+        if (idx >= 0) {
+          next[idx] = { categoryId, questionId: saved.questionId, answer };
+        } else {
+          next.push({ categoryId, questionId: saved.questionId, answer });
+        }
+      });
+      return next;
+    });
+  };
+
+  const buildSaveAnswerPayloads = (questions: AssessmentQuestion[]): SaveAnswerPayload[] => {
+    return questions
+      .map((q) => {
+        const answer = getAnswer(q.id);
+        const base: SaveAnswerPayload = {
+          questionId: q.id,
+          answerNumeric: null,
+          answerValue: null,
+          selectedOptions: null,
+        };
+        switch (q.questionType) {
+          case 'SCALE':
+            return typeof answer === 'number' ? { ...base, answerNumeric: answer } : null;
+          case 'YES_NO':
+          case 'FILE_UPLOAD':
+            return typeof answer === 'string' && answer.trim() !== '' ? { ...base, answerValue: answer } : null;
+          case 'MULTIPLE_CHOICE':
+            return Array.isArray(answer) && answer.length > 0 ? { ...base, selectedOptions: answer } : null;
+          default:
+            return null;
+        }
+      })
+      .filter((payload): payload is SaveAnswerPayload => payload !== null);
+  };
+
+  const findUnansweredRequiredQuestions = (questions: AssessmentQuestion[]) => {
+    return questions.filter((q) => {
+      if (!q.isRequired) return false;
+      const answer = getAnswer(q.id);
+      if (answer == null) return true;
+      if (typeof answer === 'string' && answer.trim() === '') return true;
+      if (Array.isArray(answer) && answer.length === 0) return true;
+      return false;
+    });
+  };
+
+  const scrollToQuestion = (questionId: string) => {
+    const element = document.getElementById(`question-${questionId}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      element.classList.add('ring-2', 'ring-red-500', 'rounded-lg');
+      setTimeout(() => element.classList.remove('ring-2', 'ring-red-500', 'rounded-lg'), 2000);
+    }
+  };
+
+  const handleAssessmentNext = async () => {
+    setSaveAnswersError(null);
+    const currentCategory = assessmentCategories[currentAssessmentStep];
+    if (!currentCategory) return;
+
+    const scopeQuestions = currentCategory.questions;
+    const unansweredRequired = findUnansweredRequiredQuestions(scopeQuestions);
+    if (unansweredRequired.length > 0) {
+      toast.error(`يرجى الإجابة على ${unansweredRequired.length} سؤال مطلوب`);
+      scrollToQuestion(unansweredRequired[0].id);
+      return;
+    }
+
+    const payload = buildSaveAnswerPayloads(scopeQuestions);
+    setIsSavingAnswers(true);
+    try {
+      const res = await onboardingService.saveAssessmentAnswers(payload, organization?.id);
+      if (res.data) {
+        mergeSavedAnswers(Array.isArray(res.data) ? res.data : res.data.answers ?? [], true);
+        locallyEditedQuestionIds.current.clear();
+        if (currentAssessmentStep < assessmentCategories.length - 1) {
+          setCurrentAssessmentStep((step) => step + 1);
+        } else {
+          setCurrentView('documents');
+        }
+      }
+    } catch (err: any) {
+      const status = err?.statusCode;
+      let message = err?.message || 'حدث خطأ أثناء حفظ الإجابات. يرجى المحاولة مرة أخرى.';
+      if (status === 404) {
+        message = 'لم يتم العثور على المؤسسة. يرجى التحقق من البيانات والمحاولة مرة أخرى.';
+      } else if (status === 400) {
+        message = 'بيانات الإجابات غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.';
+      }
+      setSaveAnswersError(message);
+      toast.error(message);
+    } finally {
+      setIsSavingAnswers(false);
+    }
+  };
+
   // SCREEN 4: Readiness Assessment Wizard
   const AssessmentView = () => {
+    if (isLoadingAssessment) {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+            <p className="text-gray-600">جارٍ تحميل فئات التقييم...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (assessmentError) {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-lg w-full text-center">
+            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold mb-2">تعذر تحميل التقييم</h2>
+            <p className="text-gray-600 mb-6">{assessmentError}</p>
+            <button
+              onClick={() => setCurrentView('profile')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              العودة إلى الملف التعريفي
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (assessmentCategories.length === 0) {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-lg w-full text-center">
+            <Info className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h2 className="text-xl font-bold mb-2">لا توجد فئات تقييم متاحة</h2>
+            <p className="text-gray-600 mb-6">لم يتم العثور على فئات تقييم في الوقت الحالي. يرجى المحاولة لاحقاً.</p>
+            <button
+              onClick={() => setCurrentView('profile')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              العودة إلى الملف التعريفي
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     const currentCategory = assessmentCategories[currentAssessmentStep];
-    const CategoryIcon = currentCategory.icon;
-    const progress = ((currentAssessmentStep + 1) / assessmentCategories.length) * 100;
+    const CategoryIcon = resolveIcon(currentCategory.icon);
+    const currentProgress = assessmentProgress[currentCategory.id] ?? { answered: 0, total: currentCategory.questions.length, isComplete: false };
 
     return (
       <div className="min-h-full bg-gray-50 p-6">
         <div className="max-w-4xl mx-auto">
-          {/* Progress */}
+          {/* Overall Progress */}
           <div className="mb-8">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm text-gray-600">الخطوة ٣ من ٤ - التقييم</span>
-              <span className="text-sm font-medium text-blue-600">{Math.round(progress)}٪</span>
+              <span className="text-sm font-medium text-blue-600">{Math.round(overallProgress)}٪</span>
             </div>
             <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${progress}%` }}></div>
+              <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${overallProgress}%` }}></div>
             </div>
           </div>
 
@@ -700,125 +1116,228 @@ export function CharityOnboardingFlow() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
               {assessmentCategories.map((cat, idx) => {
-                const Icon = cat.icon;
+                const Icon = resolveIcon(cat.icon);
+                const catProgress = assessmentProgress[cat.id] ?? { answered: 0, total: cat.questions.length, isComplete: false };
                 return (
-                  <div
+                  <button
                     key={cat.id}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                    onClick={() => setCurrentAssessmentStep(idx)}
+                    className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
                       idx === currentAssessmentStep
                         ? 'bg-blue-50 border-2 border-blue-500'
-                        : idx < currentAssessmentStep
+                        : catProgress.isComplete
                         ? 'bg-green-50 border border-green-200'
                         : 'bg-gray-50 border border-gray-200'
                     }`}
                   >
-                    <Icon className={`w-4 h-4 ${idx === currentAssessmentStep ? 'text-blue-600' : idx < currentAssessmentStep ? 'text-green-600' : 'text-gray-400'}`} />
-                    <span className={`text-sm font-medium ${idx === currentAssessmentStep ? 'text-blue-900' : idx < currentAssessmentStep ? 'text-green-900' : 'text-gray-500'}`}>
-                      {cat.name}
+                    <div className="flex items-center gap-2">
+                      <Icon className={`w-4 h-4 ${idx === currentAssessmentStep ? 'text-blue-600' : catProgress.isComplete ? 'text-green-600' : 'text-gray-400'}`} />
+                      <span className={`text-sm font-medium ${idx === currentAssessmentStep ? 'text-blue-900' : catProgress.isComplete ? 'text-green-900' : 'text-gray-500'}`}>
+                        {cat.name}
+                      </span>
+                      {catProgress.isComplete && (
+                        <CheckCircle2 className="w-4 h-4 text-green-600" />
+                      )}
+                    </div>
+                    <span className="text-xs text-gray-500">
+                      {catProgress.answered} / {catProgress.total}
                     </span>
-                    {idx < currentAssessmentStep && (
-                      <CheckCircle2 className="w-4 h-4 text-green-600" />
-                    )}
-                  </div>
+                  </button>
                 );
               })}
+            </div>
           </div>
-        </div>
 
-        {/* Error / Retry */}
-        {error && !organization && !isLoading && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center justify-between">
-            <span className="text-red-700">{error}</span>
-            <button
-              onClick={loadOrganization}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"
-            >
-              إعادة المحاولة
-            </button>
-          </div>
-        )}
-
-        {/* Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+          {/* Form Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
             {/* Category Header */}
             <div className="flex items-center gap-4 mb-8">
               <div className="w-16 h-16 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${currentCategory.color}20` }}>
                 <CategoryIcon className="w-8 h-8" style={{ color: currentCategory.color }} />
               </div>
-              <div>
+              <div className="flex-1">
                 <h2 className="text-2xl font-bold">{currentCategory.name}</h2>
-                <p className="text-gray-600">القسم {currentAssessmentStep + 1} من {assessmentCategories.length}</p>
+                <p className="text-gray-600">
+                  تم الإجابة على {currentProgress.answered} من {currentProgress.total} أسئلة
+                </p>
+                <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden mt-2">
+                  <div
+                    className="h-full bg-blue-600 transition-all duration-300"
+                    style={{ width: currentProgress.total > 0 ? `${(currentProgress.answered / currentProgress.total) * 100}%` : '0%' }}
+                  ></div>
+                </div>
               </div>
             </div>
 
-            {/* Sample Questions */}
+            {(answersLoadError || saveAnswersError) && (
+              <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                <p className="text-red-700 text-sm">{saveAnswersError || answersLoadError}</p>
+              </div>
+            )}
+
+            {/* Dynamic Questions */}
             <div className="space-y-8">
-              {/* Question 1: Yes/No */}
-              <div className="p-6 bg-gray-50 rounded-lg">
-                <label className="block font-medium mb-4">
-                  ١. هل لديكم هيكل تنظيمي واضح ومعتمد؟
-                </label>
-                <div className="flex gap-3">
-                  <button className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors font-medium">
-                    نعم
-                  </button>
-                  <button className="flex-1 px-6 py-3 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors font-medium">
-                    لا
-                  </button>
+              {currentCategory.questions.length === 0 && (
+                <div className="p-6 bg-gray-50 rounded-lg text-center text-gray-500">
+                  لا توجد أسئلة في هذا القسم
                 </div>
-              </div>
+              )}
 
-              {/* Question 2: Scale */}
-              <div className="p-6 bg-gray-50 rounded-lg">
-                <label className="block font-medium mb-4">
-                  ٢. كيف تقيّم مستوى الالتزام بالسياسات والإجراءات؟
-                </label>
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                    <span>ضعيف جداً</span>
-                    <span>ممتاز</span>
-                  </div>
-                  <div className="flex gap-2">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-                      <button
-                        key={num}
-                        className="flex-1 h-12 border-2 border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors font-medium"
+              {currentCategory.questions.map((q, qIdx) => {
+                const answer = getAnswer(q.id);
+                const isAnswered = answer != null && !(typeof answer === 'string' && answer.trim() === '') && !(Array.isArray(answer) && answer.length === 0);
+                const questionWrapperClass = `p-6 bg-gray-50 rounded-lg transition-all ${q.isRequired && !isAnswered ? 'border-2 border-transparent' : ''}`;
+
+                if (q.questionType === 'YES_NO') {
+                  return (
+                    <div key={q.id} id={`question-${q.id}`} className={questionWrapperClass}>
+                      <label className="block font-medium mb-4">
+                        {qIdx + 1}. {q.questionText}
+                        {q.isRequired && <span className="text-red-500 mr-1">*</span>}
+                        {isAnswered && <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />}
+                      </label>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => setAnswer(currentCategory.id, q.id, 'yes')}
+                          className={`flex-1 px-6 py-3 border-2 rounded-lg transition-colors font-medium ${
+                            answer === 'yes'
+                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+                          }`}
+                        >
+                          نعم
+                        </button>
+                        <button
+                          onClick={() => setAnswer(currentCategory.id, q.id, 'no')}
+                          className={`flex-1 px-6 py-3 border-2 rounded-lg transition-colors font-medium ${
+                            answer === 'no'
+                              ? 'border-blue-500 bg-blue-50 text-blue-700'
+                              : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+                          }`}
+                        >
+                          لا
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (q.questionType === 'SCALE') {
+                  return (
+                    <div key={q.id} id={`question-${q.id}`} className={questionWrapperClass}>
+                      <label className="block font-medium mb-4">
+                        {qIdx + 1}. {q.questionText}
+                        {q.isRequired && <span className="text-red-500 mr-1">*</span>}
+                        {isAnswered && <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />}
+                      </label>
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                          <span>ضعيف جداً</span>
+                          <span>ممتاز</span>
+                        </div>
+                        <div className="flex gap-2">
+                          {[1, 2, 3, 4, 5].map((num) => (
+                            <button
+                              key={num}
+                              onClick={() => setAnswer(currentCategory.id, q.id, num)}
+                              className={`flex-1 h-12 border-2 rounded-lg transition-colors font-medium ${
+                                answer === num
+                                  ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                  : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+                              }`}
+                            >
+                              {num}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+
+                if (q.questionType === 'MULTIPLE_CHOICE') {
+                  const choices = q.options?.choices ?? [];
+                  const selected = Array.isArray(answer) ? (answer as string[]) : [];
+                  return (
+                    <div key={q.id} id={`question-${q.id}`} className={questionWrapperClass}>
+                      <label className="block font-medium mb-4">
+                        {qIdx + 1}. {q.questionText}
+                        {q.isRequired && <span className="text-red-500 mr-1">*</span>}
+                        {isAnswered && <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />}
+                      </label>
+                      {choices.length === 0 ? (
+                        <p className="text-sm text-gray-500">لا توجد خيارات متاحة</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {choices.map((option) => (
+                            <label key={option} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-white cursor-pointer">
+                              <input
+                                type="checkbox"
+                                checked={selected.includes(option)}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setAnswer(currentCategory.id, q.id, [...selected, option]);
+                                  } else {
+                                    setAnswer(currentCategory.id, q.id, selected.filter((s) => s !== option));
+                                  }
+                                }}
+                                className="w-5 h-5 text-blue-600 rounded"
+                              />
+                              <span>{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  );
+                }
+
+                if (q.questionType === 'FILE_UPLOAD') {
+                  return (
+                    <div key={q.id} id={`question-${q.id}`} className="p-6 bg-blue-50 border border-blue-200 rounded-lg">
+                      <label className="block font-medium mb-2">
+                        {qIdx + 1}. {q.questionText}
+                        {q.isRequired && <span className="text-red-500 mr-1">*</span>}
+                        {isAnswered && <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />}
+                      </label>
+                      <div className="flex items-start gap-3 mb-3">
+                        <Upload className="w-5 h-5 text-blue-600 mt-0.5" />
+                        <div className="flex-1">
+                          <p className="font-medium text-blue-900 mb-1">وثائق داعمة</p>
+                          <p className="text-sm text-blue-700">يمكنك رفع وثائق تثبت إجاباتك لتحسين دقة التقييم</p>
+                        </div>
+                      </div>
+                      <input
+                        id={`file-${q.id}`}
+                        type="file"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0] ?? null;
+                          setAnswer(currentCategory.id, q.id, file);
+                        }}
+                      />
+                      <label
+                        htmlFor={`file-${q.id}`}
+                        className="w-full px-4 py-3 border-2 border-dashed border-blue-300 rounded-lg hover:bg-blue-100 transition-colors text-blue-700 font-medium flex items-center justify-center cursor-pointer"
                       >
-                        {num}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              </div>
+                        {answer instanceof File ? answer.name : typeof answer === 'string' ? answer : 'اختر ملف أو اسحبه هنا'}
+                      </label>
+                    </div>
+                  );
+                }
 
-              {/* Question 3: Multiple Choice */}
-              <div className="p-6 bg-gray-50 rounded-lg">
-                <label className="block font-medium mb-4">
-                  ٣. ما هي أدوات الحوكمة المتوفرة لديكم؟
-                </label>
-                <div className="space-y-2">
-                  {['لوائح وسياسات موثقة', 'مجلس إدارة نشط', 'تقارير دورية', 'مراجعة داخلية', 'تدقيق خارجي', 'برامج تدريبية'].map((option) => (
-                    <label key={option} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-white cursor-pointer">
-                      <input type="checkbox" className="w-5 h-5 text-blue-600 rounded" />
-                      <span>{option}</span>
+                // Unrecognized question type fallback
+                return (
+                  <div key={q.id} id={`question-${q.id}`} className={questionWrapperClass}>
+                    <label className="block font-medium mb-2">
+                      {qIdx + 1}. {q.questionText}
+                      {q.isRequired && <span className="text-red-500 mr-1">*</span>}
                     </label>
-                  ))}
-                </div>
-              </div>
-
-              {/* Evidence Upload */}
-              <div className="p-6 bg-blue-50 border border-blue-200 rounded-lg">
-                <div className="flex items-start gap-3 mb-3">
-                  <Upload className="w-5 h-5 text-blue-600 mt-0.5" />
-                  <div className="flex-1">
-                    <p className="font-medium text-blue-900 mb-1">وثائق داعمة (اختياري)</p>
-                    <p className="text-sm text-blue-700">يمكنك رفع وثائق تثبت إجاباتك لتحسين دقة التقييم</p>
+                    <p className="text-sm text-gray-500">نوع السؤال غير مدعوم</p>
                   </div>
-                </div>
-                <button className="w-full px-4 py-3 border-2 border-dashed border-blue-300 rounded-lg hover:bg-blue-100 transition-colors text-blue-700 font-medium">
-                  اختر ملف أو اسحبه هنا
-                </button>
-              </div>
+                );
+              })}
             </div>
 
             {/* Navigation */}
@@ -837,20 +1356,24 @@ export function CharityOnboardingFlow() {
                 السابق
               </button>
               <div className="text-sm text-gray-500">
-                تم حفظ الإجابات تلقائياً
+                {isSavingAnswers ? 'جارٍ حفظ الإجابات...' : 'تم حفظ الإجابات تلقائياً'}
               </div>
               <button
-                onClick={() => {
-                  if (currentAssessmentStep < assessmentCategories.length - 1) {
-                    setCurrentAssessmentStep(currentAssessmentStep + 1);
-                  } else {
-                    setCurrentView('documents');
-                  }
-                }}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                onClick={handleAssessmentNext}
+                disabled={isSavingAnswers || isLoadingAssessment}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {currentAssessmentStep === assessmentCategories.length - 1 ? 'متابعة للمستندات' : 'التالي'}
-                <ChevronLeft className="w-5 h-5" />
+                {isSavingAnswers ? (
+                  <>
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                    جارٍ الحفظ...
+                  </>
+                ) : currentAssessmentStep === assessmentCategories.length - 1 ? (
+                  'متابعة للمستندات'
+                ) : (
+                  'التالي'
+                )}
+                {!isSavingAnswers && <ChevronLeft className="w-5 h-5" />}
               </button>
             </div>
           </div>
@@ -1730,6 +2253,14 @@ export function CharityOnboardingFlow() {
   );
 
   // Main render
+  if (isLoading && !organization) {
+    return (
+      <div className="min-h-full flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-full">
       {currentView === 'landing' && LandingView()}
