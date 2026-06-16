@@ -1427,24 +1427,38 @@ export function CharityOnboardingFlow() {
       if (!res.success) {
         throw new Error(res.message || 'Failed to load documents');
       }
-      const docs = res.data || [];
+      const docs = (res.data || []) as OrganizationDocument[];
       const mappedFiles: UploadedFile[] = [];
-      const seenSlots = new Set<string>();
+      const assignedSlots = new Set<string>();
+
+      // Build a lookup of which slots can accept each document type
+      const slotsByType = documentSlots.reduce((acc, slot) => {
+        const type = mapSlotToDocumentType(slot.id);
+        if (!acc[type]) acc[type] = [];
+        acc[type].push(slot.id);
+        return acc;
+      }, {} as Record<string, DocumentSlotId[]>);
 
       for (const doc of docs) {
-        const slotId = Object.keys(DOCUMENT_SLOT_MAPPING).find(
-          (key) => DOCUMENT_SLOT_MAPPING[key as DocumentSlotId] === doc.documentType && !seenSlots.has(key)
-        );
+        const candidates = slotsByType[doc.documentType] || [];
+        // Prefer a slot whose description matches the doc description, otherwise first free slot
+        const slotId =
+          candidates.find((id) => {
+            const slotLabel = documentSlots.find((s) => s.id === id)?.label;
+            return slotLabel && doc.description && slotLabel === doc.description && !assignedSlots.has(id);
+          }) ||
+          candidates.find((id) => !assignedSlots.has(id));
+
         if (!slotId) {
-          // Unknown or duplicate type mapping — skip
+          // No available slot for this document type
           continue;
         }
-        seenSlots.add(slotId);
+        assignedSlots.add(slotId);
         mappedFiles.push({
           id: slotId,
           name: doc.originalName,
-          type: '',
-          size: 0,
+          type: doc.mimeType || '',
+          size: doc.size || 0,
           status: 'completed',
           progress: 100,
           documentType: doc.documentType,
@@ -1454,7 +1468,13 @@ export function CharityOnboardingFlow() {
         });
       }
 
-      setUploadedFiles(mappedFiles);
+      setUploadedFiles((prev) => {
+        // Keep any in-progress uploads from being wiped out by the reload
+        const keep = prev.filter((f) => f.status === 'uploading');
+        const keepIds = new Set(keep.map((f) => f.id));
+        const merged = [...keep, ...mappedFiles.filter((f) => !keepIds.has(f.id))];
+        return merged;
+      });
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load documents';
       setDocumentsLoadError(message);

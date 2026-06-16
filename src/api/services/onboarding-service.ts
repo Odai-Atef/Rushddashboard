@@ -212,6 +212,8 @@ export interface OrganizationDocument {
   documentType: DocumentType | string;
   status: DocumentStatus;
   description?: string;
+  mimeType?: string;
+  size?: number;
   createdAt?: string;
   updatedAt?: string;
 }
