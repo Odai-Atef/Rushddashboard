@@ -1,52 +1,11 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import {
-  Sparkles,
-  Award,
-  CheckCircle2,
-  AlertTriangle,
-  FileText,
-  Upload,
-  ChevronRight,
-  ChevronLeft,
-  Save,
-  Building2,
-  Users,
-  Target,
-  TrendingUp,
-  Shield,
-  DollarSign,
-  Briefcase,
-  Heart,
-  Zap,
-  Brain,
-  BarChart3,
-  Clock,
-  MapPin,
-  Phone,
-  Mail,
-  Globe,
-  Calendar,
-  ArrowRight,
-  Download,
-  X,
-  Check,
-  Loader2,
-  Star,
-  AlertCircle,
-  Lightbulb,
-  PlayCircle,
-  BookOpen,
-  Link2,
-  Activity,
-  Circle,
-  Building,
-  Info
-} from 'lucide-react';
+import { BarChart3, Brain, Briefcase, Building, Building2, Calendar, Check, CheckCircle2, ChevronLeft, ChevronRight, Clock, Download, FileText, Globe, Heart, Info, Lightbulb, Link2, Loader2, Mail, MapPin, Phone, PlayCircle, Save, Shield, Sparkles, Star, Target, TrendingUp, Upload, Users, X, Zap, Award, AlertTriangle, ArrowRight, AlertCircle, Activity, Circle, DollarSign } from 'lucide-react';
 import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration';
 import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
-import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT } from '@/api/services/onboarding-service';
+import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT, AssessmentResult, AssessmentStatus, AssessmentStatusValue } from '@/api/services/onboarding-service';
 import { resolveIcon as resolveApiIcon } from '@/app/utils/icon-map';
+import { getScoreColor } from '@/app/utils/score-color';
 
 type ViewType = 'landing' | 'registration' | 'profile' | 'assessment' | 'documents' | 'processing' | 'results' | 'analysis' | 'roadmap' | 'decision';
 
@@ -137,6 +96,10 @@ export function CharityOnboardingFlow() {
   const [processingProgress, setProcessingProgress] = useState(0);
   const [overallScore, setOverallScore] = useState(78);
   const [qualificationStatus, setQualificationStatus] = useState<'qualified' | 'conditional' | 'not-qualified'>('conditional');
+  const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
+  const [assessmentStatus, setAssessmentStatus] = useState<AssessmentStatus | null>(null);
+  const [isLoadingResults, setIsLoadingResults] = useState(false);
+  const [resultsError, setResultsError] = useState<string | null>(null);
 
   // Ref to guard auto-navigation so it only fires once on initial data load
   const hasRestoredStepRef = useRef(false);
@@ -159,6 +122,45 @@ export function CharityOnboardingFlow() {
       loadFundingAreas();
     }
   }, [currentView, loadFundingAreas]);
+
+  // ── Effect: fetch assessment results when results view mounts ─
+  useEffect(() => {
+    if (currentView !== 'results' && currentView !== 'analysis') return;
+    if (!organization?.id) return;
+
+    let cancelled = false;
+    const fetchResults = async () => {
+      setIsLoadingResults(true);
+      setResultsError(null);
+      try {
+        const statusRes = await onboardingService.getAssessmentStatus(organization.id);
+        setAssessmentStatus(statusRes.data);
+
+        if (statusRes.data?.status === 'COMPLETED') {
+          const resultsRes = await onboardingService.getAssessmentResults(organization.id);
+          if (!cancelled) {
+            setAssessmentResult(resultsRes.data);
+          }
+        } else {
+          setAssessmentResult(null);
+        }
+      } catch (err: any) {
+        if (!cancelled) {
+          setResultsError(err?.message || 'فشل تحميل النتائج');
+          toast.error(err?.message || 'فشل تحميل النتائج');
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoadingResults(false);
+        }
+      }
+    };
+
+    fetchResults();
+    return () => {
+      cancelled = true;
+    };
+  }, [currentView, organization?.id]);
 
   // ── Effect: pre-fill form when organization data arrives ──────
   useEffect(() => {
@@ -1981,29 +1983,75 @@ export function CharityOnboardingFlow() {
 
   // SCREEN 7: Readiness Results Dashboard
   const ResultsView = () => {
-    const radarData = [
-      { category: 'الحوكمة', score: 85, fullMark: 100 },
-      { category: 'المالية', score: 72, fullMark: 100 },
-      { category: 'الموارد البشرية', score: 68, fullMark: 100 },
-      { category: 'المتطوعين', score: 78, fullMark: 100 },
-      { category: 'المشاريع', score: 75, fullMark: 100 },
-      { category: 'التقنية', score: 65, fullMark: 100 },
-      { category: 'الاستراتيجية', score: 80, fullMark: 100 },
-      { category: 'الأثر', score: 70, fullMark: 100 },
-      { category: 'جمع التبرعات', score: 73, fullMark: 100 }
-    ];
+    const displayScore = assessmentResult?.overallScore ?? overallScore;
+    const displayStatus = assessmentResult?.qualificationStatus ?? qualificationStatus;
+    const displayMessage = assessmentResult?.qualificationMessage ?? 'مؤهل مع خطة تحسين';
+    const radarData = assessmentResult?.radarData ?? [];
+    const categoryScores = assessmentResult?.categoryScores.map((c) => ({ ...c, color: c.color || getScoreColor(c.score) })) ?? [];
+    const benchmarks = assessmentResult?.benchmarks ?? { yourScore: displayScore, sectorAverage: 65, topPerformer: 92 };
 
-    const categoryScores = [
-      { name: 'الحوكمة والامتثال', score: 85, color: '#10b981' },
-      { name: 'التخطيط الاستراتيجي', score: 80, color: '#3b82f6' },
-      { name: 'إدارة المتطوعين', score: 78, color: '#8b5cf6' },
-      { name: 'إدارة المشاريع', score: 75, color: '#f59e0b' },
-      { name: 'جمع التبرعات', score: 73, color: '#ec4899' },
-      { name: 'الإدارة المالية', score: 72, color: '#14b8a6' },
-      { name: 'قياس الأثر', score: 70, color: '#f97316' },
-      { name: 'الموارد البشرية', score: 68, color: '#06b6d4' },
-      { name: 'الجاهزية التقنية', score: 65, color: '#84cc16' }
-    ];
+    const isQualified = displayStatus === 'QUALIFIED' || displayStatus === 'QUALIFIED_WITH_IMPROVEMENT' || displayStatus === 'qualified' || displayStatus === 'conditional';
+
+    if (isLoadingResults) {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+            <p className="text-gray-600">جاري تحميل النتائج...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (resultsError) {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+          <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-red-200 p-8 text-center">
+            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold mb-2">تعذر تحميل النتائج</h2>
+            <p className="text-gray-600 mb-6">{resultsError}</p>
+            <button
+              onClick={() => {
+                if (organization?.id) {
+                  setCurrentView('results');
+                }
+              }}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              إعادة المحاولة
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (assessmentStatus && assessmentStatus.status !== 'COMPLETED') {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+          <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+            <Info className="w-12 h-12 text-blue-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">
+              {assessmentStatus.status === 'IN_PROGRESS' ? 'التقييم قيد الإكمال' : 'لم يبدأ التقييم بعد'}
+            </h2>
+            <p className="text-gray-600 mb-6">
+              {assessmentStatus.status === 'IN_PROGRESS'
+                ? ' أكمل إجاباتك لعرض النتائج التفصيلية.'
+                : ' ابدأ التقييم لتحصل على تحليل شامل لمؤسستك.'}
+            </p>
+            <button
+              onClick={() => setCurrentView('assessment')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              {assessmentStatus.status === 'IN_PROGRESS' ? 'متابعة التقييم' : 'بدء التقييم'}
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (!assessmentResult) {
+      return null;
+    }
 
     return (
       <div className="min-h-full bg-gray-50 p-6">
@@ -2022,13 +2070,13 @@ export function CharityOnboardingFlow() {
               <div className="text-center">
                 <div className="w-32 h-32 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-2">
                   <div>
-                    <div className="text-5xl font-bold">{overallScore}</div>
+                    <div className="text-5xl font-bold">{displayScore}</div>
                     <div className="text-sm">من ١٠٠</div>
                   </div>
                 </div>
-                <div className="inline-flex items-center gap-2 bg-yellow-400 text-yellow-900 px-3 py-1 rounded-full font-medium">
+                <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-medium ${displayStatus === 'QUALIFIED' || displayStatus === 'qualified' ? 'bg-green-400 text-green-900' : displayStatus === 'NOT_QUALIFIED' || displayStatus === 'not-qualified' ? 'bg-red-400 text-red-900' : 'bg-yellow-400 text-yellow-900'}`}>
                   <Award className="w-4 h-4" />
-                  <span>جيد جداً</span>
+                  <span>{displayMessage}</span>
                 </div>
               </div>
             </div>
@@ -2038,21 +2086,29 @@ export function CharityOnboardingFlow() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-4">
-                <div className="w-16 h-16 bg-yellow-50 rounded-full flex items-center justify-center">
-                  <AlertTriangle className="w-8 h-8 text-yellow-600" />
+                <div className={`w-16 h-16 rounded-full flex items-center justify-center ${displayStatus === 'QUALIFIED' || displayStatus === 'qualified' ? 'bg-green-50' : displayStatus === 'NOT_QUALIFIED' || displayStatus === 'not-qualified' ? 'bg-red-50' : 'bg-yellow-50'}`}>
+                  {displayStatus === 'QUALIFIED' || displayStatus === 'qualified' ? (
+                    <CheckCircle2 className="w-8 h-8 text-green-600" />
+                  ) : displayStatus === 'NOT_QUALIFIED' || displayStatus === 'not-qualified' ? (
+                    <AlertCircle className="w-8 h-8 text-red-600" />
+                  ) : (
+                    <AlertTriangle className="w-8 h-8 text-yellow-600" />
+                  )}
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold mb-1">مؤهل مع خطة تحسين</h2>
-                  <p className="text-gray-600">تم قبولك في برنامج الحاضنة مع توصيات للتطوير</p>
+                  <h2 className="text-2xl font-bold mb-1">{displayMessage}</h2>
+                  <p className="text-gray-600">{assessmentResult?.qualificationMessage}</p>
                 </div>
               </div>
-              <button
-                onClick={() => setCurrentView('roadmap')}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
-              >
-                عرض خطة التطوير
-                <ArrowRight className="w-5 h-5" />
-              </button>
+              {isQualified && (
+                <button
+                  onClick={() => setCurrentView('roadmap')}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                >
+                  عرض خطة التطوير
+                  <ArrowRight className="w-5 h-5" />
+                </button>
+              )}
             </div>
           </div>
 
@@ -2061,32 +2117,40 @@ export function CharityOnboardingFlow() {
             {/* Radar Chart */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">التحليل الشامل</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <RadarChart data={radarData}>
-                  <PolarGrid stroke="#e5e7eb" />
-                  <PolarAngleAxis dataKey="category" tick={{ fill: '#6b7280', fontSize: 12 }} />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: '#6b7280' }} />
-                  <Radar name="النتيجة" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.5} />
-                </RadarChart>
-              </ResponsiveContainer>
+              {radarData.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <RadarChart data={radarData}>
+                    <PolarGrid stroke="#e5e7eb" />
+                    <PolarAngleAxis dataKey="category" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                    <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: '#6b7280' }} />
+                    <Radar name="النتيجة" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.5} />
+                  </RadarChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-gray-500 text-center py-12">لا توجد بيانات للرسم البياني</p>
+              )}
             </div>
 
             {/* Bar Chart */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">النتائج حسب المحور</h3>
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={categoryScores} layout="horizontal">
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis type="number" domain={[0, 100]} tick={{ fill: '#6b7280' }} />
-                  <YAxis type="category" dataKey="name" width={120} tick={{ fill: '#6b7280', fontSize: 11 }} />
-                  <Tooltip />
-                  <Bar dataKey="score" radius={[0, 8, 8, 0]}>
-                    {categoryScores.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Bar>
-                </BarChart>
-              </ResponsiveContainer>
+              {categoryScores.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={categoryScores} layout="horizontal">
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis type="number" domain={[0, 100]} tick={{ fill: '#6b7280' }} />
+                    <YAxis type="category" dataKey="categoryName" width={120} tick={{ fill: '#6b7280', fontSize: 11 }} />
+                    <Tooltip />
+                    <Bar dataKey="score" radius={[0, 8, 8, 0]}>
+                      {categoryScores.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <p className="text-gray-500 text-center py-12">لا توجد بيانات للرسم البياني</p>
+              )}
             </div>
           </div>
 
@@ -2097,28 +2161,28 @@ export function CharityOnboardingFlow() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">مؤسستك</span>
-                  <span className="text-sm font-bold text-blue-600">{overallScore}٪</span>
+                  <span className="text-sm font-bold text-blue-600">{benchmarks.yourScore}٪</span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600" style={{ width: `${overallScore}%` }}></div>
+                  <div className="h-full bg-blue-600" style={{ width: `${benchmarks.yourScore}%` }}></div>
                 </div>
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">متوسط القطاع</span>
-                  <span className="text-sm font-bold text-gray-600">٦٥٪</span>
+                  <span className="text-sm font-bold text-gray-600">{benchmarks.sectorAverage}٪</span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gray-400" style={{ width: '65%' }}></div>
+                  <div className="h-full bg-gray-400" style={{ width: `${benchmarks.sectorAverage}%` }}></div>
                 </div>
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">المؤسسات الرائدة</span>
-                  <span className="text-sm font-bold text-green-600">٩٢٪</span>
+                  <span className="text-sm font-bold text-green-600">{benchmarks.topPerformer}٪</span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-green-500" style={{ width: '92%' }}></div>
+                  <div className="h-full bg-green-500" style={{ width: `${benchmarks.topPerformer}%` }}></div>
                 </div>
               </div>
             </div>

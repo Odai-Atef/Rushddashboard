@@ -1,4 +1,3 @@
-:import EnvTs from "./env.ts"
 /**
  * Base API Types
  * 

@@ -197,6 +197,61 @@ export interface AssessmentState {
   overallProgress: number;
 }
 
+/** Answer returned after saving assessment answers */
+export interface SavedAnswer {
+  questionId: string;
+  answerNumeric: number | null;
+  answerValue: string | null;
+  selectedOptions: string[] | null;
+}
+
+/** Assessment result returned by the results endpoint */
+export interface AssessmentResult {
+  organizationId: string;
+  overallScore: number;
+  qualificationStatus: 'QUALIFIED' | 'QUALIFIED_WITH_IMPROVEMENT' | 'NOT_QUALIFIED';
+  qualificationMessage: string;
+  categoryScores: {
+    categoryId: string;
+    categoryName: string;
+    score: number;
+    maxScore: number;
+    color: string;
+  }[];
+  radarData: {
+    category: string;
+    score: number;
+    fullMark: number;
+  }[];
+  strengths: {
+    area: string;
+    score: number;
+    insight: string;
+    icon: string;
+  }[];
+  weaknesses: {
+    area: string;
+    score: number;
+    insight: string;
+    severity: 'high' | 'medium' | 'low';
+  }[];
+  benchmarks: {
+    yourScore: number;
+    sectorAverage: number;
+    topPerformer: number;
+  };
+  assessedAt: string;
+}
+
+export type AssessmentStatusValue = 'COMPLETED' | 'IN_PROGRESS' | 'NOT_STARTED';
+
+/** Lightweight assessment status */
+export interface AssessmentStatus {
+  status: AssessmentStatusValue;
+  overallScore: number | null;
+  completedAt: string | null;
+}
+
 /** Document type enum used by the backend document upload API */
 export type DocumentType = 'registration' | 'financial' | 'other';
 
@@ -436,6 +491,22 @@ export class OnboardingService {
         statusCode: response.status,
       };
     }
+  }
+
+  /**
+   * Get assessment results for an organization
+   * GET /api/v1/onboarding/assessments/:organizationId/results
+   */
+  async getAssessmentResults(organizationId: string): Promise<ApiResponse<AssessmentResult>> {
+    return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/results`);
+  }
+
+  /**
+   * Get assessment status for an organization
+   * GET /api/v1/onboarding/assessments/:organizationId/status
+   */
+  async getAssessmentStatus(organizationId: string): Promise<ApiResponse<AssessmentStatus>> {
+    return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/status`);
   }
 
   /**
