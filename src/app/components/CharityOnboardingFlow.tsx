@@ -46,6 +46,7 @@ import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration
 import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
 import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT } from '@/api/services/onboarding-service';
+import { resolveIcon as resolveApiIcon } from '@/app/utils/icon-map';
 
 type ViewType = 'landing' | 'registration' | 'profile' | 'assessment' | 'documents' | 'processing' | 'results' | 'analysis' | 'roadmap' | 'decision';
 
@@ -409,20 +410,7 @@ export function CharityOnboardingFlow() {
     setRegistrationData((prev) => ({ ...prev, [field]: value }));
   };
 
-  // Icon name → Lucide component mapping (dynamic categories use string icon names)
-  const iconMap: Record<string, React.ElementType> = {
-    shield: Shield,
-    dollarSign: DollarSign,
-    users: Users,
-    heart: Heart,
-    briefcase: Briefcase,
-    zap: Zap,
-    target: Target,
-    barChart3: BarChart3,
-    trendingUp: TrendingUp,
-    building: Building,
-  };
-  const resolveIcon = (name?: string) => (name && iconMap[name]) ? iconMap[name] : Circle;
+
 
   // Dynamic assessment categories (fetched from API)
   const [assessmentCategories, setAssessmentCategories] = useState<AssessmentCategory[]>([]);
@@ -1101,7 +1089,7 @@ export function CharityOnboardingFlow() {
     }
 
     const currentCategory = assessmentCategories[currentAssessmentStep];
-    const CategoryIcon = resolveIcon(currentCategory.icon);
+    const CategoryIcon = resolveApiIcon(currentCategory.icon);
     const currentProgress = assessmentProgress[currentCategory.id] ?? { answered: 0, total: currentCategory.questions.length, isComplete: false };
 
     return (
@@ -1122,7 +1110,7 @@ export function CharityOnboardingFlow() {
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
               {assessmentCategories.map((cat, idx) => {
-                const Icon = resolveIcon(cat.icon);
+                const Icon = resolveApiIcon(cat.icon);
                 const catProgress = assessmentProgress[cat.id] ?? { answered: 0, total: cat.questions.length, isComplete: false };
                 return (
                   <button
@@ -1137,7 +1125,9 @@ export function CharityOnboardingFlow() {
                     }`}
                   >
                     <div className="flex items-center gap-2">
-                      <Icon className={`w-4 h-4 ${idx === currentAssessmentStep ? 'text-blue-600' : catProgress.isComplete ? 'text-green-600' : 'text-gray-400'}`} />
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${idx === currentAssessmentStep ? 'bg-blue-100' : catProgress.isComplete ? 'bg-green-100' : 'bg-gray-100'}`}>
+                        <Icon className={`w-4 h-4 ${idx === currentAssessmentStep ? 'text-blue-600' : catProgress.isComplete ? 'text-green-600' : 'text-gray-500'}`} />
+                      </div>
                       <span className={`text-sm font-medium ${idx === currentAssessmentStep ? 'text-blue-900' : catProgress.isComplete ? 'text-green-900' : 'text-gray-500'}`}>
                         {cat.name}
                       </span>
