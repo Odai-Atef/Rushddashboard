@@ -3,7 +3,7 @@ import { BarChart3, Brain, Briefcase, Building, Building2, Calendar, Check, Chec
 import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration';
 import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
-import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT, AssessmentStatus, AssessmentStatusValue, IsivAssessmentResult, IsivDimension } from '@/api/services/onboarding-service';
+import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT, AssessmentStatus, AssessmentStatusValue, IsivAssessmentResult, IsivDimension, CategoryScore, Strength as StrengthItem, Weakness as WeaknessItem, Benchmarks } from '@/api/services/onboarding-service';
 import { resolveIcon as resolveApiIcon } from '@/app/utils/icon-map';
 import { getScoreColor } from '@/app/utils/score-color';
 
@@ -128,7 +128,7 @@ export function CharityOnboardingFlow() {
   const [documentsLoadError, setDocumentsLoadError] = useState<string | null>(null);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
   const [processingProgress, setProcessingProgress] = useState(0);
-  const [overallScore, setOverallScore] = useState(78);
+  const [overallScore, setOverallScore] = useState(0);
   const [qualificationStatus, setQualificationStatus] = useState<'qualified' | 'conditional' | 'not-qualified'>('conditional');
   const [assessmentResult, setAssessmentResult] = useState<IsivAssessmentResult | null>(null);
   const [assessmentStatus, setAssessmentStatus] = useState<AssessmentStatus | null>(null);
@@ -169,14 +169,16 @@ export function CharityOnboardingFlow() {
       setResultsError(null);
       try {
         const statusRes = await onboardingService.getAssessmentStatus(organization.id);
-        setAssessmentStatus(statusRes.data);
+        const statusData = (statusRes.data as any)?.data ?? statusRes.data;
+        setAssessmentStatus(statusData);
 
-        if (statusRes.data?.status === 'COMPLETED') {
+        if (statusData?.status === 'COMPLETED') {
           const resultsRes = await onboardingService.getIsivAssessmentResults(organization.id);
+          const resultData = (resultsRes.data as any)?.data ?? resultsRes.data;
           if (!cancelled) {
-            setAssessmentResult(resultsRes.data);
+            setAssessmentResult(resultData);
           }
-        } else {
+        } else if (!assessmentResult) {
           setAssessmentResult(null);
         }
       } catch (err: any) {
@@ -1677,10 +1679,18 @@ export function CharityOnboardingFlow() {
     startProgress();
 
     try {
+      const startTime = Date.now();
       await onboardingService.submitAssessment(organization.id);
       const evalRes = await onboardingService.getIsivAssessmentResults(organization.id);
+      const resultData = (evalRes.data as any)?.data ?? evalRes.data;
+      const elapsed = Date.now() - startTime;
+      const remaining = Math.max(0, 3000 - elapsed);
+      if (remaining > 0) {
+        await new Promise((resolve) => setTimeout(resolve, remaining));
+      }
       stopProgress();
-      setAssessmentResult(evalRes.data);
+      setAssessmentResult(resultData);
+      setAssessmentStatus({ status: 'COMPLETED', overallScore: resultData?.overallScore ?? null, completedAt: resultData?.assessedAt ?? null });
       setCurrentView('results');
     } catch (err: any) {
       stopProgress();
@@ -2061,13 +2071,39 @@ export function CharityOnboardingFlow() {
   // SCREEN 7: Readiness Results Dashboard
   const ResultsView = () => {
     const isivResult = assessmentResult;
-    const displayScore = isivResult?.overallScore ?? overallScore;
+    const displayScore = isivResult?.overallScore ?? assessmentStatus?.overallScore ?? overallScore;
     const displayStatus = isivResult?.qualificationStatus ?? qualificationStatus;
     const statusOption = getQualificationStatusOption(isivResult?.qualificationStatus);
-    const displayMessage = statusOption.labelAr;
-    const radarData = isivResult?.dimensions.map((d) => ({ category: d.symbol, fullMark: 100, score: d.percentage })) ?? [];
-    const categoryScores = isivResult?.dimensions.map((d) => ({ categoryName: d.dimensionLabelAr, score: d.percentage, color: d.color })) ?? [];
-    const benchmarks = { yourScore: Math.round((displayScore / 120) * 100), sectorAverage: 65, topPerformer: 92 };
+    const displayMessage = isivResult?.qualificationMessage || statusOption.labelAr;
+    const dimensions = isivResult?.dimensions || [];
+    const radarData = isivResult?.radarData || dimensions.map((d) => ({
+      category: d.symbol || d.dimension.slice(0, 2),
+      score: d.percentage,
+      fullMark: 100,
+    }));
+    const categoryScores = isivResult?.categoryScores || (radarData.length > 0
+      ? radarData.map((d) => ({
+          categoryId: d.category,
+          categoryName: d.category,
+          score: d.score,
+          maxScore: d.fullMark,
+          color: d.score >= 80 ? '#10b981' : d.score >= 50 ? '#3b82f6' : '#f59e0b',
+        }))
+      : dimensions.map((d) => ({
+          categoryId: d.dimension,
+          categoryName: d.dimensionLabelAr || d.dimension,
+          score: d.percentage,
+          maxScore: 100,
+          color: d.color || (d.percentage >= 80 ? '#10b981' : d.percentage >= 50 ? '#3b82f6' : '#f59e0b'),
+        })));
+    const apiBenchmarks = isivResult?.benchmarks;
+    const benchmarks: Benchmarks = apiBenchmarks || {
+      yourScore: Math.round((displayScore / 120) * 100),
+      sectorAverage: 65,
+      topPerformer: 92,
+    };
+    const strengths = isivResult?.strengths || [];
+    const weaknesses = isivResult?.weaknesses || [];
 
     const isQualified = displayStatus.toUpperCase() === 'QUALIFIED' || displayStatus.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT' || displayStatus.toUpperCase() === 'WITH_IMPROVEMENT';
 
@@ -2122,7 +2158,7 @@ export function CharityOnboardingFlow() {
       );
     }
 
-    if (assessmentStatus && assessmentStatus.status !== 'COMPLETED') {
+    if (assessmentStatus && assessmentStatus.status !== 'COMPLETED' && !assessmentResult) {
       return (
         <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
           <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
@@ -2225,31 +2261,31 @@ export function CharityOnboardingFlow() {
             {/* Dimension Cards */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold mb-4">الأبعاد التفصيلية</h3>
-              {isivResult?.dimensions && isivResult.dimensions.length > 0 ? (
+                  {categoryScores.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {isivResult.dimensions.map((dim) => (
+                  {categoryScores.map((cs) => (
                     <div
-                      key={dim.dimension}
+                      key={cs.categoryId}
                       className="rounded-lg border border-gray-200 p-4"
-                      style={{ borderRightWidth: 4, borderRightColor: dim.color }}
+                      style={{ borderRightWidth: 4, borderRightColor: cs.color }}
                     >
                       <div className="flex items-center justify-between mb-2">
                         <span className="text-sm font-medium text-gray-700">
-                          {dim.symbol} — {dim.dimensionLabelAr}
+                          {cs.categoryName}
                         </span>
                         <span
                           className="px-2 py-1 rounded-full text-xs font-medium"
-                          style={{ backgroundColor: `${dim.color}20`, color: dim.color }}
+                          style={{ backgroundColor: `${cs.color}20`, color: cs.color }}
                         >
-                          {dim.tierLabelAr}
+                          {cs.score} / {cs.maxScore}
                         </span>
                       </div>
                       <div className="flex items-end justify-between">
-                        <div className="text-2xl font-bold" style={{ color: dim.color }}>
-                          {dim.score}
+                        <div className="text-2xl font-bold" style={{ color: cs.color }}>
+                          {cs.score}
                         </div>
                         <div className="text-sm text-gray-600">
-                          {dim.percentage}%
+                          {cs.score}%
                         </div>
                       </div>
                     </div>
@@ -2273,14 +2309,22 @@ export function CharityOnboardingFlow() {
                 <CheckCircle2 className="w-5 h-5" />
                 نقاط القوة
               </h3>
-              {isivResult?.strengths && isivResult.strengths.length > 0 ? (
+              {strengths.length > 0 ? (
                 <ul className="space-y-2">
-                  {isivResult.strengths.map((strength, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-gray-700">
-                      <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
-                      <span>{strength}</span>
-                    </li>
-                  ))}
+                  {strengths.map((strength, idx) => {
+                    const isObject = typeof strength === 'object';
+                    const label = isObject ? (strength as StrengthItem).area : (strength as string);
+                    const insight = isObject ? (strength as StrengthItem).insight : null;
+                    return (
+                      <li key={idx} className="flex flex-col gap-1 text-gray-700">
+                        <div className="flex items-start gap-2">
+                          <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                          <span className="font-medium">{label}</span>
+                        </div>
+                        {insight && <p className="text-sm text-gray-600 pr-6">{insight}</p>}
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : (
                 <p className="text-gray-500">لا توجد نقاط قوة مسجلة.</p>
@@ -2292,14 +2336,28 @@ export function CharityOnboardingFlow() {
                 <AlertCircle className="w-5 h-5" />
                 مجالات التحسين
               </h3>
-              {isivResult?.weaknesses && isivResult.weaknesses.length > 0 ? (
+              {weaknesses.length > 0 ? (
                 <ul className="space-y-2">
-                  {isivResult.weaknesses.map((weakness, idx) => (
-                    <li key={idx} className="flex items-start gap-2 text-gray-700">
-                      <X className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
-                      <span>{weakness}</span>
-                    </li>
-                  ))}
+                  {weaknesses.map((weakness, idx) => {
+                    const isObject = typeof weakness === 'object';
+                    const label = isObject ? (weakness as WeaknessItem).area : (weakness as string);
+                    const insight = isObject ? (weakness as WeaknessItem).insight : null;
+                    const severity = isObject ? (weakness as WeaknessItem).severity : null;
+                    return (
+                      <li key={idx} className="flex flex-col gap-1 text-gray-700">
+                        <div className="flex items-start gap-2">
+                          <X className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                          <span className="font-medium">{label}</span>
+                          {severity && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">
+                              {severity}
+                            </span>
+                          )}
+                        </div>
+                        {insight && <p className="text-sm text-gray-600 pr-6">{insight}</p>}
+                      </li>
+                    );
+                  })}
                 </ul>
               ) : (
                 <p className="text-gray-500">لا توجد مجالات تحسين مسجلة.</p>
@@ -2360,13 +2418,30 @@ export function CharityOnboardingFlow() {
 
   // SCREEN 8: Strengths & Weaknesses Analysis
   const AnalysisView = () => {
-    const strengths = [
+    const isivResult = assessmentResult;
+    const apiStrengths = (isivResult?.strengths || []).filter((s): s is StrengthItem => typeof s === 'object' && s !== null);
+    const apiWeaknesses = (isivResult?.weaknesses || []).filter((w): w is WeaknessItem => typeof w === 'object' && w !== null);
+
+    const strengths = apiStrengths.length > 0 ? apiStrengths.map((s) => ({
+      area: s.area,
+      score: s.score,
+      insight: s.insight,
+      icon: resolveApiIcon(s.icon),
+      color: s.score >= 80 ? 'green' : s.score >= 50 ? 'blue' : 'yellow',
+    })) : [
       { area: 'الحوكمة والامتثال', score: 85, insight: 'لديكم هيكل حوكمة قوي مع سياسات واضحة ومجلس إدارة نشط', icon: Shield, color: 'green' },
       { area: 'التخطيط الاستراتيجي', score: 80, insight: 'خطة استراتيجية واضحة مع مؤشرات أداء محددة ومراجعة دورية', icon: Target, color: 'green' },
       { area: 'إدارة المتطوعين', score: 78, insight: 'برامج فعالة لاستقطاب وتدريب المتطوعين مع نظام متابعة جيد', icon: Heart, color: 'green' }
     ];
 
-    const weaknesses = [
+    const weaknesses = apiWeaknesses.length > 0 ? apiWeaknesses.map((w) => ({
+      area: w.area,
+      score: w.score,
+      insight: w.insight,
+      severity: w.severity || 'medium',
+      icon: resolveApiIcon(w.severity === 'high' ? 'AlertTriangle' : 'Zap'),
+      color: w.severity === 'high' ? 'red' : 'yellow',
+    })) : [
       { area: 'الجاهزية التقنية', score: 65, insight: 'هناك حاجة لتحسين البنية التحتية التقنية وأنظمة إدارة البيانات', severity: 'high', icon: Zap, color: 'red' },
       { area: 'الموارد البشرية', score: 68, insight: 'نقص في برامج التطوير المهني وأنظمة تقييم الأداء', severity: 'medium', icon: Users, color: 'yellow' },
       { area: 'قياس الأثر', score: 70, insight: 'أدوات قياس الأثر موجودة لكن تحتاج إلى تطوير وأتمتة', severity: 'medium', icon: BarChart3, color: 'yellow' }
@@ -2742,33 +2817,46 @@ export function CharityOnboardingFlow() {
   };
 
   // SCREEN 10: Final Decision Screen
-  const DecisionView = () => (
-    <div className="min-h-full bg-gradient-to-br from-green-50 to-emerald-50 p-6 flex items-center justify-center">
-      <div className="max-w-3xl w-full">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-12">
-          {/* Success Icon */}
-          <div className="w-24 h-24 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
-            <CheckCircle2 className="w-12 h-12 text-white" />
-          </div>
+  const DecisionView = () => {
+    const isivResult = assessmentResult;
+    const displayScore = isivResult?.overallScore ?? assessmentStatus?.overallScore ?? overallScore;
+    const displayMessage = isivResult?.qualificationMessage || 'مؤهل مع خطة تحسين';
+    const statusOption = getQualificationStatusOption(isivResult?.qualificationStatus);
+    const isAccepted = isivResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED'
+      || isivResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT'
+      || isivResult?.qualificationStatus?.toUpperCase() === 'WITH_IMPROVEMENT';
 
-          {/* Main Message */}
-          <div className="text-center mb-8">
-            <h1 className="text-4xl font-bold mb-3">مبارك! تم قبولك في حاضنة رشد</h1>
-            <p className="text-xl text-gray-600">
-              نهنئك على اجتياز التقييم. أنت الآن جزء من مجتمع رشد للمؤسسات الخيرية الرائدة
-            </p>
-          </div>
-
-          {/* Status Badge */}
-          <div className="bg-green-50 border-2 border-green-200 rounded-xl p-6 mb-8">
-            <div className="flex items-center justify-center gap-3 mb-4">
-              <Award className="w-8 h-8 text-green-600" />
-              <div className="text-2xl font-bold text-green-900">مؤهل مع خطة تحسين</div>
+    return (
+      <div className="min-h-full bg-gradient-to-br from-green-50 to-emerald-50 p-6 flex items-center justify-center">
+        <div className="max-w-3xl w-full">
+          <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-12">
+            {/* Success Icon */}
+            <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${isAccepted ? 'bg-gradient-to-br from-green-500 to-emerald-600' : 'bg-gradient-to-br from-yellow-500 to-orange-600'}`}>
+              <CheckCircle2 className="w-12 h-12 text-white" />
             </div>
-            <p className="text-center text-green-800">
-              نتيجتك: <span className="font-bold text-2xl">{overallScore}/100</span> - تصنيف جيد جداً
-            </p>
-          </div>
+
+            {/* Main Message */}
+            <div className="text-center mb-8">
+              <h1 className="text-4xl font-bold mb-3">
+                {isAccepted ? 'مبارك! تم قبولك في حاضنة رشد' : 'تم إكمال التقييم'}
+              </h1>
+              <p className="text-xl text-gray-600">
+                {isAccepted
+                  ? 'نهنئك على اجتياز التقييم. أنت الآن جزء من مجتمع رشد للمؤسسات الخيرية الرائدة'
+                  : 'شكراً لاكتمال التقييم. فريق الحاضنة سيقوم بمراجعة نتيجتك والتواصل معك'}
+              </p>
+            </div>
+
+            {/* Status Badge */}
+            <div className={`border-2 rounded-xl p-6 mb-8 ${statusOption.bgClass.replace('bg-', 'bg-').replace('-400', '-50')} ${statusOption.textClass.replace('900', '700').replace('600', '700')}`}>
+              <div className="flex items-center justify-center gap-3 mb-4">
+                <Award className="w-8 h-8" />
+                <div className="text-2xl font-bold">{displayMessage}</div>
+              </div>
+              <p className="text-center">
+                نتيجتك: <span className="font-bold text-2xl">{displayScore}/120</span>
+              </p>
+            </div>
 
           {/* Next Steps */}
           <div className="mb-8">
@@ -2822,10 +2910,6 @@ export function CharityOnboardingFlow() {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4">
-            <button className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all font-medium flex items-center justify-center gap-2 shadow-lg">
-              <PlayCircle className="w-5 h-5" />
-              إنشاء حساب المؤسسة
-            </button>
             <button className="flex-1 px-6 py-4 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2">
               <Download className="w-5 h-5" />
               تحميل التقرير الكامل
@@ -2840,6 +2924,7 @@ export function CharityOnboardingFlow() {
       </div>
     </div>
   );
+  };
 
   // Main render
   if (isLoading && !organization) {

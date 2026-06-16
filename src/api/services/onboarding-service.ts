@@ -255,23 +255,63 @@ export interface AssessmentStatus {
 /** ISIV dimension returned by the evaluation results endpoint */
 export interface IsivDimension {
   dimension: string;
-  dimensionLabelAr: string;
-  symbol: string;
+  dimensionLabelAr?: string;
+  symbol?: string;
   score: number;
   percentage: number;
   tier: string;
   tierLabelAr: string;
+  color?: string;
+}
+
+export interface CategoryScore {
+  categoryId: string;
+  categoryName: string;
+  score: number;
+  maxScore: number;
   color: string;
+}
+
+export interface RadarDatum {
+  category: string;
+  score: number;
+  fullMark: number;
+}
+
+export interface Strength {
+  area: string;
+  score: number;
+  insight: string;
+  icon: string;
+}
+
+export interface Weakness {
+  area: string;
+  score: number;
+  insight: string;
+  severity: string;
+}
+
+export interface Benchmarks {
+  yourScore: number;
+  sectorAverage: number;
+  topPerformer: number;
 }
 
 /** ISIV 4-layer assessment result returned by the evaluation results endpoint */
 export interface IsivAssessmentResult {
+  organizationId: string;
   overallScore: number;
   qualificationStatus: string;
-  dimensions: IsivDimension[];
-  diagnosis: string;
-  strengths: string[];
-  weaknesses: string[];
+  qualificationMessage?: string;
+  dimensions?: IsivDimension[];
+  categoryScores?: CategoryScore[];
+  radarData?: RadarDatum[];
+  diagnosis?: string;
+  strengths: string[] | Strength[];
+  weaknesses: string[] | Weakness[];
+  benchmarks?: Benchmarks;
+  assessedAt?: string;
 }
 
 /** Response from the assessment submission endpoint */
@@ -282,7 +322,7 @@ export interface AssessmentSubmissionResponse {
 }
 
 /** Document type enum used by the backend document upload API */
-export type DocumentType = 'registration' | 'financial' | 'other';
+export type DocumentType = 'license' | 'financial' | 'national_address' | 'other';
 
 /** Lifecycle status of an uploaded organization document */
 export type DocumentStatus = 'UPLOADED' | 'PENDING_REVIEW' | string;
@@ -308,9 +348,9 @@ export interface OrganizationDocument {
 
 /** Mapping from frontend slot IDs to backend document types */
 export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
-  license: 'registration',
+  license: 'license',
   bank: 'financial',
-  address: 'other',
+  address: 'national_address',
   profile: 'other',
   projects: 'other',
   financial: 'financial',
@@ -322,10 +362,12 @@ export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
 export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
   REGISTRATION: 'license',
   LICENSE: 'license',
+  license: 'license',
   FINANCIAL: 'bank',
   BANK_CERTIFICATE: 'bank',
   BANK_STATEMENT: 'bank',
   NATIONAL_ADDRESS: 'address',
+  national_address: 'address',
   ADDRESS: 'address',
   ORG_PROFILE: 'profile',
   ORGANIZATION_PROFILE: 'profile',
