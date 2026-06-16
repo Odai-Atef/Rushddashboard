@@ -369,11 +369,19 @@ export class OnboardingService {
       throw error;
     }
 
-    const data = (await response.json()) as OrganizationDocument;
+    const payload = (await response.json()) as { success?: boolean; data?: OrganizationDocument; message?: string };
+    const data = payload?.data;
+    if (!data) {
+      throw {
+        code: 'INVALID_RESPONSE',
+        message: 'Upload response did not contain document data',
+        statusCode: response.status,
+      } as ApiError;
+    }
     return {
       success: true,
       data,
-      message: 'Upload successful',
+      message: payload?.message || 'Upload successful',
     };
   }
 

@@ -1402,7 +1402,8 @@ export function CharityOnboardingFlow() {
 
   const mapSlotToDocumentType = (slotId: DocumentSlotId): string => DOCUMENT_SLOT_MAPPING[slotId] || 'other';
 
-  const isCompletedStatus = (status?: string) => status === 'UPLOADED' || status === 'PENDING_REVIEW';
+  const isCompletedStatus = (status?: string) =>
+    !!status && (status.toUpperCase() === 'UPLOADED' || status.toUpperCase() === 'PENDING_REVIEW');
 
   const requiredSlots = documentSlots.filter((s) => s.required);
   const optionalSlots = documentSlots.filter((s) => !s.required);
