@@ -208,12 +208,16 @@ export interface OrganizationDocument {
   id: string;
   fileId?: string;
   fileUrl: string;
-  originalName: string;
+  originalName?: string;
+  fileName?: string;
   documentType: DocumentType | string;
   status: DocumentStatus;
   description?: string;
   mimeType?: string;
   size?: number;
+  fileSize?: number;
+  isRequired?: boolean;
+  uploadedAt?: string;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -228,6 +232,26 @@ export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
   financial: 'financial',
   annual: 'other',
   brand: 'other',
+};
+
+/** Mapping from backend document type enum values to frontend slot IDs */
+export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
+  REGISTRATION: 'license',
+  LICENSE: 'license',
+  FINANCIAL: 'bank',
+  BANK_CERTIFICATE: 'bank',
+  BANK_STATEMENT: 'bank',
+  NATIONAL_ADDRESS: 'address',
+  ADDRESS: 'address',
+  ORG_PROFILE: 'profile',
+  ORGANIZATION_PROFILE: 'profile',
+  PROFILE: 'profile',
+  PROJECTS: 'projects',
+  PREVIOUS_PROJECTS: 'projects',
+  ANNUAL_REPORT: 'annual',
+  ANNUAL: 'annual',
+  BRAND: 'brand',
+  BRAND_IDENTITY: 'brand',
 };
 
 /** All known frontend document slot IDs */

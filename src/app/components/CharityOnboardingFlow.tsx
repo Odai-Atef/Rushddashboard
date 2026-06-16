@@ -45,7 +45,7 @@ import {
 import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration';
 import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
-import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING } from '@/api/services/onboarding-service';
+import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT } from '@/api/services/onboarding-service';
 
 type ViewType = 'landing' | 'registration' | 'profile' | 'assessment' | 'documents' | 'processing' | 'results' | 'analysis' | 'roadmap' | 'decision';
 
@@ -1429,36 +1429,31 @@ export function CharityOnboardingFlow() {
       }
       const docs = (res.data || []) as OrganizationDocument[];
       const mappedFiles: UploadedFile[] = [];
-      const assignedSlots = new Set<string>();
 
-      // Build a lookup of which slots can accept each document type
-      const slotsByType = documentSlots.reduce((acc, slot) => {
-        const type = mapSlotToDocumentType(slot.id);
-        if (!acc[type]) acc[type] = [];
-        acc[type].push(slot.id);
-        return acc;
-      }, {} as Record<string, DocumentSlotId[]>);
-
+      // Group documents by slot ID; if multiple documents map to the same slot, keep the most recent
+      const docsBySlot = new Map<DocumentSlotId, OrganizationDocument[]>();
       for (const doc of docs) {
-        const candidates = slotsByType[doc.documentType] || [];
-        // Prefer a slot whose description matches the doc description, otherwise first free slot
-        const slotId =
-          candidates.find((id) => {
-            const slotLabel = documentSlots.find((s) => s.id === id)?.label;
-            return slotLabel && doc.description && slotLabel === doc.description && !assignedSlots.has(id);
-          }) ||
-          candidates.find((id) => !assignedSlots.has(id));
+        const slotId = BACKEND_DOCUMENT_TYPE_TO_SLOT[doc.documentType.toUpperCase()];
+        if (!slotId) continue;
+        if (!docsBySlot.has(slotId)) docsBySlot.set(slotId, []);
+        docsBySlot.get(slotId)!.push(doc);
+      }
 
-        if (!slotId) {
-          // No available slot for this document type
-          continue;
-        }
-        assignedSlots.add(slotId);
+      for (const [slotId, slotDocs] of docsBySlot.entries()) {
+        // Sort by uploadedAt/createdAt descending and take the most recent
+        const sorted = slotDocs.sort((a, b) => {
+          const aTime = a.uploadedAt || a.createdAt || '';
+          const bTime = b.uploadedAt || b.createdAt || '';
+          return bTime.localeCompare(aTime);
+        });
+        const doc = sorted[0];
+        if (!doc) continue;
+
         mappedFiles.push({
           id: slotId,
-          name: doc.originalName,
+          name: doc.fileName || doc.originalName || '',
           type: doc.mimeType || '',
-          size: doc.size || 0,
+          size: doc.fileSize || doc.size || 0,
           status: 'completed',
           progress: 100,
           documentType: doc.documentType,
