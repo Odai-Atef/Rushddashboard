@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Sparkles,
   Award,
@@ -45,7 +45,7 @@ import {
 import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration';
 import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
-import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer } from '@/api/services/onboarding-service';
+import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING } from '@/api/services/onboarding-service';
 
 type ViewType = 'landing' | 'registration' | 'profile' | 'assessment' | 'documents' | 'processing' | 'results' | 'analysis' | 'roadmap' | 'decision';
 
@@ -84,6 +84,10 @@ interface UploadedFile {
   size: number;
   status: 'uploading' | 'completed' | 'error';
   progress: number;
+  documentType?: string;
+  backendId?: string;
+  backendStatus?: string;
+  fileUrl?: string;
 }
 
 export function CharityOnboardingFlow() {
@@ -127,6 +131,8 @@ export function CharityOnboardingFlow() {
   const [currentAssessmentStep, setCurrentAssessmentStep] = useState(0);
   const [assessmentAnswers, setAssessmentAnswers] = useState<AssessmentAnswer[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+  const [documentsLoadError, setDocumentsLoadError] = useState<string | null>(null);
+  const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
   const [processingProgress, setProcessingProgress] = useState(0);
   const [overallScore, setOverallScore] = useState(78);
   const [qualificationStatus, setQualificationStatus] = useState<'qualified' | 'conditional' | 'not-qualified'>('conditional');
@@ -1382,21 +1388,249 @@ export function CharityOnboardingFlow() {
     );
   };
 
+  // ── Helpers: document slot mapping ──────────────────────────
+  const documentSlots: { id: DocumentSlotId; label: string; required: boolean }[] = [
+    { id: 'license', label: 'رخصة الجمعية الخيرية', required: true },
+    { id: 'bank', label: 'شهادة الحساب البنكي', required: true },
+    { id: 'address', label: 'العنوان الوطني', required: true },
+    { id: 'profile', label: 'الملف التعريفي للمؤسسة', required: true },
+    { id: 'projects', label: 'المشاريع السابقة', required: false },
+    { id: 'financial', label: 'التقارير المالية', required: false },
+    { id: 'annual', label: 'التقارير السنوية', required: false },
+    { id: 'brand', label: 'الهوية البصرية', required: false },
+  ];
+
+  const mapSlotToDocumentType = (slotId: DocumentSlotId): string => DOCUMENT_SLOT_MAPPING[slotId] || 'other';
+
+  const isCompletedStatus = (status?: string) => status === 'UPLOADED' || status === 'PENDING_REVIEW';
+
+  const requiredSlots = documentSlots.filter((s) => s.required);
+  const optionalSlots = documentSlots.filter((s) => !s.required);
+
+  const completedRequiredCount = requiredSlots.filter((slot) => {
+    const doc = uploadedFiles.find((f) => f.id === slot.id && isCompletedStatus(f.backendStatus));
+    return !!doc;
+  }).length;
+
+  const uploadedCount = uploadedFiles.filter((f) => f.backendStatus === 'UPLOADED').length;
+  const pendingReviewCount = uploadedFiles.filter((f) => f.backendStatus === 'PENDING_REVIEW').length;
+  const hasPendingUploads = uploadedFiles.some((f) => f.status === 'uploading');
+  const isDocumentsComplete = completedRequiredCount === requiredSlots.length && !hasPendingUploads;
+
+  // ── Handler: load existing documents ──────────────────────
+  const loadExistingDocuments = useCallback(async (orgId: string) => {
+    setIsLoadingDocuments(true);
+    setDocumentsLoadError(null);
+    try {
+      const res = await onboardingService.getOrganizationDocuments(orgId);
+      if (!res.success) {
+        throw new Error(res.message || 'Failed to load documents');
+      }
+      const docs = res.data || [];
+      const mappedFiles: UploadedFile[] = [];
+      const seenSlots = new Set<string>();
+
+      for (const doc of docs) {
+        const slotId = Object.keys(DOCUMENT_SLOT_MAPPING).find(
+          (key) => DOCUMENT_SLOT_MAPPING[key as DocumentSlotId] === doc.documentType && !seenSlots.has(key)
+        );
+        if (!slotId) {
+          // Unknown or duplicate type mapping — skip
+          continue;
+        }
+        seenSlots.add(slotId);
+        mappedFiles.push({
+          id: slotId,
+          name: doc.originalName,
+          type: '',
+          size: 0,
+          status: 'completed',
+          progress: 100,
+          documentType: doc.documentType,
+          backendId: doc.id,
+          backendStatus: doc.status,
+          fileUrl: doc.fileUrl,
+        });
+      }
+
+      setUploadedFiles(mappedFiles);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to load documents';
+      setDocumentsLoadError(message);
+      toast.error(message);
+    } finally {
+      setIsLoadingDocuments(false);
+    }
+  }, []);
+
+  // ── Effect: warn before closing tab while uploads are in progress ──
+  useEffect(() => {
+    const handler = (e: BeforeUnloadEvent) => {
+      if (hasPendingUploads) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+    window.addEventListener('beforeunload', handler);
+    return () => window.removeEventListener('beforeunload', handler);
+  }, [hasPendingUploads]);
+
+  // ── Effect: load existing documents when entering documents step ──
+  useEffect(() => {
+    if (currentView === 'documents' && organization?.id) {
+      loadExistingDocuments(organization.id);
+    }
+  }, [currentView, organization?.id]);
+
+  // ── Handler: upload a file to a slot ───────────────────────
+  const handleUpload = async (slotId: DocumentSlotId, file: File) => {
+    const docType = mapSlotToDocumentType(slotId);
+    const previousDoc = uploadedFiles.find((f) => f.id === slotId);
+
+    setUploadedFiles((prev) => {
+      const filtered = prev.filter((f) => f.id !== slotId);
+      return [
+        ...filtered,
+        {
+          id: slotId,
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          status: 'uploading',
+          progress: 0,
+          documentType: docType,
+        },
+      ];
+    });
+
+    // Simulate progress animation
+    const progressInterval = setInterval(() => {
+      setUploadedFiles((prev) =>
+        prev.map((f) =>
+          f.id === slotId && f.status === 'uploading' && f.progress < 90
+            ? { ...f, progress: Math.min(f.progress + 10, 90) }
+            : f
+        )
+      );
+    }, 250);
+
+    try {
+      const res = await onboardingService.uploadOrganizationDocument(file, docType, documentSlots.find((s) => s.id === slotId)?.label);
+      clearInterval(progressInterval);
+
+      if (!res.success) {
+        throw new Error(res.message || 'Upload failed');
+      }
+
+      const data = res.data;
+
+      // Delete the previous document in this slot if it exists
+      if (previousDoc?.backendId) {
+        try {
+          await onboardingService.deleteOrganizationDocument(previousDoc.backendId);
+        } catch (deleteErr) {
+          // Non-blocking: we still show the new document; log for debugging
+          console.warn('Failed to delete previous document', deleteErr);
+        }
+      }
+
+      setUploadedFiles((prev) =>
+        prev.map((f) =>
+          f.id === slotId
+            ? {
+                ...f,
+                status: 'completed',
+                progress: 100,
+                name: data.originalName,
+                documentType: data.documentType,
+                backendId: data.id,
+                backendStatus: data.status,
+                fileUrl: data.fileUrl,
+              }
+            : f
+        )
+      );
+
+      toast.success(`تم رفع ${documentSlots.find((s) => s.id === slotId)?.label} بنجاح`);
+    } catch (err) {
+      clearInterval(progressInterval);
+      const message = err instanceof Error ? err.message : 'Upload failed';
+      setUploadedFiles((prev) =>
+        prev.map((f) => (f.id === slotId ? { ...f, status: 'error', progress: 0 } : f))
+      );
+      toast.error(message);
+    }
+  };
+
+  // ── Handler: delete a document from a slot ─────────────────
+  const handleDelete = async (slotId: DocumentSlotId) => {
+    const doc = uploadedFiles.find((f) => f.id === slotId);
+    if (!doc?.backendId) {
+      setUploadedFiles((prev) => prev.filter((f) => f.id !== slotId));
+      return;
+    }
+
+    try {
+      await onboardingService.deleteOrganizationDocument(doc.backendId);
+      setUploadedFiles((prev) => prev.filter((f) => f.id !== slotId));
+      toast.success('تم حذف المستند بنجاح');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Delete failed';
+      toast.error(message);
+    }
+  };
+
+  // ── Handler: trigger file input for a slot ─────────────────
+  const handleSelectFile = (slotId: DocumentSlotId) => {
+    if (hasPendingUploads) return;
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.onchange = (e) => {
+      const target = e.target as HTMLInputElement;
+      if (target.files && target.files[0]) {
+        handleUpload(slotId, target.files[0]);
+      }
+    };
+    input.click();
+  };
+
+  // ── Handler: proceed from documents step ───────────────────
+  const handleDocumentsNext = () => {
+    if (!isDocumentsComplete || hasPendingUploads) return;
+    setCurrentView('processing');
+    setProcessingProgress(0);
+    const interval = setInterval(() => {
+      setProcessingProgress((prev) => {
+        const next = prev + 10;
+        if (next >= 100) {
+          clearInterval(interval);
+          setTimeout(() => setCurrentView('results'), 500);
+          return 100;
+        }
+        return next;
+      });
+    }, 300);
+  };
+
   // SCREEN 5: Document Upload Center
   const DocumentsView = () => {
-    const requiredDocs = [
-      { id: 'license', name: 'رخصة الجمعية الخيرية', required: true, uploaded: false },
-      { id: 'bank', name: 'شهادة الحساب البنكي', required: true, uploaded: false },
-      { id: 'address', name: 'العنوان الوطني', required: true, uploaded: false },
-      { id: 'profile', name: 'الملف التعريفي للمؤسسة', required: true, uploaded: false }
-    ];
-
-    const optionalDocs = [
-      { id: 'projects', name: 'المشاريع السابقة', required: false, uploaded: false },
-      { id: 'financial', name: 'التقارير المالية', required: false, uploaded: false },
-      { id: 'annual', name: 'التقارير السنوية', required: false, uploaded: false },
-      { id: 'brand', name: 'الهوية البصرية', required: false, uploaded: false }
-    ];
+    if (!organization?.id) {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-lg w-full text-center">
+            <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+            <h2 className="text-xl font-bold mb-2">تعذر تحميل المستندات</h2>
+            <p className="text-gray-600 mb-6">لم يتم العثور على معلومات المنظمة. يرجى العودة وإكمال التسجيل أولاً.</p>
+            <button
+              onClick={() => setCurrentView('registration')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              العودة إلى التسجيل
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="min-h-full bg-gray-50 p-6">
@@ -1415,7 +1649,7 @@ export function CharityOnboardingFlow() {
                   <FileText className="w-5 h-5 text-blue-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">0/4</p>
+                  <p className="text-2xl font-bold">{completedRequiredCount}/{requiredSlots.length}</p>
                   <p className="text-sm text-gray-600">مستندات مطلوبة</p>
                 </div>
               </div>
@@ -1426,7 +1660,7 @@ export function CharityOnboardingFlow() {
                   <CheckCircle2 className="w-5 h-5 text-green-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">{uploadedCount}</p>
                   <p className="text-sm text-gray-600">تم الرفع</p>
                 </div>
               </div>
@@ -1437,12 +1671,38 @@ export function CharityOnboardingFlow() {
                   <Clock className="w-5 h-5 text-yellow-600" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">0</p>
+                  <p className="text-2xl font-bold">{pendingReviewCount}</p>
                   <p className="text-sm text-gray-600">قيد المراجعة</p>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Load error */}
+          {documentsLoadError && (
+            <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <AlertCircle className="w-5 h-5 text-red-600" />
+                <span className="text-red-700">{documentsLoadError}</span>
+              </div>
+              <button
+                onClick={() => organization?.id && loadExistingDocuments(organization.id)}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
+              >
+                إعادة المحاولة
+              </button>
+            </div>
+          )}
+
+          {/* Required warning */}
+          {!isDocumentsComplete && !hasPendingUploads && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6 flex items-center gap-3">
+              <AlertTriangle className="w-5 h-5 text-yellow-600" />
+              <span className="text-yellow-700">
+                يرجى رفع جميع المستندات الإلزامية الأربعة قبل المتابعة.
+              </span>
+            </div>
+          )}
 
           {/* Required Documents */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
@@ -1451,21 +1711,85 @@ export function CharityOnboardingFlow() {
               المستندات الإلزامية
             </h2>
             <div className="space-y-3">
-              {requiredDocs.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50/50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <FileText className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <p className="font-medium">{doc.name}</p>
-                      <p className="text-sm text-red-600">مطلوب *</p>
+              {requiredSlots.map((doc) => {
+                const file = uploadedFiles.find((f) => f.id === doc.id);
+                const isUploading = file?.status === 'uploading';
+                const isCompleted = file?.status === 'completed';
+                const isError = file?.status === 'error';
+                return (
+                  <div
+                    key={doc.id}
+                    className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
+                      isCompleted
+                        ? 'border-2 border-green-200 bg-green-50/50'
+                        : isError
+                        ? 'border-2 border-red-300 bg-red-50/50'
+                        : 'border-2 border-dashed border-gray-300 hover:border-blue-500 hover:bg-blue-50/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      {isCompleted ? (
+                        <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      ) : (
+                        <FileText className={`w-5 h-5 flex-shrink-0 ${isError ? 'text-red-500' : 'text-gray-400'}`} />
+                      )}
+                      <div className="min-w-0">
+                        <p className="font-medium truncate">{doc.label}</p>
+                        {isCompleted && file?.name && (
+                          <p className="text-sm text-green-700 truncate max-w-xs" title={file.name}>
+                            {file.name}
+                          </p>
+                        )}
+                        {isUploading && (
+                          <div className="w-32 mt-1">
+                            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-blue-600 transition-all duration-300"
+                                style={{ width: `${file.progress}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        )}
+                        {isError && <p className="text-sm text-red-600">فشل الرفع. يرجى المحاولة مرة أخرى.</p>}
+                        {!isCompleted && !isUploading && !isError && <p className="text-sm text-red-600">مطلوب *</p>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {isCompleted && (
+                        <button
+                          onClick={() => handleDelete(doc.id)}
+                          className="px-3 py-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
+                          title="حذف"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleSelectFile(doc.id)}
+                        disabled={hasPendingUploads}
+                        className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isUploading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            جارٍ الرفع
+                          </>
+                        ) : isCompleted ? (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            استبدال
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            رفع
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-2">
-                    <Upload className="w-4 h-4" />
-                    رفع
-                  </button>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -1474,36 +1798,84 @@ export function CharityOnboardingFlow() {
             <h2 className="text-xl font-semibold mb-4">المستندات الاختيارية</h2>
             <p className="text-sm text-gray-600 mb-4">رفع هذه المستندات يساعد في تحسين دقة التقييم</p>
             <div className="space-y-3">
-              {optionalDocs.map((doc) => (
-                <div key={doc.id} className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <FileText className="w-5 h-5 text-gray-400" />
-                    <div>
-                      <p className="font-medium">{doc.name}</p>
-                      <p className="text-sm text-gray-500">اختياري</p>
+              {optionalSlots.map((doc) => {
+                const file = uploadedFiles.find((f) => f.id === doc.id);
+                const isUploading = file?.status === 'uploading';
+                const isCompleted = file?.status === 'completed';
+                const isError = file?.status === 'error';
+                return (
+                  <div
+                    key={doc.id}
+                    className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
+                      isCompleted
+                        ? 'border-2 border-green-200 bg-green-50/50'
+                        : isError
+                        ? 'border-2 border-red-300 bg-red-50/50'
+                        : 'border border-gray-200 hover:bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3 min-w-0">
+                      {isCompleted ? (
+                        <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
+                      ) : (
+                        <FileText className={`w-5 h-5 flex-shrink-0 ${isError ? 'text-red-500' : 'text-gray-400'}`} />
+                      )}
+                      <div className="min-w-0">
+                        <p className="font-medium truncate">{doc.label}</p>
+                        {isCompleted && file?.name && (
+                          <p className="text-sm text-green-700 truncate max-w-xs" title={file.name}>
+                            {file.name}
+                          </p>
+                        )}
+                        {isUploading && (
+                          <div className="w-32 mt-1">
+                            <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-blue-600 transition-all duration-300"
+                                style={{ width: `${file.progress}%` }}
+                              ></div>
+                            </div>
+                          </div>
+                        )}
+                        {isError && <p className="text-sm text-red-600">فشل الرفع. يرجى المحاولة مرة أخرى.</p>}
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {isCompleted && (
+                        <button
+                          onClick={() => handleDelete(doc.id)}
+                          className="px-3 py-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
+                          title="حذف"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      )}
+                      <button
+                        onClick={() => handleSelectFile(doc.id)}
+                        disabled={hasPendingUploads}
+                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isUploading ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            جارٍ الرفع
+                          </>
+                        ) : isCompleted ? (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            استبدال
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            رفع
+                          </>
+                        )}
+                      </button>
                     </div>
                   </div>
-                  <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium flex items-center gap-2">
-                    <Upload className="w-4 h-4" />
-                    رفع
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Upload Zone */}
-          <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-8 mb-6 border-2 border-dashed border-blue-300">
-            <div className="text-center">
-              <Upload className="w-12 h-12 text-blue-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold mb-2">اسحب وأفلت الملفات هنا</h3>
-              <p className="text-sm text-gray-600 mb-4">أو انقر لتصفح جهازك</p>
-              <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
-                اختر الملفات
-              </button>
-              <p className="text-xs text-gray-500 mt-4">
-                الصيغ المدعومة: PDF, JPG, PNG, DOCX (حد أقصى ١٠ ميجابايت)
-              </p>
+                );
+              })}
             </div>
           </div>
 
@@ -1511,26 +1883,16 @@ export function CharityOnboardingFlow() {
           <div className="flex items-center justify-between">
             <button
               onClick={() => setCurrentView('assessment')}
-              className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2"
+              disabled={hasPendingUploads}
+              className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <ChevronRight className="w-5 h-5" />
               رجوع
             </button>
             <button
-              onClick={() => {
-                setCurrentView('processing');
-                // Simulate processing
-                let progress = 0;
-                const interval = setInterval(() => {
-                  progress += 10;
-                  setProcessingProgress(progress);
-                  if (progress >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => setCurrentView('results'), 500);
-                  }
-                }, 300);
-              }}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+              onClick={handleDocumentsNext}
+              disabled={!isDocumentsComplete}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               إرسال التقييم
               <ChevronLeft className="w-5 h-5" />

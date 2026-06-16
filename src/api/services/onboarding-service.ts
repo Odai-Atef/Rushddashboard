@@ -10,7 +10,9 @@
  */
 
 import apiClient from '../client';
-import { ApiResponse } from '../types';
+import { ApiResponse, ApiError } from '../types';
+import { AUTH_CONFIG } from '../config';
+import { ENV } from '@/lib/env';
 
 export type OrganizationType = 'CHARITY' | 'FOUNDATION' | 'NGO' | 'COOP';
 export type OrganizationStatus = 'DRAFT' | 'SUBMITTED' | 'UNDER_REVIEW' | 'APPROVED' | 'REJECTED';
@@ -195,13 +197,39 @@ export interface AssessmentState {
   overallProgress: number;
 }
 
-/** Saved/loaded assessment answer shape used by the component */
-export interface SavedAnswer extends SaveAnswerPayload {
-  id?: string;
-  organizationId?: string;
+/** Document type enum used by the backend document upload API */
+export type DocumentType = 'registration' | 'financial' | 'other';
+
+/** Lifecycle status of an uploaded organization document */
+export type DocumentStatus = 'UPLOADED' | 'PENDING_REVIEW' | string;
+
+/** Document uploaded during charity onboarding */
+export interface OrganizationDocument {
+  id: string;
+  fileId?: string;
+  fileUrl: string;
+  originalName: string;
+  documentType: DocumentType | string;
+  status: DocumentStatus;
+  description?: string;
   createdAt?: string;
-  questionType?: 'SCALE' | 'YES_NO' | 'MULTIPLE_CHOICE' | 'FILE_UPLOAD' | string;
+  updatedAt?: string;
 }
+
+/** Mapping from frontend slot IDs to backend document types */
+export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
+  license: 'registration',
+  bank: 'financial',
+  address: 'other',
+  profile: 'other',
+  projects: 'other',
+  financial: 'financial',
+  annual: 'other',
+  brand: 'other',
+};
+
+/** All known frontend document slot IDs */
+export type DocumentSlotId = 'license' | 'bank' | 'address' | 'profile' | 'projects' | 'financial' | 'annual' | 'brand';
 
 /**
  * Onboarding Service class
@@ -296,6 +324,81 @@ export class OnboardingService {
     return apiClient.get('/api/v1/onboarding/assessment/state', {
       params: organizationId ? { organizationId } : undefined,
     });
+  }
+
+  /**
+   * Get all uploaded documents for the authenticated organization
+   * GET /api/v1/onboarding/documents?organizationId=...
+   */
+  async getOrganizationDocuments(organizationId: string): Promise<ApiResponse<OrganizationDocument[]>> {
+    return apiClient.get('/api/v1/onboarding/documents', {
+      params: { organizationId },
+    });
+  }
+
+  /**
+   * Upload a new organization document using multipart/form-data
+   * POST /api/v1/onboarding/documents/upload
+   */
+  async uploadOrganizationDocument(
+    file: File,
+    documentType: string,
+    description?: string
+  ): Promise<ApiResponse<OrganizationDocument>> {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('documentType', documentType);
+    if (description) {
+      formData.append('description', description);
+    }
+
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) : null;
+    const baseURL = ENV.API_BASE_URL.replace(/\/$/, '');
+
+    const response = await fetch(`${baseURL}/api/v1/onboarding/documents/upload`, {
+      method: 'POST',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await this.parseUploadError(response);
+      throw error;
+    }
+
+    const data = (await response.json()) as OrganizationDocument;
+    return {
+      success: true,
+      data,
+      message: 'Upload successful',
+    };
+  }
+
+  /**
+   * Delete an uploaded organization document
+   * DELETE /api/v1/onboarding/documents/{id}
+   */
+  async deleteOrganizationDocument(id: string): Promise<ApiResponse<void>> {
+    return apiClient.delete(`/api/v1/onboarding/documents/${id}`);
+  }
+
+  private async parseUploadError(response: Response): Promise<ApiError> {
+    try {
+      const data = await response.json();
+      return {
+        code: data.code || `HTTP_${response.status}`,
+        message: data.message || `Upload failed with status ${response.status}`,
+        details: data.details,
+        errors: data.errors,
+        statusCode: response.status,
+      };
+    } catch {
+      return {
+        code: 'HTTP_ERROR',
+        message: `Upload failed with status ${response.status}`,
+        statusCode: response.status,
+      };
+    }
   }
 
   /**

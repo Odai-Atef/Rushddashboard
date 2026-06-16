@@ -19,8 +19,8 @@
 
 **Purpose**: Prepare the service layer and shared constants needed by all user stories.
 
-- [ ] T001 Add `OrganizationDocument` interface and document type constants to `src/api/services/onboarding-service.ts`
-- [ ] T002 Add `AUTH_CONFIG` import path check and base URL accessor to `src/api/client.ts` if not already exposed
+- [x] T001 Add `OrganizationDocument` interface and document type constants to `src/api/services/onboarding-service.ts`
+- [x] T002 Add `AUTH_CONFIG` import path check and base URL accessor to `src/api/client.ts` if not already exposed
 
 ---
 
@@ -30,9 +30,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T003 Implement `getOrganizationDocuments(organizationId)` in `src/api/services/onboarding-service.ts`
-- [ ] T004 Implement `uploadOrganizationDocument(file, documentType, description)` using native `fetch` + `FormData` in `src/api/services/onboarding-service.ts`
-- [ ] T005 Implement `deleteOrganizationDocument(id)` in `src/api/services/onboarding-service.ts`
+- [x] T003 Implement `getOrganizationDocuments(organizationId)` in `src/api/services/onboarding-service.ts`
+- [x] T004 Implement `uploadOrganizationDocument(file, documentType, description)` using native `fetch` + `FormData` in `src/api/services/onboarding-service.ts`
+- [x] T005 Implement `deleteOrganizationDocument(id)` in `src/api/services/onboarding-service.ts`
 
 **Checkpoint**: Foundation ready — user story implementation can now begin in parallel.
 
@@ -46,13 +46,13 @@
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] Define static `documentSlots` array and `mapSlotToDocumentType(slotId)` helper inside `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T007 [US1] Add `uploadedFiles` and `documentsLoadError` component state and `hasPendingUploads` derived flag in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T008 [US1] Implement `handleUpload(slotId, file)` with simulated progress, status transitions, and toast feedback in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T009 [US1] Derive `completedRequiredCount` and `isDocumentsComplete` from uploaded files in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T010 [US1] Wire each required document slot to `handleUpload`, show progress/completed state, and disable upload button while uploading in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T011 [US1] Disable the Continue button until `isDocumentsComplete` is true and `hasPendingUploads` is false, and show required-documents warning in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T012 [US1] Add Arabic labels and visual completion indicators for the four required slots in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T006 [US1] Define static `documentSlots` array and `mapSlotToDocumentType(slotId)` helper inside `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T007 [US1] Add `uploadedFiles` and `documentsLoadError` component state and `hasPendingUploads` derived flag in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T008 [US1] Implement `handleUpload(slotId, file)` with simulated progress, status transitions, and toast feedback in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T009 [US1] Derive `completedRequiredCount` and `isDocumentsComplete` from uploaded files in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T010 [US1] Wire each required document slot to `handleUpload`, show progress/completed state, and disable upload button while uploading in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T011 [US1] Disable the Continue button until `isDocumentsComplete` is true and `hasPendingUploads` is false, and show required-documents warning in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T012 [US1] Add Arabic labels and visual completion indicators for the four required slots in `src/app/components/CharityOnboardingFlow.tsx`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 
@@ -66,11 +66,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [US2] Implement `loadExistingDocuments(organizationId)` in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T014 [US2] Add a `useEffect` that calls `loadExistingDocuments` when `currentView === 'documents'` and `organization?.id` is available in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T015 [US2] Map returned `OrganizationDocument[]` into `uploadedFiles` state with `completed` status and slot assignment in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T016 [US2] Handle load failure with an inline error state and retry button in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T017 [US2] Update progress counters (`0/4`, uploaded count, pending review count) from loaded documents in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T013 [US2] Implement `loadExistingDocuments(organizationId)` in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T014 [US2] Add a `useEffect` that calls `loadExistingDocuments` when `currentView === 'documents'` and `organization?.id` is available in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T015 [US2] Map returned `OrganizationDocument[]` into `uploadedFiles` state with `completed` status and slot assignment in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T016 [US2] Handle load failure with an inline error state and retry button in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T017 [US2] Update progress counters (`0/4`, uploaded count, pending review count) from loaded documents in `src/app/components/CharityOnboardingFlow.tsx`
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently.
 
@@ -84,10 +84,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T018 [US3] Implement `handleDelete(slotId)` that calls `deleteOrganizationDocument` and updates `uploadedFiles` state in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T019 [US3] Add a delete control to each completed slot in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T020 [US3] Show error toast and keep the document in the slot when delete fails in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T021 [US3] Ensure deleting a required document decrements `completedRequiredCount` and re-enables the required-documents warning in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T018 [US3] Implement `handleDelete(slotId)` that calls `deleteOrganizationDocument` and updates `uploadedFiles` state in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T019 [US3] Add a delete control to each completed slot in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T020 [US3] Show error toast and keep the document in the slot when delete fails in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T021 [US3] Ensure deleting a required document decrements `completedRequiredCount` and re-enables the required-documents warning in `src/app/components/CharityOnboardingFlow.tsx`
 
 **Checkpoint**: All user stories should now be independently functional.
 
@@ -97,12 +97,12 @@
 
 **Purpose**: Improve UX consistency, handle edge cases, and verify the implementation against the quickstart scenarios.
 
-- [ ] T022 [P] Add a `beforeunload` handler to warn users who attempt to leave the browser tab while uploads are in progress in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T023 [P] Implement missing/invalid `organizationId` redirect to the registration/landing step in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T024 [P] Ensure slot replacement deletes the previous backend document after a successful new upload in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T025 [P] Handle unknown backend document types gracefully (ignore or log) when loading existing documents in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T026 Run TypeScript compilation: `npm run build`
-- [ ] T027 Run the quickstart.md manual validation steps in the browser
+- [x] T022 [P] Add a `beforeunload` handler to warn users who attempt to leave the browser tab while uploads are in progress in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T023 [P] Implement missing/invalid `organizationId` redirect to the registration/landing step in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T024 [P] Ensure slot replacement deletes the previous backend document after a successful new upload in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T025 [P] Handle unknown backend document types gracefully (ignore or log) when loading existing documents in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T026 Run TypeScript compilation: `npm run build`
+- [x] T027 Run the quickstart.md manual validation steps in the browser
 
 ---
 
