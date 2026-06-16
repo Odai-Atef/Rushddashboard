@@ -31,13 +31,45 @@ interface ProfileData {
   activeProjects: string;
 }
 
-interface AssessmentAnswer {
-  categoryId: string;
-  questionId: string;
-  answer: number | string | string[] | File | null;
+interface QualificationStatusOption {
+  value: string;
+  labelAr: string;
+  bgClass: string;
+  textClass: string;
+  icon: typeof CheckCircle2;
 }
 
-interface UploadedFile {
+function getQualificationStatusOption(status?: string | null): QualificationStatusOption {
+  const normalized = status?.toUpperCase() ?? '';
+  switch (normalized) {
+    case 'QUALIFIED':
+    case 'QUALIFIED_WITH_IMPROVEMENT':
+    case 'WITH_IMPROVEMENT':
+      return {
+        value: normalized,
+        labelAr: normalized === 'QUALIFIED' ? 'مؤهل' : 'مؤهل مع خطة تحسين',
+        bgClass: 'bg-green-400',
+        textClass: 'text-green-900',
+        icon: CheckCircle2,
+      };
+    case 'NOT_QUALIFIED':
+      return {
+        value: normalized,
+        labelAr: 'غير مؤهل',
+        bgClass: 'bg-red-400',
+        textClass: 'text-red-900',
+        icon: AlertCircle,
+      };
+    default:
+      return {
+        value: normalized,
+        labelAr: status ?? 'مؤهل مع خطة تحسين',
+        bgClass: 'bg-yellow-400',
+        textClass: 'text-yellow-900',
+        icon: AlertTriangle,
+      };
+  }
+}
   id: string;
   name: string;
   type: string;
