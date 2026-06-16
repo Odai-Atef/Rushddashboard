@@ -19,8 +19,8 @@
 
 **Purpose**: Prepare the service layer for the new assessment result contract without changing unrelated application code.
 
-- [ ] T001 [P] Add `IsivDimension` and `IsivAssessmentResult` interfaces to `src/api/services/onboarding-service.ts`
-- [ ] T002 Add `submitAssessment(organizationId: string)` method to `src/api/services/onboarding-service.ts`
+- [x] T001 [P] Add `IsivDimension` and `IsivAssessmentResult` interfaces to `src/api/services/onboarding-service.ts`
+- [x] T002 Add `submitAssessment(organizationId: string)` method to `src/api/services/onboarding-service.ts`
 
 ---
 
@@ -30,9 +30,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T003 Update `AssessmentResult` imports and usages in `src/app/components/CharityOnboardingFlow.tsx` to reference the new `IsivAssessmentResult` type where appropriate
-- [ ] T004 [P] Verify `recharts` imports in `src/app/components/CharityOnboardingFlow.tsx` support a 4-dimension static radar chart
-- [ ] T005 Add a small Arabic qualification-status mapping helper in `src/app/components/CharityOnboardingFlow.tsx` (renders Arabic labels supplied by backend; no hard-coded enums)
+- [x] T003 Update `AssessmentResult` imports and usages in `src/app/components/CharityOnboardingFlow.tsx` to reference the new `IsivAssessmentResult` type where appropriate
+- [x] T004 [P] Verify `recharts` imports in `src/app/components/CharityOnboardingFlow.tsx` support a 4-dimension static radar chart
+- [x] T005 Add a small Arabic qualification-status mapping helper in `src/app/components/CharityOnboardingFlow.tsx` (renders Arabic labels supplied by backend; no hard-coded enums)
 
 **Checkpoint**: Foundation ready — service methods exist, types are available, and the component can import the new result shape.
 
@@ -46,11 +46,11 @@
 
 ### Implementation for User Story 1
 
-- [ ] T006 [US1] Replace the simulated `handleDocumentsNext` timer in `src/app/components/CharityOnboardingFlow.tsx` with a real async submit-and-fetch flow
-- [ ] T007 [US1] Add loading state during submit + evaluation in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T008 [US1] Wire `setAssessmentResult(evalRes.data)` and `setCurrentView('results')` after successful fetch in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T009 [US1] Display overall score out of 120 in the results view using `assessmentResult.overallScore`
-- [ ] T010 [US1] Display qualification status using the Arabic label supplied by the backend in the results view
+- [x] T006 [US1] Replace the simulated `handleDocumentsNext` timer in `src/app/components/CharityOnboardingFlow.tsx` with a real async submit-and-fetch flow
+- [x] T007 [US1] Add loading state during submit + evaluation in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T008 [US1] Wire `setAssessmentResult(evalRes.data)` and `setCurrentView('results')` after successful fetch in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T009 [US1] Display overall score out of 120 in the results view using `assessmentResult.overallScore`
+- [x] T010 [US1] Display qualification status using the Arabic label supplied by the backend in the results view
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 
@@ -64,9 +64,9 @@
 
 ### Implementation for User Story 2
 
-- [ ] T011 [P] [US2] Render the four ISIV dimensions as a static radar chart in `src/app/components/CharityOnboardingFlow.tsx` using `recharts`
-- [ ] T012 [P] [US2] Render per-dimension cards in `src/app/components/CharityOnboardingFlow.tsx` showing symbol, Arabic label, score, percentage, tier badge, and Arabic tier label
-- [ ] T013 [US2] Ensure tier badge styling uses the `color` supplied by the backend for each dimension
+- [x] T011 [P] [US2] Render the four ISIV dimensions as a static radar chart in `src/app/components/CharityOnboardingFlow.tsx` using `recharts`
+- [x] T012 [P] [US2] Render per-dimension cards in `src/app/components/CharityOnboardingFlow.tsx` showing symbol, Arabic label, score, percentage, tier badge, and Arabic tier label
+- [x] T013 [US2] Ensure tier badge styling uses the `color` supplied by the backend for each dimension
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently.
 
@@ -80,10 +80,10 @@
 
 ### Implementation for User Story 3
 
-- [ ] T014 [US3] Display the Arabic `diagnosis` text in the results view in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T015 [US3] Display the `strengths` list in the results view in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T016 [US3] Display the `weaknesses` list in the results view in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T017 [US3] Add empty-state handling for missing or empty `strengths`/`weaknesses` in the results view in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T014 [US3] Display the Arabic `diagnosis` text in the results view in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T015 [US3] Display the `strengths` list in the results view in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T016 [US3] Display the `weaknesses` list in the results view in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T017 [US3] Add empty-state handling for missing or empty `strengths`/`weaknesses` in the results view in `src/app/components/CharityOnboardingFlow.tsx`
 
 **Checkpoint**: All user stories should now be independently functional.
 
@@ -93,11 +93,11 @@
 
 **Purpose**: Error handling, returning-user support, duplicate-submit prevention, and type validation.
 
-- [ ] T018 [P] Add error state and manual retry action for evaluation fetch failures in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T019 [P] Prevent duplicate assessment submission while evaluation is in progress in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T020 [P] Verify returning users can view persisted results by confirming `getAssessmentResults` is called on results-view mount in `src/app/components/CharityOnboardingFlow.tsx`
-- [ ] T021 Run TypeScript type checks with `pnpm exec tsc --noEmit`
-- [ ] T022 Run `pnpm dev` and validate the quickstart.md scenarios manually
+- [x] T018 [P] Add error state and manual retry action for evaluation fetch failures in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T019 [P] Prevent duplicate assessment submission while evaluation is in progress in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T020 [P] Verify returning users can view persisted results by confirming `getAssessmentResults` is called on results-view mount in `src/app/components/CharityOnboardingFlow.tsx`
+- [x] T021 Run TypeScript type checks with `pnpm exec tsc --noEmit`
+- [x] T022 Run `pnpm dev` and validate the quickstart.md scenarios manually
 
 ---
 
