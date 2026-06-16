@@ -70,6 +70,8 @@ function getQualificationStatusOption(status?: string | null): QualificationStat
       };
   }
 }
+
+interface UploadedFile {
   id: string;
   name: string;
   type: string;
