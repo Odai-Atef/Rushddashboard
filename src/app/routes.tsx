@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter, Navigate } from 'react-router';
 // Router configuration - Updated 2026-06-07
 import { RootLayout } from './layouts/RootLayout';
@@ -25,7 +26,7 @@ import { ComplianceRiskPage } from './components/ComplianceRiskPage';
 import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
 import { ProjectJourneyPage } from './components/ProjectJourneyPage';
 import { CharityAssessmentPage } from './components/CharityAssessmentPage';
-import { CharityOnboardingFlow } from './components/CharityOnboardingFlow';
+import { OnboardingLayout } from './pages/onboarding/OnboardingLayout';
 import { ProjectManagementModule } from './components/ProjectManagementModule';
 import { AIProjectInnovationModule } from './components/AIProjectInnovationModule';
 import { ProjectCollaborationModule } from './components/ProjectCollaborationModule';
@@ -36,6 +37,23 @@ import { ProjectAnalyticsDashboard } from './components/ProjectAnalyticsDashboar
 import { FundingDonorAnalytics } from './components/FundingDonorAnalytics';
 import { OperationsPerformanceDashboard } from './components/OperationsPerformanceDashboard';
 import { DonorMatchingModule } from './components/donor-matching/DonorMatchingModule';
+
+const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
+const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
+const OnboardingProfilePage = lazy(() => import('./pages/onboarding/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const OnboardingAssessmentPage = lazy(() => import('./pages/onboarding/AssessmentPage').then(m => ({ default: m.AssessmentPage })));
+const OnboardingDocumentsPage = lazy(() => import('./pages/onboarding/DocumentsPage').then(m => ({ default: m.DocumentsPage })));
+const OnboardingProcessingPage = lazy(() => import('./pages/onboarding/ProcessingPage').then(m => ({ default: m.ProcessingPage })));
+const OnboardingResultsPage = lazy(() => import('./pages/onboarding/ResultsPage').then(m => ({ default: m.ResultsPage })));
+const OnboardingAnalysisPage = lazy(() => import('./pages/onboarding/AnalysisPage').then(m => ({ default: m.AnalysisPage })));
+const OnboardingRoadmapPage = lazy(() => import('./pages/onboarding/RoadmapPage').then(m => ({ default: m.RoadmapPage })));
+const OnboardingDecisionPage = lazy(() => import('./pages/onboarding/DecisionPage').then(m => ({ default: m.DecisionPage })));
+
+const OnboardingPageShell = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={<div className="min-h-full flex items-center justify-center"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>}>
+    {children}
+  </Suspense>
+);
 
 export const router = createBrowserRouter([
   {
@@ -150,7 +168,57 @@ export const router = createBrowserRouter([
           },
           {
             path: 'onboarding',
-            Component: CharityOnboardingFlow,
+            element: <OnboardingLayout />,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/dashboard/onboarding/landing" replace />,
+              },
+              {
+                path: 'landing',
+                element: <OnboardingPageShell><OnboardingLandingPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'registration',
+                element: <OnboardingPageShell><OnboardingRegistrationPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'profile',
+                element: <OnboardingPageShell><OnboardingProfilePage /></OnboardingPageShell>,
+              },
+              {
+                path: 'assessment',
+                element: <OnboardingPageShell><OnboardingAssessmentPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'documents',
+                element: <OnboardingPageShell><OnboardingDocumentsPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'processing',
+                element: <OnboardingPageShell><OnboardingProcessingPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'results',
+                element: <OnboardingPageShell><OnboardingResultsPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'analysis',
+                element: <OnboardingPageShell><OnboardingAnalysisPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'roadmap',
+                element: <OnboardingPageShell><OnboardingRoadmapPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'decision',
+                element: <OnboardingPageShell><OnboardingDecisionPage /></OnboardingPageShell>,
+              },
+              {
+                path: '*',
+                element: <Navigate to="/dashboard/onboarding/landing" replace />,
+              },
+            ],
           },
           {
             path: 'project-management',
