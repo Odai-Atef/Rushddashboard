@@ -543,6 +543,15 @@ export class OnboardingService {
   }
 
   /**
+   * Get legacy assessment results for an organization (deprecated, kept for compatibility)
+   * GET /api/v1/onboarding/assessments/:organizationId/results
+   * @deprecated Use getIsivAssessmentResults instead.
+   */
+  async getAssessmentResults(organizationId: string): Promise<ApiResponse<AssessmentResult>> {
+    return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/results`);
+  }
+
+  /**
    * Get assessment status for an organization
    * GET /api/v1/onboarding/assessments/:organizationId/status
    */

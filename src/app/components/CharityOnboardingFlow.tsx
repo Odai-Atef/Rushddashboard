@@ -3,7 +3,7 @@ import { BarChart3, Brain, Briefcase, Building, Building2, Calendar, Check, Chec
 import { useOnboardingRegistration } from '@/app/hooks/useOnboardingRegistration';
 import { toast } from 'sonner';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Cell } from 'recharts';
-import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT, AssessmentResult, AssessmentStatus, AssessmentStatusValue } from '@/api/services/onboarding-service';
+import { onboardingService, AssessmentCategory, AssessmentQuestion, SaveAnswerPayload, SavedAnswer, OrganizationDocument, DocumentSlotId, DOCUMENT_SLOT_MAPPING, BACKEND_DOCUMENT_TYPE_TO_SLOT, AssessmentStatus, AssessmentStatusValue, IsivAssessmentResult, IsivDimension } from '@/api/services/onboarding-service';
 import { resolveIcon as resolveApiIcon } from '@/app/utils/icon-map';
 import { getScoreColor } from '@/app/utils/score-color';
 
@@ -96,7 +96,7 @@ export function CharityOnboardingFlow() {
   const [processingProgress, setProcessingProgress] = useState(0);
   const [overallScore, setOverallScore] = useState(78);
   const [qualificationStatus, setQualificationStatus] = useState<'qualified' | 'conditional' | 'not-qualified'>('conditional');
-  const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
+  const [assessmentResult, setAssessmentResult] = useState<IsivAssessmentResult | null>(null);
   const [assessmentStatus, setAssessmentStatus] = useState<AssessmentStatus | null>(null);
   const [isLoadingResults, setIsLoadingResults] = useState(false);
   const [resultsError, setResultsError] = useState<string | null>(null);
@@ -137,7 +137,7 @@ export function CharityOnboardingFlow() {
         setAssessmentStatus(statusRes.data);
 
         if (statusRes.data?.status === 'COMPLETED') {
-          const resultsRes = await onboardingService.getAssessmentResults(organization.id);
+          const resultsRes = await onboardingService.getIsivAssessmentResults(organization.id);
           if (!cancelled) {
             setAssessmentResult(resultsRes.data);
           }
