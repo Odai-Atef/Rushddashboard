@@ -16,12 +16,13 @@ export function LoginPage() {
 
   const isExpired = searchParams.get('expired') === 'true';
   const redirectParam = searchParams.get('redirect');
+  const justRegistered = searchParams.get('registered') === 'true';
 
   const getSafeRedirectPath = (): string => {
     if (redirectParam && redirectParam.startsWith('/')) {
       return redirectParam;
     }
-    return '/dashboard';
+    return '/dashboard/onboarding/landing';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,13 +55,12 @@ export function LoginPage() {
       <div className="flex-1 flex items-center justify-center p-8 bg-background">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold">Rushd Platform</h1>
-            </div>
+          <div className="mb-8 text-center">
+            <img
+              src="/logo.png"
+              alt="منصة رشد"
+              className="w-[200px] h-[200px] object-contain mx-auto mb-3"
+            />
             <p className="text-muted-foreground">منصة القرارات الذكية</p>
           </div>
 
@@ -75,6 +75,15 @@ export function LoginPage() {
             <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
               <p className="text-sm text-amber-700 dark:text-amber-400">
                 انتهت صلاحية جلستك، يرجى تسجيل الدخول مرة أخرى
+              </p>
+            </div>
+          )}
+
+          {/* Registration Success Message */}
+          {justRegistered && (
+            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <p className="text-sm text-green-700 dark:text-green-400">
+                تم إنشاء حسابك بنجاح. يرجى تفعيل بريدك الإلكتروني من خلال الرابط المرسل إلى بريدك.
               </p>
             </div>
           )}

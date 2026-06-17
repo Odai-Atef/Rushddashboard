@@ -53,7 +53,9 @@ export function DashboardLayout() {
     '/dashboard/settings': 'settings',
   };
 
-  const activeView = pathToView[location.pathname] || 'executive';
+  const activeView =
+    pathToView[location.pathname] ||
+    (location.pathname.startsWith('/dashboard/onboarding') ? 'onboarding' : 'executive');
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">

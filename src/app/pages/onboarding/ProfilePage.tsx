@@ -36,6 +36,7 @@ export function ProfilePage() {
     activeProjects: '',
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [errors, setErrors] = useState<Partial<Record<keyof ProfileData, string>>>({});
 
   useEffect(() => {
     loadFundingAreas();
@@ -70,27 +71,46 @@ export function ProfilePage() {
     }
   }, [profile, organization?.profile]);
 
-  const handleProfileNext = async () => {
+  const validate = (): boolean => {
+    const nextErrors: Partial<Record<keyof ProfileData, string>> = {};
+
     if (!profileData.overview.trim()) {
-      toast.error('نبذة عن المؤسسة مطلوبة');
-      return;
+      nextErrors.overview = 'نبذة عن الجمعية مطلوبة';
     }
-    if (!profileData.targetBeneficiaries.trim()) {
-      toast.error('الفئات المستهدفة مطلوبة');
-      return;
-    }
-    if (!profileData.geographicCoverage) {
-      toast.error('النطاق الجغرافي مطلوب');
-      return;
-    }
+
     if (profileData.areasOfWork.length === 0) {
-      toast.error('مجالات العمل مطلوبة');
+      nextErrors.areasOfWork = 'مجالات العمل مطلوبة';
+    }
+
+    if (!profileData.targetBeneficiaries.trim()) {
+      nextErrors.targetBeneficiaries = 'الفئات المستهدفة مطلوبة';
+    }
+
+    if (!profileData.geographicCoverage) {
+      nextErrors.geographicCoverage = 'النطاق الجغرافي مطلوب';
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const clearFieldError = (field: keyof ProfileData) => {
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const { [field]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
+  const handleProfileNext = async () => {
+    if (!validate()) {
+      toast.error('يرجى تصحيح الأخطاء في النموذج قبل المتابعة');
       return;
     }
 
     const orgId = organization?.id;
     if (!orgId) {
-      toast.error('لم يتم العثور على معرف المؤسسة. يرجى إكمال التسجيل أولاً.');
+      toast.error('لم يتم العثور على معرف الجمعية. يرجى إكمال التسجيل أولاً.');
       return;
     }
 
@@ -146,24 +166,33 @@ export function ProfilePage() {
         {/* Form Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-2">الملف التعريفي للمؤسسة</h1>
-            <p className="text-gray-600">معلومات تفصيلية عن نشاط المؤسسة وبرامجها</p>
+            <h1 className="text-3xl font-bold mb-2">الملف التعريفي للجمعية</h1>
+            <p className="text-gray-600">معلومات تفصيلية عن نشاط الجمعية وبرامجها</p>
           </div>
 
           <form className="space-y-6">
             {/* Organization Overview */}
             <div>
-              <label className="block text-sm font-medium mb-2">نبذة عن المؤسسة *</label>
+              <label className="block text-sm font-medium mb-2">نبذة عن الجمعية *</label>
               <textarea
                 value={profileData.overview}
-                onChange={(e) =>
-                  setProfileData((prev) => ({ ...prev, overview: e.target.value }))
-                }
+                onChange={(e) => {
+                  setProfileData((prev) => ({ ...prev, overview: e.target.value }));
+                  clearFieldError('overview');
+                }}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                placeholder="اكتب نبذة مختصرة عن رؤية ورسالة وأهداف المؤسسة..."
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
+                  errors.overview
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300'
+                }`}
+                placeholder="اكتب نبذة مختصرة عن رؤية ورسالة وأهداف الجمعية..."
               />
-              <p className="text-xs text-gray-500 mt-1">٢٠٠ - ٥٠٠ كلمة</p>
+              {errors.overview ? (
+                <p className="mt-1 text-sm text-red-600">{errors.overview}</p>
+              ) : (
+                <p className="text-xs text-gray-500 mt-1">٢٠٠ - ٥٠٠ كلمة</p>
+              )}
             </div>
 
             {/* Areas of Work */}
@@ -174,27 +203,23 @@ export function ProfilePage() {
                   لا توجد مجالات عمل متاحة حالياً. يرجى المحاولة لاحقاً.
                 </p>
               )}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${errors.areasOfWork ? 'border-red-500 bg-red-50' : 'border-transparent'}`}>
                 {fundingAreas.map((area) => (
                   <label
                     key={area.id}
-                    className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                    className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer bg-white"
                   >
                     <input
                       type="checkbox"
                       checked={profileData.areasOfWork.includes(area.id)}
                       onChange={(e) => {
-                        if (e.target.checked) {
-                          setProfileData((prev) => ({
-                            ...prev,
-                            areasOfWork: [...prev.areasOfWork, area.id],
-                          }));
-                        } else {
-                          setProfileData((prev) => ({
-                            ...prev,
-                            areasOfWork: prev.areasOfWork.filter((a) => a !== area.id),
-                          }));
-                        }
+                        setProfileData((prev) => {
+                          const nextAreas = e.target.checked
+                            ? [...prev.areasOfWork, area.id]
+                            : prev.areasOfWork.filter((a) => a !== area.id);
+                          return { ...prev, areasOfWork: nextAreas };
+                        });
+                        clearFieldError('areasOfWork');
                       }}
                       className="w-4 h-4 text-blue-600 rounded"
                     />
@@ -202,6 +227,9 @@ export function ProfilePage() {
                   </label>
                 ))}
               </div>
+              {errors.areasOfWork && (
+                <p className="mt-1 text-sm text-red-600">{errors.areasOfWork}</p>
+              )}
             </div>
 
             {/* Target Beneficiaries */}
@@ -210,12 +238,20 @@ export function ProfilePage() {
               <input
                 type="text"
                 value={profileData.targetBeneficiaries}
-                onChange={(e) =>
-                  setProfileData((prev) => ({ ...prev, targetBeneficiaries: e.target.value }))
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => {
+                  setProfileData((prev) => ({ ...prev, targetBeneficiaries: e.target.value }));
+                  clearFieldError('targetBeneficiaries');
+                }}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  errors.targetBeneficiaries
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300'
+                }`}
                 placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن"
               />
+              {errors.targetBeneficiaries && (
+                <p className="mt-1 text-sm text-red-600">{errors.targetBeneficiaries}</p>
+              )}
             </div>
 
             {/* Geographic Coverage */}
@@ -223,10 +259,15 @@ export function ProfilePage() {
               <label className="block text-sm font-medium mb-2">النطاق الجغرافي *</label>
               <select
                 value={profileData.geographicCoverage}
-                onChange={(e) =>
-                  setProfileData((prev) => ({ ...prev, geographicCoverage: e.target.value }))
-                }
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                onChange={(e) => {
+                  setProfileData((prev) => ({ ...prev, geographicCoverage: e.target.value }));
+                  clearFieldError('geographicCoverage');
+                }}
+                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                  errors.geographicCoverage
+                    ? 'border-red-500 focus:ring-red-500'
+                    : 'border-gray-300'
+                }`}
               >
                 <option value="">اختر النطاق الجغرافي</option>
                 <option value="local">محلي (مدينة واحدة)</option>
@@ -234,6 +275,9 @@ export function ProfilePage() {
                 <option value="national">وطني (على مستوى المملكة)</option>
                 <option value="international">دولي</option>
               </select>
+              {errors.geographicCoverage && (
+                <p className="mt-1 text-sm text-red-600">{errors.geographicCoverage}</p>
+              )}
             </div>
 
             {/* Team Statistics */}

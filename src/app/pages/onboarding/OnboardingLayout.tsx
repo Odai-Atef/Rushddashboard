@@ -52,7 +52,7 @@ function StepGuardOutlet() {
       return {
         allowed: false,
         redirectTo: 'landing' as OnboardingStep,
-        reason: 'لم يتم تحديد المؤسسة',
+        reason: 'لم يتم تحديد الجمعية',
       };
     }
 

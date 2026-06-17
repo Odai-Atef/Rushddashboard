@@ -26,6 +26,9 @@ export interface EnvironmentConfig {
   REFRESH_TOKEN_KEY: string;
   TOKEN_EXPIRY_DAYS: number;
   
+  // App URL (used for constructing full links like activation/reset-password URLs)
+  APP_URL: string;
+
   // Analytics
   ENABLE_ANALYTICS: boolean;
   ANALYTICS_TRACKING_ID: string;
@@ -77,7 +80,7 @@ class EnvManager {
 
   private loadConfig(): EnvironmentConfig {
     return {
-      APP_NAME: this.getEnvVar('VITE_APP_NAME', 'Rushd Platform'),
+      APP_NAME: this.getEnvVar('VITE_APP_NAME', 'منصة رشد'),
       APP_VERSION: this.getEnvVar('VITE_APP_VERSION', '1.0.0'),
       APP_DESCRIPTION: this.getEnvVar('VITE_APP_DESCRIPTION', ''),
       
@@ -93,8 +96,9 @@ class EnvManager {
       REFRESH_TOKEN_KEY: this.getEnvVar('VITE_REFRESH_TOKEN_KEY', 'refresh_token'),
       TOKEN_EXPIRY_DAYS: this.getEnvVarAsNumber('VITE_TOKEN_EXPIRY_DAYS', 7),
       
-      ENABLE_ANALYTICS: this.getEnvVarAsBool('VITE_ENABLE_ANALYTICS', false),
       ANALYTICS_TRACKING_ID: this.getEnvVar('VITE_ANALYTICS_TRACKING_ID', ''),
+      
+      APP_URL: this.getEnvVar('VITE_APP_URL', typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173'),
       
       DEV_MOCK_API: this.getEnvVarAsBool('VITE_DEV_MOCK_API', false),
       DEV_DELAY_MS: this.getEnvVarAsNumber('VITE_DEV_DELAY_MS', 0),

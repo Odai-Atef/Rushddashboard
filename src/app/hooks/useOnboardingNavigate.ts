@@ -15,6 +15,7 @@ export function useOnboardingNavigate() {
     (step: OnboardingStep, options?: { replace?: boolean }) => {
       const path = getStepPath(step);
       const nextUrl = organizationId ? `${path}?organizationId=${encodeURIComponent(organizationId)}` : path;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
       navigate(nextUrl, { replace: options?.replace });
     },
     [navigate, organizationId]

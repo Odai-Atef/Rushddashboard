@@ -44,6 +44,9 @@ export function AssessmentPage() {
   const [assessmentAnswers, setAssessmentAnswers] = useState<
     AssessmentAnswer[]
   >([]);
+  const [touchedQuestionIds, setTouchedQuestionIds] = useState<Set<string>>(
+    new Set()
+  );
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const locallyEditedQuestionIds = useRef<Set<string>>(new Set());
@@ -263,6 +266,14 @@ export function AssessmentPage() {
       .filter((payload): payload is SaveAnswerPayload => payload !== null);
   };
 
+  const markRequiredAsTouched = (questions: AssessmentQuestion[]) => {
+    const requiredIds = questions
+      .filter((q) => q.isRequired)
+      .map((q) => q.id);
+    if (requiredIds.length === 0) return;
+    setTouchedQuestionIds((prev) => new Set([...prev, ...requiredIds]));
+  };
+
   const handleAssessmentNext = async () => {
     setSaveAnswersError(null);
     const currentCategory = assessmentCategories[currentAssessmentStep];
@@ -271,6 +282,7 @@ export function AssessmentPage() {
     const scopeQuestions = currentCategory.questions;
     const unansweredRequired = findUnansweredRequiredQuestions(scopeQuestions);
     if (unansweredRequired.length > 0) {
+      markRequiredAsTouched(scopeQuestions);
       toast.error(
         `يرجى الإجابة على ${unansweredRequired.length} سؤال مطلوب`
       );
@@ -305,7 +317,7 @@ export function AssessmentPage() {
         'حدث خطأ أثناء حفظ الإجابات. يرجى المحاولة مرة أخرى.';
       if (status === 404) {
         message =
-          'لم يتم العثور على المؤسسة. يرجى التحقق من البيانات والمحاولة مرة أخرى.';
+          'لم يتم العثور على الجمعية. يرجى التحقق من البيانات والمحاولة مرة أخرى.';
       } else if (status === 400) {
         message =
           'بيانات الإجابات غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.';
@@ -525,8 +537,14 @@ export function AssessmentPage() {
                   typeof answer === 'string' && answer.trim() === ''
                 ) &&
                 !(Array.isArray(answer) && answer.length === 0);
+              const showRequiredError =
+                q.isRequired && !isAnswered && touchedQuestionIds.has(q.id);
               const questionWrapperClass = `p-6 bg-gray-50 rounded-lg transition-all ${
-                q.isRequired && !isAnswered ? 'border-2 border-transparent' : ''
+                showRequiredError
+                  ? 'border-2 border-red-500 bg-red-50'
+                  : q.isRequired && !isAnswered
+                  ? 'border-2 border-transparent'
+                  : ''
               }`;
 
               if (q.questionType === 'YES_NO') {
@@ -545,6 +563,11 @@ export function AssessmentPage() {
                         <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />
                       )}
                     </label>
+                    {showRequiredError && (
+                      <p className="mb-4 text-sm text-red-600">
+                        هذا السؤال مطلوب
+                      </p>
+                    )}
                     <div className="flex gap-3">
                       <button
                         onClick={() =>
@@ -591,6 +614,11 @@ export function AssessmentPage() {
                         <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />
                       )}
                     </label>
+                    {showRequiredError && (
+                      <p className="mb-4 text-sm text-red-600">
+                        هذا السؤال مطلوب
+                      </p>
+                    )}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
                         <span>ضعيف جداً</span>
@@ -636,6 +664,11 @@ export function AssessmentPage() {
                         <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />
                       )}
                     </label>
+                    {showRequiredError && (
+                      <p className="mb-4 text-sm text-red-600">
+                        هذا السؤال مطلوب
+                      </p>
+                    )}
                     {choices.length === 0 ? (
                       <p className="text-sm text-gray-500">
                         لا توجد خيارات متاحة
@@ -691,6 +724,11 @@ export function AssessmentPage() {
                         <CheckCircle2 className="inline w-4 h-4 text-green-600 mr-2" />
                       )}
                     </label>
+                    {showRequiredError && (
+                      <p className="mb-3 text-sm text-red-600">
+                        هذا السؤال مطلوب
+                      </p>
+                    )}
                     <div className="flex items-start gap-3 mb-3">
                       <Upload className="w-5 h-5 text-blue-600 mt-0.5" />
                       <div className="flex-1">

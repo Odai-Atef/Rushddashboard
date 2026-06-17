@@ -38,7 +38,7 @@ const documentSlots: { id: DocumentSlotId; label: string; required: boolean }[] 
   { id: 'license', label: 'رخصة الجمعية الخيرية', required: true },
   { id: 'bank', label: 'شهادة الحساب البنكي', required: true },
   { id: 'address', label: 'العنوان الوطني', required: true },
-  { id: 'profile', label: 'الملف التعريفي للمؤسسة', required: true },
+  { id: 'profile', label: 'الملف التعريفي للجمعية', required: true },
   { id: 'projects', label: 'المشاريع السابقة', required: false },
   { id: 'financial', label: 'التقارير المالية', required: false },
   { id: 'annual', label: 'التقارير السنوية', required: false },

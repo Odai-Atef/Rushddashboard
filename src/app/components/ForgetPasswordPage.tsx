@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Mail, ArrowRight, CheckCircle, AlertCircle, Loader2, Sparkles } from 'lucide-react';
+import { Mail, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { authService } from '@/api/services/auth-service';
 
 export function ForgetPasswordPage() {
@@ -43,13 +43,12 @@ export function ForgetPasswordPage() {
       <div className="flex-1 flex items-center justify-center p-8 bg-background">
         <div className="w-full max-w-md">
           {/* Logo */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold">Rushd Platform</h1>
-            </div>
+          <div className="mb-8 text-center">
+            <img
+              src="/logo.png"
+              alt="Rushd Platform"
+              className="w-[200px] h-[200px] object-contain mx-auto mb-3"
+            />
             <p className="text-muted-foreground">منصة القرارات الذكية</p>
           </div>
 

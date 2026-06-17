@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Sparkles, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Phone, Building, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
 
@@ -61,8 +61,7 @@ export function RegistrationPage() {
         phone: formData.phone,
       });
       if (response.success) {
-        login();
-        navigate('/dashboard');
+        navigate('/auth/login?registered=true');
       } else {
         setApiError(response.message || 'حدث خطأ أثناء إنشاء الحساب');
       }
@@ -95,13 +94,12 @@ export function RegistrationPage() {
       <div className="flex-1 flex items-center justify-center p-8 bg-background overflow-y-auto">
         <div className="w-full max-w-md py-8">
           {/* Logo */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
-                <Sparkles className="w-6 h-6 text-white" />
-              </div>
-              <h1 className="text-2xl font-bold">Rushd Platform</h1>
-            </div>
+          <div className="mb-8 text-center">
+            <img
+              src="/logo.png"
+              alt="Rushd Platform"
+              className="w-[200px] h-[200px] object-contain mx-auto mb-3"
+            />
             <p className="text-muted-foreground">منصة القرارات الذكية</p>
           </div>
 

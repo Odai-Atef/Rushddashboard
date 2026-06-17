@@ -43,7 +43,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
-    { id: 'onboarding', label: 'تسجيل المؤسسات', icon: UserPlus, path: '/dashboard/onboarding' },
+    { id: 'onboarding', label: 'تسجيل الجمعيات', icon: UserPlus, path: '/dashboard/onboarding' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources' },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk' },
@@ -86,7 +86,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
         <div className="p-6 border-b border-sidebar-border flex items-center justify-between">
           <div>
             <h1 className="text-sidebar-foreground text-xl">منصة رشد</h1>
-            <p className="text-muted-foreground text-sm mt-1">Rushd Platform</p>
+            <p className="text-muted-foreground text-sm mt-1">منصة رشد</p>
           </div>
           <button
             onClick={onClose}

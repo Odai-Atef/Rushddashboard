@@ -101,22 +101,7 @@ export class AuthService {
     return unwrapped;
   }
 
-  /**
-   * Register a new user
-   */
-  async register(data: RegisterData): Promise<ApiResponse<AuthTokens>> {
-    const response = await apiClient.post<AuthTokens>(
-      `${this.baseEndpoint}/register`,
-      data
-    );
 
-    const unwrapped = this.unwrap<AuthTokens>(response);
-    if (unwrapped.success && unwrapped.data.accessToken) {
-      apiClient.setAuthToken(unwrapped.data.accessToken);
-    }
-
-    return unwrapped;
-  }
 
   /**
    * Logout user and clear tokens
@@ -173,14 +158,30 @@ export class AuthService {
    * Request password reset
    */
   async forgotPassword(email: string): Promise<ApiResponse<void>> {
-    return apiClient.post(`${this.baseEndpoint}/forgot-password`, { email });
+    const { ENV } = await import('@/lib/env');
+    return apiClient.post(`${this.baseEndpoint}/forgot-password`, {
+      email,
+      clientUrl: ENV.APP_URL,
+    });
   }
 
   /**
-   * Reset password with token
+   * Register a new user and request activation email.
+   * Sends the application URL so the backend can build a full activation link.
    */
-  async resetPassword(token: string, newPassword: string): Promise<ApiResponse<void>> {
-    return apiClient.post(`${this.baseEndpoint}/reset-password`, { token, newPassword });
+  async register(data: RegisterData): Promise<ApiResponse<AuthTokens>> {
+    const { ENV } = await import('@/lib/env');
+    const response = await apiClient.post<AuthTokens>(
+      `${this.baseEndpoint}/register`,
+      { ...data, clientUrl: ENV.APP_URL }
+    );
+
+    const unwrapped = this.unwrap<AuthTokens>(response);
+    if (unwrapped.success && unwrapped.data.accessToken) {
+      apiClient.setAuthToken(unwrapped.data.accessToken);
+    }
+
+    return unwrapped;
   }
 
   /**

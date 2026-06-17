@@ -60,7 +60,7 @@ export function ProcessingPage() {
         stopProgress();
         const message =
           err?.message ||
-          'فشل في تقييم المؤسسة. يرجى المحاولة مرة أخرى.';
+          'فشل في تقييم الجمعية. يرجى المحاولة مرة أخرى.';
         goToStep('documents');
       }
     };

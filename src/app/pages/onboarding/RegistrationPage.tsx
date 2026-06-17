@@ -43,6 +43,7 @@ export function RegistrationPage() {
     mobile: '',
   });
   const [isSaving, setIsSaving] = useState(false);
+  const [errors, setErrors] = useState<Partial<Record<keyof RegistrationData, string>>>({});
 
   useEffect(() => {
     if (organization) {
@@ -62,8 +63,79 @@ export function RegistrationPage() {
     }
   }, [organization]);
 
+  const validate = (): boolean => {
+    const nextErrors: Partial<Record<keyof RegistrationData, string>> = {};
+
+    if (!registrationData.orgName.trim()) {
+      nextErrors.orgName = 'اسم الجمعية مطلوب';
+    }
+
+    if (!registrationData.licenseNumber.trim()) {
+      nextErrors.licenseNumber = 'رقم الترخيص مطلوب';
+    }
+
+    if (!registrationData.registrationDate) {
+      nextErrors.registrationDate = 'تاريخ التسجيل مطلوب';
+    }
+
+    if (!registrationData.orgType) {
+      nextErrors.orgType = 'نوع الجمعية مطلوب';
+    }
+
+    if (!registrationData.city.trim()) {
+      nextErrors.city = 'المدينة / المنطقة مطلوبة';
+    }
+
+    if (!registrationData.contactPerson.trim()) {
+      nextErrors.contactPerson = 'اسم الشخص المسؤول مطلوب';
+    }
+
+    const email = registrationData.email.trim();
+    if (!email) {
+      nextErrors.email = 'البريد الإلكتروني مطلوب';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      nextErrors.email = 'يرجى إدخال بريد إلكتروني صحيح';
+    }
+
+    const mobile = registrationData.mobile.trim();
+    if (!mobile) {
+      nextErrors.mobile = 'رقم الجوال مطلوب';
+    }
+
+    setErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleSaveAndProceed = async () => {
+    if (!validate()) {
+      toast.error('يرجى تصحيح الأخطاء في النموذج قبل المتابعة');
+      return;
+    }
+
+    const { onboardingService } = await import('@/api/services');
+    setIsSaving(true);
+    try {
+      await onboardingService.saveMyOrganization(buildOrganizationDto());
+      await refreshOrganization();
+      goToStep('profile');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل حفظ بيانات الجمعية');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const clearFieldError = (field: keyof RegistrationData) => {
+    setErrors((prev) => {
+      if (!prev[field]) return prev;
+      const { [field]: _, ...rest } = prev;
+      return rest;
+    });
+  };
+
   const handleFieldChange = (field: keyof RegistrationData, value: string) => {
     setRegistrationData((prev) => ({ ...prev, [field]: value }));
+    clearFieldError(field);
   };
 
   const buildOrganizationDto = () => ({
@@ -78,19 +150,19 @@ export function RegistrationPage() {
     mobile: registrationData.mobile.trim(),
   });
 
-  const handleSaveAndProceed = async () => {
-    const { onboardingService } = await import('@/api/services');
-    setIsSaving(true);
-    try {
-      await onboardingService.saveMyOrganization(buildOrganizationDto());
-      await refreshOrganization();
-      goToStep('profile');
-    } catch (err: any) {
-      toast.error(err?.message || 'فشل حفظ بيانات المؤسسة');
-    } finally {
-      setIsSaving(false);
-    }
-  };
+  const getInputClassName = (field: keyof RegistrationData) =>
+    `w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+      errors[field]
+        ? 'border-red-500 focus:ring-red-500'
+        : 'border-gray-300'
+    }`;
+
+  const getIconInputClassName = (field: keyof RegistrationData) =>
+    `w-full pr-10 pl-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+      errors[field]
+        ? 'border-red-500 focus:ring-red-500'
+        : 'border-gray-300'
+    }`;
 
   if (!organization && isSaving) {
     return (
@@ -116,25 +188,33 @@ export function RegistrationPage() {
 
         {/* Form Card */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-2">معلومات المؤسسة الخيرية</h1>
-            <p className="text-gray-600">يرجى تعبئة البيانات الأساسية للمؤسسة</p>
+          <div className="mb-6 text-center">
+            <img
+              src="/logo.png"
+              alt="منصة رشد"
+              className="h-14 w-auto mx-auto mb-4"
+            />
+            <h1 className="text-3xl font-bold mb-2">معلومات الجمعية الخيرية</h1>
+            <p className="text-gray-600">يرجى تعبئة البيانات الأساسية للجمعية</p>
           </div>
 
           <form className="space-y-6">
             {/* Organization Name */}
             <div>
-              <label className="block text-sm font-medium mb-2">اسم المؤسسة *</label>
+              <label className="block text-sm font-medium mb-2">اسم الجمعية *</label>
               <div className="relative">
                 <Building2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <input
                   type="text"
                   value={registrationData.orgName}
                   onChange={(e) => handleFieldChange('orgName', e.target.value)}
-                  className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={getIconInputClassName('orgName')}
                   placeholder="مثال: جمعية البر الخيرية"
                 />
               </div>
+              {errors.orgName && (
+                <p className="mt-1 text-sm text-red-600">{errors.orgName}</p>
+              )}
             </div>
 
             {/* License Number & Registration Date */}
@@ -145,9 +225,12 @@ export function RegistrationPage() {
                   type="text"
                   value={registrationData.licenseNumber}
                   onChange={(e) => handleFieldChange('licenseNumber', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={getInputClassName('licenseNumber')}
                   placeholder="١٢٣٤٥٦"
                 />
+                {errors.licenseNumber && (
+                  <p className="mt-1 text-sm text-red-600">{errors.licenseNumber}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">تاريخ التسجيل *</label>
@@ -157,27 +240,33 @@ export function RegistrationPage() {
                     type="date"
                     value={registrationData.registrationDate}
                     onChange={(e) => handleFieldChange('registrationDate', e.target.value)}
-                    className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={getIconInputClassName('registrationDate')}
                   />
                 </div>
+                {errors.registrationDate && (
+                  <p className="mt-1 text-sm text-red-600">{errors.registrationDate}</p>
+                )}
               </div>
             </div>
 
             {/* Organization Type & City */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium mb-2">نوع المؤسسة *</label>
+                <label className="block text-sm font-medium mb-2">نوع الجمعية *</label>
                 <select
                   value={registrationData.orgType}
                   onChange={(e) => handleFieldChange('orgType', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={getInputClassName('orgType')}
                 >
-                  <option value="">اختر نوع المؤسسة</option>
+                  <option value="">اختر نوع الجمعية</option>
                   <option value="charity">جمعية خيرية</option>
-                  <option value="foundation">مؤسسة خيرية</option>
+                  <option value="foundation">جمعية خيرية</option>
                   <option value="ngo">منظمة غير ربحية</option>
                   <option value="coop">جمعية تعاونية</option>
                 </select>
+                {errors.orgType && (
+                  <p className="mt-1 text-sm text-red-600">{errors.orgType}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">المدينة / المنطقة *</label>
@@ -187,10 +276,13 @@ export function RegistrationPage() {
                     type="text"
                     value={registrationData.city}
                     onChange={(e) => handleFieldChange('city', e.target.value)}
-                    className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={getIconInputClassName('city')}
                     placeholder="الرياض"
                   />
                 </div>
+                {errors.city && (
+                  <p className="mt-1 text-sm text-red-600">{errors.city}</p>
+                )}
               </div>
             </div>
 
@@ -203,10 +295,13 @@ export function RegistrationPage() {
                   type="url"
                   value={registrationData.website}
                   onChange={(e) => handleFieldChange('website', e.target.value)}
-                  className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className={getIconInputClassName('website')}
                   placeholder="https://example.org"
                 />
               </div>
+              {errors.website && (
+                <p className="mt-1 text-sm text-red-600">{errors.website}</p>
+              )}
             </div>
 
             {/* Contact Person */}
@@ -216,9 +311,12 @@ export function RegistrationPage() {
                 type="text"
                 value={registrationData.contactPerson}
                 onChange={(e) => handleFieldChange('contactPerson', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className={getInputClassName('contactPerson')}
                 placeholder="أحمد محمد"
               />
+              {errors.contactPerson && (
+                <p className="mt-1 text-sm text-red-600">{errors.contactPerson}</p>
+              )}
             </div>
 
             {/* Email & Mobile */}
@@ -231,10 +329,13 @@ export function RegistrationPage() {
                     type="email"
                     value={registrationData.email}
                     onChange={(e) => handleFieldChange('email', e.target.value)}
-                    className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={getIconInputClassName('email')}
                     placeholder="email@example.com"
                   />
                 </div>
+                {errors.email && (
+                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">رقم الجوال *</label>
@@ -244,11 +345,14 @@ export function RegistrationPage() {
                     type="tel"
                     value={registrationData.mobile}
                     onChange={(e) => handleFieldChange('mobile', e.target.value)}
-                    className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className={getIconInputClassName('mobile')}
                     placeholder="+966 5X XXX XXXX"
                     dir="ltr"
                   />
                 </div>
+                {errors.mobile && (
+                  <p className="mt-1 text-sm text-red-600">{errors.mobile}</p>
+                )}
               </div>
             </div>
 

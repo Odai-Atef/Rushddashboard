@@ -104,7 +104,7 @@ export function ResetPasswordPage() {
               <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
                 <Sparkles className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-2xl font-bold">Rushd Platform</h1>
+              <h1 className="text-2xl font-bold">منصة رشد</h1>
             </div>
             <p className="text-muted-foreground">منصة القرارات الذكية</p>
           </div>

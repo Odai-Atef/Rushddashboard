@@ -314,6 +314,116 @@ export interface IsivAssessmentResult {
   assessedAt?: string;
 }
 
+/** Evaluation roadmap initiative */
+export interface EvaluationInitiative {
+  id: number;
+  title: string;
+  area: string;
+  dimension: string;
+  priority: 'high' | 'medium' | 'low' | string;
+  priorityLabelAr?: string;
+  responsible: string;
+  outcome: string;
+  duration: string;
+  status: 'not-started' | 'in-progress' | 'completed' | 'delayed' | string;
+  tasks: string[];
+  progress: number;
+}
+
+/** Evaluation roadmap section */
+export interface EvaluationRoadmap {
+  totalDurationMonths: number;
+  overallProgress: number;
+  initiatives: EvaluationInitiative[];
+}
+
+/** Evaluation dimension score */
+export interface EvaluationDimensionScore {
+  percent: number;
+  rawPoints: number;
+  maxPoints: number;
+  symbol: string;
+  nameAr: string;
+  nameEn: string;
+}
+
+/** Evaluation scores */
+export interface EvaluationScores {
+  overall: {
+    percent: number;
+    rawPoints: number;
+    maxPoints: number;
+  };
+  dimensions: EvaluationDimensionScore[];
+}
+
+/** Evaluation tier */
+export interface EvaluationTier {
+  tier: string;
+  labelAr: string;
+  labelEn: string;
+  descriptionAr?: string;
+  descriptionEn?: string;
+}
+
+/** Evaluation tier classification */
+export interface EvaluationTierClassification {
+  overall: EvaluationTier;
+  perDimension: {
+    symbol: string;
+    tier: string;
+    labelAr: string;
+    labelEn: string;
+  }[];
+}
+
+/** Evaluation comments */
+export interface EvaluationComments {
+  overall: {
+    ar: string;
+    en: string;
+  };
+  perDimension: {
+    symbol: string;
+    subDimension: string;
+    tier: string;
+    commentAr: string;
+    commentEn: string;
+  }[];
+}
+
+/** Evaluation recommendation */
+export interface EvaluationRecommendation {
+  dimension: string;
+  priority: number;
+  serviceNameAr: string;
+  serviceNameEn: string;
+  icon: any;
+  packageBundle: {
+    code: string;
+    nameAr: string;
+    nameEn: string;
+  };
+}
+
+/** Full evaluation response from /evaluate endpoint */
+export interface EvaluationResponse {
+  reportId: string;
+  organizationId: string;
+  generatedAt: string;
+  scores: EvaluationScores;
+  tierClassification: EvaluationTierClassification;
+  comments: EvaluationComments;
+  recommendations: EvaluationRecommendation[];
+  roadmap: EvaluationRoadmap;
+  qualificationStatus: string;
+}
+
+/** Request body for the evaluate endpoint */
+export interface EvaluateRequest {
+  forceRegenerate?: boolean;
+}
+
 /** Response from the assessment submission endpoint */
 export interface AssessmentSubmissionResponse {
   organizationId: string;
@@ -612,6 +722,17 @@ export class OnboardingService {
     return apiClient.put('/api/v1/onboarding/assessment/answers', { answers }, {
       params: organizationId ? { organizationId } : undefined,
     });
+  }
+
+  /**
+   * Run/generate the full evaluation report for an organization
+   * POST /api/v1/onboarding/assessments/:organizationId/evaluate
+   */
+  async evaluateAssessment(
+    organizationId: string,
+    payload?: EvaluateRequest
+  ): Promise<ApiResponse<EvaluationResponse>> {
+    return apiClient.post(`/api/v1/onboarding/assessments/${organizationId}/evaluate`, payload);
   }
 }
 

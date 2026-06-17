@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AlertCircle,
   ArrowRight,
@@ -12,6 +12,7 @@ import {
   Sparkles,
   X,
 } from 'lucide-react';
+import { handleReportDownload } from '@/app/utils/download-report';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { toast } from 'sonner';
@@ -78,6 +79,8 @@ export function ResultsPage() {
   const [resultsError, setResultsError] = useState<string | null>(null);
   const [localResult, setLocalResult] = useState<IsivAssessmentResult | null>(null);
   const [localStatus, setLocalStatus] = useState<typeof assessmentStatus>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const reportContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -148,7 +151,7 @@ export function ResultsPage() {
         })));
   const apiBenchmarks = isivResult?.benchmarks;
   const benchmarks: Benchmarks = apiBenchmarks || {
-    yourScore: Math.round((displayScore / 120) * 100),
+    yourScore: Math.round((displayScore / 100) * 100),
     sectorAverage: 65,
     topPerformer: 92,
   };
@@ -159,6 +162,21 @@ export function ResultsPage() {
     isivResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED' ||
     isivResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT' ||
     isivResult?.qualificationStatus?.toUpperCase() === 'WITH_IMPROVEMENT';
+
+  const handleDownloadReport = async () => {
+    const container = reportContainerRef.current;
+    if (!container) {
+      toast.error('تعذر العثور على محتوى التقرير');
+      return;
+    }
+
+    const orgName = isivResult?.organizationId || 'organization';
+    await handleReportDownload({
+      container,
+      fileName: `assessment-report-${orgName}.pdf`,
+      setIsDownloading,
+    });
+  };
 
   if (isLoadingResults) {
     return (
@@ -238,7 +256,7 @@ export function ResultsPage() {
   }
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div ref={reportContainerRef} className="min-h-full bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 mb-6 text-white">
@@ -255,7 +273,7 @@ export function ResultsPage() {
               <div className="w-32 h-32 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-2">
                 <div>
                   <div className="text-5xl font-bold">{displayScore}</div>
-                  <div className="text-sm">من ١٢٠</div>
+                  <div className="text-sm">من 100</div>
                 </div>
               </div>
               <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-medium ${statusOption.bgClass} ${statusOption.textClass}`}>
@@ -419,7 +437,7 @@ export function ResultsPage() {
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium">المؤسسات الرائدة</span>
+                  <span className="text-sm font-medium">الجمعيات الرائدة</span>
                   <span className="text-sm font-bold text-green-600">{benchmarks.topPerformer}٪</span>
                 </div>
                 <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
@@ -431,16 +449,24 @@ export function ResultsPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="flex gap-4">
+        <div className="report-exclude flex gap-4">
           <button
             onClick={() => goToStep('analysis')}
             className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
             عرض التحليل التفصيلي
           </button>
-          <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2">
-            <Download className="w-5 h-5" />
-            تحميل التقرير
+          <button
+            onClick={handleDownloadReport}
+            disabled={isDownloading}
+            className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isDownloading ? (
+              <Loader2 className="w-5 h-5 animate-spin" />
+            ) : (
+              <Download className="w-5 h-5" />
+            )}
+            {isDownloading ? 'جارٍ التحميل...' : 'تحميل التقرير'}
           </button>
         </div>
       </div>
