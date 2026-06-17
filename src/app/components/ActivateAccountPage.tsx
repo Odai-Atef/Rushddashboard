@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import {
   Sparkles,
@@ -23,11 +23,19 @@ export function ActivateAccountPage() {
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
+  const redirectTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!token) {
       setStatus('error');
       setMessage('رابط التفعيل غير صالح أو مفقود.');
+      redirectTimerRef.current = setTimeout(() => {
+        navigate(
+          `/auth/login?activated=error&message=${encodeURIComponent(
+            'رابط التفعيل غير صالح أو مفقود.'
+          )}`
+        );
+      }, 2500);
       return;
     }
 
@@ -40,27 +48,27 @@ export function ActivateAccountPage() {
         if (cancelled) return;
 
         if (response.success) {
+          const successMessage =
+            response.message || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.';
           setStatus('success');
-          setMessage(response.message || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.');
+          setMessage(successMessage);
 
-          const timer = setTimeout(() => {
+          redirectTimerRef.current = setTimeout(() => {
             navigate(
-              `/auth/login?activated=success&message=${encodeURIComponent(
-                response.message || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.'
-              )}`
+              `/auth/login?activated=success&message=${encodeURIComponent(successMessage)}`
             );
           }, 2500);
-          return () => clearTimeout(timer);
+          return;
         }
 
+        const failureMessage =
+          response.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.';
         setStatus('error');
-        setMessage(response.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.');
+        setMessage(failureMessage);
 
-        setTimeout(() => {
+        redirectTimerRef.current = setTimeout(() => {
           navigate(
-            `/auth/login?activated=error&message=${encodeURIComponent(
-              response.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.'
-            )}`
+            `/auth/login?activated=error&message=${encodeURIComponent(failureMessage)}`
           );
         }, 2500);
       } catch (err: any) {
@@ -74,7 +82,7 @@ export function ActivateAccountPage() {
         setStatus('error');
         setMessage(errorMessage);
 
-        setTimeout(() => {
+        redirectTimerRef.current = setTimeout(() => {
           navigate(`/auth/login?activated=error&message=${encodeURIComponent(errorMessage)}`);
         }, 2500);
       }
@@ -84,6 +92,9 @@ export function ActivateAccountPage() {
 
     return () => {
       cancelled = true;
+      if (redirectTimerRef.current) {
+        clearTimeout(redirectTimerRef.current);
+      }
     };
   }, [token, navigate]);
 

@@ -19,6 +19,9 @@ export function LoginPage() {
   const justRegistered = searchParams.get('registered') === 'true';
   const activationStatus = searchParams.get('activated');
   const activationMessage = searchParams.get('message');
+  const decodedActivationMessage = activationMessage
+    ? decodeURIComponent(activationMessage)
+    : null;
 
   const getSafeRedirectPath = (): string => {
     if (redirectParam && redirectParam.startsWith('/')) {
@@ -92,16 +95,24 @@ export function LoginPage() {
 
           {/* Account Activation Message */}
           {activationStatus === 'success' && (
-            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+            <div
+              role="alert"
+              aria-live="polite"
+              className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg"
+            >
               <p className="text-sm text-green-700 dark:text-green-400">
-                {activationMessage || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.'}
+                {decodedActivationMessage || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.'}
               </p>
             </div>
           )}
           {activationStatus === 'error' && (
-            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+            <div
+              role="alert"
+              aria-live="polite"
+              className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg"
+            >
               <p className="text-sm text-red-600 dark:text-red-400">
-                {activationMessage || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.'}
+                {decodedActivationMessage || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.'}
               </p>
             </div>
           )}

@@ -188,7 +188,7 @@ export class AuthService {
   async activateAccount(token: string): Promise<ApiResponse<{ message?: string }>> {
     return apiClient.get<{ message?: string }>(
       `${this.baseEndpoint}/activate`,
-      { params: { token } }
+      { params: { token }, skipAuthRedirect: true }
     );
   }
 
