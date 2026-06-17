@@ -36,6 +36,9 @@ export interface EnvironmentConfig {
   // Dev
   DEV_MOCK_API: boolean;
   DEV_DELAY_MS: number;
+
+  // Restricted Side-Nav Menu Access
+  RESTRICTED_MENU_USER_IDS: string[];
 }
 
 class EnvManager {
@@ -78,6 +81,16 @@ class EnvManager {
     return parsed;
   }
 
+  private getEnvVarAsStringArray(key: string, defaultValue: string[] = []): string[] {
+    const value = import.meta.env[key];
+    if (value === undefined) return defaultValue;
+    if (typeof value === 'string' && value.trim() === '') return [];
+    return String(value)
+      .split(',')
+      .map((item) => item.trim())
+      .filter((item) => item.length > 0);
+  }
+
   private loadConfig(): EnvironmentConfig {
     return {
       APP_NAME: this.getEnvVar('VITE_APP_NAME', 'منصة رشد'),
@@ -102,6 +115,8 @@ class EnvManager {
       
       DEV_MOCK_API: this.getEnvVarAsBool('VITE_DEV_MOCK_API', false),
       DEV_DELAY_MS: this.getEnvVarAsNumber('VITE_DEV_DELAY_MS', 0),
+
+      RESTRICTED_MENU_USER_IDS: this.getEnvVarAsStringArray('VITE_RESTRICTED_MENU_USER_IDS'),
     };
   }
 

@@ -16,6 +16,11 @@ import { authService } from '@/api/services/auth-service';
  * calls the backend activation endpoint, and redirects the user to the login
  * page with a success or failure message.
  */
+const ACTIVATION_SUCCESS_MESSAGE = 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.';
+const ACTIVATION_FAILURE_MESSAGE = 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية أو غير صالح.';
+const ACTIVATION_NETWORK_MESSAGE = 'تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت.';
+const ACTIVATION_MISSING_MESSAGE = 'رابط التفعيل غير صالح أو مفقود.';
+
 export function ActivateAccountPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -28,12 +33,10 @@ export function ActivateAccountPage() {
   useEffect(() => {
     if (!token) {
       setStatus('error');
-      setMessage('رابط التفعيل غير صالح أو مفقود.');
+      setMessage(ACTIVATION_MISSING_MESSAGE);
       redirectTimerRef.current = setTimeout(() => {
         navigate(
-          `/auth/login?activated=error&message=${encodeURIComponent(
-            'رابط التفعيل غير صالح أو مفقود.'
-          )}`
+          `/auth/login?activated=error&message=${encodeURIComponent(ACTIVATION_MISSING_MESSAGE)}`
         );
       }, 2500);
       return;
@@ -48,36 +51,30 @@ export function ActivateAccountPage() {
         if (cancelled) return;
 
         if (response.success) {
-          const successMessage =
-            response.message || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.';
           setStatus('success');
-          setMessage(successMessage);
+          setMessage(ACTIVATION_SUCCESS_MESSAGE);
 
           redirectTimerRef.current = setTimeout(() => {
             navigate(
-              `/auth/login?activated=success&message=${encodeURIComponent(successMessage)}`
+              `/auth/login?activated=success&message=${encodeURIComponent(ACTIVATION_SUCCESS_MESSAGE)}`
             );
           }, 2500);
           return;
         }
 
-        const failureMessage =
-          response.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.';
         setStatus('error');
-        setMessage(failureMessage);
+        setMessage(ACTIVATION_FAILURE_MESSAGE);
 
         redirectTimerRef.current = setTimeout(() => {
           navigate(
-            `/auth/login?activated=error&message=${encodeURIComponent(failureMessage)}`
+            `/auth/login?activated=error&message=${encodeURIComponent(ACTIVATION_FAILURE_MESSAGE)}`
           );
         }, 2500);
       } catch (err: any) {
         if (cancelled) return;
 
         const errorMessage =
-          err?.message === 'Failed to fetch'
-            ? 'تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت.'
-            : err?.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.';
+          err?.message === 'Failed to fetch' ? ACTIVATION_NETWORK_MESSAGE : ACTIVATION_FAILURE_MESSAGE;
 
         setStatus('error');
         setMessage(errorMessage);
