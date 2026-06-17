@@ -167,13 +167,11 @@ export class AuthService {
 
   /**
    * Register a new user and request activation email.
-   * Sends the application URL so the backend can build a full activation link.
    */
   async register(data: RegisterData): Promise<ApiResponse<AuthTokens>> {
-    const { ENV } = await import('@/lib/env');
     const response = await apiClient.post<AuthTokens>(
       `${this.baseEndpoint}/register`,
-      { ...data, clientUrl: ENV.APP_URL }
+      data
     );
 
     const unwrapped = this.unwrap<AuthTokens>(response);
