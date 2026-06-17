@@ -17,6 +17,8 @@ export function LoginPage() {
   const isExpired = searchParams.get('expired') === 'true';
   const redirectParam = searchParams.get('redirect');
   const justRegistered = searchParams.get('registered') === 'true';
+  const activationStatus = searchParams.get('activated');
+  const activationMessage = searchParams.get('message');
 
   const getSafeRedirectPath = (): string => {
     if (redirectParam && redirectParam.startsWith('/')) {
@@ -84,6 +86,22 @@ export function LoginPage() {
             <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
               <p className="text-sm text-green-700 dark:text-green-400">
                 تم إنشاء حسابك بنجاح. يرجى تفعيل بريدك الإلكتروني من خلال الرابط المرسل إلى بريدك.
+              </p>
+            </div>
+          )}
+
+          {/* Account Activation Message */}
+          {activationStatus === 'success' && (
+            <div className="mb-6 p-4 bg-green-500/10 border border-green-500/20 rounded-lg">
+              <p className="text-sm text-green-700 dark:text-green-400">
+                {activationMessage || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.'}
+              </p>
+            </div>
+          )}
+          {activationStatus === 'error' && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+              <p className="text-sm text-red-600 dark:text-red-400">
+                {activationMessage || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.'}
               </p>
             </div>
           )}

@@ -8,6 +8,7 @@ import { LoginPage } from './components/LoginPage';
 import { RegistrationPage } from './components/RegistrationPage';
 import { ForgetPasswordPage } from './components/ForgetPasswordPage';
 import { ResetPasswordPage } from './components/ResetPasswordPage';
+import { ActivateAccountPage } from './components/ActivateAccountPage';
 import { ExecutiveDashboard } from './components/ExecutiveDashboard';
 import { AIAnalysisPage } from './components/AIAnalysisPage';
 import { SalesDashboard } from './components/SalesDashboard';
@@ -88,6 +89,10 @@ export const router = createBrowserRouter([
           {
             path: 'reset-password',
             Component: ResetPasswordPage,
+          },
+          {
+            path: 'activate',
+            Component: ActivateAccountPage,
           },
         ],
       },

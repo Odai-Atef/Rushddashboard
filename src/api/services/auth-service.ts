@@ -183,6 +183,16 @@ export class AuthService {
   }
 
   /**
+   * Activate a newly registered account using an email activation token.
+   */
+  async activateAccount(token: string): Promise<ApiResponse<{ message?: string }>> {
+    return apiClient.get<{ message?: string }>(
+      `${this.baseEndpoint}/activate`,
+      { params: { token } }
+    );
+  }
+
+  /**
    * Check if user is authenticated
    */
   isAuthenticated(): boolean {

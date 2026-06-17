@@ -1,0 +1,164 @@
+import { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router';
+import {
+  Sparkles,
+  Loader2,
+  CheckCircle,
+  AlertCircle,
+  ArrowRight,
+} from 'lucide-react';
+import { authService } from '@/api/services/auth-service';
+
+/**
+ * ActivateAccountPage
+ *
+ * Reads an email activation token from the URL query parameter (?token=...),
+ * calls the backend activation endpoint, and redirects the user to the login
+ * page with a success or failure message.
+ */
+export function ActivateAccountPage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const token = searchParams.get('token');
+
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (!token) {
+      setStatus('error');
+      setMessage('رابط التفعيل غير صالح أو مفقود.');
+      return;
+    }
+
+    let cancelled = false;
+
+    const activate = async () => {
+      setStatus('loading');
+      try {
+        const response = await authService.activateAccount(token);
+        if (cancelled) return;
+
+        if (response.success) {
+          setStatus('success');
+          setMessage(response.message || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.');
+
+          const timer = setTimeout(() => {
+            navigate(
+              `/auth/login?activated=success&message=${encodeURIComponent(
+                response.message || 'تم تفعيل حسابك بنجاح. يمكنك الآن تسجيل الدخول.'
+              )}`
+            );
+          }, 2500);
+          return () => clearTimeout(timer);
+        }
+
+        setStatus('error');
+        setMessage(response.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.');
+
+        setTimeout(() => {
+          navigate(
+            `/auth/login?activated=error&message=${encodeURIComponent(
+              response.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.'
+            )}`
+          );
+        }, 2500);
+      } catch (err: any) {
+        if (cancelled) return;
+
+        const errorMessage =
+          err?.message === 'Failed to fetch'
+            ? 'تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت.'
+            : err?.message || 'فشل تفعيل الحساب. الرابط قد يكون منتهي الصلاحية.';
+
+        setStatus('error');
+        setMessage(errorMessage);
+
+        setTimeout(() => {
+          navigate(`/auth/login?activated=error&message=${encodeURIComponent(errorMessage)}`);
+        }, 2500);
+      }
+    };
+
+    activate();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [token, navigate]);
+
+  const iconColor = status === 'success' ? 'text-green-600' : 'text-red-600';
+  const bgColor = status === 'success' ? 'bg-green-500/20' : 'bg-red-500/20';
+
+  return (
+    <div className="min-h-screen flex">
+      {/* Left Side - Status */}
+      <div className="flex-1 flex items-center justify-center p-8 bg-background">
+        <div className="w-full max-w-md text-center">
+          {/* Logo */}
+          <div className="mb-8">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+                <Sparkles className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-2xl font-bold">منصة رشد</h1>
+            </div>
+            <p className="text-muted-foreground">منصة القرارات الذكية</p>
+          </div>
+
+          <div className="mb-8">
+            {status === 'loading' ? (
+              <Loader2 className="w-16 h-16 animate-spin text-primary mx-auto mb-4" />
+            ) : status === 'success' ? (
+              <div className={`inline-flex items-center justify-center w-16 h-16 ${bgColor} rounded-full mb-4`}>
+                <CheckCircle className={`w-8 h-8 ${iconColor}`} />
+              </div>
+            ) : (
+              <div className={`inline-flex items-center justify-center w-16 h-16 ${bgColor} rounded-full mb-4`}>
+                <AlertCircle className={`w-8 h-8 ${iconColor}`} />
+              </div>
+            )}
+
+            <h2 className="text-2xl font-bold mb-3">
+              {status === 'loading' && 'جاري تفعيل حسابك...'}
+              {status === 'success' && 'تم تفعيل الحساب'}
+              {status === 'error' && 'فشل تفعيل الحساب'}
+              {status === 'idle' && 'تفعيل الحساب'}
+            </h2>
+
+            <p className="text-muted-foreground mb-6">{message || 'يرجى الانتظار أثناء التحقق من رابط التفعيل.'}</p>
+
+            {(status === 'success' || status === 'error') && (
+              <button
+                onClick={() =>
+                  navigate(
+                    `/auth/login?activated=${status}&message=${encodeURIComponent(message)}`
+                  )
+                }
+                className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+              >
+                <span>الذهاب إلى تسجيل الدخول</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Right Side - Branding */}
+      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
+        <div className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl" />
+
+        <div className="relative z-10 max-w-lg text-white">
+          <h2 className="text-4xl font-bold mb-6">
+            مرحباً بك في منصة رشد
+          </h2>
+          <p className="text-xl mb-8 text-white/90">
+            خطوة واحدة تفصلك عن بدء رحلة القرارات الذكية
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
