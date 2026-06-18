@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتيجة التقييم - منصة رشد</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f5f7fa; direction: rtl;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" align="center" width="100%" style="max-width: 650px; margin: 0 auto; background-color: #ffffff;">
+        <!-- Header with Logo -->
+        <tr>
+            <td style="padding: 40px 30px; text-align: center; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="text-align: center;">
+                            <img src="https://rushdisiv.com/logo.png" alt="منصة رشد" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 20px;">
+                            <h1 style="margin: 0; color: #ffffff; font-size: 28px; font-weight: 700; letter-spacing: -0.5px;">نتيجة تقييم مؤسستك</h1>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!-- Greeting -->
+        <tr>
+            <td style="padding: 40px 30px 20px 30px;">
+                <h2 style="margin: 0; color: #1a202c; font-size: 22px; font-weight: 600;">عزيزي {{ORGANIZATION_NAME}}</h2>
+            </td>
+        </tr>
+
+        <!-- Introduction -->
+        <tr>
+            <td style="padding: 0 30px 30px 30px; color: #4a5568; font-size: 16px; line-height: 1.6;">
+                يسعدنا إطلاعك على نتائج التقييم الشامل لمؤسستك. قام فريق الذكاء الاصطناعي لدينا بتحليل جميع البيانات المقدمة وإعداد تقرير مفصل عن أداء مؤسستك.
+            </td>
+        </tr>
+
+        <!-- Overall Score -->
+        <tr>
+            <td style="padding: 0 30px 30px 30px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; overflow: hidden;">
+                    <tr>
+                        <td style="padding: 30px; text-align: center;">
+                            <div style="color: #ffffff; font-size: 16px; font-weight: 500; margin-bottom: 10px;">النتيجة الإجمالية</div>
+                            <div style="color: #ffffff; font-size: 48px; font-weight: 700; margin-bottom: 5px;">{{OVERALL_SCORE}}/100</div>
+                            <div style="color: #e9d5ff; font-size: 14px;">{{SCORE_LABEL}}</div>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!-- Dashboard Section Title -->
+        <tr>
+            <td style="padding: 20px 30px 20px 30px; background-color: #f7fafc;">
+                <h3 style="margin: 0; color: #2d3748; font-size: 20px; font-weight: 600; text-align: center;">لوحة المؤشرات الرئيسية</h3>
+            </td>
+        </tr>
+
+        <!-- KPI Dashboard Grid -->
+        <tr>
+            <td style="padding: 30px; background-color: #f7fafc;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <!-- Row 1 -->
+                    <tr>
+                        <td width="48%" style="padding: 0 1% 15px 1%; vertical-align: top;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الجاهزية التشغيلية</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{OPERATIONAL_SCORE}}%</div>
+                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                            <div style="width: {{OPERATIONAL_SCORE}}%; height: 100%; background-color: #10b981;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="48%" style="padding: 0 1% 15px 1%; vertical-align: top;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الاستقرار المالي</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{FINANCIAL_SCORE}}%</div>
+                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                            <div style="width: {{FINANCIAL_SCORE}}%; height: 100%; background-color: #3b82f6;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- Row 2 -->
+                    <tr>
+                        <td width="48%" style="padding: 0 1% 15px 1%; vertical-align: top;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الأثر الاجتماعي</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{IMPACT_SCORE}}%</div>
+                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                            <div style="width: {{IMPACT_SCORE}}%; height: 100%; background-color: #8b5cf6;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="48%" style="padding: 0 1% 15px 1%; vertical-align: top;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الحوكمة والامتثال</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{GOVERNANCE_SCORE}}%</div>
+                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                            <div style="width: {{GOVERNANCE_SCORE}}%; height: 100%; background-color: #f59e0b;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- Row 3 -->
+                    <tr>
+                        <td width="48%" style="padding: 0 1% 0 1%; vertical-align: top;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الابتكار والتطوير</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{INNOVATION_SCORE}}%</div>
+                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                            <div style="width: {{INNOVATION_SCORE}}%; height: 100%; background-color: #ec4899;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td width="48%" style="padding: 0 1% 0 1%; vertical-align: top;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <tr>
+                                    <td style="padding: 20px;">
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الشفافية</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{TRANSPARENCY_SCORE}}%</div>
+                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
+                                            <div style="width: {{TRANSPARENCY_SCORE}}%; height: 100%; background-color: #14b8a6;"></div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!-- Key Highlights -->
+        <tr>
+            <td style="padding: 30px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding-bottom: 20px;">
+                            <h3 style="margin: 0; color: #2d3748; font-size: 18px; font-weight: 600;">النقاط البارزة</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; background-color: #ecfdf5; border-right: 4px solid #10b981; border-radius: 6px; margin-bottom: 10px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="30" style="vertical-align: top;">
+                                        <div style="width: 24px; height: 24px; background-color: #10b981; border-radius: 50%; text-align: center; line-height: 24px; color: #ffffff; font-size: 14px; font-weight: 700;">✓</div>
+                                    </td>
+                                    <td style="padding-right: 10px;">
+                                        <div style="color: #065f46; font-size: 15px; font-weight: 600; margin-bottom: 3px;">نقاط القوة</div>
+                                        <div style="color: #047857; font-size: 14px; line-height: 1.5;">{{STRENGTHS}}</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 15px; background-color: #fef3c7; border-right: 4px solid #f59e0b; border-radius: 6px;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="30" style="vertical-align: top;">
+                                        <div style="width: 24px; height: 24px; background-color: #f59e0b; border-radius: 50%; text-align: center; line-height: 24px; color: #ffffff; font-size: 14px; font-weight: 700;">!</div>
+                                    </td>
+                                    <td style="padding-right: 10px;">
+                                        <div style="color: #92400e; font-size: 15px; font-weight: 600; margin-bottom: 3px;">مجالات التحسين</div>
+                                        <div style="color: #b45309; font-size: 14px; line-height: 1.5;">{{IMPROVEMENTS}}</div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!-- Recommendations -->
+        <tr>
+            <td style="padding: 0 30px 30px 30px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding-bottom: 15px;">
+                            <h3 style="margin: 0; color: #2d3748; font-size: 18px; font-weight: 600;">التوصيات الرئيسية</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="30" style="vertical-align: top;">
+                                        <div style="width: 8px; height: 8px; background-color: #667eea; border-radius: 50%; margin-top: 6px;"></div>
+                                    </td>
+                                    <td style="color: #4a5568; font-size: 15px; line-height: 1.6;">{{RECOMMENDATION_1}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="30" style="vertical-align: top;">
+                                        <div style="width: 8px; height: 8px; background-color: #667eea; border-radius: 50%; margin-top: 6px;"></div>
+                                    </td>
+                                    <td style="color: #4a5568; font-size: 15px; line-height: 1.6;">{{RECOMMENDATION_2}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding: 12px 0;">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td width="30" style="vertical-align: top;">
+                                        <div style="width: 8px; height: 8px; background-color: #667eea; border-radius: 50%; margin-top: 6px;"></div>
+                                    </td>
+                                    <td style="color: #4a5568; font-size: 15px; line-height: 1.6;">{{RECOMMENDATION_3}}</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!-- CTA Button -->
+        <tr>
+            <td style="padding: 20px 30px 40px 30px; text-align: center;">
+                <a href="{{REPORT_LINK}}" style="display: inline-block; padding: 16px 48px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 600; border-radius: 8px; box-shadow: 0 4px 6px rgba(102, 126, 234, 0.3);">
+                    عرض التقرير الكامل
+                </a>
+            </td>
+        </tr>
+
+        <!-- Next Steps -->
+        <tr>
+            <td style="padding: 30px; background-color: #fffbeb; border-top: 1px solid #fef3c7; border-bottom: 1px solid #fef3c7;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding-bottom: 15px;">
+                            <h3 style="margin: 0; color: #78350f; font-size: 18px; font-weight: 600;">الخطوات التالية</h3>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #92400e; font-size: 15px; line-height: 1.6;">
+                            سيتواصل معك فريقنا خلال 48 ساعة لمناقشة النتائج والتخطيط لخطة العمل. في غضون ذلك، يمكنك استعراض التقرير الكامل والبدء في تطبيق التوصيات الأولية.
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <!-- Footer -->
+        <tr>
+            <td style="padding: 30px 30px; background-color: #2d3748; color: #cbd5e0; text-align: center;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    <tr>
+                        <td style="padding-bottom: 15px; font-size: 14px;">
+                            لديك أسئلة؟ <a href="mailto:support@rushdisiv.com" style="color: #667eea; text-decoration: none;">تواصل مع فريق الدعم</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-bottom: 10px;">
+                            <a href="{{PLATFORM_LINK}}" style="display: inline-block; margin: 0 10px; color: #a0aec0; text-decoration: none; font-size: 13px;">زيارة المنصة</a>
+                            <span style="color: #4a5568;">•</span>
+                            <a href="{{HELP_CENTER_LINK}}" style="display: inline-block; margin: 0 10px; color: #a0aec0; text-decoration: none; font-size: 13px;">مركز المساعدة</a>
+                            <span style="color: #4a5568;">•</span>
+                            <a href="{{PRIVACY_LINK}}" style="display: inline-block; margin: 0 10px; color: #a0aec0; text-decoration: none; font-size: 13px;">سياسة الخصوصية</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding-top: 15px; font-size: 13px; color: #a0aec0; border-top: 1px solid #4a5568;">
+                            © 2026 منصة رشد. جميع الحقوق محفوظة.
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
