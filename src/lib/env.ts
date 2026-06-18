@@ -97,7 +97,7 @@ class EnvManager {
       APP_VERSION: this.getEnvVar('VITE_APP_VERSION', '1.0.0'),
       APP_DESCRIPTION: this.getEnvVar('VITE_APP_DESCRIPTION', ''),
       
-      API_BASE_URL: this.getEnvVar('VITE_API_BASE_URL', 'http://localhost:3000/api'),
+      API_BASE_URL: this.getEnvVar('VITE_API_BASE_URL', 'https://rushdisiv.com'),
       API_TIMEOUT: this.getEnvVarAsNumber('VITE_API_TIMEOUT', 30000),
       API_RETRY_ATTEMPTS: this.getEnvVarAsNumber('VITE_API_RETRY_ATTEMPTS', 3),
       
