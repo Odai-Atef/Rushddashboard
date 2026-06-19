@@ -431,8 +431,24 @@ export interface AssessmentSubmissionResponse {
   submittedAt: string;
 }
 
+/** Lightweight evaluation cooldown status */
+export interface EvaluationCooldownStatus {
+  canEvaluate: boolean;
+  cooldownMinutes: number;
+  remainingSeconds: number;
+  firstTime: boolean;
+  lastReportGeneratedAt: string | null;
+  nextEvaluationAt: string | null;
+}
+
+/** Response wrapper for evaluation cooldown endpoint */
+export interface EvaluationCooldownStatusResponse {
+  success: boolean;
+  data: EvaluationCooldownStatus;
+}
+
 /** Document type enum used by the backend document upload API */
-export type DocumentType = 'license' | 'financial' | 'national_address' | 'other';
+export type DocumentType = 'license' | 'financial' | 'national_address' | 'registration' | 'other';
 
 /** Lifecycle status of an uploaded organization document */
 export type DocumentStatus = 'UPLOADED' | 'PENDING_REVIEW' | string;
@@ -461,7 +477,7 @@ export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
   license: 'license',
   bank: 'financial',
   address: 'national_address',
-  profile: 'other',
+  profile: 'registration',
   projects: 'other',
   financial: 'financial',
   annual: 'other',
@@ -479,6 +495,7 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
   NATIONAL_ADDRESS: 'address',
   national_address: 'address',
   ADDRESS: 'address',
+  REGISTRATION: 'profile',
   ORG_PROFILE: 'profile',
   ORGANIZATION_PROFILE: 'profile',
   PROFILE: 'profile',
@@ -725,6 +742,19 @@ export class OnboardingService {
   }
 
   /**
+   * Get evaluation cooldown status for an organization
+   * GET /api/v1/onboarding/evaluation-cooldown/status?organizationId=...
+   */
+  async getEvaluationCooldownStatus(
+    organizationId: string,
+    context: 'preloader' | 'assessment' = 'preloader'
+  ): Promise<ApiResponse<EvaluationCooldownStatusResponse>> {
+    return apiClient.get('/api/v1/onboarding/evaluation-cooldown/status', {
+      params: { organizationId, context },
+    });
+  }
+
+  /**
    * Run/generate the full evaluation report for an organization
    * POST /api/v1/onboarding/assessments/:organizationId/evaluate
    */
@@ -732,7 +762,9 @@ export class OnboardingService {
     organizationId: string,
     payload?: EvaluateRequest
   ): Promise<ApiResponse<EvaluationResponse>> {
-    return apiClient.post(`/api/v1/onboarding/assessments/${organizationId}/evaluate`, payload);
+    return apiClient.post(`/api/v1/onboarding/assessments/${organizationId}/evaluate`, undefined, {
+      params: payload?.forceRegenerate ? { forceRegenerate: String(payload.forceRegenerate) } : undefined,
+    });
   }
 }
 

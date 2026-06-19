@@ -1,21 +1,63 @@
-import { Brain, CheckCircle2, Loader2 } from 'lucide-react';
+import { Brain, CheckCircle2, Loader2, Clock } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { onboardingService } from '@/api/services';
+import { toast } from 'sonner';
 
 const PRELOADER_MIN_DURATION_MS = 3000;
+
+function formatRemainingTime(totalSeconds: number): string {
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.ceil((totalSeconds % 3600) / 60);
+  if (hours > 0) {
+    return `${hours} ساعة و ${minutes} دقيقة`;
+  }
+  return `${minutes} دقيقة`;
+}
 
 export function PreloaderPage() {
   const { goToStep } = useOnboardingNavigate();
   const { activeOrganizationId, setAssessmentResult, setAssessmentStatus } =
     useOnboardingContext();
   const [processingProgress, setProcessingProgress] = useState(0);
+  const [cooldownInfo, setCooldownInfo] = useState<{
+    blocked: boolean;
+    remainingSeconds: number;
+    firstTime: boolean;
+  } | null>(null);
   const startedRef = useRef(false);
 
   useEffect(() => {
     if (!activeOrganizationId || startedRef.current) return;
     startedRef.current = true;
+
+    const checkCooldown = async () => {
+      try {
+        const res = await onboardingService.getEvaluationCooldownStatus(
+          activeOrganizationId,
+          'preloader'
+        );
+        const status = (res.data as any)?.data ?? res.data;
+        if (!status?.canEvaluate && !status?.firstTime) {
+          setCooldownInfo({
+            blocked: true,
+            remainingSeconds: status.remainingSeconds ?? 0,
+            firstTime: false,
+          });
+          return true;
+        }
+        setCooldownInfo({
+          blocked: false,
+          remainingSeconds: 0,
+          firstTime: status?.firstTime ?? false,
+        });
+        return false;
+      } catch (err: any) {
+        console.error('[PreloaderPage] cooldown check failed', err);
+        return false;
+      }
+    };
 
     let progressInterval: ReturnType<typeof setInterval> | null = null;
     const startProgress = () => {
@@ -37,6 +79,9 @@ export function PreloaderPage() {
     };
 
     const submit = async () => {
+      const blocked = await checkCooldown();
+      if (blocked) return;
+
       startProgress();
       const startTime = Date.now();
       try {
@@ -62,6 +107,7 @@ export function PreloaderPage() {
         goToStep('results');
       } catch (err: any) {
         stopProgress();
+        toast.error(err?.message || 'تعذر إكمال التقييم. يرجى المحاولة مرة أخرى.');
         goToStep('documents');
       }
     };
@@ -71,6 +117,34 @@ export function PreloaderPage() {
       if (progressInterval) clearInterval(progressInterval);
     };
   }, [activeOrganizationId, goToStep, setAssessmentResult, setAssessmentStatus]);
+
+  if (cooldownInfo?.blocked) {
+    return (
+      <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
+        <div className="max-w-xl w-full">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-10 text-center">
+            <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Clock className="w-10 h-10 text-amber-600" />
+            </div>
+            <h1 className="text-2xl font-bold mb-3">التقييم غير متاح حالياً</h1>
+            <p className="text-gray-600 mb-8">
+              لقد أجريت تقييماً مؤخراً. يمكنك إجراء التقييم مرة أخرى بعد{' '}
+              {formatRemainingTime(cooldownInfo.remainingSeconds)}.
+            </p>
+            <div className="text-sm text-gray-500">
+              الوقت المتبقي: {formatRemainingTime(cooldownInfo.remainingSeconds)}
+            </div>
+            <button
+              onClick={() => goToStep('results')}
+              className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            >
+              عرض نتيجة التقييم السابقة
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
