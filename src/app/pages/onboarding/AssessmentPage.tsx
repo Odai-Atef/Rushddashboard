@@ -11,6 +11,7 @@ import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { toast } from 'sonner';
 import { resolveIcon as resolveApiIcon } from '@/app/utils/icon-map';
+import { getStepOrder, OnboardingStep } from '@/app/utils/onboarding-guards';
 import {
   AssessmentCategory,
   AssessmentQuestion,
@@ -26,7 +27,7 @@ interface AssessmentAnswer {
 
 export function AssessmentPage() {
   const { goToStep } = useOnboardingNavigate();
-  const { organization, activeOrganizationId } = useOnboardingContext();
+  const { organization, activeOrganizationId, setOrganization, setAssessmentAnswersDirty } = useOnboardingContext();
 
   const [assessmentCategories, setAssessmentCategories] = useState<
     AssessmentCategory[]
@@ -48,10 +49,61 @@ export function AssessmentPage() {
     new Set()
   );
 
+  const [isCheckingCooldown, setIsCheckingCooldown] = useState(true);
+  const [cooldownBlocked, setCooldownBlocked] = useState(false);
+  const [cooldownRedirected, setCooldownRedirected] = useState(false);
+
   const abortControllerRef = useRef<AbortController | null>(null);
   const locallyEditedQuestionIds = useRef<Set<string>>(new Set());
 
   useEffect(() => {
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    const checkCooldown = async () => {
+      if (!activeOrganizationId) {
+        setIsCheckingCooldown(false);
+        return;
+      }
+      try {
+        const { onboardingService } = await import('@/api/services');
+        const res = await onboardingService.getEvaluationCooldownStatus(
+          activeOrganizationId,
+          'assessment'
+        );
+        if (controller.signal.aborted) return;
+        const status = (res.data as any)?.data ?? res.data;
+        if (!status?.canEvaluate && !status?.firstTime) {
+          const remainingMinutes = Math.max(
+            1,
+            Math.ceil((status?.remainingSeconds ?? 0) / 60)
+          );
+          toast.error(
+            `يمكنك إجراء التقييم مرة أخرى بعد ${remainingMinutes} دقيقة`
+          );
+          setCooldownBlocked(true);
+          setCooldownRedirected(true);
+          goToStep('preloader');
+          return;
+        }
+      } catch (err: any) {
+        if (controller.signal.aborted) return;
+        console.error('[AssessmentPage] cooldown check failed', err);
+      } finally {
+        if (!controller.signal.aborted) {
+          setIsCheckingCooldown(false);
+        }
+      }
+    };
+
+    checkCooldown();
+    return () => {
+      controller.abort();
+    };
+  }, [activeOrganizationId, goToStep]);
+
+  useEffect(() => {
+    if (cooldownRedirected || isCheckingCooldown) return;
     const controller = new AbortController();
     abortControllerRef.current = controller;
     setIsLoadingAssessment(true);
@@ -151,7 +203,7 @@ export function AssessmentPage() {
     return () => {
       controller.abort();
     };
-  }, [activeOrganizationId]);
+  }, [activeOrganizationId, cooldownRedirected, isCheckingCooldown]);
 
   const getAnswer = (questionId: string) =>
     assessmentAnswers.find((a) => a.questionId === questionId)?.answer;
@@ -163,6 +215,7 @@ export function AssessmentPage() {
   ) => {
     locallyEditedQuestionIds.current.add(questionId);
     setSaveAnswersError(null);
+    setAssessmentAnswersDirty(true);
     setAssessmentAnswers((prev) => {
       const filtered = prev.filter((a) => a.questionId !== questionId);
       return [...filtered, { categoryId, questionId, answer }];
@@ -304,9 +357,21 @@ export function AssessmentPage() {
           true
         );
         locallyEditedQuestionIds.current.clear();
+        setAssessmentAnswersDirty(false);
         if (currentAssessmentStep < assessmentCategories.length - 1) {
           setCurrentAssessmentStep((step) => step + 1);
         } else {
+          // Optimistically advance currentStep to ASSESSMENT so the route
+          // guard allows navigation to documents when the backend lags.
+          const currentStepOrder = getStepOrder(
+            (organization?.currentStep?.toLowerCase() as OnboardingStep) ?? 'landing'
+          );
+          const assessmentStepOrder = getStepOrder('assessment');
+          console.log('[AssessmentPage] final category saved, currentStep:', organization?.currentStep, 'currentStepOrder:', currentStepOrder);
+          if (organization && currentStepOrder < assessmentStepOrder) {
+            console.log('[AssessmentPage] patching currentStep to ASSESSMENT');
+            setOrganization({ ...organization, currentStep: 'ASSESSMENT' });
+          }
           goToStep('documents');
         }
       }
@@ -329,12 +394,25 @@ export function AssessmentPage() {
     }
   };
 
-  if (isLoadingAssessment) {
+  if (isCheckingCooldown || isLoadingAssessment) {
     return (
       <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-          <p className="text-gray-600">جارٍ تحميل فئات التقييم...</p>
+          <p className="text-gray-600">
+            {isCheckingCooldown ? 'جارٍ التحقق من إمكانية التقييم...' : 'جارٍ تحميل فئات التقييم...'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (cooldownBlocked) {
+    return (
+      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          <p className="text-gray-600">جارٍ إعادة التوجيه...</p>
         </div>
       </div>
     );
