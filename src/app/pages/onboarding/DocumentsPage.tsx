@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
+import { getStepOrder, OnboardingStep } from '@/app/utils/onboarding-guards';
 import { toast } from 'sonner';
 import {
   BACKEND_DOCUMENT_TYPE_TO_SLOT,
@@ -55,7 +56,7 @@ const isCompletedStatus = (status?: string) =>
 
 export function DocumentsPage() {
   const { goToStep } = useOnboardingNavigate();
-  const { organization, activeOrganizationId, setAssessmentResult, setAssessmentStatus } =
+  const { organization, activeOrganizationId, setOrganization, setAssessmentResult, setAssessmentStatus } =
     useOnboardingContext();
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
@@ -175,7 +176,7 @@ export function DocumentsPage() {
 
     const progressInterval = setInterval(() => {
       setUploadedFiles((prev) =>
-        prev.map((f) =
+        prev.map((f) =>
           f.id === slotId && f.status === 'uploading' && f.progress < 90
             ? { ...f, progress: Math.min(f.progress + 10, 90) }
             : f
@@ -208,7 +209,7 @@ export function DocumentsPage() {
       }
 
       setUploadedFiles((prev) =>
-        prev.map((f) =
+        prev.map((f) =>
           f.id === slotId
             ? {
                 ...f,
@@ -231,7 +232,7 @@ export function DocumentsPage() {
       clearInterval(progressInterval);
       const message = err instanceof Error ? err.message : 'Upload failed';
       setUploadedFiles((prev) =>
-        prev.map((f) =
+        prev.map((f) =>
           f.id === slotId ? { ...f, status: 'error', progress: 0 } : f
         )
       );
@@ -280,6 +281,19 @@ export function DocumentsPage() {
       return;
 
     setIsSubmittingAssessment(true);
+
+    // Optimistically advance currentStep to DOCUMENTS so the route
+    // guard allows navigation to preloader/results while the backend catches up.
+    if (organization) {
+      const currentStepOrder = getStepOrder(
+        (organization.currentStep?.toLowerCase() as OnboardingStep) ?? 'landing'
+      );
+      const documentsStepOrder = getStepOrder('documents');
+      if (currentStepOrder < documentsStepOrder) {
+        setOrganization({ ...organization, currentStep: 'DOCUMENTS' });
+      }
+    }
+
     goToStep('preloader');
   };
 

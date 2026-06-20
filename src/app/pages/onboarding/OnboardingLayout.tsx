@@ -124,7 +124,7 @@ function StepGuardOutlet() {
 export function OnboardingLayout() {
   console.log('[OnboardingLayout] render');
   const [searchParams] = useSearchParams();
-  const organizationId = searchParams.get('organizationId');
+  const organizationId = searchParams.get('organizationId') || null;
   console.log('[OnboardingLayout] organizationId:', organizationId);
 
   return (

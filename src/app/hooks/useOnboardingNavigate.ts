@@ -7,8 +7,9 @@ import { useOnboardingContext } from './useOnboardingContext';
 export function useOnboardingNavigate() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const urlOrganizationId = searchParams.get('organizationId');
+  const rawUrlOrganizationId = searchParams.get('organizationId');
   const { activeOrganizationId } = useOnboardingContext();
+  const urlOrganizationId = rawUrlOrganizationId || null;
   const organizationId = urlOrganizationId ?? activeOrganizationId;
 
   const goToStep = useCallback(

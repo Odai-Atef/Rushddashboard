@@ -29,7 +29,7 @@ interface LoadedEvaluation {
 
 export function RoadmapPage() {
   const { goToStep } = useOnboardingNavigate();
-  const { activeOrganizationId, organization } = useOnboardingContext();
+  const { activeOrganizationId, organization, assessmentAnswersDirty } = useOnboardingContext();
 
   const reportContainerRef = useRef<HTMLDivElement>(null);
   const [isDownloading, setIsDownloading] = useState(false);
@@ -52,23 +52,13 @@ export function RoadmapPage() {
       try {
         const { onboardingService } = await import('@/api/services');
 
-        // Try cached report first to avoid unique-constraint conflicts when a
-        // report already exists for this organization.
+        // Always force regeneration so the report reflects the latest answers.
         let res = await onboardingService.evaluateAssessment(activeOrganizationId, {
-          forceRegenerate: false,
+          forceRegenerate: true,
         });
 
         let payload = (res.data as any)?.data ?? res.data;
-        let cached = (res.data as any)?.cached ?? true;
-
-        // Only force regeneration when no cached report is available.
-        if (!payload) {
-          res = await onboardingService.evaluateAssessment(activeOrganizationId, {
-            forceRegenerate: true,
-          });
-          payload = (res.data as any)?.data ?? res.data;
-          cached = (res.data as any)?.cached ?? false;
-        }
+        let cached = (res.data as any)?.cached ?? false;
 
         if (!cancelled) {
           if (payload) {
@@ -92,7 +82,7 @@ export function RoadmapPage() {
     return () => {
       cancelled = true;
     };
-  }, [activeOrganizationId]);
+  }, [activeOrganizationId, assessmentAnswersDirty]);
 
   const handleDownloadPlan = async () => {
     const container = reportContainerRef.current;

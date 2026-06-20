@@ -705,10 +705,10 @@ export class OnboardingService {
 
   /**
    * Get ISIV assessment results for an organization
-   * GET /api/v1/onboarding/assessments/:organizationId/results
+   * GET /api/v1/onboarding/assessments/:organizationId/isiv-results
    */
   async getIsivAssessmentResults(organizationId: string): Promise<ApiResponse<IsivAssessmentResult>> {
-    return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/results`);
+    return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/isiv-results`);
   }
 
   /**

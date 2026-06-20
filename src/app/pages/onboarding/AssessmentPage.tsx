@@ -6,6 +6,7 @@ import {
   ChevronRight,
   Info,
   Loader2,
+  Upload,
 } from 'lucide-react';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';

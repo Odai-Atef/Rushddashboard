@@ -47,7 +47,9 @@ export interface OnboardingContextValue {
   isLoading: boolean;
   error: string | null;
   activeOrganizationId: string | null;
-  refreshOrganization: () => Promise<void>;
+  assessmentAnswersDirty: boolean;
+  refreshOrganization: () => Promise<Organization | null>;
+  setOrganization: (organization: Organization | null) => void;
   loadProfile: () => Promise<void>;
   loadFundingAreas: () => Promise<void>;
   loadAssessmentStatus: () => Promise<void>;
@@ -55,6 +57,7 @@ export interface OnboardingContextValue {
   loadDocuments: () => Promise<void>;
   setAssessmentResult: (result: IsivAssessmentResult | null) => void;
   setAssessmentStatus: (status: AssessmentStatus | null) => void;
+  setAssessmentAnswersDirty: (dirty: boolean) => void;
 }
 
 export const OnboardingContext = createContext<OnboardingContextValue | null>(
@@ -71,7 +74,7 @@ export function OnboardingProvider({
   organizationId: externalOrganizationId,
 }: OnboardingProviderProps) {
   console.log('[OnboardingProvider] init externalOrganizationId:', externalOrganizationId);
-  const [organization, setOrganization] = useState<Organization | null>(null);
+  const [organization, setOrganizationState] = useState<Organization | null>(null);
   const [profile, setProfile] = useState<OrganizationProfileResponse | null>(null);
   const [fundingAreas, setFundingAreas] = useState<FundingArea[]>([]);
   const [assessmentStatus, setAssessmentStatusState] = useState<AssessmentStatus | null>(null);
@@ -79,9 +82,11 @@ export function OnboardingProvider({
   const [documents, setDocuments] = useState<OrganizationDocument[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [assessmentAnswersDirty, setAssessmentAnswersDirtyState] = useState(false);
 
   const activeOrganizationId = useMemo(() => {
-    return externalOrganizationId ?? organization?.id ?? null;
+    const id = externalOrganizationId ?? organization?.id ?? null;
+    return id || null;
   }, [externalOrganizationId, organization?.id]);
 
   const resolveOrganization = useCallback(async () => {
@@ -181,9 +186,14 @@ export function OnboardingProvider({
 
   const refreshOrganization = useCallback(async () => {
     setIsLoading(true);
-    await resolveOrganization();
+    const org = await resolveOrganization();
     setIsLoading(false);
+    return org ?? null;
   }, [resolveOrganization]);
+
+  const setOrganization = useCallback((nextOrganization: Organization | null) => {
+    setOrganizationState(nextOrganization);
+  }, []);
 
   const setAssessmentResult = useCallback((result: IsivAssessmentResult | null) => {
     setAssessmentResultState(result);
@@ -191,6 +201,10 @@ export function OnboardingProvider({
 
   const setAssessmentStatus = useCallback((status: AssessmentStatus | null) => {
     setAssessmentStatusState(status);
+  }, []);
+
+  const setAssessmentAnswersDirty = useCallback((dirty: boolean) => {
+    setAssessmentAnswersDirtyState(dirty);
   }, []);
 
   // Initial hydration when the provider mounts or the external id changes
@@ -247,7 +261,9 @@ export function OnboardingProvider({
     isLoading,
     error,
     activeOrganizationId,
+    assessmentAnswersDirty,
     refreshOrganization,
+    setOrganization,
     loadProfile,
     loadFundingAreas,
     loadAssessmentStatus,
@@ -255,6 +271,7 @@ export function OnboardingProvider({
     loadDocuments,
     setAssessmentResult,
     setAssessmentStatus,
+    setAssessmentAnswersDirty,
   };
 
   return (

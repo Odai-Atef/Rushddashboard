@@ -23,7 +23,7 @@ interface ProfileData {
 
 export function ProfilePage() {
   const { goToStep } = useOnboardingNavigate();
-  const { organization, profile, fundingAreas, loadFundingAreas, refreshOrganization } =
+  const { organization, profile, fundingAreas, loadFundingAreas, refreshOrganization, setOrganization } =
     useOnboardingContext();
 
   const [profileData, setProfileData] = useState<ProfileData>({
@@ -103,12 +103,15 @@ export function ProfilePage() {
   };
 
   const handleProfileNext = async () => {
+    console.log('[ProfilePage] Next clicked');
     if (!validate()) {
+      console.log('[ProfilePage] validation failed', errors);
       toast.error('يرجى تصحيح الأخطاء في النموذج قبل المتابعة');
       return;
     }
 
     const orgId = organization?.id;
+    console.log('[ProfilePage] orgId:', orgId, 'organization:', organization);
     if (!orgId) {
       toast.error('لم يتم العثور على معرف الجمعية. يرجى إكمال التسجيل أولاً.');
       return;
@@ -116,6 +119,7 @@ export function ProfilePage() {
 
     const { onboardingService } = await import('@/api/services');
     setIsSaving(true);
+    console.log('[ProfilePage] saving profile...');
     try {
       await onboardingService.createProfile(orgId, {
         overview: profileData.overview.trim(),
@@ -135,9 +139,22 @@ export function ProfilePage() {
       await onboardingService.setFundingAreas(orgId, {
         fundingAreaIds: profileData.areasOfWork,
       });
-      await refreshOrganization();
+      console.log('[ProfilePage] profile saved, refreshing org');
+      const refreshedOrg = await refreshOrganization();
+      console.log('[ProfilePage] refreshedOrg:', refreshedOrg);
+
+      // Optimistically advance currentStep to PROFILE if the backend hasn't
+      // updated it yet. This prevents the route guard from redirecting back
+      // from assessment because it still sees REGISTRATION.
+      if (refreshedOrg && refreshedOrg.currentStep?.toUpperCase() === 'REGISTRATION') {
+        console.log('[ProfilePage] patching currentStep to PROFILE');
+        setOrganization({ ...refreshedOrg, currentStep: 'PROFILE' });
+      }
+
+      console.log('[ProfilePage] navigating to assessment');
       goToStep('assessment');
     } catch (err: any) {
+      console.error('[ProfilePage] save failed', err);
       toast.error(err?.message || 'فشل حفظ الملف التعريفي');
     } finally {
       setIsSaving(false);

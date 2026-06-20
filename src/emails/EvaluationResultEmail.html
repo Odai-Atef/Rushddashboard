@@ -13,7 +13,7 @@
                 <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
                         <td style="text-align: center;">
-                            <img src="https://rushdisiv.com/logo.png" alt="منصة رشد" style="width: 120px; height: auto; display: block; margin: 0 auto;">
+                            <img src="https://rushdisiv.com/assets/PNG-BEzEJyM7.png" alt="منصة رشد" style="width: 120px; height: auto; display: block; margin: 0 auto;">
                         </td>
                     </tr>
                     <tr>
@@ -71,11 +71,12 @@
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                                 <tr>
                                     <td style="padding: 20px;">
-                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الجاهزية التشغيلية</div>
-                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{OPERATIONAL_SCORE}}%</div>
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">البناء المؤسسي</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{I_SCORE}}%</div>
                                         <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                                            <div style="width: {{OPERATIONAL_SCORE}}%; height: 100%; background-color: #10b981;"></div>
+                                            <div style="width: {{I_SCORE}}%; height: 100%; background-color: #10b981;"></div>
                                         </div>
+                                        <div style="color: #718096; font-size: 12px; margin-top: 6px;">{{I_TIER}}</div>
                                     </td>
                                 </tr>
                             </table>
@@ -84,11 +85,12 @@
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                                 <tr>
                                     <td style="padding: 20px;">
-                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الاستقرار المالي</div>
-                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{FINANCIAL_SCORE}}%</div>
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الحوكمة</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{S_SCORE}}%</div>
                                         <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                                            <div style="width: {{FINANCIAL_SCORE}}%; height: 100%; background-color: #3b82f6;"></div>
+                                            <div style="width: {{S_SCORE}}%; height: 100%; background-color: #3b82f6;"></div>
                                         </div>
+                                        <div style="color: #718096; font-size: 12px; margin-top: 6px;">{{S_TIER}}</div>
                                     </td>
                                 </tr>
                             </table>
@@ -100,11 +102,12 @@
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                                 <tr>
                                     <td style="padding: 20px;">
-                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الأثر الاجتماعي</div>
-                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{IMPACT_SCORE}}%</div>
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الذكاء المؤسسي</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{I2_SCORE}}%</div>
                                         <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                                            <div style="width: {{IMPACT_SCORE}}%; height: 100%; background-color: #8b5cf6;"></div>
+                                            <div style="width: {{I2_SCORE}}%; height: 100%; background-color: #f59e0b;"></div>
                                         </div>
+                                        <div style="color: #718096; font-size: 12px; margin-top: 6px;">{{I2_TIER}}</div>
                                     </td>
                                 </tr>
                             </table>
@@ -113,40 +116,22 @@
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
                                 <tr>
                                     <td style="padding: 20px;">
-                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الحوكمة والامتثال</div>
-                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{GOVERNANCE_SCORE}}%</div>
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">القيمة والاستدامة</div>
+                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{V_SCORE}}%</div>
                                         <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                                            <div style="width: {{GOVERNANCE_SCORE}}%; height: 100%; background-color: #f59e0b;"></div>
+                                            <div style="width: {{V_SCORE}}%; height: 100%; background-color: #8b5cf6;"></div>
                                         </div>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <!-- Row 3 -->
-                    <tr>
-                        <td width="48%" style="padding: 0 1% 0 1%; vertical-align: top;">
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
-                                <tr>
-                                    <td style="padding: 20px;">
-                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الابتكار والتطوير</div>
-                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{INNOVATION_SCORE}}%</div>
-                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                                            <div style="width: {{INNOVATION_SCORE}}%; height: 100%; background-color: #ec4899;"></div>
-                                        </div>
+                                        <div style="color: #718096; font-size: 12px; margin-top: 6px;">{{V_TIER}}</div>
                                     </td>
                                 </tr>
                             </table>
                         </td>
                         <td width="48%" style="padding: 0 1% 0 1%; vertical-align: top;">
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f7fafc; border-radius: 8px;">
                                 <tr>
                                     <td style="padding: 20px;">
-                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">الشفافية</div>
-                                        <div style="color: #1a202c; font-size: 24px; font-weight: 700; margin-bottom: 5px;">{{TRANSPARENCY_SCORE}}%</div>
-                                        <div style="width: 100%; height: 6px; background-color: #e2e8f0; border-radius: 3px; overflow: hidden;">
-                                            <div style="width: {{TRANSPARENCY_SCORE}}%; height: 100%; background-color: #14b8a6;"></div>
-                                        </div>
+                                        <div style="color: #718096; font-size: 13px; font-weight: 500; margin-bottom: 8px;">حالة التأهيل</div>
+                                        <div style="color: #1a202c; font-size: 20px; font-weight: 700; margin-bottom: 5px;">{{QUALIFICATION_STATUS}}</div>
                                     </td>
                                 </tr>
                             </table>
