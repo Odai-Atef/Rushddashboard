@@ -70,7 +70,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
     { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration', restricted: true },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: HeartHandshake, path: '/dashboard/donors', restricted: true },
-    { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment', restricted: true },
+    { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment', restricted: false },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications', restricted: true },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources', restricted: true },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk', restricted: true },
