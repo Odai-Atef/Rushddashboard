@@ -1,44 +1,36 @@
-# Implementation Plan: [FEATURE]
+# Implementation Plan: Project Management Router Pages
 
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/speckit.plan` command. See `.specify/templates/plan-template.md` for the execution workflow.
+**Branch**: `054-project-management-router-pages` | **Date**: 2026-06-20 | **Spec**: [spec.md](spec.md)
+**Input**: Feature specification from `specs/054-project-management-router-pages/spec.md`
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+Convert the existing monolithic `ProjectManagementModule` component into a set of routable sub-pages under `/dashboard/project-management/*`. Register nested React Router routes for the dashboard, list, create, details, lifecycle, versions, activity, and reporting views; replace internal `currentView` state navigation with URL-based navigation; preserve all existing UI behavior and data flows.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [e.g., library/cli/web-service/mobile-app/compiler/desktop-app or NEEDS CLARIFICATION]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: TypeScript / React 18.3.1 / react-router 7.13.0 / Vite 6.3.5  
+**Primary Dependencies**: `lucide-react` (icons), `recharts` (charts), existing React Router 7 routing in `src/app/routes.tsx`, Tailwind CSS  
+**Storage**: N/A — project data continues to be sourced from the existing mock/project data used by `ProjectManagementModule.tsx`  
+**Testing**: Project currently has no automated test harness configured. Validation is manual via the dev server and production build.  
+**Target Platform**: Browser (desktop + responsive)  
+**Project Type**: Single-page web application (frontend)  
+**Performance Goals**: Each project management sub-page should render within 2 seconds on a stable connection; navigation between sub-pages should feel instant.  
+**Constraints**: Existing `ProjectManagementModule.tsx` component logic should be reused and split rather than rewritten; no backend changes.  
+**Scale/Scope**: Single-user frontend navigation refactor; no new backend endpoints or data persistence changes.
 
 ## Constitution Check
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+The constitution file is a placeholder template with no active principles or gates defined. No explicit gates to evaluate. The feature does not introduce complexity requiring justification: it reuses existing React Router, existing project management UI components, existing Tailwind styling, and existing mock data. No new backend services, storage systems, or external integrations are introduced.
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```text
-specs/[###-feature]/
+specs/054-project-management-router-pages/
 ├── plan.md              # This file (/speckit.plan command output)
 ├── research.md          # Phase 0 output (/speckit.plan command)
 ├── data-model.md        # Phase 1 output (/speckit.plan command)
@@ -48,51 +40,27 @@ specs/[###-feature]/
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```text
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
 src/
-├── models/
-├── services/
-├── cli/
-└── lib/
-
-tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+├── app/
+│   ├── routes.tsx                        # existing dashboard route config
+│   └── pages/
+│       └── project-management/
+│           ├── ProjectManagementLayout.tsx   # optional shared wrapper/shell
+│           ├── ProjectDashboardPage.tsx
+│           ├── ProjectListPage.tsx
+│           ├── ProjectCreatePage.tsx
+│           ├── ProjectDetailsPage.tsx
+│           ├── ProjectLifecyclePage.tsx
+│           ├── ProjectVersionsPage.tsx
+│           ├── ProjectActivityPage.tsx
+│           └── ProjectReportingPage.tsx
+│   └── components/
+│       └── ProjectManagementModule.tsx   # existing monolithic component to refactor
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Create a dedicated `src/app/pages/project-management/` directory for the new routable page components. Extract each view currently defined as an inner component inside `ProjectManagementModule.tsx` into its own page component. Keep shared types, mock data, and helpers in a co-located file or reuse the existing module until a future refactor justifies splitting further. Update `src/app/routes.tsx` to register nested routes under `/dashboard/project-management/*`.
 
 ## Complexity Tracking
 
