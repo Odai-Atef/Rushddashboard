@@ -28,7 +28,14 @@ import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
 import { ProjectJourneyPage } from './components/ProjectJourneyPage';
 import { CharityAssessmentPage } from './components/CharityAssessmentPage';
 import { OnboardingLayout } from './pages/onboarding/OnboardingLayout';
-import { ProjectManagementModule } from './components/ProjectManagementModule';
+import { ProjectDashboardPage } from './pages/project-management/ProjectDashboardPage';
+import { ProjectListPage } from './pages/project-management/ProjectListPage';
+import { ProjectCreatePage } from './pages/project-management/ProjectCreatePage';
+import { ProjectDetailsPage } from './pages/project-management/ProjectDetailsPage';
+import { ProjectLifecyclePage } from './pages/project-management/ProjectLifecyclePage';
+import { ProjectVersionsPage } from './pages/project-management/ProjectVersionsPage';
+import { ProjectActivityPage } from './pages/project-management/ProjectActivityPage';
+import { ProjectReportingPage } from './pages/project-management/ProjectReportingPage';
 import { AIProjectInnovationModule } from './components/AIProjectInnovationModule';
 import { ProjectCollaborationModule } from './components/ProjectCollaborationModule';
 import { DonorsPage } from './components/donors/DonorsPage';
@@ -232,7 +239,44 @@ export const router = createBrowserRouter([
           },
           {
             path: 'project-management',
-            Component: ProjectManagementModule,
+            children: [
+              {
+                index: true,
+                Component: ProjectDashboardPage,
+              },
+              {
+                path: 'list',
+                Component: ProjectListPage,
+              },
+              {
+                path: 'create',
+                Component: ProjectCreatePage,
+              },
+              {
+                path: 'details/:projectId',
+                Component: ProjectDetailsPage,
+              },
+              {
+                path: 'lifecycle/:projectId',
+                Component: ProjectLifecyclePage,
+              },
+              {
+                path: 'versions/:projectId',
+                Component: ProjectVersionsPage,
+              },
+              {
+                path: 'activity/:projectId',
+                Component: ProjectActivityPage,
+              },
+              {
+                path: 'reporting',
+                Component: ProjectReportingPage,
+              },
+              {
+                path: '*',
+                element: <Navigate to="/dashboard/project-management" replace />,
+              },
+            ],
           },
           {
             path: 'ai-innovation',

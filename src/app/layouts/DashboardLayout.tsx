@@ -55,7 +55,9 @@ export function DashboardLayout() {
 
   const activeView =
     pathToView[location.pathname] ||
-    (location.pathname.startsWith('/dashboard/onboarding') ? 'onboarding' : 'executive');
+    (location.pathname.startsWith('/dashboard/onboarding') ? 'onboarding' :
+     location.pathname.startsWith('/dashboard/project-management') ? 'project-management' :
+     'executive');
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">
