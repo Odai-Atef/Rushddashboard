@@ -69,6 +69,12 @@ As a platform user, I want all existing project management features such as the 
 - How are query parameters or state preserved when navigating between project management sub-pages?
 - What happens when a user refreshes a page that requires a selected project that was chosen through in-app navigation?
 
+## Clarifications
+
+### Session 2026-06-20
+
+- **Q**: How should invalid or missing project IDs be handled on detail/lifecycle/versions/activity routes? → **A**: Show an error message or redirect to `/dashboard/project-management/list`.
+
 ## Requirements *(mandatory)*
 
 ### Functional Requirements
@@ -87,6 +93,7 @@ As a platform user, I want all existing project management features such as the 
 - **FR-012**: Unknown sub-paths under `/dashboard/project-management/*` MUST redirect to the project management dashboard.
 - **FR-013**: Direct access to any project management route MUST render the correct view without requiring a prior visit to the dashboard.
 - **FR-014**: Existing project management functionality such as search, filters, forms, charts, and quick actions MUST continue to work after routing conversion.
+- **FR-015**: When a project ID required for details/lifecycle/versions/activity is missing or invalid, the application MUST display an error message or redirect the user to `/dashboard/project-management/list`.
 
 ### Key Entities
 
