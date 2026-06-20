@@ -2,9 +2,9 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-- **Plan**: `specs/054-project-management-router-pages/plan.md`
-- **Spec**: `specs/054-project-management-router-pages/spec.md`
-- **Quickstart**: `specs/054-project-management-router-pages/quickstart.md`
-- **Data Model**: `specs/054-project-management-router-pages/data-model.md`
-- **Contracts**: `specs/054-project-management-router-pages/contracts/project-management-routes-contract.md`
+- **Plan**: `specs/055-charity-assessment-router-pages/plan.md`
+- **Spec**: `specs/055-charity-assessment-router-pages/spec.md`
+- **Quickstart**: `specs/055-charity-assessment-router-pages/quickstart.md`
+- **Data Model**: `specs/055-charity-assessment-router-pages/data-model.md`
+- **Contracts**: `specs/055-charity-assessment-router-pages/contracts/charity-assessment-routes-contract.md`
 <!-- SPECKIT END -->

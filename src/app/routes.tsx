@@ -26,8 +26,11 @@ import { DataSourcesPage } from './components/DataSourcesPage';
 import { ComplianceRiskPage } from './components/ComplianceRiskPage';
 import { AnalysisHistoryPage } from './components/AnalysisHistoryPage';
 import { ProjectJourneyPage } from './components/ProjectJourneyPage';
-import { CharityAssessmentPage } from './components/CharityAssessmentPage';
 import { OnboardingLayout } from './pages/onboarding/OnboardingLayout';
+import { CharityAssessmentStartPage } from './pages/charity-assessment/CharityAssessmentStartPage';
+import { CharityAssessmentWizardPage } from './pages/charity-assessment/CharityAssessmentWizardPage';
+import { CharityAssessmentResultsPage } from './pages/charity-assessment/CharityAssessmentResultsPage';
+import { CharityAssessmentRoadmapPage } from './pages/charity-assessment/CharityAssessmentRoadmapPage';
 import { ProjectDashboardPage } from './pages/project-management/ProjectDashboardPage';
 import { ProjectListPage } from './pages/project-management/ProjectListPage';
 import { ProjectCreatePage } from './pages/project-management/ProjectCreatePage';
@@ -177,7 +180,28 @@ export const router = createBrowserRouter([
           },
           {
             path: 'charity-assessment',
-            Component: CharityAssessmentPage,
+            children: [
+              {
+                index: true,
+                Component: CharityAssessmentStartPage,
+              },
+              {
+                path: 'assessment',
+                Component: CharityAssessmentWizardPage,
+              },
+              {
+                path: 'results',
+                Component: CharityAssessmentResultsPage,
+              },
+              {
+                path: 'roadmap',
+                Component: CharityAssessmentRoadmapPage,
+              },
+              {
+                path: '*',
+                element: <Navigate to="/dashboard/charity-assessment" replace />,
+              },
+            ],
           },
           {
             path: 'onboarding',
