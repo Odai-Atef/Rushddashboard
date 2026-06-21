@@ -63,6 +63,7 @@ As a platform user, I want the project create page to retain its current layout,
 - **Q**: What should happen if the API succeeds but does not return an `id` for the new project? → **A**: Navigate to the project list with a warning.
 - **Q**: Which fields are required in the project creation form? → **A**: Use required rules returned by the API only.
 - **Q**: How should the system handle an expired session during project creation submission? → **A**: Show a session expired error and clear the form.
+- **Q**: Should the form auto-save a draft when API validation fails, or only on explicit draft save? → **A**: Only save a draft when the user explicitly triggers draft save.
 
 ### Edge Cases
 
