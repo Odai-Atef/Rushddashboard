@@ -62,11 +62,13 @@ As a platform user, I want to navigate between pages of results and change the n
 ### Session 2026-06-21
 
 - **Q**: Should the list display only project IDs returned by the API, or should the frontend fetch/enrich each project with its name, status, and manager? → **A**: Fetch full project details for each item via separate API calls.
+- **Q**: How should the system behave when the requested page exceeds the total available pages? → **A**: Silently redirect to the last available page.
 
 ### Edge Cases
 
 - What happens when the API request fails while loading the list?
 - What happens when the user selects a page number greater than `totalPages`?
+  - **Answered**: The system silently redirects to the last available page.
 - How does the system behave if the user applies filters that return zero results?
 - What happens when the user changes page size while on the last page?
 - How are invalid filter values handled before sending them to the API?
@@ -85,7 +87,7 @@ As a platform user, I want to navigate between pages of results and change the n
 - **FR-008**: The page MUST display a user-friendly error message and a retry option when the API request fails.
 - **FR-009**: Changing any filter or search term MUST reset the current page to `1`.
 - **FR-010**: Changing the page size MUST reset the current page to `1`.
-- **FR-011**: Existing navigation behavior such as clicking a project to open its details page MUST continue to work.
+- **FR-012**: If the requested `page` exceeds `totalPages`, the application MUST silently redirect the user to the last available page and reload the list.
 
 ### Key Entities
 
