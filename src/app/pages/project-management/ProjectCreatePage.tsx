@@ -67,7 +67,7 @@ export function ProjectCreatePage() {
         navigate('/dashboard/project-management/list');
       }
     } catch {
-      // Errors are already surfaced by the hook; toast global non-field errors.
+      // Errors are already surfaced by the hook. If no field errors exist, toast the global error.
       if (error && Object.keys(fieldErrors).length === 0) {
         toast.error(error);
       }

@@ -21,50 +21,55 @@ export interface UseProjectCreateReturn extends ProjectCreateState {
   clearFieldError: (field: string) => void;
 }
 
+const parseFieldErrors = (data: ApiError): Record<string, string> => {
+  const fieldErrors: Record<string, string> = {};
+
+  if (Array.isArray(data.errors)) {
+    const seen = new Set<string>();
+    data.errors.forEach((err) => {
+      const field = err.field || 'general';
+      if (!seen.has(field)) {
+        fieldErrors[field] = err.message || 'قيمة غير صحيحة';
+        seen.add(field);
+      }
+    });
+  } else if (data.errors && typeof data.errors === 'object') {
+    Object.entries(data.errors).forEach(([key, value]) => {
+      fieldErrors[key] = Array.isArray(value) ? value[0] : String(value);
+    });
+  }
+
+  return fieldErrors;
+};
+
 const getArabicErrorMessage = (error: unknown): { message: string; fieldErrors: Record<string, string> } => {
   let message = 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.';
-  const fieldErrors: Record<string, string> = {};
 
   const apiError = error as ApiError;
   const status = apiError.statusCode;
   const data = apiError as ApiError;
 
+  // Extract field-level errors regardless of HTTP status code so they can be
+  // displayed next to each input even when the backend returns 403, 422, etc.
+  const fieldErrors = parseFieldErrors(data);
+
   if (status) {
     switch (status) {
       case 400:
-        if (Array.isArray(data.errors)) {
-          const seen = new Set<string>();
-          data.errors.forEach((err) => {
-            const field = err.field || 'general';
-            if (!seen.has(field)) {
-              fieldErrors[field] = err.message || 'قيمة غير صحيحة';
-              seen.add(field);
-            }
-          });
-          message = 'يرجى تصحيح الأخطاء التالية:';
-        } else if (data.errors && typeof data.errors === 'object') {
-          Object.entries(data.errors).forEach(([key, value]) => {
-            fieldErrors[key] = Array.isArray(value) ? value[0] : String(value);
-          });
-          message = 'يرجى تصحيح الأخطاء التالية:';
-        } else {
-          message = data.message || 'البيانات المدخلة غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.';
-        }
+      case 403:
+      case 422:
+        message = Object.keys(fieldErrors).length > 0
+          ? 'يرجى تصحيح الأخطاء التالية:'
+          : data.message || 'البيانات المدخلة غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.';
         break;
       case 401:
         message = 'انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.';
-        break;
-      case 403:
-        message = 'ليس لديك الصلاحية لإنشاء مشروع.';
         break;
       case 404:
         message = 'لم يتم العثور على البيانات المطلوبة.';
         break;
       case 409:
         message = data.message || 'يوجد مشروع بنفس البيانات. يرجى استخدام بيانات أخرى.';
-        break;
-      case 422:
-        message = data.message || 'البيانات المدخلة غير مكتملة. يرجى التحقق من جميع الحقول.';
         break;
       case 500:
       case 502:
@@ -136,7 +141,13 @@ export function useProjectCreate(): UseProjectCreateReturn {
         }
 
         const { message, fieldErrors } = getArabicErrorMessage(error);
-        setState({ isLoading: false, error: message, fieldErrors });
+
+        // If the backend returned field-level errors, do not show a redundant global toast.
+        if (Object.keys(fieldErrors).length > 0) {
+          setState({ isLoading: false, error: null, fieldErrors });
+        } else {
+          setState({ isLoading: false, error: message, fieldErrors });
+        }
         throw error;
       } finally {
         if (abortControllerRef.current === controller) {
