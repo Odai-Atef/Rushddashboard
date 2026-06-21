@@ -43,6 +43,28 @@ export interface Project {
   health: ProjectHealth;
 }
 
+export interface CreateProjectDto {
+  name: string;
+  type: string;
+  category: string;
+  description: string;
+  budget: number;
+  currencyCode: string;
+  startDate: string;
+  endDate: string;
+  beneficiaries: string;
+  geographicScope: string;
+  managerId: string;
+  organizationId: string;
+}
+
+export interface CreatedProjectResponse extends CreateProjectDto {
+  id: string;
+  status: ProjectStatus;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface ProjectVersion {
   id: string;
   version: number;

@@ -1,20 +1,82 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { ChevronRight, DollarSign, Save } from 'lucide-react';
+import { useProjectCreate } from '@/api/hooks/useProjectCreate';
+import { CreateProjectDto } from '@/app/pages/project-management/project-types';
+import { toast } from 'sonner';
+
+const MANAGER_OPTIONS = [
+  { id: 'manager-1', name: 'أحمد محمد' },
+  { id: 'manager-2', name: 'سارة عبدالله' },
+  { id: 'manager-3', name: 'خالد العلي' },
+];
+
+const ORGANIZATION_OPTIONS = [
+  { id: 'org-1', name: 'جمعية البر الخيرية' },
+  { id: 'org-2', name: 'مؤسسة الرعاية الاجتماعية' },
+];
 
 export function ProjectCreatePage() {
   const navigate = useNavigate();
+  const { create, isLoading, error, fieldErrors, clearFieldError, clearError } = useProjectCreate();
   const [formData, setFormData] = useState({
     name: '',
     type: '',
-    organization: '',
+    organizationId: '',
     category: '',
     description: '',
     beneficiaries: '',
     geographicScope: '',
     budget: '',
-    duration: '',
+    currencyCode: 'SAR',
+    startDate: '',
+    endDate: '',
+    managerId: '',
   });
+
+  const updateField = (field: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    clearFieldError(field);
+    if (error) clearError();
+  };
+
+  const handleSubmit = async () => {
+    const dto: CreateProjectDto = {
+      name: formData.name,
+      type: formData.type,
+      category: formData.category,
+      description: formData.description,
+      budget: Number(formData.budget) || 0,
+      currencyCode: formData.currencyCode,
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+      beneficiaries: formData.beneficiaries,
+      geographicScope: formData.geographicScope,
+      managerId: formData.managerId,
+      organizationId: formData.organizationId,
+    };
+
+    try {
+      const response = await create(dto);
+      const createdId = response.data?.id;
+
+      if (createdId) {
+        navigate(`/dashboard/project-management/details/${createdId}`);
+      } else {
+        toast.warning('تم إنشاء المشروع بنجاح ولكن لا يمكن فتح تفاصيله حالياً.');
+        navigate('/dashboard/project-management/list');
+      }
+    } catch {
+      // Errors are already surfaced by the hook; toast global non-field errors.
+      if (error && Object.keys(fieldErrors).length === 0) {
+        toast.error(error);
+      }
+    }
+  };
+
+  const handleDraft = () => {
+    toast.info('تم حفظ المسودة محلياً');
+  };
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -32,16 +94,17 @@ export function ProjectCreatePage() {
         </div>
 
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
-          <form className="space-y-6">
+          <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
             <div>
               <label className="block text-sm font-medium mb-2">اسم المشروع *</label>
               <input
                 type="text"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) => updateField('name', e.target.value)}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="مثال: برنامج الأسر المنتجة"
               />
+              {fieldErrors.name && <p className="text-red-600 text-sm mt-1">{fieldErrors.name}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -49,7 +112,7 @@ export function ProjectCreatePage() {
                 <label className="block text-sm font-medium mb-2">نوع المشروع *</label>
                 <select
                   value={formData.type}
-                  onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                  onChange={(e) => updateField('type', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">اختر النوع</option>
@@ -59,18 +122,53 @@ export function ProjectCreatePage() {
                   <option value="إغاثي">إغاثي</option>
                   <option value="صحي">صحي</option>
                 </select>
+                {fieldErrors.type && <p className="text-red-600 text-sm mt-1">{fieldErrors.type}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">المؤسسة *</label>
                 <select
-                  value={formData.organization}
-                  onChange={(e) => setFormData({ ...formData, organization: e.target.value })}
+                  value={formData.organizationId}
+                  onChange={(e) => updateField('organizationId', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">اختر المؤسسة</option>
-                  <option value="جمعية البر الخيرية">جمعية البر الخيرية</option>
-                  <option value="مؤسسة الرعاية الاجتماعية">مؤسسة الرعاية الاجتماعية</option>
+                  {ORGANIZATION_OPTIONS.map((org) => (
+                    <option key={org.id} value={org.id}>
+                      {org.name}
+                    </option>
+                  ))}
                 </select>
+                {fieldErrors.organizationId && <p className="text-red-600 text-sm mt-1">{fieldErrors.organizationId}</p>}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">الفئة *</label>
+                <input
+                  type="text"
+                  value={formData.category}
+                  onChange={(e) => updateField('category', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="مثال: التعليم"
+                />
+                {fieldErrors.category && <p className="text-red-600 text-sm mt-1">{fieldErrors.category}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">مدير المشروع *</label>
+                <select
+                  value={formData.managerId}
+                  onChange={(e) => updateField('managerId', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">اختر المدير</option>
+                  {MANAGER_OPTIONS.map((manager) => (
+                    <option key={manager.id} value={manager.id}>
+                      {manager.name}
+                    </option>
+                  ))}
+                </select>
+                {fieldErrors.managerId && <p className="text-red-600 text-sm mt-1">{fieldErrors.managerId}</p>}
               </div>
             </div>
 
@@ -78,11 +176,12 @@ export function ProjectCreatePage() {
               <label className="block text-sm font-medium mb-2">وصف المشروع *</label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) => updateField('description', e.target.value)}
                 rows={4}
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 placeholder="اكتب وصفاً تفصيلياً للمشروع..."
               />
+              {fieldErrors.description && <p className="text-red-600 text-sm mt-1">{fieldErrors.description}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -93,23 +192,75 @@ export function ProjectCreatePage() {
                   <input
                     type="number"
                     value={formData.budget}
-                    onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
+                    onChange={(e) => updateField('budget', e.target.value)}
                     className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                     placeholder="250000"
                   />
                 </div>
+                {fieldErrors.budget && <p className="text-red-600 text-sm mt-1">{fieldErrors.budget}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">المدة الزمنية *</label>
+                <label className="block text-sm font-medium mb-2">الفئة المستفيدة *</label>
                 <input
                   type="text"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                  value={formData.beneficiaries}
+                  onChange={(e) => updateField('beneficiaries', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="مثال: الأسر المحتاجة"
+                />
+                {fieldErrors.beneficiaries && <p className="text-red-600 text-sm mt-1">{fieldErrors.beneficiaries}</p>}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">النطاق الجغرافي *</label>
+                <input
+                  type="text"
+                  value={formData.geographicScope}
+                  onChange={(e) => updateField('geographicScope', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  placeholder="مثال: الرياض"
+                />
+                {fieldErrors.geographicScope && <p className="text-red-600 text-sm mt-1">{fieldErrors.geographicScope}</p>}
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">تاريخ البدء *</label>
+                <input
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) => updateField('startDate', e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  placeholder="12 شهر"
+                />
+                {fieldErrors.startDate && <p className="text-red-600 text-sm mt-1">{fieldErrors.startDate}</p>}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">تاريخ الانتهاء *</label>
+                <input
+                  type="date"
+                  value={formData.endDate}
+                  onChange={(e) => updateField('endDate', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                />
+                {fieldErrors.endDate && <p className="text-red-600 text-sm mt-1">{fieldErrors.endDate}</p>}
+              </div>
+              <div className="hidden">
+                <input
+                  type="hidden"
+                  value={formData.currencyCode}
+                  readOnly
                 />
               </div>
             </div>
+
+            {error && Object.keys(fieldErrors).length === 0 && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
 
             <div className="flex items-center justify-between pt-6 border-t">
               <button
@@ -122,17 +273,18 @@ export function ProjectCreatePage() {
               <div className="flex gap-3">
                 <button
                   type="button"
+                  onClick={handleDraft}
                   className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2"
                 >
                   <Save className="w-5 h-5" />
                   حفظ كمسودة
                 </button>
                 <button
-                  type="button"
-                  onClick={() => navigate('/dashboard/project-management/list')}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+                  type="submit"
+                  disabled={isLoading}
+                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors font-medium"
                 >
-                  إنشاء المشروع
+                  {isLoading ? 'جاري الإنشاء...' : 'إنشاء المشروع'}
                 </button>
               </div>
             </div>

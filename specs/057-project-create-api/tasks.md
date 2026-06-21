@@ -19,9 +19,9 @@
 
 **Purpose**: Prepare the existing codebase for the new project create API integration.
 
-- [ ] T001 Create `src/api/services/project-service.ts` file and add it to `src/api/services/index.ts` registry
-- [ ] T002 Create `src/api/hooks/useProjectCreate.ts` file
-- [ ] T003 [P] Extend `src/app/pages/project-management/project-types.ts` with `CreateProjectDto` and `CreatedProjectResponse` interfaces
+- [x] T001 Create `src/api/services/project-service.ts` file and add it to `src/api/services/index.ts` registry
+- [x] T002 Create `src/api/hooks/useProjectCreate.ts` file
+- [x] T003 [P] Extend `src/app/pages/project-management/project-types.ts` with `CreateProjectDto` and `CreatedProjectResponse` interfaces
 
 ---
 
@@ -31,11 +31,11 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 Implement `ProjectService` in `src/api/services/project-service.ts` with `createProject(dto: CreateProjectDto)` calling `apiClient.post('/api/v1/projects', dto)`
-- [ ] T005 Wire `ProjectService` export into `src/api/services/index.ts` service registry
-- [ ] T006 Implement `useProjectCreate` hook in `src/api/hooks/useProjectCreate.ts` exposing `{ create, isLoading, error, fieldErrors, clearError, clearFieldError }`
-- [ ] T007 Add Arabic error mapping in `useProjectCreate.ts` for 400, 401 (handled by `apiClient`), 500, and timeout/network errors
-- [ ] T008 Add duplicate-submission guard and `AbortSignal` handling in `useProjectCreate.ts`
+- [x] T004 Implement `ProjectService` in `src/api/services/project-service.ts` with `createProject(dto: CreateProjectDto)` calling `apiClient.post('/api/v1/projects', dto)`
+- [x] T005 Wire `ProjectService` export into `src/api/services/index.ts` service registry
+- [x] T006 Implement `useProjectCreate` hook in `src/api/hooks/useProjectCreate.ts` exposing `{ create, isLoading, error, fieldErrors, clearError, clearFieldError }`
+- [x] T007 Add Arabic error mapping in `useProjectCreate.ts` for 400, 401 (handled by `apiClient`), 500, and timeout/network errors
+- [x] T008 Add duplicate-submission guard and `AbortSignal` handling in `useProjectCreate.ts`
 
 **Checkpoint**: Foundation ready — service, registry, and hook are present and usable; user story implementation can now begin in parallel.
 
@@ -49,14 +49,14 @@
 
 ### Implementation for User Story 1
 
-- [ ] T009 [US1] Refactor `src/app/pages/project-management/ProjectCreatePage.tsx` to use `useProjectCreate`
-- [ ] T010 [P] [US1] Replace the single `duration` text input with `startDate` and `endDate` date inputs in `ProjectCreatePage.tsx`
-- [ ] T011 [P] [US1] Add hidden/default `currencyCode` value of `"SAR"` to the form state in `ProjectCreatePage.tsx`
-- [ ] T012 [US1] Wire the **إنشاء المشروع** submit button to `create()` instead of direct navigation
-- [ ] T013 [US1] Build `CreateProjectDto` payload from form state, mapping `budget` to a number and `organization` selection to `organizationId`
-- [ ] T014 [US1] On success, navigate to `/dashboard/project-management/details/${response.data.id}` in `ProjectCreatePage.tsx`
-- [ ] T015 [US1] On success without `id`, navigate to `/dashboard/project-management/list` and show a warning toast/message
-- [ ] T016 [P] [US1] Show inline loading state on the submit button while `isLoading` is true
+- [x] T009 [US1] Refactor `src/app/pages/project-management/ProjectCreatePage.tsx` to use `useProjectCreate`
+- [x] T010 [P] [US1] Replace the single `duration` text input with `startDate` and `endDate` date inputs in `ProjectCreatePage.tsx`
+- [x] T011 [P] [US1] Add hidden/default `currencyCode` value of `"SAR"` to the form state in `ProjectCreatePage.tsx`
+- [x] T012 [US1] Wire the **إنشاء المشروع** submit button to `create()` instead of direct navigation
+- [x] T013 [US1] Build `CreateProjectDto` payload from form state, mapping `budget` to a number and `organization` selection to `organizationId`
+- [x] T014 [US1] On success, navigate to `/dashboard/project-management/details/${response.data.id}` in `ProjectCreatePage.tsx`
+- [x] T015 [US1] On success without `id`, navigate to `/dashboard/project-management/list` and show a warning toast/message
+- [x] T016 [P] [US1] Show inline loading state on the submit button while `isLoading` is true
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 
@@ -70,11 +70,11 @@
 
 ### Implementation for User Story 2
 
-- [ ] T017 [US2] Display inline validation errors returned by the API next to corresponding fields in `ProjectCreatePage.tsx`
-- [ ] T018 [US2] Show a global Arabic error banner/toast for server (500) and network/timeout errors in `ProjectCreatePage.tsx`
-- [ ] T019 [US2] Preserve form state after validation/server errors so the user can correct and resubmit
-- [ ] T020 [US2] Add retry behavior: allow a second click of **إنشاء المشروع** once the previous request completes or fails
-- [ ] T021 [P] [US2] Clear field-level error for a field when the user edits it
+- [x] T017 [US2] Display inline validation errors returned by the API next to corresponding fields in `ProjectCreatePage.tsx`
+- [x] T018 [US2] Show a global Arabic error banner/toast for server (500) and network/timeout errors in `ProjectCreatePage.tsx`
+- [x] T019 [US2] Preserve form state after validation/server errors so the user can correct and resubmit
+- [x] T020 [US2] Add retry behavior: allow a second click of **إنشاء المشروع** once the previous request completes or fails
+- [x] T021 [P] [US2] Clear field-level error for a field when the user edits it
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently.
 
@@ -88,11 +88,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Ensure the **إلغاء** button still navigates to `/dashboard/project-management/list` in `ProjectCreatePage.tsx`
-- [ ] T023 [US3] Ensure the back arrow link still navigates to `/dashboard/project-management/list` in `ProjectCreatePage.tsx`
-- [ ] T024 [US3] Keep **حفظ كمسودة** as a no-op or independent action that does not call the create API
-- [ ] T025 [P] [US3] Preserve existing Arabic labels, placeholders, and Tailwind styling in `ProjectCreatePage.tsx`
-- [ ] T026 [US3] Verify the page still renders correctly at `/dashboard/project-management/create` and does not flash on initial load
+- [x] T022 [US3] Ensure the **إلغاء** button still navigates to `/dashboard/project-management/list` in `ProjectCreatePage.tsx`
+- [x] T023 [US3] Ensure the back arrow link still navigates to `/dashboard/project-management/list` in `ProjectCreatePage.tsx`
+- [x] T024 [US3] Keep **حفظ كمسودة** as a no-op or independent action that does not call the create API
+- [x] T025 [P] [US3] Preserve existing Arabic labels, placeholders, and Tailwind styling in `ProjectCreatePage.tsx`
+- [x] T026 [US3] Verify the page still renders correctly at `/dashboard/project-management/create` and does not flash on initial load
 
 **Checkpoint**: All user stories should now be independently functional.
 
@@ -103,9 +103,9 @@
 **Purpose**: Improvements that affect multiple user stories and final validation.
 
 - [ ] T027 [P] Run TypeScript type check (`npx tsc --noEmit` or `pnpm build`) and fix any errors introduced by the new service/hook/page changes
-- [ ] T028 [P] Run `pnpm run build` and confirm the production build succeeds
+- [x] T028 [P] Run `pnpm run build` and confirm the production build succeeds
 - [ ] T029 Verify the quickstart.md test scenarios manually against a running dev server
-- [ ] T030 [P] Update inline code comments/TSDoc for `ProjectService`, `useProjectCreate`, and updated page components
+- [x] T030 [P] Update inline code comments/TSDoc for `ProjectService`, `useProjectCreate`, and updated page components
 
 ---
 
