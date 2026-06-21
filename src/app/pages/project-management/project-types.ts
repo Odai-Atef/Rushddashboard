@@ -65,6 +65,33 @@ export interface CreatedProjectResponse extends CreateProjectDto {
   updatedAt: string;
 }
 
+export interface ProjectListResponse {
+  data: string[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface ProjectFilters {
+  page?: number;
+  limit?: number;
+  status?: ProjectStatus | string;
+  organizationId?: string;
+  managerId?: string;
+  health?: ProjectHealth | string;
+  type?: string;
+  category?: string;
+  search?: string;
+}
+
+export interface PaginationMeta {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface ProjectVersion {
   id: string;
   version: number;

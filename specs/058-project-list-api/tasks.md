@@ -19,9 +19,9 @@
 
 **Purpose**: Prepare the existing codebase for the project list API integration.
 
-- [ ] T001 Extend `src/api/services/project-service.ts` with `getProjects(params)` and `getProjectById(id)` method signatures
-- [ ] T002 Create `src/api/hooks/useProjects.ts` file
-- [ ] T003 [P] Extend `src/app/pages/project-management/project-types.ts` with `ProjectListResponse`, `ProjectFilters`, and related request types
+- [x] T001 Extend `src/api/services/project-service.ts` with `getProjects(params)` and `getProjectById(id)` method signatures
+- [x] T002 Create `src/api/hooks/useProjects.ts` file
+- [x] T003 [P] Extend `src/app/pages/project-management/project-types.ts` with `ProjectListResponse`, `ProjectFilters`, and related request types
 
 ---
 
@@ -31,12 +31,12 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 Implement `ProjectService.getProjects(params)` in `src/api/services/project-service.ts` calling `apiClient.get('/api/v1/projects', { params })`
-- [ ] T005 Implement `ProjectService.getProjectById(id)` in `src/api/services/project-service.ts` calling `apiClient.get(`/api/v1/projects/${id}`)`
-- [ ] T006 Implement `useProjects` hook in `src/api/hooks/useProjects.ts` exposing `{ projects, pagination, filters, isLoading, error, setPage, setLimit, setFilters, applyFilters, clearFilters, refetch }`
-- [ ] T007 Add Arabic error mapping in `useProjects.ts` for list load, details load, 401, 500, and timeout/network errors
-- [ ] T008 Add parallel details fetching in `useProjects.ts` for project IDs returned by the list endpoint
-- [ ] T009 Add pagination reset logic in `useProjects.ts` when filters, search, or page size change
+- [x] T004 Implement `ProjectService.getProjects(params)` in `src/api/services/project-service.ts` calling `apiClient.get('/api/v1/projects', { params })`
+- [x] T005 Implement `ProjectService.getProjectById(id)` in `src/api/services/project-service.ts` calling `apiClient.get(`/api/v1/projects/${id}`)`
+- [x] T006 Implement `useProjects` hook in `src/api/hooks/useProjects.ts` exposing `{ projects, pagination, filters, isLoading, error, setPage, setLimit, setFilters, applyFilters, clearFilters, refetch }`
+- [x] T007 Add Arabic error mapping in `useProjects.ts` for list load, details load, 401, 500, and timeout/network errors
+- [x] T008 Add parallel details fetching in `useProjects.ts` for project IDs returned by the list endpoint
+- [x] T009 Add pagination reset logic in `useProjects.ts` when filters, search, or page size change
 
 **Checkpoint**: Foundation ready — service, registry, and hook are present and usable; user story implementation can now begin in parallel.
 
@@ -50,12 +50,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T010 [US1] Refactor `src/app/pages/project-management/ProjectListPage.tsx` to use `useProjects`
-- [ ] T011 [US1] Replace the mock `filteredProjects` source with `projects` from `useProjects`
-- [ ] T012 [P] [US1] Add pagination controls to `ProjectListPage.tsx` driven by `pagination` from `useProjects`
-- [ ] T013 [P] [US1] Add empty-state UI to `ProjectListPage.tsx` when `total` is zero
-- [ ] T014 [US1] Show a single loading spinner over the list area while `isLoading` is true
-- [ ] T015 [US1] On out-of-range page, silently redirect to the last available page using `pagination.totalPages`
+- [x] T010 [US1] Refactor `src/app/pages/project-management/ProjectListPage.tsx` to use `useProjects`
+- [x] T011 [US1] Replace the mock `filteredProjects` source with `projects` from `useProjects`
+- [x] T012 [P] [US1] Add pagination controls to `ProjectListPage.tsx` driven by `pagination` from `useProjects`
+- [x] T013 [P] [US1] Add empty-state UI to `ProjectListPage.tsx` when `total` is zero
+- [x] T014 [US1] Show a single loading spinner over the list area while `isLoading` is true
+- [x] T015 [US1] On out-of-range page, silently redirect to the last available page using `pagination.totalPages`
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 
@@ -69,12 +69,12 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] Add filter state UI for `status`, `organizationId`, `managerId`, `health`, `type`, and `category` in `ProjectListPage.tsx`
-- [ ] T017 [US2] Wire filter inputs to `setFilters` from `useProjects`
-- [ ] T018 [US2] Add Apply action that calls `applyFilters()` and resets page to 1
-- [ ] T019 [US2] Add Search action for the `search` field that calls `applyFilters()`
-- [ ] T020 [US2] Add Clear action that calls `clearFilters()` and reloads the default list
-- [ ] T021 [P] [US2] Ensure only non-empty filter values are included in the API request
+- [x] T016 [US2] Add filter state UI for `status`, `organizationId`, `managerId`, `health`, `type`, and `category` in `ProjectListPage.tsx`
+- [x] T017 [US2] Wire filter inputs to `setFilters` from `useProjects`
+- [x] T018 [US2] Add Apply action that calls `applyFilters()` and resets page to 1
+- [x] T019 [US2] Add Search action for the `search` field that calls `applyFilters()`
+- [x] T020 [US2] Add Clear action that calls `clearFilters()` and reloads the default list
+- [x] T021 [P] [US2] Ensure only non-empty filter values are included in the API request
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently.
 
@@ -88,11 +88,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Wire next/previous page controls in `ProjectListPage.tsx` to `setPage`
-- [ ] T023 [US3] Add page-size selector to `ProjectListPage.tsx` wired to `setLimit`
-- [ ] T024 [US3] Ensure changing page size resets to `page=1`
-- [ ] T025 [US3] Ensure applying filters while on a later page resets to `page=1`
-- [ ] T026 [P] [US3] Preserve existing table, kanban, and timeline view toggles and rendering
+- [x] T022 [US3] Wire next/previous page controls in `ProjectListPage.tsx` to `setPage`
+- [x] T023 [US3] Add page-size selector to `ProjectListPage.tsx` wired to `setLimit`
+- [x] T024 [US3] Ensure changing page size resets to `page=1`
+- [x] T025 [US3] Ensure applying filters while on a later page resets to `page=1`
+- [x] T026 [P] [US3] Preserve existing table, kanban, and timeline view toggles and rendering
 
 **Checkpoint**: All user stories should now be independently functional.
 
@@ -102,10 +102,10 @@
 
 **Purpose**: Improvements that affect multiple user stories and final validation.
 
-- [ ] T027 [P] Run `npm run build` and fix any errors introduced by the new service/hook/page changes
-- [ ] T028 [P] Verify the quickstart.md test scenarios manually against a running dev server
-- [ ] T029 [P] Update inline code comments/TSDoc for `ProjectService`, `useProjects`, and updated page components
-- [ ] T030 [P] Ensure existing navigation from list items to `/dashboard/project-management/details/:id` still works
+- [x] T027 [P] Run `npm run build` and fix any errors introduced by the new service/hook/page changes
+- [x] T028 [P] Verify the quickstart.md test scenarios manually against a running dev server
+- [x] T029 [P] Update inline code comments/TSDoc for `ProjectService`, `useProjects`, and updated page components
+- [x] T030 [P] Ensure existing navigation from list items to `/dashboard/project-management/details/:id` still works
 
 ---
 
