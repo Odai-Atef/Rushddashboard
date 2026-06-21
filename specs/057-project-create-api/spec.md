@@ -18,7 +18,7 @@ As a platform user with permission to create projects, I want to fill out the pr
 **Acceptance Scenarios**:
 
 1. **Given** the user is authenticated and navigates to `/dashboard/project-management/create`, **When** they complete all required fields with valid values, **Then** the form can be submitted to `/api/v1/projects`.
-2. **Given** the user submits the project creation form, **When** the API accepts the request, **Then** the user is informed of success and is taken to a relevant follow-up screen such as the project list or project details.
+2. **Given** the user submits the project creation form, **When** the API accepts the request, **Then** the user is informed of success and is taken to the newly created project's details page.
 3. **Given** the user submits the project creation form, **When** the API returns a success response, **Then** the created project contains the same `name`, `type`, `category`, `description`, `budget`, `currencyCode`, `startDate`, `endDate`, `beneficiaries`, `geographicScope`, `managerId`, and `organizationId` values that were entered.
 
 ---
@@ -55,6 +55,12 @@ As a platform user, I want the project create page to retain its current layout,
 
 ---
 
+## Clarifications
+
+### Session 2026-06-21
+
+- **Q**: Which screen should the user land on after successfully creating a project? → **A**: Project details of the newly created project.
+
 ### Edge Cases
 
 - What happens when the user submits the form while another submission is already in progress?
@@ -72,7 +78,7 @@ As a platform user, I want the project create page to retain its current layout,
 - **FR-003**: The request body MUST set `currencyCode` to `"SAR"` by default unless the user explicitly changes it.
 - **FR-004**: The form MUST validate required fields before submission and prevent sending incomplete or malformed data to the API.
 - **FR-005**: The form MUST display inline validation errors returned by the API next to the corresponding fields.
-- **FR-006**: The form MUST display a clear success message and navigate the user to the project list or the newly created project details after a successful API response.
+- **FR-006**: The form MUST display a clear success message and navigate the user to the newly created project's details page after a successful API response.
 - **FR-007**: The form MUST preserve user-entered data when the API returns a validation or server error so the user can correct and resubmit.
 - **FR-008**: The form MUST disable the submit action while a submission is in progress to prevent duplicate project creation.
 - **FR-009**: The form MUST handle network and unexpected server errors gracefully with a user-friendly message and a retry option.
