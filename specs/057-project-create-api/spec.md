@@ -60,11 +60,13 @@ As a platform user, I want the project create page to retain its current layout,
 ### Session 2026-06-21
 
 - **Q**: Which screen should the user land on after successfully creating a project? → **A**: Project details of the newly created project.
+- **Q**: What should happen if the API succeeds but does not return an `id` for the new project? → **A**: Navigate to the project list with a warning.
 
 ### Edge Cases
 
 - What happens when the user submits the form while another submission is already in progress?
 - How does the system behave if the API returns a success response without including the newly created project identifier?
+  - **Answered**: The system navigates the user to the project list and shows a warning that the project was created but could not be opened directly.
 - What happens if the user's session expires between loading the page and submitting the form?
 - How are partially completed forms handled when the user navigates away and returns?
 - What happens when the manager or organization selection lists are empty?
