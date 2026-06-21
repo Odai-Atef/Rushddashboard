@@ -111,11 +111,12 @@ export function useProjectCreate(): UseProjectCreateReturn {
 
   const create = useCallback(
     async (data: CreateProjectDto): Promise<ApiResponse<CreatedProjectResponse>> => {
+      // Prevent duplicate submissions by ignoring clicks while a request is in flight.
       if (state.isLoading) {
         throw new Error('Request already in progress');
       }
 
-      // Cancel any previous request
+      // Cancel any previous request before starting a new one.
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
@@ -129,7 +130,7 @@ export function useProjectCreate(): UseProjectCreateReturn {
         setState((prev) => ({ ...prev, isLoading: false }));
         return response;
       } catch (error) {
-        // Don't update state if the request was deliberately cancelled
+        // Don't update state if the request was deliberately cancelled.
         if ((error as Error)?.name === 'AbortError' && controller.signal.aborted) {
           throw error;
         }
