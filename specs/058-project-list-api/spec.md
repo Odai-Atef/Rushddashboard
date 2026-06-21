@@ -65,6 +65,7 @@ As a platform user, I want to navigate between pages of results and change the n
 - **Q**: How should the system behave when the requested page exceeds the total available pages? → **A**: Silently redirect to the last available page.
 - **Q**: Should filters and search be applied immediately when changed, or only after an explicit "Apply" action? → **A**: Apply only after clicking an "Apply" or "Search" button.
 - **Q**: Which endpoint or mechanism should fetch the full project details for each list item? → **A**: Call `GET /api/v1/projects/:id` for each ID.
+- **Q**: What should the list show while project details are being fetched after the initial list response? → **A**: Use a single spinner for the whole list.
 
 ### Edge Cases
 
@@ -87,6 +88,7 @@ As a platform user, I want to navigate between pages of results and change the n
 - **FR-006**: The pagination controls MUST reflect the `page`, `limit`, `total`, and `totalPages` values returned by the API.
 - **FR-007**: The page MUST provide an empty state when the API returns no projects.
 - **FR-008**: The page MUST display a user-friendly error message and a retry option when the API request fails.
+- **FR-013**: While the project identifiers and their full details are being loaded, the page MUST show a single loading spinner covering the list area.
 - **FR-009**: Changing any filter or search term MUST reset the current page to `1`.
 - **FR-010**: Changing the page size MUST reset the current page to `1`.
 - **FR-012**: If the requested `page` exceeds `totalPages`, the application MUST silently redirect the user to the last available page and reload the list.
