@@ -30,6 +30,7 @@ export type OnboardingStep =
   | 'profile'
   | 'assessment'
   | 'documents'
+  | 'thanks'
   | 'preloader'
   | 'processing'
   | 'results'

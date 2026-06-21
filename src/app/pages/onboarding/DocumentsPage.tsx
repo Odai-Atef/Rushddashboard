@@ -292,7 +292,7 @@ export function DocumentsPage() {
       }
     }
 
-    goToStep('assessment');
+    goToStep('thanks');
   };
 
   if (!activeOrganizationId) {

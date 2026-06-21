@@ -61,6 +61,7 @@ const OnboardingResultsPage = lazy(() => import('./pages/onboarding/ResultsPage'
 const OnboardingAnalysisPage = lazy(() => import('./pages/onboarding/AnalysisPage').then(m => ({ default: m.AnalysisPage })));
 const OnboardingRoadmapPage = lazy(() => import('./pages/onboarding/RoadmapPage').then(m => ({ default: m.RoadmapPage })));
 const OnboardingDecisionPage = lazy(() => import('./pages/onboarding/DecisionPage').then(m => ({ default: m.DecisionPage })));
+const OnboardingThanksPage = lazy(() => import('./pages/onboarding/ThanksPage').then(m => ({ default: m.ThanksPage })));
 
 const OnboardingPageShell = ({ children }: { children: React.ReactNode }) => (
   <Suspense fallback={<div className="min-h-full flex items-center justify-center"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>}>
@@ -231,6 +232,10 @@ export const router = createBrowserRouter([
               {
                 path: 'documents',
                 element: <OnboardingPageShell><OnboardingDocumentsPage /></OnboardingPageShell>,
+              },
+              {
+                path: 'thanks',
+                element: <OnboardingPageShell><OnboardingThanksPage /></OnboardingPageShell>,
               },
               {
                 path: 'preloader',

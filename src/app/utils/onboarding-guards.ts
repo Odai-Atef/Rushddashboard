@@ -12,6 +12,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   'registration',
   'profile',
   'documents',
+  'thanks',
   'assessment',
   'preloader',
   'processing',
@@ -62,6 +63,7 @@ function stepName(step: OnboardingStep): string {
     case 'profile': return 'الملف التعريفي';
     case 'assessment': return 'التقييم';
     case 'documents': return 'المستندات';
+    case 'thanks': return 'تأكيد المستندات';
     case 'preloader': return 'تحليل البيانات';
     case 'processing': return 'المعالجة';
     case 'results': return 'النتائج';
@@ -86,6 +88,7 @@ function isStepCompleted(step: OnboardingStep, progress: StepProgress): boolean 
     case 'assessment':
       return !!progress.assessmentCompleted;
     case 'documents':
+    case 'thanks':
       return !!progress.documentsCompleted;
     case 'preloader':
     case 'processing':
@@ -105,6 +108,7 @@ function getFurthestCompletedStep(progress: StepProgress): OnboardingStep {
     'registration',
     'profile',
     'documents',
+    'thanks',
     'assessment',
     'preloader',
     'processing',
@@ -130,6 +134,11 @@ function getAllowedNextSteps(furthestCompleted: OnboardingStep): OnboardingStep[
   // so allow it whenever assessment is reachable.
   if (next === 'assessment') {
     return ['assessment', 'preloader'];
+  }
+  // The thanks step is a soft confirmation page between documents and assessment,
+  // so allow both thanks and assessment when documents are complete.
+  if (next === 'thanks') {
+    return ['thanks', 'assessment'];
   }
   return [next];
 }
