@@ -102,9 +102,9 @@
 
 **Purpose**: Improvements that affect multiple user stories and final validation.
 
-- [ ] T027 [P] Run TypeScript type check (`npx tsc --noEmit` or `pnpm build`) and fix any errors introduced by the new service/hook/page changes
+- [x] T027 [P] Run TypeScript type check (`npx tsc --noEmit` or `pnpm build`) and fix any errors introduced by the new service/hook/page changes
 - [x] T028 [P] Run `pnpm run build` and confirm the production build succeeds
-- [ ] T029 Verify the quickstart.md test scenarios manually against a running dev server
+- [x] T029 Verify the quickstart.md test scenarios manually against a running dev server
 - [x] T030 [P] Update inline code comments/TSDoc for `ProjectService`, `useProjectCreate`, and updated page components
 
 ---
