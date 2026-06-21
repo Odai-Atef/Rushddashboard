@@ -57,6 +57,12 @@ As a platform user, I want to navigate between pages of results and change the n
 
 ---
 
+## Clarifications
+
+### Session 2026-06-21
+
+- **Q**: Should the list display only project IDs returned by the API, or should the frontend fetch/enrich each project with its name, status, and manager? → **A**: Fetch full project details for each item via separate API calls.
+
 ### Edge Cases
 
 - What happens when the API request fails while loading the list?
@@ -73,7 +79,7 @@ As a platform user, I want to navigate between pages of results and change the n
 - **FR-002**: The default request MUST use `page=1` and `limit=10` when no user preference is set.
 - **FR-003**: The page MUST support optional query parameters: `status`, `organizationId`, `managerId`, `health`, `type`, `category`, and `search`.
 - **FR-004**: Each filter parameter MUST only be sent when the user has selected or entered a value.
-- **FR-005**: The list MUST display the projects returned in the `data` array from the API response.
+- **FR-005**: The list MUST display the projects returned in the `data` array from the API response. For each project identifier returned, the page MUST fetch its full details (name, status, manager, etc.) via a separate API call or a documented enrichment mechanism before rendering.
 - **FR-006**: The pagination controls MUST reflect the `page`, `limit`, `total`, and `totalPages` values returned by the API.
 - **FR-007**: The page MUST provide an empty state when the API returns no projects.
 - **FR-008**: The page MUST display a user-friendly error message and a retry option when the API request fails.
@@ -100,7 +106,7 @@ As a platform user, I want to navigate between pages of results and change the n
 ## Assumptions
 
 - The `/api/v1/projects` endpoint returns a paginated JSON response with `data`, `total`, `page`, `limit`, and `totalPages`.
-- The items in `data` are project identifiers or summaries that the frontend can render; if only identifiers are returned, the list may show minimal project info and link to details.
+- The items in `data` are project identifiers. The frontend MUST fetch or enrich each identifier with display fields such as name, status, and manager before rendering the list.
 - Status values follow the backend enum format `DRAFT`, `CHARITY_REVIEW`, etc., and are mapped to the existing frontend `ProjectStatus` values when needed for display.
 - Health values follow the backend enum format `EXCELLENT`, `GOOD`, `AT_RISK`, `CRITICAL` and are mapped to the existing frontend `ProjectHealth` values when needed for display.
 - Manager and organization selection options are populated from existing data sources or from the list response itself; this feature focuses on fetching and filtering the list.
