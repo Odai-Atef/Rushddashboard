@@ -62,6 +62,7 @@ As a platform user, I want the project create page to retain its current layout,
 - **Q**: Which screen should the user land on after successfully creating a project? → **A**: Project details of the newly created project.
 - **Q**: What should happen if the API succeeds but does not return an `id` for the new project? → **A**: Navigate to the project list with a warning.
 - **Q**: Which fields are required in the project creation form? → **A**: Use required rules returned by the API only.
+- **Q**: How should the system handle an expired session during project creation submission? → **A**: Show a session expired error and clear the form.
 
 ### Edge Cases
 
@@ -69,6 +70,7 @@ As a platform user, I want the project create page to retain its current layout,
 - How does the system behave if the API returns a success response without including the newly created project identifier?
   - **Answered**: The system navigates the user to the project list and shows a warning that the project was created but could not be opened directly.
 - What happens if the user's session expires between loading the page and submitting the form?
+  - **Answered**: The system shows a session expired error and clears the form so the user logs in fresh and re-enters data intentionally.
 - How are partially completed forms handled when the user navigates away and returns?
 - What happens when the manager or organization selection lists are empty?
 
