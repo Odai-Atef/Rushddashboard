@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { ChevronRight, DollarSign, Save } from 'lucide-react';
 import { useProjectCreate } from '@/api/hooks/useProjectCreate';
 import { CreateProjectDto } from '@/app/pages/project-management/project-types';
+import { onboardingService } from '@/api/services';
 import { toast } from 'sonner';
 
 const MANAGER_OPTIONS = [
@@ -11,14 +12,12 @@ const MANAGER_OPTIONS = [
   { id: 'manager-3', name: 'خالد العلي' },
 ];
 
-const ORGANIZATION_OPTIONS = [
-  { id: 'org-1', name: 'جمعية البر الخيرية' },
-  { id: 'org-2', name: 'مؤسسة الرعاية الاجتماعية' },
-];
-
 export function ProjectCreatePage() {
   const navigate = useNavigate();
   const { create, isLoading, error, fieldErrors, clearFieldError, clearError } = useProjectCreate();
+  const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string }[]>([]);
+  const [isLoadingOrganization, setIsLoadingOrganization] = useState(true);
+  const [organizationError, setOrganizationError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     type: '',
@@ -33,6 +32,41 @@ export function ProjectCreatePage() {
     endDate: '',
     managerId: '',
   });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadOrganization() {
+      setIsLoadingOrganization(true);
+      setOrganizationError(null);
+      try {
+        const response = await onboardingService.getMyOrganization();
+        const org = response.data;
+        if (!cancelled) {
+          if (org?.id) {
+            setOrganizationOptions([{ id: org.id, name: org.name }]);
+            setFormData((prev) => ({ ...prev, organizationId: org.id }));
+          } else {
+            setOrganizationError('لم يتم العثور على مؤسسة مرتبطة بحسابك.');
+          }
+        }
+      } catch (err) {
+        if (!cancelled) {
+          setOrganizationError('تعذر تحميل بيانات المؤسسة. يرجى المحاولة مرة أخرى.');
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoadingOrganization(false);
+        }
+      }
+    }
+
+    loadOrganization();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -126,18 +160,26 @@ export function ProjectCreatePage() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">المؤسسة *</label>
-                <select
-                  value={formData.organizationId}
-                  onChange={(e) => updateField('organizationId', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">اختر المؤسسة</option>
-                  {ORGANIZATION_OPTIONS.map((org) => (
-                    <option key={org.id} value={org.id}>
-                      {org.name}
-                    </option>
-                  ))}
-                </select>
+                {isLoadingOrganization ? (
+                  <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                    جاري تحميل المؤسسة...
+                  </div>
+                ) : organizationError ? (
+                  <div className="text-red-600 text-sm">{organizationError}</div>
+                ) : (
+                  <select
+                    value={formData.organizationId}
+                    onChange={(e) => updateField('organizationId', e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">اختر المؤسسة</option>
+                    {organizationOptions.map((org) => (
+                      <option key={org.id} value={org.id}>
+                        {org.name}
+                      </option>
+                    ))}
+                  </select>
+                )}
                 {fieldErrors.organizationId && <p className="text-red-600 text-sm mt-1">{fieldErrors.organizationId}</p>}
               </div>
             </div>
