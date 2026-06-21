@@ -61,6 +61,7 @@ As a platform user, I want the project create page to retain its current layout,
 
 - **Q**: Which screen should the user land on after successfully creating a project? → **A**: Project details of the newly created project.
 - **Q**: What should happen if the API succeeds but does not return an `id` for the new project? → **A**: Navigate to the project list with a warning.
+- **Q**: Which fields are required in the project creation form? → **A**: Use required rules returned by the API only.
 
 ### Edge Cases
 
@@ -78,7 +79,7 @@ As a platform user, I want the project create page to retain its current layout,
 - **FR-001**: The project creation form at `/dashboard/project-management/create` MUST collect values for `name`, `type`, `category`, `description`, `budget`, `currencyCode`, `startDate`, `endDate`, `beneficiaries`, `geographicScope`, `managerId`, and `organizationId`.
 - **FR-002**: The form MUST send a request to create a project through `/api/v1/projects` with a body matching the API contract when the user confirms project creation.
 - **FR-003**: The request body MUST set `currencyCode` to `"SAR"` by default unless the user explicitly changes it.
-- **FR-004**: The form MUST validate required fields before submission and prevent sending incomplete or malformed data to the API.
+- **FR-004**: The form MUST validate fields before submission based on required rules returned by the API and prevent sending incomplete or malformed data to the API.
 - **FR-005**: The form MUST display inline validation errors returned by the API next to the corresponding fields.
 - **FR-006**: The form MUST display a clear success message and navigate the user to the newly created project's details page after a successful API response.
 - **FR-007**: The form MUST preserve user-entered data when the API returns a validation or server error so the user can correct and resubmit.
@@ -110,4 +111,4 @@ As a platform user, I want the project create page to retain its current layout,
 - `budget` is submitted as a number; the UI may collect it as a string input but converts it before calling the API.
 - Manager and organization selections are populated from existing data sources; this feature focuses on wiring the submission, not building new selection APIs.
 - The user is already authenticated and authorized to create projects when they reach the create page.
-- Validation rules beyond required fields will be driven by the API response and can be enhanced in future iterations.
+- Validation rules, including required fields, will be driven by the API response and can be enhanced in future iterations.
