@@ -156,8 +156,18 @@ export function ProjectListPage() {
     );
   };
 
-  const getProjectOrganization = (project: Project): string => project.organization || project.organizationId || '-';
-  const getProjectManager = (project: Project): string => project.manager || project.managerId || '-';
+  const getProjectOrganization = (project: Project): string => {
+    if (project.organization && typeof project.organization === 'object') {
+      return (project.organization as { name?: string; id?: string }).name || (project.organization as { name?: string; id?: string }).id || '-';
+    }
+    return project.organization || project.organizationId || '-';
+  };
+  const getProjectManager = (project: Project): string => {
+    if (project.manager && typeof project.manager === 'object') {
+      return project.manager.name || project.manager.email || project.manager.id || '-';
+    }
+    return project.manager || project.managerId || '-';
+  };
 
   const getBudgetAmount = (budget: Project['budget']): number => {
     if (typeof budget === 'number') return budget;
@@ -175,7 +185,7 @@ export function ProjectListPage() {
 
   const getDisplayStatus = (status: string): ProjectStatus => {
     const normalized = status.toLowerCase().replace(/_/g, '-');
-    return (normalized as ProjectStatus) in statusConfig ? (normalized as ProjectStatus) : 'draft';
+    return normalized in statusConfig ? (normalized as ProjectStatus) : 'draft';
   };
 
   const renderTable = () => (

@@ -6,7 +6,7 @@
 
 import apiClient from '../client';
 import { ApiResponse, RequestConfig } from '../types';
-import { Project, ProjectHealth, ProjectStatus } from '@/app/pages/project-management/project-types';
+import { Project, ProjectDetails, ProjectHealth, ProjectStatus } from '@/app/pages/project-management/project-types';
 
 export interface CreateProjectDto {
   name: string;
@@ -48,6 +48,49 @@ export interface ProjectFilters {
   type?: string;
   category?: string;
   search?: string;
+}
+
+export interface ProjectDashboardStats {
+  total: number;
+  active: number;
+  draft: number;
+  awaitingApproval: number;
+  approved: number;
+  funded: number;
+  completed: number;
+}
+
+export interface StatusDistributionItem {
+  name: string;
+  value: number;
+  color: string;
+}
+
+export interface BudgetTrendItem {
+  month: string;
+  budget: number;
+}
+
+export interface RecentActivityItem {
+  userName: string;
+  action: string;
+  projectName: string;
+  timestamp: string;
+}
+
+export interface UpcomingDeadlineItem {
+  projectName: string;
+  deadline: string;
+  daysLeft: number;
+  priority: 'high' | 'medium' | 'low';
+}
+
+export interface ProjectDashboardData {
+  stats: ProjectDashboardStats;
+  statusDistribution: StatusDistributionItem[];
+  budgetTrend: BudgetTrendItem[];
+  recentActivity: RecentActivityItem[];
+  upcomingDeadlines: UpcomingDeadlineItem[];
 }
 
 /**
@@ -102,10 +145,19 @@ export class ProjectService {
   /**
    * Get a single project by ID
    * GET /api/v1/projects/:id
-   * @deprecated The list endpoint now returns full project objects; only use this when an individual project is needed.
    */
-  async getProjectById(id: string, config?: RequestConfig): Promise<ApiResponse<Project>> {
-    return apiClient.get<Project>(`/api/v1/projects/${id}`, config);
+  async getProjectById(id: string, config?: RequestConfig): Promise<ApiResponse<ProjectDetails>> {
+    return apiClient.get<ProjectDetails>(`/api/v1/projects/${id}`, config);
+  }
+
+  /**
+   * Get dashboard summary
+   * GET /api/v1/projects/dashboard/summary
+   */
+  async getProjectDashboardSummary(
+    config?: RequestConfig
+  ): Promise<ApiResponse<ProjectDashboardData>> {
+    return apiClient.get<ProjectDashboardData>('/api/v1/projects/dashboard/summary', config);
   }
 }
 

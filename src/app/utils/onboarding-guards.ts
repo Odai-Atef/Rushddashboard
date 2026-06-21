@@ -11,8 +11,8 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   'landing',
   'registration',
   'profile',
-  'assessment',
   'documents',
+  'assessment',
   'preloader',
   'processing',
   'results',
@@ -104,8 +104,8 @@ function getFurthestCompletedStep(progress: StepProgress): OnboardingStep {
   const steps: OnboardingStep[] = [
     'registration',
     'profile',
-    'assessment',
     'documents',
+    'assessment',
     'preloader',
     'processing',
     'results',
@@ -126,10 +126,10 @@ function getAllowedNextSteps(furthestCompleted: OnboardingStep): OnboardingStep[
   const nextOrder = getStepOrder(furthestCompleted) + 1;
   if (nextOrder >= ONBOARDING_STEPS.length) return [];
   const next = ONBOARDING_STEPS[nextOrder];
-  // Preloader is the transition screen between documents and results,
-  // so allow it whenever documents is reachable.
-  if (next === 'documents') {
-    return ['documents', 'preloader'];
+  // Preloader is the transition screen between assessment and results,
+  // so allow it whenever assessment is reachable.
+  if (next === 'assessment') {
+    return ['assessment', 'preloader'];
   }
   return [next];
 }

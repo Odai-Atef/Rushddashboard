@@ -108,7 +108,7 @@ export function PreloaderPage() {
       } catch (err: any) {
         stopProgress();
         toast.error(err?.message || 'تعذر إكمال التقييم. يرجى المحاولة مرة أخرى.');
-        goToStep('documents');
+        goToStep('assessment');
       }
     };
 

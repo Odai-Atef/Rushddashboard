@@ -280,10 +280,8 @@ export function DocumentsPage() {
     )
       return;
 
-    setIsSubmittingAssessment(true);
-
     // Optimistically advance currentStep to DOCUMENTS so the route
-    // guard allows navigation to preloader/results while the backend catches up.
+    // guard allows navigation to assessment while the backend catches up.
     if (organization) {
       const currentStepOrder = getStepOrder(
         (organization.currentStep?.toLowerCase() as OnboardingStep) ?? 'landing'
@@ -294,7 +292,7 @@ export function DocumentsPage() {
       }
     }
 
-    goToStep('preloader');
+    goToStep('assessment');
   };
 
   if (!activeOrganizationId) {
@@ -325,6 +323,17 @@ export function DocumentsPage() {
         </div>
       )}
       <div className="max-w-4xl mx-auto">
+        {/* Progress */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm text-gray-600">الخطوة ٣ من ٤</span>
+            <span className="text-sm font-medium text-blue-600">٧٥٪</span>
+          </div>
+          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: '75%' }}></div>
+          </div>
+        </div>
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">المستندات المطلوبة</h1>
@@ -600,7 +609,7 @@ export function DocumentsPage() {
         {/* Navigation */}
         <div className="flex items-center justify-between">
           <button
-            onClick={() => goToStep('assessment')}
+            onClick={() => goToStep('profile')}
             disabled={hasPendingUploads}
             className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
@@ -609,20 +618,13 @@ export function DocumentsPage() {
           </button>
           <button
             onClick={handleDocumentsNext}
-            disabled={!isDocumentsComplete || isSubmittingAssessment}
+            disabled={!isDocumentsComplete || hasPendingUploads}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isSubmittingAssessment ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                جارٍ الإرسال...
-              </>
-            ) : (
-              <>
-                إرسال التقييم
-                <ChevronLeft className="w-5 h-5" />
-              </>
-            )}
+            <>
+              التالي
+              <ChevronLeft className="w-5 h-5" />
+            </>
           </button>
         </div>
       </div>

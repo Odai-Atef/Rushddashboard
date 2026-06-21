@@ -145,14 +145,14 @@ export function ProfilePage() {
 
       // Optimistically advance currentStep to PROFILE if the backend hasn't
       // updated it yet. This prevents the route guard from redirecting back
-      // from assessment because it still sees REGISTRATION.
+      // from documents because it still sees REGISTRATION.
       if (refreshedOrg && refreshedOrg.currentStep?.toUpperCase() === 'REGISTRATION') {
         console.log('[ProfilePage] patching currentStep to PROFILE');
         setOrganization({ ...refreshedOrg, currentStep: 'PROFILE' });
       }
 
-      console.log('[ProfilePage] navigating to assessment');
-      goToStep('assessment');
+      console.log('[ProfilePage] navigating to documents');
+      goToStep('documents');
     } catch (err: any) {
       console.error('[ProfilePage] save failed', err);
       toast.error(err?.message || 'فشل حفظ الملف التعريفي');

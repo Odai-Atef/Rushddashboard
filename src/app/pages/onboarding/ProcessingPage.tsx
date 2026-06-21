@@ -61,7 +61,7 @@ export function ProcessingPage() {
         const message =
           err?.message ||
           'فشل في تقييم الجمعية. يرجى المحاولة مرة أخرى.';
-        goToStep('documents');
+        goToStep('assessment');
       }
     };
 

@@ -8,23 +8,89 @@ import {
   GitBranch,
   History,
   Activity,
+  RotateCcw,
 } from 'lucide-react';
-import { findProjectById } from './project-data';
+import { useProjectDetails } from '@/api/hooks/useProjectDetails';
 import { ProjectNotFound } from './ProjectNotFound';
-import { healthConfig, statusConfig } from './project-types';
+import { healthConfig, statusConfig, ProjectDetails as ProjectDetailsType, ProjectStatus } from './project-types';
+
+function getDisplayStatus(status: string): ProjectStatus {
+  const normalized = status.toLowerCase().replace(/_/g, '-');
+  return normalized in statusConfig ? (normalized as ProjectStatus) : 'draft';
+}
+
+function getBudgetAmount(budget: number | Record<string, unknown>): number {
+  if (typeof budget === 'number') return budget;
+  if (budget && typeof budget === 'object' && 's' in budget) {
+    const digits = Array.isArray(budget.d) ? (budget.d as number[]) : [];
+    const sign = budget.s === -1 ? -1 : 1;
+    const exponent = typeof budget.e === 'number' ? budget.e : 0;
+    if (digits.length === 0) return 0;
+    const base = digits.reduce((acc, digit, idx) => acc + digit * Math.pow(10, digits.length - idx - 1), 0);
+    return sign * base * Math.pow(10, exponent - (digits.length - 1));
+  }
+  return 0;
+}
+
+function getManagerName(project: ProjectDetailsType): string {
+  return toDisplayString(project.manager, project.managerId || 'غير محدد');
+}
+
+function getOrganizationName(project: ProjectDetailsType): string {
+  if (project.organization && typeof project.organization === 'object') {
+    return project.organization.name || project.organization.id || 'غير محدد';
+  }
+  return project.organization || project.organizationId || 'غير محدد';
+}
+
+function toDisplayString(value: unknown, fallback = 'غير محدد'): string {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === 'string') return value;
+  if (typeof value === 'number' || typeof value === 'boolean') return String(value);
+  if (typeof value === 'object') {
+    const record = value as Record<string, unknown>;
+    return (record.name as string) || (record.label as string) || (record.title as string) || fallback;
+  }
+  return fallback;
+}
 
 export function ProjectDetailsPage() {
   const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
-  const selectedProject = findProjectById(projectId);
+  const { project, isLoading, error, refetch } = useProjectDetails(projectId);
 
-  if (!selectedProject) {
+  if (isLoading) {
+    return (
+      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+        <div className="text-red-600 text-center">{error}</div>
+        <button
+          onClick={() => refetch()}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+        >
+          <RotateCcw className="w-4 h-4" />
+          إعادة المحاولة
+        </button>
+      </div>
+    );
+  }
+
+  if (!project) {
     return <ProjectNotFound />;
   }
 
-  const health = healthConfig[selectedProject.health];
+  const displayHealth = getDisplayStatus(project.health as string);
+  const health = healthConfig[displayHealth] || { label: displayHealth, color: '#6b7280', icon: Activity };
   const HealthIcon = health.icon;
-  const status = statusConfig[selectedProject.status];
+  const displayStatus = getDisplayStatus(project.status as string);
+  const status = statusConfig[displayStatus] || { label: displayStatus, color: '#6b7280', bg: '#f3f4f6' };
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -39,20 +105,23 @@ export function ProjectDetailsPage() {
           </button>
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <h1 className="text-3xl font-bold mb-2">{selectedProject.name}</h1>
+              <h1 className="text-3xl font-bold mb-2">{project.name}</h1>
               <div className="flex items-center gap-4 text-sm text-gray-600">
                 <span className="flex items-center gap-1">
                   <Building2 className="w-4 h-4" />
-                  {selectedProject.organization}
+                  {getOrganizationName(project)}
                 </span>
                 <span className="flex items-center gap-1">
                   <User className="w-4 h-4" />
-                  {selectedProject.manager}
+                  {getManagerName(project)}
                 </span>
               </div>
             </div>
             <div className="flex gap-3">
-              <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2">
+              <button
+                onClick={() => navigate(`/dashboard/project-management/edit/${project.id}`)}
+                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+              >
                 <Edit className="w-5 h-5" />
                 تعديل
               </button>
@@ -83,10 +152,10 @@ export function ProjectDetailsPage() {
               <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-blue-600"
-                  style={{ width: `${selectedProject.progress}%` }}
+                  style={{ width: `${project.progress}%` }}
                 ></div>
               </div>
-              <span className="text-2xl font-bold text-blue-600">{selectedProject.progress}%</span>
+              <span className="text-2xl font-bold text-blue-600">{project.progress}%</span>
             </div>
           </div>
         </div>
@@ -95,7 +164,7 @@ export function ProjectDetailsPage() {
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white rounded-xl p-6 border border-gray-200">
               <h2 className="text-xl font-semibold mb-4">نظرة عامة</h2>
-              <p className="text-gray-700 leading-relaxed">{selectedProject.description}</p>
+              <p className="text-gray-700 leading-relaxed">{project.description}</p>
             </div>
 
             <div className="bg-white rounded-xl p-6 border border-gray-200">
@@ -103,21 +172,21 @@ export function ProjectDetailsPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <p className="text-sm text-gray-600 mb-1">نوع المشروع</p>
-                  <p className="font-medium">{selectedProject.type}</p>
+                  <p className="font-medium">{toDisplayString(project.type)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">التصنيف</p>
-                  <p className="font-medium">{selectedProject.category}</p>
+                  <p className="font-medium">{toDisplayString(project.category)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">الفئة المستهدفة</p>
-                  <p className="font-medium">{selectedProject.beneficiaries}</p>
+                  <p className="font-medium">{toDisplayString(project.beneficiaries)}</p>
                 </div>
                 <div>
                   <p className="text-sm text-gray-600 mb-1">النطاق الجغرافي</p>
                   <p className="font-medium flex items-center gap-1">
                     <MapPin className="w-4 h-4 text-gray-400" />
-                    {selectedProject.geographicScope}
+                    {toDisplayString(project.geographicScope)}
                   </p>
                 </div>
               </div>
@@ -127,9 +196,48 @@ export function ProjectDetailsPage() {
               <h2 className="text-xl font-semibold mb-4">ملخص الميزانية</h2>
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                 <span className="text-gray-600">إجمالي الميزانية</span>
-                <span className="text-2xl font-bold text-gray-900">{selectedProject.budget.toLocaleString('ar-SA')} ر.س</span>
+                <span className="text-2xl font-bold text-gray-900">
+                  {getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س
+                </span>
               </div>
             </div>
+
+            {project.budgets && project.budgets.length > 0 && (
+              <div className="bg-white rounded-xl p-6 border border-gray-200">
+                <h2 className="text-xl font-semibold mb-4">تفاصيل الميزانية</h2>
+                <div className="space-y-3">
+                  {project.budgets.map((budget) => (
+                    <div key={budget.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <span className="font-medium">{budget.category}</span>
+                      <div className="text-sm text-gray-600">
+                        مخصص: {budget.allocated.toLocaleString('ar-SA')} / منفق: {budget.spent.toLocaleString('ar-SA')} {budget.currencyCode}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {project.milestones && project.milestones.length > 0 && (
+              <div className="bg-white rounded-xl p-6 border border-gray-200">
+                <h2 className="text-xl font-semibold mb-4">المعالم الرئيسية</h2>
+                <div className="space-y-3">
+                  {project.milestones.map((milestone) => (
+                    <div key={milestone.id} className="p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-medium">{milestone.title}</span>
+                        <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">{milestone.status}</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-2">{milestone.description}</p>
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <span>تاريخ الاستحقاق: {new Date(milestone.dueDate).toLocaleDateString('ar-SA')}</span>
+                        <span>التقدم: {milestone.progress}%</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="space-y-6">
@@ -137,21 +245,21 @@ export function ProjectDetailsPage() {
               <h3 className="font-semibold mb-4">إجراءات سريعة</h3>
               <div className="space-y-2">
                 <button
-                  onClick={() => navigate(`/dashboard/project-management/lifecycle/${selectedProject.id}`)}
+                  onClick={() => navigate(`/dashboard/project-management/lifecycle/${project.id}`)}
                   className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
                 >
                   <GitBranch className="w-5 h-5 text-gray-400" />
                   <span>عرض دورة الحياة</span>
                 </button>
                 <button
-                  onClick={() => navigate(`/dashboard/project-management/versions/${selectedProject.id}`)}
+                  onClick={() => navigate(`/dashboard/project-management/versions/${project.id}`)}
                   className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
                 >
                   <History className="w-5 h-5 text-gray-400" />
                   <span>الإصدارات</span>
                 </button>
                 <button
-                  onClick={() => navigate(`/dashboard/project-management/activity/${selectedProject.id}`)}
+                  onClick={() => navigate(`/dashboard/project-management/activity/${project.id}`)}
                   className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
                 >
                   <Activity className="w-5 h-5 text-gray-400" />
@@ -164,7 +272,7 @@ export function ProjectDetailsPage() {
               <h3 className="font-semibold mb-4">الفريق المسؤول</h3>
               <div className="space-y-3">
                 {[
-                  { name: selectedProject.manager, role: 'مدير المشروع' },
+                  { name: getManagerName(project), role: 'مدير المشروع' },
                   { name: 'محمد أحمد', role: 'مسؤول مالي' },
                   { name: 'نورة خالد', role: 'ممثل الجمعية' },
                 ].map((user, idx) => (
@@ -180,6 +288,23 @@ export function ProjectDetailsPage() {
                 ))}
               </div>
             </div>
+
+            {project.activities && project.activities.length > 0 && (
+              <div className="bg-white rounded-xl p-6 border border-gray-200">
+                <h3 className="font-semibold mb-4">آخر الأنشطة</h3>
+                <div className="space-y-3">
+                  {project.activities.slice(0, 5).map((activity) => (
+                    <div key={activity.id} className="text-sm">
+                      <p className="font-medium">{activity.action}</p>
+                      <p className="text-gray-600 text-xs">{activity.description}</p>
+                      <p className="text-gray-400 text-xs mt-1">
+                        {new Date(activity.createdAt).toLocaleDateString('ar-SA')}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

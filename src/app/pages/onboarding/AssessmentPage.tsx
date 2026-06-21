@@ -363,7 +363,7 @@ export function AssessmentPage() {
           setCurrentAssessmentStep((step) => step + 1);
         } else {
           // Optimistically advance currentStep to ASSESSMENT so the route
-          // guard allows navigation to documents when the backend lags.
+          // guard allows navigation to preloader when the backend lags.
           const currentStepOrder = getStepOrder(
             (organization?.currentStep?.toLowerCase() as OnboardingStep) ?? 'landing'
           );
@@ -373,7 +373,7 @@ export function AssessmentPage() {
             console.log('[AssessmentPage] patching currentStep to ASSESSMENT');
             setOrganization({ ...organization, currentStep: 'ASSESSMENT' });
           }
-          goToStep('documents');
+          goToStep('preloader');
         }
       }
     } catch (err: any) {

@@ -34,6 +34,7 @@ import { CharityAssessmentRoadmapPage } from './pages/charity-assessment/Charity
 import { ProjectDashboardPage } from './pages/project-management/ProjectDashboardPage';
 import { ProjectListPage } from './pages/project-management/ProjectListPage';
 import { ProjectCreatePage } from './pages/project-management/ProjectCreatePage';
+import { ProjectEditPage } from './pages/project-management/ProjectEditPage';
 import { ProjectDetailsPage } from './pages/project-management/ProjectDetailsPage';
 import { ProjectLifecyclePage } from './pages/project-management/ProjectLifecyclePage';
 import { ProjectVersionsPage } from './pages/project-management/ProjectVersionsPage';
@@ -275,6 +276,10 @@ export const router = createBrowserRouter([
               {
                 path: 'create',
                 Component: ProjectCreatePage,
+              },
+              {
+                path: 'edit/:projectId',
+                Component: ProjectEditPage,
               },
               {
                 path: 'details/:projectId',

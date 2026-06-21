@@ -54,7 +54,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
 
   const navItems: NavItem[] = [
     // First item is always visible to everyone
-    { id: 'onboarding', label: 'تسجيل الجمعيات', icon: UserPlus, path: '/dashboard/onboarding' },
+    { id: 'onboarding', label: 'تسجيل الجمعيات', icon: UserPlus, path: '/dashboard/onboarding/registration' },
     // Remaining items are restricted to specific users configured in .env
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard', restricted: true },
     { id: 'incubator-overview', label: 'نظرة شاملة للحاضنة', icon: BarChart3, path: '/dashboard/incubator-overview', restricted: true },

@@ -22,6 +22,43 @@ export type ProjectStatus =
 
 export type ProjectHealth = 'excellent' | 'good' | 'at-risk' | 'critical';
 
+export interface ProjectManager {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface ProjectActivity {
+  id: string;
+  action: string;
+  description: string;
+  createdAt: string;
+}
+
+export interface ProjectBudgetItem {
+  id: string;
+  category: string;
+  allocated: number;
+  spent: number;
+  currencyCode: string;
+}
+
+export interface ProjectMilestone {
+  id: string;
+  title: string;
+  description: string;
+  dueDate: string;
+  status: string;
+  progress: number;
+}
+
+export interface ProjectDocument {
+  id: string;
+  fileId: string;
+  documentType: string;
+  createdAt: string;
+}
+
 export interface Project {
   id: string;
   organizationId: string;
@@ -44,13 +81,21 @@ export interface Project {
   isDeleted?: boolean;
   createdAt?: string;
   updatedAt?: string;
-  manager?: string | null;
-  activities?: unknown[];
-  budgets?: unknown[];
-  milestones?: unknown[];
-  documents?: unknown[];
+  manager?: ProjectManager | string | null;
+  activities?: ProjectActivity[];
+  budgets?: ProjectBudgetItem[];
+  milestones?: ProjectMilestone[];
+  documents?: ProjectDocument[];
   organization?: string;
   lastUpdated?: string;
+}
+
+export interface ProjectDetails extends Project {
+  manager: ProjectManager | null;
+  activities: ProjectActivity[];
+  budgets: ProjectBudgetItem[];
+  milestones: ProjectMilestone[];
+  documents: ProjectDocument[];
 }
 
 export interface CreateProjectDto {
@@ -81,7 +126,7 @@ export interface CreatedProjectResponse extends CreateProjectDto {
 }
 
 export interface ProjectListResponse {
-  data: string[];
+  data: Project[];
   total: number;
   page: number;
   limit: number;
