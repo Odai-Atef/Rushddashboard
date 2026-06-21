@@ -33,10 +33,10 @@ As a platform user, I want to filter projects by status, organization, manager, 
 
 **Acceptance Scenarios**:
 
-1. **Given** the user is on the project list page, **When** they select a status from the status filter, **Then** the API request includes that `status` and the list refreshes to show only matching projects.
-2. **Given** the user is on the project list page, **When** they type a keyword in the search field and confirm, **Then** the API request includes that `search` term and the list refreshes.
-3. **Given** the user is on the project list page, **When** they select a combination of filters and a search term, **Then** the API request includes all active parameters and the list refreshes accordingly.
-4. **Given** the user clears all filters and search, **When** the list reloads, **Then** the request reverts to the default `page=1` and `limit=10` without filter parameters.
+1. **Given** the user is on the project list page, **When** they select a status from the status filter and click the Apply action, **Then** the API request includes that `status` and the list refreshes to show only matching projects.
+2. **Given** the user is on the project list page, **When** they type a keyword in the search field and click the Search action, **Then** the API request includes that `search` term and the list refreshes.
+3. **Given** the user is on the project list page, **When** they select a combination of filters and a search term and click the Apply action, **Then** the API request includes all active parameters and the list refreshes accordingly.
+4. **Given** the user clears all filters and search and clicks the Apply action, **When** the list reloads, **Then** the request reverts to the default `page=1` and `limit=10` without filter parameters.
 
 ---
 
@@ -63,6 +63,7 @@ As a platform user, I want to navigate between pages of results and change the n
 
 - **Q**: Should the list display only project IDs returned by the API, or should the frontend fetch/enrich each project with its name, status, and manager? → **A**: Fetch full project details for each item via separate API calls.
 - **Q**: How should the system behave when the requested page exceeds the total available pages? → **A**: Silently redirect to the last available page.
+- **Q**: Should filters and search be applied immediately when changed, or only after an explicit "Apply" action? → **A**: Apply only after clicking an "Apply" or "Search" button.
 
 ### Edge Cases
 
@@ -80,7 +81,7 @@ As a platform user, I want to navigate between pages of results and change the n
 - **FR-001**: The project list page at `/dashboard/project-management/list` MUST fetch projects from `/api/v1/projects` using server-side pagination.
 - **FR-002**: The default request MUST use `page=1` and `limit=10` when no user preference is set.
 - **FR-003**: The page MUST support optional query parameters: `status`, `organizationId`, `managerId`, `health`, `type`, `category`, and `search`.
-- **FR-004**: Each filter parameter MUST only be sent when the user has selected or entered a value.
+- **FR-004**: Each filter parameter MUST only be sent when the user has selected or entered a value and confirmed by clicking the Apply or Search action.
 - **FR-005**: The list MUST display the projects returned in the `data` array from the API response. For each project identifier returned, the page MUST fetch its full details (name, status, manager, etc.) via a separate API call or a documented enrichment mechanism before rendering.
 - **FR-006**: The pagination controls MUST reflect the `page`, `limit`, `total`, and `totalPages` values returned by the API.
 - **FR-007**: The page MUST provide an empty state when the API returns no projects.
