@@ -31,7 +31,7 @@ export interface CreatedProjectResponse extends CreateProjectDto {
 }
 
 export interface ProjectListResponse {
-  data: string[];
+  data: Project[];
   total: number;
   page: number;
   limit: number;
@@ -102,6 +102,7 @@ export class ProjectService {
   /**
    * Get a single project by ID
    * GET /api/v1/projects/:id
+   * @deprecated The list endpoint now returns full project objects; only use this when an individual project is needed.
    */
   async getProjectById(id: string, config?: RequestConfig): Promise<ApiResponse<Project>> {
     return apiClient.get<Project>(`/api/v1/projects/${id}`, config);

@@ -14,7 +14,7 @@ import {
   X,
 } from 'lucide-react';
 import { useProjects } from '@/api/hooks/useProjects';
-import { ProjectFilters, ProjectStatus, ProjectHealth, statusConfig } from './project-types';
+import { ProjectFilters, ProjectStatus, ProjectHealth, statusConfig, Project } from './project-types';
 
 const STATUS_OPTIONS: { value: ProjectStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'جميع الحالات' },
@@ -156,6 +156,28 @@ export function ProjectListPage() {
     );
   };
 
+  const getProjectOrganization = (project: Project): string => project.organization || project.organizationId || '-';
+  const getProjectManager = (project: Project): string => project.manager || project.managerId || '-';
+
+  const getBudgetAmount = (budget: Project['budget']): number => {
+    if (typeof budget === 'number') return budget;
+    if (budget && typeof budget === 'object' && 's' in budget) {
+      // Handle Decimal.js-like serialized object: { s: sign, e: exponent, d: digits[] }
+      const digits = Array.isArray((budget as Record<string, unknown>).d) ? (budget as Record<string, unknown>).d as number[] : [];
+      const sign = (budget as Record<string, unknown>).s === -1 ? -1 : 1;
+      const exponent = typeof (budget as Record<string, unknown>).e === 'number' ? (budget as Record<string, unknown>).e as number : 0;
+      if (digits.length === 0) return 0;
+      const base = digits.reduce((acc, digit, idx) => acc + digit * Math.pow(10, (digits.length - idx - 1) * 1), 0);
+      return sign * base * Math.pow(10, exponent - (digits.length - 1));
+    }
+    return 0;
+  };
+
+  const getDisplayStatus = (status: string): ProjectStatus => {
+    const normalized = status.toLowerCase().replace(/_/g, '-');
+    return (normalized as ProjectStatus) in statusConfig ? (normalized as ProjectStatus) : 'draft';
+  };
+
   const renderTable = () => (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
@@ -175,7 +197,7 @@ export function ProjectListPage() {
           </thead>
           <tbody className="divide-y divide-gray-200">
             {projects.map((project) => {
-              const status = statusConfig[project.status];
+              const status = statusConfig[getDisplayStatus(project.status)];
               return (
                 <tr key={project.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4">
@@ -186,7 +208,7 @@ export function ProjectListPage() {
                       {project.name}
                     </button>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{project.organization}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{getProjectOrganization(project)}</td>
                   <td className="px-6 py-4">
                     <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-full">{project.type}</span>
                   </td>
@@ -198,9 +220,9 @@ export function ProjectListPage() {
                       {status.label}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium">{project.budget.toLocaleString('ar-SA')} ر.س</td>
+                  <td className="px-6 py-4 text-sm font-medium">{getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س</td>
                   <td className="px-6 py-4 text-sm text-gray-600">{project.duration}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{project.manager}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{getProjectManager(project)}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
@@ -229,7 +251,7 @@ export function ProjectListPage() {
   const renderKanban = () => (
     <div className="flex gap-4 overflow-x-auto pb-4">
       {['draft', 'charity-review', 'pm-approval', 'funded', 'execution', 'completed'].map((status) => {
-        const statusProjects = projects.filter((p) => p.status === status);
+        const statusProjects = projects.filter((p) => getDisplayStatus(p.status) === status);
         const config = statusConfig[status as ProjectStatus];
 
         return (
@@ -249,10 +271,10 @@ export function ProjectListPage() {
                     className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
                   >
                     <h4 className="font-medium mb-2">{project.name}</h4>
-                    <p className="text-xs text-gray-600 mb-3">{project.organization}</p>
+                    <p className="text-xs text-gray-600 mb-3">{getProjectOrganization(project)}</p>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-500">{project.budget.toLocaleString('ar-SA')} ر.س</span>
-                      <span className="text-gray-500">{project.manager}</span>
+                      <span className="text-gray-500">{getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س</span>
+                      <span className="text-gray-500">{getProjectManager(project)}</span>
                     </div>
                     <div className="mt-3">
                       <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
@@ -284,7 +306,7 @@ export function ProjectListPage() {
               >
                 {project.name}
               </button>
-              <p className="text-xs text-gray-500 mt-1">{project.organization}</p>
+              <p className="text-xs text-gray-500 mt-1">{getProjectOrganization(project)}</p>
             </div>
             <div className="flex-1 relative h-12">
               <div className="absolute inset-0 flex items-center">
@@ -293,16 +315,16 @@ export function ProjectListPage() {
               <div
                 className="absolute top-1/2 -translate-y-1/2 h-6 rounded-lg flex items-center px-3"
                 style={{
-                  backgroundColor: statusConfig[project.status].bg,
+                  backgroundColor: statusConfig[getDisplayStatus(project.status)].bg,
                   left: `${idx * 10}%`,
                   width: `${40 + project.progress / 3}%`,
                 }}
               >
                 <span
                   className="text-xs font-medium whitespace-nowrap"
-                  style={{ color: statusConfig[project.status].color }}
+                  style={{ color: statusConfig[getDisplayStatus(project.status)].color }}
                 >
-                  {project.progress}% - {statusConfig[project.status].label}
+                  {project.progress}% - {statusConfig[getDisplayStatus(project.status)].label}
                 </span>
               </div>
             </div>

@@ -24,23 +24,33 @@ export type ProjectHealth = 'excellent' | 'good' | 'at-risk' | 'critical';
 
 export interface Project {
   id: string;
+  organizationId: string;
   name: string;
-  organization: string;
   type: string;
   category: string;
-  status: ProjectStatus;
-  budget: number;
+  status: ProjectStatus | string;
+  budget: number | Record<string, unknown>;
+  currencyCode: string;
   duration: string;
   startDate: string;
   endDate: string;
   progress: number;
-  manager: string;
+  managerId: string | null;
   description: string;
   beneficiaries: string;
   geographicScope: string;
-  lastUpdated: string;
+  health: ProjectHealth | string;
   version: number;
-  health: ProjectHealth;
+  isDeleted?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  manager?: string | null;
+  activities?: unknown[];
+  budgets?: unknown[];
+  milestones?: unknown[];
+  documents?: unknown[];
+  organization?: string;
+  lastUpdated?: string;
 }
 
 export interface CreateProjectDto {
@@ -60,9 +70,14 @@ export interface CreateProjectDto {
 
 export interface CreatedProjectResponse extends CreateProjectDto {
   id: string;
-  status: ProjectStatus;
+  status: ProjectStatus | string;
   createdAt: string;
   updatedAt: string;
+  health?: ProjectHealth | string;
+  progress?: number;
+  version?: number;
+  manager?: string | null;
+  organization?: string;
 }
 
 export interface ProjectListResponse {

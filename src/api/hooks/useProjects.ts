@@ -118,16 +118,7 @@ export function useProjects(): UseProjectsReturn {
           { signal: controller.signal }
         );
 
-        const { data: ids, total, page, limit, totalPages } = listResponse.data;
-
-        // Fetch details for each project ID in parallel.
-        const detailResponses = await Promise.allSettled(
-          ids.map((id) => projectService.getProjectById(id, { signal: controller.signal }))
-        );
-
-        const projects: Project[] = detailResponses
-          .map((result) => (result.status === 'fulfilled' ? result.value.data : null))
-          .filter((project): project is Project => project !== null);
+        const { data: projects, total, page, limit, totalPages } = listResponse.data;
 
         if (!isMountedRef.current) return;
 
