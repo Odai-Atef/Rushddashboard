@@ -2,9 +2,9 @@
 For additional context about technologies to be used, project structure,
 shell commands, and other important information, read the current plan:
 
-- **Plan**: `specs/060-isiv-results-api/plan.md`
-- **Spec**: `specs/060-isiv-results-api/spec.md`
-- **Quickstart**: `specs/060-isiv-results-api/quickstart.md`
-- **Data Model**: `specs/060-isiv-results-api/data-model.md`
-- **Contracts**: `specs/060-isiv-results-api/contracts/project-dashboard-summary-contract.md`
+- **Plan**: `specs/061-scale-score-comments/plan.md`
+- **Spec**: `specs/061-scale-score-comments/spec.md`
+- **Quickstart**: `specs/061-scale-score-comments/quickstart.md`
+- **Data Model**: `specs/061-scale-score-comments/data-model.md`
+- **Contracts**: `specs/061-scale-score-comments/contracts/evaluation-comments-contract.md`
 <!-- SPECKIT END -->

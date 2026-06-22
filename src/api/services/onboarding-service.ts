@@ -403,6 +403,48 @@ export interface EvaluationComments {
   }[];
 }
 
+/** Maturity tier for a single evaluation comment */
+export type EvaluationCommentTier = 'CRITICAL' | 'EMERGING' | 'MEDIUM' | 'ADVANCED' | 'PIONEER';
+
+/** Single comment describing a score for a specific question */
+export interface EvaluationComment {
+  id: string;
+  dimensionSymbol: string;
+  subDimension: string;
+  tier: EvaluationCommentTier;
+  questionId: string;
+  commentAr: string;
+  commentEn: string;
+  createdAt: string;
+}
+
+/** Map of questionId to its ordered list of evaluation comments */
+export type EvaluationCommentsMap = Record<string, EvaluationComment[]>;
+
+/** API response wrapper for evaluation comments endpoint */
+export interface EvaluationCommentsResponse {
+  success: boolean;
+  data: EvaluationCommentsMap;
+}
+
+/** Score to maturity tier mapping used by the assessment scale UI */
+export const SCORE_TO_TIER: Record<number, EvaluationCommentTier> = {
+  0: 'CRITICAL',
+  1: 'CRITICAL',
+  2: 'EMERGING',
+  3: 'MEDIUM',
+  4: 'ADVANCED',
+  5: 'PIONEER',
+};
+
+export const TIER_ORDER: EvaluationCommentTier[] = [
+  'CRITICAL',
+  'EMERGING',
+  'MEDIUM',
+  'ADVANCED',
+  'PIONEER',
+];
+
 /** Evaluation recommendation */
 export interface EvaluationRecommendation {
   dimension: string;
@@ -752,6 +794,16 @@ export class OnboardingService {
   ): Promise<ApiResponse<SavedAnswer[]>> {
     return apiClient.put('/api/v1/onboarding/assessment/answers', { answers }, {
       params: organizationId ? { organizationId } : undefined,
+    });
+  }
+
+  /**
+   * Get evaluation comments for an organization's assessment questions
+   * GET /api/v1/onboarding/evaluation-comments?organizationId=...
+   */
+  async getEvaluationComments(organizationId: string): Promise<ApiResponse<EvaluationCommentsResponse>> {
+    return apiClient.get('/api/v1/onboarding/evaluation-comments', {
+      params: { organizationId },
     });
   }
 

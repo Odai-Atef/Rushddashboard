@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
+import { useEvaluationComments } from '@/api/hooks/useEvaluationComments';
 import { toast } from 'sonner';
 import { resolveIcon as resolveApiIcon } from '@/app/utils/icon-map';
 import { getStepOrder, OnboardingStep } from '@/app/utils/onboarding-guards';
@@ -18,6 +19,7 @@ import {
   AssessmentQuestion,
   SaveAnswerPayload,
   SavedAnswer,
+  SCORE_TO_TIER,
 } from '@/api/services/onboarding-service';
 
 interface AssessmentAnswer {
@@ -26,20 +28,7 @@ interface AssessmentAnswer {
   answer: number | string | string[] | File | null;
 }
 
-/**
- * Returns a placeholder description for a scale score.
- * TODO: Replace with API-driven descriptions when backend provides them.
- */
-function getScaleDescription(questionId: string, score: number): string {
-  const descriptions: Record<number, string> = {
-    1: 'لا يوجد تطبيق فعلي أو النضج ضعيف جداً في هذا المجال.',
-    2: 'تطبيق جزئي محدود مع وجود فجوات واضحة.',
-    3: 'تطبيق مقبول مع تحسينات مطلوبة.',
-    4: 'تطبيق جيد ومستقر مع نضج عالٍ.',
-    5: 'تطبيق متميز ومتقدم يمثل أفضل الممارسات.',
-  };
-  return descriptions[score] ?? `الدرجة ${score} في هذا المجال.`;
-}
+
 
 export function AssessmentPage() {
   const { goToStep } = useOnboardingNavigate();
@@ -57,8 +46,10 @@ export function AssessmentPage() {
     Record<string, { answered: number; total: number; isComplete: boolean }>
   >({});
   const [overallProgress, setOverallProgress] = useState(0);
+  const { data: commentsMap } = useEvaluationComments(activeOrganizationId ?? undefined);
   const [hoveredScale, setHoveredScale] = useState<{ questionId: string; score: number } | null>(null);
   const [currentAssessmentStep, setCurrentAssessmentStep] = useState(0);
+
   const [assessmentAnswers, setAssessmentAnswers] = useState<
     AssessmentAnswer[]
   >([]);
@@ -682,8 +673,22 @@ export function AssessmentPage() {
                     : typeof answer === 'number'
                     ? answer
                     : null;
+                const getScoreDescription = (
+                  questionId: string,
+                  score: number
+                ): string | null => {
+                  const questionComments = commentsMap[questionId];
+                  if (!questionComments || questionComments.length === 0) {
+                    return null;
+                  }
+                  const tier = SCORE_TO_TIER[score];
+                  const comment = tier
+                    ? questionComments.find((c) => c.tier === tier)
+                    : undefined;
+                  return comment?.commentAr || comment?.commentEn || null;
+                };
                 const scoreDescription =
-                  activeScore != null ? getScaleDescription(q.id, activeScore) : null;
+                  activeScore != null ? getScoreDescription(q.id, activeScore) : null;
 
                 return (
                   <div
