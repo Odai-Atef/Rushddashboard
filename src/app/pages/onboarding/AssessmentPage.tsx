@@ -26,6 +26,21 @@ interface AssessmentAnswer {
   answer: number | string | string[] | File | null;
 }
 
+/**
+ * Returns a placeholder description for a scale score.
+ * TODO: Replace with API-driven descriptions when backend provides them.
+ */
+function getScaleDescription(questionId: string, score: number): string {
+  const descriptions: Record<number, string> = {
+    1: 'لا يوجد تطبيق فعلي أو النضج ضعيف جداً في هذا المجال.',
+    2: 'تطبيق جزئي محدود مع وجود فجوات واضحة.',
+    3: 'تطبيق مقبول مع تحسينات مطلوبة.',
+    4: 'تطبيق جيد ومستقر مع نضج عالٍ.',
+    5: 'تطبيق متميز ومتقدم يمثل أفضل الممارسات.',
+  };
+  return descriptions[score] ?? `الدرجة ${score} في هذا المجال.`;
+}
+
 export function AssessmentPage() {
   const { goToStep } = useOnboardingNavigate();
   const { organization, activeOrganizationId, setOrganization, setAssessmentAnswersDirty } = useOnboardingContext();
@@ -42,6 +57,7 @@ export function AssessmentPage() {
     Record<string, { answered: number; total: number; isComplete: boolean }>
   >({});
   const [overallProgress, setOverallProgress] = useState(0);
+  const [hoveredScale, setHoveredScale] = useState<{ questionId: string; score: number } | null>(null);
   const [currentAssessmentStep, setCurrentAssessmentStep] = useState(0);
   const [assessmentAnswers, setAssessmentAnswers] = useState<
     AssessmentAnswer[]
@@ -660,6 +676,15 @@ export function AssessmentPage() {
               }
 
               if (q.questionType === 'SCALE') {
+                const activeScore =
+                  hoveredScale?.questionId === q.id
+                    ? hoveredScale.score
+                    : typeof answer === 'number'
+                    ? answer
+                    : null;
+                const scoreDescription =
+                  activeScore != null ? getScaleDescription(q.id, activeScore) : null;
+
                 return (
                   <div
                     key={q.id}
@@ -692,6 +717,10 @@ export function AssessmentPage() {
                             onClick={() =>
                               setAnswer(currentCategory.id, q.id, num)
                             }
+                            onMouseEnter={() =>
+                              setHoveredScale({ questionId: q.id, score: num })
+                            }
+                            onMouseLeave={() => setHoveredScale(null)}
                             className={`flex-1 h-12 border-2 rounded-lg transition-colors font-medium ${
                               answer === num
                                 ? 'border-blue-500 bg-blue-50 text-blue-700'
@@ -702,6 +731,11 @@ export function AssessmentPage() {
                           </button>
                         ))}
                       </div>
+                      {scoreDescription && (
+                        <p className="text-sm text-gray-600 bg-blue-50 border border-blue-100 rounded-lg p-3 mt-2 animate-in fade-in slide-in-from-top-1 duration-200">
+                          {scoreDescription}
+                        </p>
+                      )}
                     </div>
                   </div>
                 );
