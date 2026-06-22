@@ -32,6 +32,7 @@ export interface RequestConfig {
   timeout?: number;
   signal?: AbortSignal;
   skipAuthRedirect?: boolean;
+  responseType?: 'json' | 'blob' | 'text';
 }
 
 export interface PaginatedRequest {

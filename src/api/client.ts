@@ -157,8 +157,17 @@ class ApiClient {
         throw error;
       }
 
-      // Parse JSON response
-      const data = await response.json() as T;
+      // Parse response based on responseType
+      const responseType = config?.responseType || 'json';
+      let data: T;
+
+      if (responseType === 'blob') {
+        data = await response.blob() as T;
+      } else if (responseType === 'text') {
+        data = await response.text() as T;
+      } else {
+        data = await response.json() as T;
+      }
       
       return {
         success: true,
@@ -259,11 +268,11 @@ class ApiClient {
     body: unknown, 
     config?: RequestConfig
   ): Promise<ApiResponse<T>> {
-    return this.requestWithRetry<T>(
-      endpoint, 
-      { method: 'POST', body: JSON.stringify(body) }, 
-      config
-    );
+    const options: RequestInit = { method: 'POST' };
+    if (body !== undefined) {
+      options.body = JSON.stringify(body);
+    }
+    return this.requestWithRetry<T>(endpoint, options, config);
   }
 
   /**

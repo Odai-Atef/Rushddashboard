@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
   ChevronRight,
   Edit,
+  Sparkles,
+  FileDown,
+  Loader2,
   Building2,
   User,
   MapPin,
@@ -10,9 +14,14 @@ import {
   Activity,
   RotateCcw,
 } from 'lucide-react';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { useProjectDetails } from '@/api/hooks/useProjectDetails';
+import { projectService } from '@/api/services/project-service';
 import { ProjectNotFound } from './ProjectNotFound';
 import { healthConfig, statusConfig, ProjectDetails as ProjectDetailsType, ProjectStatus } from './project-types';
+
+import { toast } from 'sonner';
 
 function getDisplayStatus(status: string): ProjectStatus {
   const normalized = status.toLowerCase().replace(/_/g, '-');
@@ -58,6 +67,51 @@ export function ProjectDetailsPage() {
   const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
   const { project, isLoading, error, refetch } = useProjectDetails(projectId);
+  const [planOpen, setPlanOpen] = useState(false);
+  const [planMarkdown, setPlanMarkdown] = useState<string>('');
+  const [planLoading, setPlanLoading] = useState(false);
+  const [wordLoading, setWordLoading] = useState(false);
+
+  const handleOpenPlan = async () => {
+    if (!projectId) return;
+    setPlanOpen(true);
+    setPlanLoading(true);
+    setPlanMarkdown('');
+    try {
+      const res = await projectService.getProjectPlanMarkdown(projectId);
+      const content = res.data ?? '';
+      setPlanMarkdown(typeof content === 'string' ? content : JSON.stringify(content, null, 2));
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تحميل خطة المشروع');
+    } finally {
+      setPlanLoading(false);
+    }
+  };
+
+  const handleDownloadWord = async () => {
+    if (!projectId) return;
+    setWordLoading(true);
+    try {
+      const res = await projectService.getProjectPlanWord(projectId);
+      const blob = res.data;
+      if (!(blob instanceof Blob)) {
+        throw new Error('تعذر الحصول على ملف Word');
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${project?.name || 'project'}-plan.docx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم تحميل خطة المشروع بنجاح');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تحميل ملف Word');
+    } finally {
+      setWordLoading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -117,13 +171,20 @@ export function ProjectDetailsPage() {
                 </span>
               </div>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <button
                 onClick={() => navigate(`/dashboard/project-management/edit/${project.id}`)}
                 className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
               >
                 <Edit className="w-5 h-5" />
                 تعديل
+              </button>
+              <button
+                onClick={handleOpenPlan}
+                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+              >
+                <Sparkles className="w-5 h-5" />
+                إنشاء دراسة باستخدام الذكاء الاصطناعي
               </button>
             </div>
           </div>
@@ -308,6 +369,55 @@ export function ProjectDetailsPage() {
           </div>
         </div>
       </div>
+
+      {planOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={() => setPlanOpen(false)}
+          />
+          <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] max-w-[90vw] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+              <div>
+                <h2 className="text-xl font-semibold">خطة المشروع</h2>
+                <p className="text-sm text-gray-500 mt-1">معاينة خطة المشروع بتنسيق Markdown</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={handleDownloadWord}
+                  disabled={wordLoading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {wordLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FileDown className="w-4 h-4" />
+                  )}
+                  تحميل Word
+                </button>
+                <button
+                  onClick={() => setPlanOpen(false)}
+                  className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+              {planLoading ? (
+                <div className="flex items-center justify-center h-full">
+                  <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+                </div>
+              ) : (
+                <div className="prose prose-sm max-w-none text-right w-full break-words bg-white rounded-xl p-6 border border-gray-200 min-h-full [&>*]:text-right">
+                  <Markdown remarkPlugins={[remarkGfm]}>{planMarkdown || '\u00A0'}</Markdown>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

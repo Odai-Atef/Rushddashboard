@@ -159,6 +159,30 @@ export class ProjectService {
   ): Promise<ApiResponse<ProjectDashboardData>> {
     return apiClient.get<ProjectDashboardData>('/api/v1/projects/dashboard/summary', config);
   }
+
+  /**
+   * Get project plan as markdown text
+   * POST /api/v1/projects/:id/plan?format=markdown
+   */
+  async getProjectPlanMarkdown(id: string, config?: RequestConfig): Promise<ApiResponse<string>> {
+    return apiClient.post<string>(`/api/v1/projects/${id}/plan`, undefined, {
+      ...config,
+      params: { format: 'markdown', ...(config?.params || {}) },
+      responseType: 'text',
+    });
+  }
+
+  /**
+   * Get project plan as Word document
+   * POST /api/v1/projects/:id/plan?format=word
+   */
+  async getProjectPlanWord(id: string, config?: RequestConfig): Promise<ApiResponse<Blob>> {
+    return apiClient.post<Blob>(`/api/v1/projects/${id}/plan`, undefined, {
+      ...config,
+      params: { format: 'word', ...(config?.params || {}) },
+      responseType: 'blob',
+    });
+  }
 }
 
 // Export singleton instance

@@ -72,6 +72,10 @@ function getPriorityLabel(priority: string) {
   }
 }
 
+function formatPhaseLabel(phase: string): string {
+  return phase.replace(/(\d+)\s*days?/gi, '$1 يوم').replace(/_/g, ' ');
+}
+
 export function CharityAssessmentRoadmapPage() {
   const navigate = useNavigate();
   const { organizationId } = useParams<{ organizationId: string }>();
@@ -185,8 +189,8 @@ export function CharityAssessmentRoadmapPage() {
         overallProgress: 0,
         initiatives: llmRoadmapPhases.map((phase, idx) => ({
           id: idx + 1,
-          title: phase.phase,
-          area: phase.phase,
+          title: phase.objective || phase.phase,
+          area: formatPhaseLabel(phase.phase),
           dimension: '',
           priority: 'medium',
           responsible: '',
@@ -194,6 +198,7 @@ export function CharityAssessmentRoadmapPage() {
           duration: '3 أشهر',
           status: 'not-started',
           tasks: phase.activities ?? [],
+          kpis: phase.kpis ?? [],
           progress: 0,
         })),
       }
@@ -233,7 +238,7 @@ export function CharityAssessmentRoadmapPage() {
                 {data?.comments?.overall?.ar || 'خطة مخصصة لتحسين جاهزية منظمتك'}
               </p>
             </div>
-            <div className="flex gap-3 report-exclude">
+            <div className="flex gap-3 report-exclude flex-wrap">
               <button
                 onClick={() =>
                   navigate(
@@ -246,6 +251,19 @@ export function CharityAssessmentRoadmapPage() {
               >
                 <ArrowRight className="w-4 h-4" />
                 العودة للنتائج
+              </button>
+              <button
+                onClick={() =>
+                  navigate(
+                    organizationId
+                      ? `/dashboard/ai-innovation?assessmentOrg=${organizationId}&view=feasibility`
+                      : '/dashboard/ai-innovation?view=feasibility'
+                  )
+                }
+                className="flex items-center gap-2 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors"
+              >
+                <Sparkles className="w-4 h-4" />
+                إنشاء دراسة باستخدام الذكاء الاصطناعي
               </button>
             </div>
           </div>
@@ -397,7 +415,6 @@ export function CharityAssessmentRoadmapPage() {
             </div>
           ) : (
             initiatives.map((initiative: EvaluationInitiative, index: number) => {
-              const priorityStyle = priorityConfig[initiative.priority] || priorityConfig.medium;
               const statusStyle = statusConfig[initiative.status] || null;
               const StatusIcon = statusStyle?.icon;
 
@@ -435,19 +452,8 @@ export function CharityAssessmentRoadmapPage() {
                         <div>
                           <div className="flex items-center gap-2 mb-2 flex-wrap">
                             <h3 className="text-lg font-semibold">{initiative.title}</h3>
-                            <span className={`px-2 py-0.5 rounded text-xs ${priorityStyle.bg} ${priorityStyle.text}`}>
-                              {initiative.priorityLabelAr || getPriorityLabel(initiative.priority)}
-                            </span>
-                            {statusStyle && (
-                              <span
-                                className={`text-xs px-2 py-0.5 rounded-full font-medium ${statusStyle.bg} ${statusStyle.text} flex items-center gap-1`}
-                              >
-                                <StatusIcon className="w-3 h-3" />
-                                {statusStyle.label}
-                              </span>
-                            )}
                           </div>
-                          <p className="text-sm text-muted-foreground">المحور: {initiative.area}</p>
+                          <p className="text-sm text-muted-foreground">المحور: {formatPhaseLabel(initiative.area)}</p>
                           {initiative.dimension && (
                             <p className="text-sm text-muted-foreground">البُعد: {initiative.dimension}</p>
                           )}
@@ -461,14 +467,7 @@ export function CharityAssessmentRoadmapPage() {
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                        <div className="bg-card/50 rounded-lg p-3">
-                          <p className="text-xs text-muted-foreground mb-1">الجهة المسؤولة</p>
-                          <p className="font-medium flex items-center gap-2">
-                            <Users className="w-4 h-4 text-muted-foreground" />
-                            {initiative.responsible}
-                          </p>
-                        </div>
+                      <div className="grid grid-cols-1 gap-4 mb-4">
                         <div className="bg-card/50 rounded-lg p-3">
                           <p className="text-xs text-muted-foreground mb-1">النتيجة المتوقعة</p>
                           <p className="font-medium flex items-center gap-2">
@@ -495,7 +494,7 @@ export function CharityAssessmentRoadmapPage() {
 
                       {/* Tasks */}
                       {initiative.tasks.length > 0 && (
-                        <div>
+                        <div className="mb-4">
                           <div className="text-sm font-medium mb-2">المهام الرئيسية:</div>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                             {initiative.tasks.map((task, idx) => (
@@ -510,7 +509,22 @@ export function CharityAssessmentRoadmapPage() {
                         </div>
                       )}
 
-
+                      {/* KPIs */}
+                      {initiative.kpis && initiative.kpis.length > 0 && (
+                        <div>
+                          <div className="text-sm font-medium mb-2">مؤشرات - KPI:</div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {initiative.kpis.map((kpi, idx) => (
+                              <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                                <div className="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0">
+                                  <span className="text-xs">{idx + 1}</span>
+                                </div>
+                                {kpi}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

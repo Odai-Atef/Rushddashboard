@@ -353,6 +353,7 @@ export interface EvaluationInitiative {
   duration: string;
   status: 'not-started' | 'in-progress' | 'completed' | 'delayed' | string;
   tasks: string[];
+  kpis?: string[];
   progress: number;
 }
 
