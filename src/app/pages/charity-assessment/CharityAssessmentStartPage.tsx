@@ -8,9 +8,20 @@ import {
   Loader2,
   AlertTriangle,
   RefreshCw,
+  Building,
+  Shield,
+  Brain,
+  TrendingUp
 } from 'lucide-react';
-import { categories } from './charity-assessment-data';
 import { onboardingService, OrganizationResponse } from '@/api/services/onboarding-service';
+
+// ISIV Dimensions Configuration
+const isivDimensions = [
+  { id: 'institutional_building', code: 'I', name: 'البناء المؤسسي', nameEn: 'Institutional Building', icon: Building },
+  { id: 'governance', code: 'S', name: 'الحوكمة', nameEn: 'Governance', icon: Shield },
+  { id: 'org_intelligence', code: 'I', name: 'الذكاء المؤسسي', nameEn: 'Organizational Intelligence', icon: Brain },
+  { id: 'value_sustainability', code: 'V', name: 'القيمة والاستدامة', nameEn: 'Value & Sustainability', icon: TrendingUp },
+];
 
 export function CharityAssessmentStartPage() {
   const navigate = useNavigate();
@@ -86,27 +97,38 @@ export function CharityAssessmentStartPage() {
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6">
             <Sparkles className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold mb-4">تقييم جاهزية المنظمة</h1>
+          <h1 className="text-4xl font-bold mb-4">تقييم ISIV</h1>
           <p className="text-xl text-muted-foreground mb-2">
-            منصة ذكية لتقييم مستوى استعداد المنظمات الخيرية
+            تقييم جاهزية المنظمات الخيرية - نموذج ISIV
           </p>
           <p className="text-muted-foreground">
-            مدعوم بالذكاء الاصطناعي • تحليل شامل • توصيات مخصصة
+            4 أبعاد • 24 سؤال • 120 نقطة
           </p>
         </div>
 
         <div className="bg-card border border-border rounded-xl p-8 mb-6">
-          <h2 className="text-2xl font-semibold mb-6">ما الذي سنقيمه؟</h2>
+          <h2 className="text-2xl font-semibold mb-6">أبعاد التقييم</h2>
           <div className="grid grid-cols-2 gap-4">
-            {categories.map((cat) => {
-              const Icon = cat.icon;
+            {isivDimensions.map((dim) => {
+              const Icon = dim.icon;
               return (
-                <div key={cat.id} className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+                <div key={dim.id} className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
                   <Icon className="w-5 h-5 text-blue-500" />
-                  <span className="font-medium">{cat.name}</span>
+                  <div>
+                    <span className="font-medium">{dim.name}</span>
+                    <p className="text-xs text-muted-foreground">{dim.nameEn} ({dim.code})</p>
+                  </div>
                 </div>
               );
             })}
+          </div>
+          <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              <strong>ISIV</strong> = <strong>I</strong>nstitutional Building + <strong>S</strong>ustainability + <strong>I</strong>ntelligence + <strong>V</strong>alue
+            </p>
+            <p className="text-sm text-muted-foreground mt-1">
+              كل بُعد يحتوي على 6 أسئلة، بحد أقصى 30 نقطة لكل بُعد (5 نقاط للسؤال)
+            </p>
           </div>
         </div>
 
@@ -114,12 +136,12 @@ export function CharityAssessmentStartPage() {
           <h3 className="font-semibold mb-4">ما الذي ستحصل عليه:</h3>
           <div className="space-y-3">
             {[
-              'تقييم شامل لجاهزية المنظمة عبر 10 مجالات رئيسية',
-              'درجة جاهزية إجمالية مع مقارنة بمعايير القطاع',
-              'تحليل ذكي لنقاط القوة والضعف',
+              'تقييم شامل عبر 4 أبعاد استراتيجية (ISIV)',
+              'درجة إجمالية من 120 نقطة مع حالة التأهيل',
+              'تحليل الفجوات ونقاط القوة لكل بُعد',
               'خارطة طريق مخصصة للتحسين',
               'توصيات مدعومة بالذكاء الاصطناعي',
-              'تتبع التقدم مع مرور الوقت'
+              'مقارنة مع معايير القطاع'
             ].map((item, index) => (
               <div key={index} className="flex items-start gap-3">
                 <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
@@ -155,7 +177,7 @@ export function CharityAssessmentStartPage() {
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           <Clock className="w-4 h-4 inline mr-1" />
-          المدة المتوقعة: 20-30 دقيقة
+          المدة المتوقعة: 15-20 دقيقة (6 أسئلة لكل بُعد)
         </p>
       </div>
     </div>
