@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import {
   ArrowRight,
   ArrowLeft,
@@ -10,8 +10,15 @@ import { categories } from './charity-assessment-data';
 
 export function CharityAssessmentWizardPage() {
   const navigate = useNavigate();
+  const { organizationId } = useParams<{ organizationId: string }>();
   const [currentStep, setCurrentStep] = useState(0);
   const [showAIInsights] = useState(true);
+
+  useEffect(() => {
+    if (!organizationId) {
+      navigate('/dashboard/charity-assessment', { replace: true });
+    }
+  }, [organizationId, navigate]);
 
   const currentCategory = categories[currentStep];
   const progress = ((currentStep + 1) / categories.length) * 100;
@@ -127,7 +134,7 @@ export function CharityAssessmentWizardPage() {
               if (currentStep < categories.length - 1) {
                 setCurrentStep(currentStep + 1);
               } else {
-                navigate('/dashboard/charity-assessment/results');
+                navigate(`/dashboard/charity-assessment/results/${organizationId}`);
               }
             }}
             className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"

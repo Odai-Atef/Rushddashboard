@@ -1,14 +1,83 @@
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import {
   Sparkles,
   CheckCircle2,
   Play,
   Clock,
+  Loader2,
+  AlertTriangle,
+  RefreshCw,
 } from 'lucide-react';
 import { categories } from './charity-assessment-data';
+import { onboardingService, OrganizationResponse } from '@/api/services/onboarding-service';
 
 export function CharityAssessmentStartPage() {
   const navigate = useNavigate();
+  const [organization, setOrganization] = useState<OrganizationResponse | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const resolveOrganization = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await onboardingService.getMyOrganization();
+      setOrganization(res.data);
+    } catch (err: any) {
+      if (err?.statusCode === 404 || err?.response?.status === 404) {
+        setError('لم يتم العثور على مؤسسة مرتبطة بحسابك. يرجى إنشاء مؤسسة أولاً.');
+      } else {
+        setError(err?.message || 'تعذر تحميل معلومات المؤسسة. يرجى المحاولة مرة أخرى.');
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    resolveOrganization();
+  }, [resolveOrganization]);
+
+  const organizationId = organization?.id ?? null;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+          <p className="text-muted-foreground">جاري تحميل بيانات المؤسسة...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
+        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
+          <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">تعذر تحميل المؤسسة</h2>
+          <p className="text-muted-foreground mb-6">{error}</p>
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={() => resolveOrganization()}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              إعادة المحاولة
+            </button>
+            <button
+              onClick={() => navigate('/dashboard/onboarding/registration')}
+              className="inline-flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+            >
+              إنشاء مؤسسة
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
@@ -62,15 +131,23 @@ export function CharityAssessmentStartPage() {
 
         <div className="flex gap-4">
           <button
-            onClick={() => navigate('/dashboard/charity-assessment/assessment')}
-            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all text-lg font-medium"
+            disabled={!organizationId}
+            onClick={() =>
+              organizationId &&
+              navigate(`/dashboard/onboarding/assessment?organizationId=${organizationId}`)
+            }
+            className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Play className="w-5 h-5" />
             بدء التقييم
           </button>
           <button
-            onClick={() => navigate('/dashboard/charity-assessment/results')}
-            className="px-6 py-4 border border-border rounded-xl hover:bg-muted transition-colors font-medium"
+            disabled={!organizationId}
+            onClick={() =>
+              organizationId &&
+              navigate(`/dashboard/charity-assessment/results/${organizationId}`)
+            }
+            className="px-6 py-4 border border-border rounded-xl hover:bg-muted transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             عرض نتائج سابقة
           </button>

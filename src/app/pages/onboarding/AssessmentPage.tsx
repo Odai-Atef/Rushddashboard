@@ -470,24 +470,6 @@ export function AssessmentPage() {
   return (
     <div className="min-h-full bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        {/* Overall Progress */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">
-              الخطوة ٣ من ٤ - التقييم
-            </span>
-            <span className="text-sm font-medium text-blue-600">
-              {Math.round(overallProgress)}٪
-            </span>
-          </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue-600 transition-all duration-300"
-              style={{ width: `${overallProgress}%` }}
-            ></div>
-          </div>
-        </div>
-
         {/* Category Steps */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
           <div className="flex items-center gap-2 overflow-x-auto pb-2">
@@ -861,23 +843,7 @@ export function AssessmentPage() {
           </div>
 
           {/* Navigation */}
-          <div className="flex items-center justify-between pt-8 mt-8 border-t">
-            <button
-              onClick={() => {
-                if (currentAssessmentStep > 0) {
-                  setCurrentAssessmentStep((step) => step - 1);
-                } else {
-                  goToStep('profile');
-                }
-              }}
-              className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2"
-            >
-              <ChevronRight className="w-5 h-5" />
-              السابق
-            </button>
-            <div className="text-sm text-gray-500">
-              {isSavingAnswers ? 'جارٍ حفظ الإجابات...' : 'تم حفظ الإجابات تلقائياً'}
-            </div>
+          <div className="flex items-center justify-end pt-8 mt-8 border-t">
             <button
               onClick={handleAssessmentNext}
               disabled={isSavingAnswers || isLoadingAssessment}
@@ -889,7 +855,7 @@ export function AssessmentPage() {
                   جارٍ الحفظ...
                 </>
               ) : currentAssessmentStep === assessmentCategories.length - 1 ? (
-                'متابعة للمستندات'
+                'قيم الآن'
               ) : (
                 'التالي'
               )}

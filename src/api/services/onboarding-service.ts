@@ -254,13 +254,18 @@ export interface AssessmentStatus {
 
 /** ISIV dimension returned by the evaluation results endpoint */
 export interface IsivDimension {
-  dimension: string;
+  dimension?: string;
   dimensionLabelAr?: string;
+  nameAr?: string;
+  nameEn?: string;
   symbol?: string;
-  score: number;
-  percentage: number;
-  tier: string;
-  tierLabelAr: string;
+  score?: number;
+  percentage?: number;
+  percent?: number;
+  maxPoints?: number;
+  rawPoints?: number;
+  tier?: string;
+  tierLabelAr?: string;
   color?: string;
 }
 
@@ -298,6 +303,11 @@ export interface Benchmarks {
   topPerformer: number;
 }
 
+export interface ProgressDataItem {
+  month: string;
+  score: number;
+}
+
 /** ISIV 4-layer assessment result returned by the evaluation results endpoint */
 export interface IsivAssessmentResult {
   organizationId: string;
@@ -311,6 +321,7 @@ export interface IsivAssessmentResult {
   strengths: string[] | Strength[];
   weaknesses: string[] | Weakness[];
   benchmarks?: Benchmarks;
+  progressData?: ProgressDataItem[];
   assessedAt?: string;
 }
 
@@ -707,8 +718,11 @@ export class OnboardingService {
    * Get ISIV assessment results for an organization
    * GET /api/v1/onboarding/assessments/:organizationId/isiv-results
    */
-  async getIsivAssessmentResults(organizationId: string): Promise<ApiResponse<IsivAssessmentResult>> {
-    return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/isiv-results`);
+  async getIsivAssessmentResults(
+    organizationId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<IsivAssessmentResult>> {
+    return apiClient.get(`/api/v1/onboarding/assessments/${organizationId}/isiv-results`, config);
   }
 
   /**

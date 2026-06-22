@@ -1,9 +1,7 @@
-import { useNavigate } from 'react-router';
+import { useParams, useNavigate } from 'react-router';
 import {
   Award,
-  TrendingUp,
   AlertTriangle,
-  CheckCircle2,
   Target,
   Star,
   Sparkles,
@@ -13,6 +11,8 @@ import {
   Share2,
   RefreshCw,
   Activity,
+  TrendingUp,
+  Loader2,
 } from 'lucide-react';
 import {
   RadarChart,
@@ -32,19 +32,112 @@ import {
   Bar,
   Cell,
 } from 'recharts';
-import {
-  overallScore,
-  readinessLevel,
-  radarData,
-  strengths,
-  gaps,
-  benchmarkData,
-  progressData,
-  getSeverityColor,
-} from './charity-assessment-data';
+import { useIsivAssessmentResults } from '@/api/hooks/useIsivAssessmentResults';
+import type { Weakness, ProgressDataItem } from '@/api/services/onboarding-service';
+
+function getReadinessLevel(score: number) {
+  if (score >= 85) return { label: 'متميز', color: 'text-green-500', bg: 'bg-green-500' };
+  if (score >= 70) return { label: 'جاهز', color: 'text-blue-500', bg: 'bg-blue-500' };
+  if (score >= 55) return { label: 'متوسط', color: 'text-yellow-500', bg: 'bg-yellow-500' };
+  return { label: 'يحتاج تحسين', color: 'text-red-500', bg: 'bg-red-500' };
+}
+
+function getSeverityClasses(severity: string) {
+  switch (severity) {
+    case 'critical':
+      return {
+        wrapper: 'bg-red-500/5 border-red-500/20',
+        badge: 'text-red-500',
+        label: 'حرج',
+      };
+    case 'high':
+      return {
+        wrapper: 'bg-orange-500/5 border-orange-500/20',
+        badge: 'text-orange-500',
+        label: 'عالي',
+      };
+    default:
+      return {
+        wrapper: 'bg-yellow-500/5 border-yellow-500/20',
+        badge: 'text-yellow-500',
+        label: 'متوسط',
+      };
+  }
+}
 
 export function CharityAssessmentResultsPage() {
   const navigate = useNavigate();
+  const { organizationId } = useParams<{ organizationId: string }>();
+  const { data, isLoading, error, refetch } = useIsivAssessmentResults(organizationId);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-full bg-background flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
+          <p className="text-muted-foreground">جاري تحميل نتائج التقييم...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-full bg-background flex items-center justify-center p-8">
+        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
+          <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">تعذر تحميل النتائج</h2>
+          <p className="text-muted-foreground mb-6">{error}</p>
+          <button
+            onClick={() => refetch()}
+            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            إعادة المحاولة
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="min-h-full bg-background flex items-center justify-center p-8">
+        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
+          <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">لا توجد نتائج</h2>
+          <p className="text-muted-foreground">لم يتم العثور على نتائج تقييم لهذه المنظمة.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const overallScore = data.overallScore ?? 0;
+  const readinessLevel = getReadinessLevel(overallScore);
+  const radarData =
+    data.radarData && data.radarData.length > 0
+      ? data.radarData
+      : (data.dimensions ?? []).map((d) => ({
+          category: d.nameAr || d.dimensionLabelAr || d.dimension || d.nameEn || d.symbol || 'dimension',
+          score: d.percent ?? d.percentage ?? d.score ?? 0,
+          fullMark: 100,
+        }));
+  const strengths = data.strengths ?? [];
+  const weaknesses = (data.weaknesses ?? []) as Weakness[];
+  const benchmarks = data.benchmarks;
+  const benchmarkData = benchmarks
+    ? [
+        { name: 'منظمتك', value: benchmarks.yourScore, color: '#3b82f6' },
+        { name: 'متوسط القطاع', value: benchmarks.sectorAverage, color: '#94a3b8' },
+        { name: 'أفضل ممارسة', value: benchmarks.topPerformer, color: '#10b981' },
+      ]
+    : [
+        { name: 'منظمتك', value: overallScore, color: '#3b82f6' },
+        { name: 'متوسط القطاع', value: 68, color: '#94a3b8' },
+        { name: 'أفضل ممارسة', value: 85, color: '#10b981' },
+      ];
+  const progressData = data.progressData as ProgressDataItem[] | undefined;
+  const assessedAt = data.assessedAt ? new Date(data.assessedAt) : null;
 
   return (
     <div className="min-h-full bg-background">
@@ -54,7 +147,15 @@ export function CharityAssessmentResultsPage() {
           <div className="flex items-start justify-between mb-6">
             <div>
               <h1 className="text-3xl font-bold mb-2">نتائج تقييم الجاهزية</h1>
-              <p className="text-blue-100">تم إكمال التقييم بنجاح • تم التحديث في 11 مايو 2026</p>
+              <p className="text-blue-100">
+                {assessedAt
+                  ? `تم إكمال التقييم بنجاح • تم التحديث في ${assessedAt.toLocaleDateString('ar-SA', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                    })}`
+                  : 'تم إكمال التقييم بنجاح'}
+              </p>
             </div>
             <div className="flex gap-3">
               <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
@@ -76,12 +177,14 @@ export function CharityAssessmentResultsPage() {
           </div>
 
           {/* Overall Score */}
-          <div className="grid grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-white/10 backdrop-blur rounded-xl p-6">
               <p className="text-blue-100 mb-2">درجة الجاهزية الإجمالية</p>
               <div className="flex items-end gap-3">
                 <span className="text-5xl font-bold">{overallScore}%</span>
-                <span className={`px-3 py-1 ${readinessLevel.bg}/20 border border-white/20 rounded-full text-sm mb-2`}>
+                <span
+                  className={`px-3 py-1 ${readinessLevel.bg}/20 border border-white/20 rounded-full text-sm mb-2`}
+                >
                   {readinessLevel.label}
                 </span>
               </div>
@@ -110,20 +213,38 @@ export function CharityAssessmentResultsPage() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto p-8">
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Radar Chart */}
-          <div className="col-span-2 bg-card border border-border rounded-xl p-6">
+          <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-6">نظرة شاملة على الأداء</h2>
-            <ResponsiveContainer width="100%" height={400}>
-              <RadarChart data={radarData}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="category" />
-                <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                <Radar name="درجتك" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
-                <Radar name="المتوسط" dataKey={80} stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.3} />
-                <Tooltip />
-              </RadarChart>
-            </ResponsiveContainer>
+            {radarData.length > 0 ? (
+              <ResponsiveContainer width="100%" height={400}>
+                <RadarChart data={radarData}>
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="category" />
+                  <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                  <Radar
+                    name="درجتك"
+                    dataKey="score"
+                    stroke="#3b82f6"
+                    fill="#3b82f6"
+                    fillOpacity={0.6}
+                  />
+                  <Radar
+                    name="المتوسط"
+                    dataKey="fullMark"
+                    stroke="#94a3b8"
+                    fill="#94a3b8"
+                    fillOpacity={0.3}
+                  />
+                  <Tooltip />
+                </RadarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="h-[400px] flex items-center justify-center text-muted-foreground">
+                لا توجد بيانات رادار متاحة
+              </div>
+            )}
           </div>
 
           {/* Quick Stats */}
@@ -182,25 +303,38 @@ export function CharityAssessmentResultsPage() {
             <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
           </div>
           <div className="space-y-4">
-            {strengths.map((strength, index) => (
-              <div key={index} className="bg-green-500/5 border border-green-500/20 rounded-lg p-5">
-                <div className="flex items-start justify-between mb-3">
-                  <div>
-                    <h3 className="font-medium mb-1">{strength.category}</h3>
-                    <p className="text-sm text-muted-foreground">{strength.insight}</p>
+            {strengths.length > 0 ? (
+              strengths.map((strength, index) => {
+                const title = typeof strength === 'string' ? strength : strength.area;
+                const score = typeof strength === 'string' ? undefined : strength.score;
+                const insight = typeof strength === 'string' ? undefined : strength.insight;
+                return (
+                  <div key={index} className="bg-green-500/5 border border-green-500/20 rounded-lg p-5">
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <h3 className="font-medium mb-1">{title}</h3>
+                        {insight && <p className="text-sm text-muted-foreground">{insight}</p>}
+                      </div>
+                      {score !== undefined && (
+                        <div className="text-left">
+                          <p className="text-2xl font-bold text-green-500">{score}%</p>
+                        </div>
+                      )}
+                    </div>
+                    {score !== undefined && (
+                      <div className="w-full bg-muted rounded-full h-2">
+                        <div
+                          className="bg-green-500 h-2 rounded-full"
+                          style={{ width: `${score}%` }}
+                        />
+                      </div>
+                    )}
                   </div>
-                  <div className="text-left">
-                    <p className="text-2xl font-bold text-green-500">{strength.score}%</p>
-                  </div>
-                </div>
-                <div className="w-full bg-muted rounded-full h-2">
-                  <div
-                    className="bg-green-500 h-2 rounded-full"
-                    style={{ width: `${strength.score}%` }}
-                  />
-                </div>
-              </div>
-            ))}
+                );
+              })
+            ) : (
+              <p className="text-muted-foreground">لا توجد نقاط قوة مسجلة</p>
+            )}
           </div>
         </div>
 
@@ -211,51 +345,61 @@ export function CharityAssessmentResultsPage() {
             <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
           </div>
           <div className="space-y-4">
-            {gaps.map((gap, index) => (
-              <div
-                key={index}
-                className={`border rounded-lg p-5 ${
-                  gap.severity === 'critical'
-                    ? 'bg-red-500/5 border-red-500/20'
-                    : gap.severity === 'high'
-                    ? 'bg-orange-500/5 border-orange-500/20'
-                    : 'bg-yellow-500/5 border-yellow-500/20'
-                }`}
-              >
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="font-medium">{gap.category}</h3>
-                      <span className={`px-2 py-0.5 rounded text-xs ${getSeverityColor(gap.severity)}`}>
-                        {gap.severity === 'critical' ? 'حرج' : gap.severity === 'high' ? 'عالي' : 'متوسط'}
-                      </span>
-                    </div>
-                    <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
-                    <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
-                      <Lightbulb className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
-                      <p className="text-sm">{gap.recommendation}</p>
+            {weaknesses.length > 0 ? (
+              weaknesses.map((gap, index) => {
+                const severityClasses = getSeverityClasses(gap.severity);
+                return (
+                  <div key={index} className={`border rounded-lg p-5 ${severityClasses.wrapper}`}>
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <h3 className="font-medium">{gap.area}</h3>
+                          <span className={`px-2 py-0.5 rounded text-xs ${severityClasses.badge}`}>
+                            {severityClasses.label}
+                          </span>
+                        </div>
+                        {gap.issue && (
+                          <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
+                        )}
+                        {gap.recommendation && (
+                          <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
+                            <Lightbulb className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                            <p className="text-sm">{gap.recommendation}</p>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            ))}
+                );
+              })
+            ) : (
+              <p className="text-muted-foreground">لا توجد فجوات مسجلة</p>
+            )}
           </div>
         </div>
 
         {/* Progress Tracking */}
-        <div className="bg-card border border-border rounded-xl p-6 mb-8">
-          <h2 className="text-xl font-semibold mb-6">تتبع التقدم</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <RechartsLineChart data={progressData}>
-              <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-              <XAxis dataKey="month" />
-              <YAxis domain={[0, 100]} />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={3} name="درجة الجاهزية" />
-            </RechartsLineChart>
-          </ResponsiveContainer>
-        </div>
+        {progressData && progressData.length > 0 && (
+          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+            <h2 className="text-xl font-semibold mb-6">تتبع التقدم</h2>
+            <ResponsiveContainer width="100%" height={300}>
+              <RechartsLineChart data={progressData}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+                <XAxis dataKey="month" />
+                <YAxis domain={[0, 100]} />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="score"
+                  stroke="#3b82f6"
+                  strokeWidth={3}
+                  name="درجة الجاهزية"
+                />
+              </RechartsLineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-8 text-center">

@@ -188,11 +188,15 @@ export const router = createBrowserRouter([
                 Component: CharityAssessmentStartPage,
               },
               {
-                path: 'assessment',
+                path: 'assessment/:organizationId',
                 Component: CharityAssessmentWizardPage,
               },
               {
-                path: 'results',
+                path: 'assessment',
+                element: <Navigate to="/dashboard/charity-assessment" replace />,
+              },
+              {
+                path: 'results/:organizationId',
                 Component: CharityAssessmentResultsPage,
               },
               {

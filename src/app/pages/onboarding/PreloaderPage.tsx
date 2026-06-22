@@ -1,6 +1,6 @@
 import { Brain, CheckCircle2, Loader2, Clock } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
+import { useNavigate } from 'react-router';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { onboardingService } from '@/api/services';
 import { toast } from 'sonner';
@@ -17,7 +17,7 @@ function formatRemainingTime(totalSeconds: number): string {
 }
 
 export function PreloaderPage() {
-  const { goToStep } = useOnboardingNavigate();
+  const navigate = useNavigate();
   const { activeOrganizationId, setAssessmentResult, setAssessmentStatus } =
     useOnboardingContext();
   const [processingProgress, setProcessingProgress] = useState(0);
@@ -104,11 +104,11 @@ export function PreloaderPage() {
           overallScore: resultData?.overallScore ?? null,
           completedAt: resultData?.assessedAt ?? null,
         });
-        goToStep('results');
+        navigate(`/dashboard/charity-assessment/results/${activeOrganizationId}`);
       } catch (err: any) {
         stopProgress();
         toast.error(err?.message || 'تعذر إكمال التقييم. يرجى المحاولة مرة أخرى.');
-        goToStep('assessment');
+        navigate(`/dashboard/onboarding/assessment?organizationId=${activeOrganizationId}`);
       }
     };
 
@@ -116,7 +116,7 @@ export function PreloaderPage() {
     return () => {
       if (progressInterval) clearInterval(progressInterval);
     };
-  }, [activeOrganizationId, goToStep, setAssessmentResult, setAssessmentStatus]);
+  }, [activeOrganizationId, navigate, setAssessmentResult, setAssessmentStatus]);
 
   if (cooldownInfo?.blocked) {
     return (
@@ -135,7 +135,11 @@ export function PreloaderPage() {
               الوقت المتبقي: {formatRemainingTime(cooldownInfo.remainingSeconds)}
             </div>
             <button
-              onClick={() => goToStep('results')}
+              onClick={() =>
+                activeOrganizationId
+                  ? navigate(`/dashboard/charity-assessment/results/${activeOrganizationId}`)
+                  : navigate('/dashboard/charity-assessment')
+              }
               className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
             >
               عرض نتيجة التقييم السابقة
