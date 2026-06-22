@@ -477,10 +477,10 @@ export function AssessmentPage() {
   return (
     <div className="min-h-full bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        {/* Category Steps */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex items-center gap-2 overflow-x-auto pb-2">
-            {assessmentCategories.map((cat, idx) => {
+          {/* Category Steps */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <div className="flex items-stretch gap-2 overflow-x-auto pb-2">
+              {assessmentCategories.map((cat, idx) => {
               const Icon = resolveApiIcon(cat.icon);
               const catProgress = assessmentProgress[cat.id] ?? {
                 answered: 0,
@@ -491,7 +491,7 @@ export function AssessmentPage() {
                 <button
                   key={cat.id}
                   onClick={() => setCurrentAssessmentStep(idx)}
-                  className={`flex flex-col items-center gap-1 px-4 py-2 rounded-lg whitespace-nowrap transition-colors ${
+                  className={`flex flex-1 basis-0 min-w-0 flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg transition-colors ${
                     idx === currentAssessmentStep
                       ? 'bg-blue-50 border-2 border-blue-500'
                       : catProgress.isComplete
@@ -520,7 +520,7 @@ export function AssessmentPage() {
                       />
                     </div>
                     <span
-                      className={`text-sm font-medium ${
+                      className={`text-sm font-medium text-center ${
                         idx === currentAssessmentStep
                           ? 'text-blue-900'
                           : catProgress.isComplete
@@ -712,8 +712,6 @@ export function AssessmentPage() {
                     )}
                     <div className="space-y-3">
                       <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
-                        <span>ضعيف جداً</span>
-                        <span>ممتاز</span>
                       </div>
                       <div className="flex gap-2">
                         {[1, 2, 3, 4, 5].map((num) => (

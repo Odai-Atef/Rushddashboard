@@ -122,8 +122,17 @@ export function CharityAssessmentResultsPage() {
           score: d.percent ?? d.percentage ?? d.score ?? 0,
           fullMark: 100,
         }));
+
+  const radarValues = radarData.map((d) => d.score ?? 0);
+  const radarMin = radarValues.length ? Math.min(...radarValues) : 0;
+  const radarMax = radarValues.length ? Math.max(...radarValues) : 100;
+  const radarRange = radarMax - radarMin || 100;
+  const radarLowerBound = Math.max(0, Math.round(radarMin - radarRange * 0.1));
+  const radarUpperBound = Math.min(100, Math.round(radarMax + radarRange * 0.1));
   const strengths = data.strengths ?? [];
+  const llmStrengthsAnalysis = (data as any).llmResponse?.strengthsAnalysis;
   const weaknesses = (data.weaknesses ?? []) as Weakness[];
+  const llmGapAnalysis = (data as any).llmResponse?.gapAnalysis;
   const benchmarks = data.benchmarks;
   const benchmarkData = benchmarks
     ? [
@@ -162,10 +171,6 @@ export function CharityAssessmentResultsPage() {
                 <Download className="w-4 h-4" />
                 تصدير PDF
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
-                <Share2 className="w-4 h-4" />
-                مشاركة
-              </button>
               <button
                 onClick={() => navigate('/dashboard/charity-assessment/assessment')}
                 className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
@@ -190,22 +195,11 @@ export function CharityAssessmentResultsPage() {
               </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur rounded-xl p-6">
-              <p className="text-blue-100 mb-2">مقارنة بمتوسط القطاع</p>
-              <div className="flex items-end gap-2">
-                <TrendingUp className="w-6 h-6 mb-1" />
-                <span className="text-3xl font-bold">+5%</span>
-              </div>
-              <p className="text-sm text-blue-100 mt-2">أعلى من المتوسط</p>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur rounded-xl p-6">
-              <p className="text-blue-100 mb-2">التقدم منذ آخر تقييم</p>
-              <div className="flex items-end gap-2">
-                <Activity className="w-6 h-6 mb-1" />
-                <span className="text-3xl font-bold">+8%</span>
-              </div>
-              <p className="text-sm text-blue-100 mt-2">تحسن ملحوظ</p>
+            <div className="bg-white/10 backdrop-blur rounded-xl p-6 md:col-span-2">
+              <p className="text-blue-100 mb-2">التقييم العام</p>
+              <p className="text-2xl font-semibold leading-relaxed">
+                {data.comments?.overall?.ar || data.qualificationMessage || 'تم إكمال التقييم بنجاح'}
+              </p>
             </div>
           </div>
         </div>
@@ -221,8 +215,13 @@ export function CharityAssessmentResultsPage() {
               <ResponsiveContainer width="100%" height={400}>
                 <RadarChart data={radarData}>
                   <PolarGrid />
-                  <PolarAngleAxis dataKey="category" />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                  <PolarAngleAxis dataKey="category" tick={{ fontSize: 12, fill: '#4b5563' }} />
+                  <PolarRadiusAxis
+                    angle={90}
+                    domain={[radarLowerBound, radarUpperBound]}
+                    tick={{ fontSize: 10, fill: '#6b7280' }}
+                    tickCount={5}
+                  />
                   <Radar
                     name="درجتك"
                     dataKey="score"
@@ -230,14 +229,10 @@ export function CharityAssessmentResultsPage() {
                     fill="#3b82f6"
                     fillOpacity={0.6}
                   />
-                  <Radar
-                    name="المتوسط"
-                    dataKey="fullMark"
-                    stroke="#94a3b8"
-                    fill="#94a3b8"
-                    fillOpacity={0.3}
+                  <Tooltip
+                    formatter={(value: number) => [`${value}%`, 'درجتك']}
+                    contentStyle={{ direction: 'rtl', textAlign: 'right' }}
                   />
-                  <Tooltip />
                 </RadarChart>
               </ResponsiveContainer>
             ) : (
@@ -254,7 +249,7 @@ export function CharityAssessmentResultsPage() {
                 <Star className="w-8 h-8 text-yellow-500" />
                 <Award className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-2xl font-bold mb-1">3</p>
+              <p className="text-2xl font-bold mb-1">{strengths.length}</p>
               <p className="text-sm text-muted-foreground">نقاط قوة رئيسية</p>
             </div>
 
@@ -263,7 +258,7 @@ export function CharityAssessmentResultsPage() {
                 <AlertTriangle className="w-8 h-8 text-orange-500" />
                 <Target className="w-6 h-6 text-red-500" />
               </div>
-              <p className="text-2xl font-bold mb-1">3</p>
+              <p className="text-2xl font-bold mb-1">{weaknesses.length}</p>
               <p className="text-sm text-muted-foreground">مجالات تحتاج تحسين</p>
             </div>
 
@@ -272,7 +267,7 @@ export function CharityAssessmentResultsPage() {
                 <Lightbulb className="w-8 h-8 text-purple-500" />
                 <Sparkles className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-2xl font-bold mb-1">5</p>
+              <p className="text-2xl font-bold mb-1">{data.recommendations?.length ?? 5}</p>
               <p className="text-sm text-muted-foreground">توصيات مخصصة</p>
             </div>
           </div>
@@ -302,6 +297,9 @@ export function CharityAssessmentResultsPage() {
             <Star className="w-6 h-6 text-yellow-500" />
             <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
           </div>
+          {llmStrengthsAnalysis && (
+            <p className="text-muted-foreground leading-relaxed mb-6">{llmStrengthsAnalysis}</p>
+          )}
           <div className="space-y-4">
             {strengths.length > 0 ? (
               strengths.map((strength, index) => {
@@ -344,38 +342,42 @@ export function CharityAssessmentResultsPage() {
             <AlertTriangle className="w-6 h-6 text-orange-500" />
             <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
           </div>
-          <div className="space-y-4">
-            {weaknesses.length > 0 ? (
-              weaknesses.map((gap, index) => {
-                const severityClasses = getSeverityClasses(gap.severity);
-                return (
-                  <div key={index} className={`border rounded-lg p-5 ${severityClasses.wrapper}`}>
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="font-medium">{gap.area}</h3>
-                          <span className={`px-2 py-0.5 rounded text-xs ${severityClasses.badge}`}>
-                            {severityClasses.label}
-                          </span>
-                        </div>
-                        {gap.issue && (
-                          <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
-                        )}
-                        {gap.recommendation && (
-                          <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
-                            <Lightbulb className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
-                            <p className="text-sm">{gap.recommendation}</p>
+          {llmGapAnalysis ? (
+            <p className="text-muted-foreground leading-relaxed">{llmGapAnalysis}</p>
+          ) : (
+            <div className="space-y-4">
+              {weaknesses.length > 0 ? (
+                weaknesses.map((gap, index) => {
+                  const severityClasses = getSeverityClasses(gap.severity);
+                  return (
+                    <div key={index} className={`border rounded-lg p-5 ${severityClasses.wrapper}`}>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <h3 className="font-medium">{gap.area}</h3>
+                            <span className={`px-2 py-0.5 rounded text-xs ${severityClasses.badge}`}>
+                              {severityClasses.label}
+                            </span>
                           </div>
-                        )}
+                          {gap.issue && (
+                            <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
+                          )}
+                          {gap.recommendation && (
+                            <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
+                              <Lightbulb className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
+                              <p className="text-sm">{gap.recommendation}</p>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
-            ) : (
-              <p className="text-muted-foreground">لا توجد فجوات مسجلة</p>
-            )}
-          </div>
+                  );
+                })
+              ) : (
+                <p className="text-muted-foreground">لا توجد فجوات مسجلة</p>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Progress Tracking */}
@@ -408,7 +410,7 @@ export function CharityAssessmentResultsPage() {
             استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك
           </p>
           <button
-            onClick={() => navigate('/dashboard/charity-assessment/roadmap')}
+            onClick={() => navigate(`/dashboard/charity-assessment/roadmap/${organizationId}`)}
             className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
           >
             عرض خارطة الطريق

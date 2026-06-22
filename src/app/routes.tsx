@@ -200,6 +200,10 @@ export const router = createBrowserRouter([
                 Component: CharityAssessmentResultsPage,
               },
               {
+                path: 'roadmap/:organizationId',
+                Component: CharityAssessmentRoadmapPage,
+              },
+              {
                 path: 'roadmap',
                 Component: CharityAssessmentRoadmapPage,
               },

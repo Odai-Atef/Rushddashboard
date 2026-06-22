@@ -85,8 +85,10 @@ export function useIsivAssessmentResults(
 
       if (!isMountedRef.current) return;
 
-      if (response.data) {
-        setState({ data: response.data, isLoading: false, error: null });
+      const resultData =
+        (response.data as any)?.data ?? response.data;
+      if (resultData) {
+        setState({ data: resultData, isLoading: false, error: null });
       } else {
         setState({ data: null, isLoading: false, error: 'لا توجد نتائج' });
       }

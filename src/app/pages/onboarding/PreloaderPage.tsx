@@ -86,16 +86,14 @@ export function PreloaderPage() {
       const startTime = Date.now();
       try {
         await onboardingService.submitAssessment(activeOrganizationId);
-        const evalRes = await onboardingService.getIsivAssessmentResults(
-          activeOrganizationId
-        );
-        const resultData = (evalRes.data as any)?.data ?? evalRes.data;
-
-        const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, PRELOADER_MIN_DURATION_MS - elapsed);
-        if (remaining > 0) {
-          await new Promise((resolve) => setTimeout(resolve, remaining));
-        }
+        const [evalRes] = await Promise.all([
+          onboardingService.evaluateAssessment(activeOrganizationId),
+          new Promise((resolve) => setTimeout(resolve, PRELOADER_MIN_DURATION_MS)),
+        ]);
+        const evalData = (evalRes.data as any)?.data ?? evalRes.data;
+        const resultData = await onboardingService
+          .getIsivAssessmentResults(activeOrganizationId)
+          .then((res) => (res.data as any)?.data ?? res.data);
 
         stopProgress();
         setAssessmentResult(resultData);

@@ -309,11 +309,26 @@ export interface ProgressDataItem {
 }
 
 /** ISIV 4-layer assessment result returned by the evaluation results endpoint */
+export interface IsivDimension {
+  nameAr: string;
+  nameEn?: string;
+  symbol?: string;
+  percent?: number;
+  score?: number;
+  rawPoints?: number;
+  maxPoints?: number;
+  dimension?: string;
+  dimensionLabelAr?: string;
+  dimensionLabelEn?: string;
+  percentage?: number;
+}
+
 export interface IsivAssessmentResult {
   organizationId: string;
   overallScore: number;
   qualificationStatus: string;
   qualificationMessage?: string;
+  comments?: EvaluationComments;
   dimensions?: IsivDimension[];
   categoryScores?: CategoryScore[];
   radarData?: RadarDatum[];
@@ -460,6 +475,44 @@ export interface EvaluationRecommendation {
 }
 
 /** Full evaluation response from /evaluate endpoint */
+export interface LlmRoadmapPhase {
+  phase: string;
+  objective: string;
+  activities: string[];
+  kpis: string[];
+  expectedOutcome: string;
+}
+
+export interface LlmRecommendations {
+  highPriority: string;
+  mediumPriority: string;
+  longTermDevelopment: string;
+}
+
+export interface LlmExecutiveSummary {
+  overallStatus: string;
+  consultantOpinion: string;
+  overallAssessment: string;
+}
+
+export interface LlmOrganizationalReadiness {
+  strategy: string;
+  governance: string;
+  operations: string;
+  dataAndDigital: string;
+  sustainability: string;
+}
+
+export interface LlmResponse {
+  roadmap: LlmRoadmapPhase[];
+  gapAnalysis: string;
+  riskAssessment: string;
+  recommendations: LlmRecommendations;
+  executiveSummary: LlmExecutiveSummary;
+  strengthsAnalysis: string;
+  organizationalReadiness: LlmOrganizationalReadiness;
+}
+
 export interface EvaluationResponse {
   reportId: string;
   organizationId: string;
@@ -470,6 +523,7 @@ export interface EvaluationResponse {
   recommendations: EvaluationRecommendation[];
   roadmap: EvaluationRoadmap;
   qualificationStatus: string;
+  llmResponse?: LlmResponse;
 }
 
 /** Request body for the evaluate endpoint */
