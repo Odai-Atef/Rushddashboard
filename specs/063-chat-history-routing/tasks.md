@@ -66,10 +66,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T013 [P] [US2] Ensure `history.fetchHistory` is called on mount of `AIAnalysisChatPage.tsx` even when `chatId` is present
-- [ ] T014 [US2] Load the chat session after `history.entries` contains the matching entry for the URL `chatId`
-- [ ] T015 [US2] Prevent the `continueAnalysisId`/`rerunAnalysisId` location-state flow from conflicting with URL-based chat loading in `AIAnalysisChatPage.tsx`
-- [ ] T016 [US2] Verify active highlight is set once the matching history entry is loaded
+- [X] T013 [P] [US2] Ensure `history.fetchHistory` is called on mount of `AIAnalysisChatPage.tsx` even when `chatId` is present
+- [X] T014 [US2] Load the chat session after `history.entries` contains the matching entry for the URL `chatId`
+- [X] T015 [US2] Prevent the `continueAnalysisId`/`rerunAnalysisId` location-state flow from conflicting with URL-based chat loading in `AIAnalysisChatPage.tsx`
+- [X] T016 [US2] Verify active highlight is set once the matching history entry is loaded
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently.
 
@@ -83,9 +83,9 @@
 
 ### Implementation for User Story 3
 
-- [ ] T017 [US3] Update `startCardAnalysis` / `startLibraryAnalysis` in `AIAnalysisChatPage.tsx` to navigate to `/dashboard/ai-analysis/chat` before starting the analysis
-- [ ] T018 [US3] Clear `selectedAnalysis` when navigating back to the base route so no history item appears active
-- [ ] T019 [US3] Verify the "New Analysis" button on `AIAnalysisChatPage.tsx` respects the same base-route navigation behavior
+- [X] T017 [US3] Update `startCardAnalysis` / `startLibraryAnalysis` in `AIAnalysisChatPage.tsx` to navigate to `/dashboard/ai-analysis/chat` before starting the analysis
+- [X] T018 [US3] Clear `selectedAnalysis` when navigating back to the base route so no history item appears active
+- [X] T019 [US3] Verify the "New Analysis" button on `AIAnalysisChatPage.tsx` respects the same base-route navigation behavior
 
 **Checkpoint**: All user stories should now be independently functional.
 
