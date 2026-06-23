@@ -19,9 +19,9 @@
 
 **Purpose**: Ensure the feature branch and base route are in a known good state before adding the chat-specific route.
 
-- [ ] T001 Verify current branch is `065-chat-history-routing` and the working tree is clean
-- [ ] T002 Confirm `src/app/routes.tsx` has the existing `/dashboard/ai-analysis/chat` route without conflicts
-- [ ] T003 [P] Confirm `src/app/components/ai-analysis/AIAnalysisChatPage.tsx` builds without errors
+- [X] T001 Verify current branch is `065-chat-history-routing` and the working tree is clean
+- [X] T002 Confirm `src/app/routes.tsx` has the existing `/dashboard/ai-analysis/chat` route without conflicts
+- [X] T003 [P] Confirm `src/app/components/ai-analysis/AIAnalysisChatPage.tsx` builds without errors
 
 ---
 
@@ -31,9 +31,9 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [ ] T004 Add `/dashboard/ai-analysis/chat/:chatId` route to `src/app/routes.tsx` rendering `AIAnalysisChatPage`
-- [ ] T005 Add fallback `Navigate` for unknown sub-paths under `/dashboard/ai-analysis/chat/*` to the base chat route
-- [ ] T006 Verify the route resolves `chatId` correctly when using `react-router` `useParams`
+- [X] T004 Add `/dashboard/ai-analysis/chat/:chatId` route to `src/app/routes.tsx` rendering `AIAnalysisChatPage`
+- [X] T005 Add fallback `Navigate` for unknown sub-paths under `/dashboard/ai-analysis/chat/*` to the base chat route
+- [X] T006 Verify the route resolves `chatId` correctly when using `react-router` `useParams`
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
 
