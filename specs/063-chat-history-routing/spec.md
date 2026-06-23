@@ -53,11 +53,12 @@ A user who is viewing a chat via its dedicated route can still start a brand-new
 
 ### Edge Cases
 
-- What happens when the requested chat id does not exist or the user has no access to it?
-- What happens when the chat history list is still loading while a direct link to a chat is opened?
+- What happens when the requested chat id does not exist or the user has no access to it? The workspace shows an inline "chat not found" message and the URL remains unchanged.
+- What happens when the chat history list is still loading while a direct link to a chat is opened? The specific chat loads after the history list finishes loading.
 - How does the system handle the transition if the user clicks a history item while another analysis stream is running?
 - What should display when the user visits `/dashboard/ai-analysis/chat` without any chat id?
 - What happens if the chat history API call for a specific chat fails?
+- Starting a new analysis from a chat-specific route navigates back to the base `/dashboard/ai-analysis/chat` route, so no chat item stays visually active while the new analysis runs.
 
 ## Requirements *(mandatory)*
 
@@ -67,9 +68,9 @@ A user who is viewing a chat via its dedicated route can still start a brand-new
 - **FR-002**: Clicking a chat history item MUST navigate the browser to `/dashboard/ai-analysis/chat/:chatId`, where `:chatId` is the selected chat's identifier.
 - **FR-003**: After navigation, the application MUST load the selected chat's full conversation into the main workspace.
 - **FR-004**: The selected chat item MUST be visually distinguished in the history list as the active chat.
-- **FR-005**: Visiting `/dashboard/ai-analysis/chat/:chatId` directly or refreshing it MUST load the requested chat without requiring a prior click from the history list.
-- **FR-006**: If a chat id in the URL is invalid or inaccessible, the system MUST show a clear, user-friendly state instead of a blank screen.
-- **FR-007**: Starting a new analysis from within a chat route MUST continue to work and update the history list as expected.
+- **FR-005**: Visiting `/dashboard/ai-analysis/chat/:chatId` directly or refreshing it MUST load the requested chat without requiring a prior click from the history list; the chat-specific request MUST wait for the history list to finish loading before initiating.
+- **FR-006**: If a chat id in the URL is invalid or inaccessible, the system MUST keep the URL and display a clear, user-friendly "chat not found" message inside the workspace instead of a blank screen or full-page redirect.
+- **FR-007**: Starting a new analysis from within a chat route MUST navigate back to `/dashboard/ai-analysis/chat` and continue to work as the base route does today, while keeping the history list visible and updated.
 - **FR-008**: The base `/dashboard/ai-analysis/chat` route without a chat id MUST continue to function as it does today.
 
 ### Key Entities *(include if feature involves data)*
@@ -85,6 +86,17 @@ A user who is viewing a chat via its dedicated route can still start a brand-new
 - **SC-002**: Direct links to a chat load correctly for 100% of valid chat identifiers.
 - **SC-003**: 95% of users successfully return to a prior chat on the first attempt.
 - **SC-004**: No chat history item appears active unless its corresponding chat is currently loaded in the workspace.
+
+## Clarifications
+
+### Session 2026-06-24
+
+- **Q**: When the user is already on a chat-specific route and starts a new analysis, what should happen to the URL?  
+  **A**: Navigate back to `/dashboard/ai-analysis/chat` (base route) as soon as a new analysis starts.
+- **Q**: For an invalid or inaccessible chat id, what state should the user see?  
+  **A**: Keep the URL and display an inline "chat not found" message inside the workspace.
+- **Q**: When the chat history list is still loading and a direct link to a chat is opened, should the specific chat wait for the list or load independently?  
+  **A**: Wait for the full history list to finish loading first, then load the specific chat.
 
 ## Assumptions
 
