@@ -10,8 +10,10 @@ export interface StreamMessage {
   isStreaming?: boolean;
   timestamp: Date;
   sql?: string;
-  data?: any[];
+  data?: any[] | any;
   fallback?: boolean;
+  isStarter?: boolean;
+  isHidden?: boolean;
 }
 
 export interface UseAnalysisStreamingReturn {
@@ -88,7 +90,8 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
       setMessages(prev => [...prev, {
         id: userMessageId,
         role: 'user',
-        content: 'Starting analysis...',
+        content: 'جاري بدء التحليل...',
+        isStarter: true,
         timestamp: new Date(),
       }]);
 
@@ -115,18 +118,22 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
           const data = JSON.parse(event.data);
           
           if (data.type === 'partial_replay' || data.type === 'token') {
-            // Append token to current assistant message
+            const tokenContent = data.content || '';
+            // Append token to current assistant message and hide the starter user message on first token
             setMessages(prev => {
-              const lastMsg = prev[prev.length - 1];
+              const updated = [...prev];
+              const starterIndex = updated.findIndex(m => m.role === 'user' && m.isStarter);
+              if (starterIndex !== -1 && tokenContent) {
+                updated[starterIndex] = { ...updated[starterIndex], isHidden: true };
+              }
+              const lastMsg = updated[updated.length - 1];
               if (lastMsg?.role === 'assistant' && lastMsg.id === assistantMessageId) {
-                const updated = [...prev];
                 updated[updated.length - 1] = {
                   ...lastMsg,
-                  content: lastMsg.content + (data.content || ''),
+                  content: lastMsg.content + tokenContent,
                 };
-                return updated;
               }
-              return prev;
+              return updated;
             });
           } else if (data.type === 'complete') {
             setStatus('complete');

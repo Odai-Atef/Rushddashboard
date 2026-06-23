@@ -11,8 +11,9 @@ export interface AnalysisHistoryEntry {
   summary: string | null;
   status: AnalysisHistoryStatus;
   durationMs: number | null;
-  startedAt: string;
+  startedAt: string | null;
   completedAt: string | null;
+  createdAt?: string | null;
   insightsCount: number | null;
   recommendationsCount: number | null;
 }
@@ -55,7 +56,7 @@ export interface HistoryListState {
 
 export interface UseAnalysisHistoryReturn extends HistoryListState {
   fetchHistory: (page?: number) => Promise<void>;
-  loadSession: (runId: string, sessionId?: string) => Promise<StreamMessage[]>;
+  loadSession: (runId: string, sessionId?: string | null) => Promise<StreamMessage[]>;
   retry: () => Promise<void>;
   reset: () => void;
 }
@@ -65,8 +66,12 @@ function generateMessageId(): string {
   return `msg-${Date.now()}-${++messageIdCounter}`;
 }
 
-function formatDateTime(isoDate: string): { date: string; time: string } {
-  const d = new Date(isoDate);
+function formatDateTime(isoDate: string | null | undefined): { date: string; time: string; fullDateTime: string } {
+  const dateSource = isoDate || '';
+  const d = dateSource ? new Date(dateSource) : new Date();
+  if (!dateSource || Number.isNaN(d.getTime())) {
+    return { date: '-', time: '-', fullDateTime: '-' };
+  }
   const date = d.toLocaleDateString('ar-SA', {
     year: 'numeric',
     month: '2-digit',
@@ -76,7 +81,14 @@ function formatDateTime(isoDate: string): { date: string; time: string } {
     hour: '2-digit',
     minute: '2-digit',
   });
-  return { date, time };
+  const fullDateTime = d.toLocaleString('ar-SA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+  return { date, time, fullDateTime };
 }
 
 function getPreview(entry: AnalysisHistoryEntry): string {
@@ -160,8 +172,9 @@ function messagesToStreamMessages(analysisMessages: AnalysisMessage[]): StreamMe
       id: msg.id || generateMessageId(),
       role: validRole,
       content: msg.content ?? '',
-      isStreaming: false,
+      isStreaming: msg.isStreaming ?? false,
       timestamp: new Date(msg.createdAt || Date.now()),
+      data: msg.data,
     };
   });
 }
@@ -258,7 +271,7 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
     }
   }, []);
 
-  const loadSession = useCallback(async (runId: string, sessionId?: string): Promise<StreamMessage[]> => {
+  const loadSession = useCallback(async (runId: string, sessionId?: string | null): Promise<StreamMessage[]> => {
     // Abort any in-flight detail request
     detailAbortControllerRef.current?.abort();
     const abortController = new AbortController();
@@ -272,35 +285,28 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
     }));
 
     try {
-      // Primary: try to load actual chat messages via sessionId
-      const effectiveSessionId = sessionId || runId;
-      if (effectiveSessionId) {
-        try {
-          const msgResponse = await analysisService.getSessionMessages(effectiveSessionId);
-          if (abortController.signal.aborted) return [];
-
-          const messages = messagesToStreamMessages(msgResponse.data);
-
-          setState(prev => ({
-            ...prev,
-            isLoadingDetail: false,
-            detailError: null,
-          }));
-
-          return messages;
-        } catch (sessionErr: any) {
-          // If 404 or endpoint unavailable, fall back to legacy behavior
-          console.warn('[History] getSessionMessages failed, falling back to getRunDetail:', sessionErr?.message || sessionErr);
-        }
-      }
-
-      // Fallback: load structured run detail and reconstruct messages
-      const response = await analysisService.getRunDetail(runId);
+      // Step 1: Fetch structured history detail for the run.
+      const response = await analysisService.getHistoryRunDetail(runId);
       const detail = response.data;
+      console.log('[History] getHistoryRunDetail response', { runId, detail });
+
+      // Step 2: Always call the sessions/:sessionId/messages endpoint.
+      const effectiveSessionId = sessionId?.trim() || (detail as any)?.sessionId?.trim() || runId;
+      console.log('[History] fetching session messages', { runId, effectiveSessionId, sessionId });
+      let sessionMessages: StreamMessage[] = [];
+      try {
+        const msgResponse = await analysisService.getSessionMessages(effectiveSessionId);
+        console.log('[History] getSessionMessages response', { runId, data: msgResponse.data });
+        const messages = (msgResponse.data as any)?.data ?? msgResponse.data;
+        sessionMessages = messagesToStreamMessages(messages as AnalysisMessage[]);
+      } catch {
+        // Intentional no-op: this call is required to be issued regardless of success.
+        console.log('[History] getSessionMessages failed, falling back to history detail');
+      }
 
       if (abortController.signal.aborted) return [];
 
-      const messages = sessionDetailToMessages(detail);
+      const messages = sessionMessages.length > 0 ? sessionMessages : sessionDetailToMessages(detail);
 
       setState(prev => ({
         ...prev,

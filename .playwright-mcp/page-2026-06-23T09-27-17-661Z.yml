@@ -1,0 +1,81 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "التطابق الذكي مع المانحين" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e19]
+            - generic [ref=e24]: التطابق الذكي مع المانحين
+        - listitem [ref=e25]:
+          - link "المحلل التنفيذي الذكي" [ref=e26] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e27]
+            - generic [ref=e29]: المحلل التنفيذي الذكي
+        - listitem [ref=e30]:
+          - link "إدارة المشاريع" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e32]
+            - generic [ref=e35]: إدارة المشاريع
+        - listitem [ref=e36]:
+          - link "قاعدة الجهات المانحة" [ref=e37] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e38]
+            - generic [ref=e43]: قاعدة الجهات المانحة
+        - listitem [ref=e44]:
+          - link "تقييم الجاهزية" [ref=e45] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e46]
+            - generic [ref=e50]: تقييم الجاهزية
+    - paragraph [ref=e52]: © 2026 منصة رشد
+  - generic [ref=e53]:
+    - banner [ref=e54]:
+      - generic [ref=e56]:
+        - img
+        - textbox "ابحث..." [ref=e57]
+      - generic [ref=e58]:
+        - button "تبديل الوضع" [ref=e59]:
+          - img [ref=e60]
+        - button [ref=e62]:
+          - img [ref=e63]
+        - button "؟" [ref=e67]:
+          - generic [ref=e69]: ؟
+    - main [ref=e70]:
+      - generic [ref=e71]:
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - img [ref=e76]
+            - generic [ref=e78]:
+              - heading "المحلل التنفيذي الذكي" [level=1] [ref=e79]
+              - paragraph [ref=e80]: منصة التحليل المدعومة بالذكاء الاصطناعي
+          - button "تحليل جديد" [ref=e81]:
+            - img [ref=e82]
+            - generic [ref=e83]: تحليل جديد
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - heading "سجل التحليلات" [level=2] [ref=e88]
+                - button [ref=e89]:
+                  - img [ref=e90]
+              - generic [ref=e91]:
+                - img [ref=e92]
+                - textbox "بحث..." [ref=e95]
+            - generic [ref=e97]:
+              - img [ref=e98]
+              - paragraph [ref=e100]: جاري تحميل سجل التحليلات...
+          - generic [ref=e103]:
+            - img [ref=e105]
+            - heading "ابدأ تحليلاً ذكياً" [level=2] [ref=e107]
+            - paragraph [ref=e108]: اختر تحليلاً من مكتبة التحليلات للبدء
+            - button "فتح مكتبة التحليلات" [ref=e109]:
+              - img [ref=e110]
+              - generic [ref=e111]: فتح مكتبة التحليلات

@@ -58,6 +58,7 @@ export function DashboardLayout() {
     (location.pathname.startsWith('/dashboard/onboarding') ? 'onboarding' :
      location.pathname.startsWith('/dashboard/project-management') ? 'project-management' :
      location.pathname.startsWith('/dashboard/charity-assessment') ? 'charity-assessment' :
+     location.pathname.startsWith('/dashboard/ai-analysis') ? 'ai-analysis' :
      'executive');
 
   return (

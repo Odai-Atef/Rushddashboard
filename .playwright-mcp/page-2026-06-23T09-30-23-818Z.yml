@@ -1,0 +1,455 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "التطابق الذكي مع المانحين" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e19]
+            - generic [ref=e24]: التطابق الذكي مع المانحين
+        - listitem [ref=e25]:
+          - link "المحلل التنفيذي الذكي" [ref=e26] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e27]
+            - generic [ref=e29]: المحلل التنفيذي الذكي
+        - listitem [ref=e30]:
+          - link "إدارة المشاريع" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e32]
+            - generic [ref=e35]: إدارة المشاريع
+        - listitem [ref=e36]:
+          - link "قاعدة الجهات المانحة" [ref=e37] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e38]
+            - generic [ref=e43]: قاعدة الجهات المانحة
+        - listitem [ref=e44]:
+          - link "تقييم الجاهزية" [ref=e45] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e46]
+            - generic [ref=e50]: تقييم الجاهزية
+    - paragraph [ref=e52]: © 2026 منصة رشد
+  - generic [ref=e53]:
+    - banner [ref=e54]:
+      - generic [ref=e56]:
+        - img
+        - textbox "ابحث..." [ref=e57]
+      - generic [ref=e58]:
+        - button "تبديل الوضع" [ref=e59]:
+          - img [ref=e60]
+        - button [ref=e62]:
+          - img [ref=e63]
+        - button "OA" [ref=e112]:
+          - generic [ref=e69]: OA
+    - main [ref=e70]:
+      - generic [ref=e71]:
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - img [ref=e76]
+            - generic [ref=e78]:
+              - heading "المحلل التنفيذي الذكي" [level=1] [ref=e79]
+              - paragraph [ref=e80]: منصة التحليل المدعومة بالذكاء الاصطناعي
+          - button "تحليل جديد" [ref=e81]:
+            - img [ref=e82]
+            - generic [ref=e83]: تحليل جديد
+        - generic [ref=e84]:
+          - generic [ref=e85]:
+            - generic [ref=e86]:
+              - generic [ref=e87]:
+                - heading "سجل التحليلات" [level=2] [ref=e88]
+                - button [ref=e89]:
+                  - img [ref=e90]
+              - generic [ref=e91]:
+                - img [ref=e92]
+                - textbox "بحث..." [ref=e95]
+            - generic [ref=e96]:
+              - generic [ref=e113] [cursor=pointer]:
+                - generic [ref=e114]:
+                  - generic [ref=e115]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e116]
+                    - paragraph [ref=e117]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e119]:
+                    - img [ref=e120]
+                - generic [ref=e124]:
+                  - generic [ref=e125]:
+                    - img [ref=e126]
+                    - generic [ref=e129]: ١٢:٢٨ م
+                  - generic [ref=e130]: مكتمل
+              - generic [ref=e131] [cursor=pointer]:
+                - generic [ref=e132]:
+                  - generic [ref=e133]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e134]
+                    - paragraph [ref=e135]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e137]:
+                    - img [ref=e138]
+                - generic [ref=e142]:
+                  - generic [ref=e143]:
+                    - img [ref=e144]
+                    - generic [ref=e147]: ١١:٢٩ ص
+                  - generic [ref=e148]: مكتمل
+              - generic [ref=e149] [cursor=pointer]:
+                - generic [ref=e150]:
+                  - generic [ref=e151]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e152]
+                    - paragraph [ref=e153]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e155]:
+                    - img [ref=e156]
+                - generic [ref=e160]:
+                  - generic [ref=e161]:
+                    - img [ref=e162]
+                    - generic [ref=e165]: ١١:٠٦ ص
+                  - generic [ref=e166]: مكتمل
+              - generic [ref=e167] [cursor=pointer]:
+                - generic [ref=e168]:
+                  - generic [ref=e169]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e170]
+                    - paragraph [ref=e171]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e173]:
+                    - img [ref=e174]
+                - generic [ref=e178]:
+                  - generic [ref=e179]:
+                    - img [ref=e180]
+                    - generic [ref=e183]: ١٠:٤٧ ص
+                  - generic [ref=e184]: مكتمل
+              - generic [ref=e185] [cursor=pointer]:
+                - generic [ref=e186]:
+                  - generic [ref=e187]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e188]
+                    - paragraph [ref=e189]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e191]:
+                    - img [ref=e192]
+                - generic [ref=e196]:
+                  - generic [ref=e197]:
+                    - img [ref=e198]
+                    - generic [ref=e201]: ١٠:٤٧ ص
+                  - generic [ref=e202]: مكتمل
+              - generic [ref=e203] [cursor=pointer]:
+                - generic [ref=e204]:
+                  - generic [ref=e205]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e206]
+                    - paragraph [ref=e207]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e209]:
+                    - img [ref=e210]
+                - generic [ref=e214]:
+                  - generic [ref=e215]:
+                    - img [ref=e216]
+                    - generic [ref=e219]: ١٠:٤٦ ص
+                  - generic [ref=e220]: مكتمل
+              - generic [ref=e221] [cursor=pointer]:
+                - generic [ref=e222]:
+                  - generic [ref=e223]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e224]
+                    - paragraph [ref=e225]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e227]:
+                    - img [ref=e228]
+                - generic [ref=e232]:
+                  - generic [ref=e233]:
+                    - img [ref=e234]
+                    - generic [ref=e237]: ١٠:٤٢ ص
+                  - generic [ref=e238]: مكتمل
+              - generic [ref=e239] [cursor=pointer]:
+                - generic [ref=e240]:
+                  - generic [ref=e241]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e242]
+                    - paragraph [ref=e243]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e245]:
+                    - img [ref=e246]
+                - generic [ref=e250]:
+                  - generic [ref=e251]:
+                    - img [ref=e252]
+                    - generic [ref=e255]: ٠٩:١١ م
+                  - generic [ref=e256]: مكتمل
+              - generic [ref=e257] [cursor=pointer]:
+                - generic [ref=e258]:
+                  - generic [ref=e259]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e260]
+                    - paragraph [ref=e261]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e263]:
+                    - img [ref=e264]
+                - generic [ref=e268]:
+                  - generic [ref=e269]:
+                    - img [ref=e270]
+                    - generic [ref=e273]: ٠٨:٥٩ م
+                  - generic [ref=e274]: مكتمل
+              - generic [ref=e275] [cursor=pointer]:
+                - generic [ref=e276]:
+                  - generic [ref=e277]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e278]
+                    - paragraph [ref=e279]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e281]:
+                    - img [ref=e282]
+                - generic [ref=e286]:
+                  - generic [ref=e287]:
+                    - img [ref=e288]
+                    - generic [ref=e291]: ٠٨:٥٨ م
+                  - generic [ref=e292]: مكتمل
+              - generic [ref=e293] [cursor=pointer]:
+                - generic [ref=e294]:
+                  - generic [ref=e295]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e296]
+                    - paragraph [ref=e297]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e299]:
+                    - img [ref=e300]
+                - generic [ref=e304]:
+                  - generic [ref=e305]:
+                    - img [ref=e306]
+                    - generic [ref=e309]: ٠٨:٥٣ م
+                  - generic [ref=e310]: مكتمل
+              - generic [ref=e311] [cursor=pointer]:
+                - generic [ref=e312]:
+                  - generic [ref=e313]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e314]
+                    - paragraph [ref=e315]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e317]:
+                    - img [ref=e318]
+                - generic [ref=e322]:
+                  - generic [ref=e323]:
+                    - img [ref=e324]
+                    - generic [ref=e327]: ٠٨:٤٨ م
+                  - generic [ref=e328]: مكتمل
+              - generic [ref=e329] [cursor=pointer]:
+                - generic [ref=e330]:
+                  - generic [ref=e331]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e332]
+                    - paragraph [ref=e333]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e335]:
+                    - img [ref=e336]
+                - generic [ref=e340]:
+                  - generic [ref=e341]:
+                    - img [ref=e342]
+                    - generic [ref=e345]: ٠٨:٤٧ م
+                  - generic [ref=e346]: مكتمل
+              - generic [ref=e347] [cursor=pointer]:
+                - generic [ref=e348]:
+                  - generic [ref=e349]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e350]
+                    - paragraph [ref=e351]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e353]:
+                    - img [ref=e354]
+                - generic [ref=e358]:
+                  - generic [ref=e359]:
+                    - img [ref=e360]
+                    - generic [ref=e363]: ٠٨:٤٣ م
+                  - generic [ref=e364]: مكتمل
+              - generic [ref=e365] [cursor=pointer]:
+                - generic [ref=e366]:
+                  - generic [ref=e367]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e368]
+                    - paragraph [ref=e369]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e371]:
+                    - img [ref=e372]
+                - generic [ref=e376]:
+                  - generic [ref=e377]:
+                    - img [ref=e378]
+                    - generic [ref=e381]: ٠٨:٠٠ م
+                  - generic [ref=e382]: مكتمل
+              - generic [ref=e383] [cursor=pointer]:
+                - generic [ref=e384]:
+                  - generic [ref=e385]:
+                    - heading "Best Products by Revenue" [level=3] [ref=e386]
+                    - paragraph [ref=e387]: ١٦‏/٠٦‏/٢٠٢٦
+                  - button [ref=e389]:
+                    - img [ref=e390]
+                - generic [ref=e394]:
+                  - generic [ref=e395]:
+                    - img [ref=e396]
+                    - generic [ref=e399]: ٠٨:٠٠ م
+                  - generic [ref=e400]: مكتمل
+          - generic [ref=e102]:
+            - generic [ref=e103]:
+              - generic [ref=e401]:
+                - generic [ref=e402]:
+                  - img [ref=e404]
+                  - generic [ref=e407]:
+                    - heading "Best Products by Revenue" [level=2] [ref=e408]
+                    - paragraph [ref=e409]: سجل التحليلات
+                - generic [ref=e410]:
+                  - button [ref=e411]:
+                    - img [ref=e412]
+                  - button [ref=e416]:
+                    - img [ref=e417]
+              - generic [ref=e421]:
+                - generic [ref=e423]:
+                  - img [ref=e425]
+                  - generic [ref=e427]: جلب البيانات
+                - generic [ref=e430]:
+                  - img [ref=e432]
+                  - generic [ref=e434]: تنفيذ SQL
+                - generic [ref=e437]:
+                  - img [ref=e439]
+                  - generic [ref=e441]: معالجة المؤشرات
+                - generic [ref=e443]:
+                  - img [ref=e445]
+                  - generic [ref=e447]: اكتشاف المخاطر
+                - generic [ref=e449]:
+                  - img [ref=e451]
+                  - generic [ref=e453]: توليد التوصيات
+              - generic [ref=e456]:
+                - generic [ref=e457]:
+                  - generic [ref=e458]: المحلل الذكي
+                  - img [ref=e460]
+                - generic [ref=e462]:
+                  - generic [ref=e463]:
+                    - heading "تقرير تحليلي للمنتجات" [level=1] [ref=e464]
+                    - heading "ملخص سريع" [level=2] [ref=e465]
+                    - table [ref=e466]:
+                      - rowgroup [ref=e467]:
+                        - row "المنتج الإيرادات (دولار) الكمية المباعة عدد الطلبات متوسط سعر الوحدة متوسط الإيراد لكل طلب" [ref=e468]:
+                          - columnheader "المنتج" [ref=e469]
+                          - columnheader "الإيرادات (دولار)" [ref=e470]
+                          - columnheader "الكمية المباعة" [ref=e471]
+                          - columnheader "عدد الطلبات" [ref=e472]
+                          - columnheader "متوسط سعر الوحدة" [ref=e473]
+                          - columnheader "متوسط الإيراد لكل طلب" [ref=e474]
+                      - rowgroup [ref=e475]:
+                        - row "منتج د 2400 8 2 300 1200" [ref=e476]:
+                          - cell "منتج د" [ref=e477]
+                          - cell "2400" [ref=e478]
+                          - cell "8" [ref=e479]
+                          - cell "2" [ref=e480]
+                          - cell "300" [ref=e481]
+                          - cell "1200" [ref=e482]
+                        - row "منتج ج 150 1 1 150 150" [ref=e483]:
+                          - cell "منتج ج" [ref=e484]
+                          - cell "150" [ref=e485]
+                          - cell "1" [ref=e486]
+                          - cell "1" [ref=e487]
+                          - cell "150" [ref=e488]
+                          - cell "150" [ref=e489]
+                    - list [ref=e490]:
+                      - listitem [ref=e491]:
+                        - text: "إجمالي الإيرادات:"
+                        - strong [ref=e492]: 2550 دولار
+                      - listitem [ref=e493]:
+                        - text: "إجمالي الكمية المباعة:"
+                        - strong [ref=e494]: 9 وحدات
+                      - listitem [ref=e495]:
+                        - text: "إجمالي عدد الطلبات:"
+                        - strong [ref=e496]: 3 طلبات
+                      - listitem [ref=e497]:
+                        - text: "متوسط سعر الوحدة عبر جميع المنتجات:"
+                        - strong [ref=e498]: 266.67 دولار
+                      - listitem [ref=e499]:
+                        - text: "متوسط الإيراد لكل طلب:"
+                        - strong [ref=e500]: 850 دولار
+                    - separator [ref=e501]
+                    - heading "تحليل مفصل" [level=2] [ref=e502]
+                    - heading "1. الأداء المالي" [level=3] [ref=e503]
+                    - list [ref=e504]:
+                      - listitem [ref=e505]:
+                        - strong [ref=e506]: منتج د
+                        - text: هو المنتج الأكثر ربحية، حيث يحقق 2400 دولار من الإيرادات مقابل 8 وحدات فقط، أي متوسط سعر 300 دولار لكل وحدة.
+                      - listitem [ref=e507]:
+                        - strong [ref=e508]: منتج ج
+                        - text: يحقق إيراداً منخفضاً (150 دولار) من وحدة واحدة، مما يدل على أن الطلب على هذا المنتج محدود جداً أو أن السعر غير تنافسي.
+                    - heading "2. الكفاءة في الطلبات" [level=3] [ref=e509]
+                    - list [ref=e510]:
+                      - listitem [ref=e511]: متوسط الإيراد لكل طلب هو 850 دولار، وهو أعلى بكثير من متوسط سعر الوحدة، ما يشير إلى أن الطلبات غالباً ما تكون متعددة الوحدات (متوسط 3 وحدات لكل طلب).
+                      - listitem [ref=e512]:
+                        - strong [ref=e513]: منتج د
+                        - text: يحقق متوسط إيراد 1200 دولار لكل طلب، بينما
+                        - strong [ref=e514]: منتج ج
+                        - text: يحقق 150 دولار فقط، مما يوضح أن الطلب على المنتج ج محدود جداً.
+                    - heading "3. التوزيع الكمي" [level=3] [ref=e515]
+                    - list [ref=e516]:
+                      - listitem [ref=e517]: 8 وحدات من منتج د مقابل 1 وحدة من منتج ج، أي أن 89% من الكمية المباعة هي منتج د.
+                      - listitem [ref=e518]: هذا التوزيع يشير إلى تركيز كبير على منتج د في قاعدة العملاء.
+                    - heading "4. التوقعات والفرص" [level=3] [ref=e519]
+                    - table [ref=e520]:
+                      - rowgroup [ref=e521]:
+                        - row "الفئة التوقع السبب" [ref=e522]:
+                          - columnheader "الفئة" [ref=e523]
+                          - columnheader "التوقع" [ref=e524]
+                          - columnheader "السبب" [ref=e525]
+                      - rowgroup [ref=e526]:
+                        - row "الطلب على منتج د يظل ثابتاً أو يزداد بزيادة الترويج المنتج ذو مرتفع وطلب ثابت" [ref=e527]:
+                          - cell "الطلب على منتج د" [ref=e528]:
+                            - strong [ref=e529]: الطلب على منتج د
+                          - cell "يظل ثابتاً أو يزداد بزيادة الترويج" [ref=e530]
+                          - cell "المنتج ذو مرتفع وطلب ثابت" [ref=e531]
+                        - row "الطلب على منتج ج قد ينخفض إذا لم يتم تعديل السعر أو الترويج الطلب الحالي منخفض جداً" [ref=e532]:
+                          - cell "الطلب على منتج ج" [ref=e533]:
+                            - strong [ref=e534]: الطلب على منتج ج
+                          - cell "قد ينخفض إذا لم يتم تعديل السعر أو الترويج" [ref=e535]
+                          - cell "الطلب الحالي منخفض جداً" [ref=e536]
+                        - row "إجمالي الإيرادات زيادة بنسبة 10‑15% خلال الربع القادم استهداف أسواق جديدة لمنتج د" [ref=e537]:
+                          - cell "إجمالي الإيرادات" [ref=e538]:
+                            - strong [ref=e539]: إجمالي الإيرادات
+                          - cell "زيادة بنسبة 10‑15% خلال الربع القادم" [ref=e540]
+                          - cell "استهداف أسواق جديدة لمنتج د" [ref=e541]
+                    - heading "5. توصيات استراتيجية" [level=3] [ref=e542]
+                    - list [ref=e543]:
+                      - listitem [ref=e544]:
+                        - strong [ref=e545]: تعزيز الترويج لمنتج د
+                        - text: ": زيادة الحملات الإعلانية على القنوات التي يستهلك فيها العملاء هذا النوع من المنتجات."
+                      - listitem [ref=e546]:
+                        - strong [ref=e547]: إعادة تقييم سعر منتج ج
+                        - text: ": دراسة إمكانية تخفيض السعر أو إضافة حوافز (خصومات، حزم) لزيادة الطلب."
+                      - listitem [ref=e548]:
+                        - strong [ref=e549]: توسيع قاعدة العملاء
+                        - text: ": استهداف شرائح جديدة قد تكون مهتمة بمنتج د عبر شراكات مع تجار التجزئة أو منصات التجارة الإلكترونية."
+                      - listitem [ref=e550]:
+                        - strong [ref=e551]: تحليل المنافسة
+                        - text: ": مقارنة الأسعار والميزات مع المنافسين لتحديد نقاط القوة والضعف."
+                    - separator [ref=e552]
+                    - heading "الخلاصة" [level=2] [ref=e553]
+                    - paragraph [ref=e554]:
+                      - text: البيانات المتاحة تُظهر أن
+                      - strong [ref=e555]: منتج د
+                      - text: هو العنصر الأساسي في الإيرادات، بينما
+                      - strong [ref=e556]: منتج ج
+                      - text: يحتاج إلى تدخل استراتيجي لزيادة الطلب. بالتركيز على تحسين الترويج وتعديل الأسعار، يمكن تحقيق نمو مستدام في الإيرادات خلال الأشهر المقبلة.
+                  - button "نسخ" [ref=e558]:
+                    - img [ref=e559]
+                    - text: نسخ
+              - generic [ref=e563]:
+                - textbox "اطرح سؤالاً للمتابعة..." [ref=e564]
+                - button "إرسال" [disabled] [ref=e565]:
+                  - img [ref=e566]
+                  - generic [ref=e569]: إرسال
+            - generic [ref=e570]:
+              - heading "الرؤى والتوصيات" [level=3] [ref=e572]
+              - generic [ref=e573]:
+                - generic [ref=e574]:
+                  - generic [ref=e575]:
+                    - img [ref=e576]
+                    - heading "ملخص تنفيذي" [level=4] [ref=e586]
+                  - paragraph [ref=e587]: "# تقرير تحليلي للمنتجات ## ملخص سريع | المنتج | الإيرادات (دولار) | الكمية المباعة | عدد الطلبات | متوسط سعر الوحدة | متوسط الإيراد لكل طلب | |--------|-------------------|----------------|----------"
+                - generic [ref=e588]:
+                  - heading "التوصيات التنفيذية" [level=4] [ref=e589]:
+                    - img [ref=e590]
+                    - text: التوصيات التنفيذية
+                  - generic [ref=e592]:
+                    - generic [ref=e594]:
+                      - img [ref=e596]
+                      - generic [ref=e598]:
+                        - heading "تحسين معدل التحويل في فرع الدمام" [level=5] [ref=e599]
+                        - paragraph [ref=e600]: +18% إيرادات
+                        - paragraph [ref=e601]: إعادة تدريب فريق المبيعات وتحسين عرض المنتجات
+                    - generic [ref=e603]:
+                      - img [ref=e605]
+                      - generic [ref=e609]:
+                        - heading "توسيع قناة B2B" [level=5] [ref=e610]
+                        - paragraph [ref=e611]: +32% نمو محتمل
+                        - paragraph [ref=e612]: توظيف 3 مدراء مبيعات متخصصين
+                    - generic [ref=e614]:
+                      - img [ref=e616]
+                      - generic [ref=e618]:
+                        - heading "تحسين إدارة المخزون" [level=5] [ref=e619]
+                        - paragraph [ref=e620]: توفير 15% من التكاليف
+                        - paragraph [ref=e621]: تطبيق نظام إدارة مخزون ذكي
+                - generic [ref=e622]:
+                  - heading "إجراءات ذكية مقترحة" [level=4] [ref=e623]:
+                    - img [ref=e624]
+                    - text: إجراءات ذكية مقترحة
+                  - generic [ref=e626]:
+                    - button "تحليل عميق لفريق المبيعات" [ref=e627]
+                    - button "مقارنة مع الفروع الأخرى" [ref=e628]
+                    - button "تحليل سلوك العملاء" [ref=e629]

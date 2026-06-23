@@ -10,7 +10,7 @@ import { ForgetPasswordPage } from './components/ForgetPasswordPage';
 import { ResetPasswordPage } from './components/ResetPasswordPage';
 import { ActivateAccountPage } from './components/ActivateAccountPage';
 import { ExecutiveDashboard } from './components/ExecutiveDashboard';
-import { AIAnalysisPage } from './components/AIAnalysisPage';
+import { AIAnalysisStartPage, AIAnalysisChatPage, AIAnalysisHistoryPage } from './components/ai-analysis';
 import { SalesDashboard } from './components/SalesDashboard';
 import { CustomersDashboard } from './components/CustomersDashboard';
 import { OperationsDashboard } from './components/OperationsDashboard';
@@ -118,7 +118,28 @@ export const router = createBrowserRouter([
           },
           {
             path: 'ai-analysis',
-            Component: AIAnalysisPage,
+            children: [
+              {
+                index: true,
+                Component: AIAnalysisStartPage,
+              },
+              {
+                path: 'start',
+                Component: AIAnalysisStartPage,
+              },
+              {
+                path: 'chat',
+                Component: AIAnalysisChatPage,
+              },
+              {
+                path: 'history',
+                Component: AIAnalysisHistoryPage,
+              },
+              {
+                path: '*',
+                element: <Navigate to="/dashboard/ai-analysis" replace />,
+              },
+            ],
           },
           {
             path: 'sales',

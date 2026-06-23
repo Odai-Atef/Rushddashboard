@@ -52,7 +52,10 @@ export interface AnalysisMessage {
   sessionId: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
+  messageType?: string;
   sequenceNo: number;
+  isStreaming?: boolean;
+  data?: any;
   createdAt: string;
 }
 
@@ -173,6 +176,30 @@ export class AnalysisService {
    * Fetch full detail for a specific analysis run.
    */
   async getRunDetail(runId: string): Promise<ApiResponse<{
+    id: string;
+    title: string;
+    status: 'COMPLETED' | 'RUNNING' | 'FAILED' | 'PENDING';
+    insights: Array<{
+      id: string;
+      title: string;
+      description: string;
+      type: string | null;
+    }>;
+    results: Array<{
+      id: string;
+      insightText: string;
+      dimensionData: Record<string, any> | null;
+      recommendationText: string | null;
+    }>;
+  }>> {
+    return apiClient.get(`${this.baseEndpoint}/history/${runId}`);
+  }
+
+  /**
+   * Fetch analysis detail for a specific history entry.
+   * This is used after getSessionMessages fallback for history items without a session.
+   */
+  async getHistoryRunDetail(runId: string): Promise<ApiResponse<{
     id: string;
     title: string;
     status: 'COMPLETED' | 'RUNNING' | 'FAILED' | 'PENDING';
