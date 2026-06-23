@@ -47,12 +47,12 @@
 
 ### Implementation for User Story 1
 
-- [ ] T007 [P] [US1] Read `chatId` from `useParams` in `src/app/components/ai-analysis/AIAnalysisChatPage.tsx`
-- [ ] T008 [P] [US1] Add effect in `AIAnalysisChatPage.tsx` to load the chat session when `chatId` changes using `history.loadSession`
-- [ ] T009 [US1] Populate the workspace with loaded messages via `streaming.loadMessages` in `AIAnalysisChatPage.tsx`
-- [ ] T010 [US1] Synchronize `selectedAnalysis` state with URL `chatId` in `AIAnalysisChatPage.tsx`
-- [ ] T011 [US1] Make history item click in `AIAnalysisChatPage.tsx` navigate to `/dashboard/ai-analysis/chat/${item.id}` instead of using location state
-- [ ] T012 [US1] Ensure the active history item styling uses the URL-derived `chatId` and not stale local state
+- [X] T007 [P] [US1] Read `chatId` from `useParams` in `src/app/components/ai-analysis/AIAnalysisChatPage.tsx`
+- [X] T008 [P] [US1] Add effect in `AIAnalysisChatPage.tsx` to load the chat session when `chatId` changes using `history.loadSession`
+- [X] T009 [US1] Populate the workspace with loaded messages via `streaming.loadMessages` in `AIAnalysisChatPage.tsx`
+- [X] T010 [US1] Synchronize `selectedAnalysis` state with URL `chatId` in `AIAnalysisChatPage.tsx`
+- [X] T011 [US1] Make history item click in `AIAnalysisChatPage.tsx` navigate to `/dashboard/ai-analysis/chat/${item.id}` instead of using location state
+- [X] T012 [US1] Ensure the active history item styling uses the URL-derived `chatId` and not stale local state
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 

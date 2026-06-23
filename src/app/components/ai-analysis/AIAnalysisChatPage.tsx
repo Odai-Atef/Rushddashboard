@@ -37,7 +37,7 @@ import {
   Database,
   RefreshCw,
 } from 'lucide-react';
-import { useNavigate, useLocation } from 'react-router';
+import { useNavigate, useLocation, useParams } from 'react-router';
 import { AnalysisLibraryModal } from '@/app/components/analysis/AnalysisLibraryModal';
 import { AnalysisLibraryItem } from '@/api/services/analysis-service';
 import { resolveIcon } from '@/app/utils/icon-map';
@@ -78,6 +78,7 @@ interface AIAnalysisChatLocationState {
 export function AIAnalysisChatPage() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { chatId } = useParams<{ chatId: string }>();
   const state = (location.state as AIAnalysisChatLocationState) || {};
   const { categories: apiCategories, isLoading: categoriesLoading, error: categoriesError, retry: retryCategories } = useAnalysisCategories();
   const streaming = useAnalysisStreaming();
@@ -180,6 +181,11 @@ export function AIAnalysisChatPage() {
     history.fetchHistory(1);
   }, []);
 
+  // Keep selectedAnalysis in sync with URL chatId.
+  useEffect(() => {
+    setSelectedAnalysis(chatId ?? null);
+  }, [chatId]);
+
   // Debug: trace all location.state changes so we can see if state leaks/reappears.
   useEffect(() => {
     console.log('[Chat] location.state changed', location.state);
@@ -197,10 +203,39 @@ export function AIAnalysisChatPage() {
     });
   }, [streaming.status, streaming.error, streaming.messages.length, streaming.sessionId, streaming.analysisRunId, activeAnalysis]);
 
+  // Load chat session from URL chatId when available and not conflicting with an active stream.
+  useEffect(() => {
+    if (!chatId) return;
+    if (streaming.status === 'streaming' || streaming.status === 'connecting') return;
+
+    const loadFromUrl = async () => {
+      const entry = history.entries.find((e) => e.id === chatId);
+      if (!entry) return;
+
+      setSelectedAnalysis(chatId);
+      setActiveAnalysis(null);
+      const messages = await history.loadSession(chatId, entry?.sessionId ?? undefined);
+      if (messages.length > 0) {
+        streaming.loadMessages(messages, entry?.sessionId || chatId);
+      }
+    };
+
+    if (history.entries.length > 0) {
+      loadFromUrl();
+    }
+    // If history hasn't loaded yet, the effect below triggered by history.entries will handle it.
+  }, [chatId, history.entries.length, streaming.status]);
+
   // Handle location state on mount: selected analysis, continue, rerun
   useEffect(() => {
     if (initialLoadRef.current) return;
     initialLoadRef.current = true;
+
+    // URL-based chat loading takes priority over location-state continue/rerun flows.
+    if (chatId) {
+      console.log('[Chat] chatId present in URL, deferring to URL-based loading', chatId);
+      return;
+    }
 
     const { selectedAnalysisId, selectedLibraryItemId, continueAnalysisId, rerunAnalysisId } = state;
     console.log('[Chat] initial location state', {
@@ -363,6 +398,11 @@ export function AIAnalysisChatPage() {
     setSelectedAnalysis(null);
     setShowAnalysisLibrary(false);
     
+    // Move to base chat route before starting a new analysis so URL stays truthful.
+    if (chatId) {
+      navigate('/dashboard/ai-analysis/chat', { replace: true });
+    }
+    
     // Wait for reset to complete before starting new analysis
     streaming.reset();
     
@@ -405,13 +445,16 @@ export function AIAnalysisChatPage() {
   };
 
   const handleHistoryItemClick = (itemId: string) => {
+    if (chatId === itemId) return;
+
     const isStreamingActive = streaming.status === 'streaming' || streaming.status === 'connecting';
     if (isStreamingActive) {
       setPendingHistoryId(itemId);
       setShowConfirmDialog(true);
       return;
     }
-    loadHistorySession(itemId);
+
+    navigate(`/dashboard/ai-analysis/chat/${itemId}`);
   };
 
   const loadHistorySession = async (itemId: string) => {
@@ -427,7 +470,7 @@ export function AIAnalysisChatPage() {
   const handleConfirmSwitch = () => {
     if (pendingHistoryId) {
       streaming.reset();
-      loadHistorySession(pendingHistoryId);
+      navigate(`/dashboard/ai-analysis/chat/${pendingHistoryId}`);
     }
     setShowConfirmDialog(false);
     setPendingHistoryId(null);
@@ -701,7 +744,7 @@ export function AIAnalysisChatPage() {
                     key={item.id}
                     onClick={() => handleHistoryItemClick(item.id)}
                     className={`group p-3 rounded-lg mb-2 cursor-pointer transition-all ${
-                      selectedAnalysis === item.id
+                      (selectedAnalysis ?? chatId) === item.id
                         ? 'bg-primary/10 border-2 border-primary'
                         : 'hover:bg-muted/50 border-2 border-transparent'
                     }`}
