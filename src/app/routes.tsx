@@ -129,7 +129,16 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'chat',
-                Component: AIAnalysisChatPage,
+                children: [
+                  {
+                    index: true,
+                    Component: AIAnalysisChatPage,
+                  },
+                  {
+                    path: ':chatId',
+                    Component: AIAnalysisChatPage,
+                  },
+                ],
               },
               {
                 path: 'history',
