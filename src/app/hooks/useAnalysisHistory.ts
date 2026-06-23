@@ -46,6 +46,7 @@ export interface AnalysisInsight {
 export interface AnalysisSessionDetail {
   id: string;
   title: string;
+  summary: string | null;
   status: AnalysisHistoryStatus;
   insights: AnalysisInsight[];
   results: Array<{

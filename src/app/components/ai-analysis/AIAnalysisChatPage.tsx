@@ -806,7 +806,8 @@ export function AIAnalysisChatPage() {
                       <h4 className="font-medium text-sm">ملخص تنفيذي</h4>
                     </div>
                     <p className="text-sm leading-relaxed text-muted-foreground">
-                      {streaming.messages.filter((m) => m.role === 'assistant').pop()?.content?.slice(0, 200) ||
+                      {history.detailSession?.summary ||
+                        streaming.messages.filter((m) => m.role === 'assistant').pop()?.content?.slice(0, 200) ||
                         'جاري التحليل...'}
                     </p>
                   </div>
