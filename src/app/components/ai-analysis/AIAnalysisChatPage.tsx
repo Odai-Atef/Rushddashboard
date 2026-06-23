@@ -112,18 +112,37 @@ export function AIAnalysisChatPage() {
     console.log('[Chat] complete backfill check', { runId, sessionIdValue, hasContent, messagesCount: streaming.messages.length });
 
     if (runId && !hasContent) {
-      console.log('[Chat] assistant content empty, loading session messages for', runId);
-      history.loadSession(runId, sessionIdValue).then((messages) => {
-        // Only apply backfill if the user hasn't started a newer stream in the meantime.
+      console.log('[Chat] assistant content empty, will retry loading session messages for', runId);
+
+      const attemptLoad = async (attempt: number): Promise<void> => {
         if (streaming.sessionId !== sessionIdValue) {
           console.log('[Chat] newer stream started, skipping backfill');
           return;
         }
+        console.log('[Chat] backfill attempt', attempt, 'for', runId);
+        const messages = await history.loadSession(runId, sessionIdValue);
         if (messages.length > 0) {
-          console.log('[Chat] backfilling', messages.length, 'messages');
-          streaming.loadMessages(messages, sessionIdValue || runId);
+          const firstContent = messages.find((m) => m.role === 'assistant')?.content?.trim() || '';
+          if (firstContent.length > 0) {
+            console.log('[Chat] backfilled', messages.length, 'messages with content');
+            streaming.loadMessages(messages, sessionIdValue || runId);
+            return;
+          }
         }
-      });
+        if (attempt < 3) {
+          console.log('[Chat] backfill empty, retrying in', attempt * 1000, 'ms');
+          await new Promise((resolve) => setTimeout(resolve, attempt * 1000));
+          return attemptLoad(attempt + 1);
+        }
+        console.warn('[Chat] backfill failed after 3 attempts, no persisted messages found');
+      };
+
+      // Wait a short moment before first backfill to let backend persist the result.
+      const timer = setTimeout(() => {
+        attemptLoad(1);
+      }, 500);
+
+      return () => clearTimeout(timer);
     }
   }, [streaming.status]);
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
@@ -150,6 +169,11 @@ export function AIAnalysisChatPage() {
     console.log('[Chat] mount: fetching history');
     history.fetchHistory(1);
   }, []);
+
+  // Debug: trace all location.state changes so we can see if state leaks/reappears.
+  useEffect(() => {
+    console.log('[Chat] location.state changed', location.state);
+  }, [location.state]);
 
   // Trace streaming lifecycle for debugging
   useEffect(() => {
@@ -209,6 +233,8 @@ export function AIAnalysisChatPage() {
       } else {
         console.warn('[Chat] card not found for selectedAnalysisId', selectedAnalysisId);
       }
+      // Consume the state so a page refresh doesn't auto-restart the same analysis.
+      window.history.replaceState({}, document.title, location.pathname);
       return;
     }
 
@@ -222,6 +248,8 @@ export function AIAnalysisChatPage() {
       } else {
         console.warn('[Chat] library item not found for selectedLibraryItemId', selectedLibraryItemId, 'apiCategories:', apiCategories.length);
       }
+      // Consume the state so a page refresh doesn't auto-restart the same analysis.
+      window.history.replaceState({}, document.title, location.pathname);
     }
   }, []);
 
@@ -304,11 +332,7 @@ export function AIAnalysisChatPage() {
     setSelectedAnalysis(null);
     setShowAnalysisLibrary(false);
     streaming.reset();
-    // Give React a tick to flush reset before starting the new stream.
-    setTimeout(() => {
-      console.log('[Chat] starting new stream after reset');
-      streaming.startAnalysis(card.id, {});
-    }, 0);
+    streaming.startAnalysis(card.id, {});
   };
 
   const startLibraryAnalysis = (item: AnalysisLibraryItem) => {
@@ -439,6 +463,8 @@ export function AIAnalysisChatPage() {
   const isHistoricalSessionLoaded = history.selectedId !== null && streaming.status === 'complete' && streaming.sessionId === history.selectedId;
   const isChatEnabled = isAnalysisComplete || hasError || isHistoricalSessionLoaded;
   const hasActiveSession = streaming.status !== 'idle' || activeAnalysis !== null || isHistoricalSessionLoaded;
+  // Detect when a completed stream produced no actual content (backend generation failed/lost)
+  const isEmptyComplete = isAnalysisComplete && !isHistoricalSessionLoaded && !streaming.messages.some((m) => m.role === 'assistant' && m.content.trim().length > 0);
 
   useEffect(() => {
     if (streaming.status === 'complete') {
@@ -815,14 +841,24 @@ export function AIAnalysisChatPage() {
               )}
 
               {/* Error Banner above Chat Input */}
-              {hasError && streaming.error && (
+              {(hasError || isEmptyComplete) && (
                 <div className="p-4 border-t border-border bg-card">
-                  <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  <div className={`p-4 border rounded-lg text-sm ${hasError ? 'bg-red-50 border-red-200 text-red-700' : 'bg-yellow-50 border-yellow-200 text-yellow-800'}`}>
                     <div className="flex items-center gap-2 mb-2">
                       <AlertTriangle className="w-4 h-4" />
-                      <span className="font-medium">حدث خطأ</span>
+                      <span className="font-medium">{hasError ? 'حدث خطأ' : 'لم يتم استلام نتيجة التحليل'}</span>
                     </div>
-                    <p className="mb-3">{streaming.error}</p>
+                    <p className="mb-3">{streaming.error || 'انتهى التحليل دون إنتاج محتوى. يمكنك إعادة تشغيل التحليل.'}</p>
+                    {activeAnalysis && (
+                      <button
+                        onClick={() => startCardAnalysis(activeAnalysis)}
+                        disabled={streaming.isLoading}
+                        className="px-3 py-1.5 text-xs bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        <RefreshCw className="w-3 h-3" />
+                        إعادة تشغيل التحليل
+                      </button>
+                    )}
                     {pendingRetryQuestion && (
                       <button
                         onClick={handleRetryFollowUp}

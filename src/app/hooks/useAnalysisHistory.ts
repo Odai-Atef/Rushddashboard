@@ -369,7 +369,9 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
         const msgResponse = await analysisService.getSessionMessages(effectiveSessionId);
         console.log('[History] getSessionMessages response', { runId, data: msgResponse.data });
         const messages = (msgResponse.data as any)?.data ?? msgResponse.data;
+        console.log('[History] raw session messages', JSON.stringify(messages, null, 2));
         sessionMessages = messagesToStreamMessages(messages as AnalysisMessage[]);
+        console.log('[History] converted stream messages', sessionMessages);
       } catch {
         // Intentional no-op: this call is required to be issued regardless of success.
         console.log('[History] getSessionMessages failed, falling back to history detail');

@@ -57,7 +57,6 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
   const currentAssistantMessageId = useRef<string | null>(null);
   const analysisRunIdRef = useRef<string | null>(null);
   const statusRef = useRef<StreamingStatus>('idle');
-  const isStartingRef = useRef(false);
 
   // Ref to an optional callback fired when a streaming run completes successfully.
   // The callback receives the analysis run id so consumers can fetch related detail.
@@ -83,27 +82,25 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
   }, []);
 
   const startAnalysis = useCallback(async (analysisItemId: string, filters?: Record<string, any>) => {
-    // Prevent concurrent/duplicate starts (e.g. React Strict Mode double-invocation)
-    if (isStartingRef.current) {
-      console.log('[Streaming] startAnalysis ignored, already starting');
-      return;
-    }
-    isStartingRef.current = true;
+    const startTime = Date.now();
+    console.log('[Streaming] startAnalysis', { analysisItemId, filters, existingSessionId: sessionId, startTime });
 
-    console.log('[Streaming] startAnalysis', { analysisItemId, filters, existingSessionId: sessionId });
-
-    // Reset state
+    // Always close any existing connection and reset state before starting a new stream.
+    closeEventSource();
     setMessages([]);
     setError(null);
     setStatus('connecting');
     statusRef.current = 'connecting';
+    setSessionId(null);
+    setAnalysisRunId(null);
+    analysisRunIdRef.current = null;
     currentAssistantMessageId.current = null;
 
     try {
       // 1. Trigger streaming run
       console.log('[Streaming] triggering streaming-run for', analysisItemId);
       const response = await analysisService.triggerStreamingRun(analysisItemId, filters);
-      console.log('[Streaming] triggerStreamingRun response', response.data);
+      console.log('[Streaming] triggerStreamingRun response', { elapsedMs: Date.now() - startTime, data: response.data });
       const { sessionId: newSessionId, analysisRunId: newAnalysisRunId } = response.data;
 
       if (!newSessionId) {
@@ -128,7 +125,7 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
       }]);
 
       // 3. Connect to SSE stream
-      console.log('[Streaming] connecting SSE to session', newSessionId);
+      console.log('[Streaming] connecting SSE to session', newSessionId, 'after', Date.now() - startTime, 'ms');
       const eventSource = analysisService.connectToStream(newSessionId);
       eventSourceRef.current = eventSource;
 
@@ -155,11 +152,12 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
 
           if (data.type === 'partial_replay' || data.type === 'token') {
             const tokenContent = data.content || '';
-            // Append token to current assistant message and hide the starter user message on first token
+            const isFirstToken = tokenContent && tokenContent.trim().length > 0;
+            // Append token to current assistant message and hide the starter user message on first real token
             setMessages(prev => {
               const updated = [...prev];
               const starterIndex = updated.findIndex(m => m.role === 'user' && m.isStarter);
-              if (starterIndex !== -1 && tokenContent) {
+              if (starterIndex !== -1 && isFirstToken) {
                 updated[starterIndex] = { ...updated[starterIndex], isHidden: true };
               }
               // Find the assistant placeholder by stored ref id (more reliable than last index)
@@ -244,8 +242,6 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
       setStatus('error');
       statusRef.current = 'error';
       setError(err.message || 'Failed to start analysis');
-    } finally {
-      isStartingRef.current = false;
     }
   }, []);
 
@@ -355,7 +351,6 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     setAnalysisRunId(null);
     analysisRunIdRef.current = null;
     currentAssistantMessageId.current = null;
-    isStartingRef.current = false;
   }, [closeEventSource]);
 
   return {
