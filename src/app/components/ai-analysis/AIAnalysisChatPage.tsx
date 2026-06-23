@@ -543,6 +543,7 @@ export function AIAnalysisChatPage() {
   const isHistoricalSessionLoaded = history.selectedId !== null && streaming.status === 'complete' && streaming.sessionId === history.selectedId;
   const isChatEnabled = isAnalysisComplete || hasError || isHistoricalSessionLoaded;
   const hasActiveSession = streaming.status !== 'idle' || activeAnalysis !== null || isHistoricalSessionLoaded;
+  const isUrlChatMissing = Boolean(chatId) && !history.isLoading && history.entries.length > 0 && !history.entries.some((e) => e.id === chatId);
   // Detect when a completed stream produced no actual content (backend generation failed/lost)
   const isEmptyComplete = isAnalysisComplete && !isHistoricalSessionLoaded && !streaming.messages.some((m) => m.role === 'assistant' && m.content.trim().length > 0);
 
@@ -791,7 +792,23 @@ export function AIAnalysisChatPage() {
         </div>
 
         {/* Main Workspace */}
-        {!hasActiveSession ? (
+        {isUrlChatMissing ? (
+          <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
+            <div className="p-4 bg-yellow-500/10 rounded-xl mb-4">
+              <AlertTriangle className="w-10 h-10 text-yellow-600" />
+            </div>
+            <h2 className="text-xl font-bold mb-2">الدردشة غير موجودة</h2>
+            <p className="text-muted-foreground mb-6 max-w-md">
+              لم نتمكن من العثور على هذه الدردشة في سجل التحليلات. قد تكون محذوفة أو غير متاحة.
+            </p>
+            <button
+              onClick={() => navigate('/dashboard/ai-analysis/chat')}
+              className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              العودة إلى الدردشة
+            </button>
+          </div>
+        ) : !hasActiveSession ? (
           renderEmptyState()
         ) : (
           <div className="flex-1 flex overflow-hidden">

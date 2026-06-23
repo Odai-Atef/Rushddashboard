@@ -95,10 +95,10 @@
 
 **Purpose**: Handle invalid chats, not-found states, and cleanup.
 
-- [ ] T020 [P] Implement inline "chat not found" state in `AIAnalysisChatPage.tsx` when URL `chatId` does not match any history entry
-- [ ] T021 [P] Add guard in `AIAnalysisChatPage.tsx` to avoid auto-loading a chat while a streaming session is already active
-- [ ] T022 Verify existing standalone `src/app/components/ai-analysis/AIAnalysisHistoryPage.tsx` still navigates to base route for continue/rerun flows (no regression)
-- [ ] T023 Verify `src/app/routes.tsx` base `/dashboard/ai-analysis/chat` route and new `/:chatId` route do not overlap incorrectly
+- [X] T020 [P] Implement inline "chat not found" state in `AIAnalysisChatPage.tsx` when URL `chatId` does not match any history entry
+- [X] T021 [P] Add guard in `AIAnalysisChatPage.tsx` to avoid auto-loading a chat while a streaming session is already active
+- [X] T022 Verify existing standalone `src/app/components/ai-analysis/AIAnalysisHistoryPage.tsx` still navigates to base route for continue/rerun flows (no regression)
+- [X] T023 Verify `src/app/routes.tsx` base `/dashboard/ai-analysis/chat` route and new `/:chatId` route do not overlap incorrectly
 - [ ] T024 Run the manual verification steps in `specs/063-chat-history-routing/quickstart.md`
 
 ---
