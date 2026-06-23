@@ -251,11 +251,11 @@ export function AnalysisHistoryPage() {
   });
 
   const handleContinue = (analysisId: string) => {
-    navigate('/dashboard/ai-analysis', { state: { continueAnalysisId: analysisId } });
+    navigate('/dashboard/ai-analysis/chat', { state: { continueAnalysisId: analysisId } });
   };
 
   const handleRerun = (analysisId: string) => {
-    navigate('/dashboard/ai-analysis', { state: { rerunAnalysisId: analysisId } });
+    navigate('/dashboard/ai-analysis/chat', { state: { rerunAnalysisId: analysisId } });
   };
 
   const handleDelete = (analysisId: string) => {

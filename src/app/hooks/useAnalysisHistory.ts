@@ -266,9 +266,16 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
 
       if (abortController.signal.aborted) return;
 
+      // Ensure newest items appear first regardless of API order.
+      const sortedData = [...data].sort((a, b) => {
+        const aDate = a.startedAt || (a as any).createdAt || '';
+        const bDate = b.startedAt || (b as any).createdAt || '';
+        return new Date(bDate).getTime() - new Date(aDate).getTime();
+      });
+
       setState(prev => ({
         ...prev,
-        entries: targetPage === 1 ? data : [...prev.entries, ...data],
+        entries: targetPage === 1 ? sortedData : [...prev.entries, ...sortedData],
         pagination: {
           page: targetPage,
           limit: meta?.limit ?? currentLimit,

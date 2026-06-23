@@ -22,6 +22,7 @@ import {
   ChevronRight,
   Star,
   CheckCircle,
+  History,
 } from 'lucide-react';
 import { cn } from '@/app/utils/cn';
 import { useAnalysisCategories } from '@/app/hooks/useAnalysisCategories';
@@ -297,6 +298,7 @@ export function AIAnalysisStartPage() {
   const recommendedAnalyses = analysisCards.filter((card) => card.recommended).slice(0, 3);
 
   const handleStartAnalysis = (card: AnalysisCard) => {
+    console.log('[Start] handleStartAnalysis', { id: card.id, title: card.title });
     navigate('/dashboard/ai-analysis/chat', {
       state: { selectedAnalysisId: card.id, source: 'recommended' },
     });
@@ -304,6 +306,7 @@ export function AIAnalysisStartPage() {
 
   const handleSelectLibraryItem = (item: AnalysisLibraryItem) => {
     const card = mapLibraryItemToCard(item, apiCategories);
+    console.log('[Start] handleSelectLibraryItem', { id: card.id, title: card.title });
     navigate('/dashboard/ai-analysis/chat', {
       state: { selectedAnalysisId: card.id, source: 'library' },
     });
@@ -332,13 +335,22 @@ export function AIAnalysisStartPage() {
               <p className="text-sm text-muted-foreground">منصة التحليل المدعومة بالذكاء الاصطناعي</p>
             </div>
           </div>
-          <button
-            onClick={handleNewAnalysis}
-            className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg hover:from-purple-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg"
-          >
-            <Plus className="w-5 h-5" />
-            <span>تحليل جديد</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => navigate('/dashboard/ai-analysis/chat')}
+              className="px-4 py-3 bg-white dark:bg-card border border-border text-foreground rounded-lg hover:bg-muted transition-all flex items-center gap-2 shadow-sm"
+            >
+              <History className="w-5 h-5" />
+              <span>سجل التحليلات</span>
+            </button>
+            <button
+              onClick={handleNewAnalysis}
+              className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-600 text-white rounded-lg hover:from-purple-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg"
+            >
+              <Plus className="w-5 h-5" />
+              <span>تحليل جديد</span>
+            </button>
+          </div>
         </div>
       </div>
 

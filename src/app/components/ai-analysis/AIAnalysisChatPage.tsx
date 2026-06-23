@@ -83,19 +83,49 @@ export function AIAnalysisChatPage() {
   const streaming = useAnalysisStreaming();
   const history = useAnalysisHistory();
 
-  // Refresh history when a new streaming analysis completes so it appears in the sidebar.
+  // Refresh history when a new streaming analysis completes so it appears at the top of the sidebar.
   useEffect(() => {
-    streaming.onComplete(() => {
+    console.log('[Chat] registering onComplete callback');
+    streaming.onComplete((runId) => {
+      console.log('[Chat] streaming completed, refreshing history. runId:', runId);
       history.fetchHistory(1);
       // Fetch the run detail (insights/recommendations) for the newly completed analysis.
-      if (streaming.analysisRunId) {
-        history.loadRunDetail(streaming.analysisRunId);
+      if (runId) {
+        history.loadRunDetail(runId);
       }
     });
     return () => {
+      console.log('[Chat] clearing onComplete callback');
       streaming.onComplete(null);
     };
-  }, [streaming.onComplete, streaming.analysisRunId, history.fetchHistory, history.loadRunDetail]);
+    // Only register once on mount; avoid re-registering when analysisRunId changes mid-stream.
+  }, []);
+
+  // If a stream finishes without producing any assistant content, backfill from persisted messages.
+  useEffect(() => {
+    if (streaming.status !== 'complete') return;
+    const runId = streaming.analysisRunId;
+    const sessionIdValue = streaming.sessionId;
+    const assistantMsg = streaming.messages.find((m) => m.role === 'assistant');
+    const hasContent = assistantMsg && assistantMsg.content.trim().length > 0;
+
+    console.log('[Chat] complete backfill check', { runId, sessionIdValue, hasContent, messagesCount: streaming.messages.length });
+
+    if (runId && !hasContent) {
+      console.log('[Chat] assistant content empty, loading session messages for', runId);
+      history.loadSession(runId, sessionIdValue).then((messages) => {
+        // Only apply backfill if the user hasn't started a newer stream in the meantime.
+        if (streaming.sessionId !== sessionIdValue) {
+          console.log('[Chat] newer stream started, skipping backfill');
+          return;
+        }
+        if (messages.length > 0) {
+          console.log('[Chat] backfilling', messages.length, 'messages');
+          streaming.loadMessages(messages, sessionIdValue || runId);
+        }
+      });
+    }
+  }, [streaming.status]);
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
   const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
   const [activeAnalysis, setActiveAnalysis] = useState<AnalysisCard | null>(null);
@@ -117,8 +147,21 @@ export function AIAnalysisChatPage() {
 
   // Fetch history on mount
   useEffect(() => {
+    console.log('[Chat] mount: fetching history');
     history.fetchHistory(1);
   }, []);
+
+  // Trace streaming lifecycle for debugging
+  useEffect(() => {
+    console.log('[Chat] streaming state', {
+      status: streaming.status,
+      error: streaming.error,
+      messagesCount: streaming.messages.length,
+      sessionId: streaming.sessionId,
+      analysisRunId: streaming.analysisRunId,
+      activeAnalysisId: activeAnalysis?.id ?? null,
+    });
+  }, [streaming.status, streaming.error, streaming.messages.length, streaming.sessionId, streaming.analysisRunId, activeAnalysis]);
 
   // Handle location state on mount: selected analysis, continue, rerun
   useEffect(() => {
@@ -126,13 +169,22 @@ export function AIAnalysisChatPage() {
     initialLoadRef.current = true;
 
     const { selectedAnalysisId, selectedLibraryItemId, continueAnalysisId, rerunAnalysisId } = state;
+    console.log('[Chat] initial location state', {
+      selectedAnalysisId,
+      selectedLibraryItemId,
+      continueAnalysisId,
+      rerunAnalysisId,
+      historyEntriesCount: history.entries.length,
+    });
 
     if (continueAnalysisId) {
+      console.log('[Chat] continuing history item', continueAnalysisId);
       handleHistoryItemClick(continueAnalysisId);
       return;
     }
 
     if (rerunAnalysisId) {
+      console.log('[Chat] rerunning history item', rerunAnalysisId);
       const entry = history.entries.find((e) => e.id === rerunAnalysisId);
       if (entry) {
         handleRerunAnalysis(entry);
@@ -150,22 +202,28 @@ export function AIAnalysisChatPage() {
     }
 
     if (selectedAnalysisId) {
+      console.log('[Chat] starting analysis from card', selectedAnalysisId);
       const card = analysisCards.find((c) => c.id === selectedAnalysisId);
       if (card) {
         startCardAnalysis(card);
+      } else {
+        console.warn('[Chat] card not found for selectedAnalysisId', selectedAnalysisId);
       }
       return;
     }
 
     if (selectedLibraryItemId) {
+      console.log('[Chat] starting analysis from library', selectedLibraryItemId);
       const item = apiCategories
         .flatMap((c: any) => c.items || [])
         .find((i: AnalysisLibraryItem) => i.id === selectedLibraryItemId) as AnalysisLibraryItem | undefined;
       if (item) {
         startLibraryAnalysis(item);
+      } else {
+        console.warn('[Chat] library item not found for selectedLibraryItemId', selectedLibraryItemId, 'apiCategories:', apiCategories.length);
       }
     }
-  }, [state, history.entries, apiCategories]);
+  }, []);
 
   // Sync streaming status to progress steps
   useEffect(() => {
@@ -241,13 +299,20 @@ export function AIAnalysisChatPage() {
 
 
   const startCardAnalysis = (card: AnalysisCard) => {
+    console.log('[Chat] startCardAnalysis', { id: card.id, title: card.title, streamingStatus: streaming.status, sessionId: streaming.sessionId });
     setActiveAnalysis(card);
+    setSelectedAnalysis(null);
     setShowAnalysisLibrary(false);
     streaming.reset();
-    streaming.startAnalysis(card.id, {});
+    // Give React a tick to flush reset before starting the new stream.
+    setTimeout(() => {
+      console.log('[Chat] starting new stream after reset');
+      streaming.startAnalysis(card.id, {});
+    }, 0);
   };
 
   const startLibraryAnalysis = (item: AnalysisLibraryItem) => {
+    console.log('[Chat] startLibraryAnalysis', { id: item.id, title: item.titleAr || item.title });
     const categoryName = apiCategories.find((c: any) => c.id === item.categoryId)?.nameAr || '';
     const card: AnalysisCard = {
       id: item.id,
@@ -557,50 +622,57 @@ export function AIAnalysisChatPage() {
               </div>
             )}
 
-            {history.entries.map((item) => {
-              const effectiveDate = item.startedAt || item.createdAt;
-              const { date, time } = formatDateTime(effectiveDate);
-              const preview = getPreview(item);
-              return (
-                <div
-                  key={item.id}
-                  onClick={() => handleHistoryItemClick(item.id)}
-                  className={`group p-3 rounded-lg mb-2 cursor-pointer transition-all ${
-                    selectedAnalysis === item.id
-                      ? 'bg-primary/10 border-2 border-primary'
-                      : 'hover:bg-muted/50 border-2 border-transparent'
-                  }`}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex-1">
-                      <h3 className="font-medium text-sm mb-1 line-clamp-1">{item.title}</h3>
-                      <p className="text-xs text-muted-foreground">{date}</p>
+            {history.entries
+              .slice()
+              .sort((a, b) => {
+                const aDate = a.startedAt || a.createdAt || '';
+                const bDate = b.startedAt || b.createdAt || '';
+                return new Date(bDate).getTime() - new Date(aDate).getTime();
+              })
+              .map((item) => {
+                const effectiveDate = item.startedAt || item.createdAt;
+                const { date, time } = formatDateTime(effectiveDate);
+                const preview = getPreview(item);
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => handleHistoryItemClick(item.id)}
+                    className={`group p-3 rounded-lg mb-2 cursor-pointer transition-all ${
+                      selectedAnalysis === item.id
+                        ? 'bg-primary/10 border-2 border-primary'
+                        : 'hover:bg-muted/50 border-2 border-transparent'
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex-1">
+                        <h3 className="font-medium text-sm mb-1 line-clamp-1">{item.title}</h3>
+                        <p className="text-xs text-muted-foreground">{date}</p>
+                      </div>
+                      <div className="opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button className="p-1 hover:bg-accent rounded">
+                          <MoreVertical className="w-4 h-4" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="p-1 hover:bg-accent rounded">
-                        <MoreVertical className="w-4 h-4" />
-                      </button>
+
+                    {preview && (
+                      <p className="text-xs text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
+                        {preview}
+                      </p>
+                    )}
+
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <Clock className="w-3 h-3" />
+                        <span>{time}</span>
+                      </div>
+                      <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusColor(item.status)}`}>
+                        {getStatusLabel(item.status)}
+                      </span>
                     </div>
                   </div>
-
-                  {preview && (
-                    <p className="text-xs text-muted-foreground mb-2 line-clamp-2 leading-relaxed">
-                      {preview}
-                    </p>
-                  )}
-
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <Clock className="w-3 h-3" />
-                      <span>{time}</span>
-                    </div>
-                    <span className={`px-2 py-0.5 rounded-full text-xs ${getStatusColor(item.status)}`}>
-                      {getStatusLabel(item.status)}
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+                );
+              })}
 
             {history.isLoading && history.entries.length > 0 && (
               <div className="flex items-center justify-center py-4">
@@ -805,11 +877,13 @@ export function AIAnalysisChatPage() {
                       <Brain className="w-4 h-4 text-purple-600" />
                       <h4 className="font-medium text-sm">ملخص تنفيذي</h4>
                     </div>
-                    <p className="text-sm leading-relaxed text-muted-foreground">
-                      {history.detailSession?.summary ||
-                        streaming.messages.filter((m) => m.role === 'assistant').pop()?.content?.slice(0, 200) ||
-                        'جاري التحليل...'}
-                    </p>
+                    <div className="prose prose-sm max-w-none text-right w-full break-words text-sm leading-relaxed text-muted-foreground">
+                      <Markdown remarkPlugins={[remarkGfm]}>
+                        {history.detailSession?.summary ||
+                          streaming.messages.filter((m) => m.role === 'assistant').pop()?.content?.slice(0, 200) ||
+                          'جاري التحليل...'}
+                      </Markdown>
+                    </div>
                   </div>
 
                   {/* Recommendations */}
