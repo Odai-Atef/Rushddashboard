@@ -183,6 +183,20 @@ export class ProjectService {
       responseType: 'blob',
     });
   }
+
+  /**
+   * Save updated project plan markdown
+   * PUT /api/v1/projects/:id/plan
+   *
+   * TODO: Replace with the real backend endpoint/method/body once provided.
+   */
+  async updateProjectPlanMarkdown(
+    id: string,
+    markdown: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<unknown>> {
+    return apiClient.put<unknown>(`/api/v1/projects/${id}/plan`, { markdown }, config);
+  }
 }
 
 // Export singleton instance

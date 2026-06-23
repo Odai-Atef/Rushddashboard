@@ -13,9 +13,12 @@ import {
   History,
   Activity,
   RotateCcw,
+  Eye,
+  Save,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import MDEditor from '@uiw/react-md-editor';
 import { useProjectDetails } from '@/api/hooks/useProjectDetails';
 import { projectService } from '@/api/services/project-service';
 import { ProjectNotFound } from './ProjectNotFound';
@@ -69,22 +72,44 @@ export function ProjectDetailsPage() {
   const { project, isLoading, error, refetch } = useProjectDetails(projectId);
   const [planOpen, setPlanOpen] = useState(false);
   const [planMarkdown, setPlanMarkdown] = useState<string>('');
+  const [loadedPlanMarkdown, setLoadedPlanMarkdown] = useState<string>('');
   const [planLoading, setPlanLoading] = useState(false);
   const [wordLoading, setWordLoading] = useState(false);
+  const [planView, setPlanView] = useState<'preview' | 'edit'>('preview');
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleOpenPlan = async () => {
     if (!projectId) return;
     setPlanOpen(true);
     setPlanLoading(true);
     setPlanMarkdown('');
+    setLoadedPlanMarkdown('');
+    setPlanView('preview');
     try {
       const res = await projectService.getProjectPlanMarkdown(projectId);
       const content = res.data ?? '';
-      setPlanMarkdown(typeof content === 'string' ? content : JSON.stringify(content, null, 2));
+      const markdown = typeof content === 'string' ? content : JSON.stringify(content, null, 2);
+      setPlanMarkdown(markdown);
+      setLoadedPlanMarkdown(markdown);
     } catch (err: any) {
       toast.error(err?.message || 'فشل تحميل خطة المشروع');
     } finally {
       setPlanLoading(false);
+    }
+  };
+
+  const handleSavePlan = async () => {
+    if (!projectId) return;
+    setIsSaving(true);
+    try {
+      await projectService.updateProjectPlanMarkdown(projectId, planMarkdown);
+      setLoadedPlanMarkdown(planMarkdown);
+      setPlanView('preview');
+      toast.success('تم حفظ خطة المشروع بنجاح');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل حفظ خطة المشروع');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -380,9 +405,45 @@ export function ProjectDetailsPage() {
             <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
               <div>
                 <h2 className="text-xl font-semibold">خطة المشروع</h2>
-                <p className="text-sm text-gray-500 mt-1">معاينة خطة المشروع بتنسيق Markdown</p>
+                <p className="text-sm text-gray-500 mt-1">تحرير ومعاينة خطة المشروع</p>
               </div>
               <div className="flex items-center gap-3">
+                <div className="flex items-center bg-gray-100 rounded-lg p-1 ml-2">
+                  <button
+                    onClick={() => setPlanView('preview')}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${
+                      planView === 'preview'
+                        ? 'bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    <Eye className="w-4 h-4" />
+                    معاينة
+                  </button>
+                  <button
+                    onClick={() => setPlanView('edit')}
+                    className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${
+                      planView === 'edit'
+                        ? 'bg-white text-blue-600 shadow-sm'
+                        : 'text-gray-600 hover:text-gray-900'
+                    }`}
+                  >
+                    <Edit className="w-4 h-4" />
+                    تحرير
+                  </button>
+                </div>
+                <button
+                  onClick={handleSavePlan}
+                  disabled={isSaving || planMarkdown === loadedPlanMarkdown}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSaving ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <Save className="w-4 h-4" />
+                  )}
+                  حفظ
+                </button>
                 <button
                   onClick={handleDownloadWord}
                   disabled={wordLoading}
@@ -409,9 +470,20 @@ export function ProjectDetailsPage() {
                 <div className="flex items-center justify-center h-full">
                   <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                 </div>
-              ) : (
+              ) : planView === 'preview' ? (
                 <div className="prose prose-sm max-w-none text-right w-full break-words bg-white rounded-xl p-6 border border-gray-200 min-h-full [&>*]:text-right">
                   <Markdown remarkPlugins={[remarkGfm]}>{planMarkdown || '\u00A0'}</Markdown>
+                </div>
+              ) : (
+                <div dir="rtl" data-color-mode="light" className="bg-white rounded-xl border border-gray-200 min-h-full h-full">
+                  <MDEditor
+                    value={planMarkdown}
+                    onChange={(val) => setPlanMarkdown(val || '')}
+                    height="100%"
+                    visibleDragBar={false}
+                    preview="edit"
+                    className="w-full h-full"
+                  />
                 </div>
               )}
             </div>
