@@ -57,6 +57,8 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
   const currentAssistantMessageId = useRef<string | null>(null);
   const analysisRunIdRef = useRef<string | null>(null);
   const statusRef = useRef<StreamingStatus>('idle');
+  const retryCountRef = useRef<number>(0);
+  const isManualCloseRef = useRef<boolean>(false);
 
   // Ref to an optional callback fired when a streaming run completes successfully.
   // The callback receives the analysis run id so consumers can fetch related detail.
@@ -67,6 +69,145 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     statusRef.current = status;
   }, [status]);
 
+  // Recovery: Check for active session on mount (page refresh recovery)
+  useEffect(() => {
+    const recoverSession = async () => {
+      try {
+        const saved = sessionStorage.getItem('activeAnalysisSession');
+        if (!saved) return;
+
+        const { sessionId: savedSessionId, timestamp } = JSON.parse(saved);
+        
+        // Only recover if within last 10 minutes
+        if (Date.now() - timestamp > 600000) {
+          sessionStorage.removeItem('activeAnalysisSession');
+          return;
+        }
+
+        console.log('[Streaming] Recovering session:', savedSessionId);
+        
+        // Check session status
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL || ''}/api/v1/analysis/session/${savedSessionId}/status`,
+          {
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token') || ''}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          sessionStorage.removeItem('activeAnalysisSession');
+          return;
+        }
+
+        const status = await response.json();
+        console.log('[Streaming] Session status:', status);
+
+        if (status.canReconnect && status.status === 'RUNNING') {
+          // Session still running - reconnect
+          console.log('[Streaming] Reconnecting to running session');
+          setSessionId(savedSessionId);
+          setStatus('streaming');
+          statusRef.current = 'streaming';
+          
+          // Start streaming connection
+          const eventSource = analysisService.connectToStream(savedSessionId);
+          eventSourceRef.current = eventSource;
+          
+          // Create assistant placeholder
+          const assistantMessageId = generateMessageId();
+          currentAssistantMessageId.current = assistantMessageId;
+          
+          setMessages(prev => [...prev, {
+            id: assistantMessageId,
+            role: 'assistant',
+            content: '',
+            isStreaming: true,
+            timestamp: new Date(),
+          }]);
+          
+          // Attach handlers (same as startAnalysis)
+          eventSource.onmessage = (event) => {
+            // ... same handler as in startAnalysis
+            try {
+              const data = JSON.parse(event.data);
+              
+              if (data.type === 'partial_replay' || data.type === 'token') {
+                const tokenContent = data.content || '';
+                setMessages(prev => {
+                  const updated = [...prev];
+                  const assistantIndex = updated.findIndex(m => m.role === 'assistant' && m.id === currentAssistantMessageId.current);
+                  if (assistantIndex !== -1) {
+                    updated[assistantIndex] = {
+                      ...updated[assistantIndex],
+                      content: updated[assistantIndex].content + tokenContent,
+                    };
+                  }
+                  return updated;
+                });
+              } else if (data.type === 'complete') {
+                setStatus('complete');
+                statusRef.current = 'complete';
+                setMessages(prev => {
+                  const assistantIndex = prev.findIndex(m => m.role === 'assistant' && m.id === currentAssistantMessageId.current);
+                  if (assistantIndex !== -1) {
+                    const updated = [...prev];
+                    updated[assistantIndex] = {
+                      ...updated[assistantIndex],
+                      isStreaming: false,
+                    };
+                    return updated;
+                  }
+                  return prev;
+                });
+                eventSource.close();
+                eventSourceRef.current = null;
+              } else if (data.type === 'error') {
+                setStatus('error');
+                statusRef.current = 'error';
+                setError(data.message || 'Streaming error');
+                eventSource.close();
+                eventSourceRef.current = null;
+              }
+            } catch (e) {
+              console.debug('[SSE] non-JSON event:', event.data);
+            }
+          };
+          
+          eventSource.onerror = (error) => {
+            console.error('[SSE] Recovery connection error:', error);
+            if (statusRef.current !== 'complete') {
+              setStatus('error');
+              statusRef.current = 'error';
+              setError('فشل إعادة الاتصال بالجلسة');
+            }
+          };
+          
+        } else if (status.hasResult) {
+          // Session completed - load messages
+          console.log('[Streaming] Loading completed session messages');
+          const messagesResponse = await analysisService.getSessionMessages(savedSessionId);
+          if (messagesResponse.data?.length > 0) {
+            const formattedMessages = messagesResponse.data.map((msg: any) => ({
+              id: msg.id,
+              role: msg.role as 'user' | 'assistant' | 'system',
+              content: msg.content,
+              isStreaming: msg.isStreaming,
+              timestamp: new Date(msg.createdAt),
+            }));
+            loadMessages(formattedMessages, savedSessionId);
+          }
+        }
+      } catch (e) {
+        console.error('[Streaming] Session recovery failed:', e);
+        sessionStorage.removeItem('activeAnalysisSession');
+      }
+    };
+
+    recoverSession();
+  }, []);
+
   // Cleanup on unmount
   useEffect(() => {
     return () => {
@@ -75,6 +216,7 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
   }, []);
 
   const closeEventSource = useCallback(() => {
+    isManualCloseRef.current = true;
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
       eventSourceRef.current = null;
@@ -84,6 +226,15 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
   const startAnalysis = useCallback(async (analysisItemId: string, filters?: Record<string, any>) => {
     const startTime = Date.now();
     console.log('[Streaming] startAnalysis', { analysisItemId, filters, existingSessionId: sessionId, startTime });
+
+    // GUARD: Prevent starting if already running
+    if (statusRef.current === 'streaming' || statusRef.current === 'connecting') {
+      console.warn('[Streaming] Already running, ignoring start request');
+      return;
+    }
+
+    // CRITICAL FIX: Use a local variable for the new session ID to avoid stale closure
+    let newSessionId: string | null = null;
 
     // Always close any existing connection and reset state before starting a new stream.
     closeEventSource();
@@ -95,18 +246,24 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     setAnalysisRunId(null);
     analysisRunIdRef.current = null;
     currentAssistantMessageId.current = null;
+    retryCountRef.current = 0;
+    isManualCloseRef.current = false;
 
     try {
       // 1. Trigger streaming run
       console.log('[Streaming] triggering streaming-run for', analysisItemId);
       const response = await analysisService.triggerStreamingRun(analysisItemId, filters);
       console.log('[Streaming] triggerStreamingRun response', { elapsedMs: Date.now() - startTime, data: response.data });
-      const { sessionId: newSessionId, analysisRunId: newAnalysisRunId } = response.data;
+      const { sessionId: returnedSessionId, analysisRunId: newAnalysisRunId } = response.data;
 
-      if (!newSessionId) {
+      if (!returnedSessionId) {
         throw new Error('No session ID returned from server');
       }
 
+      // Store in local variable FIRST (avoids stale closure in setTimeout)
+      newSessionId = returnedSessionId;
+      
+      // Then update React state
       setSessionId(newSessionId);
 
       // Store the analysis run id so consumers can fetch related detail (insights/recommendations)
@@ -123,6 +280,18 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
         isStarter: true,
         timestamp: new Date(),
       }]);
+
+      // Save session for recovery on refresh
+      try {
+        sessionStorage.setItem('activeAnalysisSession', JSON.stringify({
+          sessionId: newSessionId,
+          analysisItemId,
+          filters,
+          timestamp: Date.now(),
+        }));
+      } catch (e) {
+        console.warn('[Streaming] Failed to save session to sessionStorage');
+      }
 
       // 3. Connect to SSE stream
       console.log('[Streaming] connecting SSE to session', newSessionId, 'after', Date.now() - startTime, 'ms');
@@ -148,11 +317,14 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
         console.log('[SSE] raw event.data:', event.data);
         try {
           const data = JSON.parse(event.data);
-          console.log('[SSE] parsed event', { type: data.type, content: data.content, data });
+          console.log('[SSE] parsed event', { type: data.type, content: data.content, fullData: data });
 
           if (data.type === 'partial_replay' || data.type === 'token') {
-            const tokenContent = data.content || '';
-            const isFirstToken = tokenContent && tokenContent.trim().length > 0;
+            // Check both data.content and data.data.content (NestJS SSE wrapping)
+            const tokenContent = data.content || data.data?.content || '';
+            console.log('[SSE] token received:', { tokenContent, length: tokenContent.length, source: data.content ? 'data.content' : data.data?.content ? 'data.data.content' : 'empty' });
+            
+            const isFirstToken = tokenContent.trim().length > 0;
             // Append token to current assistant message and hide the starter user message on first real token
             setMessages(prev => {
               const updated = [...prev];
@@ -164,15 +336,20 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
               const assistantIndex = updated.findIndex(m => m.role === 'assistant' && m.id === currentAssistantMessageId.current);
               if (assistantIndex !== -1) {
                 const msg = updated[assistantIndex];
+                const newContent = msg.content + tokenContent;
+                console.log('[SSE] updating message content:', { oldLength: msg.content.length, newLength: newContent.length });
                 updated[assistantIndex] = {
                   ...msg,
-                  content: msg.content + tokenContent,
+                  content: newContent,
                 };
               } else {
                 console.warn('[SSE] assistant placeholder not found for id', currentAssistantMessageId.current);
               }
               return updated;
             });
+          } else if (data.type === 'status' && data.status === 'PENDING') {
+            console.log('[SSE] Session is pending, waiting for pipeline to start...');
+            // Keep connection open, pipeline will start soon
           } else if (data.type === 'complete') {
             console.log('[SSE] received complete event');
             setStatus('complete');
@@ -214,6 +391,8 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
             });
             eventSource.close();
             eventSourceRef.current = null;
+          } else {
+            console.log('[SSE] unknown event type:', data.type);
           }
         } catch (e) {
           // Ignore parse errors for non-JSON events
@@ -227,12 +406,49 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
 
       eventSource.onerror = (error) => {
         console.error('[SSE] Connection error:', error);
-        // Only treat as error if we haven't received complete yet
-        if (statusRef.current !== 'complete') {
-          setStatus('error');
-          statusRef.current = 'error';
-          setError('فشل الاتصال بتحليل البث المباشر. تأكد من تسجيل الدخول.');
+        
+        // If manually closed, don't treat as error
+        if (isManualCloseRef.current) {
+          console.log('[SSE] Connection was manually closed');
+          return;
         }
+        
+        // If already complete, this is just the normal close
+        if (statusRef.current === 'complete') {
+          console.log('[SSE] Normal close after completion');
+          return;
+        }
+        
+        // Check if we should retry (network hiccup)
+        if (retryCountRef.current < 3) {
+          retryCountRef.current++;
+          const retryDelay = Math.min(1000 * Math.pow(2, retryCountRef.current), 10000);
+          console.log(`[SSE] Retrying connection in ${retryDelay}ms (attempt ${retryCountRef.current}/3)`);
+          
+          setStatus('connecting');
+          statusRef.current = 'connecting';
+          
+          // CRITICAL FIX: Use the local newSessionId variable, not the React state
+          setTimeout(() => {
+            if (newSessionId && statusRef.current !== 'complete') {
+              console.log('[SSE] Attempting reconnection with session:', newSessionId);
+              const reconnectEventSource = analysisService.connectToStream(newSessionId);
+              eventSourceRef.current = reconnectEventSource;
+              
+              // Re-attach handlers
+              reconnectEventSource.onmessage = eventSource.onmessage;
+              reconnectEventSource.onopen = eventSource.onopen;
+              reconnectEventSource.onerror = eventSource.onerror;
+            }
+          }, retryDelay);
+          return;
+        }
+        
+        // Max retries exceeded - show error
+        console.error('[SSE] Max retries exceeded');
+        setStatus('error');
+        statusRef.current = 'error';
+        setError('فشل الاتصال بعد عدة محاولات. اضغط لإعادة المحاولة.');
         eventSource.close();
         eventSourceRef.current = null;
       };
@@ -314,6 +530,7 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
   }, [sessionId]);
 
   const stopStreaming = useCallback(() => {
+    isManualCloseRef.current = true;
     closeEventSource();
     setStatus('complete');
     setMessages(prev => {
@@ -331,6 +548,7 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
 
   const loadMessages = useCallback((messages: StreamMessage[], newSessionId: string) => {
     console.log('[Streaming] loadMessages', { count: messages.length, newSessionId });
+    isManualCloseRef.current = true;
     closeEventSource();
     setMessages(messages);
     setStatus('complete');
@@ -338,10 +556,12 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     setError(null);
     setSessionId(newSessionId);
     currentAssistantMessageId.current = null;
+    retryCountRef.current = 0;
   }, [closeEventSource]);
 
   const reset = useCallback(() => {
     console.log('[Streaming] reset');
+    isManualCloseRef.current = true;
     closeEventSource();
     setMessages([]);
     setStatus('idle');
@@ -351,6 +571,14 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     setAnalysisRunId(null);
     analysisRunIdRef.current = null;
     currentAssistantMessageId.current = null;
+    retryCountRef.current = 0;
+    
+    // Clear saved session
+    try {
+      sessionStorage.removeItem('activeAnalysisSession');
+    } catch (e) {
+      // Ignore
+    }
   }, [closeEventSource]);
 
   return {

@@ -104,10 +104,18 @@ export function AIAnalysisChatPage() {
   // If a stream finishes without producing any assistant content, backfill from persisted messages.
   useEffect(() => {
     if (streaming.status !== 'complete') return;
-    const runId = streaming.analysisRunId;
-    const sessionIdValue = streaming.sessionId;
+    
+    // Don't backfill if we already have content
     const assistantMsg = streaming.messages.find((m) => m.role === 'assistant');
     const hasContent = assistantMsg && assistantMsg.content.trim().length > 0;
+    
+    if (hasContent) {
+      console.log('[Chat] assistant has content, skipping backfill');
+      return;
+    }
+    
+    const runId = streaming.analysisRunId;
+    const sessionIdValue = streaming.sessionId;
 
     console.log('[Chat] complete backfill check', { runId, sessionIdValue, hasContent, messagesCount: streaming.messages.length });
 
@@ -115,10 +123,12 @@ export function AIAnalysisChatPage() {
       console.log('[Chat] assistant content empty, will retry loading session messages for', runId);
 
       const attemptLoad = async (attempt: number): Promise<void> => {
-        if (streaming.sessionId !== sessionIdValue) {
-          console.log('[Chat] newer stream started, skipping backfill');
+        // Check if a new analysis has started
+        if (streaming.status !== 'complete') {
+          console.log('[Chat] status changed, skipping backfill');
           return;
         }
+        
         console.log('[Chat] backfill attempt', attempt, 'for', runId);
         const messages = await history.loadSession(runId, sessionIdValue);
         if (messages.length > 0) {
@@ -231,7 +241,28 @@ export function AIAnalysisChatPage() {
       if (card) {
         startCardAnalysis(card);
       } else {
-        console.warn('[Chat] card not found for selectedAnalysisId', selectedAnalysisId);
+        // The id is not a static recommended card; treat it as a library/analysis item id
+        // and start streaming directly. Try to find a display title from the library.
+        const libraryItem = apiCategories
+          .flatMap((c: any) => c.items || [])
+          .find((i: AnalysisLibraryItem) => i.id === selectedAnalysisId) as AnalysisLibraryItem | undefined;
+        console.log('[Chat] selectedAnalysisId not in static cards, starting as library/analysis item', { selectedAnalysisId, foundInLibrary: !!libraryItem });
+        if (libraryItem) {
+          startLibraryAnalysis(libraryItem);
+        } else {
+          const genericCard: AnalysisCard = {
+            id: selectedAnalysisId,
+            title: 'تحليل ذكي',
+            description: '',
+            category: 'مكتبة التحليلات',
+            estimatedTime: '2-3 دقائق',
+            complexity: 'متوسط',
+            impact: 'متوسط',
+            icon: Brain,
+            color: 'from-purple-500 to-blue-600',
+          };
+          startCardAnalysis(genericCard);
+        }
       }
       // Consume the state so a page refresh doesn't auto-restart the same analysis.
       window.history.replaceState({}, document.title, location.pathname);
@@ -326,12 +357,18 @@ export function AIAnalysisChatPage() {
 
 
 
-  const startCardAnalysis = (card: AnalysisCard) => {
+  const startCardAnalysis = async (card: AnalysisCard) => {
     console.log('[Chat] startCardAnalysis', { id: card.id, title: card.title, streamingStatus: streaming.status, sessionId: streaming.sessionId });
     setActiveAnalysis(card);
     setSelectedAnalysis(null);
     setShowAnalysisLibrary(false);
+    
+    // Wait for reset to complete before starting new analysis
     streaming.reset();
+    
+    // Small delay to ensure reset is processed
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
     streaming.startAnalysis(card.id, {});
   };
 
@@ -823,6 +860,32 @@ export function AIAnalysisChatPage() {
                     console.log('[Chat] rendering message', { index, role: msg.role, content: msg.content, data: msg.data });
                     return renderMessage(msg, index);
                   })}
+
+                  {streaming.status === 'streaming' && !streaming.messages.some(m => m.role === 'assistant' && m.content.length > 0) && (
+                    <div className="flex items-center justify-center p-8">
+                      <div className="flex flex-col items-center gap-3 text-muted-foreground">
+                        <Loader2 className="w-8 h-8 animate-spin" />
+                        <p>جاري تحميل التحليل...</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {streaming.status === 'complete' && !streaming.messages.some(m => m.role === 'assistant' && m.content.length > 0) && (
+                    <div className="flex items-center justify-center p-8">
+                      <div className="flex flex-col items-center gap-3 text-yellow-600">
+                        <AlertTriangle className="w-8 h-8" />
+                        <p>لم يتم استلام نتيجة التحليل. يمكنك إعادة المحاولة.</p>
+                        {activeAnalysis && (
+                          <button
+                            onClick={() => startCardAnalysis(activeAnalysis)}
+                            className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+                          >
+                            إعادة المحاولة
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {isStreamingActive && (
                     <div className="flex justify-center">

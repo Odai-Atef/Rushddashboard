@@ -308,7 +308,7 @@ export function AIAnalysisStartPage() {
     const card = mapLibraryItemToCard(item, apiCategories);
     console.log('[Start] handleSelectLibraryItem', { id: card.id, title: card.title });
     navigate('/dashboard/ai-analysis/chat', {
-      state: { selectedAnalysisId: card.id, source: 'library' },
+      state: { selectedLibraryItemId: item.id, source: 'library' },
     });
   };
 
