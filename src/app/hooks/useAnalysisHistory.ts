@@ -25,16 +25,29 @@ export interface HistoryPaginationState {
   hasMore: boolean;
 }
 
+export interface AnalysisInsight {
+  id: string;
+  analysisRunId: string;
+  categoryId: string | null;
+  title: string;
+  titleAr: string | null;
+  description: string;
+  descriptionAr: string | null;
+  type: string | null;
+  insightType: string | null;
+  confidenceScore: number | null;
+  recommendation: string | null;
+  recommendationText: string | null;
+  sortOrder: number;
+  generatedAt: string;
+  createdAt: string;
+}
+
 export interface AnalysisSessionDetail {
   id: string;
   title: string;
   status: AnalysisHistoryStatus;
-  insights: Array<{
-    id: string;
-    title: string;
-    description: string;
-    type: string | null;
-  }>;
+  insights: AnalysisInsight[];
   results: Array<{
     id: string;
     insightText: string;
@@ -57,6 +70,7 @@ export interface HistoryListState {
 export interface UseAnalysisHistoryReturn extends HistoryListState {
   fetchHistory: (page?: number) => Promise<void>;
   loadSession: (runId: string, sessionId?: string | null) => Promise<StreamMessage[]>;
+  loadRunDetail: (runId: string) => Promise<AnalysisSessionDetail | null>;
   retry: () => Promise<void>;
   reset: () => void;
 }
@@ -114,10 +128,17 @@ function sessionDetailToMessages(detail: AnalysisSessionDetail): StreamMessage[]
 
   // Convert insights to assistant messages using `description` (corrected DTO field)
   detail.insights?.forEach((insight, index) => {
+    const title = insight.titleAr || insight.title;
+    const description = insight.descriptionAr || insight.description;
+    const recommendation = insight.recommendationText || insight.recommendation;
+    let content = `**${title}**\n\n${description}`;
+    if (recommendation) {
+      content += `\n\n**التوصية:**\n\n${recommendation}`;
+    }
     messages.push({
       id: generateMessageId(),
       role: 'assistant',
-      content: `**${insight.title}**\n\n${insight.description}`,
+      content,
       isStreaming: false,
       timestamp: new Date(baseTimestamp.getTime() + index * 1000),
     });
@@ -271,8 +292,50 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
     }
   }, []);
 
+  const loadRunDetail = useCallback(async (runId: string): Promise<AnalysisSessionDetail | null> => {
+    detailAbortControllerRef.current?.abort();
+    const abortController = new AbortController();
+    detailAbortControllerRef.current = abortController;
+
+    setState(prev => ({
+      ...prev,
+      isLoadingDetail: true,
+      detailError: null,
+      selectedId: runId,
+    }));
+
+    try {
+      const response = await analysisService.getHistoryRunDetail(runId);
+      const detail = response.data;
+
+      if (abortController.signal.aborted) return null;
+
+      setState(prev => ({
+        ...prev,
+        isLoadingDetail: false,
+        detailError: null,
+        detailSession: detail,
+      }));
+
+      return detail;
+    } catch (err: any) {
+      if (abortController.signal.aborted) return null;
+
+      setState(prev => ({
+        ...prev,
+        isLoadingDetail: false,
+        detailError: err?.message || 'فشل في تحميل تفاصيل التحليل',
+      }));
+
+      return null;
+    } finally {
+      if (detailAbortControllerRef.current === abortController) {
+        detailAbortControllerRef.current = null;
+      }
+    }
+  }, []);
+
   const loadSession = useCallback(async (runId: string, sessionId?: string | null): Promise<StreamMessage[]> => {
-    // Abort any in-flight detail request
     detailAbortControllerRef.current?.abort();
     const abortController = new AbortController();
     detailAbortControllerRef.current = abortController;
@@ -361,6 +424,7 @@ export function useAnalysisHistory(): UseAnalysisHistoryReturn {
     ...state,
     fetchHistory,
     loadSession,
+    loadRunDetail,
     retry,
     reset,
   };

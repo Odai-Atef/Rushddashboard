@@ -44,7 +44,7 @@ import { resolveIcon } from '@/app/utils/icon-map';
 import { cn } from '@/app/utils/cn';
 import { useAnalysisCategories } from '@/app/hooks/useAnalysisCategories';
 import { useAnalysisStreaming } from '@/app/hooks/useAnalysisStreaming';
-import { useAnalysisHistory, formatDateTime, getPreview } from '@/app/hooks/useAnalysisHistory';
+import { useAnalysisHistory, formatDateTime, getPreview, AnalysisInsight } from '@/app/hooks/useAnalysisHistory';
 
 interface AnalysisCard {
   id: string;
@@ -82,6 +82,20 @@ export function AIAnalysisChatPage() {
   const { categories: apiCategories, isLoading: categoriesLoading, error: categoriesError, retry: retryCategories } = useAnalysisCategories();
   const streaming = useAnalysisStreaming();
   const history = useAnalysisHistory();
+
+  // Refresh history when a new streaming analysis completes so it appears in the sidebar.
+  useEffect(() => {
+    streaming.onComplete(() => {
+      history.fetchHistory(1);
+      // Fetch the run detail (insights/recommendations) for the newly completed analysis.
+      if (streaming.analysisRunId) {
+        history.loadRunDetail(streaming.analysisRunId);
+      }
+    });
+    return () => {
+      streaming.onComplete(null);
+    };
+  }, [streaming.onComplete, streaming.analysisRunId, history.fetchHistory, history.loadRunDetail]);
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
   const [selectedAnalysis, setSelectedAnalysis] = useState<string | null>(null);
   const [activeAnalysis, setActiveAnalysis] = useState<AnalysisCard | null>(null);
@@ -224,11 +238,7 @@ export function AIAnalysisChatPage() {
     { id: 'executive-1', title: 'تقرير الأداء التنفيذي الشامل', description: 'نظرة شاملة على جميع مؤشرات الأداء الرئيسية', category: 'الإدارة التنفيذية', estimatedTime: '4-5 دقائق', complexity: 'متقدم', impact: 'حرج', icon: BarChart3, recommended: true, color: 'from-purple-500 to-blue-600' },
   ];
 
-  const recommendations = [
-    { id: 1, type: 'urgent', title: 'تحسين معدل التحويل في فرع الدمام', impact: '+18% إيرادات', action: 'إعادة تدريب فريق المبيعات وتحسين عرض المنتجات' },
-    { id: 2, type: 'opportunity', title: 'توسيع قناة B2B', impact: '+32% نمو محتمل', action: 'توظيف 3 مدراء مبيعات متخصصين' },
-    { id: 3, type: 'cost', title: 'تحسين إدارة المخزون', impact: 'توفير 15% من التكاليف', action: 'تطبيق نظام إدارة مخزون ذكي' },
-  ];
+
 
   const startCardAnalysis = (card: AnalysisCard) => {
     setActiveAnalysis(card);
@@ -781,7 +791,7 @@ export function AIAnalysisChatPage() {
               )}
             </div>
 
-            {/* Right Sidebar - Insights & Recommendations */}
+              {/* Right Sidebar - Insights & Recommendations */}
             {isAnalysisComplete && (
               <div className="w-96 border-r border-border bg-card flex flex-col overflow-hidden">
                 <div className="p-4 border-b border-border">
@@ -808,53 +818,65 @@ export function AIAnalysisChatPage() {
                       التوصيات التنفيذية
                     </h4>
                     <div className="space-y-3">
-                      {recommendations.map((rec) => (
-                        <div
-                          key={rec.id}
-                          className="p-4 bg-muted/50 border border-border rounded-lg hover:shadow-md transition-all"
-                        >
-                          <div className="flex items-start gap-3">
-                            <div
-                              className={cn(
-                                'p-2 rounded-lg',
-                                rec.type === 'urgent' && 'bg-red-500/10',
-                                rec.type === 'opportunity' && 'bg-green-500/10',
-                                rec.type === 'cost' && 'bg-blue-500/10'
-                              )}
-                            >
-                              {rec.type === 'urgent' && <AlertTriangle className="w-4 h-4 text-red-600" />}
-                              {rec.type === 'opportunity' && <Target className="w-4 h-4 text-green-600" />}
-                              {rec.type === 'cost' && <DollarSign className="w-4 h-4 text-blue-600" />}
-                            </div>
-                            <div className="flex-1">
-                              <h5 className="font-medium text-sm mb-1">{rec.title}</h5>
-                              <p className="text-xs text-green-600 mb-2">{rec.impact}</p>
-                              <p className="text-xs text-muted-foreground leading-relaxed">{rec.action}</p>
-                            </div>
-                          </div>
+                      {history.isLoadingDetail && (
+                        <div className="flex items-center justify-center py-4">
+                          <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
                         </div>
-                      ))}
+                      )}
+
+                      {!history.isLoadingDetail && history.detailError && (
+                        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-xs">
+                          {history.detailError}
+                        </div>
+                      )}
+
+                      {!history.isLoadingDetail && !history.detailError && history.detailSession?.insights?.length === 0 && (
+                        <p className="text-sm text-muted-foreground text-center py-4">لا توجد رؤى متاحة</p>
+                      )}
+
+                      {!history.isLoadingDetail &&
+                        history.detailSession?.insights?.map((insight: AnalysisInsight) => {
+                          const type = (insight.type || insight.insightType || '').toLowerCase();
+                          const isUrgent = type === 'risk' || type === 'urgent';
+                          const isOpportunity = type === 'opportunity' || type === 'growth';
+                          return (
+                            <div
+                              key={insight.id}
+                              className="p-4 bg-muted/50 border border-border rounded-lg hover:shadow-md transition-all"
+                            >
+                              <div className="flex items-start gap-3">
+                                <div
+                                  className={cn(
+                                    'p-2 rounded-lg',
+                                    isUrgent && 'bg-red-500/10',
+                                    isOpportunity && 'bg-green-500/10',
+                                    !isUrgent && !isOpportunity && 'bg-blue-500/10'
+                                  )}
+                                >
+                                  {isUrgent && <AlertTriangle className="w-4 h-4 text-red-600" />}
+                                  {isOpportunity && <Target className="w-4 h-4 text-green-600" />}
+                                  {!isUrgent && !isOpportunity && <Lightbulb className="w-4 h-4 text-blue-600" />}
+                                </div>
+                                <div className="flex-1">
+                                  <h5 className="font-medium text-sm mb-1">
+                                    {insight.titleAr || insight.title}
+                                  </h5>
+                                  <p className="text-xs text-muted-foreground leading-relaxed mb-2">
+                                    {insight.descriptionAr || insight.description}
+                                  </p>
+                                  {insight.recommendationText || insight.recommendation ? (
+                                    <p className="text-xs text-green-600 leading-relaxed">
+                                      {insight.recommendationText || insight.recommendation}
+                                    </p>
+                                  ) : null}
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
                     </div>
                   </div>
 
-                  {/* Smart Follow-up Actions */}
-                  <div>
-                    <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
-                      <Zap className="w-4 h-4" />
-                      إجراءات ذكية مقترحة
-                    </h4>
-                    <div className="space-y-2">
-                      <button className="w-full px-3 py-2 bg-primary/10 border border-primary/20 hover:bg-primary/20 rounded-lg text-sm text-right transition-colors">
-                        تحليل عميق لفريق المبيعات
-                      </button>
-                      <button className="w-full px-3 py-2 bg-primary/10 border border-primary/20 hover:bg-primary/20 rounded-lg text-sm text-right transition-colors">
-                        مقارنة مع الفروع الأخرى
-                      </button>
-                      <button className="w-full px-3 py-2 bg-primary/10 border border-primary/20 hover:bg-primary/20 rounded-lg text-sm text-right transition-colors">
-                        تحليل سلوك العملاء
-                      </button>
-                    </div>
-                  </div>
                 </div>
               </div>
             )}

@@ -21,6 +21,7 @@ export interface UseAnalysisStreamingReturn {
   status: StreamingStatus;
   error: string | null;
   sessionId: string | null;
+  analysisRunId: string | null;
   isLoading: boolean;
   
   // Actions
@@ -29,6 +30,7 @@ export interface UseAnalysisStreamingReturn {
   stopStreaming: () => void;
   reset: () => void;
   loadMessages: (messages: StreamMessage[], sessionId: string) => void;
+  onComplete: (callback: (() => void) | null) => void;
 }
 
 let messageIdCounter = 0;
@@ -49,9 +51,15 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
   const [status, setStatus] = useState<StreamingStatus>('idle');
   const [error, setError] = useState<string | null>(null);
   const [sessionId, setSessionId] = useState<string | null>(null);
-  
+  const [analysisRunId, setAnalysisRunId] = useState<string | null>(null);
+
   const eventSourceRef = useRef<EventSource | null>(null);
   const currentAssistantMessageId = useRef<string | null>(null);
+  const analysisRunIdRef = useRef<string | null>(null);
+
+  // Ref to an optional callback fired when a streaming run completes successfully.
+  // This lets consumers (e.g. the chat page) refresh related data such as history.
+  const onCompleteRef = useRef<(() => void) | null>(null);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -77,13 +85,18 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     try {
       // 1. Trigger streaming run
       const response = await analysisService.triggerStreamingRun(analysisItemId, filters);
-      const { sessionId: newSessionId } = response.data;
+      const { sessionId: newSessionId, analysisRunId: newAnalysisRunId } = response.data;
       
       if (!newSessionId) {
         throw new Error('No session ID returned from server');
       }
       
       setSessionId(newSessionId);
+
+      // Store the analysis run id so consumers can fetch related detail (insights/recommendations)
+      const resolvedRunId = newAnalysisRunId || null;
+      analysisRunIdRef.current = resolvedRunId;
+      setAnalysisRunId(resolvedRunId);
 
       // 2. Add system/user context message
       const userMessageId = generateMessageId();
@@ -151,6 +164,8 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
             });
             eventSource.close();
             eventSourceRef.current = null;
+            // Refresh external history lists so the new completed analysis appears
+            onCompleteRef.current?.();
           } else if (data.type === 'error') {
             setStatus('error');
             setError(data.message || 'Streaming error occurred');
@@ -297,6 +312,8 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     setStatus('idle');
     setError(null);
     setSessionId(null);
+    setAnalysisRunId(null);
+    analysisRunIdRef.current = null;
     currentAssistantMessageId.current = null;
   }, [closeEventSource]);
 
@@ -305,11 +322,15 @@ export function useAnalysisStreaming(): UseAnalysisStreamingReturn {
     status,
     error,
     sessionId,
+    analysisRunId,
     isLoading: status === 'connecting' || status === 'streaming',
     startAnalysis,
     sendFollowUp,
     stopStreaming,
     reset,
     loadMessages,
+    onComplete: useCallback((callback: (() => void) | null) => {
+      onCompleteRef.current = callback;
+    }, []),
   };
 }
