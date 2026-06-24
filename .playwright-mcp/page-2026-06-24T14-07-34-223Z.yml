@@ -1,0 +1,59 @@
+- generic [ref=e4]:
+  - generic [ref=e6]:
+    - generic [ref=e7]:
+      - img "منصة رشد" [ref=e8]
+      - paragraph [ref=e9]: منصة القرارات الذكية
+    - generic [ref=e10]:
+      - heading "مرحباً بعودتك" [level=2] [ref=e11]
+      - paragraph [ref=e12]: سجل الدخول للوصول إلى لوحة التحكم التنفيذية
+    - paragraph [ref=e14]: انتهت صلاحية جلستك، يرجى تسجيل الدخول مرة أخرى
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]: البريد الإلكتروني
+        - generic [ref=e18]:
+          - img [ref=e19]
+          - textbox "البريد الإلكتروني" [ref=e22]:
+            - /placeholder: name@company.com
+            - text: o.3odai@gmail.com
+      - generic [ref=e23]:
+        - generic [ref=e24]: كلمة المرور
+        - generic [ref=e25]:
+          - img [ref=e26]
+          - textbox "كلمة المرور" [ref=e29]:
+            - /placeholder: ••••••••
+            - text: Oday@2010
+          - button [ref=e30]:
+            - img [ref=e31]
+      - button "نسيت كلمة المرور؟" [ref=e35]
+      - button "تسجيل الدخول" [ref=e36]:
+        - generic [ref=e37]: تسجيل الدخول
+        - img [ref=e38]
+    - paragraph [ref=e40]:
+      - text: ليس لديك حساب؟
+      - button "إنشاء حساب جديد" [ref=e41]
+  - generic [ref=e45]:
+    - heading "منصة الذكاء الاصطناعي لقرارات الأعمال" [level=2] [ref=e46]:
+      - text: منصة الذكاء الاصطناعي
+      - text: لقرارات الأعمال
+    - paragraph [ref=e47]: اتخذ قرارات استثمارية وتنفيذية أفضل بدعم من الذكاء الاصطناعي المتقدم
+    - generic [ref=e48]:
+      - generic [ref=e49]:
+        - img [ref=e51]
+        - generic [ref=e53]:
+          - heading "تحليل ذكي مدعوم بـ AI" [level=3] [ref=e54]
+          - paragraph [ref=e55]: محلل تنفيذي ذكي يجيب على أسئلتك المعقدة
+      - generic [ref=e56]:
+        - img [ref=e58]
+        - generic [ref=e61]:
+          - heading "لوحات تحكم شاملة" [level=3] [ref=e62]
+          - paragraph [ref=e63]: تتبع المبيعات والعمليات والأداء في الوقت الفعلي
+      - generic [ref=e64]:
+        - img [ref=e66]
+        - generic [ref=e70]:
+          - heading "توصيات تنفيذية" [level=3] [ref=e71]
+          - paragraph [ref=e72]: اقتراحات عملية لتحسين الأداء والربحية
+      - generic [ref=e73]:
+        - img [ref=e75]
+        - generic [ref=e77]:
+          - heading "تقارير متقدمة" [level=3] [ref=e78]
+          - paragraph [ref=e79]: رؤى عميقة ومؤشرات أداء رئيسية

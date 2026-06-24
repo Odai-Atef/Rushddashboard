@@ -1,0 +1,32 @@
+Total messages: 6 (Errors: 0, Warnings: 0)
+Returning 29 messages for level "info"
+
+[INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/chunk-KDCVS43I.js?v=d67be0e0:21608
+[LOG] [Rushd] App: منصة رشد v1.0.0 @ http://localhost:5173/src/app/App.tsx?t=1782310044533:19
+[LOG] [Rushd] Environment: development @ http://localhost:5173/src/app/App.tsx?t=1782310044533:20
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/conversations?page=1&limit=20:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/attachments?page=1&limit=20:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/discussions?page=1&limit=20:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/conversations/test-conv/messages?limit=50:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/auth/me:0
+[ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:5173/favicon.ico:0
+[INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/chunk-KDCVS43I.js?v=d67be0e0:21608
+[LOG] [Rushd] App: منصة رشد v1.0.0 @ http://localhost:5173/src/app/App.tsx?t=1782310044533:19
+[LOG] [Rushd] Environment: development @ http://localhost:5173/src/app/App.tsx?t=1782310044533:20
+[VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/auth/login?expired=true&redirect=%2Fdashboard%2Fcollaboration%2F123%2Fchat%3Fconv%3Dtest-conv:0
+[INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/chunk-KDCVS43I.js?v=d67be0e0:21608
+[LOG] [Rushd] App: منصة رشد v1.0.0 @ http://localhost:5173/src/app/App.tsx?t=1782310044533:19
+[LOG] [Rushd] Environment: development @ http://localhost:5173/src/app/App.tsx?t=1782310044533:20
+[VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/auth/login:0
+[INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/chunk-KDCVS43I.js?v=d67be0e0:21608
+[LOG] [Rushd] App: منصة رشد v1.0.0 @ http://localhost:5173/src/app/App.tsx?t=1782310044533:19
+[LOG] [Rushd] Environment: development @ http://localhost:5173/src/app/App.tsx?t=1782310044533:20
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/conversations?page=1&limit=20:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/attachments?page=1&limit=20:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/discussions?page=1&limit=20:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/projects/123/conversations/test-conv/messages?limit=50:0
+[ERROR] Failed to load resource: the server responded with a status of 401 (Unauthorized) @ http://0.0.0.0:3000/api/v1/auth/me:0
+[INFO] %cDownload the React DevTools for a better development experience: https://reactjs.org/link/react-devtools font-weight:bold @ http://localhost:5173/node_modules/.vite/deps/chunk-KDCVS43I.js?v=d67be0e0:21608
+[LOG] [Rushd] App: منصة رشد v1.0.0 @ http://localhost:5173/src/app/App.tsx?t=1782310044533:19
+[LOG] [Rushd] Environment: development @ http://localhost:5173/src/app/App.tsx?t=1782310044533:20
+[VERBOSE] [DOM] Input elements should have autocomplete attributes (suggested: "current-password"): (More info: https://goo.gl/9p2vKq) %o @ http://localhost:5173/auth/login?expired=true&redirect=%2Fdashboard%2Fcollaboration%2F123%2Fchat%3Fconv%3Dtest-conv:0
