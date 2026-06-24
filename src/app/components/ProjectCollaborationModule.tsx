@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { FC, FormEvent, KeyboardEvent, MouseEvent } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
 import useProjectDiscussions from '@/api/hooks/useProjectDiscussions';
 import useProjectConversations from '@/api/hooks/useProjectConversations';
@@ -16,6 +17,7 @@ import {
   Reply,
   Attachment as ApiAttachment,
   AttachmentType,
+  Conversation,
 } from '@/api/services/collaboration-service';
 import {
   Upload,
@@ -114,12 +116,8 @@ export function ProjectCollaborationModule() {
   const currentView: ViewType = view ?? 'hub';
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedConversation = searchParams.get('conv');
-  const [messageInput, setMessageInput] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
-  const [editInput, setEditInput] = useState('');
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const {
     conversations,
@@ -480,20 +478,77 @@ export function ProjectCollaborationModule() {
     );
   };
 
-  const ChatView = () => {
-    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-    const currentUserId = 'me';
+interface ChatViewProps {
+  projectId?: string;
+  selectedConversation: string | null;
+  conversations: Conversation[];
+  conversationsLoading: boolean;
+  conversationsError: string | null;
+  refetchConversations: () => void;
+  currentConversation: Conversation | null;
+  filteredConversations: Conversation[];
+  selectConversation: (id: string) => void;
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
+  messages: ApiMessage[];
+  messagesLoading: boolean;
+  messagesError: string | null;
+  hasMore: boolean;
+  isSending: boolean;
+  loadMessages: (reset?: boolean) => void;
+  sendMessage: (content: string) => Promise<void>;
+  editMessage: (messageId: string, content: string) => Promise<void>;
+  deleteMessage: (messageId: string) => Promise<void>;
+  markAsRead: (messageId: string) => void;
+  retrySend: (messageId: string) => void;
+  clearError: () => void;
+  revisions: RevisionRequest[];
+}
 
-    const handleSend = async () => {
-      if (!messageInput.trim() || isSending) return;
-      await sendMessage(messageInput);
-      setMessageInput('');
-    };
+// PAGE 2: Chat Messages
+function ChatView({
+  projectId,
+  selectedConversation,
+  conversations,
+  conversationsLoading,
+  conversationsError,
+  refetchConversations,
+  currentConversation,
+  filteredConversations,
+  selectConversation,
+  searchQuery,
+  setSearchQuery,
+  messages,
+  messagesLoading,
+  messagesError,
+  hasMore,
+  isSending,
+  loadMessages,
+  sendMessage,
+  editMessage,
+  deleteMessage,
+  markAsRead,
+  retrySend,
+  clearError,
+  revisions,
+}: ChatViewProps) {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const currentUserId = 'me';
+  const [messageInput, setMessageInput] = useState('');
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editInput, setEditInput] = useState('');
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
-    const startEdit = (msg: ApiMessage) => {
-      setEditingMessageId(msg.id);
-      setEditInput(msg.content);
-    };
+  const handleSend = async () => {
+    if (!messageInput.trim() || isSending) return;
+    await sendMessage(messageInput);
+    setMessageInput('');
+  };
+
+  const startEdit = (msg: ApiMessage) => {
+    setEditingMessageId(msg.id);
+    setEditInput(msg.content);
+  };
 
     const cancelEdit = () => {
       setEditingMessageId(null);
@@ -781,140 +836,140 @@ export function ProjectCollaborationModule() {
     );
   };
 
-  function MessageBubble({
-    msg,
-    isOwn,
-    editingMessageId,
-    editInput,
-    setEditInput,
-    onStartEdit,
-    onCancelEdit,
-    onSubmitEdit,
-    onDelete,
-    onRetry,
-    onMarkAsRead,
-  }: {
-    msg: ApiMessage;
-    isOwn: boolean;
-    editingMessageId: string | null;
-    editInput: string;
-    setEditInput: (value: string) => void;
-    onStartEdit: (msg: ApiMessage) => void;
-    onCancelEdit: () => void;
-    onSubmitEdit: (id: string) => void;
-    onDelete: (id: string) => void;
-    onRetry: (id: string) => void;
-    onMarkAsRead: (id: string) => void;
-  }) {
-    const bubbleRef = useRef<HTMLDivElement | null>(null);
+function MessageBubble({
+  msg,
+  isOwn,
+  editingMessageId,
+  editInput,
+  setEditInput,
+  onStartEdit,
+  onCancelEdit,
+  onSubmitEdit,
+  onDelete,
+  onRetry,
+  onMarkAsRead,
+}: {
+  msg: ApiMessage;
+  isOwn: boolean;
+  editingMessageId: string | null;
+  editInput: string;
+  setEditInput: (value: string) => void;
+  onStartEdit: (msg: ApiMessage) => void;
+  onCancelEdit: () => void;
+  onSubmitEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onRetry: (id: string) => void;
+  onMarkAsRead: (id: string) => void;
+}) {
+  const bubbleRef = useRef<HTMLDivElement | null>(null);
 
-    useEffect(() => {
-      const node = bubbleRef.current;
-      if (!node || msg.status === 'READ' || isOwn) return;
+  useEffect(() => {
+    const node = bubbleRef.current;
+    if (!node || msg.status === 'READ' || isOwn) return;
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              onMarkAsRead(msg.id);
-              observer.disconnect();
-            }
-          });
-        },
-        { threshold: 0.5 }
-      );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            onMarkAsRead(msg.id);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
 
-      observer.observe(node);
-      return () => observer.disconnect();
-    }, [msg, isOwn, onMarkAsRead]);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [msg, isOwn, onMarkAsRead]);
 
-    if (msg.deletedAt) {
-      return (
-        <div className="flex justify-center my-2">
-          <span className="text-xs text-gray-400 italic">تم حذف هذه الرسالة</span>
-        </div>
-      );
-    }
-
-    if (editingMessageId === msg.id) {
-      return (
-        <div className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <User className="w-5 h-5 text-blue-600" />
-          </div>
-          <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
-            <input
-              type="text"
-              value={editInput}
-              onChange={(e) => setEditInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
-                if (e.key === 'Escape') { onCancelEdit(); }
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-              autoFocus
-            />
-            <div className="flex gap-2 mt-1 justify-end">
-              <button
-                onClick={() => onSubmitEdit(msg.id)}
-                className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
-              >
-                حفظ
-              </button>
-              <button
-                onClick={onCancelEdit}
-                className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded"
-              >
-                إلغاء
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
+  if (msg.deletedAt) {
     return (
-      <div ref={bubbleRef} className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
+      <div className="flex justify-center my-2">
+        <span className="text-xs text-gray-400 italic">تم حذف هذه الرسالة</span>
+      </div>
+    );
+  }
+
+  if (editingMessageId === msg.id) {
+    return (
+      <div className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
           <User className="w-5 h-5 text-blue-600" />
         </div>
         <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-medium text-sm">{msg.senderUserId === 'me' ? 'أنت' : msg.senderUserId.slice(0, 8)}</span>
-            {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
-          </div>
-          <div className={`inline-block p-3 rounded-lg ${isOwn ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
-            <p className="text-sm">{msg.content}</p>
-          </div>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>
-            {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-blue-600" />}
-            {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-gray-400" />}
-            {msg.status === 'SENT' && <Check className="w-4 h-4 text-gray-400" />}
-            {msg.status === 'SENDING' && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
-            {msg.status === 'FAILED' && (
-              <button onClick={() => onRetry(msg.id)} className="text-xs text-red-600 underline">
-                فشل - إعادة
-              </button>
-            )}
-            {isOwn && msg.status !== 'SENDING' && (
-              <>
-                <button onClick={() => onStartEdit(msg)} className="text-xs text-gray-500 hover:text-blue-600">
-                  تعديل
-                </button>
-                <button onClick={() => onDelete(msg.id)} className="text-xs text-gray-500 hover:text-red-600">
-                  حذف
-                </button>
-              </>
-            )}
+          <input
+            type="text"
+            value={editInput}
+            onChange={(e) => setEditInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
+              if (e.key === 'Escape') { onCancelEdit(); }
+            }}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            autoFocus
+          />
+          <div className="flex gap-2 mt-1 justify-end">
+            <button
+              onClick={() => onSubmitEdit(msg.id)}
+              className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
+            >
+              حفظ
+            </button>
+            <button
+              onClick={onCancelEdit}
+              className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded"
+            >
+              إلغاء
+            </button>
           </div>
         </div>
       </div>
     );
   }
 
-  // PAGE 3: Threaded Discussions (Figma/Notion-style)
-  const DiscussionsView = () => {
+  return (
+    <div ref={bubbleRef} className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
+      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+        <User className="w-5 h-5 text-blue-600" />
+      </div>
+      <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="font-medium text-sm">{msg.senderUserId === 'me' ? 'أنت' : msg.senderUserId.slice(0, 8)}</span>
+          {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
+        </div>
+        <div className={`inline-block p-3 rounded-lg ${isOwn ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
+          <p className="text-sm">{msg.content}</p>
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>
+          {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-blue-600" />}
+          {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-gray-400" />}
+          {msg.status === 'SENT' && <Check className="w-4 h-4 text-gray-400" />}
+          {msg.status === 'SENDING' && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
+          {msg.status === 'FAILED' && (
+            <button onClick={() => onRetry(msg.id)} className="text-xs text-red-600 underline">
+              فشل - إعادة
+            </button>
+          )}
+          {isOwn && msg.status !== 'SENDING' && (
+            <>
+              <button onClick={() => onStartEdit(msg)} className="text-xs text-gray-500 hover:text-blue-600">
+                تعديل
+              </button>
+              <button onClick={() => onDelete(msg.id)} className="text-xs text-gray-500 hover:text-red-600">
+                حذف
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// PAGE 3: Threaded Discussions (Figma/Notion-style)
+const DiscussionsView = () => {
     const [selectedSection, setSelectedSection] = useState('all');
     const [selectedStatus, setSelectedStatus] = useState<DiscussionStatus | 'all'>('all');
     const [showNewDiscussion, setShowNewDiscussion] = useState(false);
@@ -2890,7 +2945,34 @@ export function ProjectCollaborationModule() {
   return (
     <div className="min-h-full bg-gray-50 p-6">
       {currentView === 'hub' && <HubView />}
-      {currentView === 'chat' && <ChatView />}
+      {currentView === 'chat' && (
+        <ChatView
+          projectId={projectId}
+          selectedConversation={selectedConversation}
+          conversations={conversations}
+          conversationsLoading={conversationsLoading}
+          conversationsError={conversationsError}
+          refetchConversations={refetchConversations}
+          currentConversation={currentConversation}
+          filteredConversations={filteredConversations}
+          selectConversation={selectConversation}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          messages={messages}
+          messagesLoading={messagesLoading}
+          messagesError={messagesError}
+          hasMore={hasMore}
+          isSending={isSending}
+          loadMessages={loadMessages}
+          sendMessage={sendMessage}
+          editMessage={editMessage}
+          deleteMessage={deleteMessage}
+          markAsRead={markAsRead}
+          retrySend={retrySend}
+          clearError={clearError}
+          revisions={revisions}
+        />
+      )}
       {currentView === 'discussions' && <DiscussionsView />}
       {currentView === 'attachments' && <AttachmentsView />}
       {currentView === 'revisions' && <RevisionsView />}
