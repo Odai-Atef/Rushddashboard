@@ -1,14 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FC, FormEvent, KeyboardEvent, MouseEvent } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
+import { toast } from 'sonner';
 import useProjectDiscussions from '@/api/hooks/useProjectDiscussions';
 import useProjectConversations from '@/api/hooks/useProjectConversations';
-import useConversationMessages from '@/api/hooks/useConversationMessages';
+import useConversationMessages, {
+  validateMessageContent,
+} from '@/api/hooks/useConversationMessages';
 import useConversationRealtime from '@/api/hooks/useConversationRealtime';
 import useDiscussionDetail from '@/api/hooks/useDiscussionDetail';
 import useProjectAttachments from '@/api/hooks/useProjectAttachments';
 import useAttachmentMutations from '@/api/hooks/useAttachmentMutations';
 import { formatDateTime, formatBytes } from '@/app/lib/formatters';
+import { getCollaborationErrorMessage } from '@/app/lib/error-messages';
 import {
   Message as ApiMessage,
   ConversationStatus,
@@ -167,8 +171,6 @@ export function ProjectCollaborationModule() {
   } = useConversationMessages(projectId, selectedConversation);
 
   useConversationRealtime(projectId, selectedConversation, appendMessage);
-
-  console.log('✓ ProjectCollaborationModule rendered');
 
   const setCurrentView = (nextView: ViewType) => {
     if (!projectId) {
@@ -496,7 +498,7 @@ interface ChatViewProps {
   hasMore: boolean;
   isSending: boolean;
   loadMessages: (reset?: boolean) => void;
-  sendMessage: (content: string) => Promise<void>;
+  sendMessage: (content: string, options?: { replyToId?: string }) => Promise<void>;
   editMessage: (messageId: string, content: string) => Promise<void>;
   deleteMessage: (messageId: string) => Promise<void>;
   markAsRead: (messageId: string) => void;
@@ -535,14 +537,39 @@ function ChatView({
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const currentUserId = 'me';
   const [messageInput, setMessageInput] = useState('');
+  const [replyToId, setReplyToId] = useState<string | null>(null);
+  const [replyPreview, setReplyPreview] = useState<string | null>(null);
   const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
   const [editInput, setEditInput] = useState('');
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const handleSend = async () => {
-    if (!messageInput.trim() || isSending) return;
-    await sendMessage(messageInput);
-    setMessageInput('');
+    const trimmed = messageInput.trim();
+    const validation = validateMessageContent(trimmed);
+    if (!validation.valid) {
+      toast.error(validation.error ?? 'رسالة غير صالحة');
+      return;
+    }
+
+    try {
+      await sendMessage(trimmed, replyToId ? { replyToId } : undefined);
+      setMessageInput('');
+      setReplyToId(null);
+      setReplyPreview(null);
+    } catch (err) {
+      // Input text is preserved for retry; error toast is shown by the hook consumer via messagesError.
+      toast.error(getCollaborationErrorMessage(err));
+    }
+  };
+
+  const startReply = (msg: ApiMessage) => {
+    setReplyToId(msg.id);
+    setReplyPreview(msg.content);
+  };
+
+  const cancelReply = () => {
+    setReplyToId(null);
+    setReplyPreview(null);
   };
 
   const startEdit = (msg: ApiMessage) => {
@@ -721,6 +748,7 @@ function ChatView({
                   onDelete={setDeleteTargetId}
                   onRetry={retrySend}
                   onMarkAsRead={markAsRead}
+                  onReply={startReply}
                 />
               );
             })}
@@ -728,6 +756,21 @@ function ChatView({
 
           {/* Message Input */}
           <div className="p-4 border-t border-gray-200">
+            {replyPreview && (
+              <div className="mb-2 p-2 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
+                <div className="text-sm text-gray-600 truncate max-w-md">
+                  <span className="font-medium text-gray-700">رد على:</span>{' '}
+                  {replyPreview}
+                </div>
+                <button
+                  onClick={cancelReply}
+                  className="p-1 hover:bg-gray-200 rounded"
+                  aria-label="إلغاء الرد"
+                >
+                  <X className="w-4 h-4 text-gray-500" />
+                </button>
+              </div>
+            )}
             <div className="flex gap-3">
               <button className="p-2 hover:bg-gray-100 rounded-lg">
                 <Paperclip className="w-5 h-5 text-gray-600" />
@@ -744,8 +787,7 @@ function ChatView({
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); } }}
                 placeholder="اكتب رسالتك..."
-                disabled={isSending}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
               <button
                 onClick={handleSend}
@@ -848,6 +890,7 @@ function MessageBubble({
   onDelete,
   onRetry,
   onMarkAsRead,
+  onReply,
 }: {
   msg: ApiMessage;
   isOwn: boolean;
@@ -860,6 +903,7 @@ function MessageBubble({
   onDelete: (id: string) => void;
   onRetry: (id: string) => void;
   onMarkAsRead: (id: string) => void;
+  onReply: (msg: ApiMessage) => void;
 }) {
   const bubbleRef = useRef<HTMLDivElement | null>(null);
 
@@ -938,6 +982,11 @@ function MessageBubble({
           <span className="font-medium text-sm">{msg.senderUserId === 'me' ? 'أنت' : msg.senderUserId.slice(0, 8)}</span>
           {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
         </div>
+        {msg.replyToId && (
+          <div className="text-xs text-gray-500 mb-1">
+            رد على رسالة
+          </div>
+        )}
         <div className={`inline-block p-3 rounded-lg ${isOwn ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
           <p className="text-sm">{msg.content}</p>
         </div>
@@ -961,6 +1010,11 @@ function MessageBubble({
                 حذف
               </button>
             </>
+          )}
+          {!isOwn && (
+            <button onClick={() => onReply(msg)} className="text-xs text-gray-500 hover:text-blue-600">
+              رد
+            </button>
           )}
         </div>
       </div>
