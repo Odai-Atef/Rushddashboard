@@ -1,1 +1,3 @@
-{"feature_directory":"specs/063-chat-history-routing"}
+{
+  "feature_directory": "specs/068-send-message-api"
+}

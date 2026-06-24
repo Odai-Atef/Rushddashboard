@@ -19,6 +19,11 @@ import { ApiResponse } from '@/api/types';
 import { getCollaborationErrorMessage } from '@/app/lib/error-messages';
 
 const DEFAULT_LIMIT = 50;
+const MAX_CONTENT_LENGTH = 10000;
+
+export interface SendMessageOptions {
+  replyToId?: string;
+}
 
 export interface UseConversationMessagesReturn {
   messages: Message[];
@@ -28,13 +33,29 @@ export interface UseConversationMessagesReturn {
   isSending: boolean;
   error: string | null;
   loadMessages: (reset?: boolean) => Promise<void>;
-  sendMessage: (content: string, options?: { replyToId?: string }) => Promise<void>;
+  sendMessage: (content: string, options?: SendMessageOptions) => Promise<void>;
   editMessage: (messageId: string, content: string) => Promise<void>;
   deleteMessage: (messageId: string) => Promise<void>;
   markAsRead: (messageId: string) => Promise<void>;
   retrySend: (messageId: string) => Promise<void>;
   clearError: () => void;
   appendMessage: (message: Message) => void;
+}
+
+export interface ValidationResult {
+  valid: boolean;
+  error?: string;
+}
+
+export function validateMessageContent(content: string): ValidationResult {
+  const trimmed = content.trim();
+  if (!trimmed) {
+    return { valid: false, error: 'لا يمكن إرسال رسالة فارغة.' };
+  }
+  if (trimmed.length > MAX_CONTENT_LENGTH) {
+    return { valid: false, error: 'الرسالة طويلة جداً. الحد الأقصى 10,000 حرف.' };
+  }
+  return { valid: true };
 }
 
 export function useConversationMessages(
@@ -51,6 +72,7 @@ export function useConversationMessages(
   const abortControllerRef = useRef<AbortController | null>(null);
   const isMountedRef = useRef(true);
   const optimisticIdRef = useRef(0);
+  const lastCreatedAtRef = useRef<number>(0);
   const readIdsRef = useRef<Set<string>>(new Set());
   const pendingReadRef = useRef<Set<string>>(new Set());
 
@@ -59,6 +81,13 @@ export function useConversationMessages(
       abortControllerRef.current.abort();
       abortControllerRef.current = null;
     }
+  }, []);
+
+  const nextCreatedAt = useCallback(() => {
+    const now = Date.now();
+    const next = Math.max(now, lastCreatedAtRef.current + 1);
+    lastCreatedAtRef.current = next;
+    return new Date(next).toISOString();
   }, []);
 
   const loadMessages = useCallback(
@@ -114,12 +143,18 @@ export function useConversationMessages(
   );
 
   const sendMessage = useCallback(
-    async (content: string, options?: { replyToId?: string }) => {
-      if (!projectId || !conversationId || !content.trim()) return;
+    async (content: string, options?: SendMessageOptions): Promise<void> => {
+      if (!projectId || !conversationId) return;
+
+      const validation = validateMessageContent(content);
+      if (!validation.valid) {
+        setError(validation.error ?? 'رسالة غير صالحة');
+        return;
+      }
 
       const trimmed = content.trim();
       const optimisticId = `optimistic-${++optimisticIdRef.current}`;
-      const now = new Date().toISOString();
+      const now = nextCreatedAt();
 
       const optimisticMessage: Message = {
         id: optimisticId,
@@ -144,6 +179,7 @@ export function useConversationMessages(
           content: trimmed,
           messageType: 'TEXT',
           ...(options?.replyToId ? { replyToId: options.replyToId } : {}),
+          attachmentIds: [],
         };
         const response = await collaborationService.sendMessage(
           projectId,
@@ -162,16 +198,19 @@ export function useConversationMessages(
       } catch (err) {
         if (!isMountedRef.current) return;
         setMessages((prev) =>
-          prev.map((m) => (m.id === optimisticId ? { ...m, status: 'FAILED' as const } : m))
+          prev.map((m) =>
+            m.id === optimisticId ? { ...m, status: 'FAILED' as const } : m
+          )
         );
         setError(getCollaborationErrorMessage(err));
+        throw err;
       } finally {
         if (isMountedRef.current) {
           setIsSending(false);
         }
       }
     },
-    [projectId, conversationId]
+    [projectId, conversationId, nextCreatedAt]
   );
 
   const retrySend = useCallback(
@@ -179,20 +218,58 @@ export function useConversationMessages(
       const message = messages.find((m) => m.id === messageId);
       if (!message || message.status !== 'FAILED') return;
 
+      if (!projectId || !conversationId) return;
+
+      const validation = validateMessageContent(message.content);
+      if (!validation.valid) {
+        setError(validation.error ?? 'رسالة غير صالحة');
+        return;
+      }
+
+      setIsSending(true);
       setMessages((prev) =>
-        prev.map((m) => (m.id === messageId ? { ...m, status: 'SENDING' as const } : m))
+        prev.map((m) =>
+          m.id === messageId ? { ...m, status: 'SENDING' as const } : m
+        )
       );
 
       try {
-        await sendMessage(message.content);
-        setMessages((prev) => prev.filter((m) => m.id !== messageId));
-      } catch {
-        setMessages((prev) =>
-          prev.map((m) => (m.id === messageId ? { ...m, status: 'FAILED' as const } : m))
+        const dto: CreateMessageDto = {
+          content: message.content.trim(),
+          messageType: 'TEXT',
+          ...(message.replyToId ? { replyToId: message.replyToId } : {}),
+          attachmentIds: [],
+        };
+        const response = await collaborationService.sendMessage(
+          projectId,
+          conversationId,
+          dto
         );
+
+        if (!isMountedRef.current) return;
+
+        const sent = response.data;
+        setMessages((prev) => {
+          const withoutFailed = prev.filter((m) => m.id !== messageId);
+          const merged = mergeMessages(withoutFailed, [sent]);
+          return sortMessages(merged);
+        });
+      } catch (err) {
+        if (!isMountedRef.current) return;
+        setMessages((prev) =>
+          prev.map((m) =>
+            m.id === messageId ? { ...m, status: 'FAILED' as const } : m
+          )
+        );
+        setError(getCollaborationErrorMessage(err));
+        throw err;
+      } finally {
+        if (isMountedRef.current) {
+          setIsSending(false);
+        }
       }
     },
-    [messages, sendMessage]
+    [messages, projectId, conversationId]
   );
 
   const editMessage = useCallback(
@@ -208,9 +285,7 @@ export function useConversationMessages(
         if (!isMountedRef.current) return;
 
         const updated = response.data;
-        setMessages((prev) =>
-          prev.map((m) => (m.id === updated.id ? updated : m))
-        );
+        setMessages((prev) => prev.map((m) => (m.id === updated.id ? updated : m)));
       } catch (err) {
         if (!isMountedRef.current) return;
         setError(getCollaborationErrorMessage(err));
@@ -225,7 +300,9 @@ export function useConversationMessages(
 
       setMessages((prev) =>
         prev.map((m) =>
-          m.id === messageId ? { ...m, content: 'تم حذف هذه الرسالة', deletedAt: new Date().toISOString() } : m
+          m.id === messageId
+            ? { ...m, content: 'تم حذف هذه الرسالة', deletedAt: new Date().toISOString() }
+            : m
         )
       );
 
@@ -254,7 +331,9 @@ export function useConversationMessages(
         }
         readIdsRef.current.add(messageId);
         setMessages((prev) =>
-          prev.map((m) => (m.id === messageId && m.status !== 'READ' ? { ...m, status: 'READ' as const } : m))
+          prev.map((m) =>
+            m.id === messageId && m.status !== 'READ' ? { ...m, status: 'READ' as const } : m
+          )
         );
       } catch {
         // Silently ignore read failures so chat UX is not interrupted.
@@ -279,6 +358,7 @@ export function useConversationMessages(
     setHasMore(true);
     setError(null);
     setIsSending(false);
+    lastCreatedAtRef.current = 0;
     if (projectId && conversationId) {
       loadMessages(true);
     }

@@ -1,11 +1,32 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
+import type { FC, FormEvent, KeyboardEvent, MouseEvent } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
+import { toast } from 'sonner';
+import useProjectDiscussions from '@/api/hooks/useProjectDiscussions';
 import useProjectConversations from '@/api/hooks/useProjectConversations';
-import useConversationMessages from '@/api/hooks/useConversationMessages';
+import useConversationMessages, {
+  validateMessageContent,
+} from '@/api/hooks/useConversationMessages';
 import useConversationRealtime from '@/api/hooks/useConversationRealtime';
-import { formatDateTime } from '@/app/lib/formatters';
-import { Message as ApiMessage, ConversationStatus } from '@/api/services/collaboration-service';
+import useDiscussionDetail from '@/api/hooks/useDiscussionDetail';
+import useProjectAttachments from '@/api/hooks/useProjectAttachments';
+import useAttachmentMutations from '@/api/hooks/useAttachmentMutations';
+import { formatDateTime, formatBytes } from '@/app/lib/formatters';
+import { getCollaborationErrorMessage } from '@/app/lib/error-messages';
 import {
+  Message as ApiMessage,
+  ConversationStatus,
+  Discussion as ApiDiscussion,
+  DiscussionStatus,
+  Reply,
+  Attachment as ApiAttachment,
+  AttachmentType,
+  Conversation,
+} from '@/api/services/collaboration-service';
+import {
+  Upload,
+  Film,
+  FileSpreadsheet,
   MessageSquare,
   Bell,
   Paperclip,
@@ -28,7 +49,7 @@ import {
   Download,
   Eye,
   Edit,
-  Reply,
+  Reply as ReplyIcon,
   ThumbsUp,
   Activity,
   BarChart3,
@@ -61,17 +82,6 @@ import {
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 type ViewType = 'hub' | 'chat' | 'discussions' | 'attachments' | 'revisions' | 'notifications' | 'sla' | 'health' | 'timeline';
-
-interface Discussion {
-  id: string;
-  title: string;
-  section: string;
-  author: string;
-  timestamp: string;
-  replies: number;
-  status: 'open' | 'resolved';
-  content: string;
-}
 
 interface Attachment {
   id: string;
@@ -110,12 +120,8 @@ export function ProjectCollaborationModule() {
   const currentView: ViewType = view ?? 'hub';
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedConversation = searchParams.get('conv');
-  const [messageInput, setMessageInput] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
-  const [editInput, setEditInput] = useState('');
-  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const {
     conversations,
@@ -123,6 +129,30 @@ export function ProjectCollaborationModule() {
     error: conversationsError,
     refetch: refetchConversations,
   } = useProjectConversations(projectId);
+
+  const {
+    attachments,
+    isLoading: attachmentsLoading,
+    error: attachmentsError,
+    pagination: attachmentsPagination,
+    filters: attachmentsFilters,
+    setPage: setAttachmentsPage,
+    setFilters: setAttachmentsFilters,
+    applyFilters: applyAttachmentsFilters,
+    refetch: refetchAttachments,
+  } = useProjectAttachments(projectId);
+
+  const {
+    discussions,
+    isLoading: discussionsLoading,
+    error: discussionsError,
+    pagination: discussionsPagination,
+    filters: discussionsFilters,
+    setPage: setDiscussionsPage,
+    setFilters: setDiscussionsFilters,
+    applyFilters: applyDiscussionsFilters,
+    refetch: refetchDiscussions,
+  } = useProjectDiscussions(projectId);
 
   const {
     messages,
@@ -141,8 +171,6 @@ export function ProjectCollaborationModule() {
   } = useConversationMessages(projectId, selectedConversation);
 
   useConversationRealtime(projectId, selectedConversation, appendMessage);
-
-  console.log('✓ ProjectCollaborationModule rendered');
 
   const setCurrentView = (nextView: ViewType) => {
     if (!projectId) {
@@ -197,30 +225,7 @@ export function ProjectCollaborationModule() {
   };
 
   // Sample Data
-  const discussions: Discussion[] = [
-    {
-      id: '1',
-      title: 'مناقشة الميزانية',
-      section: 'Budget',
-      author: 'أحمد محمد',
-      timestamp: '2026-06-05 14:30',
-      replies: 8,
-      status: 'open',
-      content: 'يرجى مراجعة توزيع الميزانية على الأنشطة'
-    },
-    {
-      id: '2',
-      title: 'ملاحظات على الأهداف',
-      section: 'Objectives',
-      author: 'فاطمة أحمد',
-      timestamp: '2026-06-06 10:15',
-      replies: 4,
-      status: 'resolved',
-      content: 'تم تعديل الأهداف حسب الملاحظات'
-    }
-  ];
-
-  const attachments: Attachment[] = [
+  const sampleAttachments: Attachment[] = [
     { id: '1', name: 'خطة_المشروع.pdf', type: 'pdf', size: '3.2 MB', uploadedBy: 'أحمد محمد', uploadDate: '2026-06-01', projectStage: 'تخطيط' },
     { id: '2', name: 'الميزانية_التفصيلية.xlsx', type: 'excel', size: '856 KB', uploadedBy: 'فاطمة أحمد', uploadDate: '2026-06-03', projectStage: 'مراجعة مالية' },
     { id: '3', name: 'صور_الموقع.zip', type: 'archive', size: '12.5 MB', uploadedBy: 'خالد سعيد', uploadDate: '2026-06-05', projectStage: 'دراسة ميدانية' }
@@ -475,20 +480,102 @@ export function ProjectCollaborationModule() {
     );
   };
 
-  const ChatView = () => {
-    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-    const currentUserId = 'me';
+interface ChatViewProps {
+  projectId?: string;
+  selectedConversation: string | null;
+  conversations: Conversation[];
+  conversationsLoading: boolean;
+  conversationsError: string | null;
+  refetchConversations: () => void;
+  currentConversation: Conversation | null;
+  filteredConversations: Conversation[];
+  selectConversation: (id: string) => void;
+  searchQuery: string;
+  setSearchQuery: (value: string) => void;
+  messages: ApiMessage[];
+  messagesLoading: boolean;
+  messagesError: string | null;
+  hasMore: boolean;
+  isSending: boolean;
+  loadMessages: (reset?: boolean) => void;
+  sendMessage: (content: string, options?: { replyToId?: string }) => Promise<void>;
+  editMessage: (messageId: string, content: string) => Promise<void>;
+  deleteMessage: (messageId: string) => Promise<void>;
+  markAsRead: (messageId: string) => void;
+  retrySend: (messageId: string) => void;
+  clearError: () => void;
+  revisions: RevisionRequest[];
+}
 
-    const handleSend = async () => {
-      if (!messageInput.trim() || isSending) return;
-      await sendMessage(messageInput);
+// PAGE 2: Chat Messages
+function ChatView({
+  projectId,
+  selectedConversation,
+  conversations,
+  conversationsLoading,
+  conversationsError,
+  refetchConversations,
+  currentConversation,
+  filteredConversations,
+  selectConversation,
+  searchQuery,
+  setSearchQuery,
+  messages,
+  messagesLoading,
+  messagesError,
+  hasMore,
+  isSending,
+  loadMessages,
+  sendMessage,
+  editMessage,
+  deleteMessage,
+  markAsRead,
+  retrySend,
+  clearError,
+  revisions,
+}: ChatViewProps) {
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const currentUserId = 'me';
+  const [messageInput, setMessageInput] = useState('');
+  const [replyToId, setReplyToId] = useState<string | null>(null);
+  const [replyPreview, setReplyPreview] = useState<string | null>(null);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editInput, setEditInput] = useState('');
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+  const handleSend = async () => {
+    const trimmed = messageInput.trim();
+    const validation = validateMessageContent(trimmed);
+    if (!validation.valid) {
+      toast.error(validation.error ?? 'رسالة غير صالحة');
+      return;
+    }
+
+    try {
+      await sendMessage(trimmed, replyToId ? { replyToId } : undefined);
       setMessageInput('');
-    };
+      setReplyToId(null);
+      setReplyPreview(null);
+    } catch (err) {
+      // Input text is preserved for retry; error toast is shown by the hook consumer via messagesError.
+      toast.error(getCollaborationErrorMessage(err));
+    }
+  };
 
-    const startEdit = (msg: ApiMessage) => {
-      setEditingMessageId(msg.id);
-      setEditInput(msg.content);
-    };
+  const startReply = (msg: ApiMessage) => {
+    setReplyToId(msg.id);
+    setReplyPreview(msg.content);
+  };
+
+  const cancelReply = () => {
+    setReplyToId(null);
+    setReplyPreview(null);
+  };
+
+  const startEdit = (msg: ApiMessage) => {
+    setEditingMessageId(msg.id);
+    setEditInput(msg.content);
+  };
 
     const cancelEdit = () => {
       setEditingMessageId(null);
@@ -661,6 +748,7 @@ export function ProjectCollaborationModule() {
                   onDelete={setDeleteTargetId}
                   onRetry={retrySend}
                   onMarkAsRead={markAsRead}
+                  onReply={startReply}
                 />
               );
             })}
@@ -668,6 +756,21 @@ export function ProjectCollaborationModule() {
 
           {/* Message Input */}
           <div className="p-4 border-t border-gray-200">
+            {replyPreview && (
+              <div className="mb-2 p-2 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
+                <div className="text-sm text-gray-600 truncate max-w-md">
+                  <span className="font-medium text-gray-700">رد على:</span>{' '}
+                  {replyPreview}
+                </div>
+                <button
+                  onClick={cancelReply}
+                  className="p-1 hover:bg-gray-200 rounded"
+                  aria-label="إلغاء الرد"
+                >
+                  <X className="w-4 h-4 text-gray-500" />
+                </button>
+              </div>
+            )}
             <div className="flex gap-3">
               <button className="p-2 hover:bg-gray-100 rounded-lg">
                 <Paperclip className="w-5 h-5 text-gray-600" />
@@ -684,8 +787,7 @@ export function ProjectCollaborationModule() {
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); } }}
                 placeholder="اكتب رسالتك..."
-                disabled={isSending}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
               />
               <button
                 onClick={handleSend}
@@ -776,142 +878,306 @@ export function ProjectCollaborationModule() {
     );
   };
 
-  function MessageBubble({
-    msg,
-    isOwn,
-    editingMessageId,
-    editInput,
-    setEditInput,
-    onStartEdit,
-    onCancelEdit,
-    onSubmitEdit,
-    onDelete,
-    onRetry,
-    onMarkAsRead,
-  }: {
-    msg: ApiMessage;
-    isOwn: boolean;
-    editingMessageId: string | null;
-    editInput: string;
-    setEditInput: (value: string) => void;
-    onStartEdit: (msg: ApiMessage) => void;
-    onCancelEdit: () => void;
-    onSubmitEdit: (id: string) => void;
-    onDelete: (id: string) => void;
-    onRetry: (id: string) => void;
-    onMarkAsRead: (id: string) => void;
-  }) {
-    const bubbleRef = useRef<HTMLDivElement | null>(null);
+function MessageBubble({
+  msg,
+  isOwn,
+  editingMessageId,
+  editInput,
+  setEditInput,
+  onStartEdit,
+  onCancelEdit,
+  onSubmitEdit,
+  onDelete,
+  onRetry,
+  onMarkAsRead,
+  onReply,
+}: {
+  msg: ApiMessage;
+  isOwn: boolean;
+  editingMessageId: string | null;
+  editInput: string;
+  setEditInput: (value: string) => void;
+  onStartEdit: (msg: ApiMessage) => void;
+  onCancelEdit: () => void;
+  onSubmitEdit: (id: string) => void;
+  onDelete: (id: string) => void;
+  onRetry: (id: string) => void;
+  onMarkAsRead: (id: string) => void;
+  onReply: (msg: ApiMessage) => void;
+}) {
+  const bubbleRef = useRef<HTMLDivElement | null>(null);
 
-    useEffect(() => {
-      const node = bubbleRef.current;
-      if (!node || msg.status === 'READ' || isOwn) return;
+  useEffect(() => {
+    const node = bubbleRef.current;
+    if (!node || msg.status === 'READ' || isOwn) return;
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              onMarkAsRead(msg.id);
-              observer.disconnect();
-            }
-          });
-        },
-        { threshold: 0.5 }
-      );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            onMarkAsRead(msg.id);
+            observer.disconnect();
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
 
-      observer.observe(node);
-      return () => observer.disconnect();
-    }, [msg, isOwn, onMarkAsRead]);
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [msg, isOwn, onMarkAsRead]);
 
-    if (msg.deletedAt) {
-      return (
-        <div className="flex justify-center my-2">
-          <span className="text-xs text-gray-400 italic">تم حذف هذه الرسالة</span>
-        </div>
-      );
-    }
-
-    if (editingMessageId === msg.id) {
-      return (
-        <div className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
-          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <User className="w-5 h-5 text-blue-600" />
-          </div>
-          <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
-            <input
-              type="text"
-              value={editInput}
-              onChange={(e) => setEditInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
-                if (e.key === 'Escape') { onCancelEdit(); }
-              }}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
-              autoFocus
-            />
-            <div className="flex gap-2 mt-1 justify-end">
-              <button
-                onClick={() => onSubmitEdit(msg.id)}
-                className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
-              >
-                حفظ
-              </button>
-              <button
-                onClick={onCancelEdit}
-                className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded"
-              >
-                إلغاء
-              </button>
-            </div>
-          </div>
-        </div>
-      );
-    }
-
+  if (msg.deletedAt) {
     return (
-      <div ref={bubbleRef} className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
+      <div className="flex justify-center my-2">
+        <span className="text-xs text-gray-400 italic">تم حذف هذه الرسالة</span>
+      </div>
+    );
+  }
+
+  if (editingMessageId === msg.id) {
+    return (
+      <div className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
           <User className="w-5 h-5 text-blue-600" />
         </div>
         <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
-          <div className="flex items-center gap-2 mb-1">
-            <span className="font-medium text-sm">{msg.senderUserId === 'me' ? 'أنت' : msg.senderUserId.slice(0, 8)}</span>
-            {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
-          </div>
-          <div className={`inline-block p-3 rounded-lg ${isOwn ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
-            <p className="text-sm">{msg.content}</p>
-          </div>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>
-            {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-blue-600" />}
-            {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-gray-400" />}
-            {msg.status === 'SENT' && <Check className="w-4 h-4 text-gray-400" />}
-            {msg.status === 'SENDING' && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
-            {msg.status === 'FAILED' && (
-              <button onClick={() => onRetry(msg.id)} className="text-xs text-red-600 underline">
-                فشل - إعادة
-              </button>
-            )}
-            {isOwn && msg.status !== 'SENDING' && (
-              <>
-                <button onClick={() => onStartEdit(msg)} className="text-xs text-gray-500 hover:text-blue-600">
-                  تعديل
-                </button>
-                <button onClick={() => onDelete(msg.id)} className="text-xs text-gray-500 hover:text-red-600">
-                  حذف
-                </button>
-              </>
-            )}
+          <input
+            type="text"
+            value={editInput}
+            onChange={(e) => setEditInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
+              if (e.key === 'Escape') { onCancelEdit(); }
+            }}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            autoFocus
+          />
+          <div className="flex gap-2 mt-1 justify-end">
+            <button
+              onClick={() => onSubmitEdit(msg.id)}
+              className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
+            >
+              حفظ
+            </button>
+            <button
+              onClick={onCancelEdit}
+              className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded"
+            >
+              إلغاء
+            </button>
           </div>
         </div>
       </div>
     );
   }
 
-  // PAGE 3: Threaded Discussions (Figma/Notion-style)
-  const DiscussionsView = () => {
+  return (
+    <div ref={bubbleRef} className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
+      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+        <User className="w-5 h-5 text-blue-600" />
+      </div>
+      <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
+        <div className="flex items-center gap-2 mb-1">
+          <span className="font-medium text-sm">{msg.senderUserId === 'me' ? 'أنت' : msg.senderUserId.slice(0, 8)}</span>
+          {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
+        </div>
+        {msg.replyToId && (
+          <div className="text-xs text-gray-500 mb-1">
+            رد على رسالة
+          </div>
+        )}
+        <div className={`inline-block p-3 rounded-lg ${isOwn ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
+          <p className="text-sm">{msg.content}</p>
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>
+          {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-blue-600" />}
+          {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-gray-400" />}
+          {msg.status === 'SENT' && <Check className="w-4 h-4 text-gray-400" />}
+          {msg.status === 'SENDING' && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
+          {msg.status === 'FAILED' && (
+            <button onClick={() => onRetry(msg.id)} className="text-xs text-red-600 underline">
+              فشل - إعادة
+            </button>
+          )}
+          {isOwn && msg.status !== 'SENDING' && (
+            <>
+              <button onClick={() => onStartEdit(msg)} className="text-xs text-gray-500 hover:text-blue-600">
+                تعديل
+              </button>
+              <button onClick={() => onDelete(msg.id)} className="text-xs text-gray-500 hover:text-red-600">
+                حذف
+              </button>
+            </>
+          )}
+          {!isOwn && (
+            <button onClick={() => onReply(msg)} className="text-xs text-gray-500 hover:text-blue-600">
+              رد
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// PAGE 3: Threaded Discussions (Figma/Notion-style)
+const DiscussionsView = () => {
     const [selectedSection, setSelectedSection] = useState('all');
+    const [selectedStatus, setSelectedStatus] = useState<DiscussionStatus | 'all'>('all');
     const [showNewDiscussion, setShowNewDiscussion] = useState(false);
+    const [selectedDiscussionId, setSelectedDiscussionId] = useState<string | null>(null);
+    const [newDiscussionTitle, setNewDiscussionTitle] = useState('');
+    const [newDiscussionSection, setNewDiscussionSection] = useState('budget');
+    const [newDiscussionContent, setNewDiscussionContent] = useState('');
+    const [newDiscussionErrors, setNewDiscussionErrors] = useState<Record<string, string>>({});
+    const [replyInputs, setReplyInputs] = useState<Record<string, string>>({});
+    const [replyErrors, setReplyErrors] = useState<Record<string, string>>({});
+    const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
+    const {
+      discussion,
+      replies,
+      isLoading: detailLoading,
+      isMutating: detailMutating,
+      error: detailError,
+      load: reloadDiscussion,
+      createDiscussion,
+      changeStatus,
+      deleteDiscussion,
+      createReply,
+      retryReply,
+      acceptReply,
+      clearError: clearDetailError,
+    } = useDiscussionDetail(projectId, selectedDiscussionId);
+
+    const statusOptions: { value: DiscussionStatus; label: string }[] = [
+      { value: 'OPEN', label: 'مفتوح' },
+      { value: 'RESOLVED', label: 'محلول' },
+      { value: 'CLOSED', label: 'مغلق' },
+    ];
+
+    const sectionOptions = [
+      { value: 'all', label: 'الكل' },
+      { value: 'budget', label: 'الميزانية' },
+      { value: 'timeline', label: 'الجدول الزمني' },
+      { value: 'scope', label: 'النطاق' },
+      { value: 'general', label: 'عام' },
+    ];
+
+    const handleSectionFilter = (section: string) => {
+      setSelectedSection(section);
+      setDiscussionsFilters({ section: section === 'all' ? undefined : section });
+      applyDiscussionsFilters();
+    };
+
+    const handleStatusFilter = (status: DiscussionStatus | 'all') => {
+      setSelectedStatus(status);
+      setDiscussionsFilters({ status: status === 'all' ? undefined : status });
+      applyDiscussionsFilters();
+    };
+
+    const handlePageChange = (page: number) => {
+      setDiscussionsPage(page);
+    };
+
+    const handleCreateDiscussion = async () => {
+      const errors: Record<string, string> = {};
+      if (!newDiscussionTitle.trim()) errors.title = 'عنوان النقاش مطلوب';
+      if (newDiscussionTitle.trim().length > 500) errors.title = 'العنوان يجب أن يكون أقل من 500 حرف';
+      if (!newDiscussionContent.trim()) errors.content = 'محتوى النقاش مطلوب';
+      if (newDiscussionContent.trim().length > 20000) errors.content = 'المحتوى يجب أن يكون أقل من 20000 حرف';
+      if (!newDiscussionSection.trim()) errors.section = 'القسم مطلوب';
+      if (Object.keys(errors).length > 0) {
+        setNewDiscussionErrors(errors);
+        return;
+      }
+
+      const created = await createDiscussion({
+        section: newDiscussionSection,
+        title: newDiscussionTitle.trim(),
+        content: newDiscussionContent.trim(),
+      });
+
+      if (created) {
+        setNewDiscussionTitle('');
+        setNewDiscussionContent('');
+        setNewDiscussionSection('budget');
+        setNewDiscussionErrors({});
+        setShowNewDiscussion(false);
+        setSelectedDiscussionId(created.id);
+        applyDiscussionsFilters();
+      }
+    };
+
+    const handleReplySubmit = async (discussionId: string) => {
+      const content = replyInputs[discussionId] || '';
+      if (!content.trim()) {
+        setReplyErrors((prev) => ({ ...prev, [discussionId]: 'محتوى الرد مطلوب' }));
+        return;
+      }
+      if (content.trim().length > 20000) {
+        setReplyErrors((prev) => ({ ...prev, [discussionId]: 'محتوى الرد يجب أن يكون أقل من 20000 حرف' }));
+        return;
+      }
+      setReplyErrors((prev) => ({ ...prev, [discussionId]: '' }));
+      setReplyInputs((prev) => ({ ...prev, [discussionId]: '' }));
+      await createReply(content);
+    };
+
+    const handleReplyRetry = async (tempId: string, content: string) => {
+      setReplyInputs((prev) => ({ ...prev, [discussionIdForReply]: content }));
+      await retryReply(tempId);
+    };
+
+    const discussionIdForReply = discussion?.id || '';
+
+    const handleStatusChange = async (status: DiscussionStatus) => {
+      await changeStatus(status);
+    };
+
+    const handleDeleteDiscussion = async (id: string) => {
+      setDeleteConfirmId(id);
+    };
+
+    const confirmDeleteDiscussion = async () => {
+      if (!deleteConfirmId) return;
+      if (deleteConfirmId === selectedDiscussionId) {
+        const success = await deleteDiscussion();
+        if (success) {
+          setSelectedDiscussionId(null);
+          setDeleteConfirmId(null);
+          applyDiscussionsFilters();
+        }
+      } else {
+        // For deleting from the list directly we would need a service call here;
+        // the current hook is scoped to selectedDiscussionId. We defer to selecting first.
+        setSelectedDiscussionId(deleteConfirmId);
+        setDeleteConfirmId(null);
+      }
+    };
+
+    const handleAcceptReply = async (replyId: string) => {
+      await acceptReply(replyId);
+    };
+
+    const statusBadgeClass = (status: DiscussionStatus) => {
+      switch (status) {
+        case 'OPEN': return 'bg-blue-100 text-blue-700';
+        case 'RESOLVED': return 'bg-green-100 text-green-700';
+        case 'CLOSED': return 'bg-gray-100 text-gray-700';
+        default: return 'bg-gray-100 text-gray-700';
+      }
+    };
+
+    const statusBadgeLabel = (status: DiscussionStatus) => {
+      switch (status) {
+        case 'OPEN': return 'مفتوح';
+        case 'RESOLVED': return 'محلول';
+        case 'CLOSED': return 'مغلق';
+      }
+    };
 
     return (
       <div className="space-y-6">
@@ -929,19 +1195,36 @@ export function ProjectCollaborationModule() {
           </button>
         </div>
 
-        {/* Section Filter */}
+        {/* Status Filter */}
         <div className="flex gap-2 flex-wrap">
-          {['all', 'Budget', 'Objectives', 'Timeline', 'Beneficiaries', 'Impact'].map((section) => (
+          {statusOptions.map((option) => (
             <button
-              key={section}
-              onClick={() => setSelectedSection(section)}
+              key={option.value}
+              onClick={() => handleStatusFilter(option.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                selectedSection === section
+                selectedStatus === option.value
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
               }`}
             >
-              {section === 'all' ? 'الكل' : section}
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Section Filter */}
+        <div className="flex gap-2 flex-wrap">
+          {sectionOptions.map((section) => (
+            <button
+              key={section.value}
+              onClick={() => handleSectionFilter(section.value)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                selectedSection === section.value
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              {section.label}
             </button>
           ))}
         </div>
@@ -955,31 +1238,44 @@ export function ProjectCollaborationModule() {
                 <label className="block text-sm font-medium mb-2">عنوان النقاش</label>
                 <input
                   type="text"
+                  value={newDiscussionTitle}
+                  onChange={(e) => setNewDiscussionTitle(e.target.value)}
                   placeholder="مثال: ملاحظات على توزيع الميزانية"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {newDiscussionErrors.title && <p className="text-red-600 text-sm mt-1">{newDiscussionErrors.title}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">القسم</label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                  <option>Budget</option>
-                  <option>Objectives</option>
-                  <option>Timeline</option>
-                  <option>Beneficiaries</option>
-                  <option>Impact</option>
+                <select
+                  value={newDiscussionSection}
+                  onChange={(e) => setNewDiscussionSection(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="budget">الميزانية</option>
+                  <option value="timeline">الجدول الزمني</option>
+                  <option value="scope">النطاق</option>
+                  <option value="general">عام</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">المحتوى</label>
                 <textarea
                   rows={4}
+                  value={newDiscussionContent}
+                  onChange={(e) => setNewDiscussionContent(e.target.value)}
                   placeholder="اكتب تفاصيل النقاش..."
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {newDiscussionErrors.content && <p className="text-red-600 text-sm mt-1">{newDiscussionErrors.content}</p>}
               </div>
               <div className="flex gap-3">
-                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                  نشر النقاش
+                <button
+                  onClick={handleCreateDiscussion}
+                  disabled={detailMutating}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {detailMutating ? 'جاري النشر...' : 'نشر النقاش'}
                 </button>
                 <button
                   onClick={() => setShowNewDiscussion(false)}
@@ -992,85 +1288,281 @@ export function ProjectCollaborationModule() {
           </div>
         )}
 
+        {/* Loading / Error / Empty List */}
+        {discussionsLoading && discussions.length === 0 && (
+          <div className="space-y-4">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="h-32 bg-gray-100 rounded-lg animate-pulse" />
+            ))}
+          </div>
+        )}
+        {discussionsError && (
+          <div className="p-6 text-center bg-white rounded-xl border border-gray-200">
+            <p className="text-red-600 mb-3">{discussionsError}</p>
+            <button
+              onClick={() => refetchDiscussions()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+            >
+              <RefreshCw className="w-4 h-4" />
+              إعادة المحاولة
+            </button>
+          </div>
+        )}
+        {!discussionsLoading && !discussionsError && discussions.length === 0 && (
+          <div className="p-6 text-center text-gray-500 bg-white rounded-xl border border-gray-200">
+            لا توجد مناقشات حالياً. ابدأ أول نقاش.
+          </div>
+        )}
+
+        {/* Pagination */}
+        {discussionsPagination.totalPages > 1 && (
+          <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
+            <button
+              onClick={() => handlePageChange(Math.max(1, discussionsPagination.page - 1))}
+              disabled={discussionsPagination.page <= 1}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              السابق
+            </button>
+            <span className="text-sm text-gray-700">
+              صفحة {discussionsPagination.page} من {discussionsPagination.totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(Math.min(discussionsPagination.totalPages, discussionsPagination.page + 1))}
+              disabled={discussionsPagination.page >= discussionsPagination.totalPages}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              التالي
+            </button>
+          </div>
+        )}
+
         {/* Discussions List */}
         <div className="space-y-4">
-          {discussions.map((discussion) => (
-            <div key={discussion.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          {discussions.map((discussionItem) => (
+            <div key={discussionItem.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-lg">{discussion.title}</h3>
+                      <h3 className="font-semibold text-lg">{discussionItem.title}</h3>
                       <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">
-                        {discussion.section}
+                        {discussionItem.section}
                       </span>
-                      <span className={`px-3 py-1 text-xs rounded-full font-medium ${
-                        discussion.status === 'open'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
-                      }`}>
-                        {discussion.status === 'open' ? 'مفتوح' : 'محلول'}
+                      <span className={`px-3 py-1 text-xs rounded-full font-medium ${statusBadgeClass(discussionItem.status)}`}>
+                        {statusBadgeLabel(discussionItem.status)}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{discussion.content}</p>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{discussionItem.content}</p>
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        <span>{discussion.author}</span>
+                        <span>{discussionItem.authorUserId}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        <span>{discussion.timestamp}</span>
+                        <span>{formatDateTime(discussionItem.lastReplyAt || discussionItem.updatedAt)}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Reply className="w-4 h-4" />
-                        <span>{discussion.replies} رد</span>
+                        <ReplyIcon className="w-4 h-4" />
+                        <span>{discussionItem.replyCount} رد</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Replies Section */}
-                <div className="mt-4 mr-6 space-y-3 border-r-2 border-gray-200 pr-4">
-                  {[1, 2].map((replyIdx) => (
-                    <div key={replyIdx} className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                          <User className="w-3 h-3 text-blue-600" />
+                {/* Detail View for Selected Discussion */}
+                {selectedDiscussionId === discussionItem.id && (
+                  <div className="mt-6 border-t border-gray-200 pt-4">
+                    {detailLoading && (
+                      <div className="space-y-3">
+                        <div className="h-4 bg-gray-100 rounded animate-pulse w-1/3" />
+                        <div className="h-20 bg-gray-100 rounded animate-pulse" />
+                        {[1, 2].map((n) => <div key={n} className="h-16 bg-gray-100 rounded animate-pulse" />)}
+                      </div>
+                    )}
+                    {detailError && (
+                      <div className="p-4 text-center">
+                        <p className="text-red-600 mb-2">{detailError}</p>
+                        <button
+                          onClick={() => reloadDiscussion()}
+                          className="text-sm text-blue-600 hover:text-blue-700"
+                        >
+                          إعادة المحاولة
+                        </button>
+                      </div>
+                    )}
+                    {discussion && !detailLoading && !detailError && (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className={`px-3 py-1 text-xs rounded-full font-medium ${statusBadgeClass(discussion.status)}`}>
+                              {statusBadgeLabel(discussion.status)}
+                            </span>
+                            <span className="text-sm text-gray-500">{formatDateTime(discussion.createdAt)}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {(['OPEN', 'RESOLVED', 'CLOSED'] as DiscussionStatus[]).map((s) => (
+                              <button
+                                key={s}
+                                onClick={() => handleStatusChange(s)}
+                                disabled={detailMutating || discussion.status === s}
+                                className={`px-3 py-1 text-xs rounded-lg border ${
+                                  discussion.status === s
+                                    ? 'bg-blue-600 text-white border-blue-600'
+                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                } disabled:opacity-50`}
+                              >
+                                {statusBadgeLabel(s)}
+                              </button>
+                            ))}
+                            <button
+                              onClick={() => handleDeleteDiscussion(discussion.id)}
+                              className="px-3 py-1 text-xs rounded-lg border border-red-300 text-red-700 hover:bg-red-50"
+                            >
+                              حذف
+                            </button>
+                          </div>
                         </div>
-                        <span className="text-sm font-medium">فاطمة أحمد</span>
-                        <span className="text-xs text-gray-500">منذ ساعتين</span>
-                      </div>
-                      <p className="text-sm text-gray-700">تم التعديل حسب الملاحظات، يرجى المراجعة</p>
-                      <div className="flex gap-3 mt-2">
-                        <button className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-1">
-                          <ThumbsUp className="w-3 h-3" />
-                          إعجاب
-                        </button>
-                        <button className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-1">
-                          <Reply className="w-3 h-3" />
-                          رد
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
-                {/* Reply Input */}
+                        <div className="prose max-w-none text-sm text-gray-700">
+                          {discussion.content}
+                        </div>
+
+                        {/* Replies */}
+                        <div className="space-y-3">
+                          {replies.map((reply) => {
+                            const isOptimistic = 'pending' in reply;
+                            return (
+                              <div
+                                key={reply.id}
+                                className={`bg-gray-50 p-4 rounded-lg ${
+                                  reply.isAccepted ? 'border-2 border-green-400' : 'border border-gray-200'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                      <User className="w-3 h-3 text-blue-600" />
+                                    </div>
+                                    <span className="text-sm font-medium">{reply.authorUserId}</span>
+                                    <span className="text-xs text-gray-500">{formatDateTime(reply.createdAt)}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    {reply.isAccepted && (
+                                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                                        الحل المقبول
+                                      </span>
+                                    )}
+                                    {isOptimistic && (reply as { pending: boolean; failed: boolean }).pending && (
+                                      <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">
+                                        جاري الإرسال...
+                                      </span>
+                                    )}
+                                    {isOptimistic && (reply as { pending: boolean; failed: boolean }).failed && (
+                                      <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">
+                                        فشل الإرسال
+                                      </span>
+                                    )}
+                                    {!isOptimistic && discussion.status !== 'CLOSED' && (
+                                      <button
+                                        onClick={() => handleAcceptReply(reply.id)}
+                                        disabled={detailMutating || reply.isAccepted}
+                                        className="text-xs text-green-700 hover:text-green-800 disabled:opacity-50"
+                                      >
+                                        {reply.isAccepted ? 'تم القبول' : 'قبول كحل'}
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-700">{reply.content}</p>
+                                
+                                {isOptimistic && (reply as { pending: boolean; failed: boolean }).failed && (
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <button
+                                      onClick={() => handleReplyRetry(reply.id, (reply as { originalContent: string }).originalContent)}
+                                      className="px-3 py-1 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                    >
+                                      إعادة المحاولة
+                                    </button>
+                                    <span className="text-xs text-gray-600">{(reply as { originalContent: string }).originalContent}</span>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Reply Input */}
+                        {discussion.status !== 'CLOSED' && (
+                          <div className="mt-4 flex flex-col gap-2">
+                            <div className="flex gap-3">
+                              <input
+                                type="text"
+                                value={replyInputs[discussion.id] || ''}
+                                onChange={(e) => setReplyInputs((prev) => ({ ...prev, [discussion.id]: e.target.value }))}
+                                placeholder="أضف ردك..."
+                                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                              />
+                              <button
+                                onClick={() => handleReplySubmit(discussion.id)}
+                                disabled={detailMutating}
+                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                              >
+                                رد
+                              </button>
+                            </div>
+                            {replyErrors[discussion.id] && <p className="text-red-600 text-sm">{replyErrors[discussion.id]}</p>}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="mt-4 flex gap-3">
-                  <input
-                    type="text"
-                    placeholder="أضف ردك..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    رد
+                  <button
+                    onClick={() => setSelectedDiscussionId(selectedDiscussionId === discussionItem.id ? null : discussionItem.id)}
+                    className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 border border-blue-200 rounded-lg"
+                  >
+                    {selectedDiscussionId === discussionItem.id ? 'إخفاء التفاصيل' : 'عرض التفاصيل والردود'}
+                  </button>
+                  <button
+                    onClick={() => handleDeleteDiscussion(discussionItem.id)}
+                    className="px-4 py-2 text-sm text-red-600 hover:text-red-700 border border-red-200 rounded-lg"
+                  >
+                    حذف
                   </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {deleteConfirmId && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 max-w-md w-full">
+              <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
+              <p className="text-gray-600 mb-4">هل أنت متأكد أنك تريد حذف هذا النقاش؟ سيظهر كعنصر محذوف في القائمة.</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={confirmDeleteDiscussion}
+                  disabled={detailMutating}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                >
+                  حذف
+                </button>
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
@@ -1078,14 +1570,93 @@ export function ProjectCollaborationModule() {
   // PAGE 4: Attachments Center
   const AttachmentsView = () => {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [filterType, setFilterType] = useState('all');
+    const [filterType, setFilterType] = useState<AttachmentType | 'all'>('all');
+    const [showUpload, setShowUpload] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [uploadStage, setUploadStage] = useState('');
+    const [isDragging, setIsDragging] = useState(false);
+    const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
-    const getFileIcon = (type: string) => {
-      if (type === 'pdf') return <FileText className="w-8 h-8 text-red-600" />;
-      if (type === 'excel') return <FileText className="w-8 h-8 text-green-600" />;
-      if (type === 'archive') return <Archive className="w-8 h-8 text-gray-600" />;
+    const {
+      isUploading,
+      uploadProgress,
+      isDeleting,
+      error: mutationError,
+      upload,
+      download,
+      deleteAttachment,
+      clearError,
+    } = useAttachmentMutations(projectId);
+
+    const typeOptions: { value: AttachmentType | 'all'; label: string }[] = [
+      { value: 'all', label: 'الكل' },
+      { value: 'DOCUMENT', label: 'مستند' },
+      { value: 'IMAGE', label: 'صورة' },
+      { value: 'VIDEO', label: 'فيديو' },
+      { value: 'AUDIO', label: 'صوت' },
+      { value: 'OTHER', label: 'آخر' },
+    ];
+
+    const handleFilterType = (type: AttachmentType | 'all') => {
+      setFilterType(type);
+      setAttachmentsFilters({ type: type === 'all' ? undefined : type });
+      applyAttachmentsFilters();
+    };
+
+    const handlePageChange = (page: number) => {
+      setAttachmentsPage(page);
+    };
+
+    const getFileIcon = (attachment: ApiAttachment) => {
+      const mime = attachment.mimeType || '';
+      if (mime.startsWith('image/')) return <ImageIcon className="w-8 h-8 text-purple-600" />;
+      if (mime.startsWith('video/')) return <Film className="w-8 h-8 text-red-600" />;
+      if (mime.startsWith('audio/')) return <Mic className="w-8 h-8 text-yellow-600" />;
+      if (mime.includes('pdf')) return <FileText className="w-8 h-8 text-red-600" />;
+      if (mime.includes('spreadsheet') || mime.includes('excel') || mime.includes('csv')) {
+        return <FileSpreadsheet className="w-8 h-8 text-green-600" />;
+      }
       return <File className="w-8 h-8 text-blue-600" />;
     };
+
+    const handleFileSelect = (file: File | null) => {
+      if (!file) return;
+      setSelectedFile(file);
+      setShowUpload(true);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+      const file = e.dataTransfer.files?.[0] || null;
+      handleFileSelect(file);
+    };
+
+    const handleUploadSubmit = async () => {
+      if (!selectedFile) return;
+      const created = await upload(selectedFile, uploadStage || undefined);
+      if (created) {
+        setSelectedFile(null);
+        setUploadStage('');
+        setShowUpload(false);
+        applyAttachmentsFilters();
+      }
+    };
+
+    const handleDownload = async (attachment: ApiAttachment) => {
+      await download(attachment);
+    };
+
+    const handleDelete = async () => {
+      if (!deleteTargetId) return;
+      const success = await deleteAttachment(deleteTargetId);
+      if (success) {
+        setDeleteTargetId(null);
+        applyAttachmentsFilters();
+      }
+    };
+
+    const totalSize = attachments.reduce((sum, a) => sum + (a.fileSize || 0), 0);
 
     return (
       <div className="space-y-6">
@@ -1094,7 +1665,11 @@ export function ProjectCollaborationModule() {
             <h1 className="text-3xl font-bold mb-2">مركز المرفقات</h1>
             <p className="text-gray-600">جميع ملفات المشروع في مكان واحد</p>
           </div>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+          <button
+            onClick={() => setShowUpload(!showUpload)}
+            disabled={isUploading}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
+          >
             <Plus className="w-5 h-5" />
             رفع ملف
           </button>
@@ -1104,41 +1679,113 @@ export function ProjectCollaborationModule() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <File className="w-8 h-8 text-blue-600 mb-3" />
-            <p className="text-2xl font-bold">{attachments.length}</p>
+            <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
             <p className="text-sm text-gray-600">إجمالي الملفات</p>
           </div>
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <Paperclip className="w-8 h-8 text-green-600 mb-3" />
-            <p className="text-2xl font-bold">16.5 MB</p>
+            <p className="text-2xl font-bold">{formatBytes(totalSize)}</p>
             <p className="text-sm text-gray-600">حجم التخزين</p>
           </div>
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <Users className="w-8 h-8 text-purple-600 mb-3" />
-            <p className="text-2xl font-bold">3</p>
+            <p className="text-2xl font-bold">{new Set(attachments.map((a) => a.uploadedByUserId)).size}</p>
             <p className="text-sm text-gray-600">المساهمون</p>
           </div>
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <Download className="w-8 h-8 text-gray-600 mb-3" />
-            <p className="text-2xl font-bold">24</p>
-            <p className="text-sm text-gray-600">التحميلات</p>
+            <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
+            <p className="text-sm text-gray-600">الملفات المتاحة</p>
           </div>
         </div>
+
+        {/* Upload Area */}
+        {showUpload && (
+          <div
+            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+            className={`bg-white rounded-xl p-6 border-2 border-dashed transition-colors ${
+              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+            }`}
+          >
+            <div className="text-center mb-4">
+              <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+              <p className="text-gray-700">اسحب ملفاً هنا أو انقر لاختيار ملف</p>
+              <input
+                type="file"
+                onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
+                className="mt-2"
+              />
+            </div>
+            {selectedFile && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                  <span className="text-sm font-medium">{selectedFile.name}</span>
+                  <span className="text-sm text-gray-500">{formatBytes(selectedFile.size)}</span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">المرحلة (اختياري)</label>
+                  <select
+                    value={uploadStage}
+                    onChange={(e) => setUploadStage(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">بدون مرحلة</option>
+                    <option value="planning">تخطيط</option>
+                    <option value="execution">تنفيذ</option>
+                    <option value="monitoring">مراقبة</option>
+                    <option value="closure">إغلاق</option>
+                  </select>
+                </div>
+                {isUploading && (
+                  <div className="space-y-1">
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-blue-600 transition-all"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                    <p className="text-sm text-gray-600">{uploadProgress}%</p>
+                  </div>
+                )}
+                {mutationError && <p className="text-red-600 text-sm">{mutationError}</p>}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleUploadSubmit}
+                    disabled={isUploading}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isUploading ? 'جاري الرفع...' : 'رفع'}
+                  </button>
+                  <button
+                    onClick={() => { setShowUpload(false); setSelectedFile(null); clearError(); }}
+                    disabled={isUploading}
+                    className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+                  >
+                    إلغاء
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Filters and View Toggle */}
         <div className="bg-white rounded-xl p-4 border border-gray-200">
           <div className="flex items-center justify-between flex-wrap gap-3">
-            <div className="flex gap-2">
-              {['all', 'pdf', 'excel', 'archive'].map((type) => (
+            <div className="flex gap-2 flex-wrap">
+              {typeOptions.map((option) => (
                 <button
-                  key={type}
-                  onClick={() => setFilterType(type)}
+                  key={option.value}
+                  onClick={() => handleFilterType(option.value)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                    filterType === type
+                    filterType === option.value
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {type === 'all' ? 'الكل' : type.toUpperCase()}
+                  {option.label}
                 </button>
               ))}
             </div>
@@ -1159,25 +1806,97 @@ export function ProjectCollaborationModule() {
           </div>
         </div>
 
+        {/* Loading / Error / Empty List */}
+        {attachmentsLoading && attachments.length === 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} className="h-48 bg-gray-100 rounded-lg animate-pulse" />
+            ))}
+          </div>
+        )}
+        {attachmentsError && (
+          <div className="p-6 text-center bg-white rounded-xl border border-gray-200">
+            <p className="text-red-600 mb-3">{attachmentsError}</p>
+            <button
+              onClick={() => refetchAttachments()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+            >
+              <RefreshCw className="w-4 h-4" />
+              إعادة المحاولة
+            </button>
+          </div>
+        )}
+        {!attachmentsLoading && !attachmentsError && attachments.length === 0 && (
+          <div className="p-6 text-center text-gray-500 bg-white rounded-xl border border-gray-200">
+            لا توجد مرفقات حالياً. ابدأ برفع أول ملف.
+          </div>
+        )}
+
+        {/* Pagination */}
+        {attachmentsPagination.totalPages > 1 && (
+          <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
+            <button
+              onClick={() => handlePageChange(Math.max(1, attachmentsPagination.page - 1))}
+              disabled={attachmentsPagination.page <= 1}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              السابق
+            </button>
+            <span className="text-sm text-gray-700">
+              صفحة {attachmentsPagination.page} من {attachmentsPagination.totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(Math.min(attachmentsPagination.totalPages, attachmentsPagination.page + 1))}
+              disabled={attachmentsPagination.page >= attachmentsPagination.totalPages}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              التالي
+            </button>
+          </div>
+        )}
+
+        {/* Mutation Error Banner */}
+        {mutationError && !showUpload && (
+          <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between">
+            <p className="text-red-700 text-sm">{mutationError}</p>
+            <button
+              onClick={() => clearError()}
+              className="text-sm text-red-700 hover:text-red-800"
+            >
+              إخفاء
+            </button>
+          </div>
+        )}
+
         {/* Files Grid/List */}
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {attachments.map((file) => (
               <div key={file.id} className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="flex flex-col items-center text-center">
-                  {getFileIcon(file.type)}
-                  <h4 className="font-semibold mt-4 mb-2 truncate w-full">{file.name}</h4>
-                  <p className="text-sm text-gray-600 mb-1">{file.size}</p>
-                  <p className="text-xs text-gray-500 mb-3">{file.uploadedBy}</p>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full mb-4">
-                    {file.projectStage}
-                  </span>
+                  {getFileIcon(file)}
+                  <h4 className="font-semibold mt-4 mb-2 truncate w-full">{file.fileName}</h4>
+                  <p className="text-sm text-gray-600 mb-1">{formatBytes(file.fileSize)}</p>
+                  <p className="text-xs text-gray-500 mb-1">{file.uploadedByUserId}</p>
+                  <p className="text-xs text-gray-500 mb-3">{formatDateTime(file.createdAt)}</p>
+                  {file.projectStage && (
+                    <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full mb-4">
+                      {file.projectStage}
+                    </span>
+                  )}
                   <div className="flex gap-2 w-full">
-                    <button className="flex-1 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                      <Eye className="w-4 h-4 mx-auto" />
-                    </button>
-                    <button className="flex-1 p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                    <button
+                      onClick={() => handleDownload(file)}
+                      className="flex-1 p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                    >
                       <Download className="w-4 h-4 mx-auto" />
+                    </button>
+                    <button
+                      onClick={() => setDeleteTargetId(file.id)}
+                      disabled={isDeleting}
+                      className="flex-1 p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 disabled:opacity-50"
+                    >
+                      <Trash2 className="w-4 h-4 mx-auto" />
                     </button>
                   </div>
                 </div>
@@ -1202,28 +1921,34 @@ export function ProjectCollaborationModule() {
                 {attachments.map((file) => (
                   <tr key={file.id} className="border-b border-gray-200 hover:bg-gray-50">
                     <td className="p-4 flex items-center gap-3">
-                      {getFileIcon(file.type)}
-                      <span className="font-medium">{file.name}</span>
+                      {getFileIcon(file)}
+                      <span className="font-medium">{file.fileName}</span>
                     </td>
-                    <td className="p-4 text-sm">{file.type.toUpperCase()}</td>
-                    <td className="p-4 text-sm">{file.size}</td>
-                    <td className="p-4 text-sm">{file.uploadedBy}</td>
-                    <td className="p-4 text-sm">{file.uploadDate}</td>
+                    <td className="p-4 text-sm">{file.attachmentType}</td>
+                    <td className="p-4 text-sm">{formatBytes(file.fileSize)}</td>
+                    <td className="p-4 text-sm">{file.uploadedByUserId}</td>
+                    <td className="p-4 text-sm">{formatDateTime(file.createdAt)}</td>
                     <td className="p-4">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
-                        {file.projectStage}
-                      </span>
+                      {file.projectStage && (
+                        <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
+                          {file.projectStage}
+                        </span>
+                      )}
                     </td>
                     <td className="p-4">
                       <div className="flex gap-2">
-                        <button className="p-2 hover:bg-gray-100 rounded">
-                          <Eye className="w-4 h-4 text-gray-600" />
-                        </button>
-                        <button className="p-2 hover:bg-gray-100 rounded">
+                        <button
+                          onClick={() => handleDownload(file)}
+                          className="p-2 hover:bg-gray-100 rounded"
+                        >
                           <Download className="w-4 h-4 text-gray-600" />
                         </button>
-                        <button className="p-2 hover:bg-gray-100 rounded">
-                          <Share2 className="w-4 h-4 text-gray-600" />
+                        <button
+                          onClick={() => setDeleteTargetId(file.id)}
+                          disabled={isDeleting}
+                          className="p-2 hover:bg-red-100 rounded disabled:opacity-50"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-600" />
                         </button>
                       </div>
                     </td>
@@ -1231,6 +1956,32 @@ export function ProjectCollaborationModule() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {deleteTargetId && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 max-w-md w-full">
+              <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
+              <p className="text-gray-600 mb-4">هل أنت متأكد أنك تريد حذف هذا الملف؟ لا يمكن التراجع عن هذا الإجراء.</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                >
+                  حذف
+                </button>
+                <button
+                  onClick={() => setDeleteTargetId(null)}
+                  disabled={isDeleting}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
@@ -2248,7 +2999,34 @@ export function ProjectCollaborationModule() {
   return (
     <div className="min-h-full bg-gray-50 p-6">
       {currentView === 'hub' && <HubView />}
-      {currentView === 'chat' && <ChatView />}
+      {currentView === 'chat' && (
+        <ChatView
+          projectId={projectId}
+          selectedConversation={selectedConversation}
+          conversations={conversations}
+          conversationsLoading={conversationsLoading}
+          conversationsError={conversationsError}
+          refetchConversations={refetchConversations}
+          currentConversation={currentConversation}
+          filteredConversations={filteredConversations}
+          selectConversation={selectConversation}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+          messages={messages}
+          messagesLoading={messagesLoading}
+          messagesError={messagesError}
+          hasMore={hasMore}
+          isSending={isSending}
+          loadMessages={loadMessages}
+          sendMessage={sendMessage}
+          editMessage={editMessage}
+          deleteMessage={deleteMessage}
+          markAsRead={markAsRead}
+          retrySend={retrySend}
+          clearError={clearError}
+          revisions={revisions}
+        />
+      )}
       {currentView === 'discussions' && <DiscussionsView />}
       {currentView === 'attachments' && <AttachmentsView />}
       {currentView === 'revisions' && <RevisionsView />}

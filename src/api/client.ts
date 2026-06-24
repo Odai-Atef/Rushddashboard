@@ -14,6 +14,7 @@ import {
   ApiResponse, 
   ApiError, 
   RequestConfig,
+  UploadConfig,
 } from './types';
 import { AUTH_CONFIG } from './config';
 
@@ -273,6 +274,110 @@ class ApiClient {
       options.body = JSON.stringify(body);
     }
     return this.requestWithRetry<T>(endpoint, options, config);
+  }
+
+  /**
+   * Upload multipart form data with progress tracking
+   */
+  upload<T = unknown>(
+    endpoint: string,
+    formData: FormData,
+    config?: UploadConfig
+  ): Promise<ApiResponse<T>> {
+    return new Promise((resolve, reject) => {
+      const token = this.getAuthToken();
+      const url = this.buildURL(endpoint, config?.params);
+      const timeout = config?.timeout || this.defaultTimeout;
+
+      const xhr = new XMLHttpRequest();
+
+      if (config?.signal) {
+        const onAbort = () => xhr.abort();
+        config.signal.addEventListener('abort', onAbort);
+        xhr.addEventListener('loadend', () => {
+          config.signal?.removeEventListener('abort', onAbort);
+        });
+      }
+
+      const timeoutId = setTimeout(() => xhr.abort(), timeout);
+
+      xhr.upload.addEventListener('progress', (event) => {
+        if (event.lengthComputable && config?.onProgress) {
+          const percentage = Math.round((event.loaded / event.total) * 100);
+          config.onProgress({ loaded: event.loaded, total: event.total, percentage });
+        }
+      });
+
+      xhr.addEventListener('load', () => {
+        clearTimeout(timeoutId);
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const data = JSON.parse(xhr.responseText) as T;
+            resolve({
+              success: true,
+              data,
+              message: 'Success',
+              meta: (data as Record<string, unknown>)?.meta,
+            });
+          } catch {
+            resolve({
+              success: true,
+              data: xhr.response as T,
+              message: 'Success',
+            });
+          }
+        } else {
+          reject(this.parseXhrError(xhr));
+        }
+      });
+
+      xhr.addEventListener('error', () => {
+        clearTimeout(timeoutId);
+        reject({
+          code: 'NETWORK_ERROR',
+          message: 'Network error. Please check your connection and try again.',
+          statusCode: 0,
+        } as ApiError);
+      });
+
+      xhr.addEventListener('abort', () => {
+        clearTimeout(timeoutId);
+        reject({
+          code: 'TIMEOUT',
+          message: 'Request timed out. Please try again.',
+          statusCode: 408,
+        } as ApiError);
+      });
+
+      xhr.open('POST', url);
+      if (token) {
+        xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+      }
+      xhr.setRequestHeader('X-App-Version', ENV.APP_VERSION);
+      xhr.send(formData);
+    });
+  }
+
+  /**
+   * Parse XMLHttpRequest error into ApiError shape
+   */
+  private parseXhrError(xhr: XMLHttpRequest): ApiError {
+    try {
+      const data = JSON.parse(xhr.responseText);
+      return {
+        code: data.code || 'UNKNOWN_ERROR',
+        message: data.message || `HTTP Error ${xhr.status}`,
+        details: data.details,
+        errors: data.errors,
+        statusCode: xhr.status,
+      };
+    } catch {
+      return {
+        code: 'HTTP_ERROR',
+        message: `Request failed with status ${xhr.status}`,
+        statusCode: xhr.status,
+      };
+    }
   }
 
   /**

@@ -6,7 +6,7 @@
  */
 
 import apiClient from '../client';
-import { ApiResponse, RequestConfig } from '../types';
+import { ApiResponse, RequestConfig, UploadConfig } from '../types';
 
 export type ConversationType = 'PROJECT_GROUP' | 'DIRECT_MESSAGE' | 'SYSTEM_ALERT';
 export type ConversationStatus = 'ACTIVE' | 'ARCHIVED' | 'MUTED';
@@ -27,6 +27,16 @@ export interface Conversation {
 
 export type DiscussionStatus = 'OPEN' | 'RESOLVED' | 'CLOSED';
 
+export interface Reply {
+  id: string;
+  discussionId: string;
+  authorUserId: string;
+  content: string;
+  isAccepted: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Discussion {
   id: string;
   projectId: string;
@@ -42,6 +52,30 @@ export interface Discussion {
   updatedAt: string;
 }
 
+export interface DiscussionWithReplies extends Discussion {
+  replies: Reply[];
+}
+
+export interface CreateDiscussionDto {
+  section: string;
+  title: string;
+  content: string;
+  attachmentIds?: string[];
+}
+
+export interface UpdateDiscussionDto {
+  title?: string;
+  content?: string;
+}
+
+export interface ChangeDiscussionStatusDto {
+  status: DiscussionStatus;
+}
+
+export interface CreateReplyDto {
+  content: string;
+}
+
 export type AttachmentType = 'DOCUMENT' | 'IMAGE' | 'VIDEO' | 'AUDIO' | 'OTHER';
 
 export interface Attachment {
@@ -55,6 +89,13 @@ export interface Attachment {
   projectStage: string | null;
   uploadedByUserId: string;
   createdAt: string;
+}
+
+export interface CreateAttachmentResponse extends Attachment {}
+
+export interface UploadAttachmentParams {
+  file: File;
+  projectStage?: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -203,6 +244,120 @@ export class CollaborationService {
   }
 
   /**
+   * Get a single discussion with replies
+   * GET /api/v1/projects/:projectId/discussions/:discussionId
+   */
+  async getDiscussionById(
+    projectId: string,
+    discussionId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<DiscussionWithReplies>> {
+    return apiClient.get<DiscussionWithReplies>(
+      `/api/v1/projects/${projectId}/discussions/${discussionId}`,
+      config
+    );
+  }
+
+  /**
+   * Create a new discussion
+   * POST /api/v1/projects/:projectId/discussions
+   */
+  async createDiscussion(
+    projectId: string,
+    dto: CreateDiscussionDto,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Discussion>> {
+    return apiClient.post<Discussion>(
+      `/api/v1/projects/${projectId}/discussions`,
+      dto,
+      config
+    );
+  }
+
+  /**
+   * Update a discussion
+   * PUT /api/v1/projects/:projectId/discussions/:discussionId
+   */
+  async updateDiscussion(
+    projectId: string,
+    discussionId: string,
+    dto: UpdateDiscussionDto,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Discussion>> {
+    return apiClient.put<Discussion>(
+      `/api/v1/projects/${projectId}/discussions/${discussionId}`,
+      dto,
+      config
+    );
+  }
+
+  /**
+   * Change discussion status
+   * PUT /api/v1/projects/:projectId/discussions/:discussionId/status
+   */
+  async changeDiscussionStatus(
+    projectId: string,
+    discussionId: string,
+    dto: ChangeDiscussionStatusDto,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Discussion>> {
+    return apiClient.put<Discussion>(
+      `/api/v1/projects/${projectId}/discussions/${discussionId}/status`,
+      dto,
+      config
+    );
+  }
+
+  /**
+   * Delete a discussion
+   * DELETE /api/v1/projects/:projectId/discussions/:discussionId
+   */
+  async deleteDiscussion(
+    projectId: string,
+    discussionId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<void>> {
+    return apiClient.delete<void>(
+      `/api/v1/projects/${projectId}/discussions/${discussionId}`,
+      config
+    );
+  }
+
+  /**
+   * Add a reply to a discussion
+   * POST /api/v1/projects/:projectId/discussions/:discussionId/replies
+   */
+  async createReply(
+    projectId: string,
+    discussionId: string,
+    dto: CreateReplyDto,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Reply>> {
+    return apiClient.post<Reply>(
+      `/api/v1/projects/${projectId}/discussions/${discussionId}/replies`,
+      dto,
+      config
+    );
+  }
+
+  /**
+   * Mark a reply as accepted solution
+   * PUT /api/v1/projects/:projectId/discussions/:discussionId/replies/:replyId/accept
+   */
+  async acceptReply(
+    projectId: string,
+    discussionId: string,
+    replyId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Reply>> {
+    return apiClient.put<Reply>(
+      `/api/v1/projects/${projectId}/discussions/${discussionId}/replies/${replyId}/accept`,
+      {},
+      config
+    );
+  }
+
+  /**
    * List project attachments
    * GET /api/v1/projects/:projectId/attachments
    */
@@ -217,6 +372,60 @@ export class CollaborationService {
         ...config,
         params: buildQueryParams(filtersToRecord(filters)),
       }
+    );
+  }
+
+  /**
+   * Upload a project attachment
+   * POST /api/v1/projects/:projectId/attachments
+   */
+  async uploadAttachment(
+    projectId: string,
+    params: UploadAttachmentParams,
+    config?: UploadConfig
+  ): Promise<ApiResponse<CreateAttachmentResponse>> {
+    const formData = new FormData();
+    formData.append('file', params.file);
+    if (params.projectStage) {
+      formData.append('projectStage', params.projectStage);
+    }
+    return apiClient.upload<CreateAttachmentResponse>(
+      `/api/v1/projects/${projectId}/attachments`,
+      formData,
+      config
+    );
+  }
+
+  /**
+   * Download a project attachment
+   * GET /api/v1/projects/:projectId/attachments/:attachmentId/download
+   */
+  async downloadAttachment(
+    projectId: string,
+    attachmentId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Blob>> {
+    return apiClient.get<Blob>(
+      `/api/v1/projects/${projectId}/attachments/${attachmentId}/download`,
+      {
+        ...config,
+        responseType: 'blob',
+      }
+    );
+  }
+
+  /**
+   * Delete a project attachment
+   * DELETE /api/v1/projects/:projectId/attachments/:attachmentId
+   */
+  async deleteAttachment(
+    projectId: string,
+    attachmentId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<void>> {
+    return apiClient.delete<void>(
+      `/api/v1/projects/${projectId}/attachments/${attachmentId}`,
+      config
     );
   }
 
