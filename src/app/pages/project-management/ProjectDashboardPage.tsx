@@ -67,6 +67,37 @@ export function ProjectDashboardPage() {
           </button>
         </div>
 
+        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <h3 className="text-lg font-semibold mb-4">إجراءات سريعة</h3>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <button
+              onClick={() => navigate('/dashboard/project-management/list')}
+              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            >
+              <List className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+              <p className="font-medium text-sm">عرض جميع المشاريع</p>
+            </button>
+            <button
+              onClick={() => navigate('/dashboard/project-management/create')}
+              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            >
+              <Plus className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+              <p className="font-medium text-sm">إنشاء مشروع جديد</p>
+            </button>
+            <button
+              onClick={() => navigate('/dashboard/project-management/reporting')}
+              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            >
+              <BarChart3 className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+              <p className="font-medium text-sm">التقارير الإدارية</p>
+            </button>
+            <button className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center">
+              <Download className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+              <p className="font-medium text-sm">تصدير البيانات</p>
+            </button>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-4">
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <Briefcase className="w-8 h-8 text-gray-400 mb-2" />
@@ -242,36 +273,6 @@ export function ProjectDashboardPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">إجراءات سريعة</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            <button
-              onClick={() => navigate('/dashboard/project-management/list')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
-            >
-              <List className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="font-medium text-sm">عرض جميع المشاريع</p>
-            </button>
-            <button
-              onClick={() => navigate('/dashboard/project-management/create')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
-            >
-              <Plus className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="font-medium text-sm">إنشاء مشروع جديد</p>
-            </button>
-            <button
-              onClick={() => navigate('/dashboard/project-management/reporting')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
-            >
-              <BarChart3 className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="font-medium text-sm">التقارير الإدارية</p>
-            </button>
-            <button className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center">
-              <Download className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="font-medium text-sm">تصدير البيانات</p>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -369,6 +369,30 @@ export function AIAnalysisChatPage() {
     return () => observer.disconnect();
   }, [history.pagination.hasMore, history.isLoading, history.pagination.page]);
 
+  // Scroll active history item into view when chatId/selectedAnalysis or history entries change.
+  useEffect(() => {
+    const container = historyListRef.current;
+    const activeId = chatId ?? selectedAnalysis;
+    if (!container || !activeId) return;
+
+    // If the entry is not present yet, keep loading more pages until we find it.
+    if (!history.entries.some((e) => e.id === activeId)) {
+      if (history.pagination.hasMore && !history.isLoading) {
+        history.fetchHistory(history.pagination.page + 1);
+      }
+      return;
+    }
+
+    // Search for the active item within the history list container.
+    const activeItem = Array.from(container.children).find((child) => {
+      return child.getAttribute('data-history-id') === activeId;
+    });
+
+    if (activeItem) {
+      activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, [chatId, selectedAnalysis, history.entries, history.pagination.hasMore, history.isLoading, history.pagination.page]);
+
   const analysisCards: AnalysisCard[] = [
     { id: 'sales-1', title: 'تحليل انخفاض الإيرادات', description: 'تحديد أسباب انخفاض الإيرادات وتقديم حلول فورية', category: 'المبيعات', estimatedTime: '2-3 دقائق', complexity: 'متوسط', impact: 'حرج', icon: TrendingDown, recommended: true, color: 'from-red-500 to-orange-600' },
     { id: 'sales-2', title: 'تحليل أفضل المنتجات', description: 'اكتشف المنتجات الأكثر ربحية وفرص النمو', category: 'المبيعات', estimatedTime: '1-2 دقيقة', complexity: 'بسيط', impact: 'متوسط', icon: Target, trending: true, color: 'from-green-500 to-emerald-600' },
@@ -743,6 +767,7 @@ export function AIAnalysisChatPage() {
                 return (
                   <div
                     key={item.id}
+                    data-history-id={item.id}
                     onClick={() => handleHistoryItemClick(item.id)}
                     className={`group p-3 rounded-lg mb-2 cursor-pointer transition-all ${
                       (selectedAnalysis ?? chatId) === item.id

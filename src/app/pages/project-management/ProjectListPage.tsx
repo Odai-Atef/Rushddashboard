@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { Loader2 } from 'lucide-react';
 import {
   Plus,
   Search,
@@ -12,9 +13,16 @@ import {
   ChevronRight,
   RotateCcw,
   X,
+  Pencil,
+  Download,
+  Eye,
+  MessageSquare,
 } from 'lucide-react';
 import { useProjects } from '@/api/hooks/useProjects';
 import { ProjectFilters, ProjectStatus, ProjectHealth, statusConfig, Project } from './project-types';
+import apiClient from '@/api/client';
+import { projectService } from '@/api/services/project-service';
+import { toast } from 'sonner';
 
 const STATUS_OPTIONS: { value: ProjectStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'جميع الحالات' },
@@ -74,6 +82,10 @@ export function ProjectListPage() {
   } = useProjects();
   const [listViewMode, setListViewMode] = useState<'list' | 'kanban' | 'timeline'>('list');
   const [showFilters, setShowFilters] = useState(false);
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+  const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
+  const [downloadingId, setDownloadingId] = useState<string | null>(null);
+  const menuButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -83,6 +95,81 @@ export function ProjectListPage() {
 
   const updateFilter = <K extends keyof ProjectFilters>(key: K, value: ProjectFilters[K]) => {
     setFilters({ [key]: value === 'all' ? undefined : value });
+  };
+
+  const toggleMenu = (projectId: string, event: React.MouseEvent<HTMLButtonElement>) => {
+    const button = event.currentTarget;
+    const rect = button.getBoundingClientRect();
+    setMenuPosition({ top: rect.bottom + window.scrollY + 4, left: rect.left + window.scrollX - 224 + rect.width });
+    setOpenMenuId((prev) => (prev === projectId ? null : projectId));
+  };
+
+  useEffect(() => {
+    if (!openMenuId) return;
+
+    const menuEl = document.querySelector('[data-project-menu="true"]');
+
+    const handleClickOutside = (event: MouseEvent) => {
+      const buttonEl = menuButtonRefs.current[openMenuId];
+      const target = event.target as Node;
+      if (
+        buttonEl &&
+        !buttonEl.contains(target) &&
+        menuEl &&
+        !menuEl.contains(target)
+      ) {
+        setOpenMenuId(null);
+      }
+    };
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleEscape);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener('keydown', handleEscape);
+    };
+  }, [openMenuId]);
+
+  useEffect(() => {
+    if (!openMenuId) return;
+
+    const handleScroll = () => {
+      setOpenMenuId(null);
+    };
+
+    window.addEventListener('scroll', handleScroll, true);
+    return () => window.removeEventListener('scroll', handleScroll, true);
+  }, [openMenuId]);
+
+  const handleDownloadWord = async (projectId: string, projectName: string) => {
+    setOpenMenuId(null);
+    setDownloadingId(projectId);
+    try {
+      const res = await projectService.getProjectPlanWord(projectId);
+      const blob = res.data;
+      if (!(blob instanceof Blob)) {
+        throw new Error('تعذر الحصول على ملف Word');
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${projectName || 'project'}-plan.docx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم تحميل خطة المشروع بنجاح');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تحميل ملف Word');
+    } finally {
+      setDownloadingId(null);
+    }
   };
 
   const renderLoading = () => (
@@ -245,7 +332,11 @@ export function ProjectListPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <button className="p-1 hover:bg-gray-100 rounded">
+                    <button
+                      ref={(el) => { menuButtonRefs.current[project.id] = el; }}
+                      onClick={(e) => toggleMenu(project.id, e)}
+                      className="p-1 hover:bg-gray-100 rounded"
+                    >
                       <MoreVertical className="w-5 h-5 text-gray-400" />
                     </button>
                   </td>
@@ -529,6 +620,58 @@ export function ProjectListPage() {
 
         {!isLoading && !error && projects.length > 0 && renderPagination()}
       </div>
+      {openMenuId && menuPosition && (
+        <div
+          data-project-menu="true"
+          className="fixed w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-[100] py-1"
+          style={{ top: menuPosition.top, left: Math.max(8, menuPosition.left) }}
+        >
+          {(() => {
+            const project = projects.find((p) => p.id === openMenuId);
+            if (!project) return null;
+            return (
+              <>
+                <a
+                  href={`/dashboard/project-management/edit/${project.id}`}
+                  onClick={() => setOpenMenuId(null)}
+                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 cursor-pointer"
+                >
+                  <Pencil className="w-4 h-4 text-gray-400" />
+                  تعديل
+                </a>
+                <button
+                  onClick={() => handleDownloadWord(project.id, project.name)}
+                  disabled={downloadingId === project.id}
+                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {downloadingId === project.id ? (
+                    <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
+                  ) : (
+                    <Download className="w-4 h-4 text-gray-400" />
+                  )}
+                  تحميل ملف مُولّد بالذكاء الاصطناعي
+                </button>
+                <a
+                  href={`/dashboard/project-management/details/${project.id}`}
+                  onClick={() => setOpenMenuId(null)}
+                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 cursor-pointer"
+                >
+                  <Eye className="w-4 h-4 text-gray-400" />
+                  عرض
+                </a>
+                <a
+                  href="/dashboard/contact-us"
+                  onClick={() => setOpenMenuId(null)}
+                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 cursor-pointer"
+                >
+                  <MessageSquare className="w-4 h-4 text-gray-400" />
+                  تواصل معنا
+                </a>
+              </>
+            );
+          })()}
+        </div>
+      )}
     </div>
   );
 }
