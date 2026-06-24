@@ -97,8 +97,7 @@ export function useProjectAttachments(
 
         setState((prev) => ({
           ...prev,
-          attachments:
-            page === DEFAULT_PAGE ? attachments : [...prev.attachments, ...attachments],
+          attachments,
           pagination: { page, limit, total, totalPages },
           isLoading: false,
         }));

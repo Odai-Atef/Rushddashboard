@@ -6,7 +6,7 @@
  */
 
 import apiClient from '../client';
-import { ApiResponse, RequestConfig } from '../types';
+import { ApiResponse, RequestConfig, UploadConfig } from '../types';
 
 export type ConversationType = 'PROJECT_GROUP' | 'DIRECT_MESSAGE' | 'SYSTEM_ALERT';
 export type ConversationStatus = 'ACTIVE' | 'ARCHIVED' | 'MUTED';
@@ -89,6 +89,13 @@ export interface Attachment {
   projectStage: string | null;
   uploadedByUserId: string;
   createdAt: string;
+}
+
+export interface CreateAttachmentResponse extends Attachment {}
+
+export interface UploadAttachmentParams {
+  file: File;
+  projectStage?: string;
 }
 
 export interface PaginatedResponse<T> {
@@ -365,6 +372,60 @@ export class CollaborationService {
         ...config,
         params: buildQueryParams(filtersToRecord(filters)),
       }
+    );
+  }
+
+  /**
+   * Upload a project attachment
+   * POST /api/v1/projects/:projectId/attachments
+   */
+  async uploadAttachment(
+    projectId: string,
+    params: UploadAttachmentParams,
+    config?: UploadConfig
+  ): Promise<ApiResponse<CreateAttachmentResponse>> {
+    const formData = new FormData();
+    formData.append('file', params.file);
+    if (params.projectStage) {
+      formData.append('projectStage', params.projectStage);
+    }
+    return apiClient.upload<CreateAttachmentResponse>(
+      `/api/v1/projects/${projectId}/attachments`,
+      formData,
+      config
+    );
+  }
+
+  /**
+   * Download a project attachment
+   * GET /api/v1/projects/:projectId/attachments/:attachmentId/download
+   */
+  async downloadAttachment(
+    projectId: string,
+    attachmentId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Blob>> {
+    return apiClient.get<Blob>(
+      `/api/v1/projects/${projectId}/attachments/${attachmentId}/download`,
+      {
+        ...config,
+        responseType: 'blob',
+      }
+    );
+  }
+
+  /**
+   * Delete a project attachment
+   * DELETE /api/v1/projects/:projectId/attachments/:attachmentId
+   */
+  async deleteAttachment(
+    projectId: string,
+    attachmentId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<void>> {
+    return apiClient.delete<void>(
+      `/api/v1/projects/${projectId}/attachments/${attachmentId}`,
+      config
     );
   }
 

@@ -35,6 +35,12 @@ export interface RequestConfig {
   responseType?: 'json' | 'blob' | 'text';
 }
 
+export type UploadProgressCallback = (progress: { loaded: number; total: number; percentage: number }) => void;
+
+export interface UploadConfig extends RequestConfig {
+  onProgress?: UploadProgressCallback;
+}
+
 export interface PaginatedRequest {
   page?: number;
   perPage?: number;

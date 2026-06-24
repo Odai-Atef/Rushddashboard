@@ -5,9 +5,21 @@ import useProjectConversations from '@/api/hooks/useProjectConversations';
 import useConversationMessages from '@/api/hooks/useConversationMessages';
 import useConversationRealtime from '@/api/hooks/useConversationRealtime';
 import useDiscussionDetail from '@/api/hooks/useDiscussionDetail';
-import { formatDateTime } from '@/app/lib/formatters';
-import { Message as ApiMessage, ConversationStatus, Discussion as ApiDiscussion, DiscussionStatus, Reply } from '@/api/services/collaboration-service';
+import useAttachmentMutations from '@/api/hooks/useAttachmentMutations';
+import { formatDateTime, formatBytes } from '@/app/lib/formatters';
 import {
+  Message as ApiMessage,
+  ConversationStatus,
+  Discussion as ApiDiscussion,
+  DiscussionStatus,
+  Reply,
+  Attachment as ApiAttachment,
+  AttachmentType,
+} from '@/api/services/collaboration-service';
+import {
+  Upload,
+  Film,
+  FileSpreadsheet,
   MessageSquare,
   Bell,
   Paperclip,
@@ -30,7 +42,7 @@ import {
   Download,
   Eye,
   Edit,
-  Reply,
+  Reply as ReplyIcon,
   ThumbsUp,
   Activity,
   BarChart3,
@@ -114,6 +126,18 @@ export function ProjectCollaborationModule() {
     error: conversationsError,
     refetch: refetchConversations,
   } = useProjectConversations(projectId);
+
+  const {
+    attachments,
+    isLoading: attachmentsLoading,
+    error: attachmentsError,
+    pagination: attachmentsPagination,
+    filters: attachmentsFilters,
+    setPage: setAttachmentsPage,
+    setFilters: setAttachmentsFilters,
+    applyFilters: applyAttachmentsFilters,
+    refetch: refetchAttachments,
+  } = useProjectAttachments(projectId);
 
   const {
     discussions,
@@ -200,7 +224,7 @@ export function ProjectCollaborationModule() {
   };
 
   // Sample Data
-  const attachments: Attachment[] = [
+  const sampleAttachments: Attachment[] = [
     { id: '1', name: 'خطة_المشروع.pdf', type: 'pdf', size: '3.2 MB', uploadedBy: 'أحمد محمد', uploadDate: '2026-06-01', projectStage: 'تخطيط' },
     { id: '2', name: 'الميزانية_التفصيلية.xlsx', type: 'excel', size: '856 KB', uploadedBy: 'فاطمة أحمد', uploadDate: '2026-06-03', projectStage: 'مراجعة مالية' },
     { id: '3', name: 'صور_الموقع.zip', type: 'archive', size: '12.5 MB', uploadedBy: 'خالد سعيد', uploadDate: '2026-06-05', projectStage: 'دراسة ميدانية' }
@@ -1230,7 +1254,7 @@ export function ProjectCollaborationModule() {
                         <span>{formatDateTime(discussionItem.lastReplyAt || discussionItem.updatedAt)}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Reply className="w-4 h-4" />
+                        <ReplyIcon className="w-4 h-4" />
                         <span>{discussionItem.replyCount} رد</span>
                       </div>
                     </div>
@@ -1436,14 +1460,93 @@ export function ProjectCollaborationModule() {
   // PAGE 4: Attachments Center
   const AttachmentsView = () => {
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [filterType, setFilterType] = useState('all');
+    const [filterType, setFilterType] = useState<AttachmentType | 'all'>('all');
+    const [showUpload, setShowUpload] = useState(false);
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+    const [uploadStage, setUploadStage] = useState('');
+    const [isDragging, setIsDragging] = useState(false);
+    const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
-    const getFileIcon = (type: string) => {
-      if (type === 'pdf') return <FileText className="w-8 h-8 text-red-600" />;
-      if (type === 'excel') return <FileText className="w-8 h-8 text-green-600" />;
-      if (type === 'archive') return <Archive className="w-8 h-8 text-gray-600" />;
+    const {
+      isUploading,
+      uploadProgress,
+      isDeleting,
+      error: mutationError,
+      upload,
+      download,
+      deleteAttachment,
+      clearError,
+    } = useAttachmentMutations(projectId);
+
+    const typeOptions: { value: AttachmentType | 'all'; label: string }[] = [
+      { value: 'all', label: 'الكل' },
+      { value: 'DOCUMENT', label: 'مستند' },
+      { value: 'IMAGE', label: 'صورة' },
+      { value: 'VIDEO', label: 'فيديو' },
+      { value: 'AUDIO', label: 'صوت' },
+      { value: 'OTHER', label: 'آخر' },
+    ];
+
+    const handleFilterType = (type: AttachmentType | 'all') => {
+      setFilterType(type);
+      setAttachmentsFilters({ type: type === 'all' ? undefined : type });
+      applyAttachmentsFilters();
+    };
+
+    const handlePageChange = (page: number) => {
+      setAttachmentsPage(page);
+    };
+
+    const getFileIcon = (attachment: ApiAttachment) => {
+      const mime = attachment.mimeType || '';
+      if (mime.startsWith('image/')) return <ImageIcon className="w-8 h-8 text-purple-600" />;
+      if (mime.startsWith('video/')) return <Film className="w-8 h-8 text-red-600" />;
+      if (mime.startsWith('audio/')) return <Mic className="w-8 h-8 text-yellow-600" />;
+      if (mime.includes('pdf')) return <FileText className="w-8 h-8 text-red-600" />;
+      if (mime.includes('spreadsheet') || mime.includes('excel') || mime.includes('csv')) {
+        return <FileSpreadsheet className="w-8 h-8 text-green-600" />;
+      }
       return <File className="w-8 h-8 text-blue-600" />;
     };
+
+    const handleFileSelect = (file: File | null) => {
+      if (!file) return;
+      setSelectedFile(file);
+      setShowUpload(true);
+    };
+
+    const handleDrop = (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragging(false);
+      const file = e.dataTransfer.files?.[0] || null;
+      handleFileSelect(file);
+    };
+
+    const handleUploadSubmit = async () => {
+      if (!selectedFile) return;
+      const created = await upload(selectedFile, uploadStage || undefined);
+      if (created) {
+        setSelectedFile(null);
+        setUploadStage('');
+        setShowUpload(false);
+        applyAttachmentsFilters();
+      }
+    };
+
+    const handleDownload = async (attachment: ApiAttachment) => {
+      await download(attachment);
+    };
+
+    const handleDelete = async () => {
+      if (!deleteTargetId) return;
+      const success = await deleteAttachment(deleteTargetId);
+      if (success) {
+        setDeleteTargetId(null);
+        applyAttachmentsFilters();
+      }
+    };
+
+    const totalSize = attachments.reduce((sum, a) => sum + (a.fileSize || 0), 0);
 
     return (
       <div className="space-y-6">
@@ -1452,7 +1555,11 @@ export function ProjectCollaborationModule() {
             <h1 className="text-3xl font-bold mb-2">مركز المرفقات</h1>
             <p className="text-gray-600">جميع ملفات المشروع في مكان واحد</p>
           </div>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+          <button
+            onClick={() => setShowUpload(!showUpload)}
+            disabled={isUploading}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
+          >
             <Plus className="w-5 h-5" />
             رفع ملف
           </button>
@@ -1462,41 +1569,113 @@ export function ProjectCollaborationModule() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <File className="w-8 h-8 text-blue-600 mb-3" />
-            <p className="text-2xl font-bold">{attachments.length}</p>
+            <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
             <p className="text-sm text-gray-600">إجمالي الملفات</p>
           </div>
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <Paperclip className="w-8 h-8 text-green-600 mb-3" />
-            <p className="text-2xl font-bold">16.5 MB</p>
+            <p className="text-2xl font-bold">{formatBytes(totalSize)}</p>
             <p className="text-sm text-gray-600">حجم التخزين</p>
           </div>
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <Users className="w-8 h-8 text-purple-600 mb-3" />
-            <p className="text-2xl font-bold">3</p>
+            <p className="text-2xl font-bold">{new Set(attachments.map((a) => a.uploadedByUserId)).size}</p>
             <p className="text-sm text-gray-600">المساهمون</p>
           </div>
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <Download className="w-8 h-8 text-gray-600 mb-3" />
-            <p className="text-2xl font-bold">24</p>
-            <p className="text-sm text-gray-600">التحميلات</p>
+            <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
+            <p className="text-sm text-gray-600">الملفات المتاحة</p>
           </div>
         </div>
+
+        {/* Upload Area */}
+        {showUpload && (
+          <div
+            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+            className={`bg-white rounded-xl p-6 border-2 border-dashed transition-colors ${
+              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+            }`}
+          >
+            <div className="text-center mb-4">
+              <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
+              <p className="text-gray-700">اسحب ملفاً هنا أو انقر لاختيار ملف</p>
+              <input
+                type="file"
+                onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
+                className="mt-2"
+              />
+            </div>
+            {selectedFile && (
+              <div className="space-y-3">
+                <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                  <span className="text-sm font-medium">{selectedFile.name}</span>
+                  <span className="text-sm text-gray-500">{formatBytes(selectedFile.size)}</span>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">المرحلة (اختياري)</label>
+                  <select
+                    value={uploadStage}
+                    onChange={(e) => setUploadStage(e.target.value)}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">بدون مرحلة</option>
+                    <option value="planning">تخطيط</option>
+                    <option value="execution">تنفيذ</option>
+                    <option value="monitoring">مراقبة</option>
+                    <option value="closure">إغلاق</option>
+                  </select>
+                </div>
+                {isUploading && (
+                  <div className="space-y-1">
+                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div
+                        className="h-full bg-blue-600 transition-all"
+                        style={{ width: `${uploadProgress}%` }}
+                      />
+                    </div>
+                    <p className="text-sm text-gray-600">{uploadProgress}%</p>
+                  </div>
+                )}
+                {mutationError && <p className="text-red-600 text-sm">{mutationError}</p>}
+                <div className="flex gap-3">
+                  <button
+                    onClick={handleUploadSubmit}
+                    disabled={isUploading}
+                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isUploading ? 'جاري الرفع...' : 'رفع'}
+                  </button>
+                  <button
+                    onClick={() => { setShowUpload(false); setSelectedFile(null); clearError(); }}
+                    disabled={isUploading}
+                    className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+                  >
+                    إلغاء
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Filters and View Toggle */}
         <div className="bg-white rounded-xl p-4 border border-gray-200">
           <div className="flex items-center justify-between flex-wrap gap-3">
-            <div className="flex gap-2">
-              {['all', 'pdf', 'excel', 'archive'].map((type) => (
+            <div className="flex gap-2 flex-wrap">
+              {typeOptions.map((option) => (
                 <button
-                  key={type}
-                  onClick={() => setFilterType(type)}
+                  key={option.value}
+                  onClick={() => handleFilterType(option.value)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                    filterType === type
+                    filterType === option.value
                       ? 'bg-blue-600 text-white'
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
-                  {type === 'all' ? 'الكل' : type.toUpperCase()}
+                  {option.label}
                 </button>
               ))}
             </div>
@@ -1517,25 +1696,97 @@ export function ProjectCollaborationModule() {
           </div>
         </div>
 
+        {/* Loading / Error / Empty List */}
+        {attachmentsLoading && attachments.length === 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {[1, 2, 3, 4].map((n) => (
+              <div key={n} className="h-48 bg-gray-100 rounded-lg animate-pulse" />
+            ))}
+          </div>
+        )}
+        {attachmentsError && (
+          <div className="p-6 text-center bg-white rounded-xl border border-gray-200">
+            <p className="text-red-600 mb-3">{attachmentsError}</p>
+            <button
+              onClick={() => refetchAttachments()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+            >
+              <RefreshCw className="w-4 h-4" />
+              إعادة المحاولة
+            </button>
+          </div>
+        )}
+        {!attachmentsLoading && !attachmentsError && attachments.length === 0 && (
+          <div className="p-6 text-center text-gray-500 bg-white rounded-xl border border-gray-200">
+            لا توجد مرفقات حالياً. ابدأ برفع أول ملف.
+          </div>
+        )}
+
+        {/* Pagination */}
+        {attachmentsPagination.totalPages > 1 && (
+          <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
+            <button
+              onClick={() => handlePageChange(Math.max(1, attachmentsPagination.page - 1))}
+              disabled={attachmentsPagination.page <= 1}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              السابق
+            </button>
+            <span className="text-sm text-gray-700">
+              صفحة {attachmentsPagination.page} من {attachmentsPagination.totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(Math.min(attachmentsPagination.totalPages, attachmentsPagination.page + 1))}
+              disabled={attachmentsPagination.page >= attachmentsPagination.totalPages}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              التالي
+            </button>
+          </div>
+        )}
+
+        {/* Mutation Error Banner */}
+        {mutationError && !showUpload && (
+          <div className="p-4 bg-red-50 border border-red-200 rounded-xl flex items-center justify-between">
+            <p className="text-red-700 text-sm">{mutationError}</p>
+            <button
+              onClick={() => clearError()}
+              className="text-sm text-red-700 hover:text-red-800"
+            >
+              إخفاء
+            </button>
+          </div>
+        )}
+
         {/* Files Grid/List */}
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {attachments.map((file) => (
               <div key={file.id} className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
                 <div className="flex flex-col items-center text-center">
-                  {getFileIcon(file.type)}
-                  <h4 className="font-semibold mt-4 mb-2 truncate w-full">{file.name}</h4>
-                  <p className="text-sm text-gray-600 mb-1">{file.size}</p>
-                  <p className="text-xs text-gray-500 mb-3">{file.uploadedBy}</p>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full mb-4">
-                    {file.projectStage}
-                  </span>
+                  {getFileIcon(file)}
+                  <h4 className="font-semibold mt-4 mb-2 truncate w-full">{file.fileName}</h4>
+                  <p className="text-sm text-gray-600 mb-1">{formatBytes(file.fileSize)}</p>
+                  <p className="text-xs text-gray-500 mb-1">{file.uploadedByUserId}</p>
+                  <p className="text-xs text-gray-500 mb-3">{formatDateTime(file.createdAt)}</p>
+                  {file.projectStage && (
+                    <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full mb-4">
+                      {file.projectStage}
+                    </span>
+                  )}
                   <div className="flex gap-2 w-full">
-                    <button className="flex-1 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                      <Eye className="w-4 h-4 mx-auto" />
-                    </button>
-                    <button className="flex-1 p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                    <button
+                      onClick={() => handleDownload(file)}
+                      className="flex-1 p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                    >
                       <Download className="w-4 h-4 mx-auto" />
+                    </button>
+                    <button
+                      onClick={() => setDeleteTargetId(file.id)}
+                      disabled={isDeleting}
+                      className="flex-1 p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 disabled:opacity-50"
+                    >
+                      <Trash2 className="w-4 h-4 mx-auto" />
                     </button>
                   </div>
                 </div>
@@ -1560,28 +1811,34 @@ export function ProjectCollaborationModule() {
                 {attachments.map((file) => (
                   <tr key={file.id} className="border-b border-gray-200 hover:bg-gray-50">
                     <td className="p-4 flex items-center gap-3">
-                      {getFileIcon(file.type)}
-                      <span className="font-medium">{file.name}</span>
+                      {getFileIcon(file)}
+                      <span className="font-medium">{file.fileName}</span>
                     </td>
-                    <td className="p-4 text-sm">{file.type.toUpperCase()}</td>
-                    <td className="p-4 text-sm">{file.size}</td>
-                    <td className="p-4 text-sm">{file.uploadedBy}</td>
-                    <td className="p-4 text-sm">{file.uploadDate}</td>
+                    <td className="p-4 text-sm">{file.attachmentType}</td>
+                    <td className="p-4 text-sm">{formatBytes(file.fileSize)}</td>
+                    <td className="p-4 text-sm">{file.uploadedByUserId}</td>
+                    <td className="p-4 text-sm">{formatDateTime(file.createdAt)}</td>
                     <td className="p-4">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
-                        {file.projectStage}
-                      </span>
+                      {file.projectStage && (
+                        <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
+                          {file.projectStage}
+                        </span>
+                      )}
                     </td>
                     <td className="p-4">
                       <div className="flex gap-2">
-                        <button className="p-2 hover:bg-gray-100 rounded">
-                          <Eye className="w-4 h-4 text-gray-600" />
-                        </button>
-                        <button className="p-2 hover:bg-gray-100 rounded">
+                        <button
+                          onClick={() => handleDownload(file)}
+                          className="p-2 hover:bg-gray-100 rounded"
+                        >
                           <Download className="w-4 h-4 text-gray-600" />
                         </button>
-                        <button className="p-2 hover:bg-gray-100 rounded">
-                          <Share2 className="w-4 h-4 text-gray-600" />
+                        <button
+                          onClick={() => setDeleteTargetId(file.id)}
+                          disabled={isDeleting}
+                          className="p-2 hover:bg-red-100 rounded disabled:opacity-50"
+                        >
+                          <Trash2 className="w-4 h-4 text-red-600" />
                         </button>
                       </div>
                     </td>
@@ -1589,6 +1846,32 @@ export function ProjectCollaborationModule() {
                 ))}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* Delete Confirmation Modal */}
+        {deleteTargetId && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 max-w-md w-full">
+              <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
+              <p className="text-gray-600 mb-4">هل أنت متأكد أنك تريد حذف هذا الملف؟ لا يمكن التراجع عن هذا الإجراء.</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={handleDelete}
+                  disabled={isDeleting}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                >
+                  حذف
+                </button>
+                <button
+                  onClick={() => setDeleteTargetId(null)}
+                  disabled={isDeleting}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
           </div>
         )}
       </div>
