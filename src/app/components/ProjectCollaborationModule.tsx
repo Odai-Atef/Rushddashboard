@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
+import useProjectDiscussions from '@/api/hooks/useProjectDiscussions';
 import useProjectConversations from '@/api/hooks/useProjectConversations';
 import useConversationMessages from '@/api/hooks/useConversationMessages';
 import useConversationRealtime from '@/api/hooks/useConversationRealtime';
+import useDiscussionDetail from '@/api/hooks/useDiscussionDetail';
 import { formatDateTime } from '@/app/lib/formatters';
-import { Message as ApiMessage, ConversationStatus } from '@/api/services/collaboration-service';
+import { Message as ApiMessage, ConversationStatus, Discussion as ApiDiscussion, DiscussionStatus, Reply } from '@/api/services/collaboration-service';
 import {
   MessageSquare,
   Bell,
@@ -62,17 +64,6 @@ import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, R
 
 type ViewType = 'hub' | 'chat' | 'discussions' | 'attachments' | 'revisions' | 'notifications' | 'sla' | 'health' | 'timeline';
 
-interface Discussion {
-  id: string;
-  title: string;
-  section: string;
-  author: string;
-  timestamp: string;
-  replies: number;
-  status: 'open' | 'resolved';
-  content: string;
-}
-
 interface Attachment {
   id: string;
   name: string;
@@ -123,6 +114,18 @@ export function ProjectCollaborationModule() {
     error: conversationsError,
     refetch: refetchConversations,
   } = useProjectConversations(projectId);
+
+  const {
+    discussions,
+    isLoading: discussionsLoading,
+    error: discussionsError,
+    pagination: discussionsPagination,
+    filters: discussionsFilters,
+    setPage: setDiscussionsPage,
+    setFilters: setDiscussionsFilters,
+    applyFilters: applyDiscussionsFilters,
+    refetch: refetchDiscussions,
+  } = useProjectDiscussions(projectId);
 
   const {
     messages,
@@ -197,29 +200,6 @@ export function ProjectCollaborationModule() {
   };
 
   // Sample Data
-  const discussions: Discussion[] = [
-    {
-      id: '1',
-      title: 'مناقشة الميزانية',
-      section: 'Budget',
-      author: 'أحمد محمد',
-      timestamp: '2026-06-05 14:30',
-      replies: 8,
-      status: 'open',
-      content: 'يرجى مراجعة توزيع الميزانية على الأنشطة'
-    },
-    {
-      id: '2',
-      title: 'ملاحظات على الأهداف',
-      section: 'Objectives',
-      author: 'فاطمة أحمد',
-      timestamp: '2026-06-06 10:15',
-      replies: 4,
-      status: 'resolved',
-      content: 'تم تعديل الأهداف حسب الملاحظات'
-    }
-  ];
-
   const attachments: Attachment[] = [
     { id: '1', name: 'خطة_المشروع.pdf', type: 'pdf', size: '3.2 MB', uploadedBy: 'أحمد محمد', uploadDate: '2026-06-01', projectStage: 'تخطيط' },
     { id: '2', name: 'الميزانية_التفصيلية.xlsx', type: 'excel', size: '856 KB', uploadedBy: 'فاطمة أحمد', uploadDate: '2026-06-03', projectStage: 'مراجعة مالية' },
@@ -911,7 +891,159 @@ export function ProjectCollaborationModule() {
   // PAGE 3: Threaded Discussions (Figma/Notion-style)
   const DiscussionsView = () => {
     const [selectedSection, setSelectedSection] = useState('all');
+    const [selectedStatus, setSelectedStatus] = useState<DiscussionStatus | 'all'>('all');
     const [showNewDiscussion, setShowNewDiscussion] = useState(false);
+    const [selectedDiscussionId, setSelectedDiscussionId] = useState<string | null>(null);
+    const [newDiscussionTitle, setNewDiscussionTitle] = useState('');
+    const [newDiscussionSection, setNewDiscussionSection] = useState('budget');
+    const [newDiscussionContent, setNewDiscussionContent] = useState('');
+    const [newDiscussionErrors, setNewDiscussionErrors] = useState<Record<string, string>>({});
+    const [replyInputs, setReplyInputs] = useState<Record<string, string>>({});
+    const [replyErrors, setReplyErrors] = useState<Record<string, string>>({});
+    const [deleteConfirmId, setDeleteConfirmId] = useState<string | null>(null);
+
+    const {
+      discussion,
+      replies,
+      isLoading: detailLoading,
+      isMutating: detailMutating,
+      error: detailError,
+      load: reloadDiscussion,
+      createDiscussion,
+      changeStatus,
+      deleteDiscussion,
+      createReply,
+      retryReply,
+      acceptReply,
+      clearError: clearDetailError,
+    } = useDiscussionDetail(projectId, selectedDiscussionId);
+
+    const statusOptions: { value: DiscussionStatus; label: string }[] = [
+      { value: 'OPEN', label: 'مفتوح' },
+      { value: 'RESOLVED', label: 'محلول' },
+      { value: 'CLOSED', label: 'مغلق' },
+    ];
+
+    const sectionOptions = [
+      { value: 'all', label: 'الكل' },
+      { value: 'budget', label: 'الميزانية' },
+      { value: 'timeline', label: 'الجدول الزمني' },
+      { value: 'scope', label: 'النطاق' },
+      { value: 'general', label: 'عام' },
+    ];
+
+    const handleSectionFilter = (section: string) => {
+      setSelectedSection(section);
+      setDiscussionsFilters({ section: section === 'all' ? undefined : section });
+      applyDiscussionsFilters();
+    };
+
+    const handleStatusFilter = (status: DiscussionStatus | 'all') => {
+      setSelectedStatus(status);
+      setDiscussionsFilters({ status: status === 'all' ? undefined : status });
+      applyDiscussionsFilters();
+    };
+
+    const handlePageChange = (page: number) => {
+      setDiscussionsPage(page);
+    };
+
+    const handleCreateDiscussion = async () => {
+      const errors: Record<string, string> = {};
+      if (!newDiscussionTitle.trim()) errors.title = 'عنوان النقاش مطلوب';
+      if (newDiscussionTitle.trim().length > 500) errors.title = 'العنوان يجب أن يكون أقل من 500 حرف';
+      if (!newDiscussionContent.trim()) errors.content = 'محتوى النقاش مطلوب';
+      if (newDiscussionContent.trim().length > 20000) errors.content = 'المحتوى يجب أن يكون أقل من 20000 حرف';
+      if (!newDiscussionSection.trim()) errors.section = 'القسم مطلوب';
+      if (Object.keys(errors).length > 0) {
+        setNewDiscussionErrors(errors);
+        return;
+      }
+
+      const created = await createDiscussion({
+        section: newDiscussionSection,
+        title: newDiscussionTitle.trim(),
+        content: newDiscussionContent.trim(),
+      });
+
+      if (created) {
+        setNewDiscussionTitle('');
+        setNewDiscussionContent('');
+        setNewDiscussionSection('budget');
+        setNewDiscussionErrors({});
+        setShowNewDiscussion(false);
+        setSelectedDiscussionId(created.id);
+        applyDiscussionsFilters();
+      }
+    };
+
+    const handleReplySubmit = async (discussionId: string) => {
+      const content = replyInputs[discussionId] || '';
+      if (!content.trim()) {
+        setReplyErrors((prev) => ({ ...prev, [discussionId]: 'محتوى الرد مطلوب' }));
+        return;
+      }
+      if (content.trim().length > 20000) {
+        setReplyErrors((prev) => ({ ...prev, [discussionId]: 'محتوى الرد يجب أن يكون أقل من 20000 حرف' }));
+        return;
+      }
+      setReplyErrors((prev) => ({ ...prev, [discussionId]: '' }));
+      setReplyInputs((prev) => ({ ...prev, [discussionId]: '' }));
+      await createReply(content);
+    };
+
+    const handleReplyRetry = async (tempId: string, content: string) => {
+      setReplyInputs((prev) => ({ ...prev, [discussionIdForReply]: content }));
+      await retryReply(tempId);
+    };
+
+    const discussionIdForReply = discussion?.id || '';
+
+    const handleStatusChange = async (status: DiscussionStatus) => {
+      await changeStatus(status);
+    };
+
+    const handleDeleteDiscussion = async (id: string) => {
+      setDeleteConfirmId(id);
+    };
+
+    const confirmDeleteDiscussion = async () => {
+      if (!deleteConfirmId) return;
+      if (deleteConfirmId === selectedDiscussionId) {
+        const success = await deleteDiscussion();
+        if (success) {
+          setSelectedDiscussionId(null);
+          setDeleteConfirmId(null);
+          applyDiscussionsFilters();
+        }
+      } else {
+        // For deleting from the list directly we would need a service call here;
+        // the current hook is scoped to selectedDiscussionId. We defer to selecting first.
+        setSelectedDiscussionId(deleteConfirmId);
+        setDeleteConfirmId(null);
+      }
+    };
+
+    const handleAcceptReply = async (replyId: string) => {
+      await acceptReply(replyId);
+    };
+
+    const statusBadgeClass = (status: DiscussionStatus) => {
+      switch (status) {
+        case 'OPEN': return 'bg-blue-100 text-blue-700';
+        case 'RESOLVED': return 'bg-green-100 text-green-700';
+        case 'CLOSED': return 'bg-gray-100 text-gray-700';
+        default: return 'bg-gray-100 text-gray-700';
+      }
+    };
+
+    const statusBadgeLabel = (status: DiscussionStatus) => {
+      switch (status) {
+        case 'OPEN': return 'مفتوح';
+        case 'RESOLVED': return 'محلول';
+        case 'CLOSED': return 'مغلق';
+      }
+    };
 
     return (
       <div className="space-y-6">
@@ -929,19 +1061,36 @@ export function ProjectCollaborationModule() {
           </button>
         </div>
 
-        {/* Section Filter */}
+        {/* Status Filter */}
         <div className="flex gap-2 flex-wrap">
-          {['all', 'Budget', 'Objectives', 'Timeline', 'Beneficiaries', 'Impact'].map((section) => (
+          {statusOptions.map((option) => (
             <button
-              key={section}
-              onClick={() => setSelectedSection(section)}
+              key={option.value}
+              onClick={() => handleStatusFilter(option.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium ${
-                selectedSection === section
+                selectedStatus === option.value
                   ? 'bg-blue-600 text-white'
                   : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
               }`}
             >
-              {section === 'all' ? 'الكل' : section}
+              {option.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Section Filter */}
+        <div className="flex gap-2 flex-wrap">
+          {sectionOptions.map((section) => (
+            <button
+              key={section.value}
+              onClick={() => handleSectionFilter(section.value)}
+              className={`px-4 py-2 rounded-lg text-sm font-medium ${
+                selectedSection === section.value
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+              }`}
+            >
+              {section.label}
             </button>
           ))}
         </div>
@@ -955,31 +1104,44 @@ export function ProjectCollaborationModule() {
                 <label className="block text-sm font-medium mb-2">عنوان النقاش</label>
                 <input
                   type="text"
+                  value={newDiscussionTitle}
+                  onChange={(e) => setNewDiscussionTitle(e.target.value)}
                   placeholder="مثال: ملاحظات على توزيع الميزانية"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {newDiscussionErrors.title && <p className="text-red-600 text-sm mt-1">{newDiscussionErrors.title}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">القسم</label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                  <option>Budget</option>
-                  <option>Objectives</option>
-                  <option>Timeline</option>
-                  <option>Beneficiaries</option>
-                  <option>Impact</option>
+                <select
+                  value={newDiscussionSection}
+                  onChange={(e) => setNewDiscussionSection(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="budget">الميزانية</option>
+                  <option value="timeline">الجدول الزمني</option>
+                  <option value="scope">النطاق</option>
+                  <option value="general">عام</option>
                 </select>
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">المحتوى</label>
                 <textarea
                   rows={4}
+                  value={newDiscussionContent}
+                  onChange={(e) => setNewDiscussionContent(e.target.value)}
                   placeholder="اكتب تفاصيل النقاش..."
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
+                {newDiscussionErrors.content && <p className="text-red-600 text-sm mt-1">{newDiscussionErrors.content}</p>}
               </div>
               <div className="flex gap-3">
-                <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                  نشر النقاش
+                <button
+                  onClick={handleCreateDiscussion}
+                  disabled={detailMutating}
+                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                >
+                  {detailMutating ? 'جاري النشر...' : 'نشر النقاش'}
                 </button>
                 <button
                   onClick={() => setShowNewDiscussion(false)}
@@ -992,85 +1154,281 @@ export function ProjectCollaborationModule() {
           </div>
         )}
 
+        {/* Loading / Error / Empty List */}
+        {discussionsLoading && discussions.length === 0 && (
+          <div className="space-y-4">
+            {[1, 2, 3].map((n) => (
+              <div key={n} className="h-32 bg-gray-100 rounded-lg animate-pulse" />
+            ))}
+          </div>
+        )}
+        {discussionsError && (
+          <div className="p-6 text-center bg-white rounded-xl border border-gray-200">
+            <p className="text-red-600 mb-3">{discussionsError}</p>
+            <button
+              onClick={() => refetchDiscussions()}
+              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+            >
+              <RefreshCw className="w-4 h-4" />
+              إعادة المحاولة
+            </button>
+          </div>
+        )}
+        {!discussionsLoading && !discussionsError && discussions.length === 0 && (
+          <div className="p-6 text-center text-gray-500 bg-white rounded-xl border border-gray-200">
+            لا توجد مناقشات حالياً. ابدأ أول نقاش.
+          </div>
+        )}
+
+        {/* Pagination */}
+        {discussionsPagination.totalPages > 1 && (
+          <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
+            <button
+              onClick={() => handlePageChange(Math.max(1, discussionsPagination.page - 1))}
+              disabled={discussionsPagination.page <= 1}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              السابق
+            </button>
+            <span className="text-sm text-gray-700">
+              صفحة {discussionsPagination.page} من {discussionsPagination.totalPages}
+            </span>
+            <button
+              onClick={() => handlePageChange(Math.min(discussionsPagination.totalPages, discussionsPagination.page + 1))}
+              disabled={discussionsPagination.page >= discussionsPagination.totalPages}
+              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+            >
+              التالي
+            </button>
+          </div>
+        )}
+
         {/* Discussions List */}
         <div className="space-y-4">
-          {discussions.map((discussion) => (
-            <div key={discussion.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
+          {discussions.map((discussionItem) => (
+            <div key={discussionItem.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="font-semibold text-lg">{discussion.title}</h3>
+                      <h3 className="font-semibold text-lg">{discussionItem.title}</h3>
                       <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">
-                        {discussion.section}
+                        {discussionItem.section}
                       </span>
-                      <span className={`px-3 py-1 text-xs rounded-full font-medium ${
-                        discussion.status === 'open'
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-700'
-                      }`}>
-                        {discussion.status === 'open' ? 'مفتوح' : 'محلول'}
+                      <span className={`px-3 py-1 text-xs rounded-full font-medium ${statusBadgeClass(discussionItem.status)}`}>
+                        {statusBadgeLabel(discussionItem.status)}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3">{discussion.content}</p>
+                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{discussionItem.content}</p>
                     <div className="flex items-center gap-4 text-sm text-gray-500">
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4" />
-                        <span>{discussion.author}</span>
+                        <span>{discussionItem.authorUserId}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Clock className="w-4 h-4" />
-                        <span>{discussion.timestamp}</span>
+                        <span>{formatDateTime(discussionItem.lastReplyAt || discussionItem.updatedAt)}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <Reply className="w-4 h-4" />
-                        <span>{discussion.replies} رد</span>
+                        <span>{discussionItem.replyCount} رد</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Replies Section */}
-                <div className="mt-4 mr-6 space-y-3 border-r-2 border-gray-200 pr-4">
-                  {[1, 2].map((replyIdx) => (
-                    <div key={replyIdx} className="bg-gray-50 p-4 rounded-lg">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                          <User className="w-3 h-3 text-blue-600" />
+                {/* Detail View for Selected Discussion */}
+                {selectedDiscussionId === discussionItem.id && (
+                  <div className="mt-6 border-t border-gray-200 pt-4">
+                    {detailLoading && (
+                      <div className="space-y-3">
+                        <div className="h-4 bg-gray-100 rounded animate-pulse w-1/3" />
+                        <div className="h-20 bg-gray-100 rounded animate-pulse" />
+                        {[1, 2].map((n) => <div key={n} className="h-16 bg-gray-100 rounded animate-pulse" />)}
+                      </div>
+                    )}
+                    {detailError && (
+                      <div className="p-4 text-center">
+                        <p className="text-red-600 mb-2">{detailError}</p>
+                        <button
+                          onClick={() => reloadDiscussion()}
+                          className="text-sm text-blue-600 hover:text-blue-700"
+                        >
+                          إعادة المحاولة
+                        </button>
+                      </div>
+                    )}
+                    {discussion && !detailLoading && !detailError && (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className={`px-3 py-1 text-xs rounded-full font-medium ${statusBadgeClass(discussion.status)}`}>
+                              {statusBadgeLabel(discussion.status)}
+                            </span>
+                            <span className="text-sm text-gray-500">{formatDateTime(discussion.createdAt)}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {(['OPEN', 'RESOLVED', 'CLOSED'] as DiscussionStatus[]).map((s) => (
+                              <button
+                                key={s}
+                                onClick={() => handleStatusChange(s)}
+                                disabled={detailMutating || discussion.status === s}
+                                className={`px-3 py-1 text-xs rounded-lg border ${
+                                  discussion.status === s
+                                    ? 'bg-blue-600 text-white border-blue-600'
+                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                } disabled:opacity-50`}
+                              >
+                                {statusBadgeLabel(s)}
+                              </button>
+                            ))}
+                            <button
+                              onClick={() => handleDeleteDiscussion(discussion.id)}
+                              className="px-3 py-1 text-xs rounded-lg border border-red-300 text-red-700 hover:bg-red-50"
+                            >
+                              حذف
+                            </button>
+                          </div>
                         </div>
-                        <span className="text-sm font-medium">فاطمة أحمد</span>
-                        <span className="text-xs text-gray-500">منذ ساعتين</span>
-                      </div>
-                      <p className="text-sm text-gray-700">تم التعديل حسب الملاحظات، يرجى المراجعة</p>
-                      <div className="flex gap-3 mt-2">
-                        <button className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-1">
-                          <ThumbsUp className="w-3 h-3" />
-                          إعجاب
-                        </button>
-                        <button className="text-xs text-gray-600 hover:text-blue-600 flex items-center gap-1">
-                          <Reply className="w-3 h-3" />
-                          رد
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
 
-                {/* Reply Input */}
+                        <div className="prose max-w-none text-sm text-gray-700">
+                          {discussion.content}
+                        </div>
+
+                        {/* Replies */}
+                        <div className="space-y-3">
+                          {replies.map((reply) => {
+                            const isOptimistic = 'pending' in reply;
+                            return (
+                              <div
+                                key={reply.id}
+                                className={`bg-gray-50 p-4 rounded-lg ${
+                                  reply.isAccepted ? 'border-2 border-green-400' : 'border border-gray-200'
+                                }`}
+                              >
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                      <User className="w-3 h-3 text-blue-600" />
+                                    </div>
+                                    <span className="text-sm font-medium">{reply.authorUserId}</span>
+                                    <span className="text-xs text-gray-500">{formatDateTime(reply.createdAt)}</span>
+                                  </div>
+                                  <div className="flex items-center gap-2">
+                                    {reply.isAccepted && (
+                                      <span className="px-2 py-1 bg-green-100 text-green-700 text-xs rounded-full">
+                                        الحل المقبول
+                                      </span>
+                                    )}
+                                    {isOptimistic && (reply as { pending: boolean; failed: boolean }).pending && (
+                                      <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">
+                                        جاري الإرسال...
+                                      </span>
+                                    )}
+                                    {isOptimistic && (reply as { pending: boolean; failed: boolean }).failed && (
+                                      <span className="px-2 py-1 bg-red-100 text-red-700 text-xs rounded-full">
+                                        فشل الإرسال
+                                      </span>
+                                    )}
+                                    {!isOptimistic && discussion.status !== 'CLOSED' && (
+                                      <button
+                                        onClick={() => handleAcceptReply(reply.id)}
+                                        disabled={detailMutating || reply.isAccepted}
+                                        className="text-xs text-green-700 hover:text-green-800 disabled:opacity-50"
+                                      >
+                                        {reply.isAccepted ? 'تم القبول' : 'قبول كحل'}
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-700">{reply.content}</p>
+                                
+                                {isOptimistic && (reply as { pending: boolean; failed: boolean }).failed && (
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <button
+                                      onClick={() => handleReplyRetry(reply.id, (reply as { originalContent: string }).originalContent)}
+                                      className="px-3 py-1 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                    >
+                                      إعادة المحاولة
+                                    </button>
+                                    <span className="text-xs text-gray-600">{(reply as { originalContent: string }).originalContent}</span>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* Reply Input */}
+                        {discussion.status !== 'CLOSED' && (
+                          <div className="mt-4 flex flex-col gap-2">
+                            <div className="flex gap-3">
+                              <input
+                                type="text"
+                                value={replyInputs[discussion.id] || ''}
+                                onChange={(e) => setReplyInputs((prev) => ({ ...prev, [discussion.id]: e.target.value }))}
+                                placeholder="أضف ردك..."
+                                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                              />
+                              <button
+                                onClick={() => handleReplySubmit(discussion.id)}
+                                disabled={detailMutating}
+                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                              >
+                                رد
+                              </button>
+                            </div>
+                            {replyErrors[discussion.id] && <p className="text-red-600 text-sm">{replyErrors[discussion.id]}</p>}
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 <div className="mt-4 flex gap-3">
-                  <input
-                    type="text"
-                    placeholder="أضف ردك..."
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  />
-                  <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                    رد
+                  <button
+                    onClick={() => setSelectedDiscussionId(selectedDiscussionId === discussionItem.id ? null : discussionItem.id)}
+                    className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 border border-blue-200 rounded-lg"
+                  >
+                    {selectedDiscussionId === discussionItem.id ? 'إخفاء التفاصيل' : 'عرض التفاصيل والردود'}
+                  </button>
+                  <button
+                    onClick={() => handleDeleteDiscussion(discussionItem.id)}
+                    className="px-4 py-2 text-sm text-red-600 hover:text-red-700 border border-red-200 rounded-lg"
+                  >
+                    حذف
                   </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {deleteConfirmId && (
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 max-w-md w-full">
+              <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
+              <p className="text-gray-600 mb-4">هل أنت متأكد أنك تريد حذف هذا النقاش؟ سيظهر كعنصر محذوف في القائمة.</p>
+              <div className="flex gap-3">
+                <button
+                  onClick={confirmDeleteDiscussion}
+                  disabled={detailMutating}
+                  className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 disabled:opacity-50"
+                >
+                  حذف
+                </button>
+                <button
+                  onClick={() => setDeleteConfirmId(null)}
+                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                >
+                  إلغاء
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   };
