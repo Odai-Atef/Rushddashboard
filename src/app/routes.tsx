@@ -356,7 +356,25 @@ export const router = createBrowserRouter([
           },
           {
             path: 'collaboration',
-            Component: ProjectCollaborationModule,
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/dashboard/project-management/list" replace />,
+              },
+              {
+                path: ':projectId',
+                children: [
+                  {
+                    index: true,
+                    element: <Navigate to="hub" replace />,
+                  },
+                  {
+                    path: ':view',
+                    Component: ProjectCollaborationModule,
+                  },
+                ],
+              },
+            ],
           },
           {
             path: 'donors',

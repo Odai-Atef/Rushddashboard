@@ -1,4 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
+import useProjectConversations from '@/api/hooks/useProjectConversations';
+import useConversationMessages from '@/api/hooks/useConversationMessages';
+import useConversationRealtime from '@/api/hooks/useConversationRealtime';
+import { formatDateTime } from '@/app/lib/formatters';
+import { Message as ApiMessage, ConversationStatus } from '@/api/services/collaboration-service';
 import {
   MessageSquare,
   Bell,
@@ -49,33 +55,12 @@ import {
   RefreshCw,
   Maximize2,
   Minimize2,
-  LayoutDashboard
+  LayoutDashboard,
+  Loader2,
 } from 'lucide-react';
 import { LineChart, Line, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 type ViewType = 'hub' | 'chat' | 'discussions' | 'attachments' | 'revisions' | 'notifications' | 'sla' | 'health' | 'timeline';
-
-interface Message {
-  id: string;
-  sender: string;
-  role: string;
-  content: string;
-  timestamp: string;
-  type: 'text' | 'image' | 'file' | 'voice' | 'system';
-  status: 'sent' | 'delivered' | 'read';
-  attachments?: Attachment[];
-}
-
-interface Conversation {
-  id: string;
-  projectName: string;
-  organization: string;
-  lastMessage: string;
-  lastMessageTime: string;
-  unreadCount: number;
-  status: 'active' | 'waiting' | 'overdue';
-  participants: string[];
-}
 
 interface Discussion {
   id: string;
@@ -120,79 +105,98 @@ interface Notification {
 }
 
 export function ProjectCollaborationModule() {
-  const [currentView, setCurrentView] = useState<ViewType>('hub');
-  const [selectedConversation, setSelectedConversation] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const { view, projectId } = useParams<{ view?: ViewType; projectId?: string }>();
+  const currentView: ViewType = view ?? 'hub';
+  const [searchParams, setSearchParams] = useSearchParams();
+  const selectedConversation = searchParams.get('conv');
   const [messageInput, setMessageInput] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editInput, setEditInput] = useState('');
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+  const {
+    conversations,
+    isLoading: conversationsLoading,
+    error: conversationsError,
+    refetch: refetchConversations,
+  } = useProjectConversations(projectId);
+
+  const {
+    messages,
+    hasMore,
+    isLoading: messagesLoading,
+    isSending,
+    error: messagesError,
+    loadMessages,
+    sendMessage,
+    editMessage,
+    deleteMessage,
+    markAsRead,
+    retrySend,
+    clearError,
+    appendMessage,
+  } = useConversationMessages(projectId, selectedConversation);
+
+  useConversationRealtime(projectId, selectedConversation, appendMessage);
 
   console.log('✓ ProjectCollaborationModule rendered');
 
+  const setCurrentView = (nextView: ViewType) => {
+    if (!projectId) {
+      navigate(`/dashboard/collaboration/${nextView}`);
+      return;
+    }
+    if (nextView === 'chat') {
+      navigate(`/dashboard/collaboration/${projectId}/chat`);
+    } else {
+      navigate(`/dashboard/collaboration/${projectId}/${nextView}`);
+    }
+  };
+
+  const selectConversation = (id: string) => {
+    if (!projectId) return;
+    setSearchParams({ conv: id });
+  };
+
+  const currentConversation = useMemo(() => {
+    return conversations.find((c) => c.id === selectedConversation) || null;
+  }, [conversations, selectedConversation]);
+
+  const filteredConversations = useMemo(() => {
+    return conversations.filter((conv) => {
+      const title = conv.title || '';
+      const lastText = conv.lastMessageText || '';
+      const matchesSearch =
+        !searchQuery ||
+        title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lastText.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesStatus = filterStatus === 'all' || conv.status === filterStatus.toUpperCase();
+      return matchesSearch && matchesStatus;
+    });
+  }, [conversations, searchQuery, filterStatus]);
+
+  const statusLabel = (status: ConversationStatus) => {
+    switch (status) {
+      case 'ACTIVE': return 'نشط';
+      case 'ARCHIVED': return 'مؤرشف';
+      case 'MUTED': return 'مكتوم';
+      default: return status;
+    }
+  };
+
+  const statusClass = (status: ConversationStatus) => {
+    switch (status) {
+      case 'ACTIVE': return 'bg-green-100 text-green-700';
+      case 'ARCHIVED': return 'bg-gray-100 text-gray-700';
+      case 'MUTED': return 'bg-yellow-100 text-yellow-700';
+      default: return 'bg-gray-100 text-gray-700';
+    }
+  };
+
   // Sample Data
-  const conversations: Conversation[] = [
-    {
-      id: '1',
-      projectName: 'برنامج الأسر المنتجة',
-      organization: 'جمعية البر الخيرية',
-      lastMessage: 'تم رفع الميزانية المعدلة',
-      lastMessageTime: 'منذ 5 دقائق',
-      unreadCount: 3,
-      status: 'active',
-      participants: ['أحمد محمد', 'فاطمة أحمد', 'خالد سعيد']
-    },
-    {
-      id: '2',
-      projectName: 'مشروع كفالة الأيتام',
-      organization: 'مؤسسة الرعاية',
-      lastMessage: 'بانتظار الموافقة على التعديلات',
-      lastMessageTime: 'منذ ساعة',
-      unreadCount: 0,
-      status: 'waiting',
-      participants: ['سارة علي', 'محمد عبدالله']
-    },
-    {
-      id: '3',
-      projectName: 'برنامج التدريب المهني',
-      organization: 'جمعية التنمية',
-      lastMessage: 'يرجى الرد على الاستفسارات',
-      lastMessageTime: 'منذ 3 أيام',
-      unreadCount: 5,
-      status: 'overdue',
-      participants: ['نورة خالد']
-    }
-  ];
-
-  const messages: Message[] = [
-    {
-      id: '1',
-      sender: 'أحمد محمد',
-      role: 'مدير المشروع',
-      content: 'السلام عليكم، تم مراجعة الميزانية المقترحة',
-      timestamp: '10:30 ص',
-      type: 'text',
-      status: 'read'
-    },
-    {
-      id: '2',
-      sender: 'فاطمة أحمد',
-      role: 'ممثل الجمعية',
-      content: 'شكراً لك، هل هناك ملاحظات على البنود؟',
-      timestamp: '10:35 ص',
-      type: 'text',
-      status: 'read'
-    },
-    {
-      id: '3',
-      sender: 'أحمد محمد',
-      role: 'مدير المشروع',
-      content: 'نعم، يرجى مراجعة الملف المرفق',
-      timestamp: '10:40 ص',
-      type: 'file',
-      status: 'delivered',
-      attachments: [{ id: 'f1', name: 'ملاحظات_الميزانية.pdf', type: 'pdf', size: '2.4 MB', uploadedBy: 'أحمد محمد', uploadDate: '2026-06-07', projectStage: 'مراجعة مالية' }]
-    }
-  ];
-
   const discussions: Discussion[] = [
     {
       id: '1',
@@ -278,10 +282,10 @@ export function ProjectCollaborationModule() {
   // PAGE 1: Communications Hub
   const HubView = () => {
     const stats = {
-      activeConversations: conversations.filter(c => c.status === 'active').length,
+      activeConversations: conversations.filter(c => c.status === 'ACTIVE').length,
       unreadMessages: conversations.reduce((sum, c) => sum + c.unreadCount, 0),
-      pendingResponses: conversations.filter(c => c.status === 'waiting').length,
-      delayedResponses: conversations.filter(c => c.status === 'overdue').length
+      pendingResponses: conversations.filter(c => c.status === 'MUTED').length,
+      delayedResponses: conversations.filter(c => c.status === 'ARCHIVED').length
     };
 
     return (
@@ -360,48 +364,54 @@ export function ProjectCollaborationModule() {
 
         {/* Conversations List */}
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-          <div className="p-6 border-b border-gray-200">
+          <div className="p-6 border-b border-gray-200 flex items-center justify-between">
             <h2 className="text-lg font-semibold">المحادثات النشطة</h2>
+            {conversationsLoading && <Loader2 className="w-5 h-5 animate-spin text-blue-600" />}
           </div>
+          {conversationsError && (
+            <div className="p-6 text-center">
+              <p className="text-red-600 mb-3">{conversationsError}</p>
+              <button
+                onClick={() => refetchConversations()}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+              >
+                <RefreshCw className="w-4 h-4" />
+                إعادة المحاولة
+              </button>
+            </div>
+          )}
+          {!conversationsError && conversations.length === 0 && !conversationsLoading && (
+            <div className="p-6 text-center text-gray-500">لا توجد محادثات حالياً</div>
+          )}
           <div className="divide-y divide-gray-200">
             {conversations.map((conv) => (
-              <button
+              <Link
+                to={projectId ? `/dashboard/collaboration/${projectId}/chat?conv=${conv.id}` : '/dashboard/collaboration/chat'}
                 key={conv.id}
-                onClick={() => {
-                  setSelectedConversation(conv.id);
-                  setCurrentView('chat');
-                }}
-                className="w-full p-6 hover:bg-gray-50 transition-colors text-right"
+                onClick={() => selectConversation(conv.id)}
+                className="w-full p-6 hover:bg-gray-50 transition-colors text-right block"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
-                      <h3 className="font-semibold text-lg">{conv.projectName}</h3>
+                      <h3 className="font-semibold text-lg">{conv.title || 'محادثة'}</h3>
                       {conv.unreadCount > 0 && (
                         <span className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full font-medium">
                           {conv.unreadCount}
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{conv.organization}</p>
-                    <p className="text-sm text-gray-700">{conv.lastMessage}</p>
+                    <p className="text-sm text-gray-600 mb-2">{conv.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : conv.type === 'DIRECT_MESSAGE' ? 'رسالة مباشرة' : 'تنبيه'}</p>
+                    <p className="text-sm text-gray-700">{conv.lastMessageText || 'لا توجد رسائل'}</p>
                   </div>
                   <div className="text-left">
-                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-2 ${
-                      conv.status === 'active' ? 'bg-green-100 text-green-700' :
-                      conv.status === 'waiting' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-red-100 text-red-700'
-                    }`}>
-                      {conv.status === 'active' ? 'نشط' : conv.status === 'waiting' ? 'بانتظار' : 'متأخر'}
+                    <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-2 ${statusClass(conv.status)}`}>
+                      {statusLabel(conv.status)}
                     </span>
-                    <p className="text-xs text-gray-500">{conv.lastMessageTime}</p>
+                    <p className="text-xs text-gray-500">{formatDateTime(conv.lastMessageAt)}</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Users className="w-4 h-4 text-gray-400" />
-                  <span className="text-sm text-gray-600">{conv.participants.join(', ')}</span>
-                </div>
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -410,12 +420,12 @@ export function ProjectCollaborationModule() {
         <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">المرفقات الأخيرة</h3>
-            <button
-              onClick={() => setCurrentView('attachments')}
+            <Link
+              to="/dashboard/collaboration/attachments"
               className="text-sm text-blue-600 hover:text-blue-700"
             >
               عرض الكل
-            </button>
+            </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {attachments.slice(0, 3).map((att) => (
@@ -432,41 +442,70 @@ export function ProjectCollaborationModule() {
 
         {/* Quick Actions */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <button
-            onClick={() => setCurrentView('chat')}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          <Link
+            to={projectId ? `/dashboard/collaboration/${projectId}/chat` : '/dashboard/collaboration/chat'}
+            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
           >
             <MessageSquare className="w-8 h-8 text-gray-400 mx-auto mb-3" />
             <p className="font-medium text-sm">بدء محادثة</p>
-          </button>
-          <button
-            onClick={() => setCurrentView('discussions')}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          </Link>
+          <Link
+            to={projectId ? `/dashboard/collaboration/${projectId}/discussions` : '/dashboard/collaboration/discussions'}
+            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
           >
             <GitBranch className="w-8 h-8 text-gray-400 mx-auto mb-3" />
             <p className="font-medium text-sm">المناقشات</p>
-          </button>
-          <button
-            onClick={() => setCurrentView('revisions')}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          </Link>
+          <Link
+            to={projectId ? `/dashboard/collaboration/${projectId}/revisions` : '/dashboard/collaboration/revisions'}
+            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
           >
             <Edit className="w-8 h-8 text-gray-400 mx-auto mb-3" />
             <p className="font-medium text-sm">طلبات التعديل</p>
-          </button>
-          <button
-            onClick={() => setCurrentView('sla')}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors"
+          </Link>
+          <Link
+            to={projectId ? `/dashboard/collaboration/${projectId}/sla` : '/dashboard/collaboration/sla'}
+            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
           >
             <BarChart3 className="w-8 h-8 text-gray-400 mx-auto mb-3" />
             <p className="font-medium text-sm">التحليلات</p>
-          </button>
+          </Link>
         </div>
       </div>
     );
   };
 
-  // PAGE 2: Chat Workspace (3-Panel Layout)
   const ChatView = () => {
+    const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+    const currentUserId = 'me';
+
+    const handleSend = async () => {
+      if (!messageInput.trim() || isSending) return;
+      await sendMessage(messageInput);
+      setMessageInput('');
+    };
+
+    const startEdit = (msg: ApiMessage) => {
+      setEditingMessageId(msg.id);
+      setEditInput(msg.content);
+    };
+
+    const cancelEdit = () => {
+      setEditingMessageId(null);
+      setEditInput('');
+    };
+
+    const submitEdit = async (messageId: string) => {
+      await editMessage(messageId, editInput);
+      cancelEdit();
+    };
+
+    const confirmDelete = async () => {
+      if (!deleteTargetId) return;
+      await deleteMessage(deleteTargetId);
+      setDeleteTargetId(null);
+    };
+
     return (
       <div className="h-[calc(100vh-200px)] flex gap-4">
         {/* Left Panel - Conversations */}
@@ -476,37 +515,60 @@ export function ProjectCollaborationModule() {
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
               <input
                 type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="بحث..."
                 className="w-full pr-9 pl-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <button
-              onClick={() => setCurrentView('hub')}
+            <Link
+              to={projectId ? `/dashboard/collaboration/${projectId}/hub` : '/dashboard/collaboration/hub'}
               className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
             >
               <ChevronRight className="w-4 h-4" />
               رجوع للمركز
-            </button>
+            </Link>
           </div>
           <div className="flex-1 overflow-y-auto">
-            {conversations.map((conv) => (
+            {conversationsLoading && conversations.length === 0 && (
+              <div className="p-4 space-y-3">
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="h-16 bg-gray-100 rounded-lg animate-pulse" />
+                ))}
+              </div>
+            )}
+            {conversationsError && (
+              <div className="p-4 text-center">
+                <p className="text-red-600 text-sm mb-2">{conversationsError}</p>
+                <button
+                  onClick={() => refetchConversations()}
+                  className="text-sm text-blue-600 hover:text-blue-700"
+                >
+                  إعادة المحاولة
+                </button>
+              </div>
+            )}
+            {!conversationsLoading && !conversationsError && conversations.length === 0 && (
+              <div className="p-4 text-center text-gray-500 text-sm">لا توجد محادثات</div>
+            )}
+            {filteredConversations.map((conv) => (
               <button
                 key={conv.id}
-                onClick={() => setSelectedConversation(conv.id)}
+                onClick={() => selectConversation(conv.id)}
                 className={`w-full p-4 border-b border-gray-200 hover:bg-gray-50 text-right ${
                   selectedConversation === conv.id ? 'bg-blue-50' : ''
                 }`}
               >
                 <div className="flex items-start justify-between mb-2">
-                  <h4 className="font-semibold text-sm">{conv.projectName}</h4>
+                  <h4 className="font-semibold text-sm">{conv.title || 'محادثة'}</h4>
                   {conv.unreadCount > 0 && (
                     <span className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full">
                       {conv.unreadCount}
                     </span>
                   )}
                 </div>
-                <p className="text-xs text-gray-600 mb-1">{conv.organization}</p>
-                <p className="text-xs text-gray-500 truncate">{conv.lastMessage}</p>
+                <p className="text-xs text-gray-500 truncate">{conv.lastMessageText || 'لا توجد رسائل'}</p>
+                <p className="text-xs text-gray-400 mt-1">{formatDateTime(conv.lastMessageAt)}</p>
               </button>
             ))}
           </div>
@@ -517,8 +579,10 @@ export function ProjectCollaborationModule() {
           {/* Chat Header */}
           <div className="p-4 border-b border-gray-200 flex items-center justify-between">
             <div>
-              <h3 className="font-semibold">برنامج الأسر المنتجة</h3>
-              <p className="text-sm text-gray-600">جمعية البر الخيرية</p>
+              <h3 className="font-semibold">{currentConversation?.title || 'المحادثة'}</h3>
+              <p className="text-sm text-gray-600">
+                {currentConversation?.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : 'رسالة مباشرة'}
+              </p>
             </div>
             <div className="flex gap-2">
               <button className="p-2 hover:bg-gray-100 rounded-lg">
@@ -531,37 +595,75 @@ export function ProjectCollaborationModule() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4">
-            {messages.map((msg) => (
-              <div key={msg.id} className={`flex gap-3 ${msg.role === 'مدير المشروع' ? 'flex-row-reverse' : ''}`}>
-                <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <User className="w-5 h-5 text-blue-600" />
-                </div>
-                <div className={`flex-1 ${msg.role === 'مدير المشروع' ? 'text-left' : 'text-right'}`}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-medium text-sm">{msg.sender}</span>
-                    <span className="text-xs text-gray-500">{msg.role}</span>
-                  </div>
-                  <div className={`inline-block p-3 rounded-lg ${
-                    msg.role === 'مدير المشروع' ? 'bg-blue-600 text-white' : 'bg-gray-100'
-                  }`}>
-                    <p className="text-sm">{msg.content}</p>
-                    {msg.attachments && msg.attachments.length > 0 && (
-                      <div className="mt-2 p-2 bg-white/10 rounded flex items-center gap-2">
-                        <Paperclip className="w-4 h-4" />
-                        <span className="text-xs">{msg.attachments[0].name}</span>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-xs text-gray-500">{msg.timestamp}</span>
-                    {msg.status === 'read' && <CheckCheck className="w-4 h-4 text-blue-600" />}
-                    {msg.status === 'delivered' && <CheckCheck className="w-4 h-4 text-gray-400" />}
-                    {msg.status === 'sent' && <Check className="w-4 h-4 text-gray-400" />}
-                  </div>
-                </div>
+          <div
+            ref={scrollContainerRef}
+            className="flex-1 overflow-y-auto p-6 space-y-4"
+          >
+            {messagesError && (
+              <div className="text-center p-4">
+                <p className="text-red-600 mb-3">{messagesError}</p>
+                <button
+                  onClick={() => { clearError(); loadMessages(true); }}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  إعادة المحاولة
+                </button>
               </div>
-            ))}
+            )}
+            {!selectedConversation && !messagesError && (
+              <div className="h-full flex items-center justify-center text-gray-500">
+                اختر محادثة لعرض الرسائل
+              </div>
+            )}
+            {selectedConversation && !messagesLoading && messages.length === 0 && !messagesError && (
+              <div className="h-full flex items-center justify-center text-gray-500">
+                لا توجد رسائل في هذه المحادثة
+              </div>
+            )}
+            {selectedConversation && hasMore && !messagesLoading && (
+              <div className="text-center">
+                <button
+                  onClick={() => loadMessages()}
+                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mx-auto"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  تحميل المزيد
+                </button>
+              </div>
+            )}
+            {messagesLoading && messages.length === 0 && (
+              <div className="space-y-4">
+                {[1, 2, 3].map((n) => (
+                  <div key={n} className="flex gap-3">
+                    <div className="w-10 h-10 bg-gray-100 rounded-full animate-pulse" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3 w-24 bg-gray-100 rounded animate-pulse" />
+                      <div className="h-10 w-2/3 bg-gray-100 rounded animate-pulse" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+            {messages.map((msg) => {
+              const isOwn = msg.senderUserId === currentUserId || msg.senderUserId === 'me';
+              return (
+                <MessageBubble
+                  key={msg.id}
+                  msg={msg}
+                  isOwn={isOwn}
+                  editingMessageId={editingMessageId}
+                  editInput={editInput}
+                  setEditInput={setEditInput}
+                  onStartEdit={startEdit}
+                  onCancelEdit={cancelEdit}
+                  onSubmitEdit={submitEdit}
+                  onDelete={setDeleteTargetId}
+                  onRetry={retrySend}
+                  onMarkAsRead={markAsRead}
+                />
+              );
+            })}
           </div>
 
           {/* Message Input */}
@@ -580,35 +682,63 @@ export function ProjectCollaborationModule() {
                 type="text"
                 value={messageInput}
                 onChange={(e) => setMessageInput(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); } }}
                 placeholder="اكتب رسالتك..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                disabled={isSending}
+                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100"
               />
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
-                <Send className="w-5 h-5" />
+              <button
+                onClick={handleSend}
+                disabled={isSending || !messageInput.trim()}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 disabled:opacity-60"
+              >
+                {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
                 إرسال
               </button>
             </div>
           </div>
+
+          {/* Delete Confirmation */}
+          {deleteTargetId && (
+            <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-50">
+              <div className="bg-white rounded-xl p-6 shadow-lg max-w-sm w-full mx-4">
+                <h3 className="font-semibold mb-2">حذف الرسالة</h3>
+                <p className="text-sm text-gray-600 mb-4">هل أنت متأكد من حذف هذه الرسالة؟</p>
+                <div className="flex gap-3">
+                  <button
+                    onClick={confirmDelete}
+                    className="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                  >
+                    حذف
+                  </button>
+                  <button
+                    onClick={() => setDeleteTargetId(null)}
+                    className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                  >
+                    إلغاء
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right Panel - Project Info */}
         <div className="w-80 bg-white rounded-xl border border-gray-200 overflow-y-auto">
           <div className="p-4 border-b border-gray-200">
             <h3 className="font-semibold mb-2">ملخص المشروع</h3>
-            <p className="text-sm text-gray-600">برنامج الأسر المنتجة</p>
+            <p className="text-sm text-gray-600">{currentConversation?.title || projectId || 'المشروع'}</p>
           </div>
 
           <div className="p-4 border-b border-gray-200">
-            <h4 className="font-semibold text-sm mb-3">المشاركون ({conversations[0].participants.length})</h4>
+            <h4 className="font-semibold text-sm mb-3">المشاركون</h4>
             <div className="space-y-2">
-              {conversations[0].participants.map((participant, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <span className="text-sm">{participant}</span>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                  <User className="w-4 h-4 text-blue-600" />
                 </div>
-              ))}
+                <span className="text-sm">أنت</span>
+              </div>
             </div>
           </div>
 
@@ -645,6 +775,138 @@ export function ProjectCollaborationModule() {
       </div>
     );
   };
+
+  function MessageBubble({
+    msg,
+    isOwn,
+    editingMessageId,
+    editInput,
+    setEditInput,
+    onStartEdit,
+    onCancelEdit,
+    onSubmitEdit,
+    onDelete,
+    onRetry,
+    onMarkAsRead,
+  }: {
+    msg: ApiMessage;
+    isOwn: boolean;
+    editingMessageId: string | null;
+    editInput: string;
+    setEditInput: (value: string) => void;
+    onStartEdit: (msg: ApiMessage) => void;
+    onCancelEdit: () => void;
+    onSubmitEdit: (id: string) => void;
+    onDelete: (id: string) => void;
+    onRetry: (id: string) => void;
+    onMarkAsRead: (id: string) => void;
+  }) {
+    const bubbleRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+      const node = bubbleRef.current;
+      if (!node || msg.status === 'READ' || isOwn) return;
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              onMarkAsRead(msg.id);
+              observer.disconnect();
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      observer.observe(node);
+      return () => observer.disconnect();
+    }, [msg, isOwn, onMarkAsRead]);
+
+    if (msg.deletedAt) {
+      return (
+        <div className="flex justify-center my-2">
+          <span className="text-xs text-gray-400 italic">تم حذف هذه الرسالة</span>
+        </div>
+      );
+    }
+
+    if (editingMessageId === msg.id) {
+      return (
+        <div className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
+          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <User className="w-5 h-5 text-blue-600" />
+          </div>
+          <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
+            <input
+              type="text"
+              value={editInput}
+              onChange={(e) => setEditInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
+                if (e.key === 'Escape') { onCancelEdit(); }
+              }}
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+              autoFocus
+            />
+            <div className="flex gap-2 mt-1 justify-end">
+              <button
+                onClick={() => onSubmitEdit(msg.id)}
+                className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
+              >
+                حفظ
+              </button>
+              <button
+                onClick={onCancelEdit}
+                className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded"
+              >
+                إلغاء
+              </button>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div ref={bubbleRef} className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
+        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <User className="w-5 h-5 text-blue-600" />
+        </div>
+        <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
+          <div className="flex items-center gap-2 mb-1">
+            <span className="font-medium text-sm">{msg.senderUserId === 'me' ? 'أنت' : msg.senderUserId.slice(0, 8)}</span>
+            {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
+          </div>
+          <div className={`inline-block p-3 rounded-lg ${isOwn ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
+            <p className="text-sm">{msg.content}</p>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>
+            {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-blue-600" />}
+            {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-gray-400" />}
+            {msg.status === 'SENT' && <Check className="w-4 h-4 text-gray-400" />}
+            {msg.status === 'SENDING' && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
+            {msg.status === 'FAILED' && (
+              <button onClick={() => onRetry(msg.id)} className="text-xs text-red-600 underline">
+                فشل - إعادة
+              </button>
+            )}
+            {isOwn && msg.status !== 'SENDING' && (
+              <>
+                <button onClick={() => onStartEdit(msg)} className="text-xs text-gray-500 hover:text-blue-600">
+                  تعديل
+                </button>
+                <button onClick={() => onDelete(msg.id)} className="text-xs text-gray-500 hover:text-red-600">
+                  حذف
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   // PAGE 3: Threaded Discussions (Figma/Notion-style)
   const DiscussionsView = () => {
