@@ -5,6 +5,7 @@ import useProjectConversations from '@/api/hooks/useProjectConversations';
 import useConversationMessages from '@/api/hooks/useConversationMessages';
 import useConversationRealtime from '@/api/hooks/useConversationRealtime';
 import useDiscussionDetail from '@/api/hooks/useDiscussionDetail';
+import useProjectAttachments from '@/api/hooks/useProjectAttachments';
 import useAttachmentMutations from '@/api/hooks/useAttachmentMutations';
 import { formatDateTime, formatBytes } from '@/app/lib/formatters';
 import {
