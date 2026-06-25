@@ -129,7 +129,17 @@ export function AIAnalysisStartPage() {
     });
   }, [libraryItems, apiCategories]);
 
-  const recommendedAnalyses = analysisCards.filter((card) => card.recommended || card.trending).slice(0, 3);
+  // Show the first 4 cards on the dashboard from whatever the API returns.
+  // Prefer badge-tagged items, but if fewer than 4 are tagged, fill the rest
+  // from the available library items.
+  const recommendedAnalyses = useMemo(() => {
+    const tagged = analysisCards.filter((card) => card.recommended || card.trending);
+    const needed = Math.max(0, 4 - tagged.length);
+    const others = analysisCards
+      .filter((card) => !card.recommended && !card.trending)
+      .slice(0, needed);
+    return [...tagged, ...others].slice(0, 4);
+  }, [analysisCards]);
 
   const handleStartAnalysis = (card: AnalysisCard) => {
     console.log('[Start] handleStartAnalysis', { id: card.id, title: card.title });

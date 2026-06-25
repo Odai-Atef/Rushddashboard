@@ -43,6 +43,7 @@ import { AnalysisLibraryItem } from '@/api/services/analysis-service';
 import { resolveIcon } from '@/app/utils/icon-map';
 import { cn } from '@/app/utils/cn';
 import { useAnalysisCategories } from '@/app/hooks/useAnalysisCategories';
+import { useAnalysisLibraryItems } from '@/app/hooks/useAnalysisLibraryItems';
 import { useAnalysisStreaming } from '@/app/hooks/useAnalysisStreaming';
 import { useAnalysisHistory, formatDateTime, getPreview, AnalysisInsight } from '@/app/hooks/useAnalysisHistory';
 
@@ -81,6 +82,7 @@ export function AIAnalysisChatPage() {
   const { chatId } = useParams<{ chatId: string }>();
   const state = (location.state as AIAnalysisChatLocationState) || {};
   const { categories: apiCategories, isLoading: categoriesLoading, error: categoriesError, retry: retryCategories } = useAnalysisCategories();
+  const { items: libraryItems } = useAnalysisLibraryItems('all');
   const streaming = useAnalysisStreaming();
   const history = useAnalysisHistory();
 
@@ -272,32 +274,24 @@ export function AIAnalysisChatPage() {
 
     if (selectedAnalysisId) {
       console.log('[Chat] starting analysis from card', selectedAnalysisId);
-      const card = analysisCards.find((c) => c.id === selectedAnalysisId);
-      if (card) {
-        startCardAnalysis(card);
+      // Resolve from the real library items fetched from the API. If the id is not
+      // a library item (e.g. a history rerun id), fall back to a generic card.
+      const libraryItem = libraryItems.find((i) => i.id === selectedAnalysisId);
+      if (libraryItem) {
+        startLibraryAnalysis(libraryItem);
       } else {
-        // The id is not a static recommended card; treat it as a library/analysis item id
-        // and start streaming directly. Try to find a display title from the library.
-        const libraryItem = apiCategories
-          .flatMap((c: any) => c.items || [])
-          .find((i: AnalysisLibraryItem) => i.id === selectedAnalysisId) as AnalysisLibraryItem | undefined;
-        console.log('[Chat] selectedAnalysisId not in static cards, starting as library/analysis item', { selectedAnalysisId, foundInLibrary: !!libraryItem });
-        if (libraryItem) {
-          startLibraryAnalysis(libraryItem);
-        } else {
-          const genericCard: AnalysisCard = {
-            id: selectedAnalysisId,
-            title: 'تحليل ذكي',
-            description: '',
-            category: 'مكتبة التحليلات',
-            estimatedTime: '2-3 دقائق',
-            complexity: 'متوسط',
-            impact: 'متوسط',
-            icon: Brain,
-            color: 'from-purple-500 to-blue-600',
-          };
-          startCardAnalysis(genericCard);
-        }
+        const genericCard: AnalysisCard = {
+          id: selectedAnalysisId,
+          title: 'تحليل ذكي',
+          description: '',
+          category: 'مكتبة التحليلات',
+          estimatedTime: '2-3 دقائق',
+          complexity: 'متوسط',
+          impact: 'متوسط',
+          icon: Brain,
+          color: 'from-purple-500 to-blue-600',
+        };
+        startCardAnalysis(genericCard);
       }
       // Consume the state so a page refresh doesn't auto-restart the same analysis.
       window.history.replaceState({}, document.title, location.pathname);
@@ -306,24 +300,22 @@ export function AIAnalysisChatPage() {
 
     if (selectedLibraryItemId) {
       console.log('[Chat] starting analysis from library', selectedLibraryItemId);
-      // Prefer the full item passed through navigation state; fall back to searching categories.
+      // Prefer the full item passed through navigation state; fall back to searching the API list.
       const item = (state as any).selectedLibraryItem as AnalysisLibraryItem | undefined;
       if (item) {
         startLibraryAnalysis(item);
       } else {
-        const found = apiCategories
-          .flatMap((c: any) => c.items || [])
-          .find((i: AnalysisLibraryItem) => i.id === selectedLibraryItemId) as AnalysisLibraryItem | undefined;
+        const found = libraryItems.find((i) => i.id === selectedLibraryItemId);
         if (found) {
           startLibraryAnalysis(found);
         } else {
-          console.warn('[Chat] library item not found for selectedLibraryItemId', selectedLibraryItemId, 'apiCategories:', apiCategories.length);
+          console.warn('[Chat] library item not found for selectedLibraryItemId', selectedLibraryItemId, 'libraryItems:', libraryItems.length);
         }
       }
       // Consume the state so a page refresh doesn't auto-restart the same analysis.
       window.history.replaceState({}, document.title, location.pathname);
     }
-  }, []);
+  }, [libraryItems]);
 
   // Sync streaming status to progress steps
   useEffect(() => {
@@ -398,29 +390,6 @@ export function AIAnalysisChatPage() {
       activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
   }, [chatId, selectedAnalysis, history.entries, history.pagination.hasMore, history.isLoading, history.pagination.page]);
-
-  const analysisCards: AnalysisCard[] = [
-    { id: 'sales-1', title: 'تحليل انخفاض الإيرادات', description: 'تحديد أسباب انخفاض الإيرادات وتقديم حلول فورية', category: 'المبيعات', estimatedTime: '2-3 دقائق', complexity: 'متوسط', impact: 'حرج', icon: TrendingDown, recommended: true, color: 'from-red-500 to-orange-600' },
-    { id: 'sales-2', title: 'تحليل أفضل المنتجات', description: 'اكتشف المنتجات الأكثر ربحية وفرص النمو', category: 'المبيعات', estimatedTime: '1-2 دقيقة', complexity: 'بسيط', impact: 'متوسط', icon: Target, trending: true, color: 'from-green-500 to-emerald-600' },
-    { id: 'sales-3', title: 'تحليل الفروع الضعيفة', description: 'تحديد الفروع ذات الأداء المنخفض والأسباب الجذرية', category: 'المبيعات', estimatedTime: '3-4 دقائق', complexity: 'متقدم', impact: 'عالي', icon: MapPin, color: 'from-orange-500 to-red-600' },
-    { id: 'sales-4', title: 'تحليل معدل التحويل', description: 'قياس وتحسين معدلات تحويل العملاء المحتملين', category: 'المبيعات', estimatedTime: '2 دقيقة', complexity: 'متوسط', impact: 'عالي', icon: ArrowRight, recommended: true, color: 'from-blue-500 to-cyan-600' },
-    { id: 'sales-5', title: 'تحليل اتجاهات الإيرادات', description: 'توقع الإيرادات المستقبلية بناءً على الأنماط الحالية', category: 'المبيعات', estimatedTime: '2-3 دقائق', complexity: 'متوسط', impact: 'متوسط', icon: TrendingUp, aiGenerated: true, color: 'from-purple-500 to-pink-600' },
-    { id: 'customers-1', title: 'تحليل تسرب العملاء', description: 'فهم أسباب فقدان العملاء وتقديم استراتيجيات الاحتفاظ', category: 'العملاء', estimatedTime: '3 دقائق', complexity: 'متقدم', impact: 'حرج', icon: Users, recommended: true, color: 'from-red-500 to-pink-600' },
-    { id: 'customers-2', title: 'تحليل رضا العملاء', description: 'قياس مستوى رضا العملاء وتحديد نقاط التحسين', category: 'العملاء', estimatedTime: '2 دقيقة', complexity: 'بسيط', impact: 'متوسط', icon: MessageSquare, color: 'from-blue-500 to-indigo-600' },
-    { id: 'customers-3', title: 'تحليل القيمة الدائمة للعميل', description: 'حساب LTV وتحديد العملاء الأكثر قيمة', category: 'العملاء', estimatedTime: '2-3 دقائق', complexity: 'متوسط', impact: 'عالي', icon: DollarSign, trending: true, color: 'from-green-500 to-teal-600' },
-    { id: 'customers-4', title: 'تحليل شرائح العملاء', description: 'تقسيم العملاء إلى مجموعات متجانسة للاستهداف الأمثل', category: 'العملاء', estimatedTime: '3-4 دقائق', complexity: 'متقدم', impact: 'عالي', icon: Target, aiGenerated: true, color: 'from-purple-500 to-blue-600' },
-    { id: 'operations-1', title: 'تحليل كفاءة العمليات', description: 'قياس كفاءة العمليات التشغيلية وتحديد الاختناقات', category: 'التشغيل', estimatedTime: '3 دقائق', complexity: 'متوسط', impact: 'عالي', icon: Activity, color: 'from-orange-500 to-red-600' },
-    { id: 'operations-2', title: 'تحليل أوقات التسليم', description: 'تقييم سرعة التنفيذ وتحسين عملية التوصيل', category: 'التشغيل', estimatedTime: '2 دقيقة', complexity: 'بسيط', impact: 'متوسط', icon: Clock, recommended: true, color: 'from-blue-500 to-cyan-600' },
-    { id: 'operations-3', title: 'تحليل جودة الخدمة', description: 'قياس جودة الخدمات المقدمة ومعدلات الأخطاء', category: 'التشغيل', estimatedTime: '2-3 دقائق', complexity: 'متوسط', impact: 'عالي', icon: CheckCircle, color: 'from-green-500 to-emerald-600' },
-    { id: 'profitability-1', title: 'تحليل هوامش الربح', description: 'تحليل هوامش الربح حسب المنتج والخدمة', category: 'الربحية', estimatedTime: '2-3 دقائق', complexity: 'متوسط', impact: 'حرج', icon: DollarSign, recommended: true, color: 'from-green-500 to-emerald-600' },
-    { id: 'inventory-1', title: 'تحليل المخزون الراكد', description: 'تحديد المنتجات بطيئة الحركة والحلول', category: 'المخزون', estimatedTime: '2 دقيقة', complexity: 'بسيط', impact: 'متوسط', icon: Package, color: 'from-orange-500 to-red-600' },
-    { id: 'risks-1', title: 'تحليل المخاطر المالية', description: 'تحديد وتقييم المخاطر المالية المحتملة', category: 'المخاطر', estimatedTime: '3-4 دقائق', complexity: 'متقدم', impact: 'حرج', icon: AlertTriangle, recommended: true, color: 'from-red-500 to-orange-600' },
-    { id: 'opportunities-1', title: 'اكتشاف فرص النمو', description: 'تحديد فرص التوسع والنمو الجديدة', category: 'الفرص', estimatedTime: '3 دقائق', complexity: 'متقدم', impact: 'عالي', icon: Zap, trending: true, aiGenerated: true, color: 'from-yellow-500 to-orange-600' },
-    { id: 'hr-1', title: 'تحليل معدل دوران الموظفين', description: 'فهم أسباب الاستقالات وتحسين الاحتفاظ', category: 'الموارد البشرية', estimatedTime: '2-3 دقائق', complexity: 'متوسط', impact: 'عالي', icon: UserCog, color: 'from-red-500 to-orange-600' },
-    { id: 'executive-1', title: 'تقرير الأداء التنفيذي الشامل', description: 'نظرة شاملة على جميع مؤشرات الأداء الرئيسية', category: 'الإدارة التنفيذية', estimatedTime: '4-5 دقائق', complexity: 'متقدم', impact: 'حرج', icon: BarChart3, recommended: true, color: 'from-purple-500 to-blue-600' },
-  ];
-
-
 
   const startCardAnalysis = async (card: AnalysisCard) => {
     console.log('[Chat] startCardAnalysis', { id: card.id, title: card.title, streamingStatus: streaming.status, sessionId: streaming.sessionId });

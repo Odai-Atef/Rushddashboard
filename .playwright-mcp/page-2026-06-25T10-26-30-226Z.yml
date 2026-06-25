@@ -1,0 +1,122 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "تقييم الجاهزية" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e19]
+            - generic [ref=e23]: تقييم الجاهزية
+        - listitem [ref=e24]:
+          - link "إدارة المشاريع" [ref=e25] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e26]
+            - generic [ref=e29]: إدارة المشاريع
+        - listitem [ref=e30]:
+          - link "قاعدة الجهات المانحة" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e32]
+            - generic [ref=e37]: قاعدة الجهات المانحة
+        - listitem [ref=e38]:
+          - link "التطابق الذكي مع المانحين" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e40]
+            - generic [ref=e45]: التطابق الذكي مع المانحين
+        - listitem [ref=e46]:
+          - link "المحلل التنفيذي الذكي" [ref=e47] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e48]
+            - generic [ref=e50]: المحلل التنفيذي الذكي
+    - paragraph [ref=e52]: © 2026 منصة رشد
+  - generic [ref=e53]:
+    - banner [ref=e54]:
+      - generic [ref=e56]:
+        - img
+        - textbox "ابحث..." [ref=e57]
+      - generic [ref=e58]:
+        - button "تبديل الوضع" [ref=e59]:
+          - img [ref=e60]
+        - button [ref=e62]:
+          - img [ref=e63]
+        - button "؟" [ref=e67]:
+          - generic [ref=e69]: ؟
+    - main [ref=e70]:
+      - generic [ref=e71]:
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - img [ref=e76]
+            - generic [ref=e78]:
+              - heading "المحلل التنفيذي الذكي" [level=1] [ref=e79]
+              - paragraph [ref=e80]: منصة التحليل المدعومة بالذكاء الاصطناعي
+          - generic [ref=e81]:
+            - button "سجل التحليلات" [ref=e82]:
+              - img [ref=e83]
+              - generic [ref=e87]: سجل التحليلات
+            - button "تحليل جديد" [ref=e88]:
+              - img [ref=e89]
+              - generic [ref=e90]: تحليل جديد
+        - generic [ref=e91]:
+          - generic [ref=e92]:
+            - heading "ابدأ تحليلاً ذكياً" [level=2] [ref=e93]
+            - paragraph [ref=e94]: اختر من التحليلات الموصى بها أو استكشف المكتبة الكاملة
+          - generic [ref=e95]:
+            - generic [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]:
+                - img [ref=e99]
+                - generic [ref=e109]:
+                  - heading "تحليل أفضل المنتجات" [level=3] [ref=e111]
+                  - paragraph [ref=e112]: المبيعات
+              - paragraph [ref=e113]: اكتشف المنتجات الأكثر ربحية وفرص النمو
+              - generic [ref=e114]:
+                - generic [ref=e115]:
+                  - generic [ref=e116]: متوسط
+                  - generic [ref=e117]:
+                    - img [ref=e118]
+                    - text: 1-2 دقيقة
+                - img [ref=e121]
+            - generic [ref=e123] [cursor=pointer]:
+              - generic [ref=e124]:
+                - img [ref=e126]
+                - generic [ref=e136]:
+                  - heading "تحليل المخزون الراكد" [level=3] [ref=e138]
+                  - paragraph [ref=e139]: المخزون
+              - paragraph [ref=e140]: تحديد المنتجات بطيئة الحركة والحلول
+              - generic [ref=e141]:
+                - generic [ref=e142]:
+                  - generic [ref=e143]: متوسط
+                  - generic [ref=e144]:
+                    - img [ref=e145]
+                    - text: 2 دقيقة
+                - img [ref=e148]
+            - generic [ref=e150] [cursor=pointer]:
+              - generic [ref=e151]:
+                - img [ref=e153]
+                - generic [ref=e163]:
+                  - heading "تقرير الأداء التنفيذي الشامل" [level=3] [ref=e165]
+                  - paragraph [ref=e166]: الإدارة التنفيذية
+              - paragraph [ref=e167]: نظرة شاملة على جميع مؤشرات الأداء الرئيسية
+              - generic [ref=e168]:
+                - generic [ref=e169]:
+                  - generic [ref=e170]: حرج
+                  - generic [ref=e171]:
+                    - img [ref=e172]
+                    - text: 4-5 دقائق
+                - img [ref=e175]
+          - button "استكشف 3 تحليل إضافي" [ref=e178]:
+            - generic [ref=e179]: استكشف 3 تحليل إضافي
+            - img [ref=e180]
+        - generic [ref=e183]:
+          - img [ref=e185]
+          - heading "ابدأ تحليلاً ذكياً" [level=2] [ref=e187]
+          - paragraph [ref=e188]: اختر تحليلاً من الكروت أعلاه أو استكشف المكتبة الكاملة للتحليلات المدعومة بالذكاء الاصطناعي
+          - button "فتح مكتبة التحليلات" [ref=e189]:
+            - img [ref=e190]
+            - generic [ref=e191]: فتح مكتبة التحليلات

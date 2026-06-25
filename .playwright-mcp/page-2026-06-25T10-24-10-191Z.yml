@@ -1,0 +1,236 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "تقييم الجاهزية" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e19]
+            - generic [ref=e23]: تقييم الجاهزية
+        - listitem [ref=e24]:
+          - link "إدارة المشاريع" [ref=e25] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e26]
+            - generic [ref=e29]: إدارة المشاريع
+        - listitem [ref=e30]:
+          - link "قاعدة الجهات المانحة" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e32]
+            - generic [ref=e37]: قاعدة الجهات المانحة
+        - listitem [ref=e38]:
+          - link "التطابق الذكي مع المانحين" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e40]
+            - generic [ref=e45]: التطابق الذكي مع المانحين
+        - listitem [ref=e46]:
+          - link "المحلل التنفيذي الذكي" [ref=e47] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e48]
+            - generic [ref=e50]: المحلل التنفيذي الذكي
+    - paragraph [ref=e52]: © 2026 منصة رشد
+  - generic [ref=e53]:
+    - banner [ref=e54]:
+      - generic [ref=e56]:
+        - img
+        - textbox "ابحث..." [ref=e57]
+      - generic [ref=e58]:
+        - button "تبديل الوضع" [ref=e59]:
+          - img [ref=e60]
+        - button [ref=e62]:
+          - img [ref=e63]
+        - button "OA" [ref=e67]:
+          - generic [ref=e69]: OA
+    - main [ref=e70]:
+      - generic [ref=e71]:
+        - generic [ref=e73]:
+          - generic [ref=e74]:
+            - img [ref=e76]
+            - generic [ref=e78]:
+              - heading "المحلل التنفيذي الذكي" [level=1] [ref=e79]
+              - paragraph [ref=e80]: منصة التحليل المدعومة بالذكاء الاصطناعي
+          - generic [ref=e81]:
+            - button "سجل التحليلات" [ref=e82]:
+              - img [ref=e83]
+              - generic [ref=e87]: سجل التحليلات
+            - button "تحليل جديد" [ref=e88]:
+              - img [ref=e89]
+              - generic [ref=e90]: تحليل جديد
+        - generic [ref=e91]:
+          - generic [ref=e92]:
+            - heading "ابدأ تحليلاً ذكياً" [level=2] [ref=e93]
+            - paragraph [ref=e94]: اختر من التحليلات الموصى بها أو استكشف المكتبة الكاملة
+          - generic [ref=e95]:
+            - generic [ref=e96] [cursor=pointer]:
+              - generic [ref=e97]:
+                - img [ref=e99]
+                - generic [ref=e102]:
+                  - generic [ref=e103]:
+                    - heading "تحليل انخفاض الإيرادات" [level=3] [ref=e104]
+                    - img [ref=e105]
+                  - paragraph [ref=e107]: المبيعات
+              - paragraph [ref=e108]: تحديد أسباب انخفاض الإيرادات وتقديم حلول فورية
+              - generic [ref=e109]:
+                - generic [ref=e110]:
+                  - generic [ref=e111]: حرج
+                  - generic [ref=e112]:
+                    - img [ref=e113]
+                    - text: 2-3 دقائق
+                - img [ref=e116]
+            - generic [ref=e118] [cursor=pointer]:
+              - generic [ref=e119]:
+                - img [ref=e121]
+                - generic [ref=e125]:
+                  - heading "تحليل أفضل المنتجات" [level=3] [ref=e127]
+                  - paragraph [ref=e128]: المبيعات
+              - paragraph [ref=e129]: اكتشف المنتجات الأكثر ربحية وفرص النمو
+              - generic [ref=e130]:
+                - generic [ref=e131]:
+                  - generic [ref=e132]: متوسط
+                  - generic [ref=e133]:
+                    - img [ref=e134]
+                    - text: 1-2 دقيقة
+                - img [ref=e137]
+            - generic [ref=e139] [cursor=pointer]:
+              - generic [ref=e140]:
+                - img [ref=e142]
+                - generic [ref=e145]:
+                  - heading "تحليل الفروع الضعيفة" [level=3] [ref=e147]
+                  - paragraph [ref=e148]: المبيعات
+              - paragraph [ref=e149]: تحديد الفروع ذات الأداء المنخفض والأسباب الجذرية
+              - generic [ref=e150]:
+                - generic [ref=e151]:
+                  - generic [ref=e152]: عالي
+                  - generic [ref=e153]:
+                    - img [ref=e154]
+                    - text: 3-4 دقائق
+                - img [ref=e157]
+            - generic [ref=e159] [cursor=pointer]:
+              - generic [ref=e160]:
+                - img [ref=e162]
+                - generic [ref=e166]:
+                  - heading "تحليل المخزون الراكد" [level=3] [ref=e168]
+                  - paragraph [ref=e169]: المخزون
+              - paragraph [ref=e170]: تحديد المنتجات بطيئة الحركة والحلول
+              - generic [ref=e171]:
+                - generic [ref=e172]:
+                  - generic [ref=e173]: متوسط
+                  - generic [ref=e174]:
+                    - img [ref=e175]
+                    - text: 2 دقيقة
+                - img [ref=e178]
+          - button "استكشف 4 تحليل إضافي" [ref=e181]:
+            - generic [ref=e182]: استكشف 4 تحليل إضافي
+            - img [ref=e183]
+        - generic [ref=e186]:
+          - img [ref=e188]
+          - heading "ابدأ تحليلاً ذكياً" [level=2] [ref=e190]
+          - paragraph [ref=e191]: اختر تحليلاً من الكروت أعلاه أو استكشف المكتبة الكاملة للتحليلات المدعومة بالذكاء الاصطناعي
+          - button "فتح مكتبة التحليلات" [active] [ref=e192]:
+            - img [ref=e193]
+            - generic [ref=e194]: فتح مكتبة التحليلات
+        - generic [ref=e196]:
+          - generic [ref=e197]:
+            - generic [ref=e198]:
+              - generic [ref=e199]:
+                - img [ref=e201]
+                - generic [ref=e211]:
+                  - heading "مكتبة التحليلات الذكية" [level=2] [ref=e212]
+                  - paragraph [ref=e213]: استكشف 4 تحليلاً متقدماً
+              - button [ref=e214]:
+                - img [ref=e215]
+            - generic [ref=e218]:
+              - img [ref=e219]
+              - textbox "ابحث عن التحليلات..." [ref=e222]
+          - generic [ref=e224]:
+            - button "الكل" [ref=e225]
+            - button "المبيعات5" [ref=e226]
+            - button "العملاء4" [ref=e227]
+            - button "التشغيل3" [ref=e228]
+            - button "التسويق" [ref=e229]
+            - button "الربحية1" [ref=e230]
+            - button "المخزون1" [ref=e231]
+            - button "المخاطر1" [ref=e232]
+            - button "الفرص1" [ref=e233]
+            - button "الموارد البشرية1" [ref=e234]
+            - button "الإدارة التنفيذية1" [ref=e235]
+          - generic [ref=e237]:
+            - generic [ref=e238] [cursor=pointer]:
+              - generic [ref=e239]:
+                - img [ref=e241]
+                - generic [ref=e244]:
+                  - generic [ref=e245]:
+                    - heading "تحليل انخفاض الإيرادات" [level=3] [ref=e246]
+                    - generic [ref=e247]:
+                      - img [ref=e248]
+                      - text: موصى به
+                  - paragraph [ref=e250]: المبيعات
+              - paragraph [ref=e251]: تحديد أسباب انخفاض الإيرادات وتقديم حلول فورية
+              - generic [ref=e252]:
+                - generic [ref=e253]: متوسط
+                - generic [ref=e254]: "تأثير: حرج"
+                - generic [ref=e255]:
+                  - img [ref=e256]
+                  - text: 2-3 دقائق
+              - button "بدء التحليل" [ref=e259]:
+                - img [ref=e260]
+                - generic [ref=e262]: بدء التحليل
+            - generic [ref=e263] [cursor=pointer]:
+              - generic [ref=e264]:
+                - img [ref=e266]
+                - generic [ref=e270]:
+                  - generic [ref=e271]:
+                    - heading "تحليل أفضل المنتجات" [level=3] [ref=e272]
+                    - generic [ref=e273]:
+                      - img [ref=e274]
+                      - text: رائج
+                  - paragraph [ref=e276]: المبيعات
+              - paragraph [ref=e277]: اكتشف المنتجات الأكثر ربحية وفرص النمو
+              - generic [ref=e278]:
+                - generic [ref=e279]: بسيط
+                - generic [ref=e280]: "تأثير: متوسط"
+                - generic [ref=e281]:
+                  - img [ref=e282]
+                  - text: 1-2 دقيقة
+              - button "بدء التحليل" [ref=e285]:
+                - img [ref=e286]
+                - generic [ref=e288]: بدء التحليل
+            - generic [ref=e289] [cursor=pointer]:
+              - generic [ref=e290]:
+                - img [ref=e292]
+                - generic [ref=e295]:
+                  - heading "تحليل الفروع الضعيفة" [level=3] [ref=e297]
+                  - paragraph [ref=e298]: المبيعات
+              - paragraph [ref=e299]: تحديد الفروع ذات الأداء المنخفض والأسباب الجذرية
+              - generic [ref=e300]:
+                - generic [ref=e301]: متقدم
+                - generic [ref=e302]: "تأثير: عالي"
+                - generic [ref=e303]:
+                  - img [ref=e304]
+                  - text: 3-4 دقائق
+              - button "بدء التحليل" [ref=e307]:
+                - img [ref=e308]
+                - generic [ref=e310]: بدء التحليل
+            - generic [ref=e311] [cursor=pointer]:
+              - generic [ref=e312]:
+                - img [ref=e314]
+                - generic [ref=e318]:
+                  - heading "تحليل المخزون الراكد" [level=3] [ref=e320]
+                  - paragraph [ref=e321]: المخزون
+              - paragraph [ref=e322]: تحديد المنتجات بطيئة الحركة والحلول
+              - generic [ref=e323]:
+                - generic [ref=e324]: بسيط
+                - generic [ref=e325]: "تأثير: متوسط"
+                - generic [ref=e326]:
+                  - img [ref=e327]
+                  - text: 2 دقيقة
+              - button "بدء التحليل" [ref=e330]:
+                - img [ref=e331]
+                - generic [ref=e333]: بدء التحليل

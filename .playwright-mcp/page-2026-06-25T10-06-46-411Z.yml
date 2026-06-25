@@ -1,0 +1,131 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "التطابق الذكي مع المانحين" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e19]
+            - generic [ref=e24]: التطابق الذكي مع المانحين
+        - listitem [ref=e25]:
+          - link "المحلل التنفيذي الذكي" [ref=e26] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e27]
+            - generic [ref=e29]: المحلل التنفيذي الذكي
+        - listitem [ref=e30]:
+          - link "إدارة المشاريع" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e32]
+            - generic [ref=e35]: إدارة المشاريع
+        - listitem [ref=e36]:
+          - link "التعاون والتواصل" [ref=e37] [cursor=pointer]:
+            - /url: /dashboard/collaboration
+            - img [ref=e38]
+            - generic [ref=e40]: التعاون والتواصل
+        - listitem [ref=e41]:
+          - link "قاعدة الجهات المانحة" [ref=e42] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e43]
+            - generic [ref=e48]: قاعدة الجهات المانحة
+        - listitem [ref=e49]:
+          - link "تقييم الجاهزية" [ref=e50] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e51]
+            - generic [ref=e55]: تقييم الجاهزية
+    - paragraph [ref=e57]: © 2026 منصة رشد
+  - generic [ref=e58]:
+    - banner [ref=e59]:
+      - generic [ref=e61]:
+        - img
+        - textbox "ابحث..." [ref=e62]
+      - generic [ref=e63]:
+        - button "تبديل الوضع" [ref=e64]:
+          - img [ref=e65]
+        - button [ref=e67]:
+          - img [ref=e68]
+        - button "OA" [ref=e72]:
+          - generic [ref=e74]: OA
+    - main [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - img [ref=e81]
+            - generic [ref=e83]:
+              - heading "المحلل التنفيذي الذكي" [level=1] [ref=e84]
+              - paragraph [ref=e85]: منصة التحليل المدعومة بالذكاء الاصطناعي
+          - generic [ref=e86]:
+            - button "سجل التحليلات" [ref=e87]:
+              - img [ref=e88]
+              - generic [ref=e92]: سجل التحليلات
+            - button "تحليل جديد" [ref=e93]:
+              - img [ref=e94]
+              - generic [ref=e95]: تحليل جديد
+        - generic [ref=e96]:
+          - generic [ref=e97]:
+            - heading "ابدأ تحليلاً ذكياً" [level=2] [ref=e98]
+            - paragraph [ref=e99]: اختر من التحليلات الموصى بها أو استكشف المكتبة الكاملة
+          - generic [ref=e100]:
+            - generic [ref=e101] [cursor=pointer]:
+              - generic [ref=e102]:
+                - img [ref=e104]
+                - generic [ref=e107]:
+                  - generic [ref=e108]:
+                    - heading "تحليل انخفاض الإيرادات" [level=3] [ref=e109]
+                    - img [ref=e110]
+                  - paragraph [ref=e112]: المبيعات
+              - paragraph [ref=e113]: تحديد أسباب انخفاض الإيرادات وتقديم حلول فورية
+              - generic [ref=e114]:
+                - generic [ref=e115]:
+                  - generic [ref=e116]: حرج
+                  - generic [ref=e117]:
+                    - img [ref=e118]
+                    - text: 2-3 دقائق
+                - img [ref=e121]
+            - generic [ref=e123] [cursor=pointer]:
+              - generic [ref=e124]:
+                - img [ref=e126]
+                - generic [ref=e130]:
+                  - heading "تحليل أفضل المنتجات" [level=3] [ref=e132]
+                  - paragraph [ref=e133]: المبيعات
+              - paragraph [ref=e134]: اكتشف المنتجات الأكثر ربحية وفرص النمو
+              - generic [ref=e135]:
+                - generic [ref=e136]:
+                  - generic [ref=e137]: متوسط
+                  - generic [ref=e138]:
+                    - img [ref=e139]
+                    - text: 1-2 دقيقة
+                - img [ref=e142]
+            - generic [ref=e144] [cursor=pointer]:
+              - generic [ref=e145]:
+                - img [ref=e147]
+                - generic [ref=e149]:
+                  - generic [ref=e150]:
+                    - heading "تحليل معدل التحويل" [level=3] [ref=e151]
+                    - img [ref=e152]
+                  - paragraph [ref=e154]: المبيعات
+              - paragraph [ref=e155]: قياس وتحسين معدلات تحويل العملاء المحتملين
+              - generic [ref=e156]:
+                - generic [ref=e157]:
+                  - generic [ref=e158]: عالي
+                  - generic [ref=e159]:
+                    - img [ref=e160]
+                    - text: 2 دقيقة
+                - img [ref=e163]
+          - button "استكشف 18 تحليل إضافي" [ref=e166]:
+            - generic [ref=e167]: استكشف 18 تحليل إضافي
+            - img [ref=e168]
+        - generic [ref=e171]:
+          - img [ref=e173]
+          - heading "ابدأ تحليلاً ذكياً" [level=2] [ref=e175]
+          - paragraph [ref=e176]: اختر تحليلاً من الكروت أعلاه أو استكشف المكتبة الكاملة للتحليلات المدعومة بالذكاء الاصطناعي
+          - button "فتح مكتبة التحليلات" [ref=e177]:
+            - img [ref=e178]
+            - generic [ref=e179]: فتح مكتبة التحليلات

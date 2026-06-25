@@ -1,0 +1,480 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "تقييم الجاهزية" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e19]
+            - generic [ref=e23]: تقييم الجاهزية
+        - listitem [ref=e24]:
+          - link "إدارة المشاريع" [ref=e25] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e26]
+            - generic [ref=e29]: إدارة المشاريع
+        - listitem [ref=e30]:
+          - link "قاعدة الجهات المانحة" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e32]
+            - generic [ref=e37]: قاعدة الجهات المانحة
+        - listitem [ref=e38]:
+          - link "التطابق الذكي مع المانحين" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e40]
+            - generic [ref=e45]: التطابق الذكي مع المانحين
+        - listitem [ref=e46]:
+          - link "المحلل التنفيذي الذكي" [ref=e47] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e48]
+            - generic [ref=e50]: المحلل التنفيذي الذكي
+    - paragraph [ref=e52]: © 2026 منصة رشد
+  - generic [ref=e53]:
+    - banner [ref=e54]:
+      - generic [ref=e56]:
+        - img
+        - textbox "ابحث..." [ref=e57]
+      - generic [ref=e58]:
+        - button "تبديل الوضع" [ref=e59]:
+          - img [ref=e60]
+        - button [ref=e62]:
+          - img [ref=e63]
+        - button "OA" [ref=e67]:
+          - generic [ref=e69]: OA
+    - main [ref=e70]:
+      - generic [ref=e487]:
+        - generic [ref=e489]:
+          - generic [ref=e490]:
+            - img [ref=e492]
+            - generic [ref=e494]:
+              - heading "المحلل التنفيذي الذكي" [level=1] [ref=e495]
+              - paragraph [ref=e496]: منصة التحليل المدعومة بالذكاء الاصطناعي
+          - button "تحليل جديد" [ref=e497]:
+            - img [ref=e498]
+            - generic [ref=e499]: تحليل جديد
+        - generic [ref=e500]:
+          - generic [ref=e501]:
+            - generic [ref=e502]:
+              - generic [ref=e503]:
+                - heading "سجل التحليلات" [level=2] [ref=e504]
+                - button [ref=e505]:
+                  - img [ref=e506]
+              - generic [ref=e507]:
+                - img [ref=e508]
+                - textbox "بحث..." [ref=e511]
+            - generic [ref=e512]:
+              - generic [ref=e513] [cursor=pointer]:
+                - generic [ref=e514]:
+                  - generic [ref=e515]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e516]
+                    - paragraph [ref=e517]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e519]:
+                    - img [ref=e520]
+                - paragraph [ref=e524]: يظهر تقرير Apple Watch Ultra 2 إيرادات جيدة مع طلب محدود، ويوفر فرصًا لتوسيع السوق وزيادة الطلب.
+                - generic [ref=e525]:
+                  - generic [ref=e526]:
+                    - img [ref=e527]
+                    - generic [ref=e530]: ٠١:٢٠ م
+                  - generic [ref=e531]: مكتمل
+              - generic [ref=e532] [cursor=pointer]:
+                - generic [ref=e533]:
+                  - generic [ref=e534]:
+                    - heading "تحليل انخفاض الإيرادات" [level=3] [ref=e535]
+                    - paragraph [ref=e536]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e538]:
+                    - img [ref=e539]
+                - paragraph [ref=e543]: يظهر التقرير أن الإيرادات في يونيو 2026 بلغت 2932.5 دولار مع عدد طلبات 3، ولا توجد بيانات سابقة للمق...
+                - generic [ref=e544]:
+                  - generic [ref=e545]:
+                    - img [ref=e546]
+                    - generic [ref=e549]: ٠١:١٩ م
+                  - generic [ref=e550]: مكتمل
+              - generic [ref=e551] [cursor=pointer]:
+                - generic [ref=e552]:
+                  - generic [ref=e553]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e554]
+                    - paragraph [ref=e555]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e557]:
+                    - img [ref=e558]
+                - paragraph [ref=e562]: يُظهر التقرير أداءً إيجابياً لمبيعات Apple Watch Ultra 2 مع إيرادات إجمالية قدرها 2400 دولار و8 وحدا...
+                - generic [ref=e563]:
+                  - generic [ref=e564]:
+                    - img [ref=e565]
+                    - generic [ref=e568]: ٠١:١٥ م
+                  - generic [ref=e569]: مكتمل
+              - generic [ref=e570] [cursor=pointer]:
+                - generic [ref=e571]:
+                  - generic [ref=e572]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e573]
+                    - paragraph [ref=e574]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e576]:
+                    - img [ref=e577]
+                - paragraph [ref=e581]: يظهر تحليل الفروع الأربعة تباينًا واضحًا في الأداء، حيث حقق فرع جدة الإيرادات الأعلى مع طلبين، يليه ...
+                - generic [ref=e582]:
+                  - generic [ref=e583]:
+                    - img [ref=e584]
+                    - generic [ref=e587]: ٠١:٠٣ م
+                  - generic [ref=e588]: مكتمل
+              - generic [ref=e589] [cursor=pointer]:
+                - generic [ref=e590]:
+                  - generic [ref=e591]:
+                    - heading "تحليل انخفاض الإيرادات" [level=3] [ref=e592]
+                    - paragraph [ref=e593]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e595]:
+                    - img [ref=e596]
+                - paragraph [ref=e600]: هذا التقرير يمثل أول شهر متاح للبيانات في يونيو 2026، حيث بلغت الإيرادات 2,932.5 دولار مع عدد طلبات ...
+                - generic [ref=e601]:
+                  - generic [ref=e602]:
+                    - img [ref=e603]
+                    - generic [ref=e606]: ٠١:٠١ م
+                  - generic [ref=e607]: مكتمل
+              - generic [ref=e608] [cursor=pointer]:
+                - generic [ref=e609]:
+                  - generic [ref=e610]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e611]
+                    - paragraph [ref=e612]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e614]:
+                    - img [ref=e615]
+                - paragraph [ref=e619]: يظهر تحليل الفروع أن فرع جدة هو الأعلى أداءً، بينما فروع الدمام وخميس مشيط لا تسجّل أي إيرادات، ويحت...
+                - generic [ref=e620]:
+                  - generic [ref=e621]:
+                    - img [ref=e622]
+                    - generic [ref=e625]: ١٢:٤٨ م
+                  - generic [ref=e626]: مكتمل
+              - generic [ref=e627] [cursor=pointer]:
+                - generic [ref=e628]:
+                  - generic [ref=e629]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e630]
+                    - paragraph [ref=e631]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e633]:
+                    - img [ref=e634]
+                - paragraph [ref=e638]: يظهر تقرير المبيعات أن Apple Watch Ultra 2 حقق إيرادات إجمالية قدرها 2400 دولار مع بيع 8 وحدات عبر 2...
+                - generic [ref=e639]:
+                  - generic [ref=e640]:
+                    - img [ref=e641]
+                    - generic [ref=e644]: ١٢:٤٣ م
+                  - generic [ref=e645]: مكتمل
+              - generic [ref=e646] [cursor=pointer]:
+                - generic [ref=e647]:
+                  - generic [ref=e648]:
+                    - heading "تحليل المخزون الراكد" [level=3] [ref=e649]
+                    - paragraph [ref=e650]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e652]:
+                    - img [ref=e653]
+                - generic [ref=e657]:
+                  - generic [ref=e658]:
+                    - img [ref=e659]
+                    - generic [ref=e662]: ١٢:٤١ م
+                  - generic [ref=e663]: قيد التشغيل
+              - generic [ref=e664] [cursor=pointer]:
+                - generic [ref=e665]:
+                  - generic [ref=e666]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e667]
+                    - paragraph [ref=e668]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e670]:
+                    - img [ref=e671]
+                - paragraph [ref=e675]: يظهر التقرير أن فروع الدمام وخميس مشيط غير نشطة، بينما يحقق فرع جدة أداءً مرتفعًا ويحقق فرع الرياض أ...
+                - generic [ref=e676]:
+                  - generic [ref=e677]:
+                    - img [ref=e678]
+                    - generic [ref=e681]: ١٢:٤٠ م
+                  - generic [ref=e682]: مكتمل
+              - generic [ref=e683] [cursor=pointer]:
+                - generic [ref=e684]:
+                  - generic [ref=e685]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e686]
+                    - paragraph [ref=e687]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e689]:
+                    - img [ref=e690]
+                - paragraph [ref=e694]: الملف يوضح مبيعات منتج Apple Watch Ultra 2، حيث بلغت الإيرادات 2400 دولار مقابل 8 وحدات مباعة في 2 ط...
+                - generic [ref=e695]:
+                  - generic [ref=e696]:
+                    - img [ref=e697]
+                    - generic [ref=e700]: ١٢:٣٨ م
+                  - generic [ref=e701]: مكتمل
+              - generic [ref=e702] [cursor=pointer]:
+                - generic [ref=e703]:
+                  - generic [ref=e704]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e705]
+                    - paragraph [ref=e706]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e708]:
+                    - img [ref=e709]
+                - paragraph [ref=e713]: المنتج يحقق إيرادات جيدة مع متوسط سعر مرتفع، لكن عدد الطلبات قليل، مما يشير إلى فرصة لتوسيع السوق عب...
+                - generic [ref=e714]:
+                  - generic [ref=e715]:
+                    - img [ref=e716]
+                    - generic [ref=e719]: ١٢:٣١ م
+                  - generic [ref=e720]: مكتمل
+              - generic [ref=e721] [cursor=pointer]:
+                - generic [ref=e722]:
+                  - generic [ref=e723]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e724]
+                    - paragraph [ref=e725]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e727]:
+                    - img [ref=e728]
+                - paragraph [ref=e732]: يحقق Apple Watch Ultra 2 إيرادات جيدة مع طلب مرتفع لكل طلب، مع إمكانية زيادة الطلب عبر تحسين الحملات...
+                - generic [ref=e733]:
+                  - generic [ref=e734]:
+                    - img [ref=e735]
+                    - generic [ref=e738]: ١٢:٣٠ م
+                  - generic [ref=e739]: مكتمل
+              - generic [ref=e740] [cursor=pointer]:
+                - generic [ref=e741]:
+                  - generic [ref=e742]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e743]
+                    - paragraph [ref=e744]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e746]:
+                    - img [ref=e747]
+                - paragraph [ref=e751]: المنتج Apple Watch Ultra 2 حقق إيرادات إجمالية قدرها 2400 دولار مع 8 وحدات مباعة عبر 2 طلب، ما يعادل...
+                - generic [ref=e752]:
+                  - generic [ref=e753]:
+                    - img [ref=e754]
+                    - generic [ref=e757]: ٠٩:٢٣ م
+                  - generic [ref=e758]: مكتمل
+              - generic [ref=e759] [cursor=pointer]:
+                - generic [ref=e760]:
+                  - generic [ref=e761]:
+                    - heading "تحليل المخزون الراكد" [level=3] [ref=e762]
+                    - paragraph [ref=e763]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e765]:
+                    - img [ref=e766]
+                - paragraph [ref=e770]: يظهر التقرير أن 90٪ من المنتجات غير مباعة، مع إجمالي مخزون 2355 وحدة و8 وحدات مباعة فقط، ما يشير إلى...
+                - generic [ref=e771]:
+                  - generic [ref=e772]:
+                    - img [ref=e773]
+                    - generic [ref=e776]: ٠٩:٢٢ م
+                  - generic [ref=e777]: مكتمل
+              - generic [ref=e778] [cursor=pointer]:
+                - generic [ref=e779]:
+                  - generic [ref=e780]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e781]
+                    - paragraph [ref=e782]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e784]:
+                    - img [ref=e785]
+                - paragraph [ref=e789]: الملف يوضح أن Apple Watch Ultra 2 حقق إيرادات إجمالية قدرها 2400 دولار مع مبيعات 8 وحدات عبر 2 طلب، ...
+                - generic [ref=e790]:
+                  - generic [ref=e791]:
+                    - img [ref=e792]
+                    - generic [ref=e795]: ١١:١٠ ص
+                  - generic [ref=e796]: مكتمل
+              - generic [ref=e797] [cursor=pointer]:
+                - generic [ref=e798]:
+                  - generic [ref=e799]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e800]
+                    - paragraph [ref=e801]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e803]:
+                    - img [ref=e804]
+                - paragraph [ref=e808]: حقق Apple Watch Ultra 2 إيرادات 2400$ من 8 وحدات عبر 2 طلب، مع متوسط سعر 300$ لكل ساعة، ما يعكس أداء...
+                - generic [ref=e809]:
+                  - generic [ref=e810]:
+                    - img [ref=e811]
+                    - generic [ref=e814]: ١٢:٣٩ ص
+                  - generic [ref=e815]: مكتمل
+              - generic [ref=e816] [cursor=pointer]:
+                - generic [ref=e817]:
+                  - generic [ref=e818]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e819]
+                    - paragraph [ref=e820]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e822]:
+                    - img [ref=e823]
+                - paragraph [ref=e827]: Apple Watch Ultra 2 حقق إيرادات 2400 دولار من 8 وحدات مباعة عبر 2 طلب فقط، مع متوسط سعر بيع 300 دولا...
+                - generic [ref=e828]:
+                  - generic [ref=e829]:
+                    - img [ref=e830]
+                    - generic [ref=e833]: ١٢:٠٨ ص
+                  - generic [ref=e834]: مكتمل
+              - generic [ref=e835] [cursor=pointer]:
+                - generic [ref=e836]:
+                  - generic [ref=e837]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e838]
+                    - paragraph [ref=e839]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e841]:
+                    - img [ref=e842]
+                - paragraph [ref=e846]: الملف يوضح أداء Apple Watch Ultra 2 مع إيرادات إجمالية 2400 دولار، و8 وحدات مباعة عبر 2 طلب، مع متوس...
+                - generic [ref=e847]:
+                  - generic [ref=e848]:
+                    - img [ref=e849]
+                    - generic [ref=e852]: ١٢:٠٨ ص
+                  - generic [ref=e853]: مكتمل
+              - generic [ref=e854] [cursor=pointer]:
+                - generic [ref=e855]:
+                  - generic [ref=e856]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e857]
+                    - paragraph [ref=e858]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e860]:
+                    - img [ref=e861]
+                - paragraph [ref=e865]: يُظهر تقرير تحليل المبيعات أن Apple Watch Ultra 2 حققت إيرادات إجمالية قدرها 2400$ من 8 وحدات عبر 2 ...
+                - generic [ref=e866]:
+                  - generic [ref=e867]:
+                    - img [ref=e868]
+                    - generic [ref=e871]: ١٠:٥٣ م
+                  - generic [ref=e872]: مكتمل
+              - generic [ref=e873] [cursor=pointer]:
+                - generic [ref=e874]:
+                  - generic [ref=e875]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e876]
+                    - paragraph [ref=e877]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e879]:
+                    - img [ref=e880]
+                - paragraph [ref=e884]: يُظهر التقرير أن فرع جدة – التحلية هو الأكثر ربحية، بينما فروع الدمام وخميس مشيط غير نشطة. إجمالي ال...
+                - generic [ref=e885]:
+                  - generic [ref=e886]:
+                    - img [ref=e887]
+                    - generic [ref=e890]: ١٠:٥٢ م
+                  - generic [ref=e891]: مكتمل
+          - generic [ref=e894]:
+            - generic [ref=e896]:
+              - generic [ref=e897]:
+                - img [ref=e899]
+                - generic [ref=e903]:
+                  - heading "تحليل أفضل المنتجات" [level=2] [ref=e904]
+                  - paragraph
+              - generic [ref=e905]:
+                - button [ref=e906]:
+                  - img [ref=e907]
+                - button [ref=e911]:
+                  - img [ref=e912]
+            - generic [ref=e916]:
+              - generic [ref=e918]:
+                - img [ref=e920]
+                - generic [ref=e922]: جلب البيانات
+              - generic [ref=e925]:
+                - img [ref=e927]
+                - generic [ref=e929]: تنفيذ SQL
+              - generic [ref=e932]:
+                - img [ref=e934]
+                - generic [ref=e936]: معالجة المؤشرات
+              - generic [ref=e939]:
+                - img [ref=e941]
+                - generic [ref=e943]: اكتشاف المخاطر
+              - generic [ref=e946]:
+                - img [ref=e948]
+                - generic [ref=e950]: توليد التوصيات
+            - generic [ref=e951]:
+              - generic [ref=e953]:
+                - generic [ref=e954]:
+                  - generic [ref=e955]: المحلل الذكي
+                  - img [ref=e957]
+                - generic [ref=e960]:
+                  - paragraph [ref=e961]: "We need to produce a report in Arabic, Markdown. Data: product_id, product_name \"Apple Watch Ultra 2\", total_revenue \"2400\", total_quantity_sold \"8\", total_orders 2. We need summary, analysis, predictions, key numbers. Use headings, lists, tables. No JSON. Just Markdown. Let's produce.# تقرير تحليل مبيعات منتج Apple Watch Ultra 2"
+                  - heading "ملخص سريع" [level=2] [ref=e962]
+                  - list [ref=e963]:
+                    - listitem [ref=e964]:
+                      - strong [ref=e965]: "إجمالي الإيرادات:"
+                      - text: 2400 دولار
+                    - listitem [ref=e966]:
+                      - strong [ref=e967]: "إجمالي الكمية المباعة:"
+                      - text: 8 وحدات
+                    - listitem [ref=e968]:
+                      - strong [ref=e969]: "عدد الطلبات:"
+                      - text: 2 طلب
+                    - listitem [ref=e970]:
+                      - strong [ref=e971]: "متوسط سعر الوحدة:"
+                      - text: 300 دولار
+                    - listitem [ref=e972]:
+                      - strong [ref=e973]: "متوسط الكمية لكل طلب:"
+                      - text: 4 وحدات
+                  - separator [ref=e974]
+                  - heading "تحليل الأداء" [level=2] [ref=e975]
+                  - table [ref=e976]:
+                    - rowgroup [ref=e977]:
+                      - row "المؤشر القيمة الملاحظات" [ref=e978]:
+                        - columnheader "المؤشر" [ref=e979]
+                        - columnheader "القيمة" [ref=e980]
+                        - columnheader "الملاحظات" [ref=e981]
+                    - rowgroup [ref=e982]:
+                      - row "الإيرادات 2400 دولار تم تحقيق إيرادات متوسطة مع عدم وجود فروق كبيرة بين الطلبات" [ref=e983]:
+                        - cell "الإيرادات" [ref=e984]:
+                          - strong [ref=e985]: الإيرادات
+                        - cell "2400 دولار" [ref=e986]
+                        - cell "تم تحقيق إيرادات متوسطة مع عدم وجود فروق كبيرة بين الطلبات" [ref=e987]
+                      - row "الكمية المباعة 8 وحدات معدل بيع منخفض نسبيًا، مما قد يشير إلى طلب محدود أو قلة الترويج" [ref=e988]:
+                        - cell "الكمية المباعة" [ref=e989]:
+                          - strong [ref=e990]: الكمية المباعة
+                        - cell "8 وحدات" [ref=e991]
+                        - cell "معدل بيع منخفض نسبيًا، مما قد يشير إلى طلب محدود أو قلة الترويج" [ref=e992]
+                      - row "عدد الطلبات 2 عدد الطلبات محدود، قد يكون بسبب فترة زمنية قصيرة أو قلة الحملات التسويقية" [ref=e993]:
+                        - cell "عدد الطلبات" [ref=e994]:
+                          - strong [ref=e995]: عدد الطلبات
+                        - cell "2" [ref=e996]
+                        - cell "عدد الطلبات محدود، قد يكون بسبب فترة زمنية قصيرة أو قلة الحملات التسويقية" [ref=e997]
+                      - row "متوسط سعر الوحدة 300 دولار السعر يتماشى مع الفئة المتوسطة للساعة الذكية" [ref=e998]:
+                        - cell "متوسط سعر الوحدة" [ref=e999]:
+                          - strong [ref=e1000]: متوسط سعر الوحدة
+                        - cell "300 دولار" [ref=e1001]
+                        - cell "السعر يتماشى مع الفئة المتوسطة للساعة الذكية" [ref=e1002]
+                      - row "متوسط الكمية لكل طلب 4 وحدات يشير إلى أن العملاء يشتريون في المتوسط 4 ساعات لكل طلب، ما قد يدل على رغبة في شراء هدايا أو مجموعات" [ref=e1003]:
+                        - cell "متوسط الكمية لكل طلب" [ref=e1004]:
+                          - strong [ref=e1005]: متوسط الكمية لكل طلب
+                        - cell "4 وحدات" [ref=e1006]
+                        - cell "يشير إلى أن العملاء يشتريون في المتوسط 4 ساعات لكل طلب، ما قد يدل على رغبة في شراء هدايا أو مجموعات" [ref=e1007]
+                  - heading "نقاط القوة" [level=3] [ref=e1008]
+                  - list [ref=e1009]:
+                    - listitem [ref=e1010]:
+                      - strong [ref=e1011]: سعر الوحدة معقول
+                      - text: مقارنة بالسوق، ما قد يجذب المشترين الذين يبحثون عن قيمة مقابل المال.
+                    - listitem [ref=e1012]:
+                      - strong [ref=e1013]: الطلب على الكمية الصغيرة
+                      - text: (4 وحدات لكل طلب) قد يشير إلى وجود فئة مستهدفة تبحث عن مجموعات أو هدايا.
+                  - heading "نقاط الضعف" [level=3] [ref=e1014]
+                  - list [ref=e1015]:
+                    - listitem [ref=e1016]:
+                      - strong [ref=e1017]: الكمية المباعة منخفضة
+                      - text: ، مما قد يؤثر على العائد الإجمالي.
+                    - listitem [ref=e1018]:
+                      - strong [ref=e1019]: عدد الطلبات قليل
+                      - text: ، ما قد يحد من فرص النمو.
+                  - separator [ref=e1020]
+                  - heading "توقعات مستقبلية" [level=2] [ref=e1021]
+                  - table [ref=e1022]:
+                    - rowgroup [ref=e1023]:
+                      - row "الفترة التوقع المبررات" [ref=e1024]:
+                        - columnheader "الفترة" [ref=e1025]
+                        - columnheader "التوقع" [ref=e1026]
+                        - columnheader "المبررات" [ref=e1027]
+                    - rowgroup [ref=e1028]:
+                      - row "الربع القادم زيادة الإيرادات بـ 20% إطلاق حملة تسويقية مستهدفة على منصات التواصل الاجتماعي" [ref=e1029]:
+                        - cell "الربع القادم" [ref=e1030]:
+                          - strong [ref=e1031]: الربع القادم
+                        - cell "زيادة الإيرادات بـ 20%" [ref=e1032]
+                        - cell "إطلاق حملة تسويقية مستهدفة على منصات التواصل الاجتماعي" [ref=e1033]
+                      - row "العام القادم مضاعفة الكمية المباعة شراكة مع متاجر التجزئة الكبرى وتوسيع التوزيع" [ref=e1034]:
+                        - cell "العام القادم" [ref=e1035]:
+                          - strong [ref=e1036]: العام القادم
+                        - cell "مضاعفة الكمية المباعة" [ref=e1037]
+                        - cell "شراكة مع متاجر التجزئة الكبرى وتوسيع التوزيع" [ref=e1038]
+                      - row "الاستراتيجية التركيز على البيع بالجملة للمؤسسات يمكن أن يرفع الطلب من خلال عروض خاصة للشركات التي ترغب في تقديم الساعات كجوائز للموظفين" [ref=e1039]:
+                        - cell "الاستراتيجية" [ref=e1040]:
+                          - strong [ref=e1041]: الاستراتيجية
+                        - cell "التركيز على البيع بالجملة للمؤسسات" [ref=e1042]
+                        - cell "يمكن أن يرفع الطلب من خلال عروض خاصة للشركات التي ترغب في تقديم الساعات كجوائز للموظفين" [ref=e1043]
+                  - separator [ref=e1044]
+                  - heading "توصيات" [level=2] [ref=e1045]
+                  - list [ref=e1046]:
+                    - listitem [ref=e1047]:
+                      - strong [ref=e1048]: زيادة الترويج
+                      - text: عبر الإعلانات المدفوعة على منصات مثل فيسبوك وإنستغرام.
+                    - listitem [ref=e1049]:
+                      - strong [ref=e1050]: تقديم حزم شراء
+                      - text: "(مثلاً: 2 ساعة + ملحقات) بأسعار مخفضة لتشجيع العملاء على زيادة الكمية المشتراة."
+                    - listitem [ref=e1051]:
+                      - strong [ref=e1052]: تحليل سلوك العملاء
+                      - text: عبر جمع بيانات أكثر تفصيلاً (مثل العمر، الموقع الجغرافي) لتخصيص الحملات التسويقية.
+                    - listitem [ref=e1053]:
+                      - strong [ref=e1054]: التعاون مع المؤثرين
+                      - text: في مجال التقنية واللياقة البدنية لزيادة الوعي بالمنتج.
+                  - separator [ref=e1055]
+                  - blockquote [ref=e1056]:
+                    - paragraph [ref=e1057]:
+                      - strong [ref=e1058]: الختام
+                      - text: مع التركيز على الاستراتيجيات المذكورة، يمكن تحقيق نمو ملحوظ في المبيعات والإيرادات خلال الفترة المقبلة.
+              - button "إيقاف التوليد" [ref=e1061]:
+                - img [ref=e1062]
+                - text: إيقاف التوليد

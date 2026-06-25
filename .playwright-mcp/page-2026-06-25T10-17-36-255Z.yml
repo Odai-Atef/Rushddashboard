@@ -1,0 +1,392 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e49]:
+          - link "تقييم الجاهزية" [ref=e50] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e51]
+            - generic [ref=e55]: تقييم الجاهزية
+        - listitem [ref=e17]:
+          - link "التطابق الذكي مع المانحين" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e19]
+            - generic [ref=e24]: التطابق الذكي مع المانحين
+        - listitem [ref=e25]:
+          - link "المحلل التنفيذي الذكي" [ref=e26] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e27]
+            - generic [ref=e29]: المحلل التنفيذي الذكي
+        - listitem [ref=e30]:
+          - link "إدارة المشاريع" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e32]
+            - generic [ref=e35]: إدارة المشاريع
+        - listitem [ref=e36]:
+          - link "التعاون والتواصل" [ref=e37] [cursor=pointer]:
+            - /url: /dashboard/collaboration
+            - img [ref=e38]
+            - generic [ref=e40]: التعاون والتواصل
+        - listitem [ref=e41]:
+          - link "قاعدة الجهات المانحة" [ref=e42] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e43]
+            - generic [ref=e48]: قاعدة الجهات المانحة
+    - paragraph [ref=e57]: © 2026 منصة رشد
+  - generic [ref=e58]:
+    - banner [ref=e59]:
+      - generic [ref=e61]:
+        - img
+        - textbox "ابحث..." [ref=e62]
+      - generic [ref=e63]:
+        - button "تبديل الوضع" [ref=e64]:
+          - img [ref=e65]
+        - button [ref=e67]:
+          - img [ref=e68]
+        - button "OA" [ref=e197]:
+          - generic [ref=e74]: OA
+    - main [ref=e75]:
+      - generic [ref=e283]:
+        - generic [ref=e285]:
+          - generic [ref=e286]:
+            - img [ref=e288]
+            - generic [ref=e290]:
+              - heading "المحلل التنفيذي الذكي" [level=1] [ref=e291]
+              - paragraph [ref=e292]: منصة التحليل المدعومة بالذكاء الاصطناعي
+          - button "تحليل جديد" [ref=e293]:
+            - img [ref=e294]
+            - generic [ref=e295]: تحليل جديد
+        - generic [ref=e296]:
+          - generic [ref=e297]:
+            - generic [ref=e298]:
+              - generic [ref=e299]:
+                - heading "سجل التحليلات" [level=2] [ref=e300]
+                - button [ref=e301]:
+                  - img [ref=e302]
+              - generic [ref=e303]:
+                - img [ref=e304]
+                - textbox "بحث..." [ref=e307]
+            - generic [ref=e308]:
+              - generic [ref=e309] [cursor=pointer]:
+                - generic [ref=e310]:
+                  - generic [ref=e311]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e312]
+                    - paragraph [ref=e313]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e315]:
+                    - img [ref=e316]
+                - paragraph [ref=e320]: يُظهر التقرير أداءً إيجابياً لمبيعات Apple Watch Ultra 2 مع إيرادات إجمالية قدرها 2400 دولار و8 وحدا...
+                - generic [ref=e321]:
+                  - generic [ref=e322]:
+                    - img [ref=e323]
+                    - generic [ref=e326]: ٠١:١٥ م
+                  - generic [ref=e327]: مكتمل
+              - generic [ref=e328] [cursor=pointer]:
+                - generic [ref=e329]:
+                  - generic [ref=e330]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e331]
+                    - paragraph [ref=e332]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e334]:
+                    - img [ref=e335]
+                - paragraph [ref=e339]: يظهر تحليل الفروع الأربعة تباينًا واضحًا في الأداء، حيث حقق فرع جدة الإيرادات الأعلى مع طلبين، يليه ...
+                - generic [ref=e340]:
+                  - generic [ref=e341]:
+                    - img [ref=e342]
+                    - generic [ref=e345]: ٠١:٠٣ م
+                  - generic [ref=e346]: مكتمل
+              - generic [ref=e347] [cursor=pointer]:
+                - generic [ref=e348]:
+                  - generic [ref=e349]:
+                    - heading "تحليل انخفاض الإيرادات" [level=3] [ref=e350]
+                    - paragraph [ref=e351]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e353]:
+                    - img [ref=e354]
+                - paragraph [ref=e358]: هذا التقرير يمثل أول شهر متاح للبيانات في يونيو 2026، حيث بلغت الإيرادات 2,932.5 دولار مع عدد طلبات ...
+                - generic [ref=e359]:
+                  - generic [ref=e360]:
+                    - img [ref=e361]
+                    - generic [ref=e364]: ٠١:٠١ م
+                  - generic [ref=e365]: مكتمل
+              - generic [ref=e366] [cursor=pointer]:
+                - generic [ref=e367]:
+                  - generic [ref=e368]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e369]
+                    - paragraph [ref=e370]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e372]:
+                    - img [ref=e373]
+                - paragraph [ref=e377]: يظهر تحليل الفروع أن فرع جدة هو الأعلى أداءً، بينما فروع الدمام وخميس مشيط لا تسجّل أي إيرادات، ويحت...
+                - generic [ref=e378]:
+                  - generic [ref=e379]:
+                    - img [ref=e380]
+                    - generic [ref=e383]: ١٢:٤٨ م
+                  - generic [ref=e384]: مكتمل
+              - generic [ref=e385] [cursor=pointer]:
+                - generic [ref=e386]:
+                  - generic [ref=e387]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e388]
+                    - paragraph [ref=e389]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e391]:
+                    - img [ref=e392]
+                - paragraph [ref=e396]: يظهر تقرير المبيعات أن Apple Watch Ultra 2 حقق إيرادات إجمالية قدرها 2400 دولار مع بيع 8 وحدات عبر 2...
+                - generic [ref=e397]:
+                  - generic [ref=e398]:
+                    - img [ref=e399]
+                    - generic [ref=e402]: ١٢:٤٣ م
+                  - generic [ref=e403]: مكتمل
+              - generic [ref=e404] [cursor=pointer]:
+                - generic [ref=e405]:
+                  - generic [ref=e406]:
+                    - heading "تحليل المخزون الراكد" [level=3] [ref=e407]
+                    - paragraph [ref=e408]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e410]:
+                    - img [ref=e411]
+                - generic [ref=e415]:
+                  - generic [ref=e416]:
+                    - img [ref=e417]
+                    - generic [ref=e420]: ١٢:٤١ م
+                  - generic [ref=e421]: قيد التشغيل
+              - generic [ref=e422] [cursor=pointer]:
+                - generic [ref=e423]:
+                  - generic [ref=e424]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e425]
+                    - paragraph [ref=e426]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e428]:
+                    - img [ref=e429]
+                - paragraph [ref=e433]: يظهر التقرير أن فروع الدمام وخميس مشيط غير نشطة، بينما يحقق فرع جدة أداءً مرتفعًا ويحقق فرع الرياض أ...
+                - generic [ref=e434]:
+                  - generic [ref=e435]:
+                    - img [ref=e436]
+                    - generic [ref=e439]: ١٢:٤٠ م
+                  - generic [ref=e440]: مكتمل
+              - generic [ref=e441] [cursor=pointer]:
+                - generic [ref=e442]:
+                  - generic [ref=e443]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e444]
+                    - paragraph [ref=e445]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e447]:
+                    - img [ref=e448]
+                - paragraph [ref=e452]: الملف يوضح مبيعات منتج Apple Watch Ultra 2، حيث بلغت الإيرادات 2400 دولار مقابل 8 وحدات مباعة في 2 ط...
+                - generic [ref=e453]:
+                  - generic [ref=e454]:
+                    - img [ref=e455]
+                    - generic [ref=e458]: ١٢:٣٨ م
+                  - generic [ref=e459]: مكتمل
+              - generic [ref=e460] [cursor=pointer]:
+                - generic [ref=e461]:
+                  - generic [ref=e462]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e463]
+                    - paragraph [ref=e464]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e466]:
+                    - img [ref=e467]
+                - paragraph [ref=e471]: المنتج يحقق إيرادات جيدة مع متوسط سعر مرتفع، لكن عدد الطلبات قليل، مما يشير إلى فرصة لتوسيع السوق عب...
+                - generic [ref=e472]:
+                  - generic [ref=e473]:
+                    - img [ref=e474]
+                    - generic [ref=e477]: ١٢:٣١ م
+                  - generic [ref=e478]: مكتمل
+              - generic [ref=e479] [cursor=pointer]:
+                - generic [ref=e480]:
+                  - generic [ref=e481]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e482]
+                    - paragraph [ref=e483]: ٢٥‏/٠٦‏/٢٠٢٦
+                  - button [ref=e485]:
+                    - img [ref=e486]
+                - paragraph [ref=e490]: يحقق Apple Watch Ultra 2 إيرادات جيدة مع طلب مرتفع لكل طلب، مع إمكانية زيادة الطلب عبر تحسين الحملات...
+                - generic [ref=e491]:
+                  - generic [ref=e492]:
+                    - img [ref=e493]
+                    - generic [ref=e496]: ١٢:٣٠ م
+                  - generic [ref=e497]: مكتمل
+              - generic [ref=e498] [cursor=pointer]:
+                - generic [ref=e499]:
+                  - generic [ref=e500]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e501]
+                    - paragraph [ref=e502]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e504]:
+                    - img [ref=e505]
+                - paragraph [ref=e509]: المنتج Apple Watch Ultra 2 حقق إيرادات إجمالية قدرها 2400 دولار مع 8 وحدات مباعة عبر 2 طلب، ما يعادل...
+                - generic [ref=e510]:
+                  - generic [ref=e511]:
+                    - img [ref=e512]
+                    - generic [ref=e515]: ٠٩:٢٣ م
+                  - generic [ref=e516]: مكتمل
+              - generic [ref=e517] [cursor=pointer]:
+                - generic [ref=e518]:
+                  - generic [ref=e519]:
+                    - heading "تحليل المخزون الراكد" [level=3] [ref=e520]
+                    - paragraph [ref=e521]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e523]:
+                    - img [ref=e524]
+                - paragraph [ref=e528]: يظهر التقرير أن 90٪ من المنتجات غير مباعة، مع إجمالي مخزون 2355 وحدة و8 وحدات مباعة فقط، ما يشير إلى...
+                - generic [ref=e529]:
+                  - generic [ref=e530]:
+                    - img [ref=e531]
+                    - generic [ref=e534]: ٠٩:٢٢ م
+                  - generic [ref=e535]: مكتمل
+              - generic [ref=e536] [cursor=pointer]:
+                - generic [ref=e537]:
+                  - generic [ref=e538]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e539]
+                    - paragraph [ref=e540]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e542]:
+                    - img [ref=e543]
+                - paragraph [ref=e547]: الملف يوضح أن Apple Watch Ultra 2 حقق إيرادات إجمالية قدرها 2400 دولار مع مبيعات 8 وحدات عبر 2 طلب، ...
+                - generic [ref=e548]:
+                  - generic [ref=e549]:
+                    - img [ref=e550]
+                    - generic [ref=e553]: ١١:١٠ ص
+                  - generic [ref=e554]: مكتمل
+              - generic [ref=e555] [cursor=pointer]:
+                - generic [ref=e556]:
+                  - generic [ref=e557]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e558]
+                    - paragraph [ref=e559]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e561]:
+                    - img [ref=e562]
+                - paragraph [ref=e566]: حقق Apple Watch Ultra 2 إيرادات 2400$ من 8 وحدات عبر 2 طلب، مع متوسط سعر 300$ لكل ساعة، ما يعكس أداء...
+                - generic [ref=e567]:
+                  - generic [ref=e568]:
+                    - img [ref=e569]
+                    - generic [ref=e572]: ١٢:٣٩ ص
+                  - generic [ref=e573]: مكتمل
+              - generic [ref=e574] [cursor=pointer]:
+                - generic [ref=e575]:
+                  - generic [ref=e576]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e577]
+                    - paragraph [ref=e578]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e580]:
+                    - img [ref=e581]
+                - paragraph [ref=e585]: Apple Watch Ultra 2 حقق إيرادات 2400 دولار من 8 وحدات مباعة عبر 2 طلب فقط، مع متوسط سعر بيع 300 دولا...
+                - generic [ref=e586]:
+                  - generic [ref=e587]:
+                    - img [ref=e588]
+                    - generic [ref=e591]: ١٢:٠٨ ص
+                  - generic [ref=e592]: مكتمل
+              - generic [ref=e593] [cursor=pointer]:
+                - generic [ref=e594]:
+                  - generic [ref=e595]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e596]
+                    - paragraph [ref=e597]: ٢٤‏/٠٦‏/٢٠٢٦
+                  - button [ref=e599]:
+                    - img [ref=e600]
+                - paragraph [ref=e604]: الملف يوضح أداء Apple Watch Ultra 2 مع إيرادات إجمالية 2400 دولار، و8 وحدات مباعة عبر 2 طلب، مع متوس...
+                - generic [ref=e605]:
+                  - generic [ref=e606]:
+                    - img [ref=e607]
+                    - generic [ref=e610]: ١٢:٠٨ ص
+                  - generic [ref=e611]: مكتمل
+              - generic [ref=e612] [cursor=pointer]:
+                - generic [ref=e613]:
+                  - generic [ref=e614]:
+                    - heading "أفضل المنتجات حسب الإيرادات" [level=3] [ref=e615]
+                    - paragraph [ref=e616]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e618]:
+                    - img [ref=e619]
+                - paragraph [ref=e623]: يُظهر تقرير تحليل المبيعات أن Apple Watch Ultra 2 حققت إيرادات إجمالية قدرها 2400$ من 8 وحدات عبر 2 ...
+                - generic [ref=e624]:
+                  - generic [ref=e625]:
+                    - img [ref=e626]
+                    - generic [ref=e629]: ١٠:٥٣ م
+                  - generic [ref=e630]: مكتمل
+              - generic [ref=e631] [cursor=pointer]:
+                - generic [ref=e632]:
+                  - generic [ref=e633]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e634]
+                    - paragraph [ref=e635]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e637]:
+                    - img [ref=e638]
+                - paragraph [ref=e642]: يُظهر التقرير أن فرع جدة – التحلية هو الأكثر ربحية، بينما فروع الدمام وخميس مشيط غير نشطة. إجمالي ال...
+                - generic [ref=e643]:
+                  - generic [ref=e644]:
+                    - img [ref=e645]
+                    - generic [ref=e648]: ١٠:٥٢ م
+                  - generic [ref=e649]: مكتمل
+              - generic [ref=e650] [cursor=pointer]:
+                - generic [ref=e651]:
+                  - generic [ref=e652]:
+                    - heading "تحليل المخزون الراكد" [level=3] [ref=e653]
+                    - paragraph [ref=e654]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e656]:
+                    - img [ref=e657]
+                - paragraph [ref=e661]: يظهر التقرير أن 90% من المخزون غير مبيع، مع وجود منتج واحد فقط (Apple Watch Ultra 2) يحقق مبيعات منخ...
+                - generic [ref=e662]:
+                  - generic [ref=e663]:
+                    - img [ref=e664]
+                    - generic [ref=e667]: ١٠:٤٣ م
+                  - generic [ref=e668]: مكتمل
+              - generic [ref=e669] [cursor=pointer]:
+                - generic [ref=e670]:
+                  - generic [ref=e671]:
+                    - heading "تحليل الفروع الضعيفة" [level=3] [ref=e672]
+                    - paragraph [ref=e673]: ٢٣‏/٠٦‏/٢٠٢٦
+                  - button [ref=e675]:
+                    - img [ref=e676]
+                - paragraph [ref=e680]: يُظهر التقرير أن فرع جدة هو الأعلى أداءً بإيرادات 1,897.5 ريال، بينما فرع الرياض يحقق إيرادات 1,035 ...
+                - generic [ref=e681]:
+                  - generic [ref=e682]:
+                    - img [ref=e683]
+                    - generic [ref=e686]: ١٠:٤١ م
+                  - generic [ref=e687]: مكتمل
+          - generic [ref=e690]:
+            - generic [ref=e692]:
+              - generic [ref=e693]:
+                - img [ref=e695]
+                - generic [ref=e699]:
+                  - heading "تحليل المخزون الراكد" [level=2] [ref=e700]
+                  - paragraph
+              - generic [ref=e701]:
+                - button [ref=e702]:
+                  - img [ref=e703]
+                - button [ref=e707]:
+                  - img [ref=e708]
+            - generic [ref=e712]:
+              - generic [ref=e714]:
+                - img [ref=e716]
+                - generic [ref=e718]: جلب البيانات
+              - generic [ref=e721]:
+                - img [ref=e723]
+                - generic [ref=e725]: تنفيذ SQL
+              - generic [ref=e728]:
+                - img [ref=e730]
+                - generic [ref=e732]: معالجة المؤشرات
+              - generic [ref=e735]:
+                - img [ref=e737]
+                - generic [ref=e739]: اكتشاف المخاطر
+              - generic [ref=e742]:
+                - img [ref=e781]
+                - generic [ref=e746]: توليد التوصيات
+            - generic [ref=e747]:
+              - generic [ref=e749]:
+                - generic [ref=e750]:
+                  - img [ref=e752]
+                  - generic [ref=e757]: أنت
+                - paragraph [ref=e759]: جاري بدء التحليل...
+              - generic [ref=e761]:
+                - generic [ref=e762]:
+                  - generic [ref=e763]: المحلل الذكي
+                  - img [ref=e765]
+                - generic [ref=e767]:
+                  - paragraph [ref=e769]: "Error: Analysis is still running but stream connection could not be restored. Please reconnect."
+                  - button "نسخ" [ref=e784]:
+                    - img [ref=e785]
+                    - text: نسخ
+            - generic [ref=e789]:
+              - generic [ref=e790]:
+                - img [ref=e791]
+                - generic [ref=e793]: حدث خطأ
+              - paragraph [ref=e794]: Analysis is still running but stream connection could not be restored. Please reconnect.
+              - button "إعادة تشغيل التحليل" [ref=e795]:
+                - img [ref=e796]
+                - text: إعادة تشغيل التحليل
+            - generic [ref=e802]:
+              - textbox "اطرح سؤالاً للمتابعة..." [ref=e803]
+              - button "إرسال" [disabled] [ref=e804]:
+                - img [ref=e805]
+                - generic [ref=e808]: إرسال
