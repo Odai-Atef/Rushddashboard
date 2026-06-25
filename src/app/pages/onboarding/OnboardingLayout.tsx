@@ -95,15 +95,30 @@ function StepGuardOutlet() {
     );
   }
 
-  if (!guardResult.allowed && guardResult.redirectTo) {
-    console.log('[StepGuardOutlet] guard redirect to', guardResult.redirectTo);
-    return (
-      <Navigate
-        to={`${getStepPath(guardResult.redirectTo)}${location.search}`}
-        replace
-      />
-    );
-  }
+    if (!guardResult.allowed && guardResult.redirectTo) {
+      console.log('[StepGuardOutlet] guard redirect to', guardResult.redirectTo);
+      const targetPath =
+        guardResult.redirectTo === 'registration'
+          ? '/dashboard/charity-assessment'
+          : getStepPath(guardResult.redirectTo);
+      return (
+        <Navigate
+          to={`${targetPath}${location.search}`}
+          replace
+        />
+      );
+    }
+
+    // Also redirect directly from onboarding landing/registration when no progress exists
+    // so users land on the charity-assessment start page instead of the old onboarding funnel.
+    if (
+      (step === 'landing' || step === 'registration') &&
+      activeOrganizationId &&
+      organization &&
+      (!organization.currentStep || organization.currentStep.toLowerCase() === 'registration' || organization.currentStep.toLowerCase() === 'landing')
+    ) {
+      return <Navigate to={`/dashboard/charity-assessment${location.search}`} replace />;
+    }
 
   // Surface hydration errors inside the existing onboarding layout instead of blocking
   if (error && !organization) {

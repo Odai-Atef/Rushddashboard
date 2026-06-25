@@ -157,6 +157,16 @@ export function evaluateStepGuard(
     return { allowed: true };
   }
 
+  // If registration has not been started/completed, redirect users to the
+  // charity-assessment flow instead of keeping them in the legacy onboarding funnel.
+  if (progress.currentStep === 'registration' || progress.currentStep === 'landing' || !progress.currentStep) {
+    return {
+      allowed: false,
+      redirectTo: 'registration',
+      reason: 'لم يتم إكمال التسجيل بعد.',
+    };
+  }
+
   if (isStepCompleted(requestedStep, progress)) {
     return { allowed: true };
   }
