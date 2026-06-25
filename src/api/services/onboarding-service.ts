@@ -556,7 +556,13 @@ export interface EvaluationCooldownStatusResponse {
 }
 
 /** Document type enum used by the backend document upload API */
-export type DocumentType = 'license' | 'financial' | 'national_address' | 'registration' | 'other';
+export type DocumentType =
+  | 'license'
+  | 'financial'
+  | 'national_address'
+  | 'registration'
+  | 'board_approval_letter'
+  | 'other';
 
 /** Lifecycle status of an uploaded organization document */
 export type DocumentStatus = 'UPLOADED' | 'PENDING_REVIEW' | string;
@@ -586,6 +592,7 @@ export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
   bank: 'financial',
   address: 'national_address',
   profile: 'registration',
+  board_approval: 'board_approval_letter',
   projects: 'other',
   financial: 'financial',
   annual: 'other',
@@ -607,6 +614,9 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
   ORG_PROFILE: 'profile',
   ORGANIZATION_PROFILE: 'profile',
   PROFILE: 'profile',
+  BOARD_APPROVAL_LETTER: 'board_approval',
+  board_approval_letter: 'board_approval',
+  BOARD_APPROVAL: 'board_approval',
   PROJECTS: 'projects',
   PREVIOUS_PROJECTS: 'projects',
   ANNUAL_REPORT: 'annual',
@@ -616,7 +626,7 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
 };
 
 /** All known frontend document slot IDs */
-export type DocumentSlotId = 'license' | 'bank' | 'address' | 'profile' | 'projects' | 'financial' | 'annual' | 'brand';
+export type DocumentSlotId = 'license' | 'bank' | 'address' | 'profile' | 'board_approval' | 'projects' | 'financial' | 'annual' | 'brand';
 
 /**
  * Onboarding Service class
@@ -721,6 +731,16 @@ export class OnboardingService {
     return apiClient.get('/api/v1/onboarding/documents', {
       params: { organizationId },
     });
+  }
+
+  /**
+   * Check whether all required documents have been uploaded
+   * GET /api/v1/onboarding/documents/required-check/:organizationId
+   */
+  async checkRequiredDocuments(
+    organizationId: string
+  ): Promise<ApiResponse<{ complete: boolean }>> {
+    return apiClient.get(`/api/v1/onboarding/documents/required-check/${organizationId}`);
   }
 
   /**

@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Clock,
   FileText,
+  Info,
   Loader2,
   Upload,
   X,
@@ -15,6 +16,7 @@ import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { getStepOrder, OnboardingStep } from '@/app/utils/onboarding-guards';
 import { toast } from 'sonner';
+import { useNavigate, useSearchParams } from 'react-router';
 import {
   BACKEND_DOCUMENT_TYPE_TO_SLOT,
   DOCUMENT_SLOT_MAPPING,
@@ -40,10 +42,11 @@ const documentSlots: { id: DocumentSlotId; label: string; required: boolean }[] 
   { id: 'bank', label: 'شهادة الحساب البنكي', required: true },
   { id: 'address', label: 'العنوان الوطني', required: true },
   { id: 'profile', label: 'الملف التعريفي للجمعية', required: true },
+  { id: 'board_approval', label: 'خطاب اعتماد مجلس الإدارة', required: true },
+  { id: 'brand', label: 'الهوية البصرية', required: true },
   { id: 'projects', label: 'المشاريع السابقة', required: false },
   { id: 'financial', label: 'التقارير المالية', required: false },
   { id: 'annual', label: 'التقارير السنوية', required: false },
-  { id: 'brand', label: 'الهوية البصرية', required: false },
 ];
 
 const mapSlotToDocumentType = (slotId: DocumentSlotId): string =>
@@ -56,6 +59,8 @@ const isCompletedStatus = (status?: string) =>
 
 export function DocumentsPage() {
   const { goToStep } = useOnboardingNavigate();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { organization, activeOrganizationId, setOrganization, setAssessmentResult, setAssessmentStatus } =
     useOnboardingContext();
 
@@ -63,6 +68,12 @@ export function DocumentsPage() {
   const [documentsLoadError, setDocumentsLoadError] = useState<string | null>(null);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
   const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
+  const [redirectMessage] = useState<string | null>(() => {
+    const fromResults = searchParams.get('from') === 'results';
+    return fromResults
+      ? 'لعرض النتائج، يجب عليك إكمال الملف التعريفي برفع المستندات المطلوبة.'
+      : null;
+  });
 
   const requiredSlots = documentSlots.filter((s) => s.required);
   const optionalSlots = documentSlots.filter((s) => !s.required);
@@ -292,7 +303,7 @@ export function DocumentsPage() {
       }
     }
 
-    goToStep('thanks');
+    navigate(`/dashboard/charity-assessment/results/${activeOrganizationId}`, { replace: true });
   };
 
   if (!activeOrganizationId) {
@@ -322,18 +333,7 @@ export function DocumentsPage() {
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
         </div>
       )}
-      <div className="max-w-4xl mx-auto">
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">الخطوة ٣ من ٤</span>
-            <span className="text-sm font-medium text-blue-600">٧٥٪</span>
-          </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: '75%' }}></div>
-          </div>
-        </div>
-
+      <div className="max-w-3xl mx-auto">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">المستندات المطلوبة</h1>
@@ -395,12 +395,20 @@ export function DocumentsPage() {
           </div>
         )}
 
+        {/* Redirect message from results page */}
+        {redirectMessage && (
+          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 flex items-start gap-3">
+            <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+            <span className="text-blue-700">{redirectMessage}</span>
+          </div>
+        )}
+
         {/* Required warning */}
         {!isDocumentsComplete && !hasPendingUploads && (
           <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6 flex items-center gap-3">
             <AlertTriangle className="w-5 h-5 text-yellow-600" />
             <span className="text-yellow-700">
-              يرجى رفع جميع المستندات الإلزامية الأربعة قبل المتابعة.
+              يرجى رفع جميع المستندات الإلزامية قبل المتابعة.
             </span>
           </div>
         )}
@@ -622,7 +630,7 @@ export function DocumentsPage() {
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <>
-              التالي
+              رفع المستندات ومعرفة النتيجة
               <ChevronLeft className="w-5 h-5" />
             </>
           </button>
