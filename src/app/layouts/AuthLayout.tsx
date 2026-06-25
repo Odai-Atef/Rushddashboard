@@ -11,7 +11,7 @@ export function AuthLayout() {
   const context = useOutletContext<ThemeContext>();
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to="/dashboard/charity-assessment" replace />;
   }
 
   return <Outlet context={context} />;

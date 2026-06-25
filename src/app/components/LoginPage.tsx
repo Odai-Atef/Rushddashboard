@@ -27,7 +27,7 @@ export function LoginPage() {
     if (redirectParam && redirectParam.startsWith('/')) {
       return redirectParam;
     }
-    return '/dashboard/onboarding/landing';
+    return '/dashboard/charity-assessment';
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

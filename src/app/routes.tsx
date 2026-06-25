@@ -76,7 +76,7 @@ export const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Navigate to="/dashboard" replace />,
+        element: <Navigate to="/dashboard/charity-assessment" replace />,
       },
       {
         path: 'auth',
@@ -408,7 +408,7 @@ export const router = createBrowserRouter([
       },
       {
         path: '*',
-        element: <Navigate to="/dashboard" replace />,
+        element: <Navigate to="/dashboard/charity-assessment" replace />,
       },
     ],
   },
