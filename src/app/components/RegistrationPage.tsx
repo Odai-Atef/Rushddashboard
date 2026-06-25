@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
+import { TermsModal } from './TermsModal';
 
 export function RegistrationPage() {
   const navigate = useNavigate();
@@ -15,7 +16,6 @@ export function RegistrationPage() {
     companyName: '',
     password: '',
     confirmPassword: '',
-    roleSlug: 'executive',
     agreeToTerms: false
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -57,7 +57,7 @@ export function RegistrationPage() {
         firstName: formData.firstName,
         lastName: formData.lastName,
         companyName: formData.companyName,
-        roleSlug: formData.roleSlug,
+        roleSlug: 'executive',
         phone: formData.phone,
       });
       if (response.success) {
@@ -223,31 +223,6 @@ export function RegistrationPage() {
               {errors.companyName && <p className="text-xs text-red-600 mt-1">{errors.companyName}</p>}
             </div>
 
-            {/* Role Selection */}
-            <div>
-              <label className="block text-sm font-medium mb-2">الدور</label>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { value: 'investor', label: 'مستثمر' },
-                  { value: 'executive', label: 'تنفيذي' },
-                  { value: 'analyst', label: 'محلل' }
-                ].map((role) => (
-                  <button
-                    key={role.value}
-                    type="button"
-                    onClick={() => updateField('roleSlug', role.value)}
-                    className={`px-4 py-2.5 rounded-lg border-2 transition-all text-sm ${
-                      formData.roleSlug === role.value
-                        ? 'border-primary bg-primary/10 text-primary'
-                        : 'border-border hover:border-muted-foreground'
-                    }`}
-                  >
-                    {role.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
             {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium mb-2">
@@ -317,13 +292,9 @@ export function RegistrationPage() {
                 />
                 <span className="text-sm">
                   أوافق على{' '}
-                  <a href="/terms" className="text-primary hover:underline">
-                    الشروط والأحكام
-                  </a>{' '}
-                  و{' '}
-                  <a href="/privacy" className="text-primary hover:underline">
-                    سياسة الخصوصية
-                  </a>
+                  <TermsModal>
+                    الشروط والأحكام و سياسة الخصوصية
+                  </TermsModal>
                 </span>
               </label>
               {errors.agreeToTerms && <p className="text-xs text-red-600 mt-1">{errors.agreeToTerms}</p>}
