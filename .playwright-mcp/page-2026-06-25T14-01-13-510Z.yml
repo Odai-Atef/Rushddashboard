@@ -1,0 +1,122 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "تقييم الجاهزية" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e19]
+            - generic [ref=e23]: تقييم الجاهزية
+        - listitem [ref=e24]:
+          - link "إدارة المشاريع" [ref=e25] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e26]
+            - generic [ref=e29]: إدارة المشاريع
+        - listitem [ref=e30]:
+          - link "قاعدة الجهات المانحة" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e32]
+            - generic [ref=e37]: قاعدة الجهات المانحة
+        - listitem [ref=e38]:
+          - link "التطابق الذكي مع المانحين" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e40]
+            - generic [ref=e45]: التطابق الذكي مع المانحين
+        - listitem [ref=e46]:
+          - link "المحلل التنفيذي الذكي" [ref=e47] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e48]
+            - generic [ref=e50]: المحلل التنفيذي الذكي
+    - paragraph [ref=e52]: © 2026 منصة رشد
+  - generic [ref=e53]:
+    - banner [ref=e54]:
+      - generic [ref=e56]:
+        - img
+        - textbox "ابحث..." [ref=e57]
+      - generic [ref=e58]:
+        - button "تبديل الوضع" [ref=e59]:
+          - img [ref=e60]
+        - button [ref=e62]:
+          - img [ref=e63]
+        - button "OA" [ref=e76]:
+          - generic [ref=e69]: OA
+    - main [ref=e70]:
+      - generic [ref=e168]:
+        - generic [ref=e169]:
+          - img [ref=e171]
+          - heading "تقييم ISIV" [level=1] [ref=e173]
+          - paragraph [ref=e174]: تقييم جاهزية المنظمات الخيرية - نموذج ISIV
+          - paragraph [ref=e175]: 4 أبعاد • 24 سؤال • 120 نقطة
+        - generic [ref=e176]:
+          - heading "أبعاد التقييم" [level=2] [ref=e177]
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - img [ref=e180]
+              - generic [ref=e183]:
+                - text: البناء المؤسسي
+                - paragraph [ref=e184]: Institutional Building (I)
+            - generic [ref=e185]:
+              - img [ref=e186]
+              - generic [ref=e188]:
+                - text: الحوكمة
+                - paragraph [ref=e189]: Governance (S)
+            - generic [ref=e190]:
+              - img [ref=e191]
+              - generic [ref=e201]:
+                - text: الذكاء المؤسسي
+                - paragraph [ref=e202]: Organizational Intelligence (I)
+            - generic [ref=e203]:
+              - img [ref=e204]
+              - generic [ref=e207]:
+                - text: القيمة والاستدامة
+                - paragraph [ref=e208]: Value & Sustainability (V)
+          - generic [ref=e209]:
+            - paragraph [ref=e210]:
+              - strong [ref=e211]: ISIV
+              - text: =
+              - strong [ref=e212]: I
+              - text: nstitutional Building +
+              - strong [ref=e213]: S
+              - text: ustainability +
+              - strong [ref=e214]: I
+              - text: ntelligence +
+              - strong [ref=e215]: V
+              - text: alue
+            - paragraph [ref=e216]: كل بُعد يحتوي على 6 أسئلة، بحد أقصى 30 نقطة لكل بُعد (5 نقاط للسؤال)
+        - generic [ref=e217]:
+          - heading "ما الذي ستحصل عليه:" [level=3] [ref=e218]
+          - generic [ref=e219]:
+            - generic [ref=e220]:
+              - img [ref=e221]
+              - generic [ref=e224]: تقييم شامل عبر 4 أبعاد استراتيجية (ISIV)
+            - generic [ref=e225]:
+              - img [ref=e226]
+              - generic [ref=e229]: درجة إجمالية من 120 نقطة مع حالة التأهيل
+            - generic [ref=e230]:
+              - img [ref=e231]
+              - generic [ref=e234]: تحليل الفجوات ونقاط القوة لكل بُعد
+            - generic [ref=e235]:
+              - img [ref=e236]
+              - generic [ref=e239]: خارطة طريق مخصصة للتحسين
+            - generic [ref=e240]:
+              - img [ref=e241]
+              - generic [ref=e244]: توصيات مدعومة بالذكاء الاصطناعي
+            - generic [ref=e245]:
+              - img [ref=e246]
+              - generic [ref=e249]: مقارنة مع معايير القطاع
+        - generic [ref=e250]:
+          - button "بدء التقييم" [ref=e251]:
+            - img [ref=e252]
+            - text: بدء التقييم
+          - button "عرض نتائج سابقة" [ref=e254]
+        - paragraph [ref=e255]:
+          - img [ref=e256]
+          - text: "المدة المتوقعة: 15-20 دقيقة (6 أسئلة لكل بُعد)"

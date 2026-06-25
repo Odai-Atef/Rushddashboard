@@ -1,0 +1,54 @@
+- generic [ref=e4]:
+  - complementary [ref=e5]:
+    - generic [ref=e6]:
+      - img "منصة رشد" [ref=e7]
+      - paragraph [ref=e8]: منصة رشد
+    - navigation [ref=e9]:
+      - list [ref=e10]:
+        - listitem [ref=e11]:
+          - link "تسجيل الجمعيات" [ref=e12] [cursor=pointer]:
+            - /url: /dashboard/onboarding/registration
+            - img [ref=e13]
+            - generic [ref=e16]: تسجيل الجمعيات
+        - listitem [ref=e17]:
+          - link "تقييم الجاهزية" [ref=e18] [cursor=pointer]:
+            - /url: /dashboard/charity-assessment
+            - img [ref=e19]
+            - generic [ref=e23]: تقييم الجاهزية
+        - listitem [ref=e24]:
+          - link "إدارة المشاريع" [ref=e25] [cursor=pointer]:
+            - /url: /dashboard/project-management
+            - img [ref=e26]
+            - generic [ref=e29]: إدارة المشاريع
+        - listitem [ref=e30]:
+          - link "قاعدة الجهات المانحة" [ref=e31] [cursor=pointer]:
+            - /url: /dashboard/donors
+            - img [ref=e32]
+            - generic [ref=e37]: قاعدة الجهات المانحة
+        - listitem [ref=e38]:
+          - link "التطابق الذكي مع المانحين" [ref=e39] [cursor=pointer]:
+            - /url: /dashboard/donor-matching
+            - img [ref=e40]
+            - generic [ref=e45]: التطابق الذكي مع المانحين
+        - listitem [ref=e46]:
+          - link "المحلل التنفيذي الذكي" [ref=e47] [cursor=pointer]:
+            - /url: /dashboard/ai-analysis
+            - img [ref=e48]
+            - generic [ref=e50]: المحلل التنفيذي الذكي
+    - paragraph [ref=e52]: © 2026 منصة رشد
+  - generic [ref=e53]:
+    - banner [ref=e54]:
+      - generic [ref=e56]:
+        - img
+        - textbox "ابحث..." [ref=e57]
+      - generic [ref=e58]:
+        - button "تبديل الوضع" [ref=e59]:
+          - img [ref=e60]
+        - button [ref=e62]:
+          - img [ref=e63]
+        - button "؟" [ref=e67]:
+          - generic [ref=e69]: ؟
+    - main [ref=e70]:
+      - generic [ref=e72]:
+        - img [ref=e73]
+        - paragraph [ref=e75]: جاري تحميل بيانات المؤسسة...

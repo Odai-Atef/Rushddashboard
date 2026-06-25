@@ -159,7 +159,13 @@ export function evaluateStepGuard(
 
   // If registration has not been started/completed, redirect users to the
   // charity-assessment flow instead of keeping them in the legacy onboarding funnel.
-  if (progress.currentStep === 'registration' || progress.currentStep === 'landing' || !progress.currentStep) {
+  // However, allow the assessment itself because the new charity-assessment entry
+  // point lets users start the ISIV evaluation without completing the old funnel.
+  const isAssessmentEntryPoint = requestedStep === 'assessment' || requestedStep === 'preloader' || requestedStep === 'processing';
+  if (
+    !isAssessmentEntryPoint &&
+    (progress.currentStep === 'registration' || progress.currentStep === 'landing' || !progress.currentStep)
+  ) {
     return {
       allowed: false,
       redirectTo: 'registration',
