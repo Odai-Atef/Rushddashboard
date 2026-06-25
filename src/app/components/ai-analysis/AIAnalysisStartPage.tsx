@@ -1,33 +1,20 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router';
 import {
   Sparkles,
-  TrendingUp,
-  Users,
-  AlertTriangle,
-  Target,
-  DollarSign,
-  Package,
-  MapPin,
-  MessageSquare,
-  BarChart3,
   Clock,
   ArrowRight,
   Brain,
-  TrendingDown,
-  Zap,
-  UserCog,
-  Activity,
   Plus,
   ChevronRight,
   Star,
-  CheckCircle,
   History,
 } from 'lucide-react';
 import { cn } from '@/app/utils/cn';
 import { useAnalysisCategories } from '@/app/hooks/useAnalysisCategories';
 import { AnalysisLibraryModal } from '@/app/components/analysis/AnalysisLibraryModal';
 import { AnalysisLibraryItem } from '@/api/services/analysis-service';
+import { useAnalysisLibraryItems } from '@/app/hooks/useAnalysisLibraryItems';
 import { resolveIcon } from '@/app/utils/icon-map';
 
 interface AnalysisCard {
@@ -45,216 +32,39 @@ interface AnalysisCard {
   color: string;
 }
 
-const analysisCards: AnalysisCard[] = [
+// Fallback cards shown briefly while real library items load.
+const fallbackCards: AnalysisCard[] = [
   {
-    id: 'sales-1',
-    title: 'تحليل انخفاض الإيرادات',
-    description: 'تحديد أسباب انخفاض الإيرادات وتقديم حلول فورية',
-    category: 'المبيعات',
-    estimatedTime: '2-3 دقائق',
-    complexity: 'متوسط',
-    impact: 'حرج',
-    icon: TrendingDown,
-    recommended: true,
-    color: 'from-red-500 to-orange-600',
-  },
-  {
-    id: 'sales-2',
+    id: 'fallback-1',
     title: 'تحليل أفضل المنتجات',
     description: 'اكتشف المنتجات الأكثر ربحية وفرص النمو',
     category: 'المبيعات',
     estimatedTime: '1-2 دقيقة',
     complexity: 'بسيط',
     impact: 'متوسط',
-    icon: Target,
-    trending: true,
+    icon: Brain,
     color: 'from-green-500 to-emerald-600',
   },
   {
-    id: 'sales-3',
-    title: 'تحليل الفروع الضعيفة',
-    description: 'تحديد الفروع ذات الأداء المنخفض والأسباب الجذرية',
-    category: 'المبيعات',
-    estimatedTime: '3-4 دقائق',
-    complexity: 'متقدم',
-    impact: 'عالي',
-    icon: MapPin,
-    color: 'from-orange-500 to-red-600',
-  },
-  {
-    id: 'sales-4',
-    title: 'تحليل معدل التحويل',
-    description: 'قياس وتحسين معدلات تحويل العملاء المحتملين',
-    category: 'المبيعات',
-    estimatedTime: '2 دقيقة',
-    complexity: 'متوسط',
-    impact: 'عالي',
-    icon: ArrowRight,
-    recommended: true,
-    color: 'from-blue-500 to-cyan-600',
-  },
-  {
-    id: 'sales-5',
-    title: 'تحليل اتجاهات الإيرادات',
-    description: 'توقع الإيرادات المستقبلية بناءً على الأنماط الحالية',
-    category: 'المبيعات',
-    estimatedTime: '2-3 دقائق',
-    complexity: 'متوسط',
-    impact: 'متوسط',
-    icon: TrendingUp,
-    aiGenerated: true,
-    color: 'from-purple-500 to-pink-600',
-  },
-  {
-    id: 'customers-1',
-    title: 'تحليل تسرب العملاء',
-    description: 'فهم أسباب فقدان العملاء وتقديم استراتيجيات الاحتفاظ',
-    category: 'العملاء',
-    estimatedTime: '3 دقائق',
-    complexity: 'متقدم',
-    impact: 'حرج',
-    icon: Users,
-    recommended: true,
-    color: 'from-red-500 to-pink-600',
-  },
-  {
-    id: 'customers-2',
-    title: 'تحليل رضا العملاء',
-    description: 'قياس مستوى رضا العملاء وتحديد نقاط التحسين',
-    category: 'العملاء',
-    estimatedTime: '2 دقيقة',
-    complexity: 'بسيط',
-    impact: 'متوسط',
-    icon: MessageSquare,
-    color: 'from-blue-500 to-indigo-600',
-  },
-  {
-    id: 'customers-3',
-    title: 'تحليل القيمة الدائمة للعميل',
-    description: 'حساب LTV وتحديد العملاء الأكثر قيمة',
-    category: 'العملاء',
-    estimatedTime: '2-3 دقائق',
-    complexity: 'متوسط',
-    impact: 'عالي',
-    icon: DollarSign,
-    trending: true,
-    color: 'from-green-500 to-teal-600',
-  },
-  {
-    id: 'customers-4',
-    title: 'تحليل شرائح العملاء',
-    description: 'تقسيم العملاء إلى مجموعات متجانسة للاستهداف الأمثل',
-    category: 'العملاء',
-    estimatedTime: '3-4 دقائق',
-    complexity: 'متقدم',
-    impact: 'عالي',
-    icon: Target,
-    aiGenerated: true,
-    color: 'from-purple-500 to-blue-600',
-  },
-  {
-    id: 'operations-1',
-    title: 'تحليل كفاءة العمليات',
-    description: 'قياس كفاءة العمليات التشغيلية وتحديد الاختناقات',
-    category: 'التشغيل',
-    estimatedTime: '3 دقائق',
-    complexity: 'متوسط',
-    impact: 'عالي',
-    icon: Activity,
-    color: 'from-orange-500 to-red-600',
-  },
-  {
-    id: 'operations-2',
-    title: 'تحليل أوقات التسليم',
-    description: 'تقييم سرعة التنفيذ وتحسين عملية التوصيل',
-    category: 'التشغيل',
-    estimatedTime: '2 دقيقة',
-    complexity: 'بسيط',
-    impact: 'متوسط',
-    icon: Clock,
-    recommended: true,
-    color: 'from-blue-500 to-cyan-600',
-  },
-  {
-    id: 'operations-3',
-    title: 'تحليل جودة الخدمة',
-    description: 'قياس جودة الخدمات المقدمة ومعدلات الأخطاء',
-    category: 'التشغيل',
-    estimatedTime: '2-3 دقائق',
-    complexity: 'متوسط',
-    impact: 'عالي',
-    icon: CheckCircle,
-    color: 'from-green-500 to-emerald-600',
-  },
-  {
-    id: 'profitability-1',
-    title: 'تحليل هوامش الربح',
-    description: 'تحليل هوامش الربح حسب المنتج والخدمة',
-    category: 'الربحية',
-    estimatedTime: '2-3 دقائق',
-    complexity: 'متوسط',
-    impact: 'حرج',
-    icon: DollarSign,
-    recommended: true,
-    color: 'from-green-500 to-emerald-600',
-  },
-  {
-    id: 'inventory-1',
+    id: 'fallback-2',
     title: 'تحليل المخزون الراكد',
     description: 'تحديد المنتجات بطيئة الحركة والحلول',
     category: 'المخزون',
     estimatedTime: '2 دقيقة',
     complexity: 'بسيط',
     impact: 'متوسط',
-    icon: Package,
+    icon: Brain,
     color: 'from-orange-500 to-red-600',
   },
   {
-    id: 'risks-1',
-    title: 'تحليل المخاطر المالية',
-    description: 'تحديد وتقييم المخاطر المالية المحتملة',
-    category: 'المخاطر',
-    estimatedTime: '3-4 دقائق',
-    complexity: 'متقدم',
-    impact: 'حرج',
-    icon: AlertTriangle,
-    recommended: true,
-    color: 'from-red-500 to-orange-600',
-  },
-  {
-    id: 'opportunities-1',
-    title: 'اكتشاف فرص النمو',
-    description: 'تحديد فرص التوسع والنمو الجديدة',
-    category: 'الفرص',
-    estimatedTime: '3 دقائق',
-    complexity: 'متقدم',
-    impact: 'عالي',
-    icon: Zap,
-    trending: true,
-    aiGenerated: true,
-    color: 'from-yellow-500 to-orange-600',
-  },
-  {
-    id: 'hr-1',
-    title: 'تحليل معدل دوران الموظفين',
-    description: 'فهم أسباب الاستقالات وتحسين الاحتفاظ',
-    category: 'الموارد البشرية',
-    estimatedTime: '2-3 دقائق',
-    complexity: 'متوسط',
-    impact: 'عالي',
-    icon: UserCog,
-    color: 'from-red-500 to-orange-600',
-  },
-  {
-    id: 'executive-1',
+    id: 'fallback-3',
     title: 'تقرير الأداء التنفيذي الشامل',
     description: 'نظرة شاملة على جميع مؤشرات الأداء الرئيسية',
     category: 'الإدارة التنفيذية',
     estimatedTime: '4-5 دقائق',
     complexity: 'متقدم',
     impact: 'حرج',
-    icon: BarChart3,
-    recommended: true,
+    icon: Brain,
     color: 'from-purple-500 to-blue-600',
   },
 ];
@@ -292,10 +102,34 @@ const mapLibraryItemToCard = (item: AnalysisLibraryItem, apiCategories: any[]): 
 export function AIAnalysisStartPage() {
   const navigate = useNavigate();
   const { categories: apiCategories, isLoading: categoriesLoading, error: categoriesError, retry: retryCategories } = useAnalysisCategories();
+  const { items: libraryItems, isLoading: libraryLoading, error: libraryError, retry: retryLibrary } = useAnalysisLibraryItems('all');
   const [showAnalysisLibrary, setShowAnalysisLibrary] = useState(false);
   const initializedRef = useRef(false);
 
-  const recommendedAnalyses = analysisCards.filter((card) => card.recommended).slice(0, 3);
+  // Build dashboard cards from real backend library items so every card id is a valid UUID.
+  const analysisCards: AnalysisCard[] = useMemo(() => {
+    if (libraryItems.length === 0) return fallbackCards;
+
+    return libraryItems.map((item) => {
+      const categoryName = apiCategories.find((c) => c.id === item.categoryId)?.nameAr || '';
+      return {
+        id: item.id,
+        title: item.titleAr || item.title,
+        description: item.descriptionAr || item.description || '',
+        category: categoryName,
+        estimatedTime: item.duration,
+        complexity: item.complexity as AnalysisCard['complexity'],
+        impact: item.impact as AnalysisCard['impact'],
+        icon: resolveIcon(item.icon),
+        color: item.iconBackground,
+        recommended: item.badges?.includes('موصى به') || item.badges?.includes('recommended'),
+        trending: item.badges?.includes('رائج') || item.badges?.includes('trending'),
+        aiGenerated: item.badges?.includes('AI') || item.badges?.includes('ai'),
+      };
+    });
+  }, [libraryItems, apiCategories]);
+
+  const recommendedAnalyses = analysisCards.filter((card) => card.recommended || card.trending).slice(0, 3);
 
   const handleStartAnalysis = (card: AnalysisCard) => {
     console.log('[Start] handleStartAnalysis', { id: card.id, title: card.title });
