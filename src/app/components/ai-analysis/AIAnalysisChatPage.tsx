@@ -306,13 +306,19 @@ export function AIAnalysisChatPage() {
 
     if (selectedLibraryItemId) {
       console.log('[Chat] starting analysis from library', selectedLibraryItemId);
-      const item = apiCategories
-        .flatMap((c: any) => c.items || [])
-        .find((i: AnalysisLibraryItem) => i.id === selectedLibraryItemId) as AnalysisLibraryItem | undefined;
+      // Prefer the full item passed through navigation state; fall back to searching categories.
+      const item = (state as any).selectedLibraryItem as AnalysisLibraryItem | undefined;
       if (item) {
         startLibraryAnalysis(item);
       } else {
-        console.warn('[Chat] library item not found for selectedLibraryItemId', selectedLibraryItemId, 'apiCategories:', apiCategories.length);
+        const found = apiCategories
+          .flatMap((c: any) => c.items || [])
+          .find((i: AnalysisLibraryItem) => i.id === selectedLibraryItemId) as AnalysisLibraryItem | undefined;
+        if (found) {
+          startLibraryAnalysis(found);
+        } else {
+          console.warn('[Chat] library item not found for selectedLibraryItemId', selectedLibraryItemId, 'apiCategories:', apiCategories.length);
+        }
       }
       // Consume the state so a page refresh doesn't auto-restart the same analysis.
       window.history.replaceState({}, document.title, location.pathname);

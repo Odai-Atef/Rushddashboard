@@ -142,8 +142,29 @@ export function AIAnalysisStartPage() {
     const card = mapLibraryItemToCard(item, apiCategories);
     console.log('[Start] handleSelectLibraryItem', { id: card.id, title: card.title });
     navigate('/dashboard/ai-analysis/chat', {
-      state: { selectedLibraryItemId: item.id, source: 'library' },
+      // Pass the full library item so the chat page can start the analysis
+      // immediately without relying on apiCategories (which has no nested items).
+      state: { selectedLibraryItemId: item.id, selectedLibraryItem: item, source: 'library' },
     });
+  };
+
+  const startLibraryAnalysisDirect = (item: AnalysisLibraryItem) => {
+    const card = mapLibraryItemToCard(item, apiCategories);
+    console.log('[Start] startLibraryAnalysisDirect', { id: card.id, title: card.title });
+    // Stay on the start page and start analysis inline just like the chat page does.
+    navigate('/dashboard/ai-analysis/chat', {
+      state: { selectedLibraryItemId: item.id, selectedLibraryItem: item, source: 'library' },
+    });
+  };
+
+  const handleSelectCard = (card: AnalysisCard) => {
+    // If the card came from a real library item, pass the original item as well.
+    const item = libraryItems.find((i) => i.id === card.id);
+    if (item) {
+      handleSelectLibraryItem(item);
+      return;
+    }
+    handleStartAnalysis(card);
   };
 
   const handleNewAnalysis = () => {
@@ -202,7 +223,7 @@ export function AIAnalysisStartPage() {
               <div
                 key={card.id}
                 className="group p-5 bg-card border border-border rounded-xl hover:shadow-lg hover:border-primary/50 transition-all cursor-pointer"
-                onClick={() => handleStartAnalysis(card)}
+                onClick={() => handleSelectCard(card)}
               >
                 <div className="flex items-start gap-3 mb-3">
                   <div className={cn('p-2.5 rounded-lg bg-gradient-to-br', card.color)}>
@@ -274,7 +295,7 @@ export function AIAnalysisStartPage() {
         categoriesLoading={categoriesLoading}
         categoriesError={categoriesError}
         retryCategories={retryCategories}
-        onSelectAnalysis={handleSelectLibraryItem}
+        onSelectAnalysis={startLibraryAnalysisDirect}
       />
     </div>
   );
