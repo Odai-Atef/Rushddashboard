@@ -734,11 +734,13 @@ export function AssessmentPage() {
                           </button>
                         ))}
                       </div>
-                      {scoreDescription && (
-                        <p className="text-sm text-gray-600 bg-blue-50 border border-blue-100 rounded-lg p-3 mt-2 animate-in fade-in slide-in-from-top-1 duration-200">
-                          {scoreDescription}
-                        </p>
-                      )}
+                      <div className="min-h-[3.25rem] mt-2">
+                        {scoreDescription && (
+                          <p className="text-sm text-gray-600 bg-blue-50 border border-blue-100 rounded-lg p-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                            {scoreDescription}
+                          </p>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );

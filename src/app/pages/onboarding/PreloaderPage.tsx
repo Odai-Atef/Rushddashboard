@@ -180,7 +180,7 @@ export function PreloaderPage() {
           <div className="space-y-3 text-right">
             {[
               { threshold: 20, label: 'تحليل الإجابات' },
-              { threshold: 50, label: 'مراجعة المستندات' },
+              { threshold: 50, label: 'مراجعة معلومات الجهة' },
               { threshold: 80, label: 'حساب النتيجة النهائية' },
             ].map((item) => {
               const done = processingProgress > item.threshold;
