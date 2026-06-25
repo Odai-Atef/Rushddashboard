@@ -109,6 +109,19 @@ function StepGuardOutlet() {
       );
     }
 
+    // Allow the documents step when the user is coming from the charity-assessment
+    // results page so they can upload missing required documents even if the
+    // backend has not advanced currentStep beyond registration yet.
+    const isComingFromResults = new URLSearchParams(location.search).get('from') === 'results';
+    if (
+      step === 'documents' &&
+      activeOrganizationId &&
+      organization &&
+      isComingFromResults
+    ) {
+      return <Outlet />;
+    }
+
     // Landing is the only onboarding entry point that auto-redirects when no progress exists.
     // Registration must remain directly accessible so users can always edit/fill it.
     if (
