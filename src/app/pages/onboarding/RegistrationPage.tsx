@@ -149,7 +149,8 @@ export function RegistrationPage() {
         }
       }
       await refreshOrganization();
-      navigate('/dashboard/charity-assessment', { replace: true });
+      const navOrgId = org?.data?.org?.id || organization?.id;
+      navigate(`/dashboard/onboarding/assessment${navOrgId ? `?organizationId=${encodeURIComponent(navOrgId)}` : ''}`, { replace: true });
     } catch (err: any) {
       toast.error(err?.message || 'فشل حفظ بيانات الجهه');
     } finally {

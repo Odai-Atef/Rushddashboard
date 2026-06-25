@@ -434,10 +434,10 @@ export function AssessmentPage() {
           <h2 className="text-xl font-bold mb-2">تعذر تحميل التقييم</h2>
           <p className="text-gray-600 mb-6">{assessmentError}</p>
           <button
-            onClick={() => goToStep('profile')}
+            onClick={() => goToStep('registration')}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
-            العودة إلى الملف التعريفي
+            العودة إلى التسجيل
           </button>
         </div>
       </div>
@@ -456,10 +456,10 @@ export function AssessmentPage() {
             لم يتم العثور على فئات تقييم في الوقت الحالي. يرجى المحاولة لاحقاً.
           </p>
           <button
-            onClick={() => goToStep('profile')}
+            onClick={() => goToStep('registration')}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
           >
-            العودة إلى الملف التعريفي
+            العودة إلى التسجيل
           </button>
         </div>
       </div>

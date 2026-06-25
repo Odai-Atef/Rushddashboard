@@ -10,10 +10,9 @@ import { OnboardingStep } from '../context/OnboardingContext';
 export const ONBOARDING_STEPS: OnboardingStep[] = [
   'landing',
   'registration',
-  'profile',
+  'assessment',
   'documents',
   'thanks',
-  'assessment',
   'preloader',
   'processing',
   'results',
@@ -106,10 +105,9 @@ function isStepCompleted(step: OnboardingStep, progress: StepProgress): boolean 
 function getFurthestCompletedStep(progress: StepProgress): OnboardingStep {
   const steps: OnboardingStep[] = [
     'registration',
-    'profile',
+    'assessment',
     'documents',
     'thanks',
-    'assessment',
     'preloader',
     'processing',
     'results',
@@ -130,15 +128,10 @@ function getAllowedNextSteps(furthestCompleted: OnboardingStep): OnboardingStep[
   const nextOrder = getStepOrder(furthestCompleted) + 1;
   if (nextOrder >= ONBOARDING_STEPS.length) return [];
   const next = ONBOARDING_STEPS[nextOrder];
-  // Preloader is the transition screen between assessment and results,
-  // so allow it whenever assessment is reachable.
+  // Preloader and processing are transition screens between assessment and results,
+  // so allow them whenever assessment is reachable.
   if (next === 'assessment') {
-    return ['assessment', 'preloader'];
-  }
-  // The thanks step is a soft confirmation page between documents and assessment,
-  // so allow both thanks and assessment when documents are complete.
-  if (next === 'thanks') {
-    return ['thanks', 'assessment'];
+    return ['assessment', 'preloader', 'processing'];
   }
   return [next];
 }
