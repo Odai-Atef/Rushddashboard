@@ -35,7 +35,21 @@ function StepGuardOutlet() {
   const step = location.pathname.split('/').filter(Boolean).pop() ?? '';
   console.log('[StepGuardOutlet] step:', step, 'isLoading:', isLoading, 'error:', error, 'activeOrganizationId:', activeOrganizationId, 'orgCurrentStep:', organization?.currentStep);
 
+  const isComingFromResults = new URLSearchParams(location.search).get('from') === 'results';
+
   const guardResult = useMemo(() => {
+    // Allow the documents step when the user is coming from the charity-assessment
+    // results page so they can upload missing required documents even if the
+    // backend has not advanced currentStep beyond registration yet.
+    if (
+      step === 'documents' &&
+      activeOrganizationId &&
+      organization &&
+      isComingFromResults
+    ) {
+      return { allowed: true };
+    }
+
     if (!isValidStep(step ?? '')) {
       return {
         allowed: false,
@@ -65,7 +79,7 @@ function StepGuardOutlet() {
       assessmentCompleted,
       resultsCompleted: assessmentCompleted,
     });
-  }, [step, organization?.currentStep, activeOrganizationId, assessmentStatus, assessmentResult]);
+  }, [step, organization?.currentStep, activeOrganizationId, assessmentStatus, assessmentResult, isComingFromResults, organization]);
 
   // When the organizationId comes from the URL query param, activeOrganizationId is
   // set immediately while organization is still being resolved. Show the loading state
@@ -107,19 +121,6 @@ function StepGuardOutlet() {
           replace
         />
       );
-    }
-
-    // Allow the documents step when the user is coming from the charity-assessment
-    // results page so they can upload missing required documents even if the
-    // backend has not advanced currentStep beyond registration yet.
-    const isComingFromResults = new URLSearchParams(location.search).get('from') === 'results';
-    if (
-      step === 'documents' &&
-      activeOrganizationId &&
-      organization &&
-      isComingFromResults
-    ) {
-      return <Outlet />;
     }
 
     // Landing is the only onboarding entry point that auto-redirects when no progress exists.
