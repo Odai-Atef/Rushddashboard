@@ -109,10 +109,10 @@ function StepGuardOutlet() {
       );
     }
 
-    // Also redirect directly from onboarding landing/registration when no progress exists
-    // so users land on the charity-assessment start page instead of the old onboarding funnel.
+    // Landing is the only onboarding entry point that auto-redirects when no progress exists.
+    // Registration must remain directly accessible so users can always edit/fill it.
     if (
-      (step === 'landing' || step === 'registration') &&
+      step === 'landing' &&
       activeOrganizationId &&
       organization &&
       (!organization.currentStep || organization.currentStep.toLowerCase() === 'registration' || organization.currentStep.toLowerCase() === 'landing')
