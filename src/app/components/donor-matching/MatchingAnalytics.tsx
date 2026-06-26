@@ -25,9 +25,9 @@ const topCategories = [
 
 const mostMatchedDonors = [
   { name: 'صندوق الملك عبدالعزيز', matches: 47, success: 89 },
-  { name: 'مؤسسة أرامكو', matches: 38, success: 76 },
+  { name: 'جهه أرامكو', matches: 38, success: 76 },
   { name: 'صندوق تنمية المجتمع', matches: 31, success: 68 },
-  { name: 'مؤسسة الوليد', matches: 24, success: 71 },
+  { name: 'جهه الوليد', matches: 24, success: 71 },
   { name: 'هيئة الهلال الأحمر', matches: 18, success: 55 },
 ];
 

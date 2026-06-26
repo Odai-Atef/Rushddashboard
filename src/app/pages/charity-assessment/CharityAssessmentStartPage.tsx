@@ -36,7 +36,7 @@ export function CharityAssessmentStartPage() {
       setOrganization(res.data);
     } catch (err: any) {
       if (err?.statusCode === 404 || err?.response?.status === 404) {
-        setError('لم يتم العثور على مؤسسة مرتبطة بحسابك. يرجى إنشاء مؤسسة أولاً.');
+        setError('لم يتم العثور على جهه مرتبطة بحسابك. يرجى إنشاء جهه أولاً.');
       } else {
         setError(err?.message || 'تعذر تحميل معلومات الجهه. يرجى المحاولة مرة أخرى.');
       }
@@ -74,7 +74,7 @@ export function CharityAssessmentStartPage() {
               onClick={() => navigate('/dashboard/onboarding/registration')}
               className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              إنشاء مؤسسة
+              إنشاء جهه
             </button>
           </div>
         </div>

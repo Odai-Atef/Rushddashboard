@@ -63,7 +63,7 @@ const MANAGER_OPTIONS = [
 const ORGANIZATION_OPTIONS = [
   { id: 'all', name: 'جميع المؤسسات' },
   { id: 'org-1', name: 'جمعية البر الخيرية' },
-  { id: 'org-2', name: 'مؤسسة الرعاية الاجتماعية' },
+  { id: 'org-2', name: 'جهه الرعاية الاجتماعية' },
 ];
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];

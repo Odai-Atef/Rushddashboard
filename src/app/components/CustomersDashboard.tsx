@@ -58,7 +58,7 @@ export function CustomersDashboard() {
   // High-value customers data
   const highValueCustomers = [
     { id: 1, name: 'شركة النخبة للتجارة', value: 1250000, transactions: 145, satisfaction: 4.8 },
-    { id: 2, name: 'مؤسسة الأفق للاستثمار', value: 980000, transactions: 112, satisfaction: 4.9 },
+    { id: 2, name: 'جهه الأفق للاستثمار', value: 980000, transactions: 112, satisfaction: 4.9 },
     { id: 3, name: 'شركة الريادة للتقنية', value: 850000, transactions: 98, satisfaction: 4.7 },
     { id: 4, name: 'مجموعة الابتكار القابضة', value: 720000, transactions: 89, satisfaction: 4.6 },
     { id: 5, name: 'شركة المستقبل للحلول', value: 680000, transactions: 76, satisfaction: 4.5 },

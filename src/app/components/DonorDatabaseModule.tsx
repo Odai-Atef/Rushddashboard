@@ -131,7 +131,7 @@ export function DonorDatabaseModule() {
   const donors: Donor[] = [
     {
       id: '1',
-      name: 'مؤسسة بيل وميليندا غيتس',
+      name: 'جهه بيل وميليندا غيتس',
       nameEn: 'Bill & Melinda Gates Foundation',
       type: 'international',
       fundingAreas: ['التعليم', 'الصحة', 'التنمية الاقتصادية'],
@@ -154,7 +154,7 @@ export function DonorDatabaseModule() {
     },
     {
       id: '2',
-      name: 'مؤسسة الملك عبدالله للتنمية',
+      name: 'جهه الملك عبدالله للتنمية',
       nameEn: 'King Abdullah Foundation',
       type: 'local',
       fundingAreas: ['التعليم', 'الصحة', 'البحث العلمي', 'الابتكار'],
@@ -201,7 +201,7 @@ export function DonorDatabaseModule() {
     },
     {
       id: '4',
-      name: 'مؤسسة فورد',
+      name: 'جهه فورد',
       nameEn: 'Ford Foundation',
       type: 'foundation',
       fundingAreas: ['العدالة الاجتماعية', 'حقوق الإنسان', 'التعليم'],
@@ -229,7 +229,7 @@ export function DonorDatabaseModule() {
       id: '1',
       name: 'برنامج دعم التعليم في المناطق النائية',
       donorId: '1',
-      donorName: 'مؤسسة بيل وميليندا غيتس',
+      donorName: 'جهه بيل وميليندا غيتس',
       openingDate: '2026-05-01',
       closingDate: '2026-07-15',
       minAmount: 150000,
@@ -246,7 +246,7 @@ export function DonorDatabaseModule() {
       id: '2',
       name: 'مبادرة الابتكار في الصحة العامة',
       donorId: '2',
-      donorName: 'مؤسسة الملك عبدالله للتنمية',
+      donorName: 'جهه الملك عبدالله للتنمية',
       openingDate: '2026-06-01',
       closingDate: '2026-06-20',
       minAmount: 100000,
@@ -280,7 +280,7 @@ export function DonorDatabaseModule() {
       id: '4',
       name: 'منح حقوق الإنسان والعدالة',
       donorId: '4',
-      donorName: 'مؤسسة فورد',
+      donorName: 'جهه فورد',
       openingDate: '2026-03-01',
       closingDate: '2026-05-30',
       minAmount: 75000,
@@ -297,7 +297,7 @@ export function DonorDatabaseModule() {
       id: '5',
       name: 'برنامج تمكين المرأة الاقتصادي',
       donorId: '1',
-      donorName: 'مؤسسة بيل وميليندا غيتس',
+      donorName: 'جهه بيل وميليندا غيتس',
       openingDate: '2026-06-10',
       closingDate: '2026-09-15',
       minAmount: 200000,
@@ -327,7 +327,7 @@ export function DonorDatabaseModule() {
       id: '2',
       type: 'new-opportunity',
       title: 'فرصة تمويل جديدة',
-      description: 'برنامج تمكين المرأة الاقتصادي - مؤسسة بيل وميليندا غيتس',
+      description: 'برنامج تمكين المرأة الاقتصادي - جهه بيل وميليندا غيتس',
       timestamp: 'منذ 3 ساعات',
       priority: 'medium',
       read: false,
@@ -347,7 +347,7 @@ export function DonorDatabaseModule() {
       id: '4',
       type: 'data-update',
       title: 'تحديث بيانات مطلوب',
-      description: 'يرجى تحديث معلومات الاتصال لمؤسسة الملك عبدالله للتنمية',
+      description: 'يرجى تحديث معلومات الاتصال لجهه الملك عبدالله للتنمية',
       timestamp: 'منذ يومين',
       priority: 'low',
       read: true,
@@ -489,9 +489,9 @@ export function DonorDatabaseModule() {
             </div>
             <div className="space-y-3">
               {[
-                { donor: 'مؤسسة بيل وميليندا غيتس', update: 'فرصة تمويل جديدة', time: 'منذ 3 ساعات', icon: Plus },
+                { donor: 'جهه بيل وميليندا غيتس', update: 'فرصة تمويل جديدة', time: 'منذ 3 ساعات', icon: Plus },
                 { donor: 'USAID', update: 'تحديث متطلبات التقديم', time: 'منذ يوم', icon: RefreshCw },
-                { donor: 'مؤسسة الملك عبدالله', update: 'تمديد موعد التقديم', time: 'منذ يومين', icon: Calendar }
+                { donor: 'جهه الملك عبدالله', update: 'تمديد موعد التقديم', time: 'منذ يومين', icon: Calendar }
               ].map((item, idx) => (
                 <div key={idx} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                   <div className="p-2 bg-blue-100 rounded-lg">
@@ -580,7 +580,7 @@ export function DonorDatabaseModule() {
         'local': 'محلية',
         'government': 'حكومية',
         'private': 'خاصة',
-        'foundation': 'مؤسسة'
+        'foundation': 'جهه'
       };
       return labels[type] || type;
     };
@@ -628,7 +628,7 @@ export function DonorDatabaseModule() {
               <option>محلية</option>
               <option>حكومية</option>
               <option>خاصة</option>
-              <option>مؤسسة</option>
+              <option>جهه</option>
             </select>
             <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
               <option>جميع المجالات</option>

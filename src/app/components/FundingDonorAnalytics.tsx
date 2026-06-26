@@ -51,7 +51,7 @@ const fundingByRegion = [
 ];
 
 const topDonors = [
-  { name: 'مؤسسة الملك عبدالعزيز', amount: '2.4M ر.س', projects: 12, type: 'مؤسسي' },
+  { name: 'جهه الملك عبدالعزيز', amount: '2.4M ر.س', projects: 12, type: 'مؤسسي' },
   { name: 'صندوق التنمية الاجتماعية', amount: '1.8M ر.س', projects: 9, type: 'حكومي' },
   { name: 'شركة أرامكو السعودية', amount: '1.5M ر.س', projects: 7, type: 'شركات' },
   { name: 'مجموعة MBC', amount: '980K ر.س', projects: 5, type: 'شركات' },

@@ -47,7 +47,7 @@ export function ProjectCreatePage() {
             setOrganizationOptions([{ id: org.id, name: org.name }]);
             setFormData((prev) => ({ ...prev, organizationId: org.id }));
           } else {
-            setOrganizationError('لم يتم العثور على مؤسسة مرتبطة بحسابك.');
+            setOrganizationError('لم يتم العثور على جهه مرتبطة بحسابك.');
           }
         }
       } catch (err) {

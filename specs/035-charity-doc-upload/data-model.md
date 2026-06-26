@@ -58,7 +58,7 @@ Represents the transient upload state displayed in a slot while a file is being 
 | `license` | `registration` | Yes | رخصة الجمعية الخيرية |
 | `bank` | `financial` | Yes | شهادة الحساب البنكي |
 | `address` | `other` | Yes | العنوان الوطني |
-| `profile` | `other` | Yes | الملف التعريفي للمؤسسة |
+| `profile` | `other` | Yes | الملف التعريفي للجهه |
 | `projects` | `other` | No | المشاريع السابقة |
 | `financial` | `financial` | No | التقارير المالية |
 | `annual` | `other` | No | التقارير السنوية |

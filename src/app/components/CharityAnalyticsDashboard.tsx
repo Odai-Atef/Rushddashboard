@@ -31,11 +31,11 @@ const assessmentResults = [
 
 const developmentPlans = [
   { name: 'جمعية الأمل', progress: 92, status: 'ممتاز' },
-  { name: 'مؤسسة التنمية', progress: 78, status: 'جيد' },
+  { name: 'جهه التنمية', progress: 78, status: 'جيد' },
   { name: 'جمعية الرواد', progress: 61, status: 'متوسط' },
-  { name: 'مؤسسة البناء', progress: 45, status: 'يحتاج دعم' },
+  { name: 'جهه البناء', progress: 45, status: 'يحتاج دعم' },
   { name: 'جمعية المستقبل', progress: 88, status: 'ممتاز' },
-  { name: 'مؤسسة الريادة', progress: 55, status: 'متوسط' },
+  { name: 'جهه الريادة', progress: 55, status: 'متوسط' },
 ];
 
 const engagementData = [

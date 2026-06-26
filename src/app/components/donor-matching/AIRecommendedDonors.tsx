@@ -36,7 +36,7 @@ const donors: Donor[] = [
     saved: false, logo: 'م'
   },
   {
-    id: '2', name: 'مؤسسة أرامكو للاستدامة الاجتماعية', nameEn: 'Aramco Foundation',
+    id: '2', name: 'جهه أرامكو للاستدامة الاجتماعية', nameEn: 'Aramco Foundation',
     score: 89, areas: ['البيئة', 'المجتمع', 'الطاقة'],
     minFunding: '500K', maxFunding: '5M', status: 'open', deadline: '30 يوليو 2026',
     geography: 'المنطقة الشرقية والرياض', sectors: ['البيئة', 'الطاقة المتجددة'],
@@ -52,7 +52,7 @@ const donors: Donor[] = [
     saved: false, logo: 'خ'
   },
   {
-    id: '4', name: 'مؤسسة الوليد للإنسانية', nameEn: 'Alwaleed Philanthropies',
+    id: '4', name: 'جهه الوليد للإنسانية', nameEn: 'Alwaleed Philanthropies',
     score: 78, areas: ['التعليم', 'المرأة', 'الفقر'],
     minFunding: '250K', maxFunding: '3M', status: 'open', deadline: '10 أغسطس 2026',
     geography: 'عالمي مع تركيز على السعودية', sectors: ['التعليم', 'تمكين المرأة'],

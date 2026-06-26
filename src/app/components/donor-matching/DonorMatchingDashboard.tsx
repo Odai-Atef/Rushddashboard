@@ -29,14 +29,14 @@ const trendData = [
 
 const recommendedActions = [
   { id: 1, priority: 'عاجل', action: 'أكمل وثيقة خطة الاستدامة المطلوبة من صندوق الملك عبدالعزيز', deadline: 'خلال 3 أيام', icon: AlertTriangle, color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800' },
-  { id: 2, priority: 'مهم', action: 'راجع معايير أهلية مؤسسة أرامكو وقدّم ملف التسجيل', deadline: 'خلال أسبوع', icon: CheckCircle2, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800' },
+  { id: 2, priority: 'مهم', action: 'راجع معايير أهلية جهه أرامكو وقدّم ملف التسجيل', deadline: 'خلال أسبوع', icon: CheckCircle2, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800' },
   { id: 3, priority: 'مقترح', action: 'حسّن درجة تأثير المشروع لرفع نسبة التطابق بنسبة 12%', deadline: 'قبل التقديم', icon: TrendingUp, color: 'text-blue-500', bg: 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800' },
   { id: 4, priority: 'مقترح', action: 'أضف بيانات المستفيدين التفصيلية لتحسين التطابق الجغرافي', deadline: 'هذا الأسبوع', icon: Users, color: 'text-violet-500', bg: 'bg-violet-50 dark:bg-violet-950/30 border-violet-200 dark:border-violet-800' },
 ];
 
 const topMatches = [
   { id: '1', name: 'صندوق الملك عبدالعزيز للأبحاث', score: 94, area: 'التعليم والبحث', status: 'open', deadline: '15 يوليو 2026' },
-  { id: '2', name: 'مؤسسة أرامكو للاستدامة', score: 89, area: 'البيئة والمجتمع', status: 'open', deadline: '30 يوليو 2026' },
+  { id: '2', name: 'جهه أرامكو للاستدامة', score: 89, area: 'البيئة والمجتمع', status: 'open', deadline: '30 يوليو 2026' },
   { id: '3', name: 'صندوق تنمية المجتمع', score: 83, area: 'التنمية الاجتماعية', status: 'closing', deadline: '20 يوليو 2026' },
 ];
 

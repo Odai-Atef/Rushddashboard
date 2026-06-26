@@ -23,7 +23,7 @@ export interface FundingAreaRelation {
 export type DonorType = 'FOUNDATION' | 'GOVERNMENT' | 'PRIVATE' | 'INTERNATIONAL' | 'LOCAL';
 
 export const DONOR_TYPE_LABELS: Record<DonorType, string> = {
-  FOUNDATION: 'مؤسسة',
+  FOUNDATION: 'جهه',
   GOVERNMENT: 'حكومية',
   PRIVATE: 'خاصة',
   INTERNATIONAL: 'دولية',

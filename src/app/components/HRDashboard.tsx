@@ -387,7 +387,7 @@ export function HRDashboard() {
             <p className="text-muted-foreground leading-relaxed mb-4">
               نوصي بتطوير <span className="text-foreground font-medium">برنامج مسارات وظيفية واضحة</span> لتقليل الاستقالات بسبب الفرص الأفضل بنسبة 35%.
               إطلاق <span className="text-foreground font-medium">برنامج حوافز أداء</span> للموظفين ذوي التقييم الممتاز سيرفع متوسط الأداء إلى 85/100.
-              تكثيف البرامج التدريبية في <span className="text-green-600 font-medium">الذكاء الاصطناعي</span> سيعزز القدرات التنافسية للمؤسسة.
+              تكثيف البرامج التدريبية في <span className="text-green-600 font-medium">الذكاء الاصطناعي</span> سيعزز القدرات التنافسية للجهه.
             </p>
             <div className="flex flex-wrap gap-3">
               <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
