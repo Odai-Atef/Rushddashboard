@@ -194,7 +194,18 @@ export function CharityAssessmentResultsPage() {
   // "القيمة والاستدامة") are not visually compressed near the center.
   const radarLowerBound = 0;
   const radarUpperBound = 100;
-  const llm = (data as any).llmResponse;
+  // The backend stores the LLM output as a JSON string in llmResponse.raw
+  // when parsing fails; parse it client-side to extract the rich narrative.
+  const rawLlm = (data as any).llmResponse?.raw;
+  let parsedLlm: any = null;
+  if (rawLlm && typeof rawLlm === 'string') {
+    try {
+      parsedLlm = JSON.parse(rawLlm);
+    } catch {
+      parsedLlm = null;
+    }
+  }
+  const llm = parsedLlm || (data as any).llmResponse;
   const llmStrengthsAnalysis = llm?.strengthsAnalysis;
   const llmGapAnalysis = llm?.gapAnalysis;
 
