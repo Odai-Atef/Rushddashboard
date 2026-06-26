@@ -17,11 +17,14 @@ import {
   Download,
   Eye,
   MessageSquare,
+  AlertTriangle,
+  RefreshCw,
 } from 'lucide-react';
 import { useProjects } from '@/api/hooks/useProjects';
 import { ProjectFilters, ProjectStatus, ProjectHealth, statusConfig, Project } from './project-types';
 import apiClient from '@/api/client';
 import { projectService } from '@/api/services/project-service';
+import { onboardingService, IsivAssessmentResult, OrganizationResponse } from '@/api/services/onboarding-service';
 import { toast } from 'sonner';
 
 const STATUS_OPTIONS: { value: ProjectStatus | 'all'; label: string }[] = [
@@ -86,6 +89,40 @@ export function ProjectListPage() {
   const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
   const menuButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  const [organization, setOrganization] = useState<OrganizationResponse | null>(null);
+  const [assessmentResult, setAssessmentResult] = useState<IsivAssessmentResult | null>(null);
+  const [qualificationLoading, setQualificationLoading] = useState(true);
+  const [qualificationError, setQualificationError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const load = async () => {
+      try {
+        const orgRes = await onboardingService.getMyOrganization();
+        if (cancelled) return;
+        const org = orgRes.data;
+        setOrganization(org);
+        if (!org?.id) {
+          setQualificationLoading(false);
+          return;
+        }
+        const resultRes = await onboardingService.getIsivAssessmentResults(org.id);
+        if (cancelled) return;
+        const resultData = (resultRes.data as any)?.data ?? resultRes.data;
+        setAssessmentResult(resultData ?? null);
+      } catch (err: any) {
+        if (cancelled) return;
+        setQualificationError(err?.message || 'تعذر التحقق من حالة التأهيل');
+      } finally {
+        if (!cancelled) setQualificationLoading(false);
+      }
+    };
+    load();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
@@ -436,6 +473,28 @@ export function ProjectListPage() {
     </div>
   );
 
+  const isQualified =
+    assessmentResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED' ||
+    assessmentResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT' ||
+    assessmentResult?.qualificationStatus?.toUpperCase() === 'WITH_IMPROVEMENT';
+
+  const renderQualificationBlocker = () => (
+    <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center">
+      <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
+      <h2 className="text-2xl font-bold mb-4 text-red-700">جهتك غير مؤهلة لاستخدام خصائص منصة رشد</h2>
+      <p className="text-gray-600 mb-8 max-w-md mx-auto">
+        لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.
+      </p>
+      <button
+        onClick={() => navigate(`/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`)}
+        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
+      >
+        <RefreshCw className="w-5 h-5" />
+        إعادة التقييم مرة أخرى
+      </button>
+    </div>
+  );
+
   const renderListContent = () => {
     if (error) return renderError();
     if (projects.length === 0) return renderEmpty();
@@ -616,7 +675,13 @@ export function ProjectListPage() {
           )}
         </div>
 
-        {isLoading ? renderLoading() : renderListContent()}
+        {qualificationLoading || isLoading ? (
+          renderLoading()
+        ) : !isQualified ? (
+          renderQualificationBlocker()
+        ) : (
+          renderListContent()
+        )}
 
         {!isLoading && !error && projects.length > 0 && renderPagination()}
       </div>
