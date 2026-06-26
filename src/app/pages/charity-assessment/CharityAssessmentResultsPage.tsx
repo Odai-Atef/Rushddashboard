@@ -195,36 +195,38 @@ export function CharityAssessmentResultsPage() {
   const radarLowerBound = 0;
   const radarUpperBound = 100;
   // The backend sometimes returns the LLM output as a malformed JSON string
-  // in llmResponse.raw (e.g. two objects concatenated with a comma). Parse it
-  // client-side by extracting each top-level JSON object and merging them.
+  // in llmResponse.raw. Parse it client-side and, if that fails, extract the
+  // rich fields we care about with targeted regex/string parsing.
   const rawLlm = (data as any).llmResponse?.raw;
   let parsedLlm: any = null;
   if (rawLlm && typeof rawLlm === 'string') {
     try {
       parsedLlm = JSON.parse(rawLlm);
     } catch {
-      // Try to extract and merge all top-level JSON objects.
-      const objects: any[] = [];
-      let depth = 0;
-      let start = -1;
-      for (let i = 0; i < rawLlm.length; i++) {
-        const ch = rawLlm[i];
-        if (ch === '{') {
-          if (depth === 0) start = i;
-          depth++;
-        } else if (ch === '}') {
-          depth--;
-          if (depth === 0 && start !== -1) {
-            try {
-              objects.push(JSON.parse(rawLlm.slice(start, i + 1)));
-            } catch {
-              // ignore invalid fragment
-            }
-            start = -1;
-          }
+      parsedLlm = {};
+
+      const extractStringField = (key: string): string | undefined => {
+        const pattern = new RegExp(`"${key}"\\s*:\\s*"(.*?)"(?=,\\s*"|\\s*[,}\\]])`, 's');
+        const match = rawLlm.match(pattern);
+        return match ? match[1] : undefined;
+      };
+
+      const strengthsAnalysis = extractStringField('strengthsAnalysis');
+      const gapAnalysis = extractStringField('gapAnalysis');
+      if (strengthsAnalysis) parsedLlm.strengthsAnalysis = strengthsAnalysis;
+      if (gapAnalysis) parsedLlm.gapAnalysis = gapAnalysis;
+
+      // Extract the recommendations object if present.
+      const recMatch = rawLlm.match(/"recommendations"\s*:\s*(\{.*?\})/s);
+      if (recMatch) {
+        try {
+          parsedLlm.recommendations = JSON.parse(recMatch[1]);
+        } catch {
+          // ignore malformed recommendations block
         }
       }
-      parsedLlm = objects.length > 0 ? Object.assign({}, ...objects) : null;
+
+      if (Object.keys(parsedLlm).length === 0) parsedLlm = null;
     }
   }
   const llm = parsedLlm || (data as any).llmResponse;
