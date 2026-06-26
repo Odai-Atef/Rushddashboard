@@ -194,10 +194,39 @@ export function CharityAssessmentResultsPage() {
   // "القيمة والاستدامة") are not visually compressed near the center.
   const radarLowerBound = 0;
   const radarUpperBound = 100;
-  const strengths = data.strengths ?? [];
-  const llmStrengthsAnalysis = (data as any).llmResponse?.strengthsAnalysis;
-  const weaknesses = (data.weaknesses ?? []) as Weakness[];
-  const llmGapAnalysis = (data as any).llmResponse?.gapAnalysis;
+  const llm = (data as any).llmResponse;
+  const llmStrengthsAnalysis = llm?.strengthsAnalysis;
+  const llmGapAnalysis = llm?.gapAnalysis;
+
+  // Use LLM-derived recommendations when the backend returns an empty list.
+  const recommendations =
+    data.recommendations && data.recommendations.length > 0
+      ? data.recommendations
+      : llm?.recommendations
+      ? [
+          ...(llm.recommendations.highPriority
+            ? llm.recommendations.highPriority.split(/\n/).filter(Boolean).map((r: string) => ({ text: r.trim(), priority: 'high' as const }))
+            : []),
+          ...(llm.recommendations.mediumPriority
+            ? llm.recommendations.mediumPriority.split(/\n/).filter(Boolean).map((r: string) => ({ text: r.trim(), priority: 'medium' as const }))
+            : []),
+          ...(llm.recommendations.longTermDevelopment
+            ? llm.recommendations.longTermDevelopment.split(/\n/).filter(Boolean).map((r: string) => ({ text: r.trim(), priority: 'long' as const }))
+            : []),
+        ]
+      : [];
+
+  // Prefer the rich LLM narrative for strengths; fall back to the plain backend list.
+  const strengths =
+    llmStrengthsAnalysis && typeof llmStrengthsAnalysis === 'string'
+      ? llmStrengthsAnalysis.split(/،|\. /).map((s) => s.trim()).filter(Boolean)
+      : (data.strengths ?? []);
+
+  // Prefer the rich LLM narrative for gaps; fall back to the plain backend list.
+  const weaknesses =
+    llmGapAnalysis && typeof llmGapAnalysis === 'string'
+      ? [{ area: 'تحليل الفجوات', issue: llmGapAnalysis, severity: 'medium' as const }]
+      : ((data.weaknesses ?? []) as Weakness[]);
   const benchmarks = data.benchmarks;
   const benchmarkData = benchmarks
     ? [
@@ -332,7 +361,7 @@ export function CharityAssessmentResultsPage() {
                 <Lightbulb className="w-8 h-8 text-purple-500" />
                 <Sparkles className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-2xl font-bold mb-1">{data.recommendations?.length ?? 5}</p>
+              <p className="text-2xl font-bold mb-1">{recommendations.length}</p>
               <p className="text-sm text-muted-foreground">توصيات مخصصة</p>
             </div>
           </div>
