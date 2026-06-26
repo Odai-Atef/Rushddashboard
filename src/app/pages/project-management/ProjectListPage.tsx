@@ -113,7 +113,12 @@ export function ProjectListPage() {
         setAssessmentResult(resultData ?? null);
       } catch (err: any) {
         if (cancelled) return;
-        setQualificationError(err?.message || 'تعذر التحقق من حالة التأهيل');
+        if (err?.statusCode === 403 || err?.response?.status === 403) {
+          setOrganization(null);
+          setAssessmentResult(null);
+        } else {
+          setQualificationError(err?.message || 'تعذر التحقق من حالة التأهيل');
+        }
       } finally {
         if (!cancelled) setQualificationLoading(false);
       }
@@ -478,22 +483,35 @@ export function ProjectListPage() {
     assessmentResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT' ||
     assessmentResult?.qualificationStatus?.toUpperCase() === 'WITH_IMPROVEMENT';
 
-  const renderQualificationBlocker = () => (
-    <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center">
-      <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-      <h2 className="text-2xl font-bold mb-4 text-red-700">جهتك غير مؤهلة لاستخدام خصائص منصة رشد</h2>
-      <p className="text-gray-600 mb-8 max-w-md mx-auto">
-        لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.
-      </p>
-      <button
-        onClick={() => navigate(`/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`)}
-        className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
-      >
-        <RefreshCw className="w-5 h-5" />
-        إعادة التقييم مرة أخرى
-      </button>
-    </div>
-  );
+  const renderQualificationBlocker = () => {
+    const hasOrg = !!organization?.id;
+    return (
+      <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center">
+        <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
+        <h2 className="text-2xl font-bold mb-4 text-red-700">
+          {hasOrg ? 'جهتك غير مؤهلة لاستخدام خصائص منصة رشد' : 'لم يتم ربط جهة بحسابك بعد'}
+        </h2>
+        <p className="text-gray-600 mb-8 max-w-md mx-auto">
+          {hasOrg
+            ? 'لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.'
+            : 'يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.'}
+        </p>
+        <button
+          onClick={() =>
+            navigate(
+              hasOrg
+                ? `/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`
+                : '/dashboard/onboarding/registration'
+            )
+          }
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
+        >
+          <RefreshCw className="w-5 h-5" />
+          {hasOrg ? 'إعادة التقييم مرة أخرى' : 'إنشاء حساب الجهة'}
+        </button>
+      </div>
+    );
+  };
 
   const renderListContent = () => {
     if (error) return renderError();
