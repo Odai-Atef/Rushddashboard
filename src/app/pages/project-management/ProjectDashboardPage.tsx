@@ -13,6 +13,7 @@ import {
   Download,
   User,
   Calendar,
+  AlertTriangle,
 } from 'lucide-react';
 import {
   PieChart as RechartsPieChart,
@@ -41,9 +42,28 @@ export function ProjectDashboardPage() {
   }
 
   if (error || !data) {
+    const isForbidden = error === 'ليس لديك الصلاحية لعرض لوحة المشاريع.';
     return (
       <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
-        <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
+        {isForbidden ? (
+          <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center max-w-lg">
+            <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
+            <h2 className="text-2xl font-bold mb-4 text-red-700">
+              لم يتم ربط جهة بحسابك بعد
+            </h2>
+            <p className="text-gray-600 mb-8">
+              يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.
+            </p>
+            <button
+              onClick={() => navigate('/dashboard/onboarding/registration')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
+            >
+              إنشاء حساب الجهة
+            </button>
+          </div>
+        ) : (
+          <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
+        )}
       </div>
     );
   }
