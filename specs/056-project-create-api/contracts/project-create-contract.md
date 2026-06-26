@@ -58,7 +58,7 @@ This contract defines the interface between the frontend `/dashboard/project-man
 |----------|-----------|-------|
 | اسم المشروع | `name` | Direct mapping. |
 | نوع المشروع | `type` | Direct mapping. |
-| المؤسسة | `organizationId` | UI shows name; API receives identifier. |
+| الجهه | `organizationId` | UI shows name; API receives identifier. |
 | (category selector) | `category` | Direct mapping. |
 | وصف المشروع | `description` | Direct mapping. |
 | الميزانية التقديرية | `budget` | Converted from string to number; `currencyCode` defaults to `"SAR"`. |

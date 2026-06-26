@@ -140,7 +140,7 @@ export function ProjectEditPage() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">المؤسسة *</label>
+                <label className="block text-sm font-medium mb-2">الجهه *</label>
                 <input
                   type="text"
                   value={formData.organizationId}

@@ -82,7 +82,7 @@ Replace the inline `onClick={() => setCurrentView('assessment')}` with an async 
 ```tsx
 const handleProfileNext = async () => {
   // Validation
-  if (!profileData.overview.trim()) { toast.error('نبذة عن المؤسسة مطلوبة'); return; }
+  if (!profileData.overview.trim()) { toast.error('نبذة عن الجهه مطلوبة'); return; }
   if (!profileData.targetBeneficiaries.trim()) { toast.error('الفئات المستهدفة مطلوبة'); return; }
   if (!profileData.geographicCoverage) { toast.error('النطاق الجغرافي مطلوب'); return; }
   if (profileData.areasOfWork.length === 0) { toast.error('مجالات العمل مطلوبة'); return; }

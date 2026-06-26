@@ -43,7 +43,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
-    { id: 'onboarding', label: 'تسجيل الجمعيات', icon: UserPlus, path: '/dashboard/onboarding/registration' },
+    { id: 'onboarding', label: 'تسجيل الجهات', icon: UserPlus, path: '/dashboard/onboarding/registration' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources' },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk' },

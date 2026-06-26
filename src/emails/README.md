@@ -22,7 +22,7 @@ const emailHtml = activateEmailTemplate
 رسالة نتيجة التقييم مع لوحة تحكم المؤشرات الرئيسية.
 
 **المتغيرات المطلوبة:**
-- `{{ORGANIZATION_NAME}}` - اسم المؤسسة
+- `{{ORGANIZATION_NAME}}` - اسم الجهه
 - `{{OVERALL_SCORE}}` - النتيجة الإجمالية (0-100)
 - `{{SCORE_LABEL}}` - تصنيف النتيجة (ممتاز، جيد، متوسط، إلخ)
 - `{{OPERATIONAL_SCORE}}` - نسبة الجاهزية التشغيلية (0-100)

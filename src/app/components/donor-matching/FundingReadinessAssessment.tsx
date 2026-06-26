@@ -47,7 +47,7 @@ const riskIndicators = [
   { risk: 'وثيقة انتهت صلاحيتها (شهادة التسجيل)', level: 'high', mitigation: 'قم بتجديدها فوراً عبر المنصة الحكومية' },
   { risk: 'ميزانية المشروع أقل من الحد الأدنى للمانح FII', level: 'medium', mitigation: 'أعد تقدير الميزانية أو استهدف جهات أخرى' },
   { risk: 'مؤشرات الأثر غير كافية لمعيار SRCA', level: 'medium', mitigation: 'أضف مؤشرات قياس كمية وتفصيلية' },
-  { risk: 'قِصَر خبرة المؤسسة في القطاع البيئي', level: 'low', mitigation: 'استهدف جهات تمويل التعليم بشكل أساسي' },
+  { risk: 'قِصَر خبرة الجهه في القطاع البيئي', level: 'low', mitigation: 'استهدف جهات تمويل التعليم بشكل أساسي' },
 ];
 
 const docStatusConfig: Record<string, { icon: React.ElementType; color: string; label: string }> = {

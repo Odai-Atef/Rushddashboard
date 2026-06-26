@@ -18,7 +18,7 @@ export function ThanksPage() {
         </div>
         <h1 className="text-2xl font-bold mb-3">شكراً لك</h1>
         <p className="text-gray-600 mb-6">
-          تم إنشاء/تحديث ملف المؤسسة بنجاح. يمكنك الآن بدء التقييم لتفعيل المؤسسة من إنشاء المشاريع.
+          تم إنشاء/تحديث ملف الجهه بنجاح. يمكنك الآن بدء التقييم لتفعيل الجهه من إنشاء المشاريع.
         </p>
         <div className="bg-blue-50 rounded-xl p-4 mb-6 flex items-start gap-3 text-left">
           <Sparkles className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />

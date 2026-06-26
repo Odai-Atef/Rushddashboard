@@ -38,7 +38,7 @@ export function CharityAssessmentStartPage() {
       if (err?.statusCode === 404 || err?.response?.status === 404) {
         setError('لم يتم العثور على مؤسسة مرتبطة بحسابك. يرجى إنشاء مؤسسة أولاً.');
       } else {
-        setError(err?.message || 'تعذر تحميل معلومات المؤسسة. يرجى المحاولة مرة أخرى.');
+        setError(err?.message || 'تعذر تحميل معلومات الجهه. يرجى المحاولة مرة أخرى.');
       }
     } finally {
       setIsLoading(false);
@@ -56,7 +56,7 @@ export function CharityAssessmentStartPage() {
       <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
-          <p className="text-muted-foreground">جاري تحميل بيانات المؤسسة...</p>
+          <p className="text-muted-foreground">جاري تحميل بيانات الجهه...</p>
         </div>
       </div>
     );
@@ -67,7 +67,7 @@ export function CharityAssessmentStartPage() {
       <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
         <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">تعذر تحميل المؤسسة</h2>
+          <h2 className="text-xl font-semibold mb-2">تعذر تحميل الجهه</h2>
           <p className="text-muted-foreground mb-6">{error}</p>
           <div className="flex gap-3 justify-center">
             <button

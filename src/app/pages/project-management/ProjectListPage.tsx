@@ -324,7 +324,7 @@ export function ProjectListPage() {
           <thead className="bg-gray-50 border-b border-gray-200">
             <tr>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">اسم المشروع</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المؤسسة</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الجهه</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">النوع</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الميزانية</th>
@@ -626,7 +626,7 @@ export function ProjectListPage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">المؤسسة</label>
+                  <label className="block text-sm font-medium mb-2">الجهه</label>
                   <select
                     value={pendingFilters.organizationId || 'all'}
                     onChange={(e) => updateFilter('organizationId', e.target.value)}

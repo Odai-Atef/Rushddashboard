@@ -228,7 +228,7 @@ export function useOnboardingRegistration(): UseOnboardingRegistrationReturn {
     async (data: OrganizationProfile) => {
       const orgId = state.organization?.id;
       if (!orgId) {
-        const message = 'لم يتم العثور على معرف المؤسسة. يرجى إكمال التسجيل أولاً.';
+        const message = 'لم يتم العثور على معرف الجهه. يرجى إكمال التسجيل أولاً.';
         setState((prev) => ({
           ...prev,
           error: message,
@@ -280,7 +280,7 @@ export function useOnboardingRegistration(): UseOnboardingRegistrationReturn {
     async (fundingAreaIds: string[], customAreas?: { name: string }[]) => {
       const orgId = state.organization?.id;
       if (!orgId) {
-        const message = 'لم يتم العثور على معرف المؤسسة. يرجى إكمال التسجيل أولاُ.';
+        const message = 'لم يتم العثور على معرف الجهه. يرجى إكمال التسجيل أولاُ.';
         setState((prev) => ({ ...prev, error: message }));
         throw new Error(message);
       }

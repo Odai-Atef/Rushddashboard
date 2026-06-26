@@ -136,7 +136,7 @@ export function AIProjectInnovationModule() {
         {/* Organization Context */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">سياق المؤسسة</h2>
+            <h2 className="text-lg font-semibold text-gray-900">سياق الجهه</h2>
             <div className="flex items-center gap-2">
               <span className="text-sm text-gray-600">درجة الجاهزية</span>
               <div className="flex items-center gap-2 px-3 py-1 bg-white rounded-full">
@@ -149,7 +149,7 @@ export function AIProjectInnovationModule() {
             <div className="flex items-center gap-3 bg-white rounded-lg p-4">
               <Building2 className="w-5 h-5 text-blue-600" />
               <div>
-                <p className="text-xs text-gray-600">المؤسسة</p>
+                <p className="text-xs text-gray-600">الجهه</p>
                 <p className="font-medium">{organization.name}</p>
               </div>
             </div>

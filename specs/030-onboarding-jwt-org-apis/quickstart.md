@@ -22,7 +22,7 @@
 3. Observe `GET /api/v1/onboarding/organizations/me`.
    - Expect **404** → form renders empty.
 4. Fill in all required fields:
-   - اسم المؤسسة, رقم الترخيص, تاريخ التسجيل, نوع المؤسسة, المدينة, الشخص المسؤول, البريد الإلكتروني, رقم الجوال.
+   - اسم الجهه, رقم الترخيص, تاريخ التسجيل, نوع الجهه, المدينة, الشخص المسؤول, البريد الإلكتروني, رقم الجوال.
 5. Click **"التالي"** (Next).
 6. Observe `PUT /api/v1/onboarding/organizations/me`.
    - Expect **201** → response contains `org` object.

@@ -101,7 +101,7 @@ export function OnboardingProvider({
       } catch (err: any) {
         const message =
           err?.message ||
-          `تعذر تحميل المؤسسة المحددة (${externalOrganizationId})`;
+          `تعذر تحميل الجهه المحددة (${externalOrganizationId})`;
         setError(message);
       }
     }
@@ -117,7 +117,7 @@ export function OnboardingProvider({
         return null;
       } else {
         const message =
-          err?.message || 'تعذر تحميل معلومات المؤسسة. يرجى المحاولة مرة أخرى.';
+          err?.message || 'تعذر تحميل معلومات الجهه. يرجى المحاولة مرة أخرى.';
         setError(message);
       }
     }

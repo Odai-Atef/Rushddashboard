@@ -35,7 +35,7 @@ export function TermsModal({ children }: TermsModalProps) {
             <ul className="list-disc list-inside space-y-1 mt-2">
               <li><strong>المنصة:</strong> منصة حاضنة رشد الافتراضية.</li>
               <li><strong>الحاضنة:</strong> الجهة المالكة والمشغلة للمنصة.</li>
-              <li><strong>المستخدم:</strong> الجمعية أو المؤسسة أو الجهة المسجلة في المنصة.</li>
+              <li><strong>المستخدم:</strong> الجمعية أو الجهه أو الجهة المسجلة في المنصة.</li>
               <li><strong>الخدمات:</strong> جميع الخدمات والاستشارات والمنتجات الرقمية المقدمة عبر المنصة.</li>
               <li><strong>البيانات:</strong> جميع المعلومات والوثائق والملفات المدخلة أو المرفوعة عبر المنصة.</li>
             </ul>

@@ -52,7 +52,7 @@ export function ProjectCreatePage() {
         }
       } catch (err) {
         if (!cancelled) {
-          setOrganizationError('تعذر تحميل بيانات المؤسسة. يرجى المحاولة مرة أخرى.');
+          setOrganizationError('تعذر تحميل بيانات الجهه. يرجى المحاولة مرة أخرى.');
         }
       } finally {
         if (!cancelled) {
@@ -159,10 +159,10 @@ export function ProjectCreatePage() {
                 {fieldErrors.type && <p className="text-red-600 text-sm mt-1">{fieldErrors.type}</p>}
               </div>
               <div>
-                <label className="block text-sm font-medium mb-2">المؤسسة *</label>
+                <label className="block text-sm font-medium mb-2">الجهه *</label>
                 {isLoadingOrganization ? (
                   <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
-                    جاري تحميل المؤسسة...
+                    جاري تحميل الجهه...
                   </div>
                 ) : organizationError ? (
                   <div className="text-red-600 text-sm">{organizationError}</div>
@@ -172,7 +172,7 @@ export function ProjectCreatePage() {
                     onChange={(e) => updateField('organizationId', e.target.value)}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
-                    <option value="">اختر المؤسسة</option>
+                    <option value="">اختر الجهه</option>
                     {organizationOptions.map((org) => (
                       <option key={org.id} value={org.id}>
                         {org.name}
