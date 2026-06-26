@@ -194,15 +194,37 @@ export function CharityAssessmentResultsPage() {
   // "القيمة والاستدامة") are not visually compressed near the center.
   const radarLowerBound = 0;
   const radarUpperBound = 100;
-  // The backend stores the LLM output as a JSON string in llmResponse.raw
-  // when parsing fails; parse it client-side to extract the rich narrative.
+  // The backend sometimes returns the LLM output as a malformed JSON string
+  // in llmResponse.raw (e.g. two objects concatenated with a comma). Parse it
+  // client-side by extracting each top-level JSON object and merging them.
   const rawLlm = (data as any).llmResponse?.raw;
   let parsedLlm: any = null;
   if (rawLlm && typeof rawLlm === 'string') {
     try {
       parsedLlm = JSON.parse(rawLlm);
     } catch {
-      parsedLlm = null;
+      // Try to extract and merge all top-level JSON objects.
+      const objects: any[] = [];
+      let depth = 0;
+      let start = -1;
+      for (let i = 0; i < rawLlm.length; i++) {
+        const ch = rawLlm[i];
+        if (ch === '{') {
+          if (depth === 0) start = i;
+          depth++;
+        } else if (ch === '}') {
+          depth--;
+          if (depth === 0 && start !== -1) {
+            try {
+              objects.push(JSON.parse(rawLlm.slice(start, i + 1)));
+            } catch {
+              // ignore invalid fragment
+            }
+            start = -1;
+          }
+        }
+      }
+      parsedLlm = objects.length > 0 ? Object.assign({}, ...objects) : null;
     }
   }
   const llm = parsedLlm || (data as any).llmResponse;
