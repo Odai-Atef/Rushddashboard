@@ -28,10 +28,20 @@ import {
   Tooltip,
 } from 'recharts';
 import { useProjectDashboard, timeAgo } from '@/api/hooks/useProjectDashboard';
+import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 
 export function ProjectDashboardPage() {
   const navigate = useNavigate();
   const { data, isLoading, error } = useProjectDashboard();
+  const { organization, assessmentResult } = useOnboardingContext();
+
+  const isQualified =
+    assessmentResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED' ||
+    assessmentResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT' ||
+    assessmentResult?.qualificationStatus?.toUpperCase() === 'WITH_IMPROVEMENT';
+
+  const hasOrg = !!organization?.id;
+  const showQualificationBlocker = !isQualified;
 
   if (isLoading) {
     return (
@@ -49,21 +59,59 @@ export function ProjectDashboardPage() {
           <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center max-w-lg">
             <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
             <h2 className="text-2xl font-bold mb-4 text-red-700">
-              لم يتم ربط جهة بحسابك بعد
+              {hasOrg ? 'جهتك غير مؤهلة لاستخدام خصائص منصة رشد' : 'لم يتم ربط جهة بحسابك بعد'}
             </h2>
             <p className="text-gray-600 mb-8">
-              يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.
+              {hasOrg
+                ? 'لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.'
+                : 'يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.'}
             </p>
             <button
-              onClick={() => navigate('/dashboard/onboarding/registration')}
+              onClick={() =>
+                navigate(
+                  hasOrg
+                    ? `/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`
+                    : '/dashboard/onboarding/registration'
+                )
+              }
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
             >
-              إنشاء حساب الجهة
+              {hasOrg ? 'إعادة التقييم مرة أخرى' : 'إنشاء حساب الجهة'}
             </button>
           </div>
         ) : (
           <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
         )}
+      </div>
+    );
+  }
+
+  if (showQualificationBlocker) {
+    return (
+      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+        <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center max-w-lg">
+          <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
+          <h2 className="text-2xl font-bold mb-4 text-red-700">
+            {hasOrg ? 'جهتك غير مؤهلة لاستخدام خصائص منصة رشد' : 'لم يتم ربط جهة بحسابك بعد'}
+          </h2>
+          <p className="text-gray-600 mb-8">
+            {hasOrg
+              ? 'لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.'
+              : 'يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.'}
+          </p>
+          <button
+            onClick={() =>
+              navigate(
+                hasOrg
+                  ? `/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`
+                  : '/dashboard/onboarding/registration'
+              )
+            }
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
+          >
+            {hasOrg ? 'إعادة التقييم مرة أخرى' : 'إنشاء حساب الجهة'}
+          </button>
+        </div>
       </div>
     );
   }
