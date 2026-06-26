@@ -190,12 +190,10 @@ export function CharityAssessmentResultsPage() {
           fullMark: 100,
         }));
 
-  const radarValues = radarData.map((d) => d.score ?? 0);
-  const radarMin = radarValues.length ? Math.min(...radarValues) : 0;
-  const radarMax = radarValues.length ? Math.max(...radarValues) : 100;
-  const radarRange = radarMax - radarMin || 100;
-  const radarLowerBound = Math.max(0, Math.round(radarMin - radarRange * 0.1));
-  const radarUpperBound = Math.min(100, Math.round(radarMax + radarRange * 0.1));
+  // Keep the radar chart on a fixed 0-100 scale so lower dimensions (e.g.
+  // "القيمة والاستدامة") are not visually compressed near the center.
+  const radarLowerBound = 0;
+  const radarUpperBound = 100;
   const strengths = data.strengths ?? [];
   const llmStrengthsAnalysis = (data as any).llmResponse?.strengthsAnalysis;
   const weaknesses = (data.weaknesses ?? []) as Weakness[];
