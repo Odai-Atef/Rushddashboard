@@ -6,11 +6,6 @@ import { CreateProjectDto } from '@/app/pages/project-management/project-types';
 import { onboardingService } from '@/api/services';
 import { toast } from 'sonner';
 
-const MANAGER_OPTIONS = [
-  { id: 'manager-1', name: 'أحمد محمد' },
-  { id: 'manager-2', name: 'سارة عبدالله' },
-  { id: 'manager-3', name: 'خالد العلي' },
-];
 
 export function ProjectCreatePage() {
   const navigate = useNavigate();
@@ -30,7 +25,7 @@ export function ProjectCreatePage() {
     currencyCode: 'SAR',
     startDate: '',
     endDate: '',
-    managerId: '',
+    managerId: undefined as string | undefined,
   });
 
   useEffect(() => {
@@ -86,7 +81,6 @@ export function ProjectCreatePage() {
       endDate: formData.endDate,
       beneficiaries: formData.beneficiaries,
       geographicScope: formData.geographicScope,
-      managerId: formData.managerId,
       organizationId: formData.organizationId,
     };
 
@@ -184,34 +178,16 @@ export function ProjectCreatePage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">الفئة *</label>
-                <input
-                  type="text"
-                  value={formData.category}
-                  onChange={(e) => updateField('category', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="مثال: التعليم"
-                />
-                {fieldErrors.category && <p className="text-red-600 text-sm mt-1">{fieldErrors.category}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">مدير المشروع *</label>
-                <select
-                  value={formData.managerId}
-                  onChange={(e) => updateField('managerId', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">اختر المدير</option>
-                  {MANAGER_OPTIONS.map((manager) => (
-                    <option key={manager.id} value={manager.id}>
-                      {manager.name}
-                    </option>
-                  ))}
-                </select>
-                {fieldErrors.managerId && <p className="text-red-600 text-sm mt-1">{fieldErrors.managerId}</p>}
-              </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">الفئة *</label>
+              <input
+                type="text"
+                value={formData.category}
+                onChange={(e) => updateField('category', e.target.value)}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="مثال: التعليم"
+              />
+              {fieldErrors.category && <p className="text-red-600 text-sm mt-1">{fieldErrors.category}</p>}
             </div>
 
             <div>
