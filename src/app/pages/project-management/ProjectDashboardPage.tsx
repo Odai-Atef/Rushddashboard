@@ -28,22 +28,50 @@ import {
   Tooltip,
 } from 'recharts';
 import { useProjectDashboard, timeAgo } from '@/api/hooks/useProjectDashboard';
-import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
+import { useEffect, useState } from 'react';
+import { onboardingService } from '@/api/services';
 
 export function ProjectDashboardPage() {
   const navigate = useNavigate();
   const { data, isLoading, error } = useProjectDashboard();
-  const { organization, assessmentResult } = useOnboardingContext();
+  const [hasOrg, setHasOrg] = useState(false);
+  const [isQualified, setIsQualified] = useState(false);
+  const [isCheckingQualification, setIsCheckingQualification] = useState(true);
 
-  const isQualified =
-    assessmentResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED' ||
-    assessmentResult?.qualificationStatus?.toUpperCase() === 'QUALIFIED_WITH_IMPROVEMENT' ||
-    assessmentResult?.qualificationStatus?.toUpperCase() === 'WITH_IMPROVEMENT';
+  useEffect(() => {
+    let cancelled = false;
+    const check = async () => {
+      try {
+        const orgRes = await onboardingService.getMyOrganization();
+        const org = orgRes.data;
+        if (!org?.id) {
+          if (!cancelled) { setHasOrg(false); setIsQualified(false); setIsCheckingQualification(false); }
+          return;
+        }
+        if (!cancelled) setHasOrg(true);
+        const resultRes = await onboardingService.getIsivAssessmentResults(org.id);
+        const result = (resultRes.data as any)?.data ?? resultRes.data;
+        const status = result?.qualificationStatus?.toUpperCase();
+        if (!cancelled) {
+          setIsQualified(
+            status === 'QUALIFIED' ||
+            status === 'QUALIFIED_WITH_IMPROVEMENT' ||
+            status === 'WITH_IMPROVEMENT'
+          );
+        }
+      } catch {
+        if (!cancelled) { setHasOrg(false); setIsQualified(false); }
+      } finally {
+        if (!cancelled) setIsCheckingQualification(false);
+      }
+    };
+    check();
+    return () => { cancelled = true; };
+  }, []);
 
-  const hasOrg = !!organization?.id;
   const showQualificationBlocker = !isQualified;
 
-  if (isLoading) {
+  if (isLoading || isCheckingQualification) {
     return (
       <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
