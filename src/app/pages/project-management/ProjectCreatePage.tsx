@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { ChevronRight, DollarSign, Save } from 'lucide-react';
+import { ChevronRight, DollarSign } from 'lucide-react';
 import { useProjectCreate } from '@/api/hooks/useProjectCreate';
 import { CreateProjectDto } from '@/app/pages/project-management/project-types';
 import { onboardingService } from '@/api/services';
@@ -100,10 +100,6 @@ export function ProjectCreatePage() {
         toast.error(error);
       }
     }
-  };
-
-  const handleDraft = () => {
-    toast.info('تم حفظ المسودة محلياً');
   };
 
   return (
@@ -288,23 +284,13 @@ export function ProjectCreatePage() {
               >
                 إلغاء
               </button>
-              <div className="flex gap-3">
-                <button
-                  type="button"
-                  onClick={handleDraft}
-                  className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2"
-                >
-                  <Save className="w-5 h-5" />
-                  حفظ كمسودة
-                </button>
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors font-medium"
-                >
-                  {isLoading ? 'جاري الإنشاء...' : 'إنشاء المشروع'}
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={isLoading}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors font-medium"
+              >
+                {isLoading ? 'جاري الإنشاء...' : 'إنشاء المشروع'}
+              </button>
             </div>
           </form>
         </div>
