@@ -183,9 +183,50 @@ export function OrgRegistrationPage() {
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setApiError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-      } else {
-        setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
+        return;
       }
+
+      const backendErrors: Array<{ field?: string; message?: string }> | undefined =
+        err?.errors;
+
+      if (backendErrors && backendErrors.length > 0) {
+        const fieldErrors: Partial<Record<keyof FormData, string>> = {};
+        const generalMessages: string[] = [];
+
+        backendErrors.forEach((item) => {
+          const field = item.field as keyof FormData | undefined;
+          const message = item.message || '';
+
+          if (field && field in formData) {
+            fieldErrors[field] = fieldErrors[field]
+              ? `${fieldErrors[field]}، ${message}`
+              : message;
+          } else {
+            generalMessages.push(message);
+          }
+        });
+
+        if (Object.keys(fieldErrors).length > 0) {
+          setErrors((prev) => ({ ...prev, ...fieldErrors }));
+        }
+
+        const topLevelMessage = err?.message || 'فشل التحقق من صحة البيانات';
+        const detailMessages = [
+          ...Object.values(fieldErrors),
+          ...generalMessages,
+        ].filter((m) => m !== topLevelMessage);
+        const uniqueDetailMessages = Array.from(new Set(detailMessages));
+        const details = uniqueDetailMessages.join('، ');
+
+        setApiError(
+          details
+            ? `${topLevelMessage}، ${details}`
+            : topLevelMessage
+        );
+        return;
+      }
+
+      setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
     } finally {
       setIsLoading(false);
     }
@@ -196,6 +237,11 @@ export function OrgRegistrationPage() {
 
   const getInputClassName = (field: keyof FormData, hasIcon: boolean) =>
     `w-full ${hasIcon ? 'pr-11 pl-4' : 'px-4'} py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+      errors[field] ? 'border-red-500' : 'border-border'
+    }`;
+
+  const getIconInputClassName = (field: keyof FormData) =>
+    `w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
       errors[field] ? 'border-red-500' : 'border-border'
     }`;
 
@@ -302,7 +348,7 @@ export function OrgRegistrationPage() {
                       value={formData.password}
                       onChange={(e) => setField('password', e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                      className={getIconInputClassName('password')}
                     />
                     <button
                       type="button"
@@ -327,7 +373,7 @@ export function OrgRegistrationPage() {
                       value={formData.confirmPassword}
                       onChange={(e) => setField('confirmPassword', e.target.value)}
                       placeholder="••••••••"
-                      className="w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+                      className={getIconInputClassName('confirmPassword')}
                     />
                     <button
                       type="button"
