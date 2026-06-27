@@ -21,16 +21,15 @@ export interface LoginCredentials {
 }
 
 export interface OrgRegistrationData {
-  fullName: string;
+  name: string;
   email: string;
   phone: string;
   password: string;
-  orgName: string;
+  confirmPassword: string;
   licenseNumber: string;
-  orgType: 'charity' | 'private_company';
-  city: string;
-  activity: string;
-  fundingAreas: string[];
+  type: 'CHARITY' | 'PRIVATE_COMPANY';
+  overview: string;
+  areasOfWork: string[];
 }
 
 export interface OrgRegistrationResponse {
@@ -41,11 +40,22 @@ export interface OrgRegistrationResponse {
     id: string;
     email: string;
     fullName: string;
+    phone: string;
+    roleId: string;
+    status: string;
+    createdAt: string;
   };
   organization: {
     id: string;
     name: string;
+    licenseNumber: string;
     type: string;
+    email: string;
+    mobile: string;
+    ownerId: string;
+    status: string;
+    currentStep: string;
+    createdAt: string;
   };
 }
 
@@ -198,7 +208,7 @@ export class AuthService {
     data: OrgRegistrationData
   ): Promise<ApiResponse<OrgRegistrationResponse>> {
     const response = await apiClient.post<OrgRegistrationResponse>(
-      `${this.baseEndpoint}/register/org`,
+      `${this.baseEndpoint}/register-organization`,
       data
     );
 

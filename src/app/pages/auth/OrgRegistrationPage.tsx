@@ -5,11 +5,9 @@ import {
   EyeOff,
   Mail,
   Lock,
-  User,
   Phone,
   Building,
   Building2,
-  Calendar,
   CheckCircle,
   Loader2,
   ArrowRight,
@@ -18,6 +16,7 @@ import { toast } from 'sonner';
 import { authService, OrgRegistrationData } from '@/api/services/auth-service';
 import { onboardingService, FundingArea } from '@/api/services/onboarding-service';
 import { TermsModal } from '@/app/components/TermsModal';
+import { useAuth } from '@/app/layouts/RootLayout';
 
 type OrgTypeOption = 'charity' | 'private_company';
 
@@ -49,6 +48,7 @@ const initialFormData: FormData = {
 
 export function OrgRegistrationPage() {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -98,11 +98,9 @@ export function OrgRegistrationPage() {
   const validate = (): boolean => {
     const nextErrors: Partial<Record<keyof FormData, string>> = {};
 
-    const fullName = formData.orgName.trim();
-    if (!fullName) {
+    const orgName = formData.orgName.trim();
+    if (!orgName) {
       nextErrors.orgName = 'اسم الجهه مطلوب';
-    } else if (fullName.length < 2 || fullName.length > 100) {
-      nextErrors.orgName = 'اسم الجهه يجب أن يكون بين 2 و 100 حرف';
     }
 
     const email = formData.email.trim();
@@ -114,7 +112,7 @@ export function OrgRegistrationPage() {
 
     const phone = formData.phone.trim();
     if (!phone) {
-      nextErrors.phone = 'رقم الهاتف مطلوب';
+      nextErrors.phone = 'رقم الجوال مطلوب';
     }
 
     if (!formData.password) {
@@ -164,22 +162,22 @@ export function OrgRegistrationPage() {
     setIsLoading(true);
 
     const payload: OrgRegistrationData = {
-      fullName: formData.orgName.trim(),
+      name: formData.orgName.trim(),
       email: formData.email.trim(),
       phone: formData.phone.trim(),
       password: formData.password,
-      orgName: formData.orgName.trim(),
+      confirmPassword: formData.confirmPassword,
       licenseNumber: formData.licenseNumber.trim(),
-      registrationDate: '',
-      orgType: formData.orgType as OrgTypeOption,
-      city: '',
-      activity: formData.orgType === 'private_company' ? formData.activity.trim() : '',
-      fundingAreas: formData.orgType === 'charity' ? formData.fundingAreas : [],
+      type: formData.orgType === 'private_company' ? 'PRIVATE_COMPANY' : 'CHARITY',
+      overview: formData.orgType === 'private_company' ? formData.activity.trim() : '',
+      areasOfWork: formData.orgType === 'charity' ? formData.fundingAreas : [],
     };
 
     try {
       const response = await authService.registerOrganization(payload);
       if (response.success) {
+        login();
+        toast.success(response.message || 'تم التسجيل بنجاح');
         navigate('/dashboard/onboarding/assessment');
       } else {
         setApiError(response.message || 'حدث خطأ أثناء إنشاء الحساب');
