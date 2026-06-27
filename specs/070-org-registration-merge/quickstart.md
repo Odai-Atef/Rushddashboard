@@ -1,51 +1,68 @@
-# Quickstart: Merge User and Organization Registration
+# Quick Start: Verify /auth/register/org
 
-## Verify the Change
+## Prerequisites
 
-1. Start the development server:
+- Node.js and `npm` installed.
+- Dependencies installed: `npm i`
+- Backend service running and reachable via `API_BASE_URL` (set in `.env`).
 
-   ```bash
-   npm run dev
-   ```
+## Start the Development Server
 
-2. Open the new combined registration page at `/auth/register/org`.
+```bash
+npm run dev
+```
 
-   - Confirm all merged fields are present.
-   - Confirm no duplicate fields exist (email, phone, organization/company name appear once).
+The Vite dev server will start, typically at `http://localhost:5173`.
 
-3. Fill the form and submit.
+## Access the Page
 
-   - Open the browser DevTools Network tab.
-   - Confirm the request is sent to the single new backend endpoint (e.g., `POST /api/v1/auth/register/org`).
-   - Confirm the response includes tokens, user info, and organization info.
+Open in a browser:
 
-4. Confirm redirect.
+```text
+http://localhost:5173/auth/register/org
+```
 
-   - After successful submission, verify the browser redirects to the onboarding assessment flow.
+## Happy-Path Smoke Test
 
-5. Test validation.
+1. Fill in the form:
+   - الاسم الكامل (Full name)
+   - اسم الجهه (Organization / company name)
+   - البريد الإلكتروني (Email)
+   - رقم الهاتف (Phone)
+   - كلمة المرور / تأكيد كلمة المرور (Password / Confirm)
+   - رقم الترخيص (License number)
+   - تاريخ التسجيل (Registration date)
+   - نوع الجهه (Organization type: **private company** until funding-areas endpoint is public)
+   - المدينة / المنطقة (City)
+   - النشاط (Activity, for private company)
+   - Accept terms.
+2. Click **إنشاء حساب وتسجيل الجهه**.
+3. Expected: a success toast appears and the app redirects to `/auth/login?registered=true`.
+4. The user should **not** be logged in automatically (no token stored, no redirect to dashboard).
 
-   - Leave required fields empty and submit; confirm client-side validation errors appear.
-   - Choose `charity` organization type and confirm `fundingAreas` becomes required.
-   - Choose `private_company` organization type and confirm `activity` becomes required.
+> **Important prerequisites**
+>
+> - The backend must accept `fullName`, `registrationDate`, `city`, and `companyName` in `POST /api/v1/auth/register-organization`.
+> - `GET /api/v1/donors/funding-areas` must be **public/unauthenticated** so the charity type can load its checklist on this public page.
+>
+> Until the funding-areas endpoint is public, use the **private company** type to exercise the full submit flow.
 
-6. Verify existing pages are unchanged.
+## Error-Path Smoke Test
 
-   - Visit `/auth/register` and confirm it still works as before.
-   - Visit `/dashboard/onboarding/registration` and confirm it still works as before.
+1. Leave required fields empty and submit.
+2. Expected: inline field errors appear and no API call is made.
+3. Submit with an email that already exists.
+4. Expected: a single inline API error message appears; no separate pre-check API call is visible in the network tab.
 
-7. Run the production build to catch type errors:
+## Regression Tests
 
-   ```bash
-   npm run build
-   ```
+- Visit `/auth/register` and confirm it still submits and redirects exactly as before.
+- Visit `/dashboard/onboarding/registration` and confirm it still submits and redirects exactly as before.
 
-## Definition of Done
+## Build Verification
 
-- New route `/auth/register/org` exists and renders a combined registration page.
-- The page contains all unique fields from both source pages with duplicates removed.
-- The page submits to a single new backend API endpoint.
-- Client-side validation covers all required fields and conditional fields.
-- Successful submission redirects to the onboarding assessment flow.
-- Existing `/auth/register` and `/dashboard/onboarding/registration` pages remain functional.
-- `npm run build` succeeds with zero TypeScript errors.
+```bash
+npm run build
+```
+
+The build must complete without TypeScript or Vite errors.

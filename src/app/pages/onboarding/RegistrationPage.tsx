@@ -5,7 +5,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
-  MapPin,
 } from 'lucide-react';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
@@ -20,7 +19,6 @@ interface RegistrationData {
   licenseNumber: string;
   registrationDate: string;
   orgType: OrgTypeOption | '';
-  city: string;
   activity: string;
   fundingAreas: string[];
 }
@@ -35,7 +33,6 @@ export function RegistrationPage() {
     licenseNumber: '',
     registrationDate: '',
     orgType: '',
-    city: '',
     activity: '',
     fundingAreas: [],
   });
@@ -49,17 +46,16 @@ export function RegistrationPage() {
   useEffect(() => {
     if (organization) {
       const profile = organization.profile;
-      setRegistrationData({
-        orgName: organization.name || '',
-        licenseNumber: organization.licenseNumber || '',
-        registrationDate: organization.registrationDate
-          ? organization.registrationDate.slice(0, 10)
-          : '',
-        orgType: mapOrganizationTypeToOption(organization.type),
-        city: organization.city || '',
-        activity: profile?.overview || '',
-        fundingAreas: (profile?.fundingAreas || []).map((fa) => fa.fundingAreaId).filter(Boolean),
-      });
+        setRegistrationData({
+          orgName: organization.name || '',
+          licenseNumber: organization.licenseNumber || '',
+          registrationDate: organization.registrationDate
+            ? organization.registrationDate.slice(0, 10)
+            : '',
+          orgType: mapOrganizationTypeToOption(organization.type),
+          activity: profile?.overview || '',
+          fundingAreas: (profile?.fundingAreas || []).map((fa) => fa.fundingAreaId).filter(Boolean),
+        });
     }
   }, [organization]);
 
@@ -80,10 +76,6 @@ export function RegistrationPage() {
 
     if (!registrationData.orgType) {
       nextErrors.orgType = 'نوع الجهه مطلوب';
-    }
-
-    if (!registrationData.city.trim()) {
-      nextErrors.city = 'المدينة / المنطقة مطلوبة';
     }
 
     if (registrationData.orgType === 'private_company') {
@@ -146,6 +138,7 @@ export function RegistrationPage() {
     });
   };
 
+
   const handleFieldChange = (field: keyof RegistrationData, value: string | string[]) => {
     setRegistrationData((prev) => ({ ...prev, [field]: value }));
     clearFieldError(field);
@@ -177,7 +170,6 @@ export function RegistrationPage() {
     licenseNumber: registrationData.licenseNumber.trim(),
     registrationDate: registrationData.registrationDate,
     type: mapOrgTypeOptionToApiType(registrationData.orgType),
-    city: registrationData.city.trim(),
     email: organization?.email || '',
     mobile: organization?.mobile || '',
   });
@@ -273,39 +265,21 @@ export function RegistrationPage() {
                   </div>
                 </div>
 
-                {/* Organization Type & City */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">نوع الجهه *</label>
-                    <select
-                      value={registrationData.orgType}
-                      onChange={(e) => handleFieldChange('orgType', e.target.value as OrgTypeOption | '')}
-                      className={getInputClassName('orgType')}
-                    >
-                      <option value="">اختر نوع الجهه</option>
-                      <option value="charity">جمعية خيرية</option>
-                      <option value="private_company">شركة أهلية</option>
-                    </select>
-                    {errors.orgType && (
-                      <p className="mt-1 text-sm text-red-600">{errors.orgType}</p>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">المدينة / المنطقة *</label>
-                    <div className="relative">
-                      <MapPin className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
-                        type="text"
-                        value={registrationData.city}
-                        onChange={(e) => handleFieldChange('city', e.target.value)}
-                        className={getIconInputClassName('city')}
-                        placeholder="الرياض"
-                      />
-                    </div>
-                    {errors.city && (
-                      <p className="mt-1 text-sm text-red-600">{errors.city}</p>
-                    )}
-                  </div>
+                {/* Organization Type */}
+              <div>
+                  <label className="block text-sm font-medium mb-2">نوع الجهه *</label>
+                  <select
+                    value={registrationData.orgType}
+                    onChange={(e) => handleFieldChange('orgType', e.target.value as OrgTypeOption | '')}
+                    className={getInputClassName('orgType')}
+                  >
+                    <option value="">اختر نوع الجهه</option>
+                    <option value="charity">جمعية خيرية</option>
+                    <option value="private_company">شركة أهلية</option>
+                  </select>
+                  {errors.orgType && (
+                    <p className="mt-1 text-sm text-red-600">{errors.orgType}</p>
+                  )}
                 </div>
 
                 {/* Private company activity */}

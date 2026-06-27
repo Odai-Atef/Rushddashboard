@@ -48,7 +48,6 @@ const initialFormData: FormData = {
 
 export function OrgRegistrationPage() {
   const navigate = useNavigate();
-  const { login } = useAuth();
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -168,7 +167,7 @@ export function OrgRegistrationPage() {
       password: formData.password,
       confirmPassword: formData.confirmPassword,
       licenseNumber: formData.licenseNumber.trim(),
-      type: formData.orgType === 'private_company' ? 'PRIVATE_COMPANY' : 'CHARITY',
+      type: formData.orgType === 'private_company' ? 'COOP' : 'CHARITY',
       overview: formData.orgType === 'private_company' ? formData.activity.trim() : '',
       areasOfWork: formData.orgType === 'charity' ? formData.fundingAreas : [],
     };
@@ -176,9 +175,8 @@ export function OrgRegistrationPage() {
     try {
       const response = await authService.registerOrganization(payload);
       if (response.success) {
-        login();
-        toast.success(response.message || 'تم التسجيل بنجاح');
-        navigate('/dashboard/onboarding/assessment');
+        toast.success(response.message || 'تم إنشاء الحساب وتسجيل الجهه بنجاح');
+        navigate('/auth/login?registered=true');
       } else {
         setApiError(response.message || 'حدث خطأ أثناء إنشاء الحساب');
       }

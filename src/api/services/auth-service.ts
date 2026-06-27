@@ -27,7 +27,7 @@ export interface OrgRegistrationData {
   password: string;
   confirmPassword: string;
   licenseNumber: string;
-  type: 'CHARITY' | 'PRIVATE_COMPANY';
+  type: 'CHARITY' | 'COOP';
   overview: string;
   areasOfWork: string[];
 }
@@ -213,9 +213,9 @@ export class AuthService {
     );
 
     const unwrapped = this.unwrap<OrgRegistrationResponse>(response);
-    if (unwrapped.success && unwrapped.data.accessToken) {
-      apiClient.setAuthToken(unwrapped.data.accessToken);
-    }
+    // NOTE: The combined registration page redirects to /auth/login instead of
+    // logging the user in automatically, so we intentionally do NOT store the
+    // access token here. The consumer decides whether to authenticate.
 
     return unwrapped;
   }

@@ -1,9 +1,9 @@
 # Tasks: Merge User and Organization Registration
 
-**Input**: Design documents from `/specs/070-org-registration-merge/`  
-**Prerequisites**: plan.md, spec.md, data-model.md, contracts/org-registration-contract.md, research.md, quickstart.md
+**Input**: Design documents from `/specs/070-org-registration-merge/`
+**Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: No automated test framework is currently installed, so no test tasks are included. Validation is manual per `quickstart.md`.
+**Tests**: Tests are OPTIONAL and not requested in the feature specification. This task list focuses on implementation tasks only.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -17,41 +17,42 @@
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Project initialization and basic structure
+**Purpose**: Verify existing project structure and confirm no new dependencies are needed.
 
-- [x] T001 Verify development environment by running `npm run dev` and confirming the app loads without errors.
-- [x] T002 Read `src/app/components/RegistrationPage.tsx` and `src/app/pages/onboarding/RegistrationPage.tsx` to identify shared and unique fields.
+- [X] T001 Confirm project structure matches plan.md: `src/api/services/auth-service.ts`, `src/app/pages/auth/OrgRegistrationPage.tsx`, `src/app/routes.tsx` exist and are importable.
+- [X] T002 [P] Confirm `npm run dev` starts the Vite dev server without errors.
+- [X] T003 [P] Confirm `src/app/components/RegistrationPage.tsx` and `src/app/pages/onboarding/RegistrationPage.tsx` are unchanged and load correctly.
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Add the new atomic API contract and service method so the combined page can submit data.
+**Purpose**: Prepare the API service contract and shared types so all user stories can build on a consistent foundation.
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete.
 
-- [x] T003 Define `OrgRegistrationData` and `OrgRegistrationResponse` types in `src/api/services/auth-service.ts`.
-- [x] T004 Add `registerOrganization(data: OrgRegistrationData)` method to `src/api/services/auth-service.ts` that calls the new atomic backend endpoint.
+- [X] T004 Update `OrgRegistrationData` interface in `src/api/services/auth-service.ts` to include `fullName`, `registrationDate`, and `city` fields per `data-model.md`.
+- [X] T005 Update `AuthService.registerOrganization()` in `src/api/services/auth-service.ts` so it no longer auto-stores the returned access token (the consumer will decide whether to log in).
+- [X] T006 [P] Verify `src/api/types.ts` error shape supports field-level errors; no changes needed unless the backend contract changes.
 
-**Checkpoint**: Foundation ready - user story implementation can now begin in parallel.
+**Checkpoint**: Foundation ready — the atomic registration endpoint contract and types are aligned with the clarified spec.
 
 ---
 
 ## Phase 3: User Story 1 - Combined Organization Registration Page (Priority: P1) 🎯 MVP
 
-**Goal**: The new `/auth/register/org` page renders a single form containing all merged user and organization fields.
+**Goal**: A visitor can visit `/auth/register/org`, fill a single merged form, submit it, and the system creates both a user account and an organization through one atomic API call.
 
-**Independent Test**: Visit `/auth/register/org`, confirm the page loads, and verify all required fields are visible.
+**Independent Test**: Visit `/auth/register/org`, complete all required fields, submit the form, and verify that the API call is made to `POST /api/v1/auth/register-organization` and the user is redirected to `/auth/login?registered=true` with a success message.
 
 ### Implementation for User Story 1
 
-- [x] T005 [US1] Create the new page component at `src/app/pages/auth/OrgRegistrationPage.tsx`.
-- [x] T006 [US1] Build the merged form state object covering all user and organization fields.
-- [x] T007 [US1] Add form inputs for user account fields: `fullName`, `email`, `phone`, `password`, `confirmPassword`, `agreeToTerms`.
-- [x] T008 [US1] Add form inputs for organization fields: `orgName`, `licenseNumber`, `registrationDate`, `orgType`, `city`, `activity`, `fundingAreas`.
-- [x] T009 [US1] Render `activity` field only when `orgType === 'private_company'`.
-- [x] T010 [US1] Render `fundingAreas` selection only when `orgType === 'charity'`.
-- [x] T011 [US1] Implement client-side validation for all required fields and conditional fields.
+- [X] T007 [US1] Add `fullName` field to the `FormData` interface, initial state, validation, and JSX form layout in `src/app/pages/auth/OrgRegistrationPage.tsx`.
+- [X] T008 [US1] Add `registrationDate` field to the `FormData` interface, initial state, validation, and JSX form layout in `src/app/pages/auth/OrgRegistrationPage.tsx`.
+- [X] T009 [US1] Add `city` field to the `FormData` interface, initial state, validation, and JSX form layout in `src/app/pages/auth/OrgRegistrationPage.tsx`.
+- [X] T010 [US1] Update the `handleSubmit` payload in `src/app/pages/auth/OrgRegistrationPage.tsx` to include `fullName`, `registrationDate`, and `city` and to send them to `authService.registerOrganization()`.
+- [X] T011 [US1] Remove the `login()` call and `/dashboard/onboarding/assessment` redirect from the success path in `src/app/pages/auth/OrgRegistrationPage.tsx`; redirect to `/auth/login?registered=true` with a `toast.success` message instead.
+- [X] T012 [P] [US1] Ensure the form error banner in `src/app/pages/auth/OrgRegistrationPage.tsx` still displays a single, clear message when the atomic API returns an error.
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently.
 
@@ -59,16 +60,16 @@
 
 ## Phase 4: User Story 2 - No Duplicate Fields (Priority: P1)
 
-**Goal**: Shared fields (email, phone, organization/company name) appear exactly once on the combined page.
+**Goal**: The combined page removes duplicated fields so that email, phone, and company/organization name appear exactly once while the backend still receives all data needed for both entities.
 
-**Independent Test**: Inspect the `/auth/register/org` form and confirm no duplicated labels or inputs for shared fields.
+**Independent Test**: Inspect the `/auth/register/org` form and confirm that email, phone, and organization/company name each appear exactly once. Submit the form and verify the payload includes the values for both the user and organization contexts.
 
 ### Implementation for User Story 2
 
-- [x] T012 [US2] Use a single `email` input and map it to both user and organization payloads.
-- [x] T013 [US2] Use a single `phone` input and map it to both user phone and organization mobile.
-- [x] T014 [US2] Use a single `orgName` input and map it to both `companyName` (user) and `name` (organization).
-- [x] T015 [US2] Verify no `companyName`, `mobile`, or duplicate `email` inputs exist in `src/app/pages/auth/OrgRegistrationPage.tsx`.
+- [X] T013 [US2] Confirm the merged `orgName` field in `src/app/pages/auth/OrgRegistrationPage.tsx` is the single source for both user `companyName` and organization `name`; update the payload to send `name` from `orgName` and also include a `companyName` field if required by the backend.
+- [X] T014 [US2] Confirm the merged `email` field in `src/app/pages/auth/OrgRegistrationPage.tsx` appears once and is sent to the atomic endpoint once; no separate user-email field exists.
+- [X] T015 [US2] Confirm the merged `phone` field in `src/app/pages/auth/OrgRegistrationPage.tsx` appears once and is sent to the atomic endpoint once; no separate user-phone field exists.
+- [X] T016 [US2] Add inline comment or small payload-shape verification log in `src/app/pages/auth/OrgRegistrationPage.tsx` (or remove before commit) to assert that no duplicate keys are sent for shared fields.
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently.
 
@@ -76,17 +77,15 @@
 
 ## Phase 5: User Story 3 - Preserved Existing Registration Pages (Priority: P2)
 
-**Goal**: The existing `/auth/register` and `/dashboard/onboarding/registration` pages remain functional and unchanged.
+**Goal**: The existing `/auth/register` and `/dashboard/onboarding/registration` pages remain functional and unchanged in behavior while the new combined page is rolled out.
 
-**Independent Test**: Visit `/auth/register` and `/dashboard/onboarding/registration` and confirm both still load and submit successfully.
+**Independent Test**: Visit `/auth/register` and `/dashboard/onboarding/registration` and confirm both still load and submit successfully exactly as before.
 
 ### Implementation for User Story 3
 
-- [x] T016 [US3] Add the new `/auth/register/org` route to `src/app/routes.tsx` without modifying existing auth or onboarding routes.
-- [x] T017 [US3] Confirm `src/app/components/RegistrationPage.tsx` has no changes to its behavior or fields.
-- [x] T018 [US3] Confirm `src/app/pages/onboarding/RegistrationPage.tsx` has no changes to its behavior or fields.
-- [x] T019 [US3] Test the existing `/auth/register` page manually to verify it still works.
-- [x] T020 [US3] Test the existing `/dashboard/onboarding/registration` page manually to verify it still works.
+- [X] T017 [US3] Verify `src/app/components/RegistrationPage.tsx` has not been modified in this feature; run its existing happy-path flow and confirm redirect to `/auth/login?registered=true` still works.
+- [X] T018 [US3] Verify `src/app/pages/onboarding/RegistrationPage.tsx` has not been modified in this feature; run its existing save-and-proceed flow and confirm redirect to `/dashboard/onboarding/assessment` still works.
+- [X] T019 [US3] Run a `git diff` check to confirm no unintended changes to `src/app/components/RegistrationPage.tsx` or `src/app/pages/onboarding/RegistrationPage.tsx`.
 
 **Checkpoint**: All user stories should now be independently functional.
 
@@ -94,13 +93,14 @@
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
-**Purpose**: Improvements that affect multiple user stories.
+**Purpose**: Cross-cutting improvements and final validation that affect all user stories.
 
-- [x] T021 [P] Wire form submission in `src/app/pages/auth/OrgRegistrationPage.tsx` to call `authService.registerOrganization` and redirect on success.
-- [x] T022 [P] Add error handling to display a single, clear error message when the atomic registration API fails.
-- [x] T023 [P] Run `npm run build` and fix any TypeScript errors introduced by the new types and component.
-- [x] T024 [P] Update `AGENTS.md` reference to the current plan if not already updated.
-- [x] T025 Re-test all three user stories manually per `quickstart.md`.
+- [X] T020 [P] Run `npm run build` and fix any TypeScript or Vite errors in `src/app/pages/auth/OrgRegistrationPage.tsx` or `src/api/services/auth-service.ts`.
+- [X] T021 [P] Perform manual smoke test on `/auth/register/org` per `specs/070-org-registration-merge/quickstart.md` happy-path and error-path scenarios.
+- [X] T022 [P] Perform regression smoke test on `/auth/register` and `/dashboard/onboarding/registration` per `specs/070-org-registration-merge/quickstart.md`.
+- [X] T023 Review password validation in `src/app/pages/auth/OrgRegistrationPage.tsx` to ensure it matches `src/app/components/RegistrationPage.tsx` (presence + confirmation match only).
+- [X] T024 Review duplicate-account error handling in `src/app/pages/auth/OrgRegistrationPage.tsx` to confirm it surfaces the atomic API response without making separate existence-check calls.
+- [X] T025 Update `specs/070-org-registration-merge/quickstart.md` if any verification steps changed during implementation.
 
 ---
 
@@ -108,75 +108,67 @@
 
 ### Phase Dependencies
 
-- **Setup (Phase 1)**: No dependencies - can start immediately.
-- **Foundational (Phase 2)**: Depends on Setup completion - BLOCKS all user stories.
-- **User Stories (Phase 3–5)**: All depend on Foundational phase completion.
-  - User stories can proceed in parallel (if staffed).
-  - Or sequentially in priority order (US1 → US2 → US3).
+- **Setup (Phase 1)**: No dependencies — can start immediately.
+- **Foundational (Phase 2)**: Depends on Setup completion — BLOCKS all user stories.
+- **User Stories (Phase 3-5)**: All depend on Foundational phase completion.
+  - User stories can proceed in parallel (if staffed) or sequentially in priority order (P1 → P1 → P2).
 - **Polish (Phase 6)**: Depends on all desired user stories being complete.
 
 ### User Story Dependencies
 
-- **User Story 1 (P1)**: Can start after Foundational (Phase 2). No dependencies on other stories.
-- **User Story 2 (P1)**: Can start after Foundational (Phase 2). No dependencies on other stories; easiest to implement alongside US1 in the same component.
-- **User Story 3 (P2)**: Can start after Foundational (Phase 2). No dependencies on other stories.
+- **User Story 1 (P1)**: Can start after Foundational (Phase 2) — no dependencies on other stories.
+- **User Story 2 (P1)**: Can start after Foundational (Phase 2) and after User Story 1 form structure is mostly in place; mostly independent but shares the same form file.
+- **User Story 3 (P2)**: Can start after Foundational (Phase 2) — independent verification task.
 
 ### Within Each User Story
 
-- Service contract before UI implementation.
-- Form state and inputs before validation.
-- Validation before submission wiring.
+- Core fields/validation before submit handler changes.
+- Submit handler changes before success/error path changes.
 - Story complete before moving to next priority.
 
 ### Parallel Opportunities
 
-- All Setup tasks (Phase 1) can run in parallel.
-- T003 and T004 (service types and method) are sequential.
-- T005–T011 (US1 form building) are sequential within the same file.
-- T012–T015 (US2 deduplication) can be done alongside T005–T011 since they all edit the same new component.
-- T016–T020 (US3 route preservation) can run in parallel with US1/US2 work because they touch different files.
-- T021/T022/T023/T024 (Polish) can run in parallel after the form is complete.
-- Different user stories can be worked on in parallel by different team members once the Foundational phase is complete.
+- All Setup tasks (T001-T003) can run in parallel.
+- All Foundational tasks marked [P] (T006) can run in parallel with T004 and T005.
+- User Story 1 field additions (T007, T008, T009) can be done in parallel if carefully coordinated to avoid JSX conflicts.
+- User Story 2 duplicate-field verifications (T013-T015) can run in parallel once T010 is complete.
+- User Story 3 regression tests (T017-T019) can run in parallel.
+- Polish tasks (T020-T025) can mostly run in parallel after user stories are complete.
 
 ---
 
-## Parallel Example: User Story 1 + User Story 2
+## Parallel Example: User Story 1
 
 ```bash
-# US1 form building is sequential within the same file:
-Task: "Create new page component in src/app/pages/auth/OrgRegistrationPage.tsx"
-Task: "Build merged form state object"
-Task: "Add user account field inputs"
-Task: "Add organization field inputs"
-Task: "Render conditional fields based on orgType"
-Task: "Implement client-side validation"
+# Launch all field additions together:
+Task: "T007 [US1] Add fullName field in src/app/pages/auth/OrgRegistrationPage.tsx"
+Task: "T008 [US1] Add registrationDate field in src/app/pages/auth/OrgRegistrationPage.tsx"
+Task: "T009 [US1] Add city field in src/app/pages/auth/OrgRegistrationPage.tsx"
 
-# US2 deduplication is done at the same time in the same file:
-Task: "Use single email input"
-Task: "Use single phone input"
-Task: "Use single orgName input"
+# Then update submit/redirect logic:
+Task: "T010 [US1] Update handleSubmit payload in src/app/pages/auth/OrgRegistrationPage.tsx"
+Task: "T011 [US1] Remove login call and redirect to /auth/login?registered=true in src/app/pages/auth/OrgRegistrationPage.tsx"
 ```
 
 ---
 
 ## Implementation Strategy
 
-### MVP First (User Story 1 + US2)
+### MVP First (User Story 1 Only)
 
 1. Complete Phase 1: Setup.
-2. Complete Phase 2: Foundational (CRITICAL - blocks all stories).
-3. Complete Phase 3: User Story 1 (combined page with all fields).
-4. Complete Phase 4: User Story 2 (deduplicate shared fields) in the same pass.
-5. **STOP and VALIDATE**: Test the new page independently.
-6. Deploy/demo if ready.
+2. Complete Phase 2: Foundational (CRITICAL — blocks all stories).
+3. Complete Phase 3: User Story 1 (combined page works end-to-end).
+4. **STOP and VALIDATE**: Test User Story 1 independently.
+5. Deploy/demo if ready.
 
 ### Incremental Delivery
 
 1. Complete Setup + Foundational → Foundation ready.
-2. Add User Story 1 + 2 → Combined page with no duplicate fields → Deploy/Demo (MVP!).
-3. Add User Story 3 → Route added, existing pages preserved → Deploy/Demo.
-4. Add Polish → Submission wiring, error handling, build verification → Deploy/Demo.
-5. Each increment adds value without breaking previous work.
+2. Add User Story 1 → Test independently → Deploy/Demo (MVP!).
+3. Add User Story 2 → Test independently → Deploy/Demo.
+4. Add User Story 3 → Test independently → Deploy/Demo.
+5. Each story adds value without breaking previous stories.
 
 ### Parallel Team Strategy
 
@@ -184,10 +176,10 @@ With multiple developers:
 
 1. Team completes Setup + Foundational together.
 2. Once Foundational is done:
-   - Developer A: User Story 1 + 2 (combined page component).
-   - Developer B: User Story 3 (route integration + regression checks).
-   - Developer C: Polish phase (submission, error handling, build).
-3. Stories complete and integrate independently.
+   - Developer A: User Story 1 (form fields + redirect).
+   - Developer B: User Story 2 (duplicate-field mapping verification).
+   - Developer C: User Story 3 (regression tests on existing pages).
+3. Stories complete and integrate independently; final Polish phase validates everything.
 
 ---
 

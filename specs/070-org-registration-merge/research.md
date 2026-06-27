@@ -1,46 +1,77 @@
-# Research Notes: Merge User and Organization Registration
+# Research: Merge User and Organization Registration
 
-**Feature**: Merge User and Organization Registration  
-**Date**: 2026-06-27
+## Context
+
+Feature `070-org-registration-merge` requires a new page at `/auth/register/org` that merges the fields of the existing `/auth/register` user-registration page and the `/dashboard/onboarding/registration` organization-registration page, removes duplicate fields, and submits through a single atomic backend call.
+
+## Investigation Findings
+
+### 1. Route and page already exist
+
+- Route is already registered in `src/app/routes.tsx`:
+  ```tsx
+  {
+    path: 'register/org',
+    Component: OrgRegistrationPage,
+  }
+  ```
+- Component lives at `src/app/pages/auth/OrgRegistrationPage.tsx`.
+- It already renders a two-column layout matching `/auth/register` and calls `authService.registerOrganization()`.
+
+### 2. Atomic API endpoint already exists
+
+- `src/api/services/auth-service.ts` exposes:
+  ```ts
+  async registerOrganization(data: OrgRegistrationData): Promise<ApiResponse<OrgRegistrationResponse>>
+  ```
+  which performs `POST /api/v1/auth/register-organization`.
+- The service unwraps nested backend envelopes and stores the returned access token on success.
+
+### 3. Source page fields
+
+| Field | `/auth/register` (`RegistrationPage.tsx`) | `/dashboard/onboarding/registration` (`OnboardingRegistrationPage.tsx`) | Action in combined page |
+|-------|-------------------------------------------|------------------------------------------------------------------------|-------------------------|
+| Full name | `fullName` | — | Keep |
+| Email | `email` | `email` (from existing org record) | Merge into one field |
+| Phone | `phone` | `mobile` (from existing org record) | Merge into one field |
+| Password | `password`, `confirmPassword` | — | Keep |
+| Company/Org name | `companyName` | `orgName` → `name` | Merge into one field |
+| License number | — | `licenseNumber` | Keep |
+| Registration date | — | `registrationDate` | Keep |
+| Organization type | — | `orgType` | Keep |
+| City | — | `city` | Keep |
+| Activity / Overview | — | `activity` / `overview` | Keep |
+| Funding areas | — | `fundingAreas` | Keep |
+| Terms agreement | `agreeToTerms` | — | Keep |
+
+### 4. Existing page gaps vs. clarified spec
+
+- The existing `OrgRegistrationPage.tsx` does **not** collect `fullName`, `registrationDate`, or `city`.
+- It auto-logs the user in (`login()`) and redirects to `/dashboard/onboarding/assessment`. The clarified spec says: redirect to `/auth/login` with a success message, do not log in.
+- It does not explicitly map the unified org name to a user `companyName` field.
+
+### 5. Password complexity
+
+The existing `/auth/register` only validates that a password is present and that it matches the confirmation password. There is no minimum length or character-class check. The clarified spec instructs the combined page to use the same rules.
+
+### 6. Duplicate-account detection
+
+No frontend existence-check APIs are used anywhere in the codebase. Both `/auth/register` and the existing `OrgRegistrationPage.tsx` rely on the backend returning an error message, which is displayed as a single API error. This matches the clarified requirement.
 
 ## Decisions
 
-### DEC-001: New page route and component location
+| Decision | Rationale |
+|----------|-------------|
+| Reconcile the existing `OrgRegistrationPage.tsx` instead of creating a new page | Route, component, and API call already exist and match the spec direction. |
+| Remove auto-login and redirect to `/auth/login?registered=true` | Directly implements the clarified acceptance criterion FR-006 / SC-005. |
+| Add `fullName`, `registrationDate`, and `city` fields | Needed to truly merge both source pages per the feature request. |
+| Map unified org name to both user `companyName` and organization `name` | Satisfies FR-002/FR-003 and avoids losing data needed by either entity. |
+| Keep password validation identical to `/auth/register` | Satisfies FR-004A and avoids introducing inconsistent policy. |
+| Continue relying on backend for duplicate detection | Satisfies FR-010 and avoids extra API calls. |
+| Leave `/auth/register` and `/dashboard/onboarding/registration` untouched | Satisfies FR-007. |
 
-- **Decision**: Route `/auth/register/org`, component `src/app/pages/auth/OrgRegistrationPage.tsx`.
-- **Rationale**: Matches the requested URL, groups auth pages together, and separates the new page from the existing onboarding registration page.
-- **Alternatives considered**: `src/app/components/OrgRegistrationPage.tsx`; rejected because auth pages are moving toward `pages/` organization.
+## Open items deferred to tasks
 
-### DEC-002: Merged and deduplicated field set
-
-- **Decision**: Combine fields and remove duplicates.
-  - Shared fields shown once: `email`, `phone`, `companyName`/`orgName`.
-  - User-only fields: `fullName`, `password`, `confirmPassword`.
-  - Organization-only fields: `licenseNumber`, `registrationDate`, `orgType`, `city`, `activity`/`overview`, `fundingAreas`.
-- **Rationale**: Eliminates confusion and reduces form length while preserving all data needed for both entities.
-- **Alternatives considered**: Keep duplicate fields with different names; rejected because it contradicts the core requirement.
-
-### DEC-003: Atomic API endpoint ownership
-
-- **Decision**: The frontend will call a new `POST /api/v1/auth/register/org` endpoint (or equivalent name) in the auth service namespace.
-- **Rationale**: User registration is the primary entry point; onboarding is a secondary concern handled atomically by the backend.
-- **Alternatives considered**: Place endpoint under onboarding service; rejected because user creation drives the flow.
-
-### DEC-004: Visual layout
-
-- **Decision**: Reuse the `/auth/register` two-column layout with a scrollable form area on the left.
-- **Rationale**: Consistent auth branding; the form will be longer, so a scrollable left panel is acceptable.
-- **Alternatives considered**: Use the onboarding stepper layout; rejected because the route is under `/auth/`.
-
-### DEC-005: Existing pages remain unchanged
-
-- **Decision**: Do not modify `src/app/components/RegistrationPage.tsx` or `src/app/pages/onboarding/RegistrationPage.tsx`.
-- **Rationale**: Reduces regression risk and allows the new page to be rolled out gradually.
-- **Alternatives considered**: Refactor shared parts into reusable components; deferred to avoid scope creep.
-
-## Open Risks
-
-- The exact backend endpoint name and payload shape are assumptions. The implementation should define a frontend interface and coordinate with backend.
-- The combined form will be long; mobile UX may need testing.
-- Password confirmation and terms acceptance may already exist on `/auth/register`; preserving them on the new page is straightforward.
-- The existing onboarding registration page uses `onboardingService.saveMyOrganization` + `createProfile` + `setFundingAreas`; the new atomic endpoint must cover all of these.
+- Exact visual styling/ordering of the added `fullName`, `registrationDate`, and `city` fields.
+- Whether the backend endpoint needs the new fields in the payload or if the frontend types must change.
+- Manual smoke-test steps and any Playwright/MCP verification if available.

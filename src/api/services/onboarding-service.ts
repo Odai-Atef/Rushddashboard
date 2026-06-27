@@ -610,7 +610,6 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
   NATIONAL_ADDRESS: 'address',
   national_address: 'address',
   ADDRESS: 'address',
-  REGISTRATION: 'profile',
   ORG_PROFILE: 'profile',
   ORGANIZATION_PROFILE: 'profile',
   PROFILE: 'profile',
@@ -702,7 +701,15 @@ export class OnboardingService {
    * GET /api/v1/donors/funding-areas
    */
   async getFundingAreas(): Promise<ApiResponse<FundingArea[]>> {
-    return apiClient.get('/api/v1/donors/funding-areas', { skipAuthRedirect: true });
+    const response = await apiClient.get<FundingArea[]>('/api/v1/donors/funding-areas', { skipAuthRedirect: true });
+    const raw = response.data as any;
+    const isWrapped = raw && typeof raw === 'object' && 'data' in raw;
+    return {
+      success: response.success && (isWrapped ? raw.success ?? true : true),
+      data: isWrapped ? (raw.data as FundingArea[]) : (raw as FundingArea[]),
+      message: isWrapped && raw.message !== undefined ? String(raw.message) : response.message,
+      meta: response.meta,
+    };
   }
 
   /**
