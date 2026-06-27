@@ -86,6 +86,7 @@ As a product owner, I want the existing `/auth/register` and `/dashboard/onboard
 - **FR-009**: The frontend MUST display a single, clear error message when the atomic registration API returns an error.
 - **FR-010**: Duplicate account detection (e.g., existing email or phone) is handled by the backend atomic API; the frontend MUST surface returned field-level errors without making separate existence-check calls.
 - **FR-011**: The backend MUST expose `GET /api/v1/donors/funding-areas` as a public (unauthenticated) endpoint so the public `/auth/register/org` page can load charity funding areas before the user is logged in.
+- **FR-012**: When `type === CHARITY`, the backend atomic registration endpoint MUST persist the provided `areasOfWork` IDs as organization funding-area records and include them in the returned organization payload.
 
 ### Key Entities *(include if feature involves data)*
 

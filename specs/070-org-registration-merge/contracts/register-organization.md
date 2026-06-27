@@ -44,7 +44,7 @@ Atomically create a new user account and the organization they represent. The fr
 | `type` | Organization type | Yes | `CHARITY` or `PRIVATE_COMPANY` |
 | `city` | Organization city | Yes | Non-empty after trim |
 | `overview` | Organization profile overview | Conditional | Required when `type === PRIVATE_COMPANY` |
-| `areasOfWork` | Organization funding/activity areas | Conditional | Required, non-empty when `type === CHARITY` |
+| `areasOfWork` | Organization funding/activity areas | Conditional | Required, non-empty when `type === CHARITY`. Backend must persist each ID as an organization funding-area record. |
 
 ## Success Response
 
@@ -81,7 +81,14 @@ Atomically create a new user account and the organization they represent. The fr
 }
 ```
 
-**Frontend handling**: The frontend must **ignore** `accessToken`/`refreshToken` for authentication and must redirect to `/auth/login?registered=true` with a success toast.
+- **Backend handling**: The backend must create `OrganizationFundingArea` records (or equivalent) linking the new organization to each ID in `areasOfWork`. Returning an empty `fundingAreas` array when `areasOfWork` was provided is a backend bug.
+- Frontend handling**: The frontend must **ignore** `accessToken`/`refreshToken` for authentication and must redirect to `/auth/login?registered=true` with a success toast.
+
+## Backend TODO
+
+- [ ] Persist `areasOfWork` as organization funding areas during the registration transaction.
+- [ ] Validate that each ID in `areasOfWork` exists in the `FundingArea` table; reject unknown IDs with `422`.
+- [ ] Return the created funding areas in `organization.fundingAreas` in the success response.
 
 ## Error Responses
 
