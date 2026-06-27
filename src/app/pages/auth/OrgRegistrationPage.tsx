@@ -149,6 +149,24 @@ export function OrgRegistrationPage() {
     return Object.keys(nextErrors).length === 0;
   };
 
+  const backendFieldToFormKey = (
+    backendField: string
+  ): keyof FormData | undefined => {
+    const mapping: Record<string, keyof FormData | undefined> = {
+      name: 'orgName',
+      companyName: 'orgName',
+      email: 'email',
+      phone: 'phone',
+      password: 'password',
+      confirmPassword: 'confirmPassword',
+      licenseNumber: 'licenseNumber',
+      type: 'orgType',
+      overview: 'activity',
+      areasOfWork: 'fundingAreas',
+    };
+    return mapping[backendField] ?? (backendField as keyof FormData);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setApiError('');
@@ -183,23 +201,19 @@ export function OrgRegistrationPage() {
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setApiError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-        return;
-      }
-
-      const backendErrors: Array<{ field?: string; message?: string }> | undefined =
-        err?.errors;
-
-      if (backendErrors && backendErrors.length > 0) {
+      } else if (err?.errors && Array.isArray(err.errors) && err.errors.length > 0) {
+        const backendErrors: Array<{ field?: string; message?: string }> = err.errors;
         const fieldErrors: Partial<Record<keyof FormData, string>> = {};
         const generalMessages: string[] = [];
 
         backendErrors.forEach((item) => {
-          const field = item.field as keyof FormData | undefined;
+          const mappedField = backendFieldToFormKey(item.field || '');
+          const field = mappedField;
           const message = item.message || '';
 
           if (field && field in formData) {
             fieldErrors[field] = fieldErrors[field]
-              ? `${fieldErrors[field]}، ${message}`
+              ? `${fieldErrors[field]}<br/>${message}`
               : message;
           } else {
             generalMessages.push(message);
@@ -210,23 +224,21 @@ export function OrgRegistrationPage() {
           setErrors((prev) => ({ ...prev, ...fieldErrors }));
         }
 
-        const topLevelMessage = err?.message || 'فشل التحقق من صحة البيانات';
-        const detailMessages = [
-          ...Object.values(fieldErrors),
-          ...generalMessages,
-        ].filter((m) => m !== topLevelMessage);
+        const topLevelMessage = err?.message || '';
+        const detailMessages = generalMessages.filter(
+          (m) => m !== topLevelMessage
+        );
         const uniqueDetailMessages = Array.from(new Set(detailMessages));
-        const details = uniqueDetailMessages.join('، ');
+        const details = uniqueDetailMessages.join('<br/>');
 
         setApiError(
-          details
-            ? `${topLevelMessage}، ${details}`
-            : topLevelMessage
+          topLevelMessage && details
+            ? `${topLevelMessage}<br/>${details}`
+            : topLevelMessage || details || 'فشل التحقق من صحة البيانات'
         );
-        return;
+      } else {
+        setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
       }
-
-      setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
     } finally {
       setIsLoading(false);
     }
@@ -269,7 +281,10 @@ export function OrgRegistrationPage() {
           {/* API Error */}
           {apiError && (
             <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-              <p className="text-sm text-red-600 dark:text-red-400">{apiError}</p>
+              <p
+                className="text-sm text-red-600 dark:text-red-400"
+                dangerouslySetInnerHTML={{ __html: apiError }}
+              />
             </div>
           )}
 
@@ -293,7 +308,41 @@ export function OrgRegistrationPage() {
                     className={getInputClassName('orgName', true)}
                   />
                 </div>
-                {errors.orgName && <p className="text-xs text-red-600 mt-1">{errors.orgName}</p>}
+                {errors.orgName && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.orgName }} />}
+              </div>
+
+              {/* Organization Type */}
+              <div>
+                <label htmlFor="orgType" className="block text-sm font-medium mb-2">
+                  نوع الجهه *
+                </label>
+                <select
+                  id="orgType"
+                  value={formData.orgType}
+                  onChange={(e) => setField('orgType', e.target.value as OrgTypeOption | '')}
+                  className={getInputClassName('orgType', false)}
+                >
+                  <option value="">اختر نوع الجهه</option>
+                  <option value="charity">جمعية خيرية</option>
+                  <option value="private_company">شركة أهلية</option>
+                </select>
+                {errors.orgType && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.orgType }} />}
+              </div>
+
+              {/* License Number */}
+              <div>
+                <label htmlFor="licenseNumber" className="block text-sm font-medium mb-2">
+                  رقم الترخيص *
+                </label>
+                <input
+                  id="licenseNumber"
+                  type="text"
+                  value={formData.licenseNumber}
+                  onChange={(e) => setField('licenseNumber', e.target.value)}
+                  placeholder="١٢٣٤٥٦"
+                  className={getInputClassName('licenseNumber', false)}
+                />
+                {errors.licenseNumber && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.licenseNumber }} />}
               </div>
 
               {/* Email */}
@@ -312,7 +361,7 @@ export function OrgRegistrationPage() {
                     className={getInputClassName('email', true)}
                   />
                 </div>
-                {errors.email && <p className="text-xs text-red-600 mt-1">{errors.email}</p>}
+                {errors.email && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.email }} />}
               </div>
 
               {/* Phone */}
@@ -331,7 +380,7 @@ export function OrgRegistrationPage() {
                     className={getInputClassName('phone', true)}
                   />
                 </div>
-                {errors.phone && <p className="text-xs text-red-600 mt-1">{errors.phone}</p>}
+                {errors.phone && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.phone }} />}
               </div>
 
               {/* Password */}
@@ -358,7 +407,7 @@ export function OrgRegistrationPage() {
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
-                  {errors.password && <p className="text-xs text-red-600 mt-1">{errors.password}</p>}
+                  {errors.password && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.password }} />}
                 </div>
 
                 <div>
@@ -383,42 +432,8 @@ export function OrgRegistrationPage() {
                       {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
                   </div>
-                  {errors.confirmPassword && <p className="text-xs text-red-600 mt-1">{errors.confirmPassword}</p>}
+                  {errors.confirmPassword && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.confirmPassword }} />}
                 </div>
-              </div>
-
-              {/* License Number */}
-              <div>
-                <label htmlFor="licenseNumber" className="block text-sm font-medium mb-2">
-                  رقم الترخيص *
-                </label>
-                <input
-                  id="licenseNumber"
-                  type="text"
-                  value={formData.licenseNumber}
-                  onChange={(e) => setField('licenseNumber', e.target.value)}
-                  placeholder="١٢٣٤٥٦"
-                  className={getInputClassName('licenseNumber', false)}
-                />
-                {errors.licenseNumber && <p className="text-xs text-red-600 mt-1">{errors.licenseNumber}</p>}
-              </div>
-
-              {/* Organization Type */}
-              <div>
-                <label htmlFor="orgType" className="block text-sm font-medium mb-2">
-                  نوع الجهه *
-                </label>
-                <select
-                  id="orgType"
-                  value={formData.orgType}
-                  onChange={(e) => setField('orgType', e.target.value as OrgTypeOption | '')}
-                  className={getInputClassName('orgType', false)}
-                >
-                  <option value="">اختر نوع الجهه</option>
-                  <option value="charity">جمعية خيرية</option>
-                  <option value="private_company">شركة أهلية</option>
-                </select>
-                {errors.orgType && <p className="text-xs text-red-600 mt-1">{errors.orgType}</p>}
               </div>
 
               {/* Funding Areas */}
@@ -446,7 +461,7 @@ export function OrgRegistrationPage() {
                       </label>
                     ))}
                   </div>
-                  {errors.fundingAreas && <p className="text-xs text-red-600 mt-1">{errors.fundingAreas}</p>}
+                  {errors.fundingAreas && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.fundingAreas }} />}
                 </div>
               )}
 
@@ -467,7 +482,7 @@ export function OrgRegistrationPage() {
                       className={getInputClassName('activity', true)}
                     />
                   </div>
-                  {errors.activity && <p className="text-xs text-red-600 mt-1">{errors.activity}</p>}
+                  {errors.activity && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.activity }} />}
                 </div>
               )}
             </div>
@@ -488,7 +503,7 @@ export function OrgRegistrationPage() {
                   <TermsModal>الشروط والأحكام و سياسة الخصوصية</TermsModal>
                 </span>
               </label>
-              {errors.agreeToTerms && <p className="text-xs text-red-600 mt-1">{errors.agreeToTerms}</p>}
+              {errors.agreeToTerms && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.agreeToTerms }} />}
             </div>
 
             {/* Register Button */}
