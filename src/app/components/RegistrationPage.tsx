@@ -31,7 +31,13 @@ export function RegistrationPage() {
     // Validation
     const newErrors: Record<string, string> = {};
 
-    if (!formData.fullName) newErrors.fullName = 'الاسم الكامل مطلوب';
+    const fullName = formData.fullName.trim();
+    if (!fullName) {
+      newErrors.fullName = 'الاسم الكامل مطلوب';
+    } else if (fullName.length < 2 || fullName.length > 100) {
+      newErrors.fullName = 'الاسم الكامل يجب أن يكون بين 2 و 100 حرف';
+    }
+
     if (!formData.email) newErrors.email = 'البريد الإلكتروني مطلوب';
     if (!formData.phone) newErrors.phone = 'رقم الهاتف مطلوب';
     if (!formData.companyName) newErrors.companyName = 'اسم الشركة مطلوب';
@@ -52,7 +58,7 @@ export function RegistrationPage() {
       const response = await authService.register({
         email: formData.email,
         password: formData.password,
-        fullName: formData.fullName,
+        fullName: fullName,
         companyName: formData.companyName,
         roleSlug: 'executive',
         phone: formData.phone,

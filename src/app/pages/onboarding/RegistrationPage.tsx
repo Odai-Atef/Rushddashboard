@@ -5,9 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Loader2,
-  Mail,
   MapPin,
-  Phone,
 } from 'lucide-react';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
@@ -23,8 +21,6 @@ interface RegistrationData {
   registrationDate: string;
   orgType: OrgTypeOption | '';
   city: string;
-  email: string;
-  mobile: string;
   activity: string;
   fundingAreas: string[];
 }
@@ -40,8 +36,6 @@ export function RegistrationPage() {
     registrationDate: '',
     orgType: '',
     city: '',
-    email: '',
-    mobile: '',
     activity: '',
     fundingAreas: [],
   });
@@ -63,8 +57,6 @@ export function RegistrationPage() {
           : '',
         orgType: mapOrganizationTypeToOption(organization.type),
         city: organization.city || '',
-        email: organization.email || '',
-        mobile: organization.mobile || '',
         activity: profile?.overview || '',
         fundingAreas: (profile?.fundingAreas || []).map((fa) => fa.fundingAreaId).filter(Boolean),
       });
@@ -102,18 +94,6 @@ export function RegistrationPage() {
       if (registrationData.fundingAreas.length === 0) {
         nextErrors.fundingAreas = 'مجالات العمل مطلوبة';
       }
-    }
-
-    const email = registrationData.email.trim();
-    if (!email) {
-      nextErrors.email = 'البريد الإلكتروني مطلوب';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      nextErrors.email = 'يرجى إدخال بريد إلكتروني صحيح';
-    }
-
-    const mobile = registrationData.mobile.trim();
-    if (!mobile) {
-      nextErrors.mobile = 'رقم الجوال مطلوب';
     }
 
     setErrors(nextErrors);
@@ -198,8 +178,8 @@ export function RegistrationPage() {
     registrationDate: registrationData.registrationDate,
     type: mapOrgTypeOptionToApiType(registrationData.orgType),
     city: registrationData.city.trim(),
-    email: registrationData.email.trim(),
-    mobile: registrationData.mobile.trim(),
+    email: organization?.email || '',
+    mobile: organization?.mobile || '',
   });
 
   const isCharitySelected = registrationData.orgType === 'charity';
@@ -376,43 +356,6 @@ export function RegistrationPage() {
                   </div>
                 )}
 
-                {/* Email & Mobile */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">البريد الإلكتروني *</label>
-                <div className="relative">
-                  <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="email"
-                    value={registrationData.email}
-                    onChange={(e) => handleFieldChange('email', e.target.value)}
-                    className={getIconInputClassName('email')}
-                    placeholder="email@example.com"
-                  />
-                </div>
-                {errors.email && (
-                  <p className="mt-1 text-sm text-red-600">{errors.email}</p>
-                )}
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">رقم الجوال *</label>
-                <div className="relative">
-                  <Phone className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="tel"
-                    value={registrationData.mobile}
-                    onChange={(e) => handleFieldChange('mobile', e.target.value)}
-                    className={getIconInputClassName('mobile')}
-                    placeholder="+966 5X XXX XXXX"
-                    dir="ltr"
-                  />
-                </div>
-                {errors.mobile && (
-                  <p className="mt-1 text-sm text-red-600">{errors.mobile}</p>
-                )}
-              </div>
-            </div>
-
             {/* Action Buttons */}
             <div className="flex items-center justify-end pt-6 border-t">
               <button
@@ -428,7 +371,7 @@ export function RegistrationPage() {
                   </>
                 ) : (
                   <>
-                    تسجيل وبدء التقييم
+                  تحديث
                     <ChevronLeft className="w-5 h-5" />
                   </>
                 )}

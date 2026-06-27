@@ -21,6 +21,10 @@ function getInitials(fullName: string | null | undefined): string {
   return (parts[0][0] ?? '') + (parts[parts.length - 1][0] ?? '');
 }
 
+function displayName(user: { fullName?: string | null; email?: string | null } | null | undefined): string {
+  return user?.fullName ?? user?.email ?? 'المستخدم';
+}
+
 export function TopBar({
   theme,
   onThemeToggle,
@@ -104,7 +108,7 @@ export function TopBar({
           <DropdownMenu.Trigger asChild>
             <button className="flex items-center gap-2 p-1 hover:bg-accent rounded-lg transition-colors">
               <Avatar.Root className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
-                <Avatar.Fallback className="text-sm">{getInitials(user?.fullName)}</Avatar.Fallback>
+                <Avatar.Fallback className="text-sm">{getInitials(user?.fullName ?? '')}</Avatar.Fallback>
               </Avatar.Root>
             </button>
           </DropdownMenu.Trigger>
@@ -115,7 +119,7 @@ export function TopBar({
               align="end"
             >
               <div className="px-3 py-2 border-b border-border mb-2">
-                <p className="font-medium">{user?.fullName ?? 'المستخدم'}</p>
+                <p className="font-medium">{displayName(user)}</p>
                 <p className="text-muted-foreground text-sm">{user?.email ?? ''}</p>
               </div>
               <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">

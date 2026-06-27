@@ -20,6 +20,35 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface OrgRegistrationData {
+  fullName: string;
+  email: string;
+  phone: string;
+  password: string;
+  orgName: string;
+  licenseNumber: string;
+  orgType: 'charity' | 'private_company';
+  city: string;
+  activity: string;
+  fundingAreas: string[];
+}
+
+export interface OrgRegistrationResponse {
+  accessToken: string;
+  refreshToken: string;
+  expiresIn: number;
+  user: {
+    id: string;
+    email: string;
+    fullName: string;
+  };
+  organization: {
+    id: string;
+    name: string;
+    type: string;
+  };
+}
+
 export interface RegisterData {
   email: string;
   password: string;
@@ -38,7 +67,7 @@ export interface AuthTokens {
 export interface UserProfile {
   id: string;
   email: string;
-  fullName: string | null;
+  fullName: string;
   phone?: string | null;
   jobTitle?: string | null;
   avatarUrl?: string | null;
@@ -160,6 +189,25 @@ export class AuthService {
       email,
       clientUrl: ENV.APP_URL,
     });
+  }
+
+  /**
+   * Register a new user and organization atomically.
+   */
+  async registerOrganization(
+    data: OrgRegistrationData
+  ): Promise<ApiResponse<OrgRegistrationResponse>> {
+    const response = await apiClient.post<OrgRegistrationResponse>(
+      `${this.baseEndpoint}/register/org`,
+      data
+    );
+
+    const unwrapped = this.unwrap<OrgRegistrationResponse>(response);
+    if (unwrapped.success && unwrapped.data.accessToken) {
+      apiClient.setAuthToken(unwrapped.data.accessToken);
+    }
+
+    return unwrapped;
   }
 
   /**

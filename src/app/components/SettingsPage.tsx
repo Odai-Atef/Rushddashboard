@@ -117,7 +117,7 @@ export function SettingsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-center gap-6 mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
-                  {getInitials(user?.fullName)}
+                  {getInitials(user?.fullName ?? '')}
                 </div>
                 <div>
                   <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -133,6 +133,7 @@ export function SettingsPage() {
                   <input
                     type="text"
                     defaultValue={user?.fullName ?? ''}
+                    name="fullName"
                     className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                   />
                 </div>

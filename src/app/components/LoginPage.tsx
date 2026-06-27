@@ -206,7 +206,7 @@ export function LoginPage() {
           <p className="mt-6 text-center text-sm text-muted-foreground">
             ليس لديك حساب؟{' '}
             <button
-              onClick={() => navigate('/auth/register')}
+              onClick={() => navigate('/auth/register/org')}
               className="text-primary hover:underline font-medium"
             >
               إنشاء حساب جديد

@@ -18,7 +18,7 @@ export function TermsModal({ children }: TermsModalProps) {
           {children}
         </span>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto" dir="rtl">
+      <DialogContent className="w-[90vw] max-w-[90vw] max-h-[80vh] overflow-y-auto" dir="rtl">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-center">
             الأحكام والشروط وسياسة الخصوصية

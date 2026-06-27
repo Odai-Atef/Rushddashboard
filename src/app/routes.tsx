@@ -9,6 +9,7 @@ import { RegistrationPage } from './components/RegistrationPage';
 import { ForgetPasswordPage } from './components/ForgetPasswordPage';
 import { ResetPasswordPage } from './components/ResetPasswordPage';
 import { ActivateAccountPage } from './components/ActivateAccountPage';
+import { OrgRegistrationPage } from './pages/auth/OrgRegistrationPage';
 import { ExecutiveDashboard } from './components/ExecutiveDashboard';
 import { AIAnalysisStartPage, AIAnalysisChatPage, AIAnalysisHistoryPage } from './components/ai-analysis';
 import { SalesDashboard } from './components/SalesDashboard';
@@ -93,6 +94,10 @@ export const router = createBrowserRouter([
           {
             path: 'register',
             Component: RegistrationPage,
+          },
+          {
+            path: 'register/org',
+            Component: OrgRegistrationPage,
           },
           {
             path: 'forgot-password',
