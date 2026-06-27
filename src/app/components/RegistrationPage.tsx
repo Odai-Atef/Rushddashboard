@@ -9,8 +9,7 @@ export function RegistrationPage() {
   const navigate = useNavigate();
   const { login } = useAuth();
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
     phone: '',
     companyName: '',
@@ -32,8 +31,7 @@ export function RegistrationPage() {
     // Validation
     const newErrors: Record<string, string> = {};
 
-    if (!formData.firstName) newErrors.firstName = 'الاسم الأول مطلوب';
-    if (!formData.lastName) newErrors.lastName = 'اسم العائلة مطلوب';
+    if (!formData.fullName) newErrors.fullName = 'الاسم الكامل مطلوب';
     if (!formData.email) newErrors.email = 'البريد الإلكتروني مطلوب';
     if (!formData.phone) newErrors.phone = 'رقم الهاتف مطلوب';
     if (!formData.companyName) newErrors.companyName = 'اسم الشركة مطلوب';
@@ -54,8 +52,7 @@ export function RegistrationPage() {
       const response = await authService.register({
         email: formData.email,
         password: formData.password,
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        fullName: formData.fullName,
         companyName: formData.companyName,
         roleSlug: 'executive',
         phone: formData.phone,
@@ -118,46 +115,25 @@ export function RegistrationPage() {
 
           {/* Registration Form */}
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* First Name */}
+            {/* Full Name */}
             <div>
-              <label htmlFor="firstName" className="block text-sm font-medium mb-2">
-                الاسم الأول
+              <label htmlFor="fullName" className="block text-sm font-medium mb-2">
+                الاسم الكامل
               </label>
               <div className="relative">
                 <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <input
-                  id="firstName"
+                  id="fullName"
                   type="text"
-                  value={formData.firstName}
-                  onChange={(e) => updateField('firstName', e.target.value)}
-                  placeholder="أحمد"
+                  value={formData.fullName}
+                  onChange={(e) => updateField('fullName', e.target.value)}
+                  placeholder="أحمد محمد"
                   className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.firstName ? 'border-red-500' : 'border-border'
+                    errors.fullName ? 'border-red-500' : 'border-border'
                   }`}
                 />
               </div>
-              {errors.firstName && <p className="text-xs text-red-600 mt-1">{errors.firstName}</p>}
-            </div>
-
-            {/* Last Name */}
-            <div>
-              <label htmlFor="lastName" className="block text-sm font-medium mb-2">
-                اسم العائلة
-              </label>
-              <div className="relative">
-                <User className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                <input
-                  id="lastName"
-                  type="text"
-                  value={formData.lastName}
-                  onChange={(e) => updateField('lastName', e.target.value)}
-                  placeholder="محمد"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
-                    errors.lastName ? 'border-red-500' : 'border-border'
-                  }`}
-                />
-              </div>
-              {errors.lastName && <p className="text-xs text-red-600 mt-1">{errors.lastName}</p>}
+              {errors.fullName && <p className="text-xs text-red-600 mt-1">{errors.fullName}</p>}
             </div>
 
             {/* Email */}

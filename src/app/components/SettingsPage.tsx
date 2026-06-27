@@ -35,10 +35,10 @@ type SettingsSection =
   | 'api'
   | 'services';
 
-function getInitials(fullName: string | null | undefined, firstName?: string | null, lastName?: string | null): string {
-  const name = fullName ?? (firstName && lastName ? `${firstName} ${lastName}` : firstName ?? lastName ?? '');
+function getInitials(fullName: string | null | undefined): string {
+  const name = fullName ?? '';
   if (!name) return '؟';
-  const parts = name.trim().split(/\s+/);
+  const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return '؟';
   if (parts.length === 1) return parts[0].slice(0, 2);
   return (parts[0][0] ?? '') + (parts[parts.length - 1][0] ?? '');
@@ -117,7 +117,7 @@ export function SettingsPage() {
             <div className="bg-card border border-border rounded-lg p-6">
               <div className="flex items-center gap-6 mb-6">
                 <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-white text-2xl font-bold">
-                  {getInitials(user?.fullName, user?.firstName, user?.lastName)}
+                  {getInitials(user?.fullName)}
                 </div>
                 <div>
                   <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 transition-colors">
@@ -128,23 +128,13 @@ export function SettingsPage() {
               </div>
 
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium mb-2">الاسم الأول</label>
-                    <input
-                      type="text"
-                      defaultValue={user?.firstName ?? (user?.fullName ? user.fullName.trim().split(/\s+/)[0] : '')}
-                      className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium mb-2">الاسم الأخير</label>
-                    <input
-                      type="text"
-                      defaultValue={user?.lastName ?? (user?.fullName ? user.fullName.trim().split(/\s+/).slice(1).join(' ') : '')}
-                      className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    />
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">الاسم الكامل</label>
+                  <input
+                    type="text"
+                    defaultValue={user?.fullName ?? ''}
+                    className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
                 </div>
 
                 <div>
