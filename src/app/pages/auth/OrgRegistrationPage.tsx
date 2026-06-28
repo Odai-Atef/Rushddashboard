@@ -329,6 +329,56 @@ export function OrgRegistrationPage() {
                 {errors.orgType && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.orgType }} />}
               </div>
 
+              {/* Funding Areas */}
+              {isCharitySelected && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+                  {fundingAreas.length === 0 && (
+                    <p className="text-sm text-muted-foreground mb-2">
+                      لا توجد مجالات عمل متاحة حالياً. يرجى المحاولة لاحقاً.
+                    </p>
+                  )}
+                  <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${errors.fundingAreas ? 'border-red-500 bg-red-500/5' : 'border-transparent'}`}>
+                    {fundingAreas.map((area) => (
+                      <label
+                        key={area.id}
+                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-accent cursor-pointer bg-card"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={formData.fundingAreas.includes(area.id)}
+                          onChange={() => toggleFundingArea(area.id)}
+                          className="w-4 h-4 text-primary rounded"
+                        />
+                        <span className="text-sm">{area.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                  {errors.fundingAreas && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.fundingAreas }} />}
+                </div>
+              )}
+
+              {/* Private company activity */}
+              {isPrivateCompanySelected && (
+                <div>
+                  <label htmlFor="activity" className="block text-sm font-medium mb-2">
+                    النشاط *
+                  </label>
+                  <div className="relative">
+                    <Building className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <input
+                      id="activity"
+                      type="text"
+                      value={formData.activity}
+                      onChange={(e) => setField('activity', e.target.value)}
+                      placeholder="مثال: تجارة عامة، مقاولات، خدمات استشارية"
+                      className={getInputClassName('activity', true)}
+                    />
+                  </div>
+                  {errors.activity && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.activity }} />}
+                </div>
+              )}
+
               {/* License Number */}
               <div>
                 <label htmlFor="licenseNumber" className="block text-sm font-medium mb-2">
@@ -436,55 +486,6 @@ export function OrgRegistrationPage() {
                 </div>
               </div>
 
-              {/* Funding Areas */}
-              {isCharitySelected && (
-                <div>
-                  <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
-                  {fundingAreas.length === 0 && (
-                    <p className="text-sm text-muted-foreground mb-2">
-                      لا توجد مجالات عمل متاحة حالياً. يرجى المحاولة لاحقاً.
-                    </p>
-                  )}
-                  <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${errors.fundingAreas ? 'border-red-500 bg-red-500/5' : 'border-transparent'}`}>
-                    {fundingAreas.map((area) => (
-                      <label
-                        key={area.id}
-                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-accent cursor-pointer bg-card"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.fundingAreas.includes(area.id)}
-                          onChange={() => toggleFundingArea(area.id)}
-                          className="w-4 h-4 text-primary rounded"
-                        />
-                        <span className="text-sm">{area.name}</span>
-                      </label>
-                    ))}
-                  </div>
-                  {errors.fundingAreas && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.fundingAreas }} />}
-                </div>
-              )}
-
-              {/* Private company activity */}
-              {isPrivateCompanySelected && (
-                <div>
-                  <label htmlFor="activity" className="block text-sm font-medium mb-2">
-                    النشاط *
-                  </label>
-                  <div className="relative">
-                    <Building className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                      id="activity"
-                      type="text"
-                      value={formData.activity}
-                      onChange={(e) => setField('activity', e.target.value)}
-                      placeholder="مثال: تجارة عامة، مقاولات، خدمات استشارية"
-                      className={getInputClassName('activity', true)}
-                    />
-                  </div>
-                  {errors.activity && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.activity }} />}
-                </div>
-              )}
             </div>
 
             {/* Terms and Conditions */}
