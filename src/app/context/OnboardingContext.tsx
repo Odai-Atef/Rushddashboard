@@ -49,6 +49,7 @@ export interface OnboardingContextValue {
   error: string | null;
   activeOrganizationId: string | null;
   assessmentAnswersDirty: boolean;
+  assessmentSubmitted: boolean;
   refreshOrganization: () => Promise<Organization | null>;
   setOrganization: (organization: Organization | null) => void;
   loadProfile: () => Promise<void>;
@@ -59,6 +60,7 @@ export interface OnboardingContextValue {
   setAssessmentResult: (result: IsivAssessmentResult | null) => void;
   setAssessmentStatus: (status: AssessmentStatus | null) => void;
   setAssessmentAnswersDirty: (dirty: boolean) => void;
+  setAssessmentSubmitted: (submitted: boolean) => void;
 }
 
 export const OnboardingContext = createContext<OnboardingContextValue | null>(
@@ -84,6 +86,7 @@ export function OnboardingProvider({
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [assessmentAnswersDirty, setAssessmentAnswersDirtyState] = useState(false);
+  const [assessmentSubmitted, setAssessmentSubmittedState] = useState(false);
 
   const activeOrganizationId = useMemo(() => {
     const id = externalOrganizationId ?? organization?.id ?? null;
@@ -208,6 +211,10 @@ export function OnboardingProvider({
     setAssessmentAnswersDirtyState(dirty);
   }, []);
 
+  const setAssessmentSubmitted = useCallback((submitted: boolean) => {
+    setAssessmentSubmittedState(submitted);
+  }, []);
+
   // Initial hydration when the provider mounts or the external id changes
   useEffect(() => {
     let cancelled = false;
@@ -263,6 +270,7 @@ export function OnboardingProvider({
     error,
     activeOrganizationId,
     assessmentAnswersDirty,
+    assessmentSubmitted,
     refreshOrganization,
     setOrganization,
     loadProfile,
@@ -273,6 +281,7 @@ export function OnboardingProvider({
     setAssessmentResult,
     setAssessmentStatus,
     setAssessmentAnswersDirty,
+    setAssessmentSubmitted,
   };
 
   return (

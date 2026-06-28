@@ -30,12 +30,14 @@ function StepGuardOutlet() {
     activeOrganizationId,
     assessmentStatus,
     assessmentResult,
+    assessmentSubmitted,
   } = useOnboardingContext();
   const location = useLocation();
   const step = location.pathname.split('/').filter(Boolean).pop() ?? '';
   console.log('[StepGuardOutlet] step:', step, 'isLoading:', isLoading, 'error:', error, 'activeOrganizationId:', activeOrganizationId, 'orgCurrentStep:', organization?.currentStep);
 
   const isComingFromResults = new URLSearchParams(location.search).get('from') === 'results';
+  const isNotQualified = new URLSearchParams(location.search).get('notQualified') === '1';
 
   const guardResult = useMemo(() => {
     // Allow the documents step when the user is coming from the charity-assessment
@@ -50,12 +52,24 @@ function StepGuardOutlet() {
       return { allowed: true };
     }
 
+    // Allow the thanks step when the organization was deemed not qualified in
+    // the preloader so we can show the disqualification message and re-evaluate option.
+    if (step === 'thanks' && activeOrganizationId && isNotQualified) {
+      return { allowed: true };
+    }
+
     if (!isValidStep(step ?? '')) {
       return {
         allowed: false,
         redirectTo: 'landing' as OnboardingStep,
         reason: 'الخطوة المطلوبة غير معروفة',
       };
+    }
+
+    // Allow preloader when the user has just submitted the final assessment
+    // category so the evaluation can run before the backend advances currentStep.
+    if (step === 'preloader' && activeOrganizationId && assessmentSubmitted) {
+      return { allowed: true };
     }
 
     if (!activeOrganizationId) {
@@ -79,7 +93,7 @@ function StepGuardOutlet() {
       assessmentCompleted,
       resultsCompleted: assessmentCompleted,
     });
-  }, [step, organization?.currentStep, activeOrganizationId, assessmentStatus, assessmentResult, isComingFromResults, organization]);
+  }, [step, organization?.currentStep, activeOrganizationId, assessmentStatus, assessmentResult, assessmentSubmitted, isComingFromResults, isNotQualified, organization]);
 
   // When the organizationId comes from the URL query param, activeOrganizationId is
   // set immediately while organization is still being resolved. Show the loading state

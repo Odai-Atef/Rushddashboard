@@ -18,7 +18,7 @@ function formatRemainingTime(totalSeconds: number): string {
 
 export function PreloaderPage() {
   const navigate = useNavigate();
-  const { activeOrganizationId, setAssessmentResult, setAssessmentStatus } =
+  const { activeOrganizationId, setAssessmentResult, setAssessmentStatus, setAssessmentSubmitted } =
     useOnboardingContext();
   const [processingProgress, setProcessingProgress] = useState(0);
   const [cooldownInfo, setCooldownInfo] = useState<{
@@ -102,10 +102,22 @@ export function PreloaderPage() {
           overallScore: resultData?.overallScore ?? null,
           completedAt: resultData?.assessedAt ?? null,
         });
-        navigate(`/dashboard/charity-assessment/results/${activeOrganizationId}`);
+
+        const qualificationStatus = (resultData?.qualificationStatus ?? evalData?.qualificationStatus ?? '').toString().toUpperCase();
+        const isQualified =
+          qualificationStatus === 'QUALIFIED' ||
+          qualificationStatus === 'QUALIFIED_WITH_IMPROVEMENT' ||
+          qualificationStatus === 'WITH_IMPROVEMENT';
+
+        if (isQualified) {
+          navigate(`/dashboard/onboarding/documents?organizationId=${activeOrganizationId}`);
+        } else {
+          navigate(`/dashboard/onboarding/thanks?organizationId=${activeOrganizationId}&notQualified=1`);
+        }
       } catch (err: any) {
         stopProgress();
         toast.error(err?.message || 'تعذر إكمال التقييم. يرجى المحاولة مرة أخرى.');
+        setAssessmentSubmitted(false);
         navigate(`/dashboard/onboarding/assessment?organizationId=${activeOrganizationId}`);
       }
     };
@@ -114,7 +126,7 @@ export function PreloaderPage() {
     return () => {
       if (progressInterval) clearInterval(progressInterval);
     };
-  }, [activeOrganizationId, navigate, setAssessmentResult, setAssessmentStatus]);
+  }, [activeOrganizationId, navigate, setAssessmentResult, setAssessmentStatus, setAssessmentSubmitted]);
 
   if (cooldownInfo?.blocked) {
     return (

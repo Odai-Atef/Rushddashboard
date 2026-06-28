@@ -32,7 +32,7 @@ interface AssessmentAnswer {
 
 export function AssessmentPage() {
   const { goToStep } = useOnboardingNavigate();
-  const { organization, activeOrganizationId, setOrganization, setAssessmentAnswersDirty } = useOnboardingContext();
+  const { organization, activeOrganizationId, setOrganization, setAssessmentAnswersDirty, setAssessmentSubmitted } = useOnboardingContext();
 
   const [assessmentCategories, setAssessmentCategories] = useState<
     AssessmentCategory[]
@@ -380,6 +380,7 @@ export function AssessmentPage() {
             console.log('[AssessmentPage] patching currentStep to ASSESSMENT');
             setOrganization({ ...organization, currentStep: 'ASSESSMENT' });
           }
+          setAssessmentSubmitted(true);
           goToStep('preloader');
         }
       }
