@@ -1,3 +1,4 @@
+import { useAuth } from '@/app/layouts/RootLayout';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FC, FormEvent, KeyboardEvent, MouseEvent } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
@@ -116,12 +117,18 @@ interface Notification {
 
 export function ProjectCollaborationModule() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { view, projectId } = useParams<{ view?: ViewType; projectId?: string }>();
   const currentView: ViewType = view ?? 'hub';
   const [searchParams, setSearchParams] = useSearchParams();
   const selectedConversation = searchParams.get('conv');
   const [filterStatus, setFilterStatus] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showNewConversation, setShowNewConversation] = useState(false);
+  const [newConversationTitle, setNewConversationTitle] = useState('');
+  const [isCreatingConversation, setIsCreatingConversation] = useState(false);
+
+  const currentUserId = user?.id || null;
 
   const {
     conversations,
@@ -129,6 +136,33 @@ export function ProjectCollaborationModule() {
     error: conversationsError,
     refetch: refetchConversations,
   } = useProjectConversations(projectId);
+
+  const createConversation = async () => {
+    if (!projectId || !currentUserId) return;
+    const title = newConversationTitle.trim();
+    if (!title) {
+      toast.error('يرجى إدخال عنوان المحادثة');
+      return;
+    }
+    setIsCreatingConversation(true);
+    try {
+      const response = await collaborationService.createConversation(projectId, {
+        title,
+        type: 'PROJECT_GROUP',
+        participantUserIds: [currentUserId],
+      });
+      const conversation = response.data;
+      setNewConversationTitle('');
+      setShowNewConversation(false);
+      await refetchConversations();
+      selectConversation(conversation.id);
+      toast.success('تم إنشاء المحادثة');
+    } catch (err) {
+      toast.error(getCollaborationErrorMessage(err));
+    } finally {
+      setIsCreatingConversation(false);
+    }
+  };
 
   const {
     attachments,
@@ -482,6 +516,7 @@ export function ProjectCollaborationModule() {
 
 interface ChatViewProps {
   projectId?: string;
+  currentUserId: string | null;
   selectedConversation: string | null;
   conversations: Conversation[];
   conversationsLoading: boolean;
@@ -505,11 +540,18 @@ interface ChatViewProps {
   retrySend: (messageId: string) => void;
   clearError: () => void;
   revisions: RevisionRequest[];
+  showNewConversation: boolean;
+  setShowNewConversation: (value: boolean) => void;
+  newConversationTitle: string;
+  setNewConversationTitle: (value: string) => void;
+  isCreatingConversation: boolean;
+  createConversation: () => Promise<void>;
 }
 
 // PAGE 2: Chat Messages
 function ChatView({
   projectId,
+  currentUserId,
   selectedConversation,
   conversations,
   conversationsLoading,
@@ -533,9 +575,16 @@ function ChatView({
   retrySend,
   clearError,
   revisions,
+  showNewConversation,
+  setShowNewConversation,
+  newConversationTitle,
+  setNewConversationTitle,
+  isCreatingConversation,
+  createConversation,
 }: ChatViewProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
-  const currentUserId = 'me';
+  const { user } = useAuth();
+  const effectiveCurrentUserId = currentUserId || user?.id || null;
   const [messageInput, setMessageInput] = useState('');
   const [replyToId, setReplyToId] = useState<string | null>(null);
   const [replyPreview, setReplyPreview] = useState<string | null>(null);
@@ -608,13 +657,25 @@ function ChatView({
                 className="w-full pr-9 pl-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <Link
-              to={projectId ? `/dashboard/collaboration/${projectId}/hub` : '/dashboard/collaboration/hub'}
-              className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
-            >
-              <ChevronRight className="w-4 h-4" />
-              رجوع للمركز
-            </Link>
+            <div className="flex items-center justify-between">
+              <Link
+                to={projectId ? `/dashboard/collaboration/${projectId}/hub` : '/dashboard/collaboration/hub'}
+                className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+              >
+                <ChevronRight className="w-4 h-4" />
+                رجوع للمركز
+              </Link>
+              {!showNewConversation && conversations.length > 0 && (
+                <button
+                  onClick={() => setShowNewConversation(true)}
+                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  title="إنشاء محادثة جديدة"
+                >
+                  <Plus className="w-4 h-4" />
+                  جديد
+                </button>
+              )}
+            </div>
           </div>
           <div className="flex-1 overflow-y-auto">
             {conversationsLoading && conversations.length === 0 && (
@@ -635,8 +696,45 @@ function ChatView({
                 </button>
               </div>
             )}
-            {!conversationsLoading && !conversationsError && conversations.length === 0 && (
-              <div className="p-4 text-center text-gray-500 text-sm">لا توجد محادثات</div>
+            {!conversationsLoading && !conversationsError && conversations.length === 0 && !showNewConversation && (
+              <div className="p-4 text-center">
+                <p className="text-gray-500 text-sm mb-3">لا توجد محادثات</p>
+                <button
+                  onClick={() => setShowNewConversation(true)}
+                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 justify-center mx-auto"
+                >
+                  <Plus className="w-4 h-4" />
+                  إنشاء محادثة جديدة
+                </button>
+              </div>
+            )}
+            {showNewConversation && (
+              <div className="p-4 border-b border-gray-200 bg-blue-50">
+                <label className="block text-sm font-medium mb-2">عنوان المحادثة</label>
+                <input
+                  type="text"
+                  value={newConversationTitle}
+                  onChange={(e) => setNewConversationTitle(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); createConversation(); } }}
+                  placeholder="مثال: محادثة فريق المشروع"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 mb-3"
+                />
+                <div className="flex gap-2">
+                  <button
+                    onClick={createConversation}
+                    disabled={isCreatingConversation || !newConversationTitle.trim()}
+                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
+                  >
+                    {isCreatingConversation ? 'جاري الإنشاء...' : 'إنشاء'}
+                  </button>
+                  <button
+                    onClick={() => { setShowNewConversation(false); setNewConversationTitle(''); }}
+                    className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200"
+                  >
+                    إلغاء
+                  </button>
+                </div>
+              </div>
             )}
             {filteredConversations.map((conv) => (
               <button
@@ -733,7 +831,7 @@ function ChatView({
               </div>
             )}
             {messages.map((msg) => {
-              const isOwn = msg.senderUserId === currentUserId || msg.senderUserId === 'me';
+              const isOwn = msg.senderUserId === effectiveCurrentUserId || msg.senderUserId === 'me';
               return (
                 <MessageBubble
                   key={msg.id}
@@ -891,9 +989,11 @@ function MessageBubble({
   onRetry,
   onMarkAsRead,
   onReply,
+  currentUserId,
 }: {
   msg: ApiMessage;
   isOwn: boolean;
+  currentUserId: string | null;
   editingMessageId: string | null;
   editInput: string;
   setEditInput: (value: string) => void;
@@ -906,6 +1006,8 @@ function MessageBubble({
   onReply: (msg: ApiMessage) => void;
 }) {
   const bubbleRef = useRef<HTMLDivElement | null>(null);
+  const { user } = useAuth();
+  const messageCurrentUserId = currentUserId || user?.id || null;
 
   useEffect(() => {
     const node = bubbleRef.current;
@@ -979,7 +1081,7 @@ function MessageBubble({
       </div>
       <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
         <div className="flex items-center gap-2 mb-1">
-          <span className="font-medium text-sm">{msg.senderUserId === 'me' ? 'أنت' : msg.senderUserId.slice(0, 8)}</span>
+          <span className="font-medium text-sm">{msg.senderUserId === messageCurrentUserId ? 'أنت' : (msg.sender?.fullName || msg.senderUserId.slice(0, 8))}</span>
           {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
         </div>
         {msg.replyToId && (
@@ -3002,6 +3104,7 @@ const DiscussionsView = () => {
       {currentView === 'chat' && (
         <ChatView
           projectId={projectId}
+          currentUserId={currentUserId}
           selectedConversation={selectedConversation}
           conversations={conversations}
           conversationsLoading={conversationsLoading}
@@ -3025,6 +3128,12 @@ const DiscussionsView = () => {
           retrySend={retrySend}
           clearError={clearError}
           revisions={revisions}
+          showNewConversation={showNewConversation}
+          setShowNewConversation={setShowNewConversation}
+          newConversationTitle={newConversationTitle}
+          setNewConversationTitle={setNewConversationTitle}
+          isCreatingConversation={isCreatingConversation}
+          createConversation={createConversation}
         />
       )}
       {currentView === 'discussions' && <DiscussionsView />}

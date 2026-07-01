@@ -90,6 +90,8 @@ export function useConversationMessages(
     return new Date(next).toISOString();
   }, []);
 
+  const cursorRef = useRef<string | null>(null);
+
   const loadMessages = useCallback(
     async (reset: boolean = false) => {
       if (!projectId || !conversationId) return;
@@ -101,9 +103,14 @@ export function useConversationMessages(
       setIsLoading(true);
       setError(null);
 
+      if (reset) {
+        cursorRef.current = null;
+        setCursor(null);
+      }
+
       const filters: MessageFilters = {
         limit: DEFAULT_LIMIT,
-        ...(reset ? {} : cursor ? { cursor } : {}),
+        ...(cursorRef.current ? { cursor: cursorRef.current } : {}),
       };
 
       try {
@@ -118,6 +125,7 @@ export function useConversationMessages(
         if (!isMountedRef.current) return;
 
         const { data: page, nextCursor, hasMore: more } = response.data;
+        cursorRef.current = nextCursor;
 
         setMessages((prev) => {
           const base = reset ? [] : prev;
@@ -139,7 +147,7 @@ export function useConversationMessages(
         }
       }
     },
-    [projectId, conversationId, cursor, cleanupRequest]
+    [projectId, conversationId, cleanupRequest]
   );
 
   const sendMessage = useCallback(
@@ -351,6 +359,7 @@ export function useConversationMessages(
   const clearError = useCallback(() => setError(null), []);
 
   useEffect(() => {
+    isMountedRef.current = true;
     readIdsRef.current.clear();
     pendingReadRef.current.clear();
     setMessages([]);

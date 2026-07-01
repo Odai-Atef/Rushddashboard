@@ -56,6 +56,18 @@ export interface DiscussionWithReplies extends Discussion {
   replies: Reply[];
 }
 
+export interface CreateConversationDto {
+  title?: string;
+  type: ConversationType;
+  participantUserIds: string[];
+  status?: ConversationStatus;
+}
+
+export interface UpdateConversationDto {
+  title?: string;
+  status?: ConversationStatus;
+}
+
 export interface CreateDiscussionDto {
   section: string;
   title: string;
@@ -122,6 +134,17 @@ export interface Message {
   deletedAt: string | null;
   createdAt: string;
   updatedAt: string;
+  sender?: {
+    id: string;
+    fullName: string;
+    avatarUrl: string | null;
+  };
+  attachments?: Array<{
+    id: string;
+    fileName: string;
+    fileSize: number;
+    mimeType: string;
+  }>;
 }
 
 export interface MessagesResponse {
@@ -207,6 +230,22 @@ export class CollaborationService {
         ...config,
         params: buildQueryParams(filtersToRecord(filters)),
       }
+    );
+  }
+
+  /**
+   * Create a new project conversation
+   * POST /api/v1/projects/:projectId/conversations
+   */
+  async createConversation(
+    projectId: string,
+    dto: CreateConversationDto,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Conversation>> {
+    return apiClient.post<Conversation>(
+      `/api/v1/projects/${projectId}/conversations`,
+      dto,
+      config
     );
   }
 
