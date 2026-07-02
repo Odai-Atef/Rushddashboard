@@ -203,10 +203,8 @@ export class AuthService {
    * Request password reset
    */
   async forgotPassword(email: string): Promise<ApiResponse<void>> {
-    const { ENV } = await import('@/lib/env');
     return apiClient.post(`${this.baseEndpoint}/forgot-password`, {
       email,
-      clientUrl: ENV.APP_URL,
     });
   }
 
