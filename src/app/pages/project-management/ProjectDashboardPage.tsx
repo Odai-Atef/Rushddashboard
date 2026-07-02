@@ -30,6 +30,7 @@ import {
 import { useProjectDashboard, timeAgo } from '@/api/hooks/useProjectDashboard';
 import { useEffect, useState } from 'react';
 import { onboardingService } from '@/api/services';
+import { useAuth } from '@/app/layouts/RootLayout';
 
 export function ProjectDashboardPage() {
   const navigate = useNavigate();
