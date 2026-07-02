@@ -24,6 +24,8 @@ import {
   MessageSquare
 } from 'lucide-react';
 import { cn } from '../utils/cn';
+import { useAuth } from '../layouts/RootLayout';
+import { filterMenuItemsByRole } from '@/config/menuAccess';
 import { useEffect } from 'react';
 
 interface MobileNavProps {
@@ -33,6 +35,9 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
+  const { user } = useAuth();
+  const roleSlug = user?.roleSlug ?? null;
+
   const navItems = [
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
@@ -43,7 +48,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
-    { id: 'onboarding', label: 'تسجيل الجهات', icon: UserPlus, path: '/dashboard/onboarding/registration' },
+    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/registration' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources' },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk' },
@@ -58,6 +63,8 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'opportunities', label: 'لوحة الفرص', icon: FileCheck, path: '/dashboard/opportunities' },
     { id: 'settings', label: 'الإعدادات', icon: Settings, path: '/dashboard/settings' },
   ];
+
+  const visibleItems = filterMenuItemsByRole(navItems, roleSlug);
 
   useEffect(() => {
     if (isOpen) {
@@ -100,7 +107,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
         {/* Navigation */}
         <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-2">
-            {navItems.map((item) => {
+            {visibleItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeView === item.id;
 

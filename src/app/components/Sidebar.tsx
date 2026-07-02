@@ -31,6 +31,7 @@ import {
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
 import { ENV } from '@/lib/env';
+import { filterMenuItemsByRole } from '@/config/menuAccess';
 
 interface NavItem {
   id: string;
@@ -87,7 +88,9 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'settings', label: 'الإعدادات', icon: Settings, path: '/dashboard/settings', restricted: true },
   ];
 
-  const visibleItems = navItems.filter((item) => !item.restricted || canSeeRestricted);
+  const roleSlug = user?.roleSlug ?? null;
+  const roleAllowedItems = filterMenuItemsByRole(navItems, roleSlug);
+  const visibleItems = roleAllowedItems.filter((item) => !item.restricted || canSeeRestricted);
 
   return (
     <aside className={cn("bg-sidebar border-l border-sidebar-border flex flex-col", className)}>

@@ -50,6 +50,8 @@ import { ProjectAnalyticsDashboard } from './components/ProjectAnalyticsDashboar
 import { FundingDonorAnalytics } from './components/FundingDonorAnalytics';
 import { OperationsPerformanceDashboard } from './components/OperationsPerformanceDashboard';
 import { DonorMatchingModule } from './components/donor-matching/DonorMatchingModule';
+import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard';
+import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 
 const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
 const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
@@ -220,11 +222,19 @@ export const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                Component: CharityAssessmentStartPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <CharityAssessmentStartPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'assessment/:organizationId',
-                Component: CharityAssessmentWizardPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <CharityAssessmentWizardPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'assessment',
@@ -232,15 +242,27 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'results/:organizationId',
-                Component: CharityAssessmentResultsPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <CharityAssessmentResultsPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'roadmap/:organizationId',
-                Component: CharityAssessmentRoadmapPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <CharityAssessmentRoadmapPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'roadmap',
-                Component: CharityAssessmentRoadmapPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <CharityAssessmentRoadmapPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: '*',
@@ -258,51 +280,99 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'landing',
-                element: <OnboardingPageShell><OnboardingLandingPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingLandingPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'registration',
-                element: <OnboardingPageShell><OnboardingRegistrationPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingRegistrationPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'profile',
-                element: <OnboardingPageShell><OnboardingProfilePage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingProfilePage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'assessment',
-                element: <OnboardingPageShell><OnboardingAssessmentPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingAssessmentPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'documents',
-                element: <OnboardingPageShell><OnboardingDocumentsPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingDocumentsPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'thanks',
-                element: <OnboardingPageShell><OnboardingThanksPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingThanksPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'preloader',
-                element: <OnboardingPageShell><OnboardingPreloaderPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingPreloaderPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'processing',
-                element: <OnboardingPageShell><OnboardingProcessingPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingProcessingPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'results',
-                element: <OnboardingPageShell><OnboardingResultsPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingResultsPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'analysis',
-                element: <OnboardingPageShell><OnboardingAnalysisPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingAnalysisPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'roadmap',
-                element: <OnboardingPageShell><OnboardingRoadmapPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingRoadmapPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'decision',
-                element: <OnboardingPageShell><OnboardingDecisionPage /></OnboardingPageShell>,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingDecisionPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: '*',
@@ -315,39 +385,75 @@ export const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                Component: ProjectDashboardPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectDashboardPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'list',
-                Component: ProjectListPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectListPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'create',
-                Component: ProjectCreatePage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectCreatePage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'edit/:projectId',
-                Component: ProjectEditPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectEditPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'details/:projectId',
-                Component: ProjectDetailsPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectDetailsPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'lifecycle/:projectId',
-                Component: ProjectLifecyclePage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectLifecyclePage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'versions/:projectId',
-                Component: ProjectVersionsPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectVersionsPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'activity/:projectId',
-                Component: ProjectActivityPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectActivityPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: 'reporting',
-                Component: ProjectReportingPage,
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <ProjectReportingPage />
+                  </RoleRouteGuard>
+                ),
               },
               {
                 path: '*',
@@ -383,7 +489,11 @@ export const router = createBrowserRouter([
           },
           {
             path: 'donors',
-            Component: DonorsPage,
+            element: (
+              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                <DonorsPage />
+              </RoleRouteGuard>
+            ),
           },
           {
             path: 'incubator-overview',
@@ -407,7 +517,11 @@ export const router = createBrowserRouter([
           },
           {
             path: 'donor-matching',
-            Component: DonorMatchingModule,
+            element: (
+              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                <DonorMatchingModule />
+              </RoleRouteGuard>
+            ),
           },
         ],
       },

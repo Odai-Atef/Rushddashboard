@@ -1,7 +1,7 @@
 import { Outlet } from 'react-router';
 import { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import apiClient from '@/api/client';
-import { authService, UserProfile } from '@/api/services/auth-service';
+import { authService, UserProfile, UserRole } from '@/api/services/auth-service';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -16,6 +16,29 @@ interface ThemeContext {
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
+
+function isUserRole(role: unknown): role is UserRole {
+  return (
+    typeof role === 'object' &&
+    role !== null &&
+    'slug' in role &&
+    typeof (role as UserRole).slug === 'string'
+  );
+}
+
+function extractRoleSlug(role: string | UserRole | null | undefined): string | null {
+  if (!role) return null;
+  if (typeof role === 'string') return role;
+  if (isUserRole(role)) return role.slug;
+  return null;
+}
+
+function normalizeRoleSlug(data: UserProfile): UserProfile {
+  return {
+    ...data,
+    roleSlug: data.roleSlug ?? extractRoleSlug(data.role) ?? null,
+  };
+}
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -38,7 +61,7 @@ export function RootLayout() {
     if (apiClient.isAuthenticated()) {
       authService.getProfile().then((response) => {
         if (response.success && response.data) {
-          setUser(response.data);
+          setUser(normalizeRoleSlug(response.data));
         }
       }).catch(() => {
         // Silently ignore profile fetch errors
@@ -61,7 +84,7 @@ export function RootLayout() {
     setIsAuthenticated(true);
     authService.getProfile().then((response) => {
       if (response.success && response.data) {
-        setUser(response.data);
+        setUser(normalizeRoleSlug(response.data));
       }
     }).catch(() => {
       // Silently ignore profile fetch errors

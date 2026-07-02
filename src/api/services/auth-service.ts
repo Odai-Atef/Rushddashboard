@@ -74,6 +74,12 @@ export interface AuthTokens {
   expiresIn: number;
 }
 
+export interface UserRole {
+  id: string;
+  name: string;
+  slug: string;
+}
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -84,7 +90,10 @@ export interface UserProfile {
   preferredLanguage?: string | null;
   timezone?: string | null;
   status?: string;
-  role?: string | null;
+  /** Canonical role slug used for menu access control. */
+  roleSlug?: string | null;
+  /** @deprecated Use roleSlug for access-control decisions. */
+  role?: string | UserRole | null;
   company?: string | null;
   lastLoginAt?: string | null;
   createdAt: string;
