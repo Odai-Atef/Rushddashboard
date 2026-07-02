@@ -22,6 +22,7 @@ export function ProjectCreatePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { create, isLoading, error, fieldErrors, clearFieldError, clearError } = useProjectCreate();
+  const [localFieldErrors, setLocalFieldErrors] = useState<Record<string, string>>({});
   const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string }[]>([]);
   const [isLoadingOrganization, setIsLoadingOrganization] = useState(true);
   const [organizationError, setOrganizationError] = useState<string | null>(null);
@@ -98,6 +99,11 @@ export function ProjectCreatePage() {
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
     clearFieldError(field);
+    setLocalFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next[field];
+      return next;
+    });
     if (error) clearError();
   };
 
@@ -109,12 +115,86 @@ export function ProjectCreatePage() {
       return { ...prev, fundingAreaIds: nextAreas };
     });
     clearFieldError('fundingAreaIds');
+    setLocalFieldErrors((prev) => {
+      const next = { ...prev };
+      delete next.fundingAreaIds;
+      return next;
+    });
     if (error) clearError();
   };
 
+  function getFieldError(field: string): string | undefined {
+    return localFieldErrors[field] || fieldErrors[field];
+  }
+
   const durationDays = daysBetween(formData.startDate, formData.endDate);
 
+  function validateForm(): Record<string, string> {
+    const errors: Record<string, string> = {};
+
+    if (!formData.name?.trim()) {
+      errors.name = 'اسم المشروع مطلوب.';
+    } else if (formData.name.trim().length < 3) {
+      errors.name = 'اسم المشروع يجب أن يكون 3 أحرف على الأقل.';
+    } else if (formData.name.trim().length > 255) {
+      errors.name = 'اسم المشروع يجب أن لا يتجاوز 255 حرفاً.';
+    }
+
+    if (formData.fundingAreaIds.length === 0) {
+      errors.fundingAreaIds = 'يجب تحديد مجال تمويل واحد على الأقل.';
+    }
+
+    if (!formData.description?.trim()) {
+      errors.description = 'وصف المشروع مطلوب.';
+    } else if (formData.description.trim().length < 10) {
+      errors.description = 'وصف المشروع يجب أن يكون 10 أحرف على الأقل.';
+    }
+
+    if (!formData.budget) {
+      errors.budget = 'الميزانية التقديرية مطلوبة.';
+    } else {
+      const budgetNum = Number(formData.budget);
+      if (isNaN(budgetNum) || budgetNum < 0) {
+        errors.budget = 'الميزانية يجب أن تكون صفر أو أكثر.';
+      }
+    }
+
+    if (!formData.beneficiaries?.trim()) {
+      errors.beneficiaries = 'الفئة المستفيدة مطلوبة.';
+    }
+
+    if (!formData.geographicScope?.trim()) {
+      errors.geographicScope = 'النطاق الجغرافي مطلوب.';
+    }
+
+    if (!formData.startDate) {
+      errors.startDate = 'تاريخ بدء المشروع مطلوب.';
+    }
+
+    if (!formData.endDate) {
+      errors.endDate = 'تاريخ انتهاء المشروع مطلوب.';
+    }
+
+    if (formData.startDate && formData.endDate) {
+      const start = new Date(formData.startDate);
+      const end = new Date(formData.endDate);
+      if (!isNaN(start.getTime()) && !isNaN(end.getTime()) && end < start) {
+        errors.endDate = 'تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء.';
+      }
+    }
+
+    return errors;
+  }
+
   const handleSubmit = async () => {
+    clearError();
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setLocalFieldErrors(validationErrors);
+      return;
+    }
+    setLocalFieldErrors({});
+
     const dto: CreateProjectDto = {
       name: formData.name,
       description: formData.description,
@@ -172,6 +252,7 @@ export function ProjectCreatePage() {
 
             <div>
               <label className="block text-sm font-medium mb-2">اسم المشروع *</label>
+              {getFieldError('name') && <p className="text-red-600 text-sm mb-1">{getFieldError('name')}</p>}
               <input
                 type="text"
                 value={formData.name}
@@ -179,11 +260,11 @@ export function ProjectCreatePage() {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="مثال: برنامج الأسر المنتجة"
               />
-              {fieldErrors.name && <p className="text-red-600 text-sm mt-1">{fieldErrors.name}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+              {getFieldError('fundingAreaIds') && <p className="text-red-600 text-sm mb-1">{getFieldError('fundingAreaIds')}</p>}
               {isLoadingFundingAreas ? (
                 <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
                   جاري تحميل مجالات العمل...
@@ -191,7 +272,7 @@ export function ProjectCreatePage() {
               ) : fundingAreas.length === 0 ? (
                 <p className="text-sm text-gray-500">لا توجد مجالات عمل متاحة حالياً.</p>
               ) : (
-                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${fieldErrors.fundingAreaIds ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}>
+                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${getFieldError('fundingAreaIds') ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}>
                   {fundingAreas.map((area) => (
                     <label
                       key={area.id}
@@ -208,11 +289,11 @@ export function ProjectCreatePage() {
                   ))}
                 </div>
               )}
-              {fieldErrors.fundingAreaIds && <p className="text-red-600 text-sm mt-1">{fieldErrors.fundingAreaIds}</p>}
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2">وصف المشروع *</label>
+              {getFieldError('description') && <p className="text-red-600 text-sm mb-1">{getFieldError('description')}</p>}
               <textarea
                 value={formData.description}
                 onChange={(e) => updateField('description', e.target.value)}
@@ -220,12 +301,12 @@ export function ProjectCreatePage() {
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 placeholder="اكتب وصفاً تفصيلياً للمشروع..."
               />
-              {fieldErrors.description && <p className="text-red-600 text-sm mt-1">{fieldErrors.description}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">الميزانية التقديرية (ر.س) *</label>
+                {getFieldError('budget') && <p className="text-red-600 text-sm mb-1">{getFieldError('budget')}</p>}
                 <input
                   type="number"
                   value={formData.budget}
@@ -233,10 +314,10 @@ export function ProjectCreatePage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="250000"
                 />
-                {fieldErrors.budget && <p className="text-red-600 text-sm mt-1">{fieldErrors.budget}</p>}
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">الفئة المستفيدة *</label>
+                {getFieldError('beneficiaries') && <p className="text-red-600 text-sm mb-1">{getFieldError('beneficiaries')}</p>}
                 <input
                   type="text"
                   value={formData.beneficiaries}
@@ -244,13 +325,13 @@ export function ProjectCreatePage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="مثال: الأسر المحتاجة"
                 />
-                {fieldErrors.beneficiaries && <p className="text-red-600 text-sm mt-1">{fieldErrors.beneficiaries}</p>}
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">النطاق الجغرافي *</label>
+                {getFieldError('geographicScope') && <p className="text-red-600 text-sm mb-1">{getFieldError('geographicScope')}</p>}
                 <input
                   type="text"
                   value={formData.geographicScope}
@@ -258,13 +339,15 @@ export function ProjectCreatePage() {
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="مثال: الرياض"
                 />
-                {fieldErrors.geographicScope && <p className="text-red-600 text-sm mt-1">{fieldErrors.geographicScope}</p>}
               </div>
             </div>
 
             <div>
               <label className="block text-sm font-medium mb-2">فترة المشروع *</label>
-              <div className={`flex items-stretch border rounded-lg overflow-hidden ${fieldErrors.startDate || fieldErrors.endDate ? 'border-red-500 bg-red-50' : 'border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'}`}>
+              {(getFieldError('startDate') || getFieldError('endDate')) && (
+                <p className="text-red-600 text-sm mb-1">{getFieldError('startDate') || getFieldError('endDate')}</p>
+              )}
+              <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-red-50' : 'border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'}`}>
                 <div
                   className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
                   onClick={() => startDateRef.current?.showPicker?.()}
