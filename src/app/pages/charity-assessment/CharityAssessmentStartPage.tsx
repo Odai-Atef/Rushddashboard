@@ -25,6 +25,7 @@ const isivDimensions = [
 export function CharityAssessmentStartPage() {
   const navigate = useNavigate();
   const [organization, setOrganization] = useState<OrganizationResponse | null>(null);
+  const [assessmentStatus, setAssessmentStatus] = useState<{ status: string; overallScore: number | null; completedAt: string | null } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -32,8 +33,21 @@ export function CharityAssessmentStartPage() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await onboardingService.getMyOrganization();
-      setOrganization(res.data);
+      const orgRes = await onboardingService.getMyOrganization();
+      const org = orgRes.data;
+      setOrganization(org);
+
+      if (org?.id) {
+        try {
+          const statusRes = await onboardingService.getAssessmentStatus(org.id);
+          const statusPayload = (statusRes?.data as any)?.data ?? statusRes?.data;
+          if (statusPayload) {
+            setAssessmentStatus(statusPayload);
+          }
+        } catch (statusErr) {
+          // Assessment may not exist yet; ignore.
+        }
+      }
     } catch (err: any) {
       if (err?.statusCode === 404 || err?.response?.status === 404) {
         setError('لم يتم العثور على جهه مرتبطة بحسابك. يرجى إنشاء جهه أولاً.');
@@ -50,6 +64,7 @@ export function CharityAssessmentStartPage() {
   }, [resolveOrganization]);
 
   const organizationId = organization?.id ?? null;
+  const isAssessmentCompleted = assessmentStatus?.status === 'COMPLETED' || assessmentStatus?.status === 'completed';
 
   if (isLoading) {
     return (

@@ -230,18 +230,20 @@ export function OnboardingProvider({
         await loadFundingAreas();
         console.log('[OnboardingProvider] loadFundingAreas done');
 
-        // Hydrate assessment status/result so route guards can make accurate decisions
-        // without requiring each page to load this independently on refresh.
+        // Hydrate assessment status/result in the background so route guards and
+        // pages can make accurate decisions without blocking the UI. These calls
+        // are optional; failures are logged but do not keep the app in a loading state.
         if (org?.id) {
-          try {
-            const status = await loadAssessmentStatus();
-            if (status?.status === 'COMPLETED') {
-              await loadAssessmentResult();
+          (async () => {
+            try {
+              const status = await loadAssessmentStatus();
+              if (status?.status === 'COMPLETED') {
+                await loadAssessmentResult();
+              }
+            } catch (e) {
+              console.log('[OnboardingProvider] optional assessment hydration failed', e);
             }
-          } catch (e) {
-            // Assessment data may not exist yet; don't block the whole flow.
-            console.log('[OnboardingProvider] optional assessment hydration failed', e);
-          }
+          })();
         }
       } catch (e) {
         console.error('[OnboardingProvider] hydrate error', e);

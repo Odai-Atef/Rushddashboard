@@ -98,7 +98,7 @@ export function ProjectDashboardPage() {
               onClick={() =>
                 navigate(
                   hasOrg
-                    ? `/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`
+                    ? `/dashboard/charity-assessment`
                     : '/dashboard/onboarding/registration'
                 )
               }
@@ -131,7 +131,7 @@ export function ProjectDashboardPage() {
             onClick={() =>
               navigate(
                 hasOrg
-                  ? `/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`
+                  ? '/dashboard/charity-assessment'
                   : '/dashboard/onboarding/registration'
               )
             }

@@ -103,17 +103,7 @@ export function PreloaderPage() {
           completedAt: resultData?.assessedAt ?? null,
         });
 
-        const qualificationStatus = (resultData?.qualificationStatus ?? evalData?.qualificationStatus ?? '').toString().toUpperCase();
-        const isQualified =
-          qualificationStatus === 'QUALIFIED' ||
-          qualificationStatus === 'QUALIFIED_WITH_IMPROVEMENT' ||
-          qualificationStatus === 'WITH_IMPROVEMENT';
-
-        if (isQualified) {
-          navigate(`/dashboard/onboarding/documents?organizationId=${activeOrganizationId}`);
-        } else {
-          navigate(`/dashboard/onboarding/thanks?organizationId=${activeOrganizationId}&notQualified=1`);
-        }
+        navigate(`/dashboard/charity-assessment/results/${activeOrganizationId}`);
       } catch (err: any) {
         stopProgress();
         toast.error(err?.message || 'تعذر إكمال التقييم. يرجى المحاولة مرة أخرى.');

@@ -20,8 +20,38 @@ export interface MenuItemDefinition {
  * - entity-managers: 'معلوماتي', 'تقييم الجاهزية', 'إدارة المشاريع'
  */
 export const ROLE_MENU_MAP: Record<string, string[]> = {
-  'project-managers': ['donors', 'project-management', 'donor-matching'],
-  'entity-managers': ['onboarding', 'charity-assessment', 'project-management'],
+  'project-managers': [
+    'onboarding',
+    'onboarding-assessment',
+    'onboarding-preloader',
+    'onboarding-results',
+    'onboarding-documents',
+    'onboarding-thanks',
+    'onboarding-analysis',
+    'onboarding-roadmap',
+    'onboarding-processing',
+    'charity-assessment',
+    'charity-assessment-results',
+    'charity-assessment-roadmap',
+    'project-management',
+    'donors',
+    'donor-matching',
+  ],
+  'entity-managers': [
+    'onboarding',
+    'onboarding-assessment',
+    'onboarding-preloader',
+    'onboarding-results',
+    'onboarding-documents',
+    'onboarding-thanks',
+    'onboarding-analysis',
+    'onboarding-roadmap',
+    'onboarding-processing',
+    'charity-assessment',
+    'charity-assessment-results',
+    'charity-assessment-roadmap',
+    'project-management',
+  ],
 };
 
 /**

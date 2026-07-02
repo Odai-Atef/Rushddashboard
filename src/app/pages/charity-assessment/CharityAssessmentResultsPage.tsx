@@ -373,32 +373,49 @@ export function CharityAssessmentResultsPage() {
 
           {/* Quick Stats */}
           <div className="space-y-4">
-            <div className="bg-card border border-border rounded-xl p-6">
+            <button
+              onClick={() => {
+                document.getElementById('strengths-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="bg-card border border-border rounded-xl p-6 text-right w-full hover:bg-accent/50 transition-colors cursor-pointer"
+            >
               <div className="flex items-center justify-between mb-4">
                 <Star className="w-8 h-8 text-yellow-500" />
                 <Award className="w-6 h-6 text-blue-500" />
               </div>
               <p className="text-2xl font-bold mb-1">{strengths.length}</p>
               <p className="text-sm text-muted-foreground">نقاط قوة رئيسية</p>
-            </div>
+            </button>
 
-            <div className="bg-card border border-border rounded-xl p-6">
+            <button
+              onClick={() => {
+                document.getElementById('gaps-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="bg-card border border-border rounded-xl p-6 text-right w-full hover:bg-accent/50 transition-colors cursor-pointer"
+            >
               <div className="flex items-center justify-between mb-4">
                 <AlertTriangle className="w-8 h-8 text-orange-500" />
                 <Target className="w-6 h-6 text-red-500" />
               </div>
               <p className="text-2xl font-bold mb-1">{weaknesses.length}</p>
-              <p className="text-sm text-muted-foreground">مجالات تحتاج تحسين</p>
-            </div>
+              <p className="text-sm text-muted-foreground">تحليل الفجوات</p>
+            </button>
 
-            <div className="bg-card border border-border rounded-xl p-6">
+            <button
+              onClick={() => {
+                if (organizationId) {
+                  navigate(`/dashboard/charity-assessment/roadmap/${organizationId}`);
+                }
+              }}
+              className="bg-card border border-border rounded-xl p-6 text-right w-full hover:bg-accent/50 transition-colors cursor-pointer"
+            >
               <div className="flex items-center justify-between mb-4">
                 <Lightbulb className="w-8 h-8 text-purple-500" />
                 <Sparkles className="w-6 h-6 text-blue-500" />
               </div>
               <p className="text-2xl font-bold mb-1">{recommendations.length}</p>
               <p className="text-sm text-muted-foreground">توصيات مخصصة</p>
-            </div>
+            </button>
           </div>
         </div>
 
@@ -421,7 +438,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Strengths */}
-        <div className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div id="strengths-section" className="bg-card border border-border rounded-xl p-6 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <Star className="w-6 h-6 text-yellow-500" />
             <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
@@ -466,7 +483,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Gaps */}
-        <div className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div id="gaps-section" className="bg-card border border-border rounded-xl p-6 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <AlertTriangle className="w-6 h-6 text-orange-500" />
             <h2 className="text-xl font-semibold">تحليل الفجوات</h2>

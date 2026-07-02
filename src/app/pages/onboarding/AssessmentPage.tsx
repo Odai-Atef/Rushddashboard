@@ -57,61 +57,10 @@ export function AssessmentPage() {
     new Set()
   );
 
-  const [isCheckingCooldown, setIsCheckingCooldown] = useState(true);
-  const [cooldownBlocked, setCooldownBlocked] = useState(false);
-  const [cooldownRedirected, setCooldownRedirected] = useState(false);
-
   const abortControllerRef = useRef<AbortController | null>(null);
   const locallyEditedQuestionIds = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
-
-    const checkCooldown = async () => {
-      if (!activeOrganizationId) {
-        setIsCheckingCooldown(false);
-        return;
-      }
-      try {
-        const { onboardingService } = await import('@/api/services');
-        const res = await onboardingService.getEvaluationCooldownStatus(
-          activeOrganizationId,
-          'assessment'
-        );
-        if (controller.signal.aborted) return;
-        const status = (res.data as any)?.data ?? res.data;
-        if (!status?.canEvaluate && !status?.firstTime) {
-          const remainingMinutes = Math.max(
-            1,
-            Math.ceil((status?.remainingSeconds ?? 0) / 60)
-          );
-          toast.error(
-            `يمكنك إجراء التقييم مرة أخرى بعد ${remainingMinutes} دقيقة`
-          );
-          setCooldownBlocked(true);
-          setCooldownRedirected(true);
-          goToStep('preloader');
-          return;
-        }
-      } catch (err: any) {
-        if (controller.signal.aborted) return;
-        console.error('[AssessmentPage] cooldown check failed', err);
-      } finally {
-        if (!controller.signal.aborted) {
-          setIsCheckingCooldown(false);
-        }
-      }
-    };
-
-    checkCooldown();
-    return () => {
-      controller.abort();
-    };
-  }, [activeOrganizationId, goToStep]);
-
-  useEffect(() => {
-    if (cooldownRedirected || isCheckingCooldown) return;
     const controller = new AbortController();
     abortControllerRef.current = controller;
     setIsLoadingAssessment(true);
@@ -211,7 +160,7 @@ export function AssessmentPage() {
     return () => {
       controller.abort();
     };
-  }, [activeOrganizationId, cooldownRedirected, isCheckingCooldown]);
+  }, [activeOrganizationId]);
 
   const getAnswer = (questionId: string) =>
     assessmentAnswers.find((a) => a.questionId === questionId)?.answer;
@@ -403,25 +352,12 @@ export function AssessmentPage() {
     }
   };
 
-  if (isCheckingCooldown || isLoadingAssessment) {
+  if (isLoadingAssessment) {
     return (
       <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-          <p className="text-gray-600">
-            {isCheckingCooldown ? 'جارٍ التحقق من إمكانية التقييم...' : 'جارٍ تحميل فئات التقييم...'}
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  if (cooldownBlocked) {
-    return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
-        <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-          <p className="text-gray-600">جارٍ إعادة التوجيه...</p>
+          <p className="text-gray-600">جارٍ تحميل فئات التقييم...</p>
         </div>
       </div>
     );

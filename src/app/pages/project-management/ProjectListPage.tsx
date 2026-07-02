@@ -25,6 +25,7 @@ import { ProjectFilters, ProjectStatus, ProjectHealth, statusConfig, Project } f
 import apiClient from '@/api/client';
 import { projectService } from '@/api/services/project-service';
 import { onboardingService, IsivAssessmentResult, OrganizationResponse } from '@/api/services/onboarding-service';
+import { useAuth } from '@/app/layouts/RootLayout';
 import { toast } from 'sonner';
 
 const STATUS_OPTIONS: { value: ProjectStatus | 'all'; label: string }[] = [
@@ -70,6 +71,8 @@ const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
 export function ProjectListPage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const isProjectManager = user?.roleSlug === 'project-managers';
   const {
     projects,
     pagination,
@@ -503,7 +506,7 @@ export function ProjectListPage() {
           onClick={() =>
             navigate(
               hasOrg
-                ? `/dashboard/onboarding/assessment${organization?.id ? `?organizationId=${encodeURIComponent(organization.id)}` : ''}`
+                ? '/dashboard/charity-assessment'
                 : '/dashboard/onboarding/registration'
             )
           }
@@ -725,18 +728,20 @@ export function ProjectListPage() {
                   <Pencil className="w-4 h-4 text-gray-400" />
                   تعديل
                 </a>
-                <button
-                  onClick={() => handleDownloadWord(project.id, project.name)}
-                  disabled={downloadingId === project.id}
-                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {downloadingId === project.id ? (
-                    <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
-                  ) : (
-                    <Download className="w-4 h-4 text-gray-400" />
-                  )}
-                  تحميل ملف مُولّد بالذكاء الاصطناعي
-                </button>
+                {isProjectManager && (
+                  <button
+                    onClick={() => handleDownloadWord(project.id, project.name)}
+                    disabled={downloadingId === project.id}
+                    className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {downloadingId === project.id ? (
+                      <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
+                    ) : (
+                      <Download className="w-4 h-4 text-gray-400" />
+                    )}
+                    تحميل ملف مُولّد بالذكاء الاصطناعي
+                  </button>
+                )}
                 <a
                   href={`/dashboard/project-management/details/${project.id}`}
                   onClick={() => setOpenMenuId(null)}

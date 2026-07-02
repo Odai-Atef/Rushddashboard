@@ -5,6 +5,7 @@ import { authService, UserProfile, UserRole } from '@/api/services/auth-service'
 
 interface AuthContextType {
   isAuthenticated: boolean;
+  isLoading: boolean;
   user: UserProfile | null;
   login: () => void;
   logout: () => void;
@@ -50,6 +51,7 @@ export const useAuth = () => {
 
 export function RootLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => apiClient.isAuthenticated());
+  const [isLoading, setIsLoading] = useState(isAuthenticated);
   const [user, setUser] = useState<UserProfile | null>(null);
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const saved = localStorage.getItem('rushd_theme');
@@ -59,12 +61,15 @@ export function RootLayout() {
   // Load user profile on mount if authenticated
   useEffect(() => {
     if (apiClient.isAuthenticated()) {
+      setIsLoading(true);
       authService.getProfile().then((response) => {
         if (response.success && response.data) {
           setUser(normalizeRoleSlug(response.data));
         }
       }).catch(() => {
         // Silently ignore profile fetch errors
+      }).finally(() => {
+        setIsLoading(false);
       });
     }
   }, []);
@@ -82,12 +87,15 @@ export function RootLayout() {
 
   const login = useCallback(() => {
     setIsAuthenticated(true);
+    setIsLoading(true);
     authService.getProfile().then((response) => {
       if (response.success && response.data) {
         setUser(normalizeRoleSlug(response.data));
       }
     }).catch(() => {
       // Silently ignore profile fetch errors
+    }).finally(() => {
+      setIsLoading(false);
     });
   }, []);
 
@@ -105,6 +113,7 @@ export function RootLayout() {
 
   const authValue = {
     isAuthenticated,
+    isLoading,
     user,
     login,
     logout,

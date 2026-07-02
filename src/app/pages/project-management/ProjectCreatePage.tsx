@@ -29,7 +29,7 @@ export function ProjectCreatePage() {
   const [isLoadingFundingAreas, setIsLoadingFundingAreas] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
-    funding_areas: [] as string[],
+    fundingAreaIds: [] as string[],
     organizationId: '',
     description: '',
     beneficiaries: '',
@@ -103,12 +103,12 @@ export function ProjectCreatePage() {
 
   const toggleFundingArea = (areaId: string) => {
     setFormData((prev) => {
-      const nextAreas = prev.funding_areas.includes(areaId)
-        ? prev.funding_areas.filter((id) => id !== areaId)
-        : [...prev.funding_areas, areaId];
-      return { ...prev, funding_areas: nextAreas };
+      const nextAreas = prev.fundingAreaIds.includes(areaId)
+        ? prev.fundingAreaIds.filter((id) => id !== areaId)
+        : [...prev.fundingAreaIds, areaId];
+      return { ...prev, fundingAreaIds: nextAreas };
     });
-    clearFieldError('funding_areas');
+    clearFieldError('fundingAreaIds');
     if (error) clearError();
   };
 
@@ -126,7 +126,7 @@ export function ProjectCreatePage() {
       geographicScope: formData.geographicScope,
       managerId: user?.id || '',
       organizationId: formData.organizationId,
-      funding_areas: formData.funding_areas,
+      fundingAreaIds: formData.fundingAreaIds,
     };
 
     try {
@@ -164,6 +164,12 @@ export function ProjectCreatePage() {
 
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+              </div>
+            )}
+
             <div>
               <label className="block text-sm font-medium mb-2">اسم المشروع *</label>
               <input
@@ -185,7 +191,7 @@ export function ProjectCreatePage() {
               ) : fundingAreas.length === 0 ? (
                 <p className="text-sm text-gray-500">لا توجد مجالات عمل متاحة حالياً.</p>
               ) : (
-                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${fieldErrors.funding_areas ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}>
+                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${fieldErrors.fundingAreaIds ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}>
                   {fundingAreas.map((area) => (
                     <label
                       key={area.id}
@@ -193,7 +199,7 @@ export function ProjectCreatePage() {
                     >
                       <input
                         type="checkbox"
-                        checked={formData.funding_areas.includes(area.id)}
+                        checked={formData.fundingAreaIds.includes(area.id)}
                         onChange={() => toggleFundingArea(area.id)}
                         className="w-4 h-4 text-blue-600 rounded"
                       />
@@ -202,7 +208,7 @@ export function ProjectCreatePage() {
                   ))}
                 </div>
               )}
-              {fieldErrors.funding_areas && <p className="text-red-600 text-sm mt-1">{fieldErrors.funding_areas}</p>}
+              {fieldErrors.fundingAreaIds && <p className="text-red-600 text-sm mt-1">{fieldErrors.fundingAreaIds}</p>}
             </div>
 
             <div>
@@ -294,12 +300,6 @@ export function ProjectCreatePage() {
                 <p className="text-gray-500 text-xs mt-2">مدة المشروع: {durationDays} يوم</p>
               )}
             </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                {error}
-              </div>
-            )}
 
             <div className="flex items-center justify-between pt-6 border-t">
               <button

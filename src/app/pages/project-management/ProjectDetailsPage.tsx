@@ -23,10 +23,11 @@ import { useProjectDetails } from '@/api/hooks/useProjectDetails';
 import { projectService } from '@/api/services/project-service';
 import { ProjectNotFound } from './ProjectNotFound';
 import { healthConfig, statusConfig, ProjectDetails as ProjectDetailsType, ProjectStatus } from './project-types';
+import { useAuth } from '@/app/layouts/RootLayout';
 
 import { toast } from 'sonner';
 
-function getDisplayStatus(status: string): ProjectStatus {
+export function getDisplayStatus(status: string): ProjectStatus {
   const normalized = status.toLowerCase().replace(/_/g, '-');
   return normalized in statusConfig ? (normalized as ProjectStatus) : 'draft';
 }
@@ -73,7 +74,9 @@ function toDisplayString(value: unknown, fallback = 'غير محدد'): string {
 export function ProjectDetailsPage() {
   const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
+  const { user } = useAuth();
   const { project, isLoading, error, refetch } = useProjectDetails(projectId);
+  const isProjectManager = user?.roleSlug === 'project-managers';
   const [planOpen, setPlanOpen] = useState(false);
   const [planMarkdown, setPlanMarkdown] = useState<string>('');
   const [loadedPlanMarkdown, setLoadedPlanMarkdown] = useState<string>('');
@@ -208,13 +211,15 @@ export function ProjectDetailsPage() {
                 <Edit className="w-5 h-5" />
                 تعديل
               </button>
-              <button
-                onClick={handleOpenPlan}
-                className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
-              >
-                <Sparkles className="w-5 h-5" />
-                إنشاء دراسة باستخدام الذكاء الاصطناعي
-              </button>
+              {isProjectManager && (
+                <button
+                  onClick={handleOpenPlan}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                >
+                  <Sparkles className="w-5 h-5" />
+                  إنشاء دراسة باستخدام الذكاء الاصطناعي
+                </button>
+              )}
             </div>
           </div>
         </div>

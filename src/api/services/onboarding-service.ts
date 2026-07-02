@@ -252,6 +252,13 @@ export interface AssessmentStatus {
   completedAt: string | null;
 }
 
+/** Assessment eligibility decision returned by the backend guard endpoint */
+export interface AssessmentAllowedResponse {
+  allowed: boolean;
+  message: string;
+  remainingCooldownSeconds: number | null;
+}
+
 /** ISIV dimension returned by the evaluation results endpoint */
 export interface IsivDimension {
   dimension?: string;
@@ -835,6 +842,18 @@ export class OnboardingService {
   ): Promise<ApiResponse<AssessmentSubmissionResponse>> {
     return apiClient.post('/api/v1/onboarding/assessment/submit', undefined, {
       params: { organizationId },
+    });
+  }
+
+  /**
+   * Check whether the organization is allowed to start/retake the assessment
+   * POST /api/v1/onboarding/assessment/is-allowed
+   */
+  async checkAssessmentAllowed(
+    organizationId: string
+  ): Promise<ApiResponse<AssessmentAllowedResponse>> {
+    return apiClient.post('/api/v1/onboarding/assessment/is-allowed', {
+      organizationId,
     });
   }
 

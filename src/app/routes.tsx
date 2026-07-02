@@ -52,6 +52,7 @@ import { OperationsPerformanceDashboard } from './components/OperationsPerforman
 import { DonorMatchingModule } from './components/donor-matching/DonorMatchingModule';
 import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard';
 import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
+import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
 
 const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
 const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
@@ -306,7 +307,11 @@ export const router = createBrowserRouter([
                 path: 'assessment',
                 element: (
                   <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingAssessmentPage /></OnboardingPageShell>
+                    <OnboardingPageShell>
+                      <AssessmentAllowedGuard>
+                        <OnboardingAssessmentPage />
+                      </AssessmentAllowedGuard>
+                    </OnboardingPageShell>
                   </RoleRouteGuard>
                 ),
               },

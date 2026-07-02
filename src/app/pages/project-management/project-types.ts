@@ -109,7 +109,7 @@ export interface CreateProjectDto {
   geographicScope: string;
   managerId: string;
   organizationId: string;
-  funding_areas: string[];
+  fundingAreaIds: string[];
 }
 
 export interface CreatedProjectResponse extends CreateProjectDto {
