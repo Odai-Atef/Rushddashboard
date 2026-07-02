@@ -69,7 +69,13 @@ export function ProjectDashboardPage() {
     return () => { cancelled = true; };
   }, []);
 
-  const showQualificationBlocker = !isQualified;
+  const { user } = useAuth();
+  const roleSlug = user?.roleSlug ?? null;
+
+  // Only enforce qualification blocker for entity-managers
+  // project-managers bypass this check entirely
+  const requiresQualificationCheck = roleSlug === 'entity-managers';
+  const showQualificationBlocker = requiresQualificationCheck && !isQualified;
 
   if (isLoading || isCheckingQualification) {
     return (
