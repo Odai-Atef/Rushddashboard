@@ -301,13 +301,16 @@ export function ProjectListPage() {
   const getBudgetAmount = (budget: Project['budget']): number => {
     if (typeof budget === 'number') return budget;
     if (budget && typeof budget === 'object' && 's' in budget) {
-      // Handle Decimal.js-like serialized object: { s: sign, e: exponent, d: digits[] }
       const digits = Array.isArray((budget as Record<string, unknown>).d) ? (budget as Record<string, unknown>).d as number[] : [];
       const sign = (budget as Record<string, unknown>).s === -1 ? -1 : 1;
       const exponent = typeof (budget as Record<string, unknown>).e === 'number' ? (budget as Record<string, unknown>).e as number : 0;
       if (digits.length === 0) return 0;
-      const base = digits.reduce((acc, digit, idx) => acc + digit * Math.pow(10, (digits.length - idx - 1) * 1), 0);
-      return sign * base * Math.pow(10, exponent - (digits.length - 1));
+      const coefficient = digits
+        .map((chunk, index) => (index === 0 ? String(chunk) : String(chunk).padStart(7, '0')))
+        .join('');
+      const normalizedExponent = exponent - (coefficient.length - 1);
+      const amount = Number(`${coefficient}e${normalizedExponent}`);
+      return Number.isFinite(amount) ? sign * amount : 0;
     }
     return 0;
   };

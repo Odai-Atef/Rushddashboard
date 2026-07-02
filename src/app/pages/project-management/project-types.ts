@@ -100,8 +100,6 @@ export interface ProjectDetails extends Project {
 
 export interface CreateProjectDto {
   name: string;
-  type: string;
-  category: string;
   description: string;
   budget: number;
   currencyCode: string;
@@ -111,6 +109,7 @@ export interface CreateProjectDto {
   geographicScope: string;
   managerId: string;
   organizationId: string;
+  funding_areas: string[];
 }
 
 export interface CreatedProjectResponse extends CreateProjectDto {

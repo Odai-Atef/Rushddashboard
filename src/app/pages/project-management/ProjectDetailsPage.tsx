@@ -38,8 +38,12 @@ function getBudgetAmount(budget: number | Record<string, unknown>): number {
     const sign = budget.s === -1 ? -1 : 1;
     const exponent = typeof budget.e === 'number' ? budget.e : 0;
     if (digits.length === 0) return 0;
-    const base = digits.reduce((acc, digit, idx) => acc + digit * Math.pow(10, digits.length - idx - 1), 0);
-    return sign * base * Math.pow(10, exponent - (digits.length - 1));
+    const coefficient = digits
+      .map((chunk, index) => (index === 0 ? String(chunk) : String(chunk).padStart(7, '0')))
+      .join('');
+    const normalizedExponent = exponent - (coefficient.length - 1);
+    const amount = Number(`${coefficient}e${normalizedExponent}`);
+    return Number.isFinite(amount) ? sign * amount : 0;
   }
   return 0;
 }
@@ -357,18 +361,13 @@ export function ProjectDetailsPage() {
             <div className="bg-white rounded-xl p-6 border border-gray-200">
               <h3 className="font-semibold mb-4">الفريق المسؤول</h3>
               <div className="space-y-3">
-                {[
-                  { name: getManagerName(project), role: 'مدير المشروع' },
-                  { name: 'محمد أحمد', role: 'مسؤول مالي' },
-                  { name: 'نورة خالد', role: 'ممثل الجمعية' },
-                ].map((user, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                {['مدير المشروع', 'مسؤول مالي', 'ممثل الجمعية'].map((role) => (
+                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
                     <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-blue-600" />
                     </div>
                     <div className="flex-1">
-                      <p className="font-medium text-sm">{user.name}</p>
-                      <p className="text-xs text-gray-600">{user.role}</p>
+                      <p className="font-medium text-sm">{role}</p>
                     </div>
                   </div>
                 ))}

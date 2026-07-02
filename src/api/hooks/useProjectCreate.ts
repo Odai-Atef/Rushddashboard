@@ -142,12 +142,7 @@ export function useProjectCreate(): UseProjectCreateReturn {
 
         const { message, fieldErrors } = getArabicErrorMessage(error);
 
-        // If the backend returned field-level errors, do not show a redundant global toast.
-        if (Object.keys(fieldErrors).length > 0) {
-          setState({ isLoading: false, error: null, fieldErrors });
-        } else {
-          setState({ isLoading: false, error: message, fieldErrors });
-        }
+        setState({ isLoading: false, error: message, fieldErrors });
         throw error;
       } finally {
         if (abortControllerRef.current === controller) {

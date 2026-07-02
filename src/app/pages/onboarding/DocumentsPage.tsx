@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { DragEvent, useCallback, useEffect, useState } from 'react';
 import {
   AlertCircle,
   AlertTriangle,
@@ -68,6 +68,7 @@ export function DocumentsPage() {
   const [documentsLoadError, setDocumentsLoadError] = useState<string | null>(null);
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
   const [isSubmittingAssessment, setIsSubmittingAssessment] = useState(false);
+  const [dragOverSlotId, setDragOverSlotId] = useState<DocumentSlotId | null>(null);
   const [redirectMessage] = useState<string | null>(() => {
     const fromResults = searchParams.get('from') === 'results';
     return fromResults
@@ -282,6 +283,31 @@ export function DocumentsPage() {
     input.click();
   };
 
+  const handleRowDragOver = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
+    if (hasPendingUploads) return;
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'copy';
+    if (dragOverSlotId !== slotId) {
+      setDragOverSlotId(slotId);
+    }
+  };
+
+  const handleRowDragLeave = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
+    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+    if (dragOverSlotId === slotId) {
+      setDragOverSlotId(null);
+    }
+  };
+
+  const handleRowDrop = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
+    event.preventDefault();
+    setDragOverSlotId(null);
+    if (hasPendingUploads) return;
+    const file = event.dataTransfer.files?.[0];
+    if (!file) return;
+    handleUpload(slotId, file);
+  };
+
   const handleDocumentsNext = () => {
     if (
       !isDocumentsComplete ||
@@ -425,11 +451,17 @@ export function DocumentsPage() {
               const isUploading = file?.status === 'uploading';
               const isCompleted = file?.status === 'completed';
               const isError = file?.status === 'error';
+              const isDragOver = dragOverSlotId === doc.id;
               return (
                 <div
                   key={doc.id}
+                  onDragOver={(event) => handleRowDragOver(event, doc.id)}
+                  onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
+                  onDrop={(event) => handleRowDrop(event, doc.id)}
                   className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
-                    isCompleted
+                    isDragOver
+                      ? 'border-2 border-blue-500 bg-blue-50'
+                      : isCompleted
                       ? 'border-2 border-green-200 bg-green-50/50'
                       : isError
                       ? 'border-2 border-red-300 bg-red-50/50'
@@ -527,11 +559,17 @@ export function DocumentsPage() {
               const isUploading = file?.status === 'uploading';
               const isCompleted = file?.status === 'completed';
               const isError = file?.status === 'error';
+              const isDragOver = dragOverSlotId === doc.id;
               return (
                 <div
                   key={doc.id}
+                  onDragOver={(event) => handleRowDragOver(event, doc.id)}
+                  onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
+                  onDrop={(event) => handleRowDrop(event, doc.id)}
                   className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
-                    isCompleted
+                    isDragOver
+                      ? 'border-2 border-blue-500 bg-blue-50'
+                      : isCompleted
                       ? 'border-2 border-green-200 bg-green-50/50'
                       : isError
                       ? 'border-2 border-red-300 bg-red-50/50'

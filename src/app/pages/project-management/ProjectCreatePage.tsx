@@ -1,23 +1,36 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import { ChevronRight, DollarSign } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { useProjectCreate } from '@/api/hooks/useProjectCreate';
-import { CreateProjectDto } from '@/app/pages/project-management/project-types';
-import { onboardingService } from '@/api/services';
+import { CreateProjectDto } from '@/api/services/project-service';
+import { onboardingService } from '@/api/services/onboarding-service';
+import type { FundingArea } from '@/api/services/onboarding-service';
+import { useAuth } from '@/app/layouts/RootLayout';
 import { toast } from 'sonner';
 
+function daysBetween(start: string, end: string): number | null {
+  if (!start || !end) return null;
+  const s = new Date(start);
+  const e = new Date(end);
+  if (isNaN(s.getTime()) || isNaN(e.getTime())) return null;
+  const diff = e.getTime() - s.getTime();
+  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return days >= 0 ? days : null;
+}
 
 export function ProjectCreatePage() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const { create, isLoading, error, fieldErrors, clearFieldError, clearError } = useProjectCreate();
   const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string }[]>([]);
   const [isLoadingOrganization, setIsLoadingOrganization] = useState(true);
   const [organizationError, setOrganizationError] = useState<string | null>(null);
+  const [fundingAreas, setFundingAreas] = useState<FundingArea[]>([]);
+  const [isLoadingFundingAreas, setIsLoadingFundingAreas] = useState(true);
   const [formData, setFormData] = useState({
     name: '',
-    type: '',
+    funding_areas: [] as string[],
     organizationId: '',
-    category: '',
     description: '',
     beneficiaries: '',
     geographicScope: '',
@@ -25,8 +38,10 @@ export function ProjectCreatePage() {
     currencyCode: 'SAR',
     startDate: '',
     endDate: '',
-    managerId: undefined as string | undefined,
   });
+
+  const startDateRef = useRef<HTMLInputElement | null>(null);
+  const endDateRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -56,7 +71,24 @@ export function ProjectCreatePage() {
       }
     }
 
+    async function loadFundingAreas() {
+      setIsLoadingFundingAreas(true);
+      try {
+        const response = await onboardingService.getFundingAreas();
+        if (!cancelled && response.success && Array.isArray(response.data)) {
+          setFundingAreas(response.data);
+        }
+      } catch {
+        // Silently ignore; empty list is acceptable
+      } finally {
+        if (!cancelled) {
+          setIsLoadingFundingAreas(false);
+        }
+      }
+    }
+
     loadOrganization();
+    loadFundingAreas();
 
     return () => {
       cancelled = true;
@@ -69,11 +101,22 @@ export function ProjectCreatePage() {
     if (error) clearError();
   };
 
+  const toggleFundingArea = (areaId: string) => {
+    setFormData((prev) => {
+      const nextAreas = prev.funding_areas.includes(areaId)
+        ? prev.funding_areas.filter((id) => id !== areaId)
+        : [...prev.funding_areas, areaId];
+      return { ...prev, funding_areas: nextAreas };
+    });
+    clearFieldError('funding_areas');
+    if (error) clearError();
+  };
+
+  const durationDays = daysBetween(formData.startDate, formData.endDate);
+
   const handleSubmit = async () => {
     const dto: CreateProjectDto = {
       name: formData.name,
-      type: formData.type,
-      category: formData.category,
       description: formData.description,
       budget: Number(formData.budget) || 0,
       currencyCode: formData.currencyCode,
@@ -81,7 +124,9 @@ export function ProjectCreatePage() {
       endDate: formData.endDate,
       beneficiaries: formData.beneficiaries,
       geographicScope: formData.geographicScope,
+      managerId: user?.id || '',
       organizationId: formData.organizationId,
+      funding_areas: formData.funding_areas,
     };
 
     try {
@@ -131,59 +176,33 @@ export function ProjectCreatePage() {
               {fieldErrors.name && <p className="text-red-600 text-sm mt-1">{fieldErrors.name}</p>}
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">نوع المشروع *</label>
-                <select
-                  value={formData.type}
-                  onChange={(e) => updateField('type', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">اختر النوع</option>
-                  <option value="تنموي">تنموي</option>
-                  <option value="خيري">خيري</option>
-                  <option value="تدريبي">تدريبي</option>
-                  <option value="إغاثي">إغاثي</option>
-                  <option value="صحي">صحي</option>
-                </select>
-                {fieldErrors.type && <p className="text-red-600 text-sm mt-1">{fieldErrors.type}</p>}
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">الجهه *</label>
-                {isLoadingOrganization ? (
-                  <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
-                    جاري تحميل الجهه...
-                  </div>
-                ) : organizationError ? (
-                  <div className="text-red-600 text-sm">{organizationError}</div>
-                ) : (
-                  <select
-                    value={formData.organizationId}
-                    onChange={(e) => updateField('organizationId', e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    <option value="">اختر الجهه</option>
-                    {organizationOptions.map((org) => (
-                      <option key={org.id} value={org.id}>
-                        {org.name}
-                      </option>
-                    ))}
-                  </select>
-                )}
-                {fieldErrors.organizationId && <p className="text-red-600 text-sm mt-1">{fieldErrors.organizationId}</p>}
-              </div>
-            </div>
-
             <div>
-              <label className="block text-sm font-medium mb-2">الفئة *</label>
-              <input
-                type="text"
-                value={formData.category}
-                onChange={(e) => updateField('category', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="مثال: التعليم"
-              />
-              {fieldErrors.category && <p className="text-red-600 text-sm mt-1">{fieldErrors.category}</p>}
+              <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+              {isLoadingFundingAreas ? (
+                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                  جاري تحميل مجالات العمل...
+                </div>
+              ) : fundingAreas.length === 0 ? (
+                <p className="text-sm text-gray-500">لا توجد مجالات عمل متاحة حالياً.</p>
+              ) : (
+                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${fieldErrors.funding_areas ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}>
+                  {fundingAreas.map((area) => (
+                    <label
+                      key={area.id}
+                      className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer bg-white"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={formData.funding_areas.includes(area.id)}
+                        onChange={() => toggleFundingArea(area.id)}
+                        className="w-4 h-4 text-blue-600 rounded"
+                      />
+                      <span className="text-sm">{area.name}</span>
+                    </label>
+                  ))}
+                </div>
+              )}
+              {fieldErrors.funding_areas && <p className="text-red-600 text-sm mt-1">{fieldErrors.funding_areas}</p>}
             </div>
 
             <div>
@@ -201,16 +220,13 @@ export function ProjectCreatePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">الميزانية التقديرية (ر.س) *</label>
-                <div className="relative">
-                  <DollarSign className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input
-                    type="number"
-                    value={formData.budget}
-                    onChange={(e) => updateField('budget', e.target.value)}
-                    className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                    placeholder="250000"
-                  />
-                </div>
+                <input
+                  type="number"
+                  value={formData.budget}
+                  onChange={(e) => updateField('budget', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  placeholder="250000"
+                />
                 {fieldErrors.budget && <p className="text-red-600 text-sm mt-1">{fieldErrors.budget}</p>}
               </div>
               <div>
@@ -238,39 +254,48 @@ export function ProjectCreatePage() {
                 />
                 {fieldErrors.geographicScope && <p className="text-red-600 text-sm mt-1">{fieldErrors.geographicScope}</p>}
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">تاريخ البدء *</label>
-                <input
-                  type="date"
-                  value={formData.startDate}
-                  onChange={(e) => updateField('startDate', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-                {fieldErrors.startDate && <p className="text-red-600 text-sm mt-1">{fieldErrors.startDate}</p>}
-              </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">تاريخ الانتهاء *</label>
-                <input
-                  type="date"
-                  value={formData.endDate}
-                  onChange={(e) => updateField('endDate', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                />
-                {fieldErrors.endDate && <p className="text-red-600 text-sm mt-1">{fieldErrors.endDate}</p>}
+            <div>
+              <label className="block text-sm font-medium mb-2">فترة المشروع *</label>
+              <div className={`flex items-stretch border rounded-lg overflow-hidden ${fieldErrors.startDate || fieldErrors.endDate ? 'border-red-500 bg-red-50' : 'border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'}`}>
+                <div
+                  className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
+                  onClick={() => startDateRef.current?.showPicker?.()}
+                >
+                  <span className="text-[10px] text-gray-400 mb-0.5">من</span>
+                  <input
+                    ref={startDateRef}
+                    type="date"
+                    value={formData.startDate}
+                    onChange={(e) => updateField('startDate', e.target.value)}
+                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer"
+                  />
+                </div>
+                <div className="w-px bg-gray-200 self-stretch my-2" />
+                <div
+                  className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
+                  onClick={() => endDateRef.current?.showPicker?.()}
+                >
+                  <span className="text-[10px] text-gray-400 mb-0.5">إلى</span>
+                  <input
+                    ref={endDateRef}
+                    type="date"
+                    value={formData.endDate}
+                    onChange={(e) => updateField('endDate', e.target.value)}
+                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer"
+                  />
+                </div>
               </div>
-              <div className="hidden">
-                <input
-                  type="hidden"
-                  value={formData.currencyCode}
-                  readOnly
-                />
-              </div>
+              {(fieldErrors.startDate || fieldErrors.endDate) && (
+                <p className="text-red-600 text-sm mt-1">{fieldErrors.startDate || fieldErrors.endDate}</p>
+              )}
+              {durationDays !== null && (
+                <p className="text-gray-500 text-xs mt-2">مدة المشروع: {durationDays} يوم</p>
+              )}
             </div>
 
-            {error && Object.keys(fieldErrors).length === 0 && (
+            {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {error}
               </div>
@@ -286,7 +311,7 @@ export function ProjectCreatePage() {
               </button>
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || isLoadingOrganization || !!organizationError}
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 {isLoading ? 'جاري الإنشاء...' : 'إنشاء المشروع'}
