@@ -117,6 +117,10 @@ export const router = createBrowserRouter([
         ],
       },
       {
+        path: 'reset-password',
+        Component: ResetPasswordPage,
+      },
+      {
         path: 'dashboard',
         Component: DashboardLayout,
         children: [

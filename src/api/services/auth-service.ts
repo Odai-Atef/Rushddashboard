@@ -211,6 +211,16 @@ export class AuthService {
   }
 
   /**
+   * Reset password using a token from the reset email.
+   */
+  async resetPassword(token: string, newPassword: string): Promise<ApiResponse<void>> {
+    return apiClient.post(`${this.baseEndpoint}/reset-password`, {
+      token,
+      newPassword,
+    });
+  }
+
+  /**
    * Register a new user and organization atomically.
    */
   async registerOrganization(
