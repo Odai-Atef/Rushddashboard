@@ -35,6 +35,7 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'charity-assessment-roadmap',
     'project-management',
     'donors',
+    'pricing',
     'donor-matching',
   ],
   'entity-managers': [
@@ -51,6 +52,7 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'charity-assessment-results',
     'charity-assessment-roadmap',
     'project-management',
+    'pricing',
   ],
 };
 

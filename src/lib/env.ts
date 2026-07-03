@@ -37,6 +37,9 @@ export interface EnvironmentConfig {
   DEV_MOCK_API: boolean;
   DEV_DELAY_MS: number;
 
+  // Payment
+  PAYMENT_CALLBACK_URL: string;
+
   // Restricted Side-Nav Menu Access
   RESTRICTED_MENU_USER_IDS: string[];
 }
@@ -115,6 +118,8 @@ class EnvManager {
       
       DEV_MOCK_API: this.getEnvVarAsBool('VITE_DEV_MOCK_API', false),
       DEV_DELAY_MS: this.getEnvVarAsNumber('VITE_DEV_DELAY_MS', 0),
+
+      PAYMENT_CALLBACK_URL: this.getEnvVar('VITE_PAYMENT_CALLBACK_URL', `${this.getEnvVar('VITE_APP_URL', typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173')}/payment/callback`),
 
       RESTRICTED_MENU_USER_IDS: this.getEnvVarAsStringArray('VITE_RESTRICTED_MENU_USER_IDS'),
     };

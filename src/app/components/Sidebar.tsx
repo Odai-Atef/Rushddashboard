@@ -60,7 +60,8 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment', restricted: false },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: HeartHandshake, path: '/dashboard/donors', restricted: false },
-  
+    { id: 'pricing', label: 'الباقات والأسعار', icon: Package, path: '/dashboard/pricing', restricted: false },
+
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard', restricted: true },
     { id: 'incubator-overview', label: 'نظرة شاملة للحاضنة', icon: BarChart3, path: '/dashboard/incubator-overview', restricted: true },
     { id: 'charity-analytics', label: 'تحليلات الجمعيات', icon: Building2, path: '/dashboard/charity-analytics', restricted: true },

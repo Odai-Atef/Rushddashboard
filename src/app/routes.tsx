@@ -53,6 +53,8 @@ import { DonorMatchingModule } from './components/donor-matching/DonorMatchingMo
 import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard';
 import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
+import { PaymentCallbackPage } from './pages/payment/PaymentCallbackPage';
+import { PricingPage } from './pages/pricing/PricingPage';
 
 const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
 const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
@@ -119,6 +121,12 @@ export const router = createBrowserRouter([
       {
         path: 'reset-password',
         Component: ResetPasswordPage,
+      },
+      {
+        path: 'payment/callback',
+        element: (
+          <PaymentCallbackPage />
+        ),
       },
       {
         path: 'dashboard',
@@ -469,6 +477,14 @@ export const router = createBrowserRouter([
                 element: <Navigate to="/dashboard/project-management" replace />,
               },
             ],
+          },
+          {
+            path: 'pricing',
+            element: (
+              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                <PricingPage />
+              </RoleRouteGuard>
+            ),
           },
           {
             path: 'ai-innovation',

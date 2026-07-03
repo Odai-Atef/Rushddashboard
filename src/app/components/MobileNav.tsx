@@ -39,16 +39,17 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
   const roleSlug = user?.roleSlug ?? null;
 
   const navItems = [
+    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/registration' },
+    { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
+    { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+    { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
+    { id: 'pricing', label: 'الباقات والأسعار', icon: Package, path: '/dashboard/pricing' },
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
     { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation' },
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history' },
     { id: 'project-journey', label: 'رحلة المشروع', icon: Briefcase, path: '/dashboard/project-journey' },
-    { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
     { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
-    { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
-    { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
-    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/registration' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources' },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk' },

@@ -10,6 +10,7 @@ import { DashboardService, dashboardService } from './dashboard-service';
 import { DonorService, donorService } from './donor-service';
 import { OnboardingService, onboardingService } from './onboarding-service';
 import { ProjectService, projectService } from './project-service';
+import { SubscriptionService, subscriptionService } from './subscription-service';
 
 export interface Services {
   auth: AuthService;
@@ -17,6 +18,7 @@ export interface Services {
   donor: DonorService;
   onboarding: OnboardingService;
   project: ProjectService;
+  subscription: SubscriptionService;
 }
 
 class ServiceRegistry {
@@ -45,6 +47,10 @@ class ServiceRegistry {
   getProjectService(): ProjectService {
     return this.services.project;
   }
+
+  getSubscriptionService(): SubscriptionService {
+    return this.services.subscription;
+  }
 }
 
 // Default service registry with singleton instances
@@ -54,6 +60,7 @@ const defaultServices: Services = {
   donor: donorService,
   onboarding: onboardingService,
   project: projectService,
+  subscription: subscriptionService,
 };
 
 // Export singleton registry
@@ -67,3 +74,4 @@ export { AnalysisService, analysisService } from './analysis-service';
 export { DonorService, donorService } from './donor-service';
 export { OnboardingService, onboardingService } from './onboarding-service';
 export { ProjectService, projectService } from './project-service';
+export { SubscriptionService, subscriptionService } from './subscription-service';

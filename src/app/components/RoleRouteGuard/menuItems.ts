@@ -20,5 +20,6 @@ export const MENU_ITEMS_FOR_GUARD: MenuItemDefinition[] = [
   { id: 'charity-assessment-roadmap', label: 'خطة تحسين الجاهزية', path: '/dashboard/charity-assessment/roadmap' },
   { id: 'project-management', label: 'إدارة المشاريع', path: '/dashboard/project-management' },
   { id: 'donors', label: 'قاعدة الجهات المانحة', path: '/dashboard/donors' },
+  { id: 'pricing', label: 'الباقات والأسعار', path: '/dashboard/pricing' },
   { id: 'donor-matching', label: 'التطابق الذكي مع المانحين', path: '/dashboard/donor-matching' },
 ];
