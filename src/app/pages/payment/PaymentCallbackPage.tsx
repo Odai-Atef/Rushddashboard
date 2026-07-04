@@ -11,6 +11,13 @@ import { Check, X, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
 import { subscriptionService } from '@/api/services/subscription-service';
 import apiClient from '@/api/client';
 
+const DASHBOARD_URL = '/dashboard';
+const LOGIN_URL = '/auth/login';
+
+function isAuthenticated(): boolean {
+  return !!localStorage.getItem('auth_token');
+}
+
 type PaymentResult = 'verifying' | 'success' | 'failed' | 'timeout' | 'error';
 
 export function PaymentCallbackPage() {
@@ -46,9 +53,9 @@ export function PaymentCallbackPage() {
 
       if (res.data?.success) {
         setResult('success');
-        setMessage('تم الدفع بنجاح! جاري التوجيه إلى لوحة التحكم...');
+        setMessage('تم الدفع بنجاح! جاري التوجيه...');
         setTimeout(() => {
-          navigate('/dashboard');
+          navigate(isAuthenticated() ? DASHBOARD_URL : LOGIN_URL);
         }, 2000);
         return true;
       } else {

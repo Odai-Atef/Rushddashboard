@@ -479,7 +479,7 @@ export function PricingPage() {
               <button
                 onClick={() => openSlaModal(pkg)}
                 disabled={subscribingId === pkg.id}
-                className="w-full py-3.5 rounded-xl text-white font-bold text-base mb-6 transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="w-full py-3.5 rounded-xl text-white font-bold text-base mb-3 transition-opacity hover:opacity-90 disabled:opacity-50"
                 style={{ background: accent }}
               >
                 {subscribingId === pkg.id ? (
@@ -490,6 +490,14 @@ export function PricingPage() {
                 ) : (
                   "اشترك الآن"
                 )}
+              </button>
+
+              {/* Alternative: checkout via website (new tab) */}
+              <button
+                onClick={() => window.open(`/pricing/checkout/${pkg.id}`, '_blank')}
+                className="w-full py-2 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-6"
+              >
+                أو اشترك عبر الموقع ↗
               </button>
 
               {/* Benefits + Included Services */}
