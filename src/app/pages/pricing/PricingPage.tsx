@@ -4,7 +4,7 @@
  * Allows logged-in users to view packages and subscribe from within the app.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Check, Shield, Star, Zap, Loader2, AlertTriangle } from "lucide-react";
 import { subscriptionService } from "@/api/services/subscription-service";
@@ -54,12 +54,35 @@ export function PricingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
+  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [checkingSubscription, setCheckingSubscription] = useState(false);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const checkActiveSubscription = useCallback(async () => {
+    setCheckingSubscription(true);
+    try {
+      const res = await subscriptionService.getMySubscription();
+      const subData = (res.data as unknown as { success?: boolean; data?: { status: string } })?.data ?? res.data;
+      if (subData?.status === 'active') {
+        setHasActiveSubscription(true);
+        navigate('/dashboard');
+        return true;
+      }
+    } catch {
+      // Ignore errors
+    } finally {
+      setCheckingSubscription(false);
+    }
+    return false;
+  }, [navigate]);
 
   useEffect(() => {
+    // Check if user already has an active subscription on mount
+    checkActiveSubscription();
+
     subscriptionService
       .getPackages()
       .then((res) => {
-        // API returns { success: true, data: [packages] } inside ApiResponse wrapper
         const raw = res.data as unknown as { success: boolean; data: PackageItem[] };
         if (res.success && raw?.data) {
           setPackages(raw.data.filter((p: PackageItem) => p.isActive));
@@ -70,6 +93,11 @@ export function PricingPage() {
         setError("فشل في تحميل الباقات");
         setLoading(false);
       });
+
+    // Cleanup polling interval on unmount
+    return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+    };
   }, []);
 
   const handleSubscribe = async (pkg: PackageItem) => {
@@ -98,8 +126,21 @@ export function PricingPage() {
         return;
       }
 
-      // 3. Redirect to Moyasar
-      window.location.href = payRaw.data.checkoutUrl;
+      // 3. Open Moyasar in a new tab
+      window.open(payRaw.data.checkoutUrl, '_blank');
+
+      // 4. Start polling for subscription activation (Moyasar test mode doesn't auto-redirect)
+      let attempts = 0;
+      const maxAttempts = 24; // ~2 minutes (24 * 5s)
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      intervalRef.current = setInterval(async () => {
+        attempts += 1;
+        const found = await checkActiveSubscription();
+        if (found || attempts >= maxAttempts) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          setSubscribingId(null);
+        }
+      }, 5000);
     } catch (err: any) {
       setError(err?.message || "حدث خطأ غير متوقع");
       setSubscribingId(null);
@@ -129,6 +170,29 @@ export function PricingPage() {
           <span>{error}</span>
         </div>
       )}
+
+      {/* Payment completion help — in case Moyasar redirect fails (test mode) */}
+      <div className="mb-8 p-4 bg-blue-50 border border-blue-200 rounded-xl text-center">
+        <p className="text-blue-800 mb-3 text-sm">
+          {subscribingId
+            ? "تم فتح صفحة الدفع في تبويب جديد. إذا أكملت الدفع ولم يتم إعادة التوجيه، اضغط الزر أدناه"
+            : "إذا أكملت الدفع في صفحة ميسر ولم يتم إعادة توجيهك تلقائياً، اضغط الزر أدناه"}
+        </p>
+        <button
+          onClick={checkActiveSubscription}
+          disabled={checkingSubscription}
+          className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50"
+        >
+          {checkingSubscription ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              جاري التحقق...
+            </span>
+          ) : (
+            "لقد أكملت الدفع"
+          )}
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {packages.map((pkg, idx) => {
