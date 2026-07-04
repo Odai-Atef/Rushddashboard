@@ -2,13 +2,14 @@
  * Payment Callback Page
  *
  * Handles the redirect from Moyasar after payment.
- * Parses query params, polls for status, and redirects accordingly.
+ * Parses query params, calls backend callback, and redirects accordingly.
  */
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router';
 import { Check, X, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
 import { subscriptionService } from '@/api/services/subscription-service';
+import apiClient from '@/api/client';
 
 type PaymentResult = 'verifying' | 'success' | 'failed' | 'timeout' | 'error';
 
@@ -21,10 +22,45 @@ export function PaymentCallbackPage() {
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Parse Moyasar callback params
-  const moyasarId = searchParams.get('id');       // Moyasar invoice ID
+  const moyasarId = searchParams.get('id');       // Moyasar payment ID
+  const invoiceId = searchParams.get('invoice_id'); // Moyasar invoice ID
   const moyasarStatus = searchParams.get('status'); // "paid" | "failed" | "canceled"
 
-  // Poll subscription status
+  const effectiveId = invoiceId || moyasarId;
+
+  // Call backend callback endpoint to verify payment and activate subscription
+  const verifyPayment = useCallback(async () => {
+    if (!effectiveId) {
+      console.log('[PaymentCallback] No effectiveId found in URL');
+      return false;
+    }
+
+    try {
+      console.log('[PaymentCallback] Calling backend callback with id:', effectiveId);
+
+      // Call backend callback endpoint to verify with Moyasar
+      const callbackUrl = `/api/v1/subscriptions/payments/callback?id=${effectiveId}&status=${moyasarStatus || 'unknown'}`;
+      const res = await apiClient.get(callbackUrl, { skipAuthRedirect: true } as any);
+      
+      console.log('[PaymentCallback] Backend callback response:', res);
+
+      if (res.data?.success) {
+        setResult('success');
+        setMessage('تم الدفع بنجاح! جاري التوجيه إلى لوحة التحكم...');
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000);
+        return true;
+      } else {
+        console.log('[PaymentCallback] Backend returned not-success:', res.data);
+      }
+    } catch (err: any) {
+      console.log('[PaymentCallback] Callback endpoint failed, will poll:', err?.message, err?.statusCode);
+    }
+    return false;
+  }, [effectiveId, moyasarStatus, navigate]);
+
+  // Poll subscription status as fallback
   useEffect(() => {
     if (moyasarStatus === 'failed' || moyasarStatus === 'canceled') {
       setResult('failed');
@@ -32,10 +68,28 @@ export function PaymentCallbackPage() {
       return;
     }
 
+    let attempts = 0;
+    const maxAttempts = 12;
+    let callbackAttempted = false;
+
     const poll = async () => {
+      attempts += 1;
+      console.log(`[PaymentCallback] Poll attempt ${attempts}/${maxAttempts}`);
+
       try {
-        // If we have a moyasar ID, try to get payment status by it first
-        // Then check subscription status
+        // Try backend callback first (only on first attempt)
+        if (!callbackAttempted) {
+          callbackAttempted = true;
+          console.log('[PaymentCallback] Attempting backend callback...');
+          const verified = await verifyPayment();
+          if (verified) {
+            console.log('[PaymentCallback] Callback verified successfully');
+            return;
+          }
+        }
+
+        // Fallback: poll subscription status
+        console.log('[PaymentCallback] Polling subscription status...');
         const subRes = await subscriptionService.getMySubscription();
 
         if (subRes.success && subRes.data.status === 'active') {
@@ -48,27 +102,21 @@ export function PaymentCallbackPage() {
           return;
         }
 
-        setPollCount((c) => {
-          const next = c + 1;
-          if (next >= 12) { // ~60 seconds (5s * 12)
+        setPollCount(attempts);
+        if (attempts >= maxAttempts) {
+          if (intervalRef.current) clearInterval(intervalRef.current);
+          setResult('timeout');
+          setMessage('يستغرق التحقق من الدفع وقتاً أطول من المتوقع. يرجى تحديث الصفحة لاحقاً.');
+        }
+      } catch (error: any) {
+        console.log('[PaymentCallback] Poll error:', error?.code, error?.message);
+        if (error?.code === 'SUBSCRIPTION_NOT_FOUND') {
+          setPollCount(attempts);
+          if (attempts >= maxAttempts) {
             if (intervalRef.current) clearInterval(intervalRef.current);
             setResult('timeout');
             setMessage('يستغرق التحقق من الدفع وقتاً أطول من المتوقع. يرجى تحديث الصفحة لاحقاً.');
           }
-          return next;
-        });
-      } catch (error: any) {
-        // If subscription not found or inactive, keep polling
-        if (error?.code === 'SUBSCRIPTION_NOT_FOUND') {
-          setPollCount((c) => {
-            const next = c + 1;
-            if (next >= 12) {
-              if (intervalRef.current) clearInterval(intervalRef.current);
-              setResult('timeout');
-              setMessage('يستغرق التحقق من الدفع وقتاً أطول من المتوقع. يرجى تحديث الصفحة لاحقاً.');
-            }
-            return next;
-          });
         } else {
           if (intervalRef.current) clearInterval(intervalRef.current);
           setResult('error');
@@ -84,10 +132,27 @@ export function PaymentCallbackPage() {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [moyasarStatus, navigate]);
+  }, [moyasarStatus, navigate, verifyPayment]);
 
-  const handleRetry = () => {
-    navigate('/dashboard/settings?tab=billing');
+  const handleManualSync = async () => {
+    setResult('verifying');
+    setMessage('جاري محاولة التفعيل اليدوي...');
+    try {
+      const res = await apiClient.post('/api/v1/subscriptions/payments/sync');
+      if ((res.data as any)?.success) {
+        setResult('success');
+        setMessage('تم تفعيل الاشتراك بنجاح! جاري التوجيه إلى لوحة التحكم...');
+        setTimeout(() => {
+          navigate('/dashboard');
+        }, 2000);
+      } else {
+        setResult('error');
+        setMessage((res.data as any)?.message || 'لم يتم العثور على اشتراك معلق');
+      }
+    } catch (err: any) {
+      setResult('error');
+      setMessage(err?.message || 'فشل التفعيل اليدوي');
+    }
   };
 
   const handleGoHome = () => {
@@ -162,7 +227,7 @@ export function PaymentCallbackPage() {
         {(result === 'failed' || result === 'error') && (
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
-              onClick={handleRetry}
+              onClick={() => window.location.reload()}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"
             >
               <RefreshCw className="w-4 h-4" />
@@ -178,7 +243,14 @@ export function PaymentCallbackPage() {
         )}
 
         {result === 'timeout' && (
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <div className="flex flex-col gap-3 justify-center">
+            <button
+              onClick={handleManualSync}
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-green-600 text-white font-semibold hover:bg-green-700 transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              تفعيل الاشتراك يدوياً
+            </button>
             <button
               onClick={() => window.location.reload()}
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-colors"

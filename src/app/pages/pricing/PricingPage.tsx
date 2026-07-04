@@ -8,6 +8,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Check, Shield, Star, Zap, Loader2, AlertTriangle } from "lucide-react";
 import { subscriptionService } from "@/api/services/subscription-service";
+import apiClient from "@/api/client";
 
 interface PackageItem {
   id: string;
@@ -61,12 +62,25 @@ export function PricingPage() {
   const checkActiveSubscription = useCallback(async () => {
     setCheckingSubscription(true);
     try {
+      // First try: check if subscription is already active
       const res = await subscriptionService.getMySubscription();
       const subData = (res.data as unknown as { success?: boolean; data?: { status: string } })?.data ?? res.data;
       if (subData?.status === 'active') {
         setHasActiveSubscription(true);
         navigate('/dashboard');
         return true;
+      }
+
+      // Second try: call sync endpoint to manually activate pending subscription
+      try {
+        const syncRes = await apiClient.post('/api/v1/subscriptions/payments/sync');
+        if ((syncRes.data as any)?.success) {
+          setHasActiveSubscription(true);
+          navigate('/dashboard');
+          return true;
+        }
+      } catch (syncErr: any) {
+        console.log('[PricingPage] Sync failed:', syncErr?.message);
       }
     } catch {
       // Ignore errors
