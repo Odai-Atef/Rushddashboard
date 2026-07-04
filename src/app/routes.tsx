@@ -55,6 +55,8 @@ import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
 import { PaymentCallbackPage } from './pages/payment/PaymentCallbackPage';
 import { PricingPage } from './pages/pricing/PricingPage';
+import { PackagesPage } from './pages/public/PackagesPage';
+import { SLAPage } from './pages/public/SLAPage';
 
 const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
 const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
@@ -117,6 +119,14 @@ export const router = createBrowserRouter([
             Component: ActivateAccountPage,
           },
         ],
+      },
+      {
+        path: 'packages',
+        element: <PackagesPage />,
+      },
+      {
+        path: 'sla/:packageId',
+        element: <SLAPage />,
       },
       {
         path: 'reset-password',

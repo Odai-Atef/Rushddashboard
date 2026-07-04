@@ -457,9 +457,9 @@ export function PricingPage() {
 
               <div className="mb-6">
                 <span className="text-4xl font-extrabold" style={{ color: accent }}>
-                  {pkg.priceAnnual.toLocaleString("ar-SA")}
+                  {pkg.priceMonthly.toLocaleString("ar-SA")}
                 </span>
-                <span className="text-base text-slate-500 mr-2">ريال/سنة</span>
+                <span className="text-base text-slate-500 mr-2">ريال/شهر</span>
                 <p className="text-sm text-slate-400 mt-1">{pkg.projectLimit} مشاريع</p>
               </div>
 
