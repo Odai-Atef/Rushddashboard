@@ -10,6 +10,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Check, Shield, Star, Zap, Loader2, AlertTriangle, X, ScrollText, XCircle } from "lucide-react";
 import { subscriptionService } from "@/api/services/subscription-service";
+import { onboardingService } from "@/api/services/onboarding-service";
 import apiClient from "@/api/client";
 
 interface SlaData {
@@ -233,6 +234,8 @@ export function PricingPage() {
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
   const [checkingSubscription, setCheckingSubscription] = useState(false);
   const [notStartedStatus, setNotStartedStatus] = useState(false);
+  const [requiredDocumentsMissing, setRequiredDocumentsMissing] = useState(false);
+  const [organizationId, setOrganizationId] = useState<string | null>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // SLA Modal state
@@ -299,12 +302,22 @@ export function PricingPage() {
         setNotStartedStatus(true);
         setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
       }
+      if (errorCode === 'REQUIRED_DOCUMENTS_MISSING') {
+        setRequiredDocumentsMissing(true);
+        setError(err?.message || err?.data?.message || err?.response?.data?.message || "يجب رفع المستندات المطلوبة أولاً.");
+      }
     }
   }, []);
 
   useEffect(() => {
     checkActiveSubscription();
     checkSubscriptionsStatus();
+    onboardingService.getMyOrganization().then((orgRes) => {
+      const org = orgRes.data as unknown as { id?: string } | undefined;
+      if (org?.id) setOrganizationId(org.id);
+    }).catch(() => {
+      // ignore; documents link will just use empty org id
+    });
     subscriptionService
       .getPackages()
       .then((res) => {
@@ -455,7 +468,7 @@ export function PricingPage() {
       </div>
 
       {error && (
-        <div className={`mb-8 p-4 rounded-xl flex items-start gap-3 ${notStartedStatus ? 'bg-amber-50 border border-amber-200 text-amber-800' : 'bg-red-50 border border-red-200 text-red-700'}`}>
+        <div className={`mb-8 p-4 rounded-xl flex items-start gap-3 ${notStartedStatus || requiredDocumentsMissing ? 'bg-amber-50 border border-amber-200 text-amber-800' : 'bg-red-50 border border-red-200 text-red-700'}`}>
           <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
           <div className="flex-1">
             <div className="space-y-2">
@@ -472,6 +485,18 @@ export function PricingPage() {
                   وفتح صفحة تقييم الجمعية.
                 </p>
               )}
+              {requiredDocumentsMissing && (
+                <p>
+                  لإتمام الاشتراك، يرجى رفع المستندات المطلوبة{" "}
+                  <button
+                    onClick={() => navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId || '')}`)}
+                    className="inline font-medium underline hover:no-underline"
+                  >
+                    بالضغط هنا
+                  </button>
+                  .
+                </p>
+              )}
             </div>
             {notStartedStatus && (
               <div className="mt-3">
@@ -480,6 +505,17 @@ export function PricingPage() {
                   className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
                 >
                   ابدأ التقييم الآن
+                  <Zap className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+            {requiredDocumentsMissing && (
+              <div className="mt-3">
+                <button
+                  onClick={() => navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId || '')}`)}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
+                >
+                  رفع المستندات المطلوبة
                   <Zap className="w-4 h-4" />
                 </button>
               </div>
