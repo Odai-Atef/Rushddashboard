@@ -71,78 +71,12 @@ export function CharityAssessmentResultsPage() {
   const { organizationId } = useParams<{ organizationId: string }>();
   const { data, isLoading, error, refetch } = useIsivAssessmentResults(organizationId);
 
-  const [documentsCheckState, setDocumentsCheckState] = useState<
-    'loading' | 'complete' | 'incomplete' | 'error'
-  >('loading');
-
-  useEffect(() => {
-    if (!organizationId) return;
-    let cancelled = false;
-
-    const checkRequiredDocuments = async () => {
-      try {
-        const { onboardingService } = await import('@/api/services');
-        const res = await onboardingService.checkRequiredDocuments(organizationId);
-        if (cancelled) return;
-        const payload = res.data as any;
-        const complete = !!(payload?.data?.complete ?? payload?.complete);
-        if (complete) {
-          setDocumentsCheckState('complete');
-        } else {
-          setDocumentsCheckState('incomplete');
-          navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId)}&from=results`, {
-            replace: true,
-          });
-        }
-      } catch (err: any) {
-        if (cancelled) return;
-        setDocumentsCheckState('error');
-      }
-    };
-
-    checkRequiredDocuments();
-    return () => {
-      cancelled = true;
-    };
-  }, [organizationId, navigate]);
-
-  if (isLoading || documentsCheckState === 'loading') {
+  if (isLoading) {
     return (
       <div className="min-h-full bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-10 h-10 animate-spin text-blue-500" />
           <p className="text-muted-foreground">جاري تحميل نتائج التقييم...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (documentsCheckState === 'incomplete') {
-    return (
-      <div className="min-h-full bg-background flex items-center justify-center p-8">
-        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
-          <Loader2 className="w-10 h-10 animate-spin text-blue-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">جاري التحقق من المستندات</h2>
-          <p className="text-muted-foreground">يجب عليك إكمال ملفك التعريفي لعرض نتائج التقييم.</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (documentsCheckState === 'error') {
-    return (
-      <div className="min-h-full bg-background flex items-center justify-center p-8">
-        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
-          <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-semibold mb-2">تعذر التحقق من المستندات</h2>
-          <p className="text-muted-foreground mb-6">يجب عليك إكمال ملفك التعريفي لعرض نتائج التقييم.</p>
-          <button
-            onClick={() => navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId || '')}&from=results`)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <ChevronRight className="w-4 h-4" />
-            العودة لإكمال الملف التعريفي
-          </button>
         </div>
       </div>
     );
