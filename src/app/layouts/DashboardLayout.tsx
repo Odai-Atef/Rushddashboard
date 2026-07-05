@@ -51,6 +51,7 @@ export function DashboardLayout() {
     '/dashboard/recommendations': 'recommendations',
     '/dashboard/opportunities': 'opportunities',
     '/dashboard/settings': 'settings',
+    '/dashboard/pricing': 'pricing',
   };
 
   const activeView =
