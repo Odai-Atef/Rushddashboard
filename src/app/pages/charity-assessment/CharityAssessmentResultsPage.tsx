@@ -268,7 +268,7 @@ export function CharityAssessmentResultsPage() {
                   }
                   className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors animate-pulse"
                 >
-                  أكمل ملفك
+                  أكمل ملف جهتك
                 </button>
               )}
             </div>
