@@ -70,8 +70,28 @@ export function CharityAssessmentResultsPage() {
   const navigate = useNavigate();
   const { organizationId } = useParams<{ organizationId: string }>();
   const { data, isLoading, error, refetch } = useIsivAssessmentResults(organizationId);
+  const [documentsMissing, setDocumentsMissing] = useState<boolean | null>(null);
 
-  if (isLoading) {
+  useEffect(() => {
+    if (!organizationId) return;
+    let cancelled = false;
+    const check = async () => {
+      try {
+        const { onboardingService } = await import('@/api/services');
+        const res = await onboardingService.checkRequiredDocuments(organizationId);
+        if (cancelled) return;
+        const payload = res.data as any;
+        const complete = !!(payload?.data?.complete ?? payload?.complete);
+        setDocumentsMissing(!complete);
+      } catch {
+        if (!cancelled) setDocumentsMissing(false);
+      }
+    };
+    check();
+    return () => { cancelled = true; };
+  }, [organizationId]);
+
+  if (isLoading || documentsMissing === null) {
     return (
       <div className="min-h-full bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -229,7 +249,7 @@ export function CharityAssessmentResultsPage() {
                   : 'تم إكمال التقييم بنجاح'}
               </p>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap items-center">
               <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
                 <Download className="w-4 h-4" />
                 تصدير PDF
@@ -241,6 +261,16 @@ export function CharityAssessmentResultsPage() {
                 <RefreshCw className="w-4 h-4" />
                 إعادة التقييم
               </button>
+              {documentsMissing && data.qualificationStatus?.toUpperCase() !== 'NOT_QUALIFIED' && (
+                <button
+                  onClick={() =>
+                    navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId || '')}&from=results`)
+                  }
+                  className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors animate-pulse"
+                >
+                  أكمل ملفك
+                </button>
+              )}
             </div>
           </div>
 
