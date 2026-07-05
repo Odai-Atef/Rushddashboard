@@ -28,6 +28,9 @@ export interface EnvironmentConfig {
   
   // App URL (used for constructing full links like activation/reset-password URLs)
   APP_URL: string;
+  
+  // Notifications
+  WEBSOCKET_BASE_URL: string;
 
   // Analytics
   ENABLE_ANALYTICS: boolean;
@@ -119,7 +122,8 @@ class EnvManager {
       DEV_MOCK_API: this.getEnvVarAsBool('VITE_DEV_MOCK_API', false),
       DEV_DELAY_MS: this.getEnvVarAsNumber('VITE_DEV_DELAY_MS', 0),
 
-      PAYMENT_CALLBACK_URL: this.getEnvVar('VITE_PAYMENT_CALLBACK_URL', `${this.getEnvVar('VITE_APP_URL', typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173')}/payment/callback`),
+      // Notifications
+      WEBSOCKET_BASE_URL: this.getEnvVar('VITE_WEBSOCKET_BASE_URL', 'wss://api.rushdisiv.com'),
 
       RESTRICTED_MENU_USER_IDS: this.getEnvVarAsStringArray('VITE_RESTRICTED_MENU_USER_IDS'),
     };

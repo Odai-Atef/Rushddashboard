@@ -64,7 +64,6 @@ export interface RegisterData {
   password: string;
   fullName: string;
   companyName: string;
-  roleSlug: string;
   phone: string;
 }
 

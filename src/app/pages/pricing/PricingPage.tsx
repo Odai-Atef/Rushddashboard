@@ -232,6 +232,7 @@ export function PricingPage() {
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
   const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
   const [checkingSubscription, setCheckingSubscription] = useState(false);
+  const [notStartedStatus, setNotStartedStatus] = useState(false);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // SLA Modal state
@@ -262,8 +263,16 @@ export function PricingPage() {
       } catch (syncErr: any) {
         console.log('[PricingPage] Sync failed:', syncErr?.message);
       }
-    } catch {
-      // Ignore
+    } catch (err: any) {
+      // Check for NOT_STARTED status
+      const errorData = err?.data || err?.response?.data;
+      if (errorData?.status === 'NOT_STARTED' || errorData?.code === 'ORGANIZATION_NOT_QUALIFIED') {
+        setNotStartedStatus(true);
+        setError(errorData?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
+        setCheckingSubscription(false);
+        return false;
+      }
+      // Ignore other errors
     } finally {
       setCheckingSubscription(false);
     }
@@ -414,9 +423,36 @@ export function PricingPage() {
       </div>
 
       {error && (
-        <div className="mb-8 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3 text-red-700">
-          <AlertTriangle className="w-5 h-5" />
-          <span>{error}</span>
+        <div className={`mb-8 p-4 rounded-xl flex items-start gap-3 ${notStartedStatus ? 'bg-amber-50 border border-amber-200 text-amber-800' : 'bg-red-50 border border-red-200 text-red-700'}`}>
+          <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <div className="space-y-2">
+              <span>{error}</span>
+              {notStartedStatus && (
+                <p>
+                  ابدأ التقييم الآن{" "}
+                  <button
+                    onClick={() => navigate('/dashboard/charity-assessment')}
+                    className="inline font-medium underline hover:no-underline"
+                  >
+                    بالضغط هنا
+                  </button>{" "}
+                  وفتح صفحة تقييم الجمعية.
+                </p>
+              )}
+            </div>
+            {notStartedStatus && (
+              <div className="mt-3">
+                <button
+                  onClick={() => navigate('/dashboard/charity-assessment')}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
+                >
+                  ابدأ التقييم الآن
+                  <Zap className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       )}
 

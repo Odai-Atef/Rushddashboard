@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Navigate } from 'react-router';
+import { createBrowserRouter, Navigate, useRouteError } from 'react-router';
 // Router configuration - Updated 2026-06-07
 import { RootLayout } from './layouts/RootLayout';
 import { AuthLayout } from './layouts/AuthLayout';
@@ -77,6 +77,26 @@ const OnboardingPageShell = ({ children }: { children: React.ReactNode }) => (
   </Suspense>
 );
 
+function RouterErrorBoundary() {
+  const error = useRouteError() as Error;
+  console.error('Router error:', error);
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4" dir="rtl">
+      <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
+        <div className="text-6xl mb-4">⚠️</div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">عذراً، حدث خطأ</h1>
+        <p className="text-gray-600 mb-6">{error?.message || 'حدث خطأ غير متوقع أثناء تحميل الصفحة'}</p>
+        <button
+          onClick={() => window.location.href = '/dashboard/charity-assessment'}
+          className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          العودة للرئيسية
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export const router = createBrowserRouter([
   {
     path: '/',
@@ -141,6 +161,7 @@ export const router = createBrowserRouter([
       {
         path: 'dashboard',
         Component: DashboardLayout,
+        errorElement: <RouterErrorBoundary />,
         children: [
           {
             index: true,

@@ -60,7 +60,6 @@ export function RegistrationPage() {
         password: formData.password,
         fullName: fullName,
         companyName: formData.companyName,
-        roleSlug: 'executive',
         phone: formData.phone,
       });
       if (response.success) {

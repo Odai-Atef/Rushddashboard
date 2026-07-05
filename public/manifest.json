@@ -1,0 +1,23 @@
+{
+  "name": "منصة رشد",
+  "short_name": "رشد",
+  "description": "منصة حاضنة رشد: تقييم وتطوير الجمعيات والمؤسسات غير الربحية",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#2C4A6E",
+  "theme_color": "#2C4A6E",
+  "icons": [
+    {
+      "src": "/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
