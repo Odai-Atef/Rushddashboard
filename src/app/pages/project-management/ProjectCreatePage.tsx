@@ -28,6 +28,7 @@ export function ProjectCreatePage() {
   const [organizationError, setOrganizationError] = useState<string | null>(null);
   const [fundingAreas, setFundingAreas] = useState<FundingArea[]>([]);
   const [isLoadingFundingAreas, setIsLoadingFundingAreas] = useState(true);
+  const [noActiveSubscription, setNoActiveSubscription] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     fundingAreaIds: [] as string[],
@@ -210,6 +211,7 @@ export function ProjectCreatePage() {
     };
 
     try {
+      setNoActiveSubscription(false);
       const response = await create(dto);
       const createdId = response.data?.id;
 
@@ -219,7 +221,11 @@ export function ProjectCreatePage() {
         toast.warning('تم إنشاء المشروع بنجاح ولكن لا يمكن فتح تفاصيله حالياً.');
         navigate('/dashboard/project-management/list');
       }
-    } catch {
+    } catch (err: any) {
+      const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
+      if (errorCode === 'NO_ACTIVE_SUBSCRIPTION') {
+        setNoActiveSubscription(true);
+      }
       // Errors are already surfaced by the hook. If no field errors exist, toast the global error.
       if (error && Object.keys(fieldErrors).length === 0) {
         toast.error(error);
@@ -247,6 +253,19 @@ export function ProjectCreatePage() {
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {error}
+                {noActiveSubscription && (
+                  <p className="mt-2">
+                    اختر باقتك واشترك الآن{" "}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/dashboard/pricing')}
+                      className="font-medium underline hover:no-underline text-blue-600"
+                    >
+                      من هنا
+                    </button>
+                    .
+                  </p>
+                )}
               </div>
             )}
 
@@ -383,6 +402,25 @@ export function ProjectCreatePage() {
                 <p className="text-gray-500 text-xs mt-2">مدة المشروع: {durationDays} يوم</p>
               )}
             </div>
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                {error}
+                {noActiveSubscription && (
+                  <p className="mt-2">
+                    اختر باقتك واشترك الآن{" "}
+                    <button
+                      type="button"
+                      onClick={() => navigate('/dashboard/pricing')}
+                      className="font-medium underline hover:no-underline text-blue-600"
+                    >
+                      من هنا
+                    </button>
+                    .
+                  </p>
+                )}
+              </div>
+            )}
 
             <div className="flex items-center justify-between pt-6 border-t">
               <button
