@@ -407,6 +407,7 @@ export function PricingPage() {
 
   const handleSubscribeFromDetail = async (pkg: PackageDetail) => {
     setSubscribingId(pkg.id);
+    setRequiredDocumentsMissing(false);
     try {
       const subRes = await subscriptionService.createSubscription({ packageId: pkg.id });
       const subRaw = subRes.data as unknown as { success: boolean; data: { id: string } };
@@ -442,8 +443,12 @@ export function PricingPage() {
       if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
         setNotStartedStatus(true);
         setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
+      } else if (errorCode === 'REQUIRED_DOCUMENTS_MISSING') {
+        setRequiredDocumentsMissing(true);
+        setError(err?.message || err?.data?.message || err?.response?.data?.message || "يجب رفع المستندات المطلوبة أولاً.");
       } else {
         setNotStartedStatus(false);
+        setRequiredDocumentsMissing(false);
         setError(err?.message || "حدث خطأ غير متوقع");
       }
       setSubscribingId(null);
