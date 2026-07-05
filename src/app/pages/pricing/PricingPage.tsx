@@ -231,7 +231,11 @@ export function PricingPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
-  const [hasActiveSubscription, setHasActiveSubscription] = useState(false);
+  const [activeSubscription, setActiveSubscription] = useState<{
+    packageId: string;
+    packageName: string;
+    status: string;
+  } | null>(null);
   const [checkingSubscription, setCheckingSubscription] = useState(false);
   const [notStartedStatus, setNotStartedStatus] = useState(false);
   const [requiredDocumentsMissing, setRequiredDocumentsMissing] = useState(false);
@@ -250,17 +254,24 @@ export function PricingPage() {
     setCheckingSubscription(true);
     try {
       const res = await subscriptionService.getMySubscription();
-      const subData = (res.data as unknown as { success?: boolean; data?: { status: string } })?.data ?? res.data;
-      if (subData?.status === 'active') {
-        setHasActiveSubscription(true);
-        navigate('/dashboard');
+      const subData = (res.data as unknown as { success?: boolean; data?: { status: string; packageId?: string; package?: { name?: string } } })?.data ?? res.data;
+      if (subData?.status === 'active' && subData?.packageId) {
+        setActiveSubscription({
+          packageId: subData.packageId,
+          packageName: subData.package?.name || 'الباقة الحالية',
+          status: subData.status,
+        });
         return true;
       }
       try {
         const syncRes = await apiClient.post('/api/v1/subscriptions/payments/sync');
-        if ((syncRes.data as any)?.success) {
-          setHasActiveSubscription(true);
-          navigate('/dashboard');
+        const syncData = (syncRes.data as any)?.data ?? syncRes.data;
+        if ((syncRes.data as any)?.success && syncData?.status === 'active' && syncData?.packageId) {
+          setActiveSubscription({
+            packageId: syncData.packageId,
+            packageName: syncData.package?.name || 'الباقة الحالية',
+            status: syncData.status,
+          });
           return true;
         }
       } catch (syncErr: any) {
@@ -281,7 +292,7 @@ export function PricingPage() {
       setCheckingSubscription(false);
     }
     return false;
-  }, [navigate]);
+  }, []);
 
   /**
    * Fetch subscription status from GET /api/v1/subscriptions (the user's organization subscription).
@@ -466,11 +477,27 @@ export function PricingPage() {
   return (
     <div className="max-w-6xl mx-auto px-6 py-8" dir="rtl">
       <div className="text-center mb-12">
-        <h1 className="text-3xl font-bold text-slate-900 mb-4">اختر الباقة المناسبة</h1>
+        <h1 className="text-3xl font-bold text-slate-900 mb-4">{activeSubscription ? 'باقات منصة رشد' : 'اختر الباقة المناسبة'}</h1>
         <p className="text-slate-500 text-lg">
-          باقات مصممة خصيصاً للمنظمات غير الربحية السعودية
+          {activeSubscription
+            ? 'لديك اشتراك نشط حالياً. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.'
+            : 'باقات مصممة خصيصاً للمنظمات غير الربحية السعودية'}
         </p>
       </div>
+
+      {activeSubscription && (
+        <div className="mb-8 p-4 rounded-xl bg-green-50 border border-green-200 text-green-800 flex items-start gap-3">
+          <Check className="w-5 h-5 shrink-0 mt-0.5" />
+          <div>
+            <p className="font-medium">
+              لديك اشتراك نشط حالياً: {activeSubscription.packageName}
+            </p>
+            <p className="text-sm mt-1">
+              إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
+            </p>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className={`mb-8 p-4 rounded-xl flex items-start gap-3 ${notStartedStatus || requiredDocumentsMissing ? 'bg-amber-50 border border-amber-200 text-amber-800' : 'bg-red-50 border border-red-200 text-red-700'}`}>
@@ -535,22 +562,30 @@ export function PricingPage() {
           const accent = accentColors[idx % accentColors.length];
           const grad = gradients[idx % gradients.length];
           const isRecommended = idx === 1;
+          const isCurrentPackage = activeSubscription?.packageId === pkg.id;
 
           return (
             <div
               key={pkg.id}
-              className="bg-white rounded-2xl p-7 border relative transition-all hover:shadow-lg"
+              className={`rounded-2xl p-7 border relative transition-all hover:shadow-lg ${isCurrentPackage ? 'bg-green-50/50' : 'bg-white'}`}
               style={{
-                borderColor: isRecommended ? accent : "#E2E8F0",
-                boxShadow: isRecommended ? `0 16px 48px ${accent}20` : "0 4px 12px rgba(0,0,0,0.05)",
+                borderColor: isCurrentPackage ? '#10B981' : isRecommended ? accent : "#E2E8F0",
+                boxShadow: isCurrentPackage ? '0 16px 48px rgba(16,185,129,0.15)' : isRecommended ? `0 16px 48px ${accent}20` : "0 4px 12px rgba(0,0,0,0.05)",
               }}
             >
-              {isRecommended && (
+              {isRecommended && !isCurrentPackage && (
                 <div
                   className="absolute top-4 left-4 text-white text-xs font-bold px-3 py-1 rounded-full"
                   style={{ background: accent }}
                 >
                   الأكثر طلباً
+                </div>
+              )}
+              {isCurrentPackage && (
+                <div
+                  className="absolute top-4 left-4 text-white text-xs font-bold px-3 py-1 rounded-full bg-emerald-600"
+                >
+                  باقتك الحالية
                 </div>
               )}
 
@@ -585,29 +620,38 @@ export function PricingPage() {
                 </div>
               </div>
 
-              <button
-                onClick={() => openSlaModal(pkg)}
-                disabled={subscribingId === pkg.id}
-                className="w-full py-3.5 rounded-xl text-white font-bold text-base mb-3 transition-opacity hover:opacity-90 disabled:opacity-50"
-                style={{ background: accent }}
-              >
-                {subscribingId === pkg.id ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    جاري التحضير...
-                  </span>
-                ) : (
-                  "اشترك الآن"
-                )}
-              </button>
+              {!activeSubscription && (
+                <>
+                  <button
+                    onClick={() => openSlaModal(pkg)}
+                    disabled={subscribingId === pkg.id}
+                    className="w-full py-3.5 rounded-xl text-white font-bold text-base mb-3 transition-opacity hover:opacity-90 disabled:opacity-50"
+                    style={{ background: accent }}
+                  >
+                    {subscribingId === pkg.id ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        جاري التحضير...
+                      </span>
+                    ) : (
+                      "اشترك الآن"
+                    )}
+                  </button>
 
-              {/* Alternative: checkout via website (new tab) */}
-              <button
-                onClick={() => window.open(`/pricing/checkout/${pkg.id}`, '_blank')}
-                className="w-full py-2 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-6"
-              >
-                أو اشترك عبر الموقع ↗
-              </button>
+                  {/* Alternative: checkout via website (new tab) */}
+                  <button
+                    onClick={() => window.open(`/pricing/checkout/${pkg.id}`, '_blank')}
+                    className="w-full py-2 text-sm text-slate-500 hover:text-slate-700 transition-colors mb-6"
+                  >
+                    أو اشترك عبر الموقع ↗
+                  </button>
+                </>
+              )}
+              {isCurrentPackage && (
+                <div className="w-full py-3.5 rounded-xl text-emerald-700 bg-emerald-100 font-bold text-base mb-3 text-center">
+                  باقتك الحالية
+                </div>
+              )}
 
               {/* Benefits + Included Services */}
               <div className="space-y-3 pr-1">
@@ -818,17 +862,27 @@ export function PricingPage() {
                     {slaScrollProgress}%
                   </span>
                 </div>
-                <button
-                  onClick={confirmSlaAndProceed}
-                  disabled={!slaAccepted}
-                  className="w-full py-3.5 rounded-xl text-white font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  style={{
-                    background: slaAccepted ? '#2563EB' : '#94A3B8',
-                    boxShadow: slaAccepted ? '0 4px 20px rgba(37,99,235,0.3)' : 'none',
-                  }}
-                >
-                  {slaAccepted ? "متابعة للدفع" : "يرجى قبول الاتفاقية أولاً"}
-                </button>
+                {activeSubscription?.packageId === selectedPkg.id ? (
+                  <div className="w-full py-3.5 rounded-xl text-emerald-700 bg-emerald-100 font-bold text-base text-center">
+                    هذه باقتك الحالية
+                  </div>
+                ) : activeSubscription ? (
+                  <div className="w-full py-3.5 rounded-xl text-slate-600 bg-slate-100 font-bold text-base text-center">
+                    لديك اشتراك نشط. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
+                  </div>
+                ) : (
+                  <button
+                    onClick={confirmSlaAndProceed}
+                    disabled={!slaAccepted}
+                    className="w-full py-3.5 rounded-xl text-white font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{
+                      background: slaAccepted ? '#2563EB' : '#94A3B8',
+                      boxShadow: slaAccepted ? '0 4px 20px rgba(37,99,235,0.3)' : 'none',
+                    }}
+                  >
+                    {slaAccepted ? "متابعة للدفع" : "يرجى قبول الاتفاقية أولاً"}
+                  </button>
+                )}
               </div>
             )}
           </div>
