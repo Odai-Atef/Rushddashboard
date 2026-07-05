@@ -30,6 +30,7 @@ import {
 import { useProjectDashboard, timeAgo } from '@/api/hooks/useProjectDashboard';
 import { useEffect, useState } from 'react';
 import { onboardingService } from '@/api/services';
+import { AssessmentStatusValue } from '@/api/services/onboarding-service';
 import { useAuth } from '@/app/layouts/RootLayout';
 
 export function ProjectDashboardPage() {
@@ -37,6 +38,7 @@ export function ProjectDashboardPage() {
   const { data, isLoading, error } = useProjectDashboard();
   const [hasOrg, setHasOrg] = useState(false);
   const [isQualified, setIsQualified] = useState(false);
+  const [assessmentMissing, setAssessmentMissing] = useState(false);
   const [isCheckingQualification, setIsCheckingQualification] = useState(true);
 
   useEffect(() => {
@@ -46,10 +48,42 @@ export function ProjectDashboardPage() {
         const orgRes = await onboardingService.getMyOrganization();
         const org = orgRes.data;
         if (!org?.id) {
-          if (!cancelled) { setHasOrg(false); setIsQualified(false); setIsCheckingQualification(false); }
+          if (!cancelled) {
+            setHasOrg(false);
+            setIsQualified(false);
+            setAssessmentMissing(false);
+            setIsCheckingQualification(false);
+          }
           return;
         }
         if (!cancelled) setHasOrg(true);
+
+        // First check the lightweight assessment status to distinguish
+        // "not started" from "completed but not qualified".
+        let statusValue: AssessmentStatusValue | undefined;
+        try {
+          const statusRes = await onboardingService.getAssessmentStatus(org.id);
+          const statusData = (statusRes.data as any)?.data ?? statusRes.data;
+          statusValue = statusData?.status;
+        } catch (statusErr: any) {
+          const statusCode = statusErr?.statusCode || statusErr?.response?.status;
+          if (statusCode === 422) {
+            statusValue = 'NOT_STARTED';
+          }
+        }
+
+        if (!cancelled) {
+          setAssessmentMissing(statusValue === 'NOT_STARTED');
+        }
+
+        if (statusValue === 'NOT_STARTED') {
+          if (!cancelled) {
+            setIsQualified(false);
+            setIsCheckingQualification(false);
+          }
+          return;
+        }
+
         const resultRes = await onboardingService.getIsivAssessmentResults(org.id);
         const result = (resultRes.data as any)?.data ?? resultRes.data;
         const status = result?.qualificationStatus?.toUpperCase();
@@ -61,7 +95,7 @@ export function ProjectDashboardPage() {
           );
         }
       } catch {
-        if (!cancelled) { setHasOrg(false); setIsQualified(false); }
+        if (!cancelled) { setIsQualified(false); }
       } finally {
         if (!cancelled) setIsCheckingQualification(false);
       }
@@ -86,69 +120,72 @@ export function ProjectDashboardPage() {
     );
   }
 
-  if (error || !data) {
-    const isForbidden = error === 'ليس لديك الصلاحية لعرض لوحة المشاريع.';
+  const renderQualificationBlocker = () => {
+    const title = !hasOrg
+      ? 'لم يتم ربط جهة بحسابك بعد'
+      : assessmentMissing
+      ? 'لم تبدأ عملية التقييم'
+      : 'جهتك غير مؤهلة لاستخدام خصائص منصة رشد';
+
+    const subtitle = !hasOrg
+      ? 'يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.'
+      : assessmentMissing
+      ? 'يجب إجراء التقييم أولاً لاستخدام خصائص منصة رشد.'
+      : 'لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.';
+
+    const cta = !hasOrg
+      ? 'إنشاء حساب الجهة'
+      : assessmentMissing
+      ? 'ابدأ التقييم الآن'
+      : 'إعادة التقييم مرة أخرى';
+
+    const ctaPath = !hasOrg
+      ? '/dashboard/onboarding/registration'
+      : '/dashboard/charity-assessment';
+
     return (
       <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
-        {isForbidden ? (
-          <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center max-w-lg">
-            <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-            <h2 className="text-2xl font-bold mb-4 text-red-700">
-              {hasOrg ? 'جهتك غير مؤهلة لاستخدام خصائص منصة رشد' : 'لم يتم ربط جهة بحسابك بعد'}
-            </h2>
-            <p className="text-gray-600 mb-8">
-              {hasOrg
-                ? 'لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.'
-                : 'يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.'}
+        <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center max-w-lg">
+          <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
+          <h2 className="text-2xl font-bold mb-4 text-red-700">{title}</h2>
+          <p className="text-gray-600 mb-2">{subtitle}</p>
+          {assessmentMissing && hasOrg && (
+            <p className="text-gray-600 mb-6">
+              يمكنك بدء التقييم الآن{" "}
+              <button
+                onClick={() => navigate('/dashboard/charity-assessment')}
+                className="font-medium underline hover:no-underline text-blue-600"
+              >
+                بالضغط هنا
+              </button>
+              .
             </p>
-            <button
-              onClick={() =>
-                navigate(
-                  hasOrg
-                    ? `/dashboard/charity-assessment`
-                    : '/dashboard/onboarding/registration'
-                )
-              }
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
-            >
-              {hasOrg ? 'إعادة التقييم مرة أخرى' : 'إنشاء حساب الجهة'}
-            </button>
-          </div>
-        ) : (
-          <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
-        )}
+          )}
+          <button
+            onClick={() => navigate(ctaPath)}
+            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
+          >
+            {cta}
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  if (error || !data) {
+    const isForbidden = error === 'ليس لديك الصلاحية لعرض لوحة المشاريع.';
+    if (isForbidden) {
+      return renderQualificationBlocker();
+    }
+    return (
+      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+        <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
       </div>
     );
   }
 
   if (showQualificationBlocker) {
-    return (
-      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
-        <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center max-w-lg">
-          <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-          <h2 className="text-2xl font-bold mb-4 text-red-700">
-            {hasOrg ? 'جهتك غير مؤهلة لاستخدام خصائص منصة رشد' : 'لم يتم ربط جهة بحسابك بعد'}
-          </h2>
-          <p className="text-gray-600 mb-8">
-            {hasOrg
-              ? 'لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.'
-              : 'يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.'}
-          </p>
-          <button
-            onClick={() =>
-              navigate(
-                hasOrg
-                  ? '/dashboard/charity-assessment'
-                  : '/dashboard/onboarding/registration'
-              )
-            }
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
-          >
-            {hasOrg ? 'إعادة التقييم مرة أخرى' : 'إنشاء حساب الجهة'}
-          </button>
-        </div>
-      </div>
-    );
+    return renderQualificationBlocker();
   }
 
   const { stats, statusDistribution, budgetTrend, recentActivity, upcomingDeadlines } = data;

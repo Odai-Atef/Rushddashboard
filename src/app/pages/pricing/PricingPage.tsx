@@ -264,12 +264,13 @@ export function PricingPage() {
         console.log('[PricingPage] Sync failed:', syncErr?.message);
       }
     } catch (err: any) {
-      // Check for NOT_STARTED status
-      const errorData = err?.data || err?.response?.data;
-      if (errorData?.status === 'NOT_STARTED' || errorData?.code === 'ORGANIZATION_NOT_QUALIFIED') {
+      // Check for NOT_STARTED status. The error may be an ApiError (code/message)
+      // or an axios-style error with err.response.data.
+      const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
+      const errorStatus = err?.status || err?.data?.status || err?.response?.data?.status;
+      if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
         setNotStartedStatus(true);
-        setError(errorData?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
-        setCheckingSubscription(false);
+        setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
         return false;
       }
       // Ignore other errors
@@ -279,8 +280,31 @@ export function PricingPage() {
     return false;
   }, [navigate]);
 
+  /**
+   * Fetch subscription status from GET /api/v1/subscriptions (the user's organization subscription).
+   * This is the endpoint that returns NOT_STARTED when the charity assessment has not begun.
+   */
+  const checkSubscriptionsStatus = useCallback(async () => {
+    try {
+      const res = await apiClient.get('/api/v1/subscriptions');
+      const data = (res.data as unknown as { success?: boolean; data?: { status?: string } })?.data ?? res.data;
+      if (data?.status === 'NOT_STARTED') {
+        setNotStartedStatus(true);
+        setError("لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
+      }
+    } catch (err: any) {
+      const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
+      const errorStatus = err?.status || err?.data?.status || err?.response?.data?.status;
+      if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
+        setNotStartedStatus(true);
+        setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
+      }
+    }
+  }, []);
+
   useEffect(() => {
     checkActiveSubscription();
+    checkSubscriptionsStatus();
     subscriptionService
       .getPackages()
       .then((res) => {
@@ -400,7 +424,15 @@ export function PricingPage() {
         }
       }, 5000);
     } catch (err: any) {
-      setError(err?.message || "حدث خطأ غير متوقع");
+      const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
+      const errorStatus = err?.status || err?.data?.status || err?.response?.data?.status;
+      if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
+        setNotStartedStatus(true);
+        setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
+      } else {
+        setNotStartedStatus(false);
+        setError(err?.message || "حدث خطأ غير متوقع");
+      }
       setSubscribingId(null);
     }
   };
