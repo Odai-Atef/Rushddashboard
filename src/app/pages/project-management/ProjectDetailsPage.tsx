@@ -86,6 +86,10 @@ export function ProjectDetailsPage() {
   const [planView, setPlanView] = useState<'preview' | 'edit'>('preview');
   const [isSaving, setIsSaving] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [decisionLoading, setDecisionLoading] = useState(false);
+  const [reviewNotes, setReviewNotes] = useState('');
+  const [reviewStep, setReviewStep] = useState<'view' | 'notes' | 'confirm-approve'>('view');
 
   const handleOpenPlan = async () => {
     if (!projectId) return;
@@ -177,6 +181,58 @@ export function ProjectDetailsPage() {
     }
   };
 
+  const getProjectStudy = (): string => {
+    if (!project) return '';
+    const study = project.llmResponse || project.llmResponseText || project.aiStudy || project.generatedStudy || '';
+    if (typeof study === 'string') return study;
+    return JSON.stringify(study, null, 2);
+  };
+
+  const handleOpenReview = () => {
+    setReviewOpen(true);
+    setReviewStep('view');
+    setReviewNotes('');
+  };
+
+  const handleCloseReview = () => {
+    setReviewOpen(false);
+    setReviewStep('view');
+    setReviewNotes('');
+  };
+
+  const handleConfirmApprove = () => {
+    if (window.confirm('هل أنت متأكد من الموافقة على هذا المشروع؟')) {
+      handleCharityDecision('CHARITY_APPROVAL');
+    }
+  };
+
+  const handleCharityDecision = async (decisionStatus: 'CHARITY_APPROVAL' | 'INCUBATOR_MODIFICATIONS') => {
+    if (!projectId) return;
+    setDecisionLoading(true);
+    try {
+      const payload: { status: 'CHARITY_APPROVAL' | 'INCUBATOR_MODIFICATIONS'; notes?: string } = {
+        status: decisionStatus,
+      };
+      if (decisionStatus === 'INCUBATOR_MODIFICATIONS') {
+        payload.notes = reviewNotes.trim();
+      }
+      const res = await projectService.submitCharityDecision(projectId, payload);
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم تسجيل قرار المشروع بنجاح');
+        await refetch();
+        handleCloseReview();
+      } else {
+        toast.success('تم تسجيل قرار المشروع بنجاح');
+        await refetch();
+        handleCloseReview();
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تسجيل قرار المشروع');
+    } finally {
+      setDecisionLoading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
@@ -210,6 +266,9 @@ export function ProjectDetailsPage() {
   const displayStatus = getDisplayStatus(project.status as string);
   const status = statusConfig[displayStatus] || { label: displayStatus, color: '#6b7280', bg: '#f3f4f6' };
   const isDraftProject = displayStatus === 'draft';
+  const isEntityManager = user?.roleSlug === 'entity-managers';
+  const rawStatus = (project.status as string).toUpperCase().replace(/-/g, '_');
+  const showReviewButton = isEntityManager && rawStatus === 'CHARITY_REVIEW';
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -237,13 +296,6 @@ export function ProjectDetailsPage() {
               </div>
             </div>
             <div className="flex gap-3 flex-wrap">
-              <button
-                onClick={() => navigate(`/dashboard/project-management/edit/${project.id}`)}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
-              >
-                <Edit className="w-5 h-5" />
-                تعديل
-              </button>
               {isProjectManager && (
                 <>
                   <button
@@ -268,6 +320,15 @@ export function ProjectDetailsPage() {
                     </button>
                   )}
                 </>
+              )}
+              {showReviewButton && (
+                <button
+                  onClick={handleOpenReview}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
+                >
+                  <Eye className="w-5 h-5" />
+                  مراجعة مسودة المشروع
+                </button>
               )}
             </div>
           </div>
@@ -538,6 +599,101 @@ export function ProjectDetailsPage() {
                     className="w-full h-full"
                   />
                 </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {reviewOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={handleCloseReview}
+          />
+          <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] max-w-[90vw] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+              <div>
+                <h2 className="text-xl font-semibold">مراجعة مسودة المشروع</h2>
+                <p className="text-sm text-gray-500 mt-1">يرجى مراجعة الدراسة المُولدة ثم اختيار القرار المناسب</p>
+              </div>
+              <button
+                onClick={handleCloseReview}
+                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+              {reviewStep === 'view' ? (
+                <div className="space-y-6">
+                  <div className="prose prose-sm max-w-none text-right w-full break-words bg-white rounded-xl p-6 border border-gray-200 min-h-full [&>*]:text-right">
+                    <Markdown remarkPlugins={[remarkGfm]}>{getProjectStudy() || 'لا توجد دراسة مُولدة لهذا المشروع'}</Markdown>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="text-lg font-semibold">طلب تعديلات</h3>
+                  <p className="text-sm text-gray-600">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
+                  <textarea
+                    value={reviewNotes}
+                    onChange={(e) => setReviewNotes(e.target.value)}
+                    placeholder="اكتب ملاحظاتك هنا..."
+                    rows={8}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+              {reviewStep === 'view' ? (
+                <>
+                  <button
+                    onClick={handleCloseReview}
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    إلغاء
+                  </button>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <button
+                      onClick={() => setReviewStep('notes')}
+                      className="px-5 py-2.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2"
+                    >
+                      طلب تعديلات
+                    </button>
+                    <button
+                      onClick={handleConfirmApprove}
+                      disabled={decisionLoading}
+                      className="px-5 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {decisionLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : null}
+                      موافقة
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setReviewStep('view')}
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    رجوع
+                  </button>
+                  <button
+                    onClick={() => handleCharityDecision('INCUBATOR_MODIFICATIONS')}
+                    disabled={decisionLoading || !reviewNotes.trim()}
+                    className="px-5 py-2.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {decisionLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : null}
+                    إرسال طلب التعديلات
+                  </button>
+                </>
               )}
             </div>
           </div>

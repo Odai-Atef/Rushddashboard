@@ -99,6 +99,19 @@ export interface SubmitToCharityResponse {
   attachments: SubmitToCharityAttachment[];
 }
 
+export interface CharityDecisionPayload {
+  status: 'CHARITY_APPROVAL' | 'INCUBATOR_MODIFICATIONS';
+  notes?: string;
+}
+
+export interface CharityDecisionResponse {
+  success: boolean;
+  message: string;
+  projectId: string;
+  newStatus: string;
+  conversationId: string;
+}
+
 export interface ProjectDashboardData {
   stats: ProjectDashboardStats;
   statusDistribution: StatusDistributionItem[];
@@ -221,6 +234,18 @@ export class ProjectService {
     config?: RequestConfig
   ): Promise<ApiResponse<SubmitToCharityResponse>> {
     return apiClient.post<SubmitToCharityResponse>(`/api/v1/projects/${id}/submit-to-charity`, undefined, config);
+  }
+
+  /**
+   * Entity manager makes a charity decision on a project in CHARITY_REVIEW
+   * POST /api/v1/projects/:id/charity-decision
+   */
+  async submitCharityDecision(
+    id: string,
+    payload: CharityDecisionPayload,
+    config?: RequestConfig
+  ): Promise<ApiResponse<CharityDecisionResponse>> {
+    return apiClient.post<CharityDecisionResponse>(`/api/v1/projects/${id}/charity-decision`, payload, config);
   }
 }
 

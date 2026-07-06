@@ -96,6 +96,10 @@ export interface ProjectDetails extends Project {
   budgets: ProjectBudgetItem[];
   milestones: ProjectMilestone[];
   documents: ProjectDocument[];
+  llmResponse?: string;
+  llmResponseText?: string;
+  aiStudy?: string;
+  generatedStudy?: string;
 }
 
 export interface CreateProjectDto {
