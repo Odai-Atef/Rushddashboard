@@ -3,6 +3,8 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FC, FormEvent, KeyboardEvent, MouseEvent } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import useProjectDiscussions from '@/api/hooks/useProjectDiscussions';
 import useProjectConversations from '@/api/hooks/useProjectConversations';
 import useConversationMessages, {
@@ -12,7 +14,7 @@ import useConversationRealtime from '@/api/hooks/useConversationRealtime';
 import useDiscussionDetail from '@/api/hooks/useDiscussionDetail';
 import useProjectAttachments from '@/api/hooks/useProjectAttachments';
 import useAttachmentMutations from '@/api/hooks/useAttachmentMutations';
-import { formatDateTime, formatBytes } from '@/app/lib/formatters';
+import { formatDateTime } from '@/app/lib/formatters';
 import { getCollaborationErrorMessage } from '@/app/lib/error-messages';
 import {
   Message as ApiMessage,
@@ -23,7 +25,9 @@ import {
   Attachment as ApiAttachment,
   AttachmentType,
   Conversation,
+  collaborationService,
 } from '@/api/services/collaboration-service';
+import { formatBytes } from '@/app/lib/formatters';
 import {
   Upload,
   Film,
@@ -1008,6 +1012,44 @@ function MessageBubble({
   const bubbleRef = useRef<HTMLDivElement | null>(null);
   const { user } = useAuth();
   const messageCurrentUserId = currentUserId || user?.id || null;
+  const [downloadingAttachmentId, setDownloadingAttachmentId] = useState<string | null>(null);
+
+  const handleDownloadAttachment = async (attachment: NonNullable<ApiMessage['attachments']>[number]) => {
+    const fileId = attachment.fileId || attachment.file?.id;
+    const fileName = attachment.file?.originalName || attachment.fileName || 'download';
+    if (!fileId) {
+      toast.error('لا يوجد معرف للملف المرفق');
+      return;
+    }
+    setDownloadingAttachmentId(attachment.id);
+    try {
+      const res = await collaborationService.downloadFileById(fileId);
+      const blob = res.data;
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم تحميل الملف بنجاح');
+    } catch (err) {
+      toast.error(getCollaborationErrorMessage(err) || 'فشل تحميل الملف المرفق');
+    } finally {
+      setDownloadingAttachmentId(null);
+    }
+  };
+
+  const getAttachmentIcon = (mimeType?: string) => {
+    if (!mimeType) return <File className="w-5 h-5" />;
+    if (mimeType.startsWith('image/')) return <ImageIcon className="w-5 h-5" />;
+    if (mimeType.startsWith('video/')) return <Film className="w-5 h-5" />;
+    if (mimeType.startsWith('audio/')) return <Mic className="w-5 h-5" />;
+    if (mimeType.includes('pdf')) return <FileText className="w-5 h-5 !text-red-600" />;
+    if (mimeType.includes('word') || mimeType.includes('officedocument')) return <FileText className="w-5 h-5 !text-blue-600" />;
+    return <File className="w-5 h-5" />;
+  };
 
   useEffect(() => {
     const node = bubbleRef.current;
@@ -1089,8 +1131,42 @@ function MessageBubble({
             رد على رسالة
           </div>
         )}
-        <div className={`inline-block p-3 rounded-lg ${isOwn ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}>
-          <p className="text-sm">{msg.content}</p>
+        <div className="inline-block p-3 rounded-lg text-right bg-gray-100">
+          <div
+            dir="rtl"
+            className="text-sm prose prose-sm max-w-none break-words text-right [&>*]:text-right [&_a]:underline [&_pre]:p-2 [&_pre]:rounded [&_pre]:bg-gray-200 [&_code]:text-gray-800 [&_code]:bg-gray-200 [&_code]:px-1 [&_code]:rounded"
+          >
+            <Markdown remarkPlugins={[remarkGfm]}>{msg.content || '\u00A0'}</Markdown>
+          </div>
+          {msg.attachments && msg.attachments.length > 0 && (
+            <div className="mt-3 space-y-2">
+              {msg.attachments.map((attachment) => (
+                <button
+                  key={attachment.id}
+                  onClick={() => handleDownloadAttachment(attachment)}
+                  disabled={downloadingAttachmentId === attachment.id}
+                  className="w-full flex items-center gap-3 p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition-colors text-right disabled:opacity-50"
+                >
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600">
+                    {downloadingAttachmentId === attachment.id ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      getAttachmentIcon(attachment.file?.mimeType || attachment.mimeType)
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0 text-right">
+                    <p className="text-sm font-medium truncate text-gray-900">
+                      {attachment.file?.originalName || attachment.fileName || 'ملف مرفق'}
+                    </p>
+                    {attachment.file?.size !== undefined && (
+                      <p className="text-xs text-gray-500">{formatBytes(attachment.file.size)}</p>
+                    )}
+                  </div>
+                  <Download className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>

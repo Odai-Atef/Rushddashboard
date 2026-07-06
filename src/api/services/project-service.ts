@@ -84,6 +84,21 @@ export interface UpcomingDeadlineItem {
   priority: 'high' | 'medium' | 'low';
 }
 
+export interface SubmitToCharityAttachment {
+  id: string;
+  originalName: string;
+  mimeType: string;
+}
+
+export interface SubmitToCharityResponse {
+  success: boolean;
+  message: string;
+  projectId: string;
+  newStatus: string;
+  conversationId: string;
+  attachments: SubmitToCharityAttachment[];
+}
+
 export interface ProjectDashboardData {
   stats: ProjectDashboardStats;
   statusDistribution: StatusDistributionItem[];
@@ -195,6 +210,17 @@ export class ProjectService {
     config?: RequestConfig
   ): Promise<ApiResponse<unknown>> {
     return apiClient.put<unknown>(`/api/v1/projects/${id}/plan`, { markdown }, config);
+  }
+
+  /**
+   * Submit a draft project to the charity for review
+   * POST /api/v1/projects/:id/submit-to-charity
+   */
+  async submitToCharity(
+    id: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<SubmitToCharityResponse>> {
+    return apiClient.post<SubmitToCharityResponse>(`/api/v1/projects/${id}/submit-to-charity`, undefined, config);
   }
 }
 

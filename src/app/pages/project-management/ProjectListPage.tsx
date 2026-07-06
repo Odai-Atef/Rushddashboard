@@ -1,11 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { useNavigate } from 'react-router';
 import { Loader2 } from 'lucide-react';
 import {
   Plus,
   Search,
   Filter,
-  MoreVertical,
   List,
   LayoutGrid,
   GanttChart,
@@ -19,6 +18,7 @@ import {
   MessageSquare,
   AlertTriangle,
   RefreshCw,
+  Pin,
 } from 'lucide-react';
 import { useProjects } from '@/api/hooks/useProjects';
 import { ProjectFilters, ProjectStatus, ProjectHealth, statusConfig, Project } from './project-types';
@@ -88,10 +88,7 @@ export function ProjectListPage() {
   } = useProjects();
   const [listViewMode, setListViewMode] = useState<'list' | 'kanban' | 'timeline'>('list');
   const [showFilters, setShowFilters] = useState(false);
-  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
-  const [menuPosition, setMenuPosition] = useState<{ top: number; left: number } | null>(null);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
-  const menuButtonRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   const [organization, setOrganization] = useState<OrganizationResponse | null>(null);
   const [assessmentResult, setAssessmentResult] = useState<IsivAssessmentResult | null>(null);
@@ -142,58 +139,8 @@ export function ProjectListPage() {
     setFilters({ [key]: value === 'all' ? undefined : value });
   };
 
-  const toggleMenu = (projectId: string, event: React.MouseEvent<HTMLButtonElement>) => {
-    const button = event.currentTarget;
-    const rect = button.getBoundingClientRect();
-    setMenuPosition({ top: rect.bottom + window.scrollY + 4, left: rect.left + window.scrollX - 224 + rect.width });
-    setOpenMenuId((prev) => (prev === projectId ? null : projectId));
-  };
-
-  useEffect(() => {
-    if (!openMenuId) return;
-
-    const menuEl = document.querySelector('[data-project-menu="true"]');
-
-    const handleClickOutside = (event: MouseEvent) => {
-      const buttonEl = menuButtonRefs.current[openMenuId];
-      const target = event.target as Node;
-      if (
-        buttonEl &&
-        !buttonEl.contains(target) &&
-        menuEl &&
-        !menuEl.contains(target)
-      ) {
-        setOpenMenuId(null);
-      }
-    };
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setOpenMenuId(null);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
-  }, [openMenuId]);
-
-  useEffect(() => {
-    if (!openMenuId) return;
-
-    const handleScroll = () => {
-      setOpenMenuId(null);
-    };
-
-    window.addEventListener('scroll', handleScroll, true);
-    return () => window.removeEventListener('scroll', handleScroll, true);
-  }, [openMenuId]);
 
   const handleDownloadWord = async (projectId: string, projectName: string) => {
-    setOpenMenuId(null);
     setDownloadingId(projectId);
     try {
       const res = await projectService.getProjectPlanWord(projectId);
@@ -323,6 +270,32 @@ export function ProjectListPage() {
     return normalized in statusConfig ? (normalized as ProjectStatus) : 'draft';
   };
 
+  const getRawStatus = (status: string): string => status.toUpperCase().replace(/-/g, '_');
+
+  const shouldShowPinIcon = (project: Project): boolean => {
+    const rawStatus = getRawStatus(project.status);
+    const roleSlug = user?.roleSlug;
+
+    const projectManagerStatuses = [
+      'COMMISSION_APPROVED',
+      'DRAFT',
+      'CHARITY_APPROVAL',
+      'INCUBATOR_MODIFICATIONS',
+    ];
+    const entityManagerStatuses = [
+      'CHARITY_REVIEW',
+      'COMMISSION_APPROVAL',
+    ];
+
+    if (roleSlug === 'project-managers' && projectManagerStatuses.includes(rawStatus)) {
+      return true;
+    }
+    if (roleSlug === 'entity-managers' && entityManagerStatuses.includes(rawStatus)) {
+      return true;
+    }
+    return false;
+  };
+
   const renderTable = () => (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
@@ -331,11 +304,7 @@ export function ProjectListPage() {
             <tr>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">اسم المشروع</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الجهه</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">النوع</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الميزانية</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المدة</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">مدير المشروع</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">التقدم</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"></th>
             </tr>
@@ -355,9 +324,6 @@ export function ProjectListPage() {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{getProjectOrganization(project)}</td>
                   <td className="px-6 py-4">
-                    <span className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded-full">{project.type}</span>
-                  </td>
-                  <td className="px-6 py-4">
                     <span
                       className="text-xs px-2 py-1 rounded-full font-medium"
                       style={{ backgroundColor: status.bg, color: status.color }}
@@ -365,11 +331,8 @@ export function ProjectListPage() {
                       {status.label}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium">{getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{project.duration}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{getProjectManager(project)}</td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 min-w-[140px]">
                       <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
                         <div
                           className="h-full bg-blue-600 transition-all"
@@ -380,13 +343,28 @@ export function ProjectListPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <button
-                      ref={(el) => { menuButtonRefs.current[project.id] = el; }}
-                      onClick={(e) => toggleMenu(project.id, e)}
-                      className="p-1 hover:bg-gray-100 rounded"
-                    >
-                      <MoreVertical className="w-5 h-5 text-gray-400" />
-                    </button>
+                    <div className="flex items-center justify-end gap-2 flex-wrap">
+                      {shouldShowPinIcon(project) && (
+                        <div className="relative flex items-center justify-center w-6 h-6">
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 animate-ping" />
+                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500" />
+                        </div>
+                      )}
+                      <a
+                        href={`/dashboard/project-management/details/${project.id}`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                      >
+                        <Eye className="w-3.5 h-3.5" />
+                        عرض
+                      </a>
+                      <a
+                        href={`/dashboard/collaboration/${project.id}/chat`}
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                      >
+                        <MessageSquare className="w-3.5 h-3.5" />
+                        متابعة تحديثات المشروع - شات
+                      </a>
+                    </div>
                   </td>
                 </tr>
               );
@@ -709,60 +687,7 @@ export function ProjectListPage() {
 
         {!isLoading && !error && projects.length > 0 && renderPagination()}
       </div>
-      {openMenuId && menuPosition && (
-        <div
-          data-project-menu="true"
-          className="fixed w-56 bg-white rounded-lg shadow-lg border border-gray-200 z-[100] py-1"
-          style={{ top: menuPosition.top, left: Math.max(8, menuPosition.left) }}
-        >
-          {(() => {
-            const project = projects.find((p) => p.id === openMenuId);
-            if (!project) return null;
-            return (
-              <>
-                <a
-                  href={`/dashboard/project-management/edit/${project.id}`}
-                  onClick={() => setOpenMenuId(null)}
-                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 cursor-pointer"
-                >
-                  <Pencil className="w-4 h-4 text-gray-400" />
-                  تعديل
-                </a>
-                {isProjectManager && (
-                  <button
-                    onClick={() => handleDownloadWord(project.id, project.name)}
-                    disabled={downloadingId === project.id}
-                    className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {downloadingId === project.id ? (
-                      <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />
-                    ) : (
-                      <Download className="w-4 h-4 text-gray-400" />
-                    )}
-                    تحميل ملف مُولّد بالذكاء الاصطناعي
-                  </button>
-                )}
-                <a
-                  href={`/dashboard/project-management/details/${project.id}`}
-                  onClick={() => setOpenMenuId(null)}
-                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 cursor-pointer"
-                >
-                  <Eye className="w-4 h-4 text-gray-400" />
-                  عرض
-                </a>
-                <a
-                  href={`/dashboard/collaboration/${project.id}/chat`}
-                  onClick={() => setOpenMenuId(null)}
-                  className="w-full px-4 py-2 text-right text-sm hover:bg-gray-50 flex items-center gap-3 cursor-pointer"
-                >
-                  <MessageSquare className="w-4 h-4 text-gray-400" />
-                  تواصل معنا
-                </a>
-              </>
-            );
-          })()}
-        </div>
-      )}
+
     </div>
   );
 }

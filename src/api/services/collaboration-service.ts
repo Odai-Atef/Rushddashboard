@@ -6,6 +6,8 @@
  */
 
 import apiClient from '../client';
+import { ENV } from '@/lib/env';
+import { AUTH_CONFIG } from '../config';
 import { ApiResponse, RequestConfig, UploadConfig } from '../types';
 
 export type ConversationType = 'PROJECT_GROUP' | 'DIRECT_MESSAGE' | 'SYSTEM_ALERT';
@@ -141,9 +143,33 @@ export interface Message {
   };
   attachments?: Array<{
     id: string;
-    fileName: string;
-    fileSize: number;
-    mimeType: string;
+    fileId: string;
+    conversationId: string;
+    messageId: string;
+    fileName?: string;
+    fileSize?: number;
+    mimeType?: string;
+    attachmentType: AttachmentType;
+    projectStage: string | null;
+    uploadedByUserId: string;
+    createdAt: string;
+    file?: {
+      id: string;
+      originalName: string;
+      storageKey: string;
+      mimeType: string;
+      extension: string;
+      size: number;
+      checksum: string;
+      category: string;
+      storageProvider: string;
+      storagePath: string;
+      uploadedBy: string;
+      companyId: string;
+      meta: unknown;
+      createdAt: string;
+      updatedAt: string;
+    };
   }>;
 }
 
@@ -451,6 +477,49 @@ export class CollaborationService {
         responseType: 'blob',
       }
     );
+  }
+
+  /**
+   * Download a file directly by its file ID
+   * GET /api/v1/files/:fileId/download
+   */
+  async downloadFileById(fileId: string, config?: RequestConfig): Promise<ApiResponse<Blob>> {
+    const baseURL = ENV.API_BASE_URL.replace(/\/$/, '');
+    const token = typeof localStorage !== 'undefined' ? localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) : null;
+    const url = new URL(`${baseURL}/api/v1/files/${fileId}/download`);
+    const response = await fetch(url.toString(), {
+      method: 'GET',
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      signal: config?.signal,
+    });
+
+    if (!response.ok) {
+      try {
+        const data = await response.json();
+        throw {
+          code: data.code || 'DOWNLOAD_FAILED',
+          message: data.message || `Download failed with status ${response.status}`,
+          statusCode: response.status,
+        };
+      } catch {
+        throw {
+          code: 'DOWNLOAD_FAILED',
+          message: `Download failed with status ${response.status}`,
+          statusCode: response.status,
+        };
+      }
+    }
+
+    const blob = await response.blob();
+    const contentDisposition = response.headers.get('content-disposition');
+    const fileNameMatch = contentDisposition?.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+    const fileName = fileNameMatch?.[1]?.replace(/['"]/g, '') || 'download';
+    return {
+      success: true,
+      data: blob,
+      message: 'Download successful',
+      meta: { fileName },
+    };
   }
 
   /**

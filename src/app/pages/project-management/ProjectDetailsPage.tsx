@@ -15,6 +15,7 @@ import {
   RotateCcw,
   Eye,
   Save,
+  Send,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -84,6 +85,7 @@ export function ProjectDetailsPage() {
   const [wordLoading, setWordLoading] = useState(false);
   const [planView, setPlanView] = useState<'preview' | 'edit'>('preview');
   const [isSaving, setIsSaving] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   const handleOpenPlan = async () => {
     if (!projectId) return;
@@ -145,6 +147,36 @@ export function ProjectDetailsPage() {
     }
   };
 
+  const handleSubmitToCharity = async () => {
+    if (!projectId) return;
+    setSubmitLoading(true);
+    try {
+      const res = await projectService.submitToCharity(projectId);
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم إرسال المشروع للجهة الخيرية بنجاح');
+        await refetch();
+      } else {
+        toast.success('تم إرسال المشروع للجهة الخيرية بنجاح');
+        await refetch();
+      }
+    } catch (err: any) {
+      const code = err?.code;
+      const message = err?.message || 'فشل إرسال المشروع للجهة الخيرية';
+      if (code === 'PROJECT_PLAN_MISSING') {
+        toast.error(message, {
+          action: {
+            label: err?.actionLabel || 'إنشاء دراسة باستخدام الذكاء الاصطناعي',
+            onClick: handleOpenPlan,
+          },
+        });
+      } else {
+        toast.error(message);
+      }
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
@@ -177,6 +209,7 @@ export function ProjectDetailsPage() {
   const HealthIcon = health.icon;
   const displayStatus = getDisplayStatus(project.status as string);
   const status = statusConfig[displayStatus] || { label: displayStatus, color: '#6b7280', bg: '#f3f4f6' };
+  const isDraftProject = displayStatus === 'draft';
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -212,13 +245,29 @@ export function ProjectDetailsPage() {
                 تعديل
               </button>
               {isProjectManager && (
-                <button
-                  onClick={handleOpenPlan}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
-                >
-                  <Sparkles className="w-5 h-5" />
-                  إنشاء دراسة باستخدام الذكاء الاصطناعي
-                </button>
+                <>
+                  <button
+                    onClick={handleOpenPlan}
+                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                  >
+                    <Sparkles className="w-5 h-5" />
+                    إنشاء دراسة باستخدام الذكاء الاصطناعي
+                  </button>
+                  {isDraftProject && (
+                    <button
+                      onClick={handleSubmitToCharity}
+                      disabled={submitLoading}
+                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {submitLoading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <Send className="w-5 h-5" />
+                      )}
+                      إرسال إلى الجهة للموافقة
+                    </button>
+                  )}
+                </>
               )}
             </div>
           </div>

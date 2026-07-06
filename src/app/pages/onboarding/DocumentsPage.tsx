@@ -37,6 +37,135 @@ interface UploadedFile {
   fileUrl?: string;
 }
 
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
+
+const SLOT_FILE_VALIDATION: Record<
+  DocumentSlotId,
+  { accept: string; extensions: string[]; mimeTypes: string[]; label: string }
+> = {
+  license: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+  bank: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+  address: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+  profile: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+  board_approval: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+  brand: {
+    accept: '.png,.jpeg,.jpg,.svg',
+    extensions: ['.png', '.jpeg', '.jpg', '.svg'],
+    mimeTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'],
+    label: 'PNG, JPEG, JPG, SVG',
+  },
+  projects: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+  financial: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+  annual: {
+    accept: '.pdf,.doc,.docx',
+    extensions: ['.pdf', '.doc', '.docx'],
+    mimeTypes: [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ],
+    label: 'PDF, Word',
+  },
+};
+
+function getFileExtension(fileName: string): string {
+  const dotIndex = fileName.lastIndexOf('.');
+  return dotIndex >= 0 ? fileName.slice(dotIndex).toLowerCase() : '';
+}
+
+function validateFile(
+  slotId: DocumentSlotId,
+  file: File
+): { valid: boolean; error?: string } {
+  if (file.size > MAX_FILE_SIZE_BYTES) {
+    return { valid: false, error: 'حجم الملف يتجاوز الحد المسموح (10 ميجابايت).' };
+  }
+
+  const rules = SLOT_FILE_VALIDATION[slotId];
+  if (!rules) {
+    return { valid: true };
+  }
+
+  const extension = getFileExtension(file.name);
+  const isExtensionAllowed = rules.extensions.includes(extension);
+  const isMimeTypeAllowed = rules.mimeTypes.includes(file.type);
+
+  if (!isExtensionAllowed && !isMimeTypeAllowed) {
+    const isBrand = slotId === 'brand';
+    return {
+      valid: false,
+      error: isBrand
+        ? 'يُسمح فقط بملفات الصور (PNG, JPEG, JPG, SVG) للهوية البصرية.'
+        : 'يُسمح فقط بملفات PDF وWord لهذا المستند.',
+    };
+  }
+
+  return { valid: true };
+}
+
 const documentSlots: { id: DocumentSlotId; label: string; required: boolean }[] = [
   { id: 'license', label: 'رخصة الجمعية الخيرية', required: true },
   { id: 'bank', label: 'شهادة الحساب البنكي', required: true },
@@ -274,9 +403,15 @@ export function DocumentsPage() {
     if (hasPendingUploads) return;
     const input = document.createElement('input');
     input.type = 'file';
+    input.accept = SLOT_FILE_VALIDATION[slotId]?.accept || '';
     input.onchange = (e) => {
       const target = e.target as HTMLInputElement;
       if (target.files && target.files[0]) {
+        const validation = validateFile(slotId, target.files[0]);
+        if (!validation.valid) {
+          toast.error(validation.error || 'ملف غير صالح');
+          return;
+        }
         handleUpload(slotId, target.files[0]);
       }
     };
@@ -305,6 +440,11 @@ export function DocumentsPage() {
     if (hasPendingUploads) return;
     const file = event.dataTransfer.files?.[0];
     if (!file) return;
+    const validation = validateFile(slotId, file);
+    if (!validation.valid) {
+      toast.error(validation.error || 'ملف غير صالح');
+      return;
+    }
     handleUpload(slotId, file);
   };
 
@@ -478,35 +618,38 @@ export function DocumentsPage() {
                         }`}
                       />
                     )}
-                    <div className="min-w-0">
-                      <p className="font-medium truncate">{doc.label}</p>
-                      {isCompleted && file?.name && (
-                        <p
-                          className="text-sm text-green-700 truncate max-w-xs"
-                          title={file.name}
-                        >
-                          {file.name}
-                        </p>
-                      )}
-                      {isUploading && (
-                        <div className="w-32 mt-1">
-                          <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-blue-600 transition-all duration-300"
-                              style={{ width: `${file.progress}%` }}
-                            ></div>
-                          </div>
+                  <div className="min-w-0">
+                    <p className="font-medium truncate">{doc.label}</p>
+                    <p className="text-xs text-gray-500">
+                      {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF, Word'} - الحد الأقصى 10 ميجابايت
+                    </p>
+                    {isCompleted && file?.name && (
+                      <p
+                        className="text-sm text-green-700 truncate max-w-xs"
+                        title={file.name}
+                      >
+                        {file.name}
+                      </p>
+                    )}
+                    {isUploading && (
+                      <div className="w-32 mt-1">
+                        <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <div
+                            className="h-full bg-blue-600 transition-all duration-300"
+                            style={{ width: `${file.progress}%` }}
+                          ></div>
                         </div>
-                      )}
-                      {isError && (
-                        <p className="text-sm text-red-600">
-                          فشل الرفع. يرجى المحاولة مرة أخرى.
-                        </p>
-                      )}
-                      {!isCompleted && !isUploading && !isError && (
-                        <p className="text-sm text-red-600">مطلوب *</p>
-                      )}
-                    </div>
+                      </div>
+                    )}
+                    {isError && (
+                      <p className="text-sm text-red-600">
+                        فشل الرفع. يرجى المحاولة مرة أخرى.
+                      </p>
+                    )}
+                    {!isCompleted && !isUploading && !isError && (
+                      <p className="text-sm text-red-600">مطلوب *</p>
+                    )}
+                  </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {isCompleted && (
@@ -588,6 +731,9 @@ export function DocumentsPage() {
                     )}
                     <div className="min-w-0">
                       <p className="font-medium truncate">{doc.label}</p>
+                      <p className="text-xs text-gray-500">
+                        {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF, Word'} - الحد الأقصى 10 ميجابايت
+                      </p>
                       {isCompleted && file?.name && (
                         <p
                           className="text-sm text-green-700 truncate max-w-xs"
