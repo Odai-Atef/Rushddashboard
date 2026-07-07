@@ -927,55 +927,6 @@ function ChatView({
           )}
         </div>
 
-        {/* Right Panel - Project Info */}
-        <div className="w-80 bg-white rounded-xl border border-gray-200 overflow-y-auto">
-          <div className="p-4 border-b border-gray-200">
-            <h3 className="font-semibold mb-2">ملخص المشروع</h3>
-            <p className="text-sm text-gray-600">{currentConversation?.title || projectId || 'المشروع'}</p>
-          </div>
-
-          <div className="p-4 border-b border-gray-200">
-            <h4 className="font-semibold text-sm mb-3">المشاركون</h4>
-            <div className="space-y-2">
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-blue-600" />
-                </div>
-                <span className="text-sm">أنت</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="p-4 border-b border-gray-200">
-            <h4 className="font-semibold text-sm mb-3">الطلبات المفتوحة</h4>
-            <div className="space-y-2">
-              {revisions.slice(0, 2).map((rev) => (
-                <div key={rev.id} className="p-3 bg-gray-50 rounded-lg">
-                  <p className="text-sm font-medium mb-1">{rev.title}</p>
-                  <p className="text-xs text-gray-600">الحالة: {rev.status === 'in-progress' ? 'قيد العمل' : 'مفتوح'}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="p-4">
-            <h4 className="font-semibold text-sm mb-3">حالة المشروع</h4>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-600">التقدم</span>
-                <span className="text-sm font-medium">65%</span>
-              </div>
-              <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-600" style={{ width: '65%' }}></div>
-              </div>
-              <div className="pt-2">
-                <span className="inline-block px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-medium">
-                  قيد التنفيذ
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     );
   };

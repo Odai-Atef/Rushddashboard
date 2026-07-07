@@ -15,6 +15,7 @@ import {
   Eye,
   Save,
   Send,
+  Edit,
   Presentation,
   FileText,
   Upload,
@@ -553,7 +554,7 @@ export function ProjectDetailsPage() {
             <div className="flex gap-3 flex-wrap">
               {isProjectManager && (
                 <>
-                  {(isDraftProject || displayStatus === 'incubator-modifications') && (
+                  {(isDraftProject || displayStatus === 'incubator-modifications' || displayStatus === 'offer-approved') && (
                     <button
                       onClick={handleOpenPlan}
                       className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
