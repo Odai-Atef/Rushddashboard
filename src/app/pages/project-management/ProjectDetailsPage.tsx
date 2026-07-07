@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
   ChevronRight,
-  Edit,
   Sparkles,
   FileDown,
   Loader2,
@@ -16,6 +15,9 @@ import {
   Eye,
   Save,
   Send,
+  Presentation,
+  FileText,
+  Upload,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -90,6 +92,21 @@ export function ProjectDetailsPage() {
   const [decisionLoading, setDecisionLoading] = useState(false);
   const [reviewNotes, setReviewNotes] = useState('');
   const [reviewStep, setReviewStep] = useState<'view' | 'notes' | 'confirm-approve'>('view');
+  const [presentationLoading, setPresentationLoading] = useState(false);
+  const [designReviewOpen, setDesignReviewOpen] = useState(false);
+  const [designDecisionLoading, setDesignDecisionLoading] = useState(false);
+  const [designNotes, setDesignNotes] = useState('');
+  const [designInternalNotes, setDesignInternalNotes] = useState('');
+  const [designStep, setDesignStep] = useState<'view' | 'notes'>('view');
+  const [redesignLoading, setRedesignLoading] = useState(false);
+  const [offerReviewOpen, setOfferReviewOpen] = useState(false);
+  const [offerStep, setOfferStep] = useState<'view' | 'approve' | 'reject'>('view');
+  const [offerDecisionLoading, setOfferDecisionLoading] = useState(false);
+  const [offerDownloadLoading, setOfferDownloadLoading] = useState(false);
+  const [offerFile, setOfferFile] = useState<File | null>(null);
+  const [offerInternalNotes, setOfferInternalNotes] = useState('');
+  const [offerRejectReason, setOfferRejectReason] = useState('');
+  const [offerFileError, setOfferFileError] = useState('');
 
   const handleOpenPlan = async () => {
     if (!projectId) return;
@@ -206,6 +223,239 @@ export function ProjectDetailsPage() {
     }
   };
 
+  const handleGeneratePresentation = async () => {
+    if (!projectId) return;
+    if (!window.confirm('هل تريد إنشاء العرض التقديمي للمشروع بالذكاء الاصطناعي؟')) return;
+
+    setPresentationLoading(true);
+    try {
+      const res = await projectService.generatePresentation(projectId);
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم إنشاء العرض التقديمي بنجاح');
+        await refetch();
+      } else {
+        toast.success('تم إنشاء العرض التقديمي بنجاح');
+        await refetch();
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل إنشاء العرض التقديمي');
+    } finally {
+      setPresentationLoading(false);
+    }
+  };
+
+  const handleOpenDesignReview = () => {
+    setDesignReviewOpen(true);
+    setDesignStep('view');
+    setDesignNotes('');
+    setDesignInternalNotes('');
+  };
+
+  const handleCloseDesignReview = () => {
+    setDesignReviewOpen(false);
+    setDesignStep('view');
+    setDesignNotes('');
+    setDesignInternalNotes('');
+  };
+
+  const handleConfirmDesignApprove = () => {
+    if (window.confirm('هل أنت متأكد من اعتماد تصميم هذا المشروع؟')) {
+      handleDesignDecision('DESIGN_APPROVED');
+    }
+  };
+
+  const handleDesignDecision = async (decisionStatus: 'DESIGN_APPROVED' | 'DESIGN_REJECTED') => {
+    if (!projectId) return;
+    setDesignDecisionLoading(true);
+    try {
+      const payload: {
+        status: 'DESIGN_APPROVED' | 'DESIGN_REJECTED';
+        notes?: string;
+        internalNotes?: string;
+      } = {
+        status: decisionStatus,
+      };
+      if (decisionStatus === 'DESIGN_REJECTED') {
+        payload.notes = designNotes.trim();
+        if (designInternalNotes.trim()) {
+          payload.internalNotes = designInternalNotes.trim();
+        }
+      }
+      const res = await projectService.submitDesignDecision(projectId, payload);
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم تسجيل قرار التصميم بنجاح');
+        await refetch();
+        handleCloseDesignReview();
+      } else {
+        toast.success('تم تسجيل قرار التصميم بنجاح');
+        await refetch();
+        handleCloseDesignReview();
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تسجيل قرار التصميم');
+    } finally {
+      setDesignDecisionLoading(false);
+    }
+  };
+
+  const handleRequestRedesign = async () => {
+    if (!projectId) return;
+    if (!window.confirm('هل تريد طلب إعادة إنشاء التصميم؟')) return;
+
+    setRedesignLoading(true);
+    try {
+      const res = await projectService.generatePresentation(projectId, { forceRegenerate: true });
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم طلب إعادة إنشاء التصميم بنجاح');
+        await refetch();
+      } else {
+        toast.success('تم طلب إعادة إنشاء التصميم بنجاح');
+        await refetch();
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل طلب إعادة إنشاء التصميم');
+    } finally {
+      setRedesignLoading(false);
+    }
+  };
+
+  const getDesignHtml = (): string => {
+    if (!project) return '';
+    return project.presentationResponseText || '';
+  };
+
+  const handleOpenOfferReview = () => {
+    setOfferReviewOpen(true);
+    setOfferStep('view');
+    setOfferFile(null);
+    setOfferInternalNotes('');
+    setOfferRejectReason('');
+    setOfferFileError('');
+  };
+
+  const handleCloseOfferReview = () => {
+    setOfferReviewOpen(false);
+    setOfferStep('view');
+    setOfferFile(null);
+    setOfferInternalNotes('');
+    setOfferRejectReason('');
+    setOfferFileError('');
+  };
+
+  const handleDownloadPriceOffer = async () => {
+    if (!projectId || !project) return;
+    setOfferDownloadLoading(true);
+    try {
+      const res = await projectService.downloadPriceOffer(projectId, 'offer');
+      const blob = res.data;
+      if (!(blob instanceof Blob)) {
+        throw new Error('تعذر الحصول على ملف عرض السعر');
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${project.name || 'project'}-price-offer`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم تحميل عرض السعر بنجاح');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تحميل عرض السعر');
+    } finally {
+      setOfferDownloadLoading(false);
+    }
+  };
+
+  const validateOfferFile = (file: File): boolean => {
+    const allowedExtensions = ['pdf', 'doc', 'docx'];
+    const allowedMimeTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    const isValidType = allowedExtensions.includes(extension) || allowedMimeTypes.includes(file.type);
+    const maxSize = 10 * 1024 * 1024;
+    if (!isValidType) {
+      setOfferFileError('يُسمح فقط بملفات PDF أو Word');
+      return false;
+    }
+    if (file.size > maxSize) {
+      setOfferFileError('حجم الملف يجب ألا يتجاوز 10 ميجابايت');
+      return false;
+    }
+    setOfferFileError('');
+    return true;
+  };
+
+  const handleOfferFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setOfferFile(null);
+      setOfferFileError('');
+      return;
+    }
+    if (validateOfferFile(file)) {
+      setOfferFile(file);
+    } else {
+      setOfferFile(null);
+      e.target.value = '';
+    }
+  };
+
+  const handleApprovePriceOffer = async () => {
+    if (!projectId || !offerFile) return;
+    if (!validateOfferFile(offerFile)) return;
+
+    setOfferDecisionLoading(true);
+    try {
+      const res = await projectService.approvePriceOffer(projectId, {
+        file: offerFile,
+        internalNotes: offerInternalNotes.trim() || undefined,
+      });
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم اعتماد عرض السعر بنجاح');
+        await refetch();
+        handleCloseOfferReview();
+      } else {
+        toast.success('تم اعتماد عرض السعر بنجاح');
+        await refetch();
+        handleCloseOfferReview();
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل اعتماد عرض السعر');
+    } finally {
+      setOfferDecisionLoading(false);
+    }
+  };
+
+  const handleRejectPriceOffer = async () => {
+    if (!projectId) return;
+    const reason = offerRejectReason.trim();
+    if (!reason) {
+      toast.error('يرجى كتابة سبب الرفض');
+      return;
+    }
+    setOfferDecisionLoading(true);
+    try {
+      const res = await projectService.rejectPriceOffer(projectId, { reason });
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم رفض عرض السعر بنجاح');
+        await refetch();
+        handleCloseOfferReview();
+      } else {
+        toast.success('تم رفض عرض السعر بنجاح');
+        await refetch();
+        handleCloseOfferReview();
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل رفض عرض السعر');
+    } finally {
+      setOfferDecisionLoading(false);
+    }
+  };
+
   const handleCharityDecision = async (decisionStatus: 'CHARITY_APPROVAL' | 'INCUBATOR_MODIFICATIONS') => {
     if (!projectId) return;
     setDecisionLoading(true);
@@ -269,6 +519,11 @@ export function ProjectDetailsPage() {
   const isEntityManager = user?.roleSlug === 'entity-managers';
   const rawStatus = (project.status as string).toUpperCase().replace(/-/g, '_');
   const showReviewButton = isEntityManager && rawStatus === 'CHARITY_REVIEW';
+  const showGeneratePresentationButton = isProjectManager && rawStatus === 'CHARITY_APPROVAL';
+  const showDesignReviewButton = isEntityManager && rawStatus === 'DESIGN_REVIEW';
+  const showRedesignButton = isProjectManager && rawStatus === 'DESIGN_REJECTED';
+  const isDesignRejected = rawStatus === 'DESIGN_REJECTED';
+  const showOfferReviewButton = isEntityManager && rawStatus === 'OFFER_REVIEW';
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -298,13 +553,15 @@ export function ProjectDetailsPage() {
             <div className="flex gap-3 flex-wrap">
               {isProjectManager && (
                 <>
-                  <button
-                    onClick={handleOpenPlan}
-                    className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
-                  >
-                    <Sparkles className="w-5 h-5" />
-                    إنشاء دراسة باستخدام الذكاء الاصطناعي
-                  </button>
+                  {(isDraftProject || displayStatus === 'incubator-modifications') && (
+                    <button
+                      onClick={handleOpenPlan}
+                      className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                    >
+                      <Sparkles className="w-5 h-5" />
+                      إنشاء دراسة باستخدام الذكاء الاصطناعي
+                    </button>
+                  )}
                   {isDraftProject && (
                     <button
                       onClick={handleSubmitToCharity}
@@ -328,6 +585,52 @@ export function ProjectDetailsPage() {
                 >
                   <Eye className="w-5 h-5" />
                   مراجعة مسودة المشروع
+                </button>
+              )}
+              {showGeneratePresentationButton && (
+                <button
+                  onClick={handleGeneratePresentation}
+                  disabled={presentationLoading}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {presentationLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Presentation className="w-5 h-5" />
+                  )}
+                  إنشاء العرض التقديمي بالذكاء الاصطناعي
+                </button>
+              )}
+              {showDesignReviewButton && (
+                <button
+                  onClick={handleOpenDesignReview}
+                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+                >
+                  <Eye className="w-5 h-5" />
+                  اعتماد تصميم المشروع
+                </button>
+              )}
+              {showRedesignButton && (
+                <button
+                  onClick={handleRequestRedesign}
+                  disabled={redesignLoading}
+                  className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {redesignLoading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Presentation className="w-5 h-5" />
+                  )}
+                  طلب إعادة التصميم
+                </button>
+              )}
+              {showOfferReviewButton && (
+                <button
+                  onClick={handleOpenOfferReview}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                >
+                  <FileText className="w-5 h-5" />
+                  اعتماد عرض السعر
                 </button>
               )}
             </div>
@@ -692,6 +995,290 @@ export function ProjectDetailsPage() {
                       <Loader2 className="w-4 h-4 animate-spin" />
                     ) : null}
                     إرسال طلب التعديلات
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {designReviewOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={handleCloseDesignReview}
+          />
+          <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+              <div>
+                <h2 className="text-xl font-semibold">اعتماد تصميم المشروع</h2>
+                <p className="text-sm text-gray-500 mt-1">يرجى مراجعة التصميم المعروض أدناه ثم اختيار القرار المناسب</p>
+              </div>
+              <button
+                onClick={handleCloseDesignReview}
+                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+              {designStep === 'view' ? (
+                <div className="space-y-6 w-full">
+                  {getDesignHtml() ? (
+                    <div
+                      className="w-full bg-white rounded-xl border border-gray-200 min-h-full"
+                      dangerouslySetInnerHTML={{ __html: getDesignHtml() }}
+                    />
+                  ) : (
+                    <div className="prose prose-sm max-w-none text-right w-full break-words bg-white rounded-xl p-6 border border-gray-200 min-h-full [&>*]:text-right">
+                      لا يوجد تصميم معتمد لهذا المشروع
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="text-lg font-semibold">طلب تعديل على التصميم</h3>
+                  <p className="text-sm text-gray-600">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
+                  <textarea
+                    value={designNotes}
+                    onChange={(e) => setDesignNotes(e.target.value)}
+                    placeholder="اكتب ملاحظات التعديلات هنا..."
+                    rows={6}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                  />
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">ملاحظات داخلية (اختياري)</label>
+                    <textarea
+                      value={designInternalNotes}
+                      onChange={(e) => setDesignInternalNotes(e.target.value)}
+                      placeholder="ملاحظات داخلية غير مرسلة للجهة..."
+                      rows={4}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                    />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+              {designStep === 'view' ? (
+                <>
+                  <button
+                    onClick={handleCloseDesignReview}
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    إلغاء
+                  </button>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <button
+                      onClick={() => setDesignStep('notes')}
+                      className="px-5 py-2.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2"
+                    >
+                      طلب تعديل
+                    </button>
+                    <button
+                      onClick={handleConfirmDesignApprove}
+                      disabled={designDecisionLoading}
+                      className="px-5 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {designDecisionLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : null}
+                      اعتماد التصميم
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setDesignStep('view')}
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    رجوع
+                  </button>
+                  <button
+                    onClick={() => handleDesignDecision('DESIGN_REJECTED')}
+                    disabled={designDecisionLoading || !designNotes.trim()}
+                    className="px-5 py-2.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {designDecisionLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : null}
+                    إرسال طلب التعديل
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {offerReviewOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={handleCloseOfferReview}
+          />
+          <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+              <div>
+                <h2 className="text-xl font-semibold">اعتماد عرض السعر</h2>
+                <p className="text-sm text-gray-500 mt-1">
+                  {offerStep === 'view'
+                    ? 'يرجى تحميل عرض السعر المُولد ومراجعته قبل اتخاذ القرار'
+                    : offerStep === 'approve'
+                    ? 'ارفع عرض السعر الموقع لإتمام الاعتماد'
+                    : 'اكتب سبب رفض عرض السعر'}
+                </p>
+              </div>
+              <button
+                onClick={handleCloseOfferReview}
+                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+              {offerStep === 'view' && (
+                <div className="space-y-6 max-w-3xl mx-auto">
+                  <div className="bg-blue-50 border border-blue-100 rounded-xl p-6 text-center space-y-4">
+                    <FileText className="w-16 h-16 text-blue-600 mx-auto" />
+                    <div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1">عرض السعر</h3>
+                      <p className="text-sm text-gray-600">يمكنك تحميل عرض السعر المُولد لمراجعته قبل اتخاذ القرار.</p>
+                    </div>
+                    <button
+                      onClick={handleDownloadPriceOffer}
+                      disabled={offerDownloadLoading}
+                      className="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {offerDownloadLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <FileDown className="w-4 h-4" />
+                      )}
+                      تحميل عرض السعر
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {offerStep === 'approve' && (
+                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="text-lg font-semibold">رفع عرض السعر الموقع</h3>
+                  <p className="text-sm text-gray-600">يرجى رفع نسخة عرض السعر الموقع بصيغة PDF أو Word فقط (بحد أقصى 10 ميجابايت).</p>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700">الملف الموقع</label>
+                    <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                      <div className="flex flex-col items-center gap-2 text-gray-600">
+                        <Upload className="w-8 h-8" />
+                        <span className="text-sm font-medium">
+                          {offerFile ? offerFile.name : 'انقر لاختيار ملف PDF أو Word'}
+                        </span>
+                        <span className="text-xs text-gray-400">PDF أو Word - بحد أقصى 10 ميجابايت</span>
+                      </div>
+                      <input
+                        type="file"
+                        accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        onChange={handleOfferFileChange}
+                        className="hidden"
+                      />
+                    </label>
+                    {offerFileError && (
+                      <p className="text-sm text-red-600">{offerFileError}</p>
+                    )}
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">ملاحظات داخلية (اختياري)</label>
+                    <textarea
+                      value={offerInternalNotes}
+                      onChange={(e) => setOfferInternalNotes(e.target.value)}
+                      placeholder="ملاحظات داخلية غير مرسلة للجهة..."
+                      rows={4}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                    />
+                  </div>
+                </div>
+              )}
+
+              {offerStep === 'reject' && (
+                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                  <h3 className="text-lg font-semibold">رفض عرض السعر</h3>
+                  <p className="text-sm text-gray-600">يرجى توضيح سبب رفض عرض السعر ليتم إرساله إلى مدير المشروع.</p>
+                  <textarea
+                    value={offerRejectReason}
+                    onChange={(e) => setOfferRejectReason(e.target.value)}
+                    placeholder="اكتب سبب الرفض هنا..."
+                    rows={8}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+              {offerStep === 'view' ? (
+                <>
+                  <button
+                    onClick={handleCloseOfferReview}
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    إلغاء
+                  </button>
+                  <div className="flex items-center gap-3 flex-wrap">
+                    <button
+                      onClick={() => setOfferStep('reject')}
+                      className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium flex items-center gap-2"
+                    >
+                      رفض
+                    </button>
+                    <button
+                      onClick={() => setOfferStep('approve')}
+                      className="px-5 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center gap-2"
+                    >
+                      موافقة
+                    </button>
+                  </div>
+                </>
+              ) : offerStep === 'approve' ? (
+                <>
+                  <button
+                    onClick={() => setOfferStep('view')}
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    رجوع
+                  </button>
+                  <button
+                    onClick={handleApprovePriceOffer}
+                    disabled={offerDecisionLoading || !offerFile}
+                    className="px-5 py-2.5 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {offerDecisionLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : null}
+                    إرسال الموافقة مع الملف
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setOfferStep('view')}
+                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  >
+                    رجوع
+                  </button>
+                  <button
+                    onClick={handleRejectPriceOffer}
+                    disabled={offerDecisionLoading || !offerRejectReason.trim()}
+                    className="px-5 py-2.5 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {offerDecisionLoading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : null}
+                    إرسال سبب الرفض
                   </button>
                 </>
               )}

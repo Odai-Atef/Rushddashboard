@@ -112,6 +112,98 @@ export interface CharityDecisionResponse {
   conversationId: string;
 }
 
+export interface PresentationFile {
+  id: string;
+  originalName: string;
+  mimeType: string;
+  downloadUrl: string;
+}
+
+export interface GeneratePresentationResponse {
+  success: boolean;
+  message: string;
+  projectId: string;
+  htmlContent: string;
+  pdfFile: PresentationFile;
+  conversationId: string;
+  aiSessionId: string;
+}
+
+export interface ProjectLifecycleChangedByUser {
+  id: string;
+  email: string;
+}
+
+export interface ProjectLifecycleStep {
+  id: string;
+  projectId: string;
+  status: string;
+  enteredAt: string;
+  exitedAt: string | null;
+  durationMs: number | null;
+  notes: string | null;
+  changedBy: string;
+  changedByUser: ProjectLifecycleChangedByUser;
+}
+
+export interface DesignDecisionPayload {
+  status: 'DESIGN_APPROVED' | 'DESIGN_REJECTED';
+  notes?: string;
+  internalNotes?: string;
+}
+
+export interface DesignDecisionResponse {
+  success: boolean;
+  message: string;
+  projectId: string;
+  newStatus: string;
+  conversationId: string;
+}
+
+export interface PriceOfferApprovePayload {
+  file: File;
+  internalNotes?: string;
+}
+
+export interface PriceOfferRejectPayload {
+  reason: string;
+}
+
+export interface PriceOfferDecisionResponse {
+  success: boolean;
+  message: string;
+  projectId: string;
+  newStatus: string;
+  fileId: string | null;
+  conversationId: string;
+}
+
+export interface ProjectDocumentUploader {
+  id: string;
+  email: string;
+}
+
+export interface ProjectDocumentFile {
+  id: string;
+  originalName: string;
+  mimeType: string;
+  size: number;
+  storageKey: string;
+  storageProvider: string;
+  storagePath: string;
+}
+
+export interface ProjectDocument {
+  id: string;
+  projectId: string;
+  fileId: string;
+  documentType: string;
+  uploadedBy: string;
+  createdAt: string;
+  file: ProjectDocumentFile;
+  uploader: ProjectDocumentUploader;
+}
+
 export interface ProjectDashboardData {
   stats: ProjectDashboardStats;
   statusDistribution: StatusDistributionItem[];
@@ -246,6 +338,104 @@ export class ProjectService {
     config?: RequestConfig
   ): Promise<ApiResponse<CharityDecisionResponse>> {
     return apiClient.post<CharityDecisionResponse>(`/api/v1/projects/${id}/charity-decision`, payload, config);
+  }
+
+  /**
+   * Generate an AI presentation for a project approved by the charity
+   * POST /api/v1/projects/:id/generate-presentation
+   */
+  async generatePresentation(
+    id: string,
+    options: { forceRegenerate?: boolean } = {},
+    config?: RequestConfig
+  ): Promise<ApiResponse<GeneratePresentationResponse>> {
+    return apiClient.post<GeneratePresentationResponse>(
+      `/api/v1/projects/${id}/generate-presentation`,
+      {},
+      {
+        ...config,
+        params: { forceRegenerate: options.forceRegenerate ?? true, ...(config?.params || {}) },
+      }
+    );
+  }
+
+  /**
+   * Get project lifecycle history
+   * GET /api/v1/projects/:id/lifecycle
+   */
+  async getProjectLifecycle(
+    id: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<ProjectLifecycleStep[]>> {
+    return apiClient.get<ProjectLifecycleStep[]>(`/api/v1/projects/${id}/lifecycle`, config);
+  }
+
+  /**
+   * Get project documents
+   * GET /api/v1/projects/:id/documents
+   */
+  async getProjectDocuments(
+    id: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<ProjectDocument[]>> {
+    return apiClient.get<ProjectDocument[]>(`/api/v1/projects/${id}/documents`, config);
+  }
+
+  /**
+   * Entity manager makes a design decision on a project in DESIGN_REVIEW
+   * POST /api/v1/projects/:id/design-decision
+   */
+  async submitDesignDecision(
+    id: string,
+    payload: DesignDecisionPayload,
+    config?: RequestConfig
+  ): Promise<ApiResponse<DesignDecisionResponse>> {
+    return apiClient.post<DesignDecisionResponse>(`/api/v1/projects/${id}/design-decision`, payload, config);
+  }
+
+  /**
+   * Download the price offer file for a project
+   * GET /api/v1/projects/:id/price-offer/download
+   */
+  async downloadPriceOffer(
+    id: string,
+    type?: 'signed' | 'offer',
+    config?: RequestConfig
+  ): Promise<ApiResponse<Blob>> {
+    return apiClient.get<Blob>(`/api/v1/projects/${id}/price-offer/download`, {
+      ...config,
+      params: { ...(type ? { type } : {}), ...(config?.params || {}) },
+      responseType: 'blob',
+    });
+  }
+
+  /**
+   * Approve the price offer with a signed document
+   * POST /api/v1/projects/:id/price-offer/approve
+   */
+  async approvePriceOffer(
+    id: string,
+    payload: PriceOfferApprovePayload,
+    config?: RequestConfig
+  ): Promise<ApiResponse<PriceOfferDecisionResponse>> {
+    const formData = new FormData();
+    formData.append('file', payload.file);
+    if (payload.internalNotes) {
+      formData.append('internalNotes', payload.internalNotes);
+    }
+    return apiClient.upload<PriceOfferDecisionResponse>(`/api/v1/projects/${id}/price-offer/approve`, formData, config);
+  }
+
+  /**
+   * Reject the price offer with a reason
+   * POST /api/v1/projects/:id/price-offer/reject
+   */
+  async rejectPriceOffer(
+    id: string,
+    payload: PriceOfferRejectPayload,
+    config?: RequestConfig
+  ): Promise<ApiResponse<PriceOfferDecisionResponse>> {
+    return apiClient.post<PriceOfferDecisionResponse>(`/api/v1/projects/${id}/price-offer/reject`, payload, config);
   }
 }
 

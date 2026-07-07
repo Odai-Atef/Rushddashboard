@@ -284,7 +284,8 @@ export function ProjectListPage() {
     ];
     const entityManagerStatuses = [
       'CHARITY_REVIEW',
-      'COMMISSION_APPROVAL',
+      'DESIGN_REVIEW',
+      'OFFER_REVIEW',
     ];
 
     if (roleSlug === 'project-managers' && projectManagerStatuses.includes(rawStatus)) {

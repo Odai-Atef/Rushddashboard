@@ -5,6 +5,7 @@ import {
 } from 'lucide-react';
 
 export type ProjectStatus =
+  | 'created'
   | 'draft'
   | 'charity-review'
   | 'incubator-modifications'
@@ -13,6 +14,12 @@ export type ProjectStatus =
   | 'financial-approval'
   | 'approved'
   | 'design-team'
+  | 'design-review'
+  | 'design-approved'
+  | 'design-rejected'
+  | 'offer-review'
+  | 'offer-approved'
+  | 'offer-rejected'
   | 'ready-donor'
   | 'submitted-donor'
   | 'funded'
@@ -100,6 +107,7 @@ export interface ProjectDetails extends Project {
   llmResponseText?: string;
   aiStudy?: string;
   generatedStudy?: string;
+  presentationResponseText?: string;
 }
 
 export interface CreateProjectDto {
@@ -177,14 +185,21 @@ export const statusConfig: Record<
   ProjectStatus,
   { label: string; color: string; bg: string }
 > = {
-  draft: { label: 'مسودة', color: '#6b7280', bg: '#f3f4f6' },
-  'charity-review': { label: 'مراجعة الجمعية', color: '#3b82f6', bg: '#dbeafe' },
+  created: { label: 'جديد', color: '#6b7280', bg: '#f3f4f6' },
+  draft: { label: 'بانتظار إنشاء المسودة', color: '#6b7280', bg: '#f3f4f6' },
+  'charity-review': { label: 'في انتظار مراجعة الجهة لمسودة المشروع', color: '#3b82f6', bg: '#dbeafe' },
   'incubator-modifications': { label: 'تعديلات الحاضنة', color: '#f59e0b', bg: '#fef3c7' },
-  'charity-approval': { label: 'موافقة الجمعية', color: '#8b5cf6', bg: '#ede9fe' },
+  'charity-approval': { label: 'تمت الموافقة من الجهة على المسودة', color: '#8b5cf6', bg: '#ede9fe' },
   'pm-approval': { label: 'موافقة مدير المشروع', color: '#ec4899', bg: '#fce7f3' },
   'financial-approval': { label: 'موافقة مالية', color: '#14b8a6', bg: '#ccfbf1' },
   approved: { label: 'معتمد', color: '#10b981', bg: '#d1fae5' },
   'design-team': { label: 'فريق التصميم', color: '#6366f1', bg: '#e0e7ff' },
+  'design-review': { label: 'مراجعة التصميم', color: '#8b5cf6', bg: '#ede9fe' },
+  'design-approved': { label: 'تمت الموافقة على التصميم', color: '#10b981', bg: '#d1fae5' },
+  'design-rejected': { label: 'تم رفض التصميم', color: '#ef4444', bg: '#fee2e2' },
+  'offer-review': { label: 'بانتظار اعتماد عرض السعر', color: '#3b82f6', bg: '#dbeafe' },
+  'offer-approved': { label: 'تم اعتماد عرض السعر', color: '#10b981', bg: '#d1fae5' },
+  'offer-rejected': { label: 'تم رفض عرض السعر', color: '#ef4444', bg: '#fee2e2' },
   'ready-donor': { label: 'جاهز للمانحين', color: '#06b6d4', bg: '#cffafe' },
   'submitted-donor': { label: 'مقدم للمانحين', color: '#0891b2', bg: '#cffafe' },
   funded: { label: 'ممول', color: '#10b981', bg: '#d1fae5' },
