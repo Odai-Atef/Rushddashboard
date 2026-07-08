@@ -54,6 +54,9 @@ function getBudgetAmount(budget: number | Record<string, unknown>): number {
 }
 
 function getManagerName(project: ProjectDetailsType): string {
+  if (project.manager && typeof project.manager === 'object') {
+    return project.manager.name || project.manager.email || project.managerId || 'غير محدد';
+  }
   return toDisplayString(project.manager, project.managerId || 'غير محدد');
 }
 
@@ -545,10 +548,6 @@ export function ProjectDetailsPage() {
                 <span className="flex items-center gap-1">
                   <Building2 className="w-4 h-4" />
                   {getOrganizationName(project)}
-                </span>
-                <span className="flex items-center gap-1">
-                  <User className="w-4 h-4" />
-                  {getManagerName(project)}
                 </span>
               </div>
             </div>
