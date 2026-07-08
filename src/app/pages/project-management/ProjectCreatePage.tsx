@@ -35,6 +35,7 @@ export function ProjectCreatePage() {
     organizationId: '',
     description: '',
     beneficiaries: '',
+    beneficiariesCount: '',
     geographicScope: '',
     budget: '',
     currencyCode: 'SAR',
@@ -164,6 +165,15 @@ export function ProjectCreatePage() {
       errors.beneficiaries = 'الفئة المستفيدة مطلوبة.';
     }
 
+    if (!formData.beneficiariesCount) {
+      errors.beneficiariesCount = 'عدد المستفيدين مطلوب.';
+    } else {
+      const countNum = Number(formData.beneficiariesCount);
+      if (isNaN(countNum) || countNum < 0 || !Number.isInteger(countNum)) {
+        errors.beneficiariesCount = 'عدد المستفيدين يجب أن يكون عدداً صحيحاً 0 أو أكثر.';
+      }
+    }
+
     if (!formData.geographicScope?.trim()) {
       errors.geographicScope = 'النطاق الجغرافي مطلوب.';
     }
@@ -204,6 +214,7 @@ export function ProjectCreatePage() {
       startDate: formData.startDate,
       endDate: formData.endDate,
       beneficiaries: formData.beneficiaries,
+      beneficiariesCount: Number(formData.beneficiariesCount) || 0,
       geographicScope: formData.geographicScope,
       managerId: user?.id || '',
       organizationId: formData.organizationId,
@@ -348,6 +359,19 @@ export function ProjectCreatePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-2">عدد المستفيدين *</label>
+                {getFieldError('beneficiariesCount') && <p className="text-red-600 text-sm mb-1">{getFieldError('beneficiariesCount')}</p>}
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={formData.beneficiariesCount}
+                  onChange={(e) => updateField('beneficiariesCount', e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  placeholder="مثال: 500"
+                />
+              </div>
               <div>
                 <label className="block text-sm font-medium mb-2">النطاق الجغرافي *</label>
                 {getFieldError('geographicScope') && <p className="text-red-600 text-sm mb-1">{getFieldError('geographicScope')}</p>}

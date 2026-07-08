@@ -6,7 +6,7 @@
 
 import apiClient from '../client';
 import { ApiResponse, RequestConfig } from '../types';
-import { Project, ProjectDetails, ProjectHealth, ProjectStatus } from '@/app/pages/project-management/project-types';
+import { Project, ProjectDetails, ProjectHealth, ProjectStatus, UpdateProjectDto } from '@/app/pages/project-management/project-types';
 
 export interface CreateProjectDto {
   name: string;
@@ -16,6 +16,7 @@ export interface CreateProjectDto {
   startDate: string;
   endDate: string;
   beneficiaries: string;
+  beneficiariesCount: number;
   geographicScope: string;
   managerId: string;
   organizationId: string;
@@ -245,6 +246,18 @@ export class ProjectService {
     config?: RequestConfig
   ): Promise<ApiResponse<CreatedProjectResponse>> {
     return apiClient.post<CreatedProjectResponse>('/api/v1/projects', data, config);
+  }
+
+  /**
+   * Update an existing project
+   * PATCH /api/v1/projects/:id
+   */
+  async updateProject(
+    id: string,
+    data: UpdateProjectDto,
+    config?: RequestConfig
+  ): Promise<ApiResponse<CreatedProjectResponse>> {
+    return apiClient.patch<CreatedProjectResponse>(`/api/v1/projects/${id}`, data, config);
   }
 
   /**

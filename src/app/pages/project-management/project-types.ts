@@ -4,6 +4,12 @@ import {
   XCircle,
 } from 'lucide-react';
 
+export interface FundingAreaInfo {
+  id: string;
+  name: string;
+  nameAr?: string;
+}
+
 export type ProjectStatus =
   | 'created'
   | 'draft'
@@ -82,6 +88,7 @@ export interface Project {
   managerId: string | null;
   description: string;
   beneficiaries: string;
+  beneficiariesCount?: number;
   geographicScope: string;
   health: ProjectHealth | string;
   version: number;
@@ -95,6 +102,8 @@ export interface Project {
   documents?: ProjectDocument[];
   organization?: string;
   lastUpdated?: string;
+  fundingAreaIds?: string[];
+  fundingAreas?: FundingAreaInfo[];
 }
 
 export interface ProjectDetails extends Project {
@@ -118,6 +127,7 @@ export interface CreateProjectDto {
   startDate: string;
   endDate: string;
   beneficiaries: string;
+  beneficiariesCount: number;
   geographicScope: string;
   managerId: string;
   organizationId: string;
@@ -134,6 +144,12 @@ export interface CreatedProjectResponse extends CreateProjectDto {
   version?: number;
   manager?: string | null;
   organization?: string;
+}
+
+export interface UpdateProjectDto extends Partial<CreateProjectDto> {
+  status?: ProjectStatus | string;
+  llmResponseText?: string;
+  presentationResponseText?: string;
 }
 
 export interface ProjectListResponse {

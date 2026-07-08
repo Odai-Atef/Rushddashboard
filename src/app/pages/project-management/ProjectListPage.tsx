@@ -366,6 +366,15 @@ export function ProjectListPage() {
                         <MessageSquare className="w-3.5 h-3.5" />
                         متابعة تحديثات المشروع - شات
                       </a>
+                      {isProjectManager && (
+                        <a
+                          href={`/dashboard/project-management/edit/${project.id}`}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        >
+                          <Pencil className="w-3.5 h-3.5" />
+                          تعديل
+                        </a>
+                      )}
                     </div>
                   </td>
                 </tr>

@@ -14,6 +14,7 @@ import { useProjectDetails } from '@/api/hooks/useProjectDetails';
 import { useProjectLifecycle } from '@/api/hooks/useProjectLifecycle';
 import { ProjectNotFound } from './ProjectNotFound';
 import { statusConfig, ProjectStatus } from './project-types';
+import { formatDateTime } from '@/app/lib/formatters';
 
 function formatDuration(ms: number | null): string {
   if (ms === null || ms === undefined) return '-';
@@ -157,11 +158,11 @@ export function ProjectActivityPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 mb-3">
                           <div>
                             <p className="text-xs text-gray-500 mb-1">تاريخ الدخول</p>
-                            <p>{new Date(step.enteredAt).toLocaleString('ar-SA')}</p>
+                            <p>{new Date(step.enteredAt).toLocaleString('ar-SA')} ({formatDateTime(step.enteredAt)})</p>
                           </div>
                           <div>
                             <p className="text-xs text-gray-500 mb-1">تاريخ الخروج</p>
-                            <p>{step.exitedAt ? new Date(step.exitedAt).toLocaleString('ar-SA') : '—'}</p>
+                            <p>{step.exitedAt ? `${new Date(step.exitedAt).toLocaleString('ar-SA')} (${formatDateTime(step.exitedAt)})` : '—'}</p>
                           </div>
                         </div>
 

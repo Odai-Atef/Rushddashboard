@@ -26,7 +26,7 @@ import MDEditor from '@uiw/react-md-editor';
 import { useProjectDetails } from '@/api/hooks/useProjectDetails';
 import { projectService } from '@/api/services/project-service';
 import { ProjectNotFound } from './ProjectNotFound';
-import { healthConfig, statusConfig, ProjectDetails as ProjectDetailsType, ProjectStatus } from './project-types';
+import { healthConfig, statusConfig, ProjectDetails as ProjectDetailsType, ProjectStatus, FundingAreaInfo } from './project-types';
 import { useAuth } from '@/app/layouts/RootLayout';
 
 import { toast } from 'sonner';
@@ -108,6 +108,7 @@ export function ProjectDetailsPage() {
   const [offerInternalNotes, setOfferInternalNotes] = useState('');
   const [offerRejectReason, setOfferRejectReason] = useState('');
   const [offerFileError, setOfferFileError] = useState('');
+  const [activeDocTab, setActiveDocTab] = useState<'study' | 'presentation'>('study');
 
   const handleOpenPlan = async () => {
     if (!projectId) return;
@@ -554,6 +555,13 @@ export function ProjectDetailsPage() {
             <div className="flex gap-3 flex-wrap">
               {isProjectManager && (
                 <>
+                  <button
+                    onClick={() => navigate(`/dashboard/project-management/edit/${projectId}`)}
+                    className="px-4 py-2 bg-gray-700 text-white rounded-lg hover:bg-gray-800 transition-colors flex items-center gap-2"
+                  >
+                    <Edit className="w-5 h-5" />
+                    تعديل
+                  </button>
                   {(isDraftProject || displayStatus === 'incubator-modifications' || displayStatus === 'offer-approved') && (
                     <button
                       onClick={handleOpenPlan}
@@ -680,14 +688,6 @@ export function ProjectDetailsPage() {
               <h2 className="text-xl font-semibold mb-4">معلومات المشروع</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">نوع المشروع</p>
-                  <p className="font-medium">{toDisplayString(project.type)}</p>
-                </div>
-                <div>
-                  <p className="text-sm text-gray-600 mb-1">التصنيف</p>
-                  <p className="font-medium">{toDisplayString(project.category)}</p>
-                </div>
-                <div>
                   <p className="text-sm text-gray-600 mb-1">الفئة المستهدفة</p>
                   <p className="font-medium">{toDisplayString(project.beneficiaries)}</p>
                 </div>
@@ -697,6 +697,29 @@ export function ProjectDetailsPage() {
                     <MapPin className="w-4 h-4 text-gray-400" />
                     {toDisplayString(project.geographicScope)}
                   </p>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2">
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">عدد المستفيدين</p>
+                    <p className="font-medium">
+                      {typeof project.beneficiariesCount === 'number' ? project.beneficiariesCount.toLocaleString('ar-SA') : '—'}
+                    </p>
+                  </div>
+                  {(project.fundingAreaIds?.length > 0 || project.fundingAreas?.length > 0) && (
+                    <div>
+                      <p className="text-sm text-gray-600 mb-1">مجالات العمل</p>
+                      <div className="flex flex-wrap gap-2">
+                        {(project.fundingAreas || project.fundingAreaIds?.map((id) => ({ id, name: id })) || []).map((area: FundingAreaInfo | { id: string; name: string }) => (
+                          <span
+                            key={area.id}
+                            className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-700"
+                          >
+                            {area.nameAr || area.name}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -710,6 +733,51 @@ export function ProjectDetailsPage() {
                 </span>
               </div>
             </div>
+
+            {(project.llmResponseText || project.presentationResponseText) && (
+              <div className="bg-white rounded-xl p-6 border border-gray-200">
+                <div className="flex items-center gap-4 border-b border-gray-200 mb-4">
+                  {project.llmResponseText && (
+                    <button
+                      onClick={() => setActiveDocTab('study')}
+                      className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'study' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    >
+                      دراسة المشروع
+                    </button>
+                  )}
+                  {project.presentationResponseText && (
+                    <button
+                      onClick={() => setActiveDocTab('presentation')}
+                      className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'presentation' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                    >
+                      تصميم العرض
+                    </button>
+                  )}
+                </div>
+                {activeDocTab === 'study' && project.llmResponseText && (
+                  <div dir="rtl" className="bg-white rounded-xl border border-gray-200 min-h-[300px] text-right">
+                    <MDEditor
+                      value={project.llmResponseText}
+                      onChange={() => {}}
+                      height="400px"
+                      visibleDragBar={false}
+                      preview="preview"
+                      hideToolbar={true}
+                      className="w-full [&_*]:text-right"
+                      data-color-mode="light"
+                    />
+                  </div>
+                )}
+                {activeDocTab === 'presentation' && project.presentationResponseText && (
+                  <div dir="rtl" className="bg-white rounded-xl border border-gray-200 p-6 min-h-[300px] text-right">
+                    <div
+                      className="prose prose-sm max-w-none w-full break-words [&>*]:text-right"
+                      dangerouslySetInnerHTML={{ __html: project.presentationResponseText }}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
 
             {project.budgets && project.budgets.length > 0 && (
               <div className="bg-white rounded-xl p-6 border border-gray-200">

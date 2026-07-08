@@ -1032,11 +1032,8 @@ function MessageBubble({
 
   if (editingMessageId === msg.id) {
     return (
-      <div className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
-        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <User className="w-5 h-5 text-blue-600" />
-        </div>
-        <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
+      <div className={`flex gap-3 ${isOwn ? 'justify-start' : 'justify-end'}`}>
+        <div className={`max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
           <input
             type="text"
             value={editInput}
@@ -1048,7 +1045,7 @@ function MessageBubble({
             className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
             autoFocus
           />
-          <div className="flex gap-2 mt-1 justify-end">
+          <div className={`flex gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
             <button
               onClick={() => onSubmitEdit(msg.id)}
               className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
@@ -1063,17 +1060,28 @@ function MessageBubble({
             </button>
           </div>
         </div>
+        {isOwn && (
+          <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <User className="w-5 h-5 text-green-600" />
+          </div>
+        )}
+        {!isOwn && (
+          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+            <User className="w-5 h-5 text-blue-600" />
+          </div>
+        )}
       </div>
     );
   }
 
   return (
-    <div ref={bubbleRef} className={`flex gap-3 ${isOwn ? 'flex-row-reverse' : ''}`}>
-      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-        <User className="w-5 h-5 text-blue-600" />
-      </div>
-      <div className={`flex-1 ${isOwn ? 'text-left' : 'text-right'}`}>
-        <div className="flex items-center gap-2 mb-1">
+    <div
+      ref={bubbleRef}
+      className={`flex gap-3 ${isOwn ? 'justify-start' : 'justify-end'}`}
+    >
+      {/* Content first so in RTL own messages sit at the right edge */}
+      <div className={`max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
+        <div className="flex items-center gap-2 mb-1 justify-end">
           <span className="font-medium text-sm">{msg.senderUserId === messageCurrentUserId ? 'أنت' : (msg.sender?.fullName || msg.senderUserId.slice(0, 8))}</span>
           {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
         </div>
@@ -1082,7 +1090,7 @@ function MessageBubble({
             رد على رسالة
           </div>
         )}
-        <div className="inline-block p-3 rounded-lg text-right bg-gray-100">
+        <div className={`inline-block p-3 rounded-lg text-right ${isOwn ? 'bg-green-100 text-gray-900' : 'bg-gray-100 text-gray-900'}`}>
           <div
             dir="rtl"
             className="text-sm prose prose-sm max-w-none break-words text-right [&>*]:text-right [&_a]:underline [&_pre]:p-2 [&_pre]:rounded [&_pre]:bg-gray-200 [&_code]:text-gray-800 [&_code]:bg-gray-200 [&_code]:px-1 [&_code]:rounded"
@@ -1119,7 +1127,7 @@ function MessageBubble({
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2 mt-1">
+        <div className={`flex items-center gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
           <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>
           {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-blue-600" />}
           {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-gray-400" />}
@@ -1130,16 +1138,6 @@ function MessageBubble({
               فشل - إعادة
             </button>
           )}
-          {isOwn && msg.status !== 'SENDING' && (
-            <>
-              <button onClick={() => onStartEdit(msg)} className="text-xs text-gray-500 hover:text-blue-600">
-                تعديل
-              </button>
-              <button onClick={() => onDelete(msg.id)} className="text-xs text-gray-500 hover:text-red-600">
-                حذف
-              </button>
-            </>
-          )}
           {!isOwn && (
             <button onClick={() => onReply(msg)} className="text-xs text-gray-500 hover:text-blue-600">
               رد
@@ -1147,6 +1145,18 @@ function MessageBubble({
           )}
         </div>
       </div>
+
+      {/* Avatar second so it sits on the inner side of the bubble */}
+      {isOwn && (
+        <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <User className="w-5 h-5 text-green-600" />
+        </div>
+      )}
+      {!isOwn && (
+        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+          <User className="w-5 h-5 text-blue-600" />
+        </div>
+      )}
     </div>
   );
 }
