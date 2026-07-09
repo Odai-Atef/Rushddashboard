@@ -21,7 +21,6 @@ export interface MenuItemDefinition {
  */
 export const ROLE_MENU_MAP: Record<string, string[]> = {
   'project-managers': [
-    'onboarding',
     'onboarding-assessment',
     'onboarding-preloader',
     'onboarding-results',
@@ -30,13 +29,12 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'onboarding-analysis',
     'onboarding-roadmap',
     'onboarding-processing',
-    'charity-assessment',
     'charity-assessment-results',
     'charity-assessment-roadmap',
     'project-management',
     'donors',
-    'pricing',
     'donor-matching',
+    'manage-org',
   ],
   'entity-managers': [
     'onboarding',

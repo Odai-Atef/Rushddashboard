@@ -38,11 +38,12 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
   const { user } = useAuth();
   const roleSlug = user?.roleSlug ?? null;
 
-  const navItems = [
-    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/registration' },
+  const navItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = [
+    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
-    { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+    { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management/list' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
+    { id: 'manage-org', label: 'إدارة تفعيل الجهات', icon: Users, path: '/dashboard/manage/org' },
     { id: 'pricing', label: 'الباقات والأسعار', icon: Package, path: '/dashboard/pricing' },
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
@@ -114,9 +115,9 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
 
               return (
                 <li key={item.id}>
-                  <NavLink
-                    to={item.path}
-                    onClick={onClose}
+                <NavLink
+                  to={item.linkTo ?? item.path}
+                  onClick={onClose}
                     className={cn(
                       "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-right",
                       isActive

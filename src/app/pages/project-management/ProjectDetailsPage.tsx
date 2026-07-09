@@ -27,6 +27,7 @@ import { useProjectDetails } from '@/api/hooks/useProjectDetails';
 import { projectService } from '@/api/services/project-service';
 import { ProjectNotFound } from './ProjectNotFound';
 import { healthConfig, statusConfig, ProjectDetails as ProjectDetailsType, ProjectStatus, FundingAreaInfo } from './project-types';
+import { formatDateTime } from '@/app/lib/formatters';
 import { useAuth } from '@/app/layouts/RootLayout';
 
 import { toast } from 'sonner';
@@ -645,7 +646,7 @@ export function ProjectDetailsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <p className="text-sm text-gray-600 mb-2">حالة المشروع</p>
             <span
@@ -654,13 +655,6 @@ export function ProjectDetailsPage() {
             >
               {status.label}
             </span>
-          </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <p className="text-sm text-gray-600 mb-2">صحة المشروع</p>
-            <div className="flex items-center gap-2">
-              <HealthIcon className="w-5 h-5" style={{ color: health.color }} />
-              <span className="font-medium" style={{ color: health.color }}>{health.label}</span>
-            </div>
           </div>
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <p className="text-sm text-gray-600 mb-2">نسبة الإنجاز</p>
@@ -869,7 +863,7 @@ export function ProjectDetailsPage() {
                       <p className="font-medium">{activity.action}</p>
                       <p className="text-gray-600 text-xs">{activity.description}</p>
                       <p className="text-gray-400 text-xs mt-1">
-                        {new Date(activity.createdAt).toLocaleDateString('ar-SA')}
+                        {new Date(activity.createdAt).toLocaleDateString('ar-SA')} ({formatDateTime(activity.createdAt)})
                       </p>
                     </div>
                   ))}

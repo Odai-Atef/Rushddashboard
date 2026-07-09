@@ -6,7 +6,7 @@
 import { MenuItemDefinition } from './index';
 
 export const MENU_ITEMS_FOR_GUARD: MenuItemDefinition[] = [
-  { id: 'onboarding', label: 'معلوماتي', path: '/dashboard/onboarding/registration' },
+  { id: 'onboarding', label: 'معلوماتي', path: '/dashboard/onboarding/info' },
   { id: 'onboarding-assessment', label: 'تقييم الجاهزية', path: '/dashboard/onboarding/assessment' },
   { id: 'onboarding-preloader', label: 'معالجة التقييم', path: '/dashboard/onboarding/preloader' },
   { id: 'onboarding-results', label: 'نتائج التقييم', path: '/dashboard/onboarding/results' },
@@ -18,8 +18,9 @@ export const MENU_ITEMS_FOR_GUARD: MenuItemDefinition[] = [
   { id: 'charity-assessment', label: 'تقييم الجاهزية', path: '/dashboard/charity-assessment' },
   { id: 'charity-assessment-results', label: 'نتائج تقييم الجاهزية', path: '/dashboard/charity-assessment/results' },
   { id: 'charity-assessment-roadmap', label: 'خطة تحسين الجاهزية', path: '/dashboard/charity-assessment/roadmap' },
-  { id: 'project-management', label: 'إدارة المشاريع', path: '/dashboard/project-management' },
+  { id: 'project-management', label: 'إدارة المشاريع', path: '/dashboard/project-management/list' },
   { id: 'donors', label: 'قاعدة الجهات المانحة', path: '/dashboard/donors' },
   { id: 'pricing', label: 'الباقات والأسعار', path: '/dashboard/pricing' },
   { id: 'donor-matching', label: 'التطابق الذكي مع المانحين', path: '/dashboard/donor-matching' },
+  { id: 'manage-org', label: 'إدارة تفعيل الجهات', path: '/dashboard/manage/org' },
 ];

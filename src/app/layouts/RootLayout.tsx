@@ -2,6 +2,7 @@ import { Outlet } from 'react-router';
 import { useState, useEffect, createContext, useContext, useCallback } from 'react';
 import apiClient from '@/api/client';
 import { authService, UserProfile, UserRole } from '@/api/services/auth-service';
+import { Toaster } from '@/app/components/ui/sonner';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -123,6 +124,7 @@ export function RootLayout() {
     <AuthContext.Provider value={authValue}>
       <div className={theme}>
         <Outlet context={{ theme, setTheme } satisfies ThemeContext} />
+        <Toaster position="top-center" richColors duration={5000} />
       </div>
     </AuthContext.Provider>
   );

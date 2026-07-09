@@ -38,6 +38,8 @@ interface NavItem {
   label: string;
   icon: typeof LayoutDashboard;
   path: string;
+  /** Optional distinct navigation target (e.g. with query params) for NavLink `to`. */
+  linkTo?: string;
   /** Set to true to only render this item for users listed in VITE_RESTRICTED_MENU_USER_IDS. */
   restricted?: boolean;
 }
@@ -55,10 +57,10 @@ export function Sidebar({ activeView, className }: SidebarProps) {
 
   const navItems: NavItem[] = [
     // First item is always visible to everyone
-    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/registration' },
+    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
     // Remaining items are restricted to specific users configured in .env
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment', restricted: false },
-    { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+    { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management/list' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: HeartHandshake, path: '/dashboard/donors', restricted: false },
     { id: 'pricing', label: 'الباقات والأسعار', icon: Package, path: '/dashboard/pricing', restricted: false },
 
@@ -69,6 +71,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'funding-analytics', label: 'تحليلات التمويل والمانحين', icon: DollarSign, path: '/dashboard/funding-analytics', restricted: true },
     { id: 'operations-analytics', label: 'تحليلات التشغيل والأداء', icon: Activity, path: '/dashboard/operations-analytics', restricted: true },
     { id: 'donor-matching', label: 'التطابق الذكي مع المانحين', icon: Handshake, path: '/dashboard/donor-matching', restricted: false },
+    { id: 'manage-org', label: 'إدارة تفعيل الجهات', icon: Users, path: '/dashboard/manage/org', restricted: false },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis', restricted: false },
     { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation', restricted: true },
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history', restricted: true },
@@ -115,7 +118,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
             return (
               <li key={item.id}>
                 <NavLink
-                  to={item.path}
+                  to={item.linkTo ?? item.path}
                   className={cn(
                     "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-right",
                     isActive

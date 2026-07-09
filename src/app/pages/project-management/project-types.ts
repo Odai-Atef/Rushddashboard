@@ -14,6 +14,7 @@ export type ProjectStatus =
   | 'created'
   | 'draft'
   | 'charity-review'
+  | 'charity-decision'
   | 'incubator-modifications'
   | 'charity-approval'
   | 'pm-approval'
@@ -23,9 +24,11 @@ export type ProjectStatus =
   | 'design-review'
   | 'design-approved'
   | 'design-rejected'
+  | 'design-decision'
   | 'offer-review'
   | 'offer-approved'
   | 'offer-rejected'
+  | 'offer-generated'
   | 'ready-donor'
   | 'submitted-donor'
   | 'funded'
@@ -204,6 +207,7 @@ export const statusConfig: Record<
   created: { label: 'جديد', color: '#6b7280', bg: '#f3f4f6' },
   draft: { label: 'بانتظار إنشاء المسودة', color: '#6b7280', bg: '#f3f4f6' },
   'charity-review': { label: 'في انتظار مراجعة الجهة لمسودة المشروع', color: '#3b82f6', bg: '#dbeafe' },
+  'charity-decision': { label: 'قرار الجهة', color: '#8b5cf6', bg: '#ede9fe' },
   'incubator-modifications': { label: 'تعديلات الحاضنة', color: '#f59e0b', bg: '#fef3c7' },
   'charity-approval': { label: 'تمت الموافقة من الجهة على المسودة', color: '#8b5cf6', bg: '#ede9fe' },
   'pm-approval': { label: 'موافقة مدير المشروع', color: '#ec4899', bg: '#fce7f3' },
@@ -213,9 +217,11 @@ export const statusConfig: Record<
   'design-review': { label: 'مراجعة التصميم', color: '#8b5cf6', bg: '#ede9fe' },
   'design-approved': { label: 'تمت الموافقة على التصميم', color: '#10b981', bg: '#d1fae5' },
   'design-rejected': { label: 'تم رفض التصميم', color: '#ef4444', bg: '#fee2e2' },
+  'design-decision': { label: 'قرار التصميم', color: '#8b5cf6', bg: '#ede9fe' },
   'offer-review': { label: 'بانتظار اعتماد عرض السعر', color: '#3b82f6', bg: '#dbeafe' },
   'offer-approved': { label: 'تم اعتماد عرض السعر', color: '#10b981', bg: '#d1fae5' },
   'offer-rejected': { label: 'تم رفض عرض السعر', color: '#ef4444', bg: '#fee2e2' },
+  'offer-generated': { label: 'تم إنشاء عرض السعر', color: '#3b82f6', bg: '#dbeafe' },
   'ready-donor': { label: 'جاهز للمانحين', color: '#06b6d4', bg: '#cffafe' },
   'submitted-donor': { label: 'مقدم للمانحين', color: '#0891b2', bg: '#cffafe' },
   funded: { label: 'ممول', color: '#10b981', bg: '#d1fae5' },

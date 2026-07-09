@@ -521,7 +521,7 @@ export function PricingPage() {
                 <p>
                   لإتمام الاشتراك، يرجى رفع المستندات المطلوبة{" "}
                   <button
-                    onClick={() => navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId || '')}`)}
+                    onClick={() => navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}`)}
                     className="inline font-medium underline hover:no-underline"
                   >
                     بالضغط هنا
@@ -544,7 +544,7 @@ export function PricingPage() {
             {requiredDocumentsMissing && (
               <div className="mt-3">
                 <button
-                  onClick={() => navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId || '')}`)}
+                  onClick={() => navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}`)}
                   className="inline-flex items-center gap-2 px-4 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
                 >
                   رفع المستندات المطلوبة

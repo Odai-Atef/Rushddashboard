@@ -12,6 +12,7 @@ import { NotificationService, notificationService } from './notification-service
 import { OnboardingService, onboardingService } from './onboarding-service';
 import { ProjectService, projectService } from './project-service';
 import { SubscriptionService, subscriptionService } from './subscription-service';
+import { UserService, userService } from './user-service';
 
 export interface Services {
   auth: AuthService;
@@ -21,6 +22,7 @@ export interface Services {
   onboarding: OnboardingService;
   project: ProjectService;
   subscription: SubscriptionService;
+  user: UserService;
 }
 
 class ServiceRegistry {
@@ -57,6 +59,10 @@ class ServiceRegistry {
   getSubscriptionService(): SubscriptionService {
     return this.services.subscription;
   }
+
+  getUserService(): UserService {
+    return this.services.user;
+  }
 }
 const defaultServices: Services = {
   auth: authService,
@@ -66,6 +72,7 @@ const defaultServices: Services = {
   onboarding: onboardingService,
   project: projectService,
   subscription: subscriptionService,
+  user: userService,
 };
 
 // Export singleton registry
@@ -81,3 +88,4 @@ export { NotificationService, notificationService } from './notification-service
 export { OnboardingService, onboardingService } from './onboarding-service';
 export { ProjectService, projectService } from './project-service';
 export { SubscriptionService, subscriptionService } from './subscription-service';
+export { UserService, userService } from './user-service';

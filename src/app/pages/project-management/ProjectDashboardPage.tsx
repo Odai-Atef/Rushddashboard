@@ -140,7 +140,7 @@ export function ProjectDashboardPage() {
       : 'إعادة التقييم مرة أخرى';
 
     const ctaPath = !hasOrg
-      ? '/dashboard/onboarding/registration'
+      ? '/dashboard/onboarding/info?tab=info'
       : '/dashboard/charity-assessment';
 
     return (

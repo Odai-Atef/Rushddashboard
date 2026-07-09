@@ -53,6 +53,7 @@ import { DonorMatchingModule } from './components/donor-matching/DonorMatchingMo
 import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard';
 import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
+import { UserActivationPage } from './pages/admin/UserActivationPage';
 import { PaymentCallbackPage } from './pages/payment/PaymentCallbackPage';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { PackagesPage } from './pages/public/PackagesPage';
@@ -60,6 +61,7 @@ import { SLAPage } from './pages/public/SLAPage';
 
 const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
 const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
+const OnboardingInfoPage = lazy(() => import('./pages/onboarding/InfoPage').then(m => ({ default: m.InfoPage })));
 const OnboardingProfilePage = lazy(() => import('./pages/onboarding/ProfilePage').then(m => ({ default: m.ProfilePage })));
 const OnboardingAssessmentPage = lazy(() => import('./pages/onboarding/AssessmentPage').then(m => ({ default: m.AssessmentPage })));
 const OnboardingDocumentsPage = lazy(() => import('./pages/onboarding/DocumentsPage').then(m => ({ default: m.DocumentsPage })));
@@ -339,6 +341,14 @@ export const router = createBrowserRouter([
                 ),
               },
               {
+                path: 'info',
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OnboardingPageShell><OnboardingInfoPage /></OnboardingPageShell>
+                  </RoleRouteGuard>
+                ),
+              },
+              {
                 path: 'profile',
                 element: (
                   <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
@@ -578,6 +588,27 @@ export const router = createBrowserRouter([
                 <DonorMatchingModule />
               </RoleRouteGuard>
             ),
+          },
+          {
+            path: 'manage',
+            children: [
+              {
+                index: true,
+                element: <Navigate to="/dashboard/manage/org" replace />,
+              },
+              {
+                path: 'org',
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <UserActivationPage />
+                  </RoleRouteGuard>
+                ),
+              },
+              {
+                path: '*',
+                element: <Navigate to="/dashboard/manage/org" replace />,
+              },
+            ],
           },
         ],
       },

@@ -496,7 +496,7 @@ export function ProjectListPage() {
             navigate(
               hasOrg
                 ? '/dashboard/charity-assessment'
-                : '/dashboard/onboarding/registration'
+                : '/dashboard/onboarding/info?tab=info'
             )
           }
           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"

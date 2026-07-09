@@ -264,7 +264,7 @@ export function CharityAssessmentResultsPage() {
               {documentsMissing && data.qualificationStatus?.toUpperCase() !== 'NOT_QUALIFIED' && (
                 <button
                   onClick={() =>
-                    navigate(`/dashboard/onboarding/documents?organizationId=${encodeURIComponent(organizationId || '')}&from=results`)
+                    navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}&from=results`)
                   }
                   className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg transition-colors animate-pulse"
                 >
