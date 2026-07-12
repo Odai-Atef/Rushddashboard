@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Loader2 } from 'lucide-react';
 import { useProjectCreate } from '@/api/hooks/useProjectCreate';
-import { CreateProjectDto } from '@/api/services/project-service';
+import { useProjectEligibility } from '@/api/hooks/useProjectEligibility';
+import { CreateProjectDto, ProjectEligibility } from '@/api/services/project-service';
 import { onboardingService } from '@/api/services/onboarding-service';
 import type { FundingArea } from '@/api/services/onboarding-service';
 import { useAuth } from '@/app/layouts/RootLayout';
@@ -28,7 +29,8 @@ export function ProjectCreatePage() {
   const [organizationError, setOrganizationError] = useState<string | null>(null);
   const [fundingAreas, setFundingAreas] = useState<FundingArea[]>([]);
   const [isLoadingFundingAreas, setIsLoadingFundingAreas] = useState(true);
-  const [noActiveSubscription, setNoActiveSubscription] = useState(false);
+  const [createErrorReason, setCreateErrorReason] = useState<ProjectEligibility['reason'] | null>(null);
+  const [eligibilityToastShown, setEligibilityToastShown] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     fundingAreaIds: [] as string[],
@@ -42,6 +44,13 @@ export function ProjectCreatePage() {
     startDate: '',
     endDate: '',
   });
+
+  const {
+    data: eligibility,
+    isLoading: isLoadingEligibility,
+    error: eligibilityError,
+    reason: eligibilityReason,
+  } = useProjectEligibility(formData.organizationId);
 
   const startDateRef = useRef<HTMLInputElement | null>(null);
   const endDateRef = useRef<HTMLInputElement | null>(null);
@@ -97,6 +106,20 @@ export function ProjectCreatePage() {
       cancelled = true;
     };
   }, []);
+
+  const isEligible = Boolean(eligibility?.canCreate ?? eligibility?.allowed);
+  const effectiveEligibilityReason = eligibilityReason || createErrorReason;
+  const showPricingCta =
+    effectiveEligibilityReason === 'NO_ACTIVE_SUBSCRIPTION' ||
+    effectiveEligibilityReason === 'PROJECT_LIMIT_REACHED';
+  const formDisabled = isLoading || isLoadingEligibility || !!organizationError || !isEligible;
+
+  useEffect(() => {
+    if (!isLoadingEligibility && !isEligible && eligibilityError && !eligibilityToastShown) {
+      toast.error(eligibilityError);
+      setEligibilityToastShown(true);
+    }
+  }, [isLoadingEligibility, isEligible, eligibilityError, eligibilityToastShown]);
 
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -222,7 +245,7 @@ export function ProjectCreatePage() {
     };
 
     try {
-      setNoActiveSubscription(false);
+      setCreateErrorReason(null);
       const response = await create(dto);
       const createdId = response.data?.id;
 
@@ -234,8 +257,8 @@ export function ProjectCreatePage() {
       }
     } catch (err: any) {
       const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
-      if (errorCode === 'NO_ACTIVE_SUBSCRIPTION') {
-        setNoActiveSubscription(true);
+      if (errorCode === 'NO_ACTIVE_SUBSCRIPTION' || errorCode === 'PROJECT_LIMIT_REACHED') {
+        setCreateErrorReason(errorCode);
       }
       // Errors are already surfaced by the hook. If no field errors exist, toast the global error.
       if (error && Object.keys(fieldErrors).length === 0) {
@@ -243,6 +266,19 @@ export function ProjectCreatePage() {
       }
     }
   };
+
+  if (isLoadingEligibility) {
+    return (
+      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          <p className="text-gray-600">جارٍ التحقق من إمكانية إنشاء المشاريع...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const eligibilityBannerMessage = eligibilityError || error || null;
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -261,10 +297,10 @@ export function ProjectCreatePage() {
 
         <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
-            {error && (
+            {eligibilityBannerMessage && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-                {error}
-                {noActiveSubscription && (
+                {eligibilityBannerMessage}
+                {showPricingCta && (
                   <p className="mt-2">
                     اختر باقتك واشترك الآن{" "}
                     <button
@@ -287,7 +323,8 @@ export function ProjectCreatePage() {
                 type="text"
                 value={formData.name}
                 onChange={(e) => updateField('name', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                disabled={formDisabled}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                 placeholder="مثال: برنامج الأسر المنتجة"
               />
             </div>
@@ -302,17 +339,18 @@ export function ProjectCreatePage() {
               ) : fundingAreas.length === 0 ? (
                 <p className="text-sm text-gray-500">لا توجد مجالات عمل متاحة حالياً.</p>
               ) : (
-                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${getFieldError('fundingAreaIds') ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}>
+                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${getFieldError('fundingAreaIds') ? 'border-red-500 bg-red-50' : 'border-gray-200'} ${formDisabled ? 'bg-gray-50' : ''}`}>
                   {fundingAreas.map((area) => (
                     <label
                       key={area.id}
-                      className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer bg-white"
+                      className={`flex items-center gap-2 p-3 border border-gray-200 rounded-lg bg-white ${formDisabled ? 'cursor-not-allowed opacity-70' : 'hover:bg-gray-50 cursor-pointer'}`}
                     >
                       <input
                         type="checkbox"
                         checked={formData.fundingAreaIds.includes(area.id)}
                         onChange={() => toggleFundingArea(area.id)}
-                        className="w-4 h-4 text-blue-600 rounded"
+                        disabled={formDisabled}
+                        className="w-4 h-4 text-blue-600 rounded disabled:cursor-not-allowed"
                       />
                       <span className="text-sm">{area.name}</span>
                     </label>
@@ -328,7 +366,8 @@ export function ProjectCreatePage() {
                 value={formData.description}
                 onChange={(e) => updateField('description', e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                disabled={formDisabled}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                 placeholder="اكتب وصفاً تفصيلياً للمشروع..."
               />
             </div>
@@ -341,7 +380,8 @@ export function ProjectCreatePage() {
                   type="number"
                   value={formData.budget}
                   onChange={(e) => updateField('budget', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  disabled={formDisabled}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                   placeholder="250000"
                 />
               </div>
@@ -352,7 +392,8 @@ export function ProjectCreatePage() {
                   type="text"
                   value={formData.beneficiaries}
                   onChange={(e) => updateField('beneficiaries', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={formDisabled}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                   placeholder="مثال: الأسر المحتاجة"
                 />
               </div>
@@ -368,7 +409,8 @@ export function ProjectCreatePage() {
                   step="1"
                   value={formData.beneficiariesCount}
                   onChange={(e) => updateField('beneficiariesCount', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  disabled={formDisabled}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                   placeholder="مثال: 500"
                 />
               </div>
@@ -379,7 +421,8 @@ export function ProjectCreatePage() {
                   type="text"
                   value={formData.geographicScope}
                   onChange={(e) => updateField('geographicScope', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  disabled={formDisabled}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
                   placeholder="مثال: الرياض"
                 />
               </div>
@@ -401,7 +444,8 @@ export function ProjectCreatePage() {
                     type="date"
                     value={formData.startDate}
                     onChange={(e) => updateField('startDate', e.target.value)}
-                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer"
+                    disabled={formDisabled}
+                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer disabled:cursor-not-allowed disabled:text-gray-500"
                   />
                 </div>
                 <div className="w-px bg-gray-200 self-stretch my-2" />
@@ -415,7 +459,8 @@ export function ProjectCreatePage() {
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => updateField('endDate', e.target.value)}
-                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer"
+                    disabled={formDisabled}
+                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer disabled:cursor-not-allowed disabled:text-gray-500"
                   />
                 </div>
               </div>
@@ -456,7 +501,7 @@ export function ProjectCreatePage() {
               </button>
               <button
                 type="submit"
-                disabled={isLoading || isLoadingOrganization || !!organizationError}
+                disabled={formDisabled}
                 className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors font-medium"
               >
                 {isLoading ? 'جاري الإنشاء...' : 'إنشاء المشروع'}

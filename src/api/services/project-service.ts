@@ -30,6 +30,16 @@ export interface CreatedProjectResponse extends CreateProjectDto {
   updatedAt: string;
 }
 
+export interface ProjectEligibility {
+  canCreate: boolean;
+  allowed: boolean;
+  current: number;
+  limit: number;
+  remaining: number;
+  reason?: 'NO_ACTIVE_SUBSCRIPTION' | 'PROJECT_LIMIT_REACHED' | string;
+  message?: string;
+}
+
 export interface ProjectListResponse {
   data: Project[];
   total: number;
@@ -237,6 +247,20 @@ function buildProjectQueryParams(filters: ProjectFilters): Record<string, string
  * Encapsulates all project management API operations.
  */
 export class ProjectService {
+  /**
+   * Check whether the current user is allowed to create a new project
+   * GET /api/v1/projects/eligibility
+   */
+  async checkProjectCreationEligibility(
+    organizationId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<ProjectEligibility>> {
+    return apiClient.get<ProjectEligibility>('/api/v1/projects/eligibility', {
+      ...config,
+      params: { organizationId, ...(config?.params || {}) },
+    });
+  }
+
   /**
    * Create a new project
    * POST /api/v1/projects

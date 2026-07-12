@@ -278,13 +278,16 @@ export function PricingPage() {
         console.log('[PricingPage] Sync failed:', syncErr?.message);
       }
     } catch (err: any) {
-      // Check for NOT_STARTED status. The error may be an ApiError (code/message)
-      // or an axios-style error with err.response.data.
       const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
       const errorStatus = err?.status || err?.data?.status || err?.response?.data?.status;
       if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
         setNotStartedStatus(true);
         setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
+        return false;
+      }
+      if (errorCode === 'REQUIRED_DOCUMENTS_MISSING') {
+        setRequiredDocumentsMissing(true);
+        setError(err?.message || err?.data?.message || err?.response?.data?.message || "يجب رفع المستندات المطلوبة أولاً.");
         return false;
       }
       // Ignore other errors
@@ -294,35 +297,8 @@ export function PricingPage() {
     return false;
   }, []);
 
-  /**
-   * Fetch subscription status from GET /api/v1/subscriptions (the user's organization subscription).
-   * This is the endpoint that returns NOT_STARTED when the charity assessment has not begun.
-   */
-  const checkSubscriptionsStatus = useCallback(async () => {
-    try {
-      const res = await apiClient.get('/api/v1/subscriptions');
-      const data = (res.data as unknown as { success?: boolean; data?: { status?: string } })?.data ?? res.data;
-      if (data?.status === 'NOT_STARTED') {
-        setNotStartedStatus(true);
-        setError("لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
-      }
-    } catch (err: any) {
-      const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
-      const errorStatus = err?.status || err?.data?.status || err?.response?.data?.status;
-      if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
-        setNotStartedStatus(true);
-        setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
-      }
-      if (errorCode === 'REQUIRED_DOCUMENTS_MISSING') {
-        setRequiredDocumentsMissing(true);
-        setError(err?.message || err?.data?.message || err?.response?.data?.message || "يجب رفع المستندات المطلوبة أولاً.");
-      }
-    }
-  }, []);
-
   useEffect(() => {
     checkActiveSubscription();
-    checkSubscriptionsStatus();
     onboardingService.getMyOrganization().then((orgRes) => {
       const org = orgRes.data as unknown as { id?: string } | undefined;
       if (org?.id) setOrganizationId(org.id);
