@@ -48,6 +48,27 @@ export interface ProjectListResponse {
   totalPages: number;
 }
 
+export interface MatchDonorsSearchParameters {
+  keywords: string[];
+  fundingAreas: string[];
+  locations: string[];
+  query: string;
+}
+
+export interface MatchDonorsDonor {
+  name: string;
+  description: string;
+  matchingScore: number;
+  url: string;
+  source: 'online' | 'offline';
+}
+
+export interface MatchDonorsResponse {
+  projectId: string;
+  searchParameters: MatchDonorsSearchParameters;
+  donors: MatchDonorsDonor[];
+}
+
 export interface ProjectFilters {
   page?: number;
   limit?: number;
@@ -473,6 +494,30 @@ export class ProjectService {
     config?: RequestConfig
   ): Promise<ApiResponse<PriceOfferDecisionResponse>> {
     return apiClient.post<PriceOfferDecisionResponse>(`/api/v1/projects/${id}/price-offer/reject`, payload, config);
+  }
+
+  /**
+   * AI-powered donor matching for a specific project
+   * POST /api/v1/projects/:id/match-donors
+   */
+  async matchDonors(
+    id: string,
+    options?: { searchDepth?: 'basic' | 'advanced'; maxResults?: number },
+    config?: RequestConfig
+  ): Promise<ApiResponse<MatchDonorsResponse>> {
+    return apiClient.post<MatchDonorsResponse>(
+      `/api/v1/projects/${id}/match-donors`,
+      undefined,
+      {
+        ...config,
+        timeout: 120_000, // 2 minutes for AI analysis
+        params: {
+          searchDepth: options?.searchDepth ?? 'basic',
+          maxResults: options?.maxResults ?? 20,
+          ...(config?.params || {}),
+        },
+      }
+    );
   }
 }
 

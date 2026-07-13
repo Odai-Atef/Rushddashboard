@@ -49,7 +49,13 @@ import { CharityAnalyticsDashboard } from './components/CharityAnalyticsDashboar
 import { ProjectAnalyticsDashboard } from './components/ProjectAnalyticsDashboard';
 import { FundingDonorAnalytics } from './components/FundingDonorAnalytics';
 import { OperationsPerformanceDashboard } from './components/OperationsPerformanceDashboard';
-import { DonorMatchingModule } from './components/donor-matching/DonorMatchingModule';
+import { DonorMatchingLayout } from './pages/donor-matching/DonorMatchingLayout';
+import { DonorMatchingDashboardPage } from './pages/donor-matching/DonorMatchingDashboardPage';
+import { AIRecommendedDonorsPage } from './pages/donor-matching/AIRecommendedDonorsPage';
+import { MatchAnalysisPage } from './pages/donor-matching/MatchAnalysisPage';
+import { FundingReadinessAssessmentPage } from './pages/donor-matching/FundingReadinessAssessmentPage';
+import { SubmissionPreparationPage } from './pages/donor-matching/SubmissionPreparationPage';
+import { MatchingAnalyticsPage } from './pages/donor-matching/MatchingAnalyticsPage';
 import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard';
 import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
@@ -585,9 +591,17 @@ export const router = createBrowserRouter([
             path: 'donor-matching',
             element: (
               <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                <DonorMatchingModule />
+                <DonorMatchingLayout />
               </RoleRouteGuard>
             ),
+            children: [
+              { index: true, element: <DonorMatchingDashboardPage /> },
+              { path: 'recommended', element: <AIRecommendedDonorsPage /> },
+              { path: 'analysis/:donorId', element: <MatchAnalysisPage /> },
+              { path: 'readiness', element: <FundingReadinessAssessmentPage /> },
+              { path: 'submission/:donorId', element: <SubmissionPreparationPage /> },
+              { path: 'analytics', element: <MatchingAnalyticsPage /> },
+            ],
           },
           {
             path: 'manage',
