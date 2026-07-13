@@ -1,30 +1,28 @@
 import { useState, useMemo } from 'react';
 import {
-  Search, Bookmark, Send, Eye, Sparkles, ChevronDown,
-  CheckCircle2, AlertCircle, Clock, BookmarkCheck, ExternalLink,
-  Loader2, FolderKanban
+  Search, Sparkles,
+  ExternalLink, FileText,
+  Loader2
 } from 'lucide-react';
-import type { Project } from '@/app/pages/project-management/project-types';
+import { toast } from 'sonner';
 import type { MatchDonorsResponse } from '@/api/services/project-service';
+import { projectService } from '@/api/services/project-service';
+import type { ProjectDetails } from '@/app/pages/project-management/project-types';
+import { statusConfig as projectStatusConfig, ProjectStatus } from '@/app/pages/project-management/project-types';
 
-export interface AIRecommendedDonorsProps {
-  projects: Project[];
-  selectedProjectId: string | null;
-  onSelectProject: (id: string | null) => void;
-  onExecuteMatch: () => void;
-  matchData: MatchDonorsResponse | null;
-  isMatching: boolean;
-  isLoadingProjects: boolean;
-  error: string | null;
-  onNavigate: (view: string, donorId?: string) => void;
+function getDisplayStatus(status: string): ProjectStatus {
+  const normalized = status.toLowerCase().replace(/_/g, '-');
+  return normalized in projectStatusConfig ? (normalized as ProjectStatus) : 'draft';
 }
 
-const statusConfig: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  open: { label: 'مفتوح', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400', icon: CheckCircle2 },
-  closing: { label: 'ينتهي قريباً', color: 'bg-red-100 text-red-600 dark:bg-red-950/50 dark:text-red-400', icon: AlertCircle },
-  review: { label: 'قيد المراجعة', color: 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400', icon: Clock },
-  closed: { label: 'مغلق', color: 'bg-muted text-muted-foreground', icon: AlertCircle },
-};
+export interface AIRecommendedDonorsProps {
+  project: ProjectDetails | null;
+  isLoadingProject: boolean;
+  projectError: string | null;
+  matchData: MatchDonorsResponse | null;
+  isMatching: boolean;
+  error: string | null;
+}
 
 function ScoreRing({ score }: { score: number }) {
   const color = score >= 80 ? '#10b981' : score >= 60 ? '#6366f1' : score >= 40 ? '#f59e0b' : '#94a3b8';
@@ -55,23 +53,15 @@ function ScoreRing({ score }: { score: number }) {
 }
 
 export function AIRecommendedDonors({
-  projects,
-  selectedProjectId,
-  onSelectProject,
-  onExecuteMatch,
+  project,
+  isLoadingProject,
+  projectError,
   matchData,
   isMatching,
-  isLoadingProjects,
   error,
-  onNavigate,
 }: AIRecommendedDonorsProps) {
   const [search, setSearch] = useState('');
-  const [savedDonors, setSavedDonors] = useState<Set<number>>(new Set());
-
-  const selectedProject = useMemo(
-    () => projects.find((p) => p.id === selectedProjectId) || null,
-    [projects, selectedProjectId]
-  );
+  const [generatingId, setGeneratingId] = useState<string | null>(null);
 
   const donors = matchData?.donors ?? [];
 
@@ -85,67 +75,80 @@ export function AIRecommendedDonors({
     });
   }, [donors, search]);
 
-  const toggleSave = (idx: number) => {
-    setSavedDonors((prev) => {
-      const next = new Set(prev);
-      next.has(idx) ? next.delete(idx) : next.add(idx);
-      return next;
-    });
+  const handleGeneratePlan = async (donorMatchId: string, donorName: string) => {
+    if (!window.confirm('هل أنت متأكد من إنشاء خطة مشروع خاصة بهذه الجهة؟')) {
+      return;
+    }
+    setGeneratingId(donorMatchId);
+    try {
+      const res = await projectService.generateDonorPlan(donorMatchId);
+      const blob = res.data;
+      if (!(blob instanceof Blob)) {
+        throw new Error('تعذر الحصول على ملف الخطة');
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${donorName}-plan.docx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم إنشاء خطة المشروع وتحميلها بنجاح');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل إنشاء خطة المشروع. يرجى المحاولة لاحقاً.');
+    } finally {
+      setGeneratingId(null);
+    }
   };
 
-  const hasProjects = projects.length > 0;
+  if (isMatching) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+        <Loader2 className="w-10 h-10 animate-spin text-violet-600 mb-4" />
+        <p className="text-lg font-medium">جارٍ تحليل الجهات المانحة...</p>
+        <p className="text-sm mt-1">قد يستغرق ذلك بضع لحظات</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-5">
-      {/* Project Selector + Analyze */}
-      <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-end">
-        <div className="flex-1 w-full">
-          <label className="block text-sm font-medium mb-1.5 text-right">اختر المشروع</label>
-          <div className="relative">
-            <FolderKanban className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <select
-              value={selectedProjectId ?? ''}
-              onChange={(e) => onSelectProject(e.target.value || null)}
-              disabled={isLoadingProjects || !hasProjects}
-              className="w-full pr-10 pl-4 py-2.5 text-sm border border-border rounded-lg bg-background text-foreground text-right disabled:opacity-50"
-            >
-              <option value="">{isLoadingProjects ? 'جارٍ تحميل المشاريع...' : hasProjects ? '-- اختر مشروعاً --' : 'لا توجد مشاريع'}</option>
-              {projects.map((p) => (
-                <option key={p.id} value={p.id}>
-                  {p.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <button
-          onClick={onExecuteMatch}
-          disabled={isMatching || !selectedProjectId}
-          className="flex items-center gap-2 px-5 py-2.5 bg-violet-600 text-white rounded-lg hover:bg-violet-700 disabled:bg-violet-300 disabled:cursor-not-allowed transition-colors text-sm font-medium"
-        >
-          {isMatching ? (
-            <>
+      {/* Project Info */}
+      {(isLoadingProject || project || projectError) && (
+        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200">
+          {isLoadingProject && (
+            <div className="flex items-center gap-2 text-sm text-gray-600">
               <Loader2 className="w-4 h-4 animate-spin" />
-              جارٍ التحليل...
-            </>
-          ) : (
-            <>
-              <Sparkles className="w-4 h-4" />
-              تحليل الجهات المانحة
-            </>
+              جارٍ تحميل بيانات المشروع...
+            </div>
           )}
-        </button>
-      </div>
-
-      {/* AI Header */}
-      {matchData && selectedProject && (
-        <div className="flex items-center gap-3 p-4 rounded-xl bg-violet-50 dark:bg-violet-950/30 border border-violet-200 dark:border-violet-800">
-          <Sparkles className="w-5 h-5 text-violet-600 flex-shrink-0" />
-          <p className="text-sm text-violet-800 dark:text-violet-300 text-right flex-1">
-            حلّل الذكاء الاصطناعي المشروع <strong>{selectedProject.name}</strong> ووجد{' '}
-            <strong>{matchData.donors?.length ?? 0} جهات مانحة</strong> متطابقة بناءً على معايير البحث.
-          </p>
+          {projectError && (
+            <p className="text-sm text-red-600 text-right">{projectError}</p>
+          )}
+          {project && (
+            <div className="flex items-center justify-between">
+              <div className="text-right">
+                <p className="text-sm text-gray-600 mb-1">
+                  نتائج التطابق للمشروع: <strong className="text-foreground">{project.name}</strong>
+                </p>
+                <div className="flex items-center gap-2">
+                  {(() => {
+                    const displayStatus = getDisplayStatus(project.status as string);
+                    const cfg = projectStatusConfig[displayStatus];
+                    return cfg ? (
+                      <span
+                        className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium"
+                        style={{ backgroundColor: cfg.bg, color: cfg.color }}
+                      >
+                        {cfg.label}
+                      </span>
+                    ) : null;
+                  })()}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -177,10 +180,22 @@ export function AIRecommendedDonors({
       {/* Donor Cards */}
       <div className="space-y-4">
         {filtered.map((donor, idx) => {
-          const isSaved = savedDonors.has(idx);
-          // Use a generic status fallback since API doesn't return status
-          const statusKey = 'open';
-          const StatusIcon = statusConfig[statusKey].icon;
+          const donorStatus = donor.status ?? 'MATCHED';
+          const statusColor = donorStatus === 'MATCHED'
+            ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400'
+            : donorStatus === 'PENDING'
+              ? 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400'
+              : donorStatus === 'REJECTED'
+                ? 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400'
+                : 'bg-slate-100 text-slate-700 dark:bg-slate-950/50 dark:text-slate-400';
+          const statusLabel = donorStatus === 'MATCHED'
+            ? 'مطابق'
+            : donorStatus === 'PENDING'
+              ? 'قيد الانتظار'
+              : donorStatus === 'REJECTED'
+                ? 'مرفوض'
+                : donorStatus;
+
           return (
             <div
               key={idx}
@@ -199,10 +214,9 @@ export function AIRecommendedDonors({
                       <div className="flex items-center justify-start gap-2 mb-0.5">
                         <h3 className="text-foreground font-semibold">{donor.name}</h3>
                         <span
-                          className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${statusConfig[statusKey].color}`}
+                          className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${statusColor}`}
                         >
-                          <StatusIcon className="w-3 h-3" />
-                          {statusConfig[statusKey].label}
+                          {statusLabel}
                         </span>
                         <span
                           className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${
@@ -236,25 +250,16 @@ export function AIRecommendedDonors({
                       <ExternalLink className="w-3.5 h-3.5" /> زيارة الموقع
                     </a>
                     <button
-                      onClick={() => toggleSave(idx)}
-                      className={`flex items-center gap-1.5 px-3 py-1.5 text-xs border rounded-lg transition-colors ${
-                        isSaved
-                          ? 'border-amber-300 text-amber-600 bg-amber-50 dark:bg-amber-950/30'
-                          : 'border-border text-foreground hover:bg-muted'
-                      }`}
+                      onClick={() => handleGeneratePlan(donor.id, donor.name)}
+                      disabled={generatingId === donor.id}
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {isSaved ? (
-                        <BookmarkCheck className="w-3.5 h-3.5" />
+                      {generatingId === donor.id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
                       ) : (
-                        <Bookmark className="w-3.5 h-3.5" />
+                        <FileText className="w-3.5 h-3.5" />
                       )}
-                      {isSaved ? 'محفوظ' : 'حفظ'}
-                    </button>
-                    <button
-                      onClick={() => onNavigate('analysis', String(idx))}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs border border-border rounded-lg text-foreground hover:bg-muted transition-colors"
-                    >
-                      <Eye className="w-3.5 h-3.5" /> تحليل التطابق
+                      {generatingId === donor.id ? 'جارٍ إنشاء الخطة...' : 'إنشاء خطة مشروع خاصة بهذه الجهة'}
                     </button>
                   </div>
                 </div>
@@ -263,14 +268,6 @@ export function AIRecommendedDonors({
           );
         })}
       </div>
-
-      {!matchData && !isMatching && !error && (
-        <div className="text-center py-16 text-muted-foreground">
-          <Sparkles className="w-12 h-12 mx-auto mb-4 text-violet-300" />
-          <p className="text-lg font-medium mb-2">ابدأ بتحليل الجهات المانحة</p>
-          <p className="text-sm">اختر مشروعاً من القائمة ثم اضغط على "تحليل الجهات المانحة" للحصول على توصيات مدعومة بالذكاء الاصطناعي.</p>
-        </div>
-      )}
     </div>
   );
 }

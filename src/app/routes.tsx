@@ -596,7 +596,7 @@ export const router = createBrowserRouter([
             ),
             children: [
               { index: true, element: <DonorMatchingDashboardPage /> },
-              { path: 'recommended', element: <AIRecommendedDonorsPage /> },
+               { path: 'recommended/:projectId', element: <AIRecommendedDonorsPage /> },
               { path: 'analysis/:donorId', element: <MatchAnalysisPage /> },
               { path: 'readiness', element: <FundingReadinessAssessmentPage /> },
               { path: 'submission/:donorId', element: <SubmissionPreparationPage /> },

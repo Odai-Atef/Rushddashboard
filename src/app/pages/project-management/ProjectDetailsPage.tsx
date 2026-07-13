@@ -585,6 +585,19 @@ export function ProjectDetailsPage() {
                       إرسال إلى الجهة للموافقة
                     </button>
                   )}
+                  {(rawStatus === 'DESIGN_APPROVED' || rawStatus === 'READY_DONOR') && (
+                    <button
+                      onClick={() => {
+                        if (window.confirm('هل أنت متأكد من البحث عن المانحين لهذا المشروع؟')) {
+                          navigate(`/dashboard/donor-matching/recommended/${projectId}`);
+                        }
+                      }}
+                      className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors flex items-center gap-2"
+                    >
+                      <Sparkles className="w-5 h-5" />
+                      بحث عن المانحين
+                    </button>
+                  )}
                 </>
               )}
               {showReviewButton && (

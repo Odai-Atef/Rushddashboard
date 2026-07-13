@@ -56,11 +56,13 @@ export interface MatchDonorsSearchParameters {
 }
 
 export interface MatchDonorsDonor {
+  id: string;
   name: string;
   description: string;
   matchingScore: number;
   url: string;
   source: 'online' | 'offline';
+  status?: string | null;
 }
 
 export interface MatchDonorsResponse {
@@ -516,6 +518,25 @@ export class ProjectService {
           maxResults: options?.maxResults ?? 20,
           ...(config?.params || {}),
         },
+      }
+    );
+  }
+
+  /**
+   * Generate a donor-specific project plan (.docx)
+   * POST /api/v1/projects/donor-matches/:donorMatchId/generate-plan
+   */
+  async generateDonorPlan(
+    donorMatchId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Blob>> {
+    return apiClient.post<Blob>(
+      `/api/v1/projects/donor-matches/${donorMatchId}/generate-plan`,
+      undefined,
+      {
+        ...config,
+        timeout: 300_000, // 5 minutes for .docx generation
+        responseType: 'blob',
       }
     );
   }
