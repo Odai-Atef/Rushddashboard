@@ -25,8 +25,7 @@ import {
   BarChart3,
   Building2,
   FolderKanban,
-  Activity,
-  Handshake
+  Activity
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
@@ -70,7 +69,6 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'project-analytics', label: 'تحليلات المشاريع', icon: FolderKanban, path: '/dashboard/project-analytics', restricted: true },
     { id: 'funding-analytics', label: 'تحليلات التمويل والمانحين', icon: DollarSign, path: '/dashboard/funding-analytics', restricted: true },
     { id: 'operations-analytics', label: 'تحليلات التشغيل والأداء', icon: Activity, path: '/dashboard/operations-analytics', restricted: true },
-    { id: 'donor-matching', label: 'التطابق الذكي مع المانحين', icon: Handshake, path: '/dashboard/donor-matching', restricted: false },
     { id: 'manage-org', label: 'إدارة تفعيل الجهات', icon: Users, path: '/dashboard/manage/org', restricted: false },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis', restricted: false },
     { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation', restricted: true },

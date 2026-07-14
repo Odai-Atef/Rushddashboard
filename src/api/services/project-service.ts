@@ -415,6 +415,7 @@ export class ProjectService {
       {
         ...config,
         params: { forceRegenerate: options.forceRegenerate ?? true, ...(config?.params || {}) },
+        timeout: 300_000,
       }
     );
   }
