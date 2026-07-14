@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
+import { executeRecaptcha } from '@/app/lib/recaptcha';
 import { TermsModal } from './TermsModal';
 
 export function RegistrationPage() {
@@ -55,12 +56,16 @@ export function RegistrationPage() {
     setIsLoading(true);
 
     try {
+      // Execute reCAPTCHA v2 Invisible
+      const recaptchaToken = await executeRecaptcha('register');
+
       const response = await authService.register({
         email: formData.email,
         password: formData.password,
         fullName: fullName,
         companyName: formData.companyName,
         phone: formData.phone,
+        recaptchaToken,
       });
       if (response.success) {
         navigate('/auth/login?registered=true');
@@ -70,6 +75,8 @@ export function RegistrationPage() {
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setApiError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+      } else if (err?.message?.includes('reCAPTCHA')) {
+        setApiError('فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى');
       } else {
         setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
       }

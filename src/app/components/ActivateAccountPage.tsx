@@ -8,6 +8,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { authService } from '@/api/services/auth-service';
+import { executeRecaptcha } from '@/app/lib/recaptcha';
 
 /**
  * ActivateAccountPage
@@ -47,7 +48,10 @@ export function ActivateAccountPage() {
     const activate = async () => {
       setStatus('loading');
       try {
-        const response = await authService.activateAccount(token);
+        // Execute reCAPTCHA v2 Invisible
+        const recaptchaToken = await executeRecaptcha('activate_account');
+
+        const response = await authService.activateAccount(token, recaptchaToken);
         if (cancelled) return;
 
         if (response.success) {
@@ -73,8 +77,12 @@ export function ActivateAccountPage() {
       } catch (err: any) {
         if (cancelled) return;
 
-        const errorMessage =
-          err?.message === 'Failed to fetch' ? ACTIVATION_NETWORK_MESSAGE : ACTIVATION_FAILURE_MESSAGE;
+        let errorMessage = ACTIVATION_FAILURE_MESSAGE;
+        if (err?.message === 'Failed to fetch') {
+          errorMessage = ACTIVATION_NETWORK_MESSAGE;
+        } else if (err?.message?.includes('reCAPTCHA')) {
+          errorMessage = 'فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى';
+        }
 
         setStatus('error');
         setMessage(errorMessage);

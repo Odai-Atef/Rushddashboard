@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
+import { executeRecaptcha } from '@/app/lib/recaptcha';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -36,7 +37,10 @@ export function LoginPage() {
     setIsLoading(true);
 
     try {
-      const response = await authService.login({ email, password });
+      // Execute reCAPTCHA v2 Invisible
+      const recaptchaToken = await executeRecaptcha('login');
+      
+      const response = await authService.login({ email, password, recaptchaToken });
       if (response.success) {
         login();
         navigate(getSafeRedirectPath());
@@ -46,6 +50,8 @@ export function LoginPage() {
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+      } else if (err?.message?.includes('reCAPTCHA')) {
+        setError('فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى');
       } else {
         setError(err?.message || 'البريد الإلكتروني أو كلمة المرور غير صحيحة');
       }

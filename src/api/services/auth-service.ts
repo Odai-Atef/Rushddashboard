@@ -18,6 +18,7 @@ import { ApiResponse, ApiError } from '../types';
 export interface LoginCredentials {
   email: string;
   password: string;
+  recaptchaToken: string;
 }
 
 export interface OrgRegistrationData {
@@ -65,6 +66,7 @@ export interface RegisterData {
   fullName: string;
   companyName: string;
   phone: string;
+  recaptchaToken: string;
 }
 
 export interface AuthTokens {
@@ -201,19 +203,21 @@ export class AuthService {
   /**
    * Request password reset
    */
-  async forgotPassword(email: string): Promise<ApiResponse<void>> {
+  async forgotPassword(email: string, recaptchaToken: string): Promise<ApiResponse<void>> {
     return apiClient.post(`${this.baseEndpoint}/forgot-password`, {
       email,
+      recaptchaToken,
     });
   }
 
   /**
    * Reset password using a token from the reset email.
    */
-  async resetPassword(token: string, newPassword: string): Promise<ApiResponse<void>> {
+  async resetPassword(token: string, newPassword: string, recaptchaToken: string): Promise<ApiResponse<void>> {
     return apiClient.post(`${this.baseEndpoint}/reset-password`, {
       token,
       newPassword,
+      recaptchaToken,
     });
   }
 
@@ -256,10 +260,10 @@ export class AuthService {
   /**
    * Activate a newly registered account using an email activation token.
    */
-  async activateAccount(token: string): Promise<ApiResponse<{ message?: string }>> {
+  async activateAccount(token: string, recaptchaToken: string): Promise<ApiResponse<{ message?: string }>> {
     return apiClient.get<{ message?: string }>(
       `${this.baseEndpoint}/activate`,
-      { params: { token }, skipAuthRedirect: true }
+      { params: { token, recaptchaToken }, skipAuthRedirect: true }
     );
   }
 

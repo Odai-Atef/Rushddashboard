@@ -13,6 +13,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { authService } from '@/api/services/auth-service';
+import { executeRecaptcha } from '@/app/lib/recaptcha';
 import { evaluatePasswordStrength, isPasswordStrong } from '@/lib/password-rules';
 
 /**
@@ -62,7 +63,10 @@ export function ResetPasswordPage() {
     setErrorMessage('');
 
     try {
-      const response = await authService.resetPassword(token, newPassword);
+      // Execute reCAPTCHA v2 Invisible
+      const recaptchaToken = await executeRecaptcha('reset_password');
+
+      const response = await authService.resetPassword(token, newPassword, recaptchaToken);
       if (response.success) {
         setStatus('success');
       } else {
@@ -73,6 +77,9 @@ export function ResetPasswordPage() {
       if (err?.message === 'Failed to fetch') {
         setStatus('error');
         setErrorMessage('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+      } else if (err?.message?.includes('reCAPTCHA')) {
+        setStatus('error');
+        setErrorMessage('فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى');
       } else {
         // Backend returns 400 for invalid/expired tokens with a generic message
         setStatus('error');
