@@ -21,6 +21,7 @@ export type ProjectStatus =
   | 'financial-approval'
   | 'approved'
   | 'design-team'
+  | 'design-team-approval'
   | 'design-review'
   | 'design-approved'
   | 'design-rejected'
@@ -208,12 +209,13 @@ export const statusConfig: Record<
   draft: { label: 'بانتظار إنشاء المسودة', color: '#6b7280', bg: '#f3f4f6' },
   'charity-review': { label: 'في انتظار مراجعة الجهة لمسودة المشروع', color: '#3b82f6', bg: '#dbeafe' },
   'charity-decision': { label: 'قرار الجهة', color: '#8b5cf6', bg: '#ede9fe' },
-  'incubator-modifications': { label: 'تعديلات الحاضنة', color: '#f59e0b', bg: '#fef3c7' },
+  'incubator-modifications': { label: 'تعديلات الجهة', color: '#f59e0b', bg: '#fef3c7' },
   'charity-approval': { label: 'تمت الموافقة من الجهة على المسودة', color: '#8b5cf6', bg: '#ede9fe' },
   'pm-approval': { label: 'موافقة مدير المشروع', color: '#ec4899', bg: '#fce7f3' },
   'financial-approval': { label: 'موافقة مالية', color: '#14b8a6', bg: '#ccfbf1' },
   approved: { label: 'معتمد', color: '#10b981', bg: '#d1fae5' },
   'design-team': { label: 'فريق التصميم', color: '#6366f1', bg: '#e0e7ff' },
+  'design-team-approval': { label: 'تمت الموافقة على فريق التصميم', color: '#10b981', bg: '#d1fae5' },
   'design-review': { label: 'مراجعة التصميم', color: '#8b5cf6', bg: '#ede9fe' },
   'design-approved': { label: 'تمت الموافقة على التصميم', color: '#10b981', bg: '#d1fae5' },
   'design-rejected': { label: 'تم رفض التصميم', color: '#ef4444', bg: '#fee2e2' },
