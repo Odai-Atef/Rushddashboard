@@ -6,43 +6,124 @@ import {
   RotateCcw,
   Clock,
   User,
-  FileText,
-  ArrowRight,
   CheckCircle2,
+  XCircle,
+  AlertCircle,
+  Circle,
 } from 'lucide-react';
 import { useProjectDetails } from '@/api/hooks/useProjectDetails';
 import { useProjectLifecycle } from '@/api/hooks/useProjectLifecycle';
 import { ProjectNotFound } from './ProjectNotFound';
 import { getDisplayStatus } from './ProjectDetailsPage';
 import { statusConfig, ProjectStatus } from './project-types';
-
-function formatDuration(ms: number | null): string {
-  if (ms === null || ms === undefined) return '-';
-  const seconds = Math.floor(ms / 1000);
-  const minutes = Math.floor(seconds / 60);
-  const hours = Math.floor(minutes / 60);
-  const days = Math.floor(hours / 24);
-
-  if (days > 0) return `${days} يوم${days > 1 ? '' : ''}`;
-  if (hours > 0) return `${hours} ساعة`;
-  if (minutes > 0) return `${minutes} دقيقة`;
-  return `${seconds} ثانية`;
-}
+import type { ProjectLifecycleStep } from '@/api/services/project-service';
 
 function getStatusLabel(status: string): string {
   const normalized = status.toLowerCase().replace(/_/g, '-');
   return statusConfig[normalized as ProjectStatus]?.label || status;
 }
 
-function getStatusStyle(status: string): { bg: string; color: string } {
+// ─── Phase definitions ───
+type PhaseStatus = 'completed' | 'current' | 'pending' | 'stopped';
+
+interface PhaseDef {
+  id: number;
+  title: string;
+  statuses: string[]; // backend statuses that belong to this phase
+}
+
+const PHASES: PhaseDef[] = [
+  {
+    id: 1,
+    title: 'بدء المشروع',
+    statuses: ['created', 'offer-generated', 'offer-review', 'offer-approved', 'offer-rejected'],
+  },
+  {
+    id: 2,
+    title: 'مراجعة الجهة',
+    statuses: ['draft', 'pm-approval', 'charity-review', 'charity-decision', 'incubator-modifications', 'charity-approval'],
+  },
+  {
+    id: 3,
+    title: 'مرحلة التصميم',
+    statuses: ['design-team', 'design-review', 'design-decision', 'design-approved', 'design-rejected'],
+  },
+  {
+    id: 4,
+    title: 'التمويل والتنفيذ',
+    statuses: ['ready-donor', 'submitted-donor', 'funded', 'execution'],
+  },
+  {
+    id: 5,
+    title: 'النهائي',
+    statuses: ['completed', 'closed'],
+  },
+];
+
+// Map a backend status string to its phase id
+function getPhaseIdByStatus(status: string): number | null {
   const normalized = status.toLowerCase().replace(/_/g, '-');
-  return (
-    statusConfig[normalized as ProjectStatus] || {
-      label: status,
-      color: '#6b7280',
-      bg: '#f3f4f6',
-    }
+  for (const phase of PHASES) {
+    if (phase.statuses.includes(normalized)) return phase.id;
+  }
+  return null;
+}
+
+// Determine the overall phase status from its steps
+function getPhaseStatus(steps: ProjectLifecycleStep[]): PhaseStatus {
+  if (steps.length === 0) return 'pending';
+
+  const hasCurrent = steps.some((s) => s.exitedAt === null);
+  const allCompleted = steps.every((s) => s.exitedAt !== null);
+  const hasStopped = steps.some(
+    (s) =>
+      s.status.toLowerCase().includes('rejected') ||
+      s.status.toLowerCase().includes('stopped') ||
+      s.status.toLowerCase().includes('refused')
   );
+
+  if (hasCurrent) return 'current';
+  if (hasStopped) return 'stopped';
+  if (allCompleted) return 'completed';
+  return 'pending';
+}
+
+function getPhaseStatusColor(status: PhaseStatus): { bg: string; border: string; text: string } {
+  switch (status) {
+    case 'completed':
+      return { bg: 'bg-emerald-500', border: 'border-emerald-500', text: 'text-emerald-600' };
+    case 'current':
+      return { bg: 'bg-blue-500', border: 'border-blue-500', text: 'text-blue-600' };
+    case 'stopped':
+      return { bg: 'bg-red-500', border: 'border-red-500', text: 'text-red-600' };
+    case 'pending':
+    default:
+      return { bg: 'bg-gray-300', border: 'border-gray-300', text: 'text-gray-400' };
+  }
+}
+
+function getStepStatusColor(step: ProjectLifecycleStep): { bg: string; border: string; icon: 'completed' | 'current' | 'stopped' | 'pending' } {
+  if (step.exitedAt === null) {
+    return { bg: 'bg-blue-500', border: 'border-blue-500', icon: 'current' };
+  }
+  const normalized = step.status.toLowerCase();
+  if (normalized.includes('rejected') || normalized.includes('stopped') || normalized.includes('refused')) {
+    return { bg: 'bg-red-500', border: 'border-red-500', icon: 'stopped' };
+  }
+  return { bg: 'bg-emerald-500', border: 'border-emerald-500', icon: 'completed' };
+}
+
+function StatusIcon({ type, className }: { type: 'completed' | 'current' | 'stopped' | 'pending'; className?: string }) {
+  switch (type) {
+    case 'completed':
+      return <CheckCircle2 className={className || 'w-4 h-4 text-white'} />;
+    case 'current':
+      return <div className={className ? className : 'w-3 h-3 rounded-full bg-white'} />;
+    case 'stopped':
+      return <XCircle className={className || 'w-4 h-4 text-white'} />;
+    case 'pending':
+      return <Circle className={className || 'w-4 h-4 text-gray-400'} />;
+  }
 }
 
 export function ProjectLifecyclePage() {
@@ -86,9 +167,24 @@ export function ProjectLifecyclePage() {
 
   const isDraft = getDisplayStatus(project.status as string) === 'draft';
 
+  // Group steps into phases
+  const phaseMap: Record<number, ProjectLifecycleStep[]> = {};
+  for (const step of steps) {
+    const phaseId = getPhaseIdByStatus(step.status);
+    if (phaseId) {
+      if (!phaseMap[phaseId]) phaseMap[phaseId] = [];
+      phaseMap[phaseId].push(step);
+    }
+  }
+
+  // Sort steps inside each phase by enteredAt
+  for (const id of Object.keys(phaseMap)) {
+    phaseMap[Number(id)].sort((a, b) => new Date(a.enteredAt).getTime() - new Date(b.enteredAt).getTime());
+  }
+
   return (
     <div className="min-h-full bg-gray-50 p-6">
-      <div className="space-y-6">
+      <div className="space-y-6 max-w-4xl mx-auto">
         <button
           onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
           className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-4"
@@ -96,9 +192,14 @@ export function ProjectLifecyclePage() {
           <ChevronRight className="w-5 h-5" />
           رجوع إلى تفاصيل المشروع
         </button>
-        <h1 className={`text-3xl font-bold mb-4 text-gray-900 ${isDraft ? 'opacity-50' : ''}`}>
-          دورة حياة المشروع
-        </h1>
+
+        <div className="text-center mb-8">
+          <h1 className={`text-3xl font-bold text-gray-900 ${isDraft ? 'opacity-50' : ''}`}>
+            مسار دورة حياة المشروع
+          </h1>
+          <p className="text-gray-500 mt-2">يعرض جميع المراحل من البداية حتى الإغلاق</p>
+        </div>
+
         <div className="bg-white rounded-xl p-8 border border-gray-200">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -114,78 +215,110 @@ export function ProjectLifecyclePage() {
             <div className="text-center py-12 text-gray-500">لا توجد خطوات مسجلة لدورة حياة هذا المشروع</div>
           ) : (
             <div className="relative">
-              <div className="absolute right-6 top-0 bottom-0 w-0.5 bg-gray-200" />
-              <div className="space-y-6">
-                {steps.map((step, index) => {
-                  const style = getStatusStyle(step.status);
-                  const isLast = index === steps.length - 1;
-                  const isCurrent = step.exitedAt === null;
+              {/* Vertical connector line */}
+              <div className="absolute right-[27px] top-4 bottom-4 w-0.5 bg-gray-200" />
+
+              <div className="space-y-8">
+                {PHASES.map((phase) => {
+                  const phaseSteps = phaseMap[phase.id] || [];
+                  const phaseStatus = getPhaseStatus(phaseSteps);
+                  const colors = getPhaseStatusColor(phaseStatus);
+                  const isLastPhase = phase.id === 6;
+
+                  // Build lookup map for API steps in this phase
+                  const stepByStatus: Record<string, ProjectLifecycleStep> = {};
+                  for (const s of phaseSteps) {
+                    stepByStatus[s.status.toLowerCase().replace(/_/g, '-')] = s;
+                  }
+
                   return (
-                    <div key={step.id} className="relative flex gap-4 pr-3">
-                      <div className="relative z-10 flex-shrink-0 w-6 h-6 mt-1">
-                        {isCurrent ? (
-                          <div className="w-6 h-6 rounded-full border-2 border-blue-600 bg-white flex items-center justify-center">
-                            <div className="w-3 h-3 rounded-full bg-blue-600" />
-                          </div>
-                        ) : (
-                          <div className="w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
-                            <CheckCircle2 className="w-4 h-4 text-white" />
-                          </div>
-                        )}
+                    <div key={phase.id} className="relative flex gap-6">
+                      {/* Phase number node */}
+                      <div className="relative z-10 flex-shrink-0">
+                        <div
+                          className={`w-14 h-14 rounded-full border-2 flex items-center justify-center font-bold text-lg ${colors.border} ${
+                            phaseStatus === 'completed' || phaseStatus === 'current' ? colors.bg : 'bg-white'
+                          }`}
+                        >
+                          <span
+                            className={
+                              phaseStatus === 'completed' || phaseStatus === 'current' ? 'text-white' : colors.text
+                            }
+                          >
+                            {phase.id}
+                          </span>
+                        </div>
                       </div>
 
-                      <div className="flex-1 bg-gray-50 rounded-xl p-5 border border-gray-200">
-                        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-3">
-                          <div className="flex items-center gap-3">
-                            <span
-                              className="inline-block px-3 py-1 rounded-full text-xs font-medium"
-                              style={{ backgroundColor: style.bg, color: style.color }}
-                            >
-                              {getStatusLabel(step.status)}
-                            </span>
-                            {isCurrent && (
-                              <span className="text-xs font-medium text-blue-600">الحالة الحالية</span>
-                            )}
-                          </div>
-                          <div className="flex items-center gap-4 text-xs text-gray-500">
-                            <span className="flex items-center gap-1">
-                              <Clock className="w-3.5 h-3.5" />
-                              {formatDuration(step.durationMs)}
-                            </span>
-                            <span className="flex items-center gap-1">
-                              <User className="w-3.5 h-3.5" />
-                              {step.changedByUser?.email || step.changedBy}
-                            </span>
-                          </div>
+                      {/* Phase content */}
+                      <div className="flex-1 pt-2">
+                        <h3 className={`font-bold text-lg mb-4 ${colors.text}`}>{phase.title}</h3>
+
+                        <div className="space-y-3">
+                          {phase.statuses.map((statusKey) => {
+                            const step = stepByStatus[statusKey];
+                            const hasStep = !!step;
+                            let stepColors: ReturnType<typeof getStepStatusColor>;
+                            if (hasStep) {
+                              stepColors = getStepStatusColor(step);
+                            } else {
+                              stepColors = { bg: 'bg-gray-300', border: 'border-gray-300', icon: 'pending' };
+                            }
+                            return (
+                              <div key={statusKey} className="flex items-start gap-3 pr-2">
+                                {/* Small status circle */}
+                                <div
+                                  className={`flex-shrink-0 w-6 h-6 rounded-full border-2 mt-0.5 flex items-center justify-center ${stepColors.border} ${
+                                    hasStep && (stepColors.icon === 'completed' || stepColors.icon === 'current')
+                                      ? stepColors.bg
+                                      : 'bg-white'
+                                  }`}
+                                >
+                                  <StatusIcon
+                                    type={stepColors.icon}
+                                    className={
+                                      hasStep && (stepColors.icon === 'completed' || stepColors.icon === 'current')
+                                        ? 'w-3 h-3 text-white'
+                                        : 'w-3 h-3 text-gray-400'
+                                    }
+                                  />
+                                </div>
+
+                                <div className="flex-1">
+                                  <p className={`text-sm font-medium ${hasStep ? 'text-gray-900' : 'text-gray-400'}`}>
+                                    {getStatusLabel(statusKey)}
+                                  </p>
+                                  {hasStep && step.enteredAt && (
+                                    <p className="text-xs text-gray-500 mt-0.5">
+                                      <span className="inline-flex items-center gap-1">
+                                        <Clock className="w-3 h-3" />
+                                        {new Date(step.enteredAt).toLocaleDateString('ar-SA', {
+                                          year: 'numeric',
+                                          month: 'short',
+                                          day: 'numeric',
+                                        })}
+                                      </span>
+                                      {step.exitedAt && (
+                                        <span>
+                                          {' '}
+                                          →{' '}
+                                          {new Date(step.exitedAt).toLocaleDateString('ar-SA', {
+                                            year: 'numeric',
+                                            month: 'short',
+                                            day: 'numeric',
+                                          })}
+                                        </span>
+                                      )}
+                                    </p>
+                                  )}
+                                  {hasStep && step.notes && (
+                                    <p className="text-xs text-gray-600 mt-1">{step.notes}</p>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600 mb-3">
-                          <div>
-                            <p className="text-xs text-gray-500 mb-1">تاريخ الدخول</p>
-                            <p>{new Date(step.enteredAt).toLocaleString('ar-SA')}</p>
-                          </div>
-                          <div>
-                            <p className="text-xs text-gray-500 mb-1">تاريخ الخروج</p>
-                            <p>{step.exitedAt ? new Date(step.exitedAt).toLocaleString('ar-SA') : '—'}</p>
-                          </div>
-                        </div>
-
-                        {step.notes && (
-                          <div className="bg-white rounded-lg p-3 border border-gray-200">
-                            <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
-                              <FileText className="w-3.5 h-3.5" />
-                              ملاحظات
-                            </div>
-                            <p className="text-sm text-gray-700">{step.notes}</p>
-                          </div>
-                        )}
-
-                        {!isLast && steps[index + 1] && (
-                          <div className="hidden md:flex items-center gap-2 mt-3 text-xs text-gray-400">
-                            <ArrowRight className="w-3.5 h-3.5 rotate-90" />
-                            <span>انتقل إلى {getStatusLabel(steps[index + 1].status)}</span>
-                          </div>
-                        )}
                       </div>
                     </div>
                   );
@@ -193,6 +326,28 @@ export function ProjectLifecyclePage() {
               </div>
             </div>
           )}
+
+          {/* Legend */}
+          <div className="mt-12 pt-6 border-t border-gray-200">
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-full bg-red-500" />
+                <span className="text-gray-600">متوقف مع إعادة المراجعة</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-full border-2 border-gray-300" />
+                <span className="text-gray-600">باقي</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-full bg-blue-500" />
+                <span className="text-gray-600">الحالة الحالية</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 rounded-full bg-emerald-500" />
+                <span className="text-gray-600">مكتمل</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

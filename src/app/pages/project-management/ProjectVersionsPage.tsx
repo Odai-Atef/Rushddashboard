@@ -130,42 +130,63 @@ export function ProjectVersionsPage() {
             <div className="text-center py-12 text-gray-500">لا توجد مستندات مسجلة لهذا المشروع</div>
           ) : (
             <div className="space-y-3">
-              {documents.map((doc) => (
-                <div
-                  key={doc.id}
-                  className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-blue-300 transition-colors"
-                >
-                  <div className="flex-shrink-0">
-                    {getDocumentIcon(doc.file.mimeType)}
-                  </div>
-
-                  <div className="flex-1 min-w-0">
-                    <p className="font-medium text-gray-900 truncate">{doc.file.originalName}</p>
-                    <div className="flex items-center gap-3 text-xs text-gray-500 mt-1 flex-wrap">
-                      <span>{getDocumentTypeLabel(doc.documentType)}</span>
-                      <span>•</span>
-                      <span>{formatBytes(doc.file.size)}</span>
-                      <span>•</span>
-                      <span>{new Date(doc.createdAt).toLocaleString('ar-SA')}</span>
-                      <span>•</span>
-                      <span className="truncate">{doc.uploader?.email || doc.uploadedBy}</span>
+              {documents.map((doc) => {
+                const file = doc.file;
+                if (!file) {
+                  return (
+                    <div
+                      key={doc.id}
+                      className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200"
+                    >
+                      <div className="flex-shrink-0">
+                        <File className="w-8 h-8 text-gray-400" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="font-medium text-gray-900 truncate">{getDocumentTypeLabel(doc.documentType)}</p>
+                        <div className="flex items-center gap-3 text-xs text-gray-500 mt-1 flex-wrap">
+                          <span>الملف غير متوفر</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-
-                  <button
-                    onClick={() => handleDownload(doc.fileId, doc.file.originalName)}
-                    disabled={downloadingId === doc.fileId}
-                    className="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                  );
+                }
+                return (
+                  <div
+                    key={doc.id}
+                    className="flex items-center gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200 hover:border-blue-300 transition-colors"
                   >
-                    {downloadingId === doc.fileId ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <FileDown className="w-4 h-4" />
-                    )}
-                    تحميل
-                  </button>
-                </div>
-              ))}
+                    <div className="flex-shrink-0">
+                      {getDocumentIcon(file.mimeType)}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <p className="font-medium text-gray-900 truncate">{file.originalName}</p>
+                      <div className="flex items-center gap-3 text-xs text-gray-500 mt-1 flex-wrap">
+                        <span>{getDocumentTypeLabel(doc.documentType)}</span>
+                        <span>•</span>
+                        <span>{formatBytes(file.size)}</span>
+                        <span>•</span>
+                        <span>{new Date(doc.createdAt).toLocaleString('ar-SA')}</span>
+                        <span>•</span>
+                        <span className="truncate">{doc.uploader?.email || doc.uploadedBy}</span>
+                      </div>
+                    </div>
+
+                    <button
+                      onClick={() => handleDownload(doc.fileId, file.originalName)}
+                      disabled={downloadingId === doc.fileId}
+                      className="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {downloadingId === doc.fileId ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <FileDown className="w-4 h-4" />
+                      )}
+                      تحميل
+                    </button>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
