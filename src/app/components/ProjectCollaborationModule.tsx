@@ -596,6 +596,28 @@ function ChatView({
   const [editInput, setEditInput] = useState('');
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
+  // Auto-scroll: track previous message count so we only snap to bottom when NEW messages arrive
+  const prevMessageCountRef = useRef<number>(0);
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const isNewMessage = messages.length > prevMessageCountRef.current;
+    prevMessageCountRef.current = messages.length;
+    // If user is near bottom (within 150px) or a new message just arrived, scroll down
+    const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 150;
+    if (isNewMessage || isNearBottom) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [messages]);
+
+  // Scroll to bottom on first conversation load
+  useEffect(() => {
+    const el = scrollContainerRef.current;
+    if (el && selectedConversation && messages.length > 0) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [selectedConversation]);
+
   const handleSend = async () => {
     const trimmed = messageInput.trim();
     const validation = validateMessageContent(trimmed);
@@ -647,9 +669,9 @@ function ChatView({
     };
 
     return (
-      <div className="h-[calc(100vh-200px)] flex gap-4">
+      <div className="h-[calc(100vh-200px)] flex gap-4 overflow-hidden">
         {/* Left Panel - Conversations */}
-        <div className="w-80 bg-white rounded-xl border border-gray-200 flex flex-col">
+        <div className="w-80 bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200">
             <div className="relative mb-3">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -786,7 +808,8 @@ function ChatView({
           {/* Messages */}
           <div
             ref={scrollContainerRef}
-            className="flex-1 overflow-y-auto p-6 space-y-4"
+            className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth"
+            style={{ minHeight: 0 }}
           >
             {messagesError && (
               <div className="text-center p-4">
