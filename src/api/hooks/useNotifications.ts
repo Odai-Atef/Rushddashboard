@@ -93,14 +93,14 @@ export function useNotifications(): UseNotificationsReturn {
         const res = await notificationService.markAsRead(id);
         if (!res.success) {
           // Revert on failure
-          setNotifications((prev) =
+          setNotifications((prev) =>
             prev.map((n) => (n.id === id ? { ...n, status: 'DELIVERED' as const, readAt: null } : n))
           );
           setUnreadCount((prev) => prev + 1);
         }
       } catch {
         // Revert on failure
-        setNotifications((prev) =
+        setNotifications((prev) =>
           prev.map((n) => (n.id === id ? { ...n, status: 'DELIVERED' as const, readAt: null } : n))
         );
         setUnreadCount((prev) => prev + 1);
@@ -115,7 +115,7 @@ export function useNotifications(): UseNotificationsReturn {
     if (unreadIds.length === 0) return;
 
     // Optimistic update
-    setNotifications((prev) =
+    setNotifications((prev) =>
       prev.map((n) => ({ ...n, status: 'READ' as const, readAt: new Date().toISOString() }))
     );
     setUnreadCount(0);
@@ -124,7 +124,7 @@ export function useNotifications(): UseNotificationsReturn {
       await Promise.all(unreadIds.map((id) => notificationService.markAsRead(id)));
     } catch {
       // Revert on failure
-      setNotifications((prev) =
+      setNotifications((prev) =>
         prev.map((n) =>
           unreadIds.includes(n.id) ? { ...n, status: 'DELIVERED' as const, readAt: null } : n
         )

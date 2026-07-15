@@ -13,6 +13,7 @@ export interface ProjectCreateState {
   isLoading: boolean;
   error: string | null;
   fieldErrors: Record<string, string>;
+  errorCode?: string;
 }
 
 export interface UseProjectCreateReturn extends ProjectCreateState {
@@ -42,16 +43,18 @@ const parseFieldErrors = (data: ApiError): Record<string, string> => {
   return fieldErrors;
 };
 
-const getArabicErrorMessage = (error: unknown): { message: string; fieldErrors: Record<string, string> } => {
+const getArabicErrorMessage = (error: unknown): { message: string; fieldErrors: Record<string, string>; code?: string } => {
   let message = 'حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.';
 
   const apiError = error as ApiError;
   const status = apiError.statusCode;
-  const data = apiError as ApiError;
+  // The backend sends { message, code, details, errors }. Fallback to details.message if top-level message is missing.
+  const specificMessage = apiError.message || (apiError.details as any)?.message;
+  const specificCode = apiError.code || (apiError.details as any)?.code;
 
   // Extract field-level errors regardless of HTTP status code so they can be
   // displayed next to each input even when the backend returns 403, 422, etc.
-  const fieldErrors = parseFieldErrors(data);
+  const fieldErrors = parseFieldErrors(apiError);
 
   if (status) {
     switch (status) {
@@ -60,7 +63,7 @@ const getArabicErrorMessage = (error: unknown): { message: string; fieldErrors: 
       case 422:
         message = Object.keys(fieldErrors).length > 0
           ? 'يرجى تصحيح الأخطاء التالية:'
-          : data.message || 'البيانات المدخلة غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.';
+          : specificMessage || 'البيانات المدخلة غير صحيحة. يرجى التحقق والمحاولة مرة أخرى.';
         break;
       case 401:
         message = 'انتهت الجلسة. يرجى تسجيل الدخول مرة أخرى.';
@@ -69,7 +72,7 @@ const getArabicErrorMessage = (error: unknown): { message: string; fieldErrors: 
         message = 'لم يتم العثور على البيانات المطلوبة.';
         break;
       case 409:
-        message = data.message || 'يوجد مشروع بنفس البيانات. يرجى استخدام بيانات أخرى.';
+        message = specificMessage || 'يوجد مشروع بنفس البيانات. يرجى استخدام بيانات أخرى.';
         break;
       case 500:
       case 502:
@@ -79,9 +82,9 @@ const getArabicErrorMessage = (error: unknown): { message: string; fieldErrors: 
         break;
       default:
         if (status >= 400 && status < 500) {
-          message = data.message || 'طلب غير صحيح. يرجى التحقق والمحاولة مرة أخرى.';
+          message = specificMessage || 'طلب غير صحيح. يرجى التحقق والمحاولة مرة أخرى.';
         } else {
-          message = data.message || 'حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.';
+          message = specificMessage || 'حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.';
         }
     }
   } else if ((error as Error)?.name === 'AbortError' || apiError.code === 'TIMEOUT') {
@@ -90,7 +93,7 @@ const getArabicErrorMessage = (error: unknown): { message: string; fieldErrors: 
     message = 'لا يمكن الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.';
   }
 
-  return { message, fieldErrors };
+  return { message, fieldErrors, code: specificCode };
 };
 
 export function useProjectCreate(): UseProjectCreateReturn {
@@ -140,9 +143,9 @@ export function useProjectCreate(): UseProjectCreateReturn {
           throw error;
         }
 
-        const { message, fieldErrors } = getArabicErrorMessage(error);
+        const { message, fieldErrors, code } = getArabicErrorMessage(error);
 
-        setState({ isLoading: false, error: message, fieldErrors });
+        setState({ isLoading: false, error: message, fieldErrors, errorCode: code });
         throw error;
       } finally {
         if (abortControllerRef.current === controller) {

@@ -22,7 +22,6 @@ function daysBetween(start: string, end: string): number | null {
 export function ProjectCreatePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { create, isLoading, error, fieldErrors, clearFieldError, clearError } = useProjectCreate();
   const [localFieldErrors, setLocalFieldErrors] = useState<Record<string, string>>({});
   const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string }[]>([]);
   const [isLoadingOrganization, setIsLoadingOrganization] = useState(true);
@@ -51,6 +50,9 @@ export function ProjectCreatePage() {
     error: eligibilityError,
     reason: eligibilityReason,
   } = useProjectEligibility(formData.organizationId);
+
+  // Destructure errorCode from the hook to detect eligibility-related failures
+  const { create, isLoading, error, errorCode, fieldErrors, clearFieldError, clearError } = useProjectCreate();
 
   const startDateRef = useRef<HTMLInputElement | null>(null);
   const endDateRef = useRef<HTMLInputElement | null>(null);
@@ -256,9 +258,9 @@ export function ProjectCreatePage() {
         navigate('/dashboard/project-management/list');
       }
     } catch (err: any) {
-      const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
-      if (errorCode === 'NO_ACTIVE_SUBSCRIPTION' || errorCode === 'PROJECT_LIMIT_REACHED') {
-        setCreateErrorReason(errorCode);
+      const specificErrorCode = err?.code || err?.data?.code || err?.response?.data?.code || errorCode;
+      if (specificErrorCode === 'NO_ACTIVE_SUBSCRIPTION' || specificErrorCode === 'PROJECT_LIMIT_REACHED') {
+        setCreateErrorReason(specificErrorCode);
       }
       // Errors are already surfaced by the hook. If no field errors exist, toast the global error.
       if (error && Object.keys(fieldErrors).length === 0) {
@@ -475,7 +477,7 @@ export function ProjectCreatePage() {
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
                 {error}
-                {noActiveSubscription && (
+                {showPricingCta && (
                   <p className="mt-2">
                     اختر باقتك واشترك الآن{" "}
                     <button

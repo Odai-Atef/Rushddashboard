@@ -9,7 +9,7 @@ import { ApiResponse, RequestConfig } from '../types';
 
 export type NotificationPriority = 'LOW' | 'MEDIUM' | 'HIGH' | 'URGENT';
 export type NotificationChannel = 'IN_APP' | 'PUSH' | 'EMAIL';
-export type NotificationStatus = 'SENT' | 'DELIVERED' | 'READ';
+export type NotificationStatus = 'SENT' | 'SCHEDULED' | 'PENDING' | 'DELIVERED' | 'READ' | 'FAILED';
 
 export interface Notification {
   id: string;

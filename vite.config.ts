@@ -30,6 +30,16 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  server: {
+    allowedHosts: [
+      'localhost',
+      'rushdisiv.com',
+      'app.rushdisiv.com',
+      'properly-uncertain-unwanted.ngrok-free.dev',
+      '.ngrok-free.app',
+      '.ngrok.io',
+    ],
+  },
 
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
