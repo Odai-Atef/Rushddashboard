@@ -1309,16 +1309,6 @@ export function ProjectDetailsPage() {
                       تحميل الملف التسويقي
                     </button>
                   </div>
-                  {getDesignHtml() ? (
-                    <div
-                      className="w-full bg-white rounded-xl border border-gray-200 min-h-full"
-                      dangerouslySetInnerHTML={{ __html: getDesignHtml() }}
-                    />
-                  ) : (
-                    <div className="prose prose-sm max-w-none text-right w-full break-words bg-white rounded-xl p-6 border border-gray-200 min-h-full [&>*]:text-right">
-                      لا يوجد تصميم معتمد لهذا المشروع
-                    </div>
-                  )}
                 </div>
               ) : (
                 <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
