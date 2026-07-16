@@ -51,11 +51,63 @@ function formatDate(dateString: string | null | undefined): string {
   }
 }
 
+function formatRelativeTime(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+  const diffWeeks = Math.floor(diffDays / 7);
+  const diffMonths = Math.floor(diffDays / 30);
+  const diffYears = Math.floor(diffDays / 365);
+
+  if (diffMins < 1) return 'الآن';
+  if (diffMins < 60) return `منذ ${diffMins} دقيقة`;
+  if (diffHours < 24) return `منذ ${diffHours} ساعة`;
+  if (diffDays < 7) return `منذ ${diffDays} يوم`;
+  if (diffWeeks < 4) return `منذ ${diffWeeks} أسبوع`;
+  if (diffMonths < 12) return `منذ ${diffMonths} شهر`;
+  return `منذ ${diffYears} سنة`;
+}
+
 function formatFileSize(bytes: number): string {
   if (!bytes || bytes === 0) return '0 B';
   const sizes = ['B', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
   return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${sizes[i]}`;
+}
+
+function getDocumentTypeLabel(documentType: string): string {
+  const labels: Record<string, string> = {
+    LICENSE: 'الترخيص',
+    BANK_CERTIFICATE: 'الشهادة البنكية',
+    NATIONAL_ADDRESS: 'العنوان الوطني',
+    ORG_PROFILE: 'بيان المنشأة',
+    PROJECTS: 'المشاريع',
+    FINANCIAL: 'المالية',
+    ANNUAL: 'التقرير السنوي',
+    BRAND: 'العلامة التجارية',
+    BOARD_APPROVAL_LETTER: 'خطاب موافقة مجلس الإدارة',
+    AI_PLAN_DOCX: 'دراسة المشروع - Word',
+    AI_PLAN_PDF: 'دراسة المشروع - PDF',
+    AI_PRESENTATION_PPTX: 'عرض تقديمي',
+    PRICE_OFFER: 'عرض السعر',
+    SIGNED_PRICE_OFFER: 'عرض السعر الموقع',
+    AI_DONOR_PLAN: 'خطة التبرع بالذكاء الاصطناعي',
+  };
+  return labels[documentType] || documentType;
+}
+
+function getOrganizationTypeLabel(type: string | null | undefined): string {
+  const labels: Record<string, string> = {
+    CHARITY: 'جمعية خيرية',
+    FOUNDATION: 'مؤسسة',
+    NGO: 'منظمة غير حكومية',
+    COOP: 'تعاونية',
+  };
+  if (!type) return '-';
+  return labels[type] || type;
 }
 
 function getActionErrorMessage(error: unknown): string {
@@ -320,6 +372,8 @@ export function UserActivationPage() {
                     <TableHead className="text-right">رقم الترخيص</TableHead>
                     <TableHead className="text-right">المستندات</TableHead>
                     <TableHead className="text-right">الحالة</TableHead>
+                    <TableHead className="text-right">تاريخ الإنشاء</TableHead>
+                    <TableHead className="text-right">تاريخ التحديث</TableHead>
                     <TableHead className="text-right"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -331,7 +385,7 @@ export function UserActivationPage() {
                         <div className="text-xs text-gray-500">{user.email}</div>
                       </TableCell>
                       <TableCell>{user.organization?.name || '-'}</TableCell>
-                      <TableCell>{user.organization?.type || '-'}</TableCell>
+                      <TableCell>{getOrganizationTypeLabel(user.organization?.type)}</TableCell>
                       <TableCell>{user.organization?.licenseNumber || '-'}</TableCell>
                       <TableCell>
                         <Badge variant="outline">
@@ -339,6 +393,14 @@ export function UserActivationPage() {
                         </Badge>
                       </TableCell>
                       <TableCell>{getStatusBadge(user.status)}</TableCell>
+                      <TableCell>
+                        <div>{formatDate(user.organization?.createdAt)}</div>
+                        <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.createdAt)}</div>
+                      </TableCell>
+                      <TableCell>
+                        <div>{formatDate(user.organization?.updatedAt)}</div>
+                        <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.updatedAt)}</div>
+                      </TableCell>
                       <TableCell>
                         <Button
                           variant="outline"
@@ -372,7 +434,7 @@ export function UserActivationPage() {
 
       {/* User Details Modal */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto" dir="rtl">
+        <DialogContent className="max-h-[90vh] overflow-y-auto" style={{ maxWidth: '72rem', width: 'calc(100% - 2rem)' }} dir="rtl">
           <DialogHeader>
             <DialogTitle className="text-xl flex items-center gap-2">
               <Building2 className="w-5 h-5" />
@@ -465,9 +527,10 @@ export function UserActivationPage() {
                         <div className="flex items-center gap-3">
                           <FileText className="w-5 h-5 text-blue-600" />
                           <div>
-                            <div className="font-medium text-sm">{doc.fileName}</div>
+                            <div className="font-medium text-base">{getDocumentTypeLabel(doc.documentType)}</div>
+                            <div className="text-sm text-gray-600">{doc.fileName}</div>
                             <div className="text-xs text-gray-500">
-                              {doc.documentType} • {formatFileSize(doc.fileSize)} • {formatDate(doc.uploadedAt)}
+                              {formatFileSize(doc.fileSize)} • {formatDate(doc.uploadedAt)}
                             </div>
                           </div>
                         </div>
