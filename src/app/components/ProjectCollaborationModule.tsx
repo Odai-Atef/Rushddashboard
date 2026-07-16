@@ -588,6 +588,7 @@ function ChatView({
 }: ChatViewProps) {
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { user } = useAuth();
+  const navigate = useNavigate();
   const effectiveCurrentUserId = currentUserId || user?.id || null;
   const [messageInput, setMessageInput] = useState('');
   const [replyToId, setReplyToId] = useState<string | null>(null);
@@ -669,7 +670,15 @@ function ChatView({
     };
 
     return (
-      <div className="h-[calc(100vh-200px)] flex gap-4 overflow-hidden">
+      <div className="space-y-4">
+        <button
+          onClick={() => navigate('/dashboard/project-management/list')}
+          className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2"
+        >
+          <ChevronRight className="w-5 h-5" />
+          رجوع إلى قائمة المشاريع
+        </button>
+        <div className="h-[calc(100vh-240px)] flex gap-4 overflow-hidden">
         {/* Left Panel - Conversations */}
         <div className="w-80 bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden">
           <div className="p-4 border-b border-gray-200">
@@ -949,10 +958,10 @@ function ChatView({
             </div>
           )}
         </div>
-
       </div>
-    );
-  };
+    </div>
+  );
+};
 
 function MessageBubble({
   msg,
