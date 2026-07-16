@@ -839,7 +839,7 @@ export function ProjectDetailsPage() {
                   className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
                 >
                   <History className="w-5 h-5 text-gray-400" />
-                  <span>الإصدارات</span>
+                  <span>البريد الوارد</span>
                 </button>
                 <button
                   onClick={() => navigate(`/dashboard/project-management/activity/${project.id}`)}
