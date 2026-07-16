@@ -348,6 +348,7 @@ export class ProjectService {
       ...config,
       params: { format: 'markdown', ...(config?.params || {}) },
       responseType: 'text',
+      timeout: 300_000, // 5 minutes
     });
   }
 
@@ -360,6 +361,7 @@ export class ProjectService {
       ...config,
       params: { format: 'word', ...(config?.params || {}) },
       responseType: 'blob',
+      timeout: 300_000, // 5 minutes
     });
   }
 
