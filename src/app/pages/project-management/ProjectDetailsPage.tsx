@@ -9,7 +9,7 @@ import {
   User,
   MapPin,
   GitBranch,
-  History,
+  Inbox,
   Activity,
   RotateCcw,
   Eye,
@@ -19,6 +19,7 @@ import {
   Presentation,
   FileText,
   Upload,
+  MessageSquare,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -838,8 +839,15 @@ export function ProjectDetailsPage() {
                   onClick={() => navigate(`/dashboard/project-management/versions/${project.id}`)}
                   className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
                 >
-                  <History className="w-5 h-5 text-gray-400" />
+                  <Inbox className="w-5 h-5 text-gray-400" />
                   <span>البريد الوارد</span>
+                </button>
+                <button
+                  onClick={() => navigate(`/dashboard/collaboration/${project.id}/chat`)}
+                  className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
+                >
+                  <MessageSquare className="w-5 h-5 text-gray-400" />
+                  <span>المحادثة</span>
                 </button>
                 <button
                   onClick={() => navigate(`/dashboard/project-management/activity/${project.id}`)}
