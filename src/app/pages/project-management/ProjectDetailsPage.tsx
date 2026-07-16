@@ -30,6 +30,7 @@ import { ProjectNotFound } from './ProjectNotFound';
 import { healthConfig, statusConfig, ProjectDetails as ProjectDetailsType, ProjectStatus, FundingAreaInfo } from './project-types';
 import { formatDateTime } from '@/app/lib/formatters';
 import { useAuth } from '@/app/layouts/RootLayout';
+import { useConfirm } from '@/app/hooks/useConfirm.tsx';
 
 import { toast } from 'sonner';
 
@@ -114,6 +115,25 @@ export function ProjectDetailsPage() {
   const [offerRejectReason, setOfferRejectReason] = useState('');
   const [offerFileError, setOfferFileError] = useState('');
   const [activeDocTab, setActiveDocTab] = useState<'study' | 'presentation'>('study');
+  const { confirm, dialog: confirmDialog } = useConfirm();
+
+  const handleApproveDraftClick = async () => {
+    const confirmed = await confirm({
+      title: 'هل أنت متأكد من اعتماد مسودة المشروع وإرساله للجهة الخيرية للمراجعة؟',
+    });
+    if (confirmed) {
+      handleSubmitToCharity();
+    }
+  };
+
+  const handleSearchDonorsClick = async () => {
+    const confirmed = await confirm({
+      title: 'هل أنت متأكد من البحث عن المانحين لهذا المشروع؟',
+    });
+    if (confirmed && projectId) {
+      navigate(`/dashboard/donor-matching/recommended/${projectId}`);
+    }
+  };
 
   const handleOpenPlan = async () => {
     if (!projectId) return;
@@ -224,15 +244,21 @@ export function ProjectDetailsPage() {
     setReviewNotes('');
   };
 
-  const handleConfirmApprove = () => {
-    if (window.confirm('هل أنت متأكد من الموافقة على هذا المشروع؟')) {
+  const handleConfirmApprove = async () => {
+    const confirmed = await confirm({
+      title: 'هل أنت متأكد من الموافقة على هذا المشروع؟',
+    });
+    if (confirmed) {
       handleCharityDecision('CHARITY_APPROVAL');
     }
   };
 
   const handleGeneratePresentation = async () => {
     if (!projectId) return;
-    if (!window.confirm('هل تريد إنشاء العرض التقديمي للمشروع بالذكاء الاصطناعي؟')) return;
+    const confirmed = await confirm({
+      title: 'هل تريد إنشاء العرض التقديمي للمشروع بالذكاء الاصطناعي؟',
+    });
+    if (!confirmed) return;
 
     setPresentationLoading(true);
     try {
@@ -265,8 +291,11 @@ export function ProjectDetailsPage() {
     setDesignInternalNotes('');
   };
 
-  const handleConfirmDesignApprove = () => {
-    if (window.confirm('هل أنت متأكد من اعتماد تصميم هذا المشروع؟')) {
+  const handleConfirmDesignApprove = async () => {
+    const confirmed = await confirm({
+      title: 'هل أنت متأكد من اعتماد تصميم هذا المشروع؟',
+    });
+    if (confirmed) {
       handleDesignDecision('DESIGN_APPROVED');
     }
   };
@@ -307,7 +336,10 @@ export function ProjectDetailsPage() {
 
   const handleRequestRedesign = async () => {
     if (!projectId) return;
-    if (!window.confirm('هل تريد طلب إعادة إنشاء التصميم؟')) return;
+    const confirmed = await confirm({
+      title: 'هل تريد طلب إعادة إنشاء التصميم؟',
+    });
+    if (!confirmed) return;
 
     setRedesignLoading(true);
     try {
@@ -574,11 +606,7 @@ export function ProjectDetailsPage() {
                   )}
                   {showApproveDraftButton && (
                     <button
-                      onClick={() => {
-                        if (window.confirm('هل أنت متأكد من اعتماد مسودة المشروع وإرساله للجهة الخيرية للمراجعة؟')) {
-                          handleSubmitToCharity();
-                        }
-                      }}
+                      onClick={handleApproveDraftClick}
                       disabled={submitLoading}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -592,11 +620,7 @@ export function ProjectDetailsPage() {
                   )}
                   {(rawStatus === 'DESIGN_APPROVED' || rawStatus === 'READY_DONOR') && (
                     <button
-                      onClick={() => {
-                        if (window.confirm('هل أنت متأكد من البحث عن المانحين لهذا المشروع؟')) {
-                          navigate(`/dashboard/donor-matching/recommended/${projectId}`);
-                        }
-                      }}
+                      onClick={handleSearchDonorsClick}
                       className="px-4 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors flex items-center gap-2"
                     >
                       <Sparkles className="w-5 h-5" />
@@ -837,7 +861,7 @@ export function ProjectDetailsPage() {
                   className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
                 >
                   <GitBranch className="w-5 h-5 text-gray-400" />
-                  <span>عرض دورة الحياة</span>
+                  <span>رحلة المشروع</span>
                 </button>
                 <button
                   onClick={() => navigate(`/dashboard/project-management/versions/${project.id}`)}
@@ -1373,6 +1397,7 @@ export function ProjectDetailsPage() {
           </div>
         </div>
       )}
+      {confirmDialog}
     </div>
   );
 }

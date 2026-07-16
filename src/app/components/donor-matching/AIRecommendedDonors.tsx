@@ -9,6 +9,7 @@ import type { MatchDonorsResponse } from '@/api/services/project-service';
 import { projectService } from '@/api/services/project-service';
 import type { ProjectDetails } from '@/app/pages/project-management/project-types';
 import { statusConfig as projectStatusConfig, ProjectStatus } from '@/app/pages/project-management/project-types';
+import { useConfirm } from '@/app/hooks/useConfirm.tsx';
 
 function getDisplayStatus(status: string): ProjectStatus {
   const normalized = status.toLowerCase().replace(/_/g, '-');
@@ -62,6 +63,7 @@ export function AIRecommendedDonors({
 }: AIRecommendedDonorsProps) {
   const [search, setSearch] = useState('');
   const [generatingId, setGeneratingId] = useState<string | null>(null);
+  const { confirm, dialog: confirmDialog } = useConfirm();
 
   const donors = matchData?.donors ?? [];
 
@@ -76,7 +78,10 @@ export function AIRecommendedDonors({
   }, [donors, search]);
 
   const handleGeneratePlan = async (donorMatchId: string, donorName: string) => {
-    if (!window.confirm('هل أنت متأكد من إنشاء خطة مشروع خاصة بهذه الجهة؟')) {
+    const confirmed = await confirm({
+      title: 'هل أنت متأكد من إنشاء خطة مشروع خاصة بهذه الجهة؟',
+    });
+    if (!confirmed) {
       return;
     }
     setGeneratingId(donorMatchId);
@@ -268,6 +273,7 @@ export function AIRecommendedDonors({
           );
         })}
       </div>
+      {confirmDialog}
     </div>
   );
 }
