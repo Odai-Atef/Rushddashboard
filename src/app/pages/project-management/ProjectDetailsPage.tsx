@@ -572,7 +572,7 @@ export function ProjectDetailsPage() {
                       إنشاء دراسة باستخدام الذكاء الاصطناعي
                     </button>
                   )}
-                  {isDraftProject && (
+                  {displayStatus === 'approved' && (
                     <button
                       onClick={handleSubmitToCharity}
                       disabled={submitLoading}
