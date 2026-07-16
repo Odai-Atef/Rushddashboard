@@ -96,6 +96,11 @@ export function ProjectListPage() {
   const [qualificationError, setQualificationError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (isProjectManager) {
+      setQualificationLoading(false);
+      return;
+    }
+
     let cancelled = false;
     const load = async () => {
       try {
@@ -127,7 +132,7 @@ export function ProjectListPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isProjectManager]);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
