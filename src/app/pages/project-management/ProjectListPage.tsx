@@ -288,6 +288,8 @@ export function ProjectListPage() {
       'INCUBATOR_MODIFICATIONS',
       'OFFER_APPROVED',
       'DESIGN_APPROVED',
+      'PM_APPROVAL',
+      'DESIGN_TEAM',
     ];
     const entityManagerStatuses = [
       'CHARITY_REVIEW',
