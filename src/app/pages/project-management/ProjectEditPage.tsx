@@ -11,32 +11,7 @@ import { statusConfig, ProjectStatus, UpdateProjectDto, ProjectDetails as Projec
 import { useAuth } from '@/app/layouts/RootLayout';
 import MDEditor from '@uiw/react-md-editor';
 
-const STATUS_OPTIONS: ProjectStatus[] = [
-  'created',
-  'draft',
-  'charity-review',
-  'charity-decision',
-  'incubator-modifications',
-  'charity-approval',
-  'pm-approval',
-  'financial-approval',
-  'approved',
-  'design-team',
-  'design-review',
-  'design-approved',
-  'design-rejected',
-  'design-decision',
-  'offer-review',
-  'offer-approved',
-  'offer-rejected',
-  'offer-generated',
-  'ready-donor',
-  'submitted-donor',
-  'funded',
-  'execution',
-  'completed',
-  'closed',
-];
+const STATUS_OPTIONS: ProjectStatus[] = Object.keys(statusConfig) as ProjectStatus[];
 
 function daysBetween(start: string, end: string): number | null {
   if (!start || !end) return null;
