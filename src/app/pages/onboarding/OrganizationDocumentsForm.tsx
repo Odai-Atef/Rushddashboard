@@ -5,7 +5,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   Clock,
-  Eye,
+  Download,
   FileText,
   Info,
   Loader2,
@@ -14,7 +14,6 @@ import {
 } from 'lucide-react';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { toast } from 'sonner';
-import apiClient from '@/api/client';
 import { useSearchParams } from 'react-router';
 import {
   BACKEND_DOCUMENT_TYPE_TO_SLOT,
@@ -34,6 +33,7 @@ interface UploadedFile {
   backendId?: string;
   backendStatus?: string;
   fileUrl?: string;
+  fileId?: string;
 }
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
@@ -266,6 +266,7 @@ export function OrganizationDocumentsForm() {
           backendId: doc.id,
           backendStatus: doc.status,
           fileUrl: doc.fileUrl,
+          fileId: doc.fileId,
         });
       }
 
@@ -362,6 +363,7 @@ export function OrganizationDocumentsForm() {
                 backendId: data.id,
                 backendStatus: data.status,
                 fileUrl: data.fileUrl,
+                fileId: data.fileId,
               }
             : f
         )
@@ -452,15 +454,29 @@ export function OrganizationDocumentsForm() {
     handleUpload(slotId, file);
   };
 
-  const handleViewFile = (fileUrl?: string) => {
-    if (!fileUrl) {
-      toast.error('لا يوجد رابط للملف', { duration: TOAST_DURATION });
+  const handleDownloadFile = async (fileId?: string) => {
+    if (!fileId) {
+      toast.error('لا يوجد معرف للملف', { duration: TOAST_DURATION });
       return;
     }
-    const base = (apiClient as any).defaults?.baseURL?.replace(/\/$/, '') || window.location.origin;
-    const path = fileUrl.startsWith('/') ? fileUrl : `/${fileUrl}`;
-    const fullUrl = `${base}${path}`;
-    window.open(fullUrl, '_blank', 'noopener,noreferrer');
+    try {
+      const { collaborationService } = await import('@/api/services/collaboration-service');
+      const res = await collaborationService.downloadFileById(fileId);
+      if (!res.success || !res.data) throw new Error('Download failed');
+
+      const blob = res.data;
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'document';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم تحميل الملف بنجاح', { duration: TOAST_DURATION });
+    } catch {
+      toast.error('فشل تحميل الملف', { duration: TOAST_DURATION });
+    }
   };
 
   const handleSave = () => {
@@ -656,13 +672,13 @@ export function OrganizationDocumentsForm() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {isCompleted && file?.fileUrl && (
+                    {isCompleted && file?.fileId && (
                       <button
-                        onClick={() => handleViewFile(file.fileUrl)}
+                        onClick={() => handleDownloadFile(file.fileId)}
                         className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
-                        title="عرض"
+                        title="تحميل"
                       >
-                        <Eye className="w-4 h-4" />
+                        <Download className="w-4 h-4" />
                       </button>
                     )}
                     <button
@@ -763,14 +779,14 @@ export function OrganizationDocumentsForm() {
                       )}
                     </div>
                   </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {isCompleted && file?.fileUrl && (
+                   <div className="flex items-center gap-2 flex-shrink-0">
+                    {isCompleted && file?.fileId && (
                       <button
-                        onClick={() => handleViewFile(file.fileUrl)}
+                        onClick={() => handleDownloadFile(file.fileId)}
                         className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
-                        title="عرض"
+                        title="تحميل"
                       >
-                        <Eye className="w-4 h-4" />
+                        <Download className="w-4 h-4" />
                       </button>
                     )}
                     <button
