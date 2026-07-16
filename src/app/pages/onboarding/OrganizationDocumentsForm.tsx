@@ -340,7 +340,7 @@ export function OrganizationDocumentsForm() {
 
       if (previousDoc?.backendId) {
         try {
-          await onboardingService.deleteOrganizationDocument(previousDoc.backendId);
+          await onboardingService.deleteOrganizationDocument(previousDoc.backendId, activeOrganizationId || '');
         } catch (deleteErr) {
           console.warn('Failed to delete previous document', deleteErr);
         }
@@ -388,7 +388,7 @@ export function OrganizationDocumentsForm() {
 
     try {
       const { onboardingService } = await import('@/api/services');
-      await onboardingService.deleteOrganizationDocument(doc.backendId);
+      await onboardingService.deleteOrganizationDocument(doc.backendId, activeOrganizationId || '');
       setUploadedFiles((prev) => prev.filter((f) => f.id !== slotId));
       toast.success('تم حذف المستند بنجاح', { duration: TOAST_DURATION });
     } catch (err) {

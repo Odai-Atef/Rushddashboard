@@ -810,8 +810,10 @@ export class OnboardingService {
    * Delete an uploaded organization document
    * DELETE /api/v1/onboarding/documents/{id}
    */
-  async deleteOrganizationDocument(id: string): Promise<ApiResponse<void>> {
-    return apiClient.delete(`/api/v1/onboarding/documents/${id}`);
+  async deleteOrganizationDocument(id: string, organizationId: string): Promise<ApiResponse<void>> {
+    return apiClient.delete(`/api/v1/onboarding/documents/${id}`, {
+      params: { organizationId },
+    });
   }
 
   private async parseUploadError(response: Response): Promise<ApiError> {
