@@ -526,7 +526,7 @@ export function ProjectDetailsPage() {
   const isEntityManager = user?.roleSlug === 'entity-managers';
   const rawStatus = (project.status as string).toUpperCase().replace(/-/g, '_');
   const showReviewButton = isEntityManager && rawStatus === 'CHARITY_REVIEW';
-  const showGeneratePresentationButton = isProjectManager && rawStatus === 'CHARITY_APPROVAL';
+  const showGeneratePresentationButton = isProjectManager && rawStatus === 'DESIGN_TEAM';
   const showDesignReviewButton = isEntityManager && rawStatus === 'DESIGN_REVIEW';
   const showRedesignButton = isProjectManager && rawStatus === 'DESIGN_REJECTED';
   const showApproveDraftButton = isProjectManager && rawStatus === 'PM_APPROVAL';

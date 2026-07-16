@@ -215,7 +215,7 @@ export const statusConfig: Record<
   'financial-approval': { label: 'موافقة مالية', color: '#14b8a6', bg: '#ccfbf1' },
   approved: { label: 'معتمد', color: '#10b981', bg: '#d1fae5' },
   'design-team': { label: 'فريق التصميم', color: '#6366f1', bg: '#e0e7ff' },
-  'design-team-approval': { label: 'تمت الموافقة على فريق التصميم', color: '#10b981', bg: '#d1fae5' },
+  'design-team-approval': { label: 'في انتظار موافقة فريق التصميم', color: '#10b981', bg: '#d1fae5' },
   'design-review': { label: 'مراجعة التصميم', color: '#8b5cf6', bg: '#ede9fe' },
   'design-approved': { label: 'تمت الموافقة على التصميم', color: '#10b981', bg: '#d1fae5' },
   'design-rejected': { label: 'تم رفض التصميم', color: '#ef4444', bg: '#fee2e2' },
