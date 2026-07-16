@@ -290,6 +290,7 @@ export function ProjectListPage() {
       'DESIGN_APPROVED',
       'PM_APPROVAL',
       'DESIGN_TEAM',
+      'DESIGN_TEAM_APPROVAL',
     ];
     const entityManagerStatuses = [
       'CHARITY_REVIEW',
