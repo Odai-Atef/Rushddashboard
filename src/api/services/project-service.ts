@@ -212,6 +212,28 @@ export interface PriceOfferDecisionResponse {
   conversationId: string;
 }
 
+export interface SendDesignToOwnerPayload {
+  file?: File;
+  notes?: string;
+  internalNotes?: string;
+}
+
+export interface SendDesignFileInfo {
+  id: string;
+  originalName: string;
+  mimeType: string;
+  downloadUrl: string;
+}
+
+export interface SendDesignToOwnerResponse {
+  success: boolean;
+  message: string;
+  projectId: string;
+  newStatus: string;
+  conversationId?: string;
+  file?: SendDesignFileInfo;
+}
+
 export interface ProjectDocumentUploader {
   id: string;
   email: string;
@@ -420,6 +442,46 @@ export class ProjectService {
         timeout: 300_000,
       }
     );
+  }
+
+  /**
+   * Project manager sends approved design to the charity owner
+   * POST /api/v1/projects/:id/send-design-to-owner
+   */
+  async sendDesignToOwner(
+    id: string,
+    payload: SendDesignToOwnerPayload,
+    config?: RequestConfig
+  ): Promise<ApiResponse<SendDesignToOwnerResponse>> {
+    const formData = new FormData();
+    if (payload.file) {
+      formData.append('file', payload.file);
+    }
+    if (payload.notes) {
+      formData.append('notes', payload.notes);
+    }
+    if (payload.internalNotes) {
+      formData.append('internalNotes', payload.internalNotes);
+    }
+    return apiClient.upload<SendDesignToOwnerResponse>(
+      `/api/v1/projects/${id}/send-design-to-owner`,
+      formData,
+      config
+    );
+  }
+
+  /**
+   * Download the generated AI marketing/presentation file
+   * GET /api/v1/projects/:id/presentation/download
+   */
+  async downloadPresentation(
+    id: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<Blob>> {
+    return apiClient.get<Blob>(`/api/v1/projects/${id}/presentation/download`, {
+      ...config,
+      responseType: 'blob',
+    });
   }
 
   /**

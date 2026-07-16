@@ -115,6 +115,13 @@ export function ProjectDetailsPage() {
   const [offerRejectReason, setOfferRejectReason] = useState('');
   const [offerFileError, setOfferFileError] = useState('');
   const [activeDocTab, setActiveDocTab] = useState<'study' | 'presentation'>('study');
+  const [sendDesignOpen, setSendDesignOpen] = useState(false);
+  const [sendDesignFile, setSendDesignFile] = useState<File | null>(null);
+  const [sendDesignNotes, setSendDesignNotes] = useState('');
+  const [sendDesignInternalNotes, setSendDesignInternalNotes] = useState('');
+  const [sendDesignFileError, setSendDesignFileError] = useState('');
+  const [sendDesignLoading, setSendDesignLoading] = useState(false);
+  const [presentationDownloadLoading, setPresentationDownloadLoading] = useState(false);
   const { confirm, dialog: confirmDialog } = useConfirm();
 
   const handleApproveDraftClick = async () => {
@@ -132,6 +139,117 @@ export function ProjectDetailsPage() {
     });
     if (confirmed && projectId) {
       navigate(`/dashboard/donor-matching/recommended/${projectId}`);
+    }
+  };
+
+  const validateSendDesignFile = (file: File): boolean => {
+    const allowedExtensions = ['pptx', 'pdf'];
+    const allowedMimeTypes = [
+      'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+      'application/pdf',
+    ];
+    const extension = file.name.split('.').pop()?.toLowerCase() || '';
+    const isValidType = allowedExtensions.includes(extension) || allowedMimeTypes.includes(file.type);
+    const maxSize = 10 * 1024 * 1024;
+    if (!isValidType) {
+      setSendDesignFileError('يُسمح فقط بملفات PPTX أو PDF');
+      return false;
+    }
+    if (file.size > maxSize) {
+      setSendDesignFileError('حجم الملف يجب ألا يتجاوز 10 ميجابايت');
+      return false;
+    }
+    setSendDesignFileError('');
+    return true;
+  };
+
+  const handleSendDesignFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      setSendDesignFile(null);
+      setSendDesignFileError('');
+      return;
+    }
+    if (validateSendDesignFile(file)) {
+      setSendDesignFile(file);
+    } else {
+      setSendDesignFile(null);
+      e.target.value = '';
+    }
+  };
+
+  const handleOpenSendDesign = () => {
+    setSendDesignOpen(true);
+    setSendDesignFile(null);
+    setSendDesignNotes('');
+    setSendDesignInternalNotes('');
+    setSendDesignFileError('');
+  };
+
+  const handleCloseSendDesign = () => {
+    setSendDesignOpen(false);
+    setSendDesignFile(null);
+    setSendDesignNotes('');
+    setSendDesignInternalNotes('');
+    setSendDesignFileError('');
+  };
+
+  const handleDownloadGeneratedPresentation = async () => {
+    if (!projectId || !project) return;
+    setPresentationDownloadLoading(true);
+    try {
+      const res = await projectService.downloadPresentation(projectId);
+      const blob = res.data;
+      if (!(blob instanceof Blob)) {
+        throw new Error('تعذر الحصول على الملف');
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${project.name || 'project'}-الملف-التسويقي.pptx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم تحميل الملف التسويقي المولد بنجاح');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تحميل الملف التسويقي المولد');
+    } finally {
+      setPresentationDownloadLoading(false);
+    }
+  };
+
+  const handleSendDesignToOwner = async () => {
+    if (!projectId) return;
+    setSendDesignLoading(true);
+    try {
+      const res = await projectService.sendDesignToOwner(projectId, {
+        file: sendDesignFile || undefined,
+        notes: sendDesignNotes.trim() || undefined,
+        internalNotes: sendDesignInternalNotes.trim() || undefined,
+      });
+      if (res.data?.success) {
+        toast.success(res.data.message || 'تم إرسال التصميم إلى الجهة الخيرية بنجاح');
+        await refetch();
+        handleCloseSendDesign();
+      } else {
+        toast.success('تم إرسال التصميم إلى الجهة الخيرية بنجاح');
+        await refetch();
+        handleCloseSendDesign();
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل إرسال التصميم إلى الجهة الخيرية');
+    } finally {
+      setSendDesignLoading(false);
+    }
+  };
+
+  const handleConfirmSendDesign = async () => {
+    const confirmed = await confirm({
+      title: 'هل أنت متأكد من اعتماد التصميم وإرساله إلى الجهة الخيرية؟',
+    });
+    if (confirmed) {
+      handleSendDesignToOwner();
     }
   };
 
@@ -563,6 +681,7 @@ export function ProjectDetailsPage() {
   const showRedesignButton = isProjectManager && rawStatus === 'DESIGN_REJECTED';
   const showApproveDraftButton = isProjectManager && rawStatus === 'PM_APPROVAL';
   const showOfferReviewButton = isEntityManager && rawStatus === 'OFFER_REVIEW';
+  const showSendDesignToOwnerButton = isProjectManager && rawStatus === 'DESIGN_TEAM_APPROVAL';
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -616,6 +735,16 @@ export function ProjectDetailsPage() {
                         <Send className="w-5 h-5" />
                       )}
                       اعتماد مسودة المشروع
+                    </button>
+                  )}
+                  {showSendDesignToOwnerButton && (
+                    <button
+                      onClick={handleOpenSendDesign}
+                      disabled={sendDesignLoading}
+                      className="px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Send className="w-5 h-5" />
+                      إرسال التصميم إلى الجهة الخيرية
                     </button>
                   )}
                   {(rawStatus === 'DESIGN_APPROVED' || rawStatus === 'READY_DONOR') && (
@@ -1397,6 +1526,116 @@ export function ProjectDetailsPage() {
           </div>
         </div>
       )}
+
+      {sendDesignOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div
+            className="absolute inset-0 bg-black/60"
+            onClick={handleCloseSendDesign}
+          />
+          <div dir="rtl" className="relative z-10 flex flex-col w-full max-w-2xl max-h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+              <div>
+                <h2 className="text-xl font-semibold">إرسال التصميم إلى الجهة الخيرية</h2>
+              </div>
+              <button
+                onClick={handleCloseSendDesign}
+                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 space-y-5">
+              <p className="text-sm text-gray-600 bg-blue-50 border border-blue-100 rounded-lg p-4">
+                إذا لم تقم برفع ملف جديد، سيتم إرسال الملف التسويقي المولد تلقائياً إلى الجهة الخيرية. إذا قمت برفع ملف، فسيُرسل بدلاً من الملف الافتراضي. بالاعتماد، سيتم إرسال التصميم إلى العميل.
+              </p>
+
+              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
+                <h3 className="font-medium">الملف التسويقي المولد</h3>
+                <button
+                  onClick={handleDownloadGeneratedPresentation}
+                  disabled={presentationDownloadLoading}
+                  className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {presentationDownloadLoading ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <FileDown className="w-4 h-4" />
+                  )}
+                  تحميل الملف التسويقي المولد
+                </button>
+              </div>
+
+              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
+                <h3 className="font-medium">ملف التصميم البديل (اختياري)</h3>
+                <label className="flex flex-col gap-2 cursor-pointer">
+                  <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+                    <Upload className="w-4 h-4" />
+                    <span>اختر ملف PPTX أو PDF</span>
+                  </div>
+                  <input
+                    type="file"
+                    accept=".pptx,.pdf"
+                    onChange={handleSendDesignFileChange}
+                    className="hidden"
+                  />
+                </label>
+                {sendDesignFile && (
+                  <p className="text-sm text-gray-600">الملف المحدد: {sendDesignFile.name}</p>
+                )}
+                {sendDesignFileError && (
+                  <p className="text-sm text-red-600">{sendDesignFileError}</p>
+                )}
+              </div>
+
+              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
+                <label className="block text-sm font-medium text-gray-700">ملاحظات (اختياري)</label>
+                <textarea
+                  value={sendDesignNotes}
+                  onChange={(e) => setSendDesignNotes(e.target.value.slice(0, 2000))}
+                  placeholder="اكتب الملاحظات التي ستُرسل مع التصميم..."
+                  rows={4}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                />
+                <p className="text-xs text-gray-500 text-left">{sendDesignNotes.length}/2000</p>
+              </div>
+
+              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
+                <label className="block text-sm font-medium text-gray-700">ملاحظات داخلية (اختياري)</label>
+                <textarea
+                  value={sendDesignInternalNotes}
+                  onChange={(e) => setSendDesignInternalNotes(e.target.value.slice(0, 2000))}
+                  placeholder="ملاحظات داخلية غير مرسلة للجهة..."
+                  rows={3}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                />
+                <p className="text-xs text-gray-500 text-left">{sendDesignInternalNotes.length}/2000</p>
+              </div>
+            </div>
+
+            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+              <button
+                onClick={handleCloseSendDesign}
+                className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+              >
+                إلغاء
+              </button>
+              <button
+                onClick={handleConfirmSendDesign}
+                disabled={sendDesignLoading || !!sendDesignFileError}
+                className="px-5 py-2.5 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {sendDesignLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : null}
+                اعتماد وإرسال
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {confirmDialog}
     </div>
   );
