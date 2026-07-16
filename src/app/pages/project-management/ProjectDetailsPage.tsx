@@ -102,6 +102,7 @@ export function ProjectDetailsPage() {
   const [presentationLoading, setPresentationLoading] = useState(false);
   const [designReviewOpen, setDesignReviewOpen] = useState(false);
   const [designDecisionLoading, setDesignDecisionLoading] = useState(false);
+  const [designPresentationDownloadLoading, setDesignPresentationDownloadLoading] = useState(false);
   const [designNotes, setDesignNotes] = useState('');
   const [designInternalNotes, setDesignInternalNotes] = useState('');
   const [designStep, setDesignStep] = useState<'view' | 'notes'>('view');
@@ -407,6 +408,31 @@ export function ProjectDetailsPage() {
     setDesignStep('view');
     setDesignNotes('');
     setDesignInternalNotes('');
+  };
+
+  const handleDownloadDesignPresentation = async () => {
+    if (!projectId || !project) return;
+    setDesignPresentationDownloadLoading(true);
+    try {
+      const res = await projectService.downloadPresentation(projectId);
+      const blob = res.data;
+      if (!(blob instanceof Blob)) {
+        throw new Error('تعذر الحصول على الملف');
+      }
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${project.name || 'project'}-الملف-التسويقي.pptx`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      toast.success('تم تحميل الملف التسويقي بنجاح');
+    } catch (err: any) {
+      toast.error(err?.message || 'فشل تحميل الملف التسويقي');
+    } finally {
+      setDesignPresentationDownloadLoading(false);
+    }
   };
 
   const handleConfirmDesignApprove = async () => {
@@ -1266,6 +1292,23 @@ export function ProjectDetailsPage() {
             <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
               {designStep === 'view' ? (
                 <div className="space-y-6 w-full">
+                  <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                    <p className="text-sm text-gray-700 mb-3">
+                      الملف التسويقي جاهز الآن يمكنك تحميله ومراجعته بالضغط على تحميل وبعدها يمكنك اعتماده أو طلب تعديل
+                    </p>
+                    <button
+                      onClick={handleDownloadDesignPresentation}
+                      disabled={designPresentationDownloadLoading}
+                      className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {designPresentationDownloadLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <FileDown className="w-4 h-4" />
+                      )}
+                      تحميل الملف التسويقي
+                    </button>
+                  </div>
                   {getDesignHtml() ? (
                     <div
                       className="w-full bg-white rounded-xl border border-gray-200 min-h-full"
