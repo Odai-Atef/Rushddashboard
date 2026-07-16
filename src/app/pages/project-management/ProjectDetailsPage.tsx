@@ -649,7 +649,7 @@ export function ProjectDetailsPage() {
                   ) : (
                     <Presentation className="w-5 h-5" />
                   )}
-                  إنشاء العرض التقديمي بالذكاء الاصطناعي
+                  إنشاء الملف التسويقي بالذكاء الاصطناعي
                 </button>
               )}
               {showDesignReviewButton && (
