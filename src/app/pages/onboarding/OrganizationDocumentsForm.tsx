@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { toast } from 'sonner';
+import apiClient from '@/api/client';
 import { useSearchParams } from 'react-router';
 import {
   BACKEND_DOCUMENT_TYPE_TO_SLOT,
@@ -450,7 +451,10 @@ export function OrganizationDocumentsForm() {
       toast.error('لا يوجد رابط للملف', { duration: TOAST_DURATION });
       return;
     }
-    window.open(fileUrl, '_blank', 'noopener,noreferrer');
+    const base = (apiClient as any).defaults?.baseURL?.replace(/\/$/, '') || window.location.origin;
+    const path = fileUrl.startsWith('/') ? fileUrl : `/${fileUrl}`;
+    const fullUrl = `${base}${path}`;
+    window.open(fullUrl, '_blank', 'noopener,noreferrer');
   };
 
   const handleSave = () => {
@@ -646,15 +650,6 @@ export function OrganizationDocumentsForm() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {isCompleted && (
-                      <button
-                        onClick={() => handleDelete(doc.id)}
-                        className="px-3 py-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
-                        title="حذف"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
                     {isCompleted && file?.fileUrl && (
                       <button
                         onClick={() => handleViewFile(file.fileUrl)}
@@ -763,15 +758,6 @@ export function OrganizationDocumentsForm() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {isCompleted && (
-                      <button
-                        onClick={() => handleDelete(doc.id)}
-                        className="px-3 py-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors text-sm font-medium"
-                        title="حذف"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
                     {isCompleted && file?.fileUrl && (
                       <button
                         onClick={() => handleViewFile(file.fileUrl)}
