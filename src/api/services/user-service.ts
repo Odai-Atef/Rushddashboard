@@ -65,6 +65,8 @@ export interface AdminUserFilters {
   page?: number;
   limit?: number;
   search?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
 }
 
 export interface ApproveUserResponse {
@@ -103,6 +105,8 @@ function buildAdminUsersQueryParams(
   if (filters.page !== undefined) params.page = filters.page;
   if (filters.limit !== undefined) params.limit = filters.limit;
   if (filters.search?.trim()) params.search = filters.search.trim();
+  if (filters.sortBy?.trim()) params.sortBy = filters.sortBy.trim();
+  if (filters.sortOrder) params.sortOrder = filters.sortOrder;
 
   return params;
 }

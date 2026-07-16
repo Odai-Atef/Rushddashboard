@@ -14,6 +14,8 @@ import {
   Phone,
   MapPin,
   Calendar,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import apiClient from '@/api/client';
@@ -137,6 +139,38 @@ function getActionErrorMessage(error: unknown): string {
   return 'لا يمكن الاتصال بالخادم. يرجى التحقق من اتصال الإنترنت والمحاولة مرة أخرى.';
 }
 
+function SortableHeader({
+  column,
+  label,
+  sortBy,
+  sortOrder,
+  onSort,
+}: {
+  column: string;
+  label: string;
+  sortBy: string | null;
+  sortOrder: 'asc' | 'desc';
+  onSort: (column: string) => void;
+}) {
+  const isActive = sortBy === column;
+  return (
+    <TableHead className="text-right cursor-pointer select-none hover:bg-gray-100 transition-colors" onClick={() => onSort(column)}>
+      <div className="flex items-center justify-end gap-1">
+        <span>{label}</span>
+        {isActive ? (
+          sortOrder === 'asc' ? (
+            <ArrowUp className="w-3 h-3 text-blue-600" />
+          ) : (
+            <ArrowDown className="w-3 h-3 text-blue-600" />
+          )
+        ) : (
+          <span className="w-3 h-3 inline-block" />
+        )}
+      </div>
+    </TableHead>
+  );
+}
+
 export function UserActivationPage() {
   const {
     users,
@@ -144,12 +178,15 @@ export function UserActivationPage() {
     pendingSearch,
     isLoading,
     error,
+    sortBy,
+    sortOrder,
     setPage,
     setLimit,
     setSearch,
     applySearch,
     clearSearch,
     refetch,
+    toggleSort,
   } = useAdminUsers();
 
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
@@ -366,14 +403,14 @@ export function UserActivationPage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="text-right">المستخدم</TableHead>
-                    <TableHead className="text-right">الجهة</TableHead>
-                    <TableHead className="text-right">نوع الجهة</TableHead>
-                    <TableHead className="text-right">رقم الترخيص</TableHead>
+                    <SortableHeader column="fullName" label="المستخدم" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
+                    <SortableHeader column="organization.name" label="الجهة" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
+                    <SortableHeader column="organization.type" label="نوع الجهة" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
+                    <SortableHeader column="organization.licenseNumber" label="رقم الترخيص" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <TableHead className="text-right">المستندات</TableHead>
-                    <TableHead className="text-right">الحالة</TableHead>
-                    <TableHead className="text-right">تاريخ الإنشاء</TableHead>
-                    <TableHead className="text-right">تاريخ التحديث</TableHead>
+                    <SortableHeader column="status" label="الحالة" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
+                    <SortableHeader column="organization.createdAt" label="تاريخ الإنشاء" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
+                    <SortableHeader column="organization.updatedAt" label="تاريخ التحديث" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <TableHead className="text-right"></TableHead>
                   </TableRow>
                 </TableHeader>

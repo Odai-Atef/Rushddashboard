@@ -26,6 +26,8 @@ export interface AdminUsersState {
   pendingSearch: string;
   isLoading: boolean;
   error: string | null;
+  sortBy: string | null;
+  sortOrder: 'asc' | 'desc';
 }
 
 export interface UseAdminUsersReturn extends AdminUsersState {
@@ -35,6 +37,7 @@ export interface UseAdminUsersReturn extends AdminUsersState {
   applySearch: () => Promise<void>;
   clearSearch: () => Promise<void>;
   refetch: () => Promise<void>;
+  toggleSort: (column: string) => void;
 }
 
 const DEFAULT_LIMIT = 10;
@@ -84,6 +87,8 @@ export function useAdminUsers(): UseAdminUsersReturn {
     pendingSearch: '',
     isLoading: false,
     error: null,
+    sortBy: null,
+    sortOrder: 'desc',
   });
 
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -193,6 +198,25 @@ export function useAdminUsers(): UseAdminUsersReturn {
     await load(cleared);
   }, [state.filters.limit, load]);
 
+  const toggleSort = useCallback(
+    (column: string) => {
+      setState((prev) => {
+        const nextSortOrder =
+          prev.sortBy === column && prev.sortOrder === 'asc' ? 'desc' : 'asc';
+        return { ...prev, sortBy: column, sortOrder: nextSortOrder };
+      });
+      const newFilters: AdminUserFilters = {
+        ...state.filters,
+        sortBy: column,
+        sortOrder:
+          state.sortBy === column && state.sortOrder === 'asc' ? 'desc' : 'asc',
+        page: DEFAULT_PAGE,
+      };
+      load(newFilters, true);
+    },
+    [state.filters, state.sortBy, state.sortOrder, load]
+  );
+
   const refetch = useCallback(async () => {
     await load(state.filters);
   }, [state.filters, load]);
@@ -214,6 +238,7 @@ export function useAdminUsers(): UseAdminUsersReturn {
     applySearch,
     clearSearch,
     refetch,
+    toggleSort,
   };
 }
 
