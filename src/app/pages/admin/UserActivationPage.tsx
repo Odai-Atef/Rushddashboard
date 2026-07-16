@@ -154,8 +154,11 @@ function SortableHeader({
 }) {
   const isActive = sortBy === column;
   return (
-    <TableHead className="text-right cursor-pointer select-none hover:bg-gray-100 transition-colors" onClick={() => onSort(column)}>
-      <div className="flex items-center justify-end gap-1">
+    <TableHead
+      className="text-right cursor-pointer select-none hover:bg-gray-100 transition-colors"
+      onClick={() => onSort(column)}
+    >
+      <div className="flex items-center justify-start gap-1 w-full">
         <span>{label}</span>
         {isActive ? (
           sortOrder === 'asc' ? (

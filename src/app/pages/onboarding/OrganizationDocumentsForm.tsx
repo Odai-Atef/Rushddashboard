@@ -5,6 +5,7 @@ import {
   CheckCircle2,
   ChevronLeft,
   Clock,
+  Eye,
   FileText,
   Info,
   Loader2,
@@ -444,6 +445,14 @@ export function OrganizationDocumentsForm() {
     handleUpload(slotId, file);
   };
 
+  const handleViewFile = (fileUrl?: string) => {
+    if (!fileUrl) {
+      toast.error('لا يوجد رابط للملف', { duration: TOAST_DURATION });
+      return;
+    }
+    window.open(fileUrl, '_blank', 'noopener,noreferrer');
+  };
+
   const handleSave = () => {
     if (hasPendingUploads) {
       toast.error('يرجى انتظار اكتمال رفع الملفات الجارية', { duration: TOAST_DURATION });
@@ -646,6 +655,15 @@ export function OrganizationDocumentsForm() {
                         <X className="w-4 h-4" />
                       </button>
                     )}
+                    {isCompleted && file?.fileUrl && (
+                      <button
+                        onClick={() => handleViewFile(file.fileUrl)}
+                        className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
+                        title="عرض"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                    )}
                     <button
                       onClick={() => handleSelectFile(doc.id)}
                       disabled={hasPendingUploads}
@@ -752,6 +770,15 @@ export function OrganizationDocumentsForm() {
                         title="حذف"
                       >
                         <X className="w-4 h-4" />
+                      </button>
+                    )}
+                    {isCompleted && file?.fileUrl && (
+                      <button
+                        onClick={() => handleViewFile(file.fileUrl)}
+                        className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
+                        title="عرض"
+                      >
+                        <Eye className="w-4 h-4" />
                       </button>
                     )}
                     <button
