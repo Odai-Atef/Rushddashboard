@@ -696,7 +696,7 @@ export function ProjectListPage() {
 
         {qualificationLoading || isLoading ? (
           renderLoading()
-        ) : !isQualified ? (
+        ) : !isProjectManager && !isQualified ? (
           renderQualificationBlocker()
         ) : (
           renderListContent()
