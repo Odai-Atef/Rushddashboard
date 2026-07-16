@@ -529,7 +529,7 @@ export function ProjectDetailsPage() {
   const showGeneratePresentationButton = isProjectManager && rawStatus === 'CHARITY_APPROVAL';
   const showDesignReviewButton = isEntityManager && rawStatus === 'DESIGN_REVIEW';
   const showRedesignButton = isProjectManager && rawStatus === 'DESIGN_REJECTED';
-  const isDesignRejected = rawStatus === 'DESIGN_REJECTED';
+  const showApproveDraftButton = isProjectManager && rawStatus === 'PM_APPROVAL';
   const showOfferReviewButton = isEntityManager && rawStatus === 'OFFER_REVIEW';
 
   return (
@@ -572,9 +572,13 @@ export function ProjectDetailsPage() {
                       إنشاء دراسة باستخدام الذكاء الاصطناعي
                     </button>
                   )}
-                  {displayStatus === 'approved' && (
+                  {showApproveDraftButton && (
                     <button
-                      onClick={handleSubmitToCharity}
+                      onClick={() => {
+                        if (window.confirm('هل أنت متأكد من اعتماد مسودة المشروع وإرساله للجهة الخيرية للمراجعة؟')) {
+                          handleSubmitToCharity();
+                        }
+                      }}
                       disabled={submitLoading}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
@@ -583,7 +587,7 @@ export function ProjectDetailsPage() {
                       ) : (
                         <Send className="w-5 h-5" />
                       )}
-                      إرسال إلى الجهة للموافقة
+                      اعتماد مسودة المشروع
                     </button>
                   )}
                   {(rawStatus === 'DESIGN_APPROVED' || rawStatus === 'READY_DONOR') && (
