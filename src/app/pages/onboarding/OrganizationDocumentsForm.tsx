@@ -1,4 +1,4 @@
-import { DragEvent, useCallback, useEffect, useState } from 'react';
+import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
 import {
   AlertCircle,
   AlertTriangle,
@@ -195,6 +195,7 @@ export function OrganizationDocumentsForm() {
   const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [dragOverSlotId, setDragOverSlotId] = useState<DocumentSlotId | null>(null);
+  const uploadingSlotsRef = useRef<Set<string>>(new Set());
   const [redirectMessage] = useState<string | null>(() => {
     const fromResults = searchParams.get('from') === 'results';
     return fromResults
@@ -293,6 +294,9 @@ export function OrganizationDocumentsForm() {
   }, [activeOrganizationId, loadExistingDocuments]);
 
   const handleUpload = async (slotId: DocumentSlotId, file: File) => {
+    if (uploadingSlotsRef.current.has(slotId)) return;
+    uploadingSlotsRef.current.add(slotId);
+
     const docType = mapSlotToDocumentType(slotId);
     const previousDoc = uploadedFiles.find((f) => f.id === slotId);
 
@@ -313,8 +317,8 @@ export function OrganizationDocumentsForm() {
     });
 
     const progressInterval = setInterval(() => {
-      setUploadedFiles((prev) =
-        prev.map((f) =
+      setUploadedFiles((prev) =>
+        prev.map((f) =>
           f.id === slotId && f.status === 'uploading' && f.progress < 90
             ? { ...f, progress: Math.min(f.progress + 10, 90) }
             : f
@@ -346,8 +350,8 @@ export function OrganizationDocumentsForm() {
         }
       }
 
-      setUploadedFiles((prev) =
-        prev.map((f) =
+      setUploadedFiles((prev) =>
+        prev.map((f) =>
           f.id === slotId
             ? {
                 ...f,
@@ -370,12 +374,14 @@ export function OrganizationDocumentsForm() {
     } catch (err) {
       clearInterval(progressInterval);
       const message = err instanceof Error ? err.message : 'Upload failed';
-      setUploadedFiles((prev) =
-        prev.map((f) =
+      setUploadedFiles((prev) =>
+        prev.map((f) =>
           f.id === slotId ? { ...f, status: 'error', progress: 0 } : f
         )
       );
       toast.error(message, { duration: TOAST_DURATION });
+    } finally {
+      uploadingSlotsRef.current.delete(slotId);
     }
   };
 
