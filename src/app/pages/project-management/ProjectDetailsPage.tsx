@@ -760,7 +760,7 @@ export function ProjectDetailsPage() {
                       ) : (
                         <Send className="w-5 h-5" />
                       )}
-                      اعتماد مسودة المشروع
+                      اعتماد الجمعية لمسودة المشروع
                     </button>
                   )}
                   {showSendDesignToOwnerButton && (

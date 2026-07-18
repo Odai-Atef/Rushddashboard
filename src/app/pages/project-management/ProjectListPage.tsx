@@ -34,7 +34,7 @@ const STATUS_OPTIONS: { value: ProjectStatus | 'all'; label: string }[] = [
   { value: 'charity-review', label: 'مراجعة الجمعية' },
   { value: 'incubator-modifications', label: 'تعديلات الجهة' },
   { value: 'charity-approval', label: 'موافقة الجمعية' },
-  { value: 'pm-approval', label: 'موافقة مدير المشروع' },
+  { value: 'pm-approval', label: 'بانتظار موافقة مدير المشروع' },
   { value: 'financial-approval', label: 'موافقة مالية' },
   { value: 'approved', label: 'معتمد' },
   { value: 'design-team', label: 'فريق التصميم' },

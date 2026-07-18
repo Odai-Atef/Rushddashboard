@@ -425,7 +425,7 @@ export function NotificationsPage() {
                 <p className="text-base leading-relaxed">{selectedNotification.body}</p>
 
                 {selectedNotification.payload && Object.keys(selectedNotification.payload).length > 0 && (
-                  <div className="bg-muted rounded-xl p-4">
+                  <div className="bg-muted rounded-xl p-4 hidden">
                     <h4 className="font-semibold mb-3 flex items-center gap-2">
                       <Activity className="w-4 h-4" />
                       بيانات إضافية
