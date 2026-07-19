@@ -131,6 +131,7 @@ export function ProjectCollaborationModule() {
   const [showNewConversation, setShowNewConversation] = useState(false);
   const [newConversationTitle, setNewConversationTitle] = useState('');
   const [isCreatingConversation, setIsCreatingConversation] = useState(false);
+  const [unreadOverrides, setUnreadOverrides] = useState<Record<string, number>>({});
 
   const currentUserId = user?.id || null;
 
@@ -140,6 +141,12 @@ export function ProjectCollaborationModule() {
     error: conversationsError,
     refetch: refetchConversations,
   } = useProjectConversations(projectId);
+
+  useEffect(() => {
+    const map: Record<string, number> = {};
+    conversations.forEach((c) => { map[c.id] = c.unreadCount; });
+    setUnreadOverrides(map);
+  }, [conversations]);
 
   const createConversation = async () => {
     if (!projectId || !currentUserId) return;
@@ -224,6 +231,7 @@ export function ProjectCollaborationModule() {
 
   const selectConversation = (id: string) => {
     if (!projectId) return;
+    setUnreadOverrides((prev) => ({ ...prev, [id]: 0 }));
     setSearchParams({ conv: id });
   };
 
@@ -326,7 +334,7 @@ export function ProjectCollaborationModule() {
   const HubView = () => {
     const stats = {
       activeConversations: conversations.filter(c => c.status === 'ACTIVE').length,
-      unreadMessages: conversations.reduce((sum, c) => sum + c.unreadCount, 0),
+      unreadMessages: conversations.reduce((sum, c) => sum + (unreadOverrides[c.id] ?? c.unreadCount), 0),
       pendingResponses: conversations.filter(c => c.status === 'MUTED').length,
       delayedResponses: conversations.filter(c => c.status === 'ARCHIVED').length
     };
@@ -438,9 +446,9 @@ export function ProjectCollaborationModule() {
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="font-semibold text-lg">{conv.title || 'محادثة'}</h3>
-                      {conv.unreadCount > 0 && (
+                      {(unreadOverrides[conv.id] ?? conv.unreadCount) > 0 && (
                         <span className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full font-medium">
-                          {conv.unreadCount}
+                          {unreadOverrides[conv.id] ?? conv.unreadCount}
                         </span>
                       )}
                     </div>
@@ -817,9 +825,9 @@ function ChatView({
                   selectedConversation === conv.id ? 'bg-blue-50' : ''
                 }`}
               >
-                {conv.unreadCount > 0 && (
+                {(unreadOverrides[conv.id] ?? conv.unreadCount) > 0 && (
                   <span className="absolute top-2 left-2 min-w-[20px] h-5 px-1.5 bg-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
-                    {conv.unreadCount > 99 ? '99+' : conv.unreadCount}
+                    {(unreadOverrides[conv.id] ?? conv.unreadCount) > 99 ? '99+' : (unreadOverrides[conv.id] ?? conv.unreadCount)}
                   </span>
                 )}
                 <div className="flex items-start justify-between mb-2">
