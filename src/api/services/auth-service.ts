@@ -91,6 +91,7 @@ export interface UserProfile {
   preferredLanguage?: string | null;
   timezone?: string | null;
   status?: string;
+  actionRequired?: string | null;
   /** Canonical role slug used for menu access control. */
   roleSlug?: string | null;
   /** @deprecated Use roleSlug for access-control decisions. */

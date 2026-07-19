@@ -28,7 +28,7 @@ export interface UseProjectsReturn extends ProjectsState {
   setPage: (page: number) => void;
   setLimit: (limit: number) => void;
   setFilters: (filters: Partial<ProjectFilters>) => void;
-  applyFilters: () => Promise<void>;
+  applyFilters: (override?: Partial<ProjectFilters>) => Promise<void>;
   clearFilters: () => Promise<void>;
   refetch: () => Promise<void>;
 }
@@ -174,8 +174,8 @@ export function useProjects(): UseProjectsReturn {
     }));
   }, []);
 
-  const applyFilters = useCallback(async () => {
-    const newFilters = { ...state.pendingFilters, page: DEFAULT_PAGE };
+  const applyFilters = useCallback(async (override: Partial<ProjectFilters> = {}) => {
+    const newFilters = { ...state.pendingFilters, ...override, page: DEFAULT_PAGE };
     await load(newFilters, true);
   }, [state.pendingFilters, load]);
 

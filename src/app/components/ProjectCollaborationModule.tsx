@@ -1,5 +1,5 @@
 import { useAuth } from '@/app/layouts/RootLayout';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { FC, FormEvent, KeyboardEvent, MouseEvent } from 'react';
 import { useParams, Link, useNavigate, useSearchParams } from 'react-router';
 import { toast } from 'sonner';
@@ -619,6 +619,44 @@ function ChatView({
     }
   }, [selectedConversation]);
 
+  // Mark visible unread messages as read on mount, messages update, and tab focus
+  const markVisibleUnreadMessages = useCallback(() => {
+    const container = scrollContainerRef.current;
+    if (!container || !projectId || !selectedConversation) return;
+
+    const containerRect = container.getBoundingClientRect();
+    messages.forEach((msg) => {
+      const isOwn = msg.senderUserId === effectiveCurrentUserId || msg.senderUserId === 'me';
+      if (isOwn || msg.status === 'READ') return;
+
+      const node = container.querySelector(`[data-message-id="${msg.id}"]`);
+      if (!node) return;
+
+      const rect = node.getBoundingClientRect();
+      const isVisible = rect.top < containerRect.bottom && rect.bottom > containerRect.top;
+      if (isVisible) {
+        markAsRead(msg.id);
+      }
+    });
+  }, [messages, projectId, selectedConversation, effectiveCurrentUserId, markAsRead]);
+
+  useEffect(() => {
+    const rafId = requestAnimationFrame(() => {
+      markVisibleUnreadMessages();
+    });
+    return () => cancelAnimationFrame(rafId);
+  }, [messages, selectedConversation, markVisibleUnreadMessages]);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        markVisibleUnreadMessages();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [markVisibleUnreadMessages]);
+
   const handleSend = async () => {
     const trimmed = messageInput.trim();
     const validation = validateMessageContent(trimmed);
@@ -775,17 +813,17 @@ function ChatView({
               <button
                 key={conv.id}
                 onClick={() => selectConversation(conv.id)}
-                className={`w-full p-4 border-b border-gray-200 hover:bg-gray-50 text-right ${
+                className={`relative w-full p-4 border-b border-gray-200 hover:bg-gray-50 text-right ${
                   selectedConversation === conv.id ? 'bg-blue-50' : ''
                 }`}
               >
+                {conv.unreadCount > 0 && (
+                  <span className="absolute top-2 left-2 min-w-[20px] h-5 px-1.5 bg-red-600 text-white text-xs font-bold rounded-full flex items-center justify-center">
+                    {conv.unreadCount > 99 ? '99+' : conv.unreadCount}
+                  </span>
+                )}
                 <div className="flex items-start justify-between mb-2">
                   <h4 className="font-semibold text-sm">{conv.title || 'محادثة'}</h4>
-                  {conv.unreadCount > 0 && (
-                    <span className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full">
-                      {conv.unreadCount}
-                    </span>
-                  )}
                 </div>
                 <p className="text-xs text-gray-500 truncate">{conv.lastMessageText || 'لا توجد رسائل'}</p>
                 <p className="text-xs text-gray-400 mt-1">{formatDateTime(conv.lastMessageAt)}</p>
@@ -1109,6 +1147,7 @@ function MessageBubble({
   return (
     <div
       ref={bubbleRef}
+      data-message-id={msg.id}
       className={`flex gap-3 ${isOwn ? 'justify-start' : 'justify-end'}`}
     >
       {/* Content first so in RTL own messages sit at the right edge */}

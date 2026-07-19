@@ -53,11 +53,9 @@ export function Sidebar({ activeView, className }: SidebarProps) {
   const allowedUserIds = ENV.RESTRICTED_MENU_USER_IDS;
   const currentUserId = user?.id;
   const canSeeRestricted = Boolean(currentUserId && allowedUserIds.includes(currentUserId));
+  const roleSlug = user?.roleSlug ?? null;
 
-  const navItems: NavItem[] = [
-    // First item is always visible to everyone
-    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
-    // Remaining items are restricted to specific users configured in .env
+  const commonNavItems: NavItem[] = [
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment', restricted: false },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management/list' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: HeartHandshake, path: '/dashboard/donors', restricted: false },
@@ -74,7 +72,6 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation', restricted: true },
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history', restricted: true },
     { id: 'project-journey', label: 'رحلة المشروع', icon: Briefcase, path: '/dashboard/project-journey', restricted: true },
-    // { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration', restricted: true },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications', restricted: true },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources', restricted: true },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk', restricted: true },
@@ -90,7 +87,18 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     { id: 'settings', label: 'الإعدادات', icon: Settings, path: '/dashboard/settings', restricted: true },
   ];
 
-  const roleSlug = user?.roleSlug ?? null;
+  const navItems: NavItem[] = roleSlug === 'project-managers'
+    ? [
+        { id: 'project-management-dashboard', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+        { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
+        ...commonNavItems.filter((item) => item.id !== 'project-management'),
+      ]
+    : [
+        { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
+        { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
+        ...commonNavItems,
+      ];
+
   const roleAllowedItems = filterMenuItemsByRole(navItems, roleSlug);
   const visibleItems = roleAllowedItems.filter((item) => !item.restricted || canSeeRestricted);
 

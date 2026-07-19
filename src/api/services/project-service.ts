@@ -276,12 +276,7 @@ function buildProjectQueryParams(filters: ProjectFilters): Record<string, string
 
   if (filters.page !== undefined) params.page = filters.page;
   if (filters.limit !== undefined) params.limit = filters.limit;
-  if (filters.status) params.status = filters.status;
-  if (filters.organizationId) params.organizationId = filters.organizationId;
-  if (filters.managerId) params.managerId = filters.managerId;
-  if (filters.health) params.health = filters.health;
-  if (filters.type) params.type = filters.type;
-  if (filters.category) params.category = filters.category;
+  if (filters.status) params.status = filters.status.replace(/-/g, '_').toUpperCase();
   if (filters.search) params.search = filters.search;
 
   return params;

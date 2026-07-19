@@ -194,7 +194,7 @@ export function UserActivationPage() {
 
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [actionMode, setActionMode] = useState<'view' | 'reject'>('view');
+  const [actionMode, setActionMode] = useState<'view' | 'reject' | 'confirm-approve' | 'confirm-reject'>('view');
   const [rejectComment, setRejectComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -264,6 +264,21 @@ export function UserActivationPage() {
         toast.error('فشل فتح المستند. يرجى المحاولة مرة أخرى.');
       }
     }
+  };
+
+  const canActOnUser = (status?: string | null): boolean => {
+    const normalized = status?.toUpperCase() || '';
+    return normalized === 'ACTIVE' || normalized === 'NEED_ACTION_FROM_ORG';
+  };
+
+  const handleApproveClick = () => {
+    if (!selectedUser || !canActOnUser(selectedUser.status)) return;
+    setActionMode('confirm-approve');
+  };
+
+  const handleRejectClick = () => {
+    if (!selectedUser || !canActOnUser(selectedUser.status)) return;
+    setActionMode('confirm-reject');
   };
 
   const handleApprove = async () => {
@@ -349,7 +364,7 @@ export function UserActivationPage() {
       return <Badge className="bg-green-600 hover:bg-green-700">مفعل</Badge>;
     }
     if (normalized === 'NEED_ACTION_FROM_ORG') {
-      return <Badge variant="destructive">يحتاج إجراء</Badge>;
+      return <Badge variant="destructive">مطلوب إكمال مستندات</Badge>;
     }
     return <Badge variant="outline">{status}</Badge>;
   };
@@ -511,6 +526,15 @@ export function UserActivationPage() {
                     <span className="text-gray-600">تاريخ التسجيل:</span>
                     <span className="font-medium">{formatDate(selectedUser.createdAt)}</span>
                   </div>
+                  {selectedUser.actionRequired && (
+                    <div className="sm:col-span-2 flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                      <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      <div>
+                        <span className="text-amber-800 font-medium">الإجراء المطلوب:</span>
+                        <p className="text-amber-800 text-sm mt-0.5">{selectedUser.actionRequired}</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -607,6 +631,72 @@ export function UserActivationPage() {
                   />
                 </div>
               )}
+
+              {/* Inline Confirmation Panels */}
+              {actionMode === 'confirm-approve' && selectedUser && (
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg space-y-3">
+                  <div className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-slate-900">تأكيد تفعيل الجهة</h4>
+                      <p className="text-sm text-slate-700 mt-1">
+                        سيتم تفعيل {selectedUser.fullName} / {selectedUser.organization?.name || 'الجهة'}. لا يمكن التراجع عن هذا الإجراء.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setActionMode('view')}
+                      disabled={isSubmitting}
+                    >
+                      إلغاء
+                    </Button>
+                    <Button
+                      onClick={handleApprove}
+                      disabled={isSubmitting}
+                      className="bg-green-600 hover:bg-green-700"
+                    >
+                      {isSubmitting ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <CheckCircle className="w-4 h-4" />
+                      )}
+                      تأكيد التفعيل
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {actionMode === 'confirm-reject' && selectedUser && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg space-y-3">
+                  <div className="flex items-start gap-3">
+                    <AlertTriangle className="w-5 h-5 text-red-600 shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-slate-900">تأكيد طلب الإجراء</h4>
+                      <p className="text-sm text-slate-700 mt-1">
+                        سيتم إرسال طلب إجراء إلى {selectedUser.fullName} / {selectedUser.organization?.name || 'الجهة'}.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-end gap-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => setActionMode('view')}
+                      disabled={isSubmitting}
+                    >
+                      إلغاء
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      onClick={() => setActionMode('reject')}
+                      disabled={isSubmitting}
+                    >
+                      متابعة لإدخال السبب
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -615,18 +705,18 @@ export function UserActivationPage() {
               إغلاق
             </Button>
 
-            {actionMode === 'view' ? (
+            {actionMode === 'view' && (
               <>
                 <Button
                   variant="destructive"
-                  onClick={() => setActionMode('reject')}
-                  disabled={isSubmitting || selectedUser?.status?.toUpperCase() !== 'ACTIVE'}
+                  onClick={handleRejectClick}
+                  disabled={isSubmitting || !canActOnUser(selectedUser?.status)}
                 >
                   رفض / طلب إجراء
                 </Button>
                 <Button
-                  onClick={handleApprove}
-                  disabled={isSubmitting || selectedUser?.status?.toUpperCase() !== 'ACTIVE'}
+                  onClick={handleApproveClick}
+                  disabled={isSubmitting || !canActOnUser(selectedUser?.status)}
                   className="bg-green-600 hover:bg-green-700"
                 >
                   {isSubmitting ? (
@@ -637,7 +727,9 @@ export function UserActivationPage() {
                   تفعيل
                 </Button>
               </>
-            ) : (
+            )}
+
+            {actionMode === 'reject' && (
               <>
                 <Button
                   variant="outline"
@@ -659,6 +751,12 @@ export function UserActivationPage() {
                   إرسال طلب الإجراء
                 </Button>
               </>
+            )}
+
+            {(actionMode === 'confirm-approve' || actionMode === 'confirm-reject') && (
+              <Button variant="outline" onClick={() => setActionMode('view')} disabled={isSubmitting}>
+                إلغاء
+              </Button>
             )}
           </DialogFooter>
         </DialogContent>

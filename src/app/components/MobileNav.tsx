@@ -38,8 +38,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
   const { user } = useAuth();
   const roleSlug = user?.roleSlug ?? null;
 
-  const navItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = [
-    { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
+  const commonNavItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = [
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management/list' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
@@ -50,7 +49,6 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation' },
     { id: 'analysis-history', label: 'التحليلات السابقة', icon: History, path: '/dashboard/analysis-history' },
     { id: 'project-journey', label: 'رحلة المشروع', icon: Briefcase, path: '/dashboard/project-journey' },
-    { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
     { id: 'notifications', label: 'الإشعارات والتنبيهات', icon: Bell, path: '/dashboard/notifications' },
     { id: 'data-sources', label: 'مصادر البيانات', icon: Database, path: '/dashboard/data-sources' },
     { id: 'compliance-risk', label: 'الامتثال والمخاطر', icon: ShieldAlert, path: '/dashboard/compliance-risk' },
@@ -65,6 +63,18 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'opportunities', label: 'لوحة الفرص', icon: FileCheck, path: '/dashboard/opportunities' },
     { id: 'settings', label: 'الإعدادات', icon: Settings, path: '/dashboard/settings' },
   ];
+
+  const navItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = roleSlug === 'project-managers'
+    ? [
+        { id: 'project-management-dashboard', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+        { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
+        ...commonNavItems.filter((item) => item.id !== 'project-management'),
+      ]
+    : [
+        { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
+        { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
+        ...commonNavItems,
+      ];
 
   const visibleItems = filterMenuItemsByRole(navItems, roleSlug);
 

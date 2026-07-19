@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
-import { Building2, FileText } from 'lucide-react';
+import { Building2, FileText, AlertCircle } from 'lucide-react';
 import { EntityInfoForm } from './EntityInfoForm';
 import { OrganizationDocumentsForm } from './OrganizationDocumentsForm';
+import { useAuth } from '@/app/layouts/RootLayout';
 import { cn } from '@/app/utils/cn';
 
 type InfoTab = 'info' | 'documents';
@@ -13,6 +14,7 @@ const tabs: { id: InfoTab; label: string; icon: typeof Building2 }[] = [
 ];
 
 export function InfoPage() {
+  const { user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
   const [activeTab, setActiveTab] = useState<InfoTab>(() => {
     const tab = searchParams.get('tab');
@@ -31,9 +33,24 @@ export function InfoPage() {
     setSearchParams({ tab }, { replace: true });
   };
 
+  const showActionRequiredAlert = user?.status?.toUpperCase() === 'NEED_ACTION_FROM_ORG' && !!user?.actionRequired;
+
   return (
     <div className="min-h-full bg-gray-50 p-6">
       <div className="max-w-3xl mx-auto">
+        {/* Action required alert */}
+        {showActionRequiredAlert && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+            <div>
+              <p className="text-red-700 text-sm font-semibold">
+                تنبيه: هناك إجراء مطلوب منك لإتمام اعتماد ملفك الشخصي:
+              </p>
+              <p className="text-red-700 text-sm mt-1">{user.actionRequired}</p>
+            </div>
+          </div>
+        )}
+
         {/* Tabs Header */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
           <div className="flex w-full">

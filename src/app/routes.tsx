@@ -1,5 +1,5 @@
 import { lazy, Suspense } from 'react';
-import { createBrowserRouter, Navigate, useRouteError } from 'react-router';
+import { createBrowserRouter, Navigate, Outlet, useRouteError } from 'react-router';
 // Router configuration - Updated 2026-06-07
 import { RootLayout } from './layouts/RootLayout';
 import { AuthLayout } from './layouts/AuthLayout';
@@ -539,6 +539,11 @@ export const router = createBrowserRouter([
           },
           {
             path: 'collaboration',
+            element: (
+              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                <Outlet />
+              </RoleRouteGuard>
+            ),
             children: [
               {
                 index: true,

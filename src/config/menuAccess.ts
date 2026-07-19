@@ -44,6 +44,7 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'donors',
     'donor-matching',
     'manage-org',
+    'collaboration',
   ],
   'entity-managers': [
     'onboarding',
@@ -68,6 +69,7 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'project-management-activity',
     'project-management-reporting',
     'pricing',
+    'collaboration',
   ],
 };
 

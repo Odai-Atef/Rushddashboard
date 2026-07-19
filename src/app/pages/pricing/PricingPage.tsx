@@ -9,6 +9,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Check, Shield, Star, Zap, Loader2, AlertTriangle, X, ScrollText, XCircle } from "lucide-react";
+import { Separator } from "@/app/components/ui/separator";
 import { subscriptionService } from "@/api/services/subscription-service";
 import { onboardingService } from "@/api/services/onboarding-service";
 import apiClient from "@/api/client";
@@ -46,6 +47,7 @@ interface PackageDetail {
     outcomes?: string[];
     exclusions?: string[];
     suitableFor?: string[];
+    notes?: string[];
     opportunityManagement?: string;
     donorSupport?: string;
     impactReporting?: string;
@@ -629,23 +631,53 @@ export function PricingPage() {
                 </div>
               )}
 
-              {/* Benefits + Included Services */}
-              <div className="space-y-3 pr-1">
-                {(() => {
-                  const list = normalizeFeatures(pkg.features);
-                  return list.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-2.5">
-                      <div
-                        className="w-5 h-5 rounded-full flex items-center justify-center"
-                        style={{ background: `${accent}15` }}
-                      >
-                        <Check size={12} color={accent} strokeWidth={2.5} />
+              {/* Benefits */}
+              {(() => {
+                const parsed = parsePackageFeatures(pkg.features);
+                const benefits = parsed.benefits ?? [];
+                if (benefits.length === 0) return null;
+                return (
+                  <div className="space-y-3 pr-1">
+                    {benefits.map((benefit, i) => (
+                      <div key={i} className="flex items-center gap-2.5">
+                        <div
+                          className="w-5 h-5 rounded-full flex items-center justify-center"
+                          style={{ background: `${accent}15` }}
+                        >
+                          <Check size={12} color={accent} strokeWidth={2.5} />
+                        </div>
+                        <span className="text-sm text-slate-600">{benefit}</span>
                       </div>
-                      <span className="text-sm text-slate-600">{feature}</span>
+                    ))}
+                  </div>
+                );
+              })()}
+
+              {/* Notes */}
+              {(() => {
+                const parsed = parsePackageFeatures(pkg.features);
+                const notes = parsed.notes ?? [];
+                if (notes.length === 0) return null;
+                return (
+                  <>
+                    <Separator className="my-4 bg-slate-200" />
+                    <h4 className="text-sm font-bold text-slate-900 mb-2">ملاحظات</h4>
+                    <div className="space-y-2 pr-1">
+                      {notes.map((note, i) => (
+                        <div key={i} className="flex items-start gap-2.5">
+                          <div
+                            className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                            style={{ background: `${accent}15` }}
+                          >
+                            <AlertTriangle size={12} color={accent} strokeWidth={2.5} />
+                          </div>
+                          <span className="text-sm text-slate-600">{note}</span>
+                        </div>
+                      ))}
                     </div>
-                  ));
-                })()}
-              </div>
+                  </>
+                );
+              })()}
             </div>
           );
         })}

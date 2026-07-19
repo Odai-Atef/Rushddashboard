@@ -108,6 +108,7 @@ export interface Project {
   lastUpdated?: string;
   fundingAreaIds?: string[];
   fundingAreas?: FundingAreaInfo[];
+  unreadMessageCount?: number;
 }
 
 export interface ProjectDetails extends Project {
@@ -167,12 +168,7 @@ export interface ProjectListResponse {
 export interface ProjectFilters {
   page?: number;
   limit?: number;
-  status?: ProjectStatus | string;
-  organizationId?: string;
-  managerId?: string;
-  health?: ProjectHealth | string;
-  type?: string;
-  category?: string;
+  status?: string;
   search?: string;
 }
 

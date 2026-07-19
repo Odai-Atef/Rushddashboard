@@ -1,5 +1,5 @@
 import { useState, useEffect, Fragment } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { Loader2 } from 'lucide-react';
 import {
   Plus,
@@ -21,7 +21,7 @@ import {
   Pin,
 } from 'lucide-react';
 import { useProjects } from '@/api/hooks/useProjects';
-import { ProjectFilters, ProjectStatus, ProjectHealth, statusConfig, Project } from './project-types';
+import { ProjectFilters, ProjectStatus, statusConfig, Project } from './project-types';
 import apiClient from '@/api/client';
 import { projectService } from '@/api/services/project-service';
 import { onboardingService, IsivAssessmentResult, OrganizationResponse } from '@/api/services/onboarding-service';
@@ -30,42 +30,15 @@ import { toast } from 'sonner';
 
 const STATUS_OPTIONS: { value: ProjectStatus | 'all'; label: string }[] = [
   { value: 'all', label: 'جميع الحالات' },
-  { value: 'draft', label: 'مسودة' },
-  { value: 'charity-review', label: 'مراجعة الجمعية' },
-  { value: 'incubator-modifications', label: 'تعديلات الجهة' },
-  { value: 'charity-approval', label: 'موافقة الجمعية' },
-  { value: 'pm-approval', label: 'بانتظار موافقة مدير المشروع' },
-  { value: 'financial-approval', label: 'موافقة مالية' },
-  { value: 'approved', label: 'معتمد' },
-  { value: 'design-team', label: 'فريق التصميم' },
-  { value: 'ready-donor', label: 'جاهز للمانحين' },
-  { value: 'submitted-donor', label: 'مقدم للمانحين' },
-  { value: 'funded', label: 'ممول' },
-  { value: 'execution', label: 'قيد التنفيذ' },
-  { value: 'completed', label: 'مكتمل' },
-  { value: 'closed', label: 'مغلق' },
+  ...Object.entries(statusConfig).map(([value, config]) => ({
+    value: value as ProjectStatus,
+    label: config.label,
+  })),
 ];
 
-const HEALTH_OPTIONS: { value: ProjectHealth | 'all'; label: string }[] = [
-  { value: 'all', label: 'جميع الحالات الصحية' },
-  { value: 'excellent', label: 'ممتاز' },
-  { value: 'good', label: 'جيد' },
-  { value: 'at-risk', label: 'معرض للخطر' },
-  { value: 'critical', label: 'حرج' },
-];
-
-const MANAGER_OPTIONS = [
-  { id: 'all', name: 'جميع المدراء' },
-  { id: 'manager-1', name: 'أحمد محمد' },
-  { id: 'manager-2', name: 'سارة عبدالله' },
-  { id: 'manager-3', name: 'خالد العلي' },
-];
-
-const ORGANIZATION_OPTIONS = [
-  { id: 'all', name: 'جميع المؤسسات' },
-  { id: 'org-1', name: 'جمعية البر الخيرية' },
-  { id: 'org-2', name: 'جهه الرعاية الاجتماعية' },
-];
+function toBackendStatus(status: ProjectStatus): string {
+  return status.replace(/-/g, '_').toUpperCase();
+}
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -142,6 +115,12 @@ export function ProjectListPage() {
 
   const updateFilter = <K extends keyof ProjectFilters>(key: K, value: ProjectFilters[K]) => {
     setFilters({ [key]: value === 'all' ? undefined : value });
+  };
+
+  const updateStatusFilter = (value: ProjectFilters['status']) => {
+    const status = value === 'all' ? undefined : value;
+    setFilters({ status });
+    void applyFilters({ status });
   };
 
 
@@ -368,13 +347,18 @@ export function ProjectListPage() {
                         <Eye className="w-3.5 h-3.5" />
                         عرض
                       </a>
-                      <a
-                        href={`/dashboard/collaboration/${project.id}/chat`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
-                      >
-                        <MessageSquare className="w-3.5 h-3.5" />
-                        متابعة تحديثات المشروع - شات
-                      </a>
+    <Link
+      to={`/dashboard/collaboration/${project.id}/chat`}
+      className="relative inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+    >
+      <MessageSquare className="w-3.5 h-3.5" />
+      متابعة تحديثات المشروع - شات
+      {Number(project.unreadMessageCount) > 0 && (
+        <span className="absolute -top-1.5 -left-1.5 min-w-[18px] h-[18px] bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold px-1">
+          {Number(project.unreadMessageCount) > 99 ? '99+' : project.unreadMessageCount}
+        </span>
+      )}
+    </Link>
                       {isProjectManager && (
                         <a
                           href={`/dashboard/project-management/edit/${project.id}`}
@@ -602,79 +586,18 @@ export function ProjectListPage() {
 
           {showFilters && (
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">الحالة</label>
                   <select
                     value={pendingFilters.status || 'all'}
-                    onChange={(e) => updateFilter('status', e.target.value)}
+                    onChange={(e) => updateStatusFilter(e.target.value)}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
                     {STATUS_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>{option.label}</option>
                     ))}
                   </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">الحالة الصحية</label>
-                  <select
-                    value={pendingFilters.health || 'all'}
-                    onChange={(e) => updateFilter('health', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    {HEALTH_OPTIONS.map((option) => (
-                      <option key={option.value} value={option.value}>{option.label}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">الجهه</label>
-                  <select
-                    value={pendingFilters.organizationId || 'all'}
-                    onChange={(e) => updateFilter('organizationId', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    {ORGANIZATION_OPTIONS.map((option) => (
-                      <option key={option.id} value={option.id}>{option.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">مدير المشروع</label>
-                  <select
-                    value={pendingFilters.managerId || 'all'}
-                    onChange={(e) => updateFilter('managerId', e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
-                  >
-                    {MANAGER_OPTIONS.map((option) => (
-                      <option key={option.id} value={option.id}>{option.name}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">النوع</label>
-                  <input
-                    type="text"
-                    value={pendingFilters.type || ''}
-                    onChange={(e) => updateFilter('type', e.target.value)}
-                    placeholder="مثال: تنموي"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium mb-2">الفئة</label>
-                  <input
-                    type="text"
-                    value={pendingFilters.category || ''}
-                    onChange={(e) => updateFilter('category', e.target.value)}
-                    placeholder="مثال: التعليم"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
                 </div>
               </div>
 
@@ -685,12 +608,6 @@ export function ProjectListPage() {
                 >
                   <X className="w-4 h-4" />
                   مسح
-                </button>
-                <button
-                  onClick={() => applyFilters()}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-                >
-                  تطبيق
                 </button>
               </div>
             </div>
