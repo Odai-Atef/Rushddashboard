@@ -4,6 +4,7 @@ import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loade
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
 import { executeRecaptcha } from '@/app/lib/recaptcha';
+import type { UserProfile } from '@/api/services/auth-service';
 
 export function LoginPage() {
   const navigate = useNavigate();
@@ -24,11 +25,26 @@ export function LoginPage() {
     ? decodeURIComponent(activationMessage)
     : null;
 
-  const getSafeRedirectPath = (): string => {
+  const getDefaultRedirectForRole = (user: UserProfile | null): string => {
+    let roleSlug: string | null = user?.roleSlug ?? null;
+    if (!roleSlug && user?.role) {
+      if (typeof user.role === 'string') {
+        roleSlug = user.role;
+      } else if (typeof user.role === 'object' && user.role !== null && 'slug' in user.role && typeof (user.role as any).slug === 'string') {
+        roleSlug = (user.role as any).slug;
+      }
+    }
+    if (roleSlug === 'project-managers') {
+      return '/dashboard/project-management';
+    }
+    return '/dashboard/charity-assessment';
+  };
+
+  const getSafeRedirectPath = (user: UserProfile | null): string => {
     if (redirectParam && redirectParam.startsWith('/')) {
       return redirectParam;
     }
-    return '/dashboard/charity-assessment';
+    return getDefaultRedirectForRole(user);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,7 +59,9 @@ export function LoginPage() {
       const response = await authService.login({ email, password, recaptchaToken });
       if (response.success) {
         login();
-        navigate(getSafeRedirectPath());
+        const profileResponse = await authService.getProfile();
+        const user = profileResponse.success ? profileResponse.data : null;
+        navigate(getSafeRedirectPath(user));
       } else {
         setError(response.message || 'حدث خطأ أثناء تسجيل الدخول');
       }

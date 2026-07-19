@@ -10,28 +10,27 @@ import {
   Target,
   Activity,
   BarChart3,
-  Download,
   User,
-  Calendar,
   AlertTriangle,
+  Bell,
+  Info,
 } from 'lucide-react';
 import {
-  PieChart as RechartsPieChart,
-  Pie,
-  Cell,
-  ResponsiveContainer,
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
+  ResponsiveContainer,
   Tooltip,
 } from 'recharts';
 import { useProjectDashboard, timeAgo } from '@/api/hooks/useProjectDashboard';
+import { useNotifications } from '@/api/hooks/useNotifications';
 import { useEffect, useState } from 'react';
 import { onboardingService } from '@/api/services';
 import { AssessmentStatusValue } from '@/api/services/onboarding-service';
 import { useAuth } from '@/app/layouts/RootLayout';
+import { statusConfig, ProjectStatus } from './project-types';
 
 export function ProjectDashboardPage() {
   const navigate = useNavigate();
@@ -106,13 +105,27 @@ export function ProjectDashboardPage() {
 
   const { user } = useAuth();
   const roleSlug = user?.roleSlug ?? null;
+  const isProjectManager = roleSlug === 'project-managers';
+
+  const {
+    notifications,
+    unreadCount,
+    loading: notificationsLoading,
+    fetchNotifications,
+  } = useNotifications();
+
+  useEffect(() => {
+    if (isProjectManager) {
+      fetchNotifications({ page: 1, limit: 20 });
+    }
+  }, [isProjectManager, fetchNotifications]);
 
   // Only enforce qualification blocker for entity-managers
   // project-managers bypass this check entirely
   const requiresQualificationCheck = roleSlug === 'entity-managers';
   const showQualificationBlocker = requiresQualificationCheck && !isQualified;
 
-  if (isLoading || isCheckingQualification) {
+  if (isLoading || isCheckingQualification || notificationsLoading) {
     return (
       <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
@@ -188,7 +201,7 @@ export function ProjectDashboardPage() {
     return renderQualificationBlocker();
   }
 
-  const { stats, statusDistribution, budgetTrend, recentActivity, upcomingDeadlines } = data;
+  const { stats, statusDistribution, recentActivity } = data;
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -209,7 +222,7 @@ export function ProjectDashboardPage() {
 
         <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
           <h3 className="text-lg font-semibold mb-4">إجراءات سريعة</h3>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <button
               onClick={() => navigate('/dashboard/project-management/list')}
               className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
@@ -230,10 +243,6 @@ export function ProjectDashboardPage() {
             >
               <BarChart3 className="w-6 h-6 text-gray-400 mx-auto mb-2" />
               <p className="font-medium text-sm">التقارير الإدارية</p>
-            </button>
-            <button className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center">
-              <Download className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="font-medium text-sm">تصدير البيانات</p>
             </button>
           </div>
         </div>
@@ -282,28 +291,47 @@ export function ProjectDashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {isProjectManager && statusDistribution.length > 0 && (
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+            {statusDistribution
+              .filter((item) => item.value > 0)
+              .map((item, idx) => {
+                const normalizedStatus = Object.keys(statusConfig).find(
+                  (key) => statusConfig[key as ProjectStatus].label === item.name
+                );
+                const config = normalizedStatus
+                  ? statusConfig[normalizedStatus as ProjectStatus]
+                  : { label: item.name, color: item.color, bg: item.color + '15' };
+                return (
+                  <div
+                    key={idx}
+                    className="bg-white rounded-xl p-6 border shadow-sm"
+                  >
+                    <Activity className="w-8 h-8 mb-2" style={{ color: config.color }} />
+                    <p className="text-3xl font-bold" style={{ color: config.color }}>
+                      {item.value}
+                    </p>
+                    <p className="text-sm text-gray-600 mt-1">
+                      {config.label}
+                    </p>
+                  </div>
+                );
+              })}
+          </div>
+        )}
+
+        {isProjectManager && (
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <h3 className="text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
             {statusDistribution.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
-                <RechartsPieChart>
-                  <Pie
-                    data={statusDistribution}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={false}
-                    label={(entry) => `${entry.name}: ${entry.value}`}
-                    outerRadius={100}
-                    fill="#8884d8"
-                    dataKey="value"
-                  >
-                    {statusDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
-                    ))}
-                  </Pie>
+                <BarChart data={statusDistribution.filter((item) => item.value > 0)} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} interval={0} angle={-45} textAnchor="end" />
+                  <YAxis tick={{ fill: '#6b7280' }} allowDecimals={false} />
                   <Tooltip />
-                </RechartsPieChart>
+                  <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="#3b82f6" />
+                </BarChart>
               </ResponsiveContainer>
             ) : (
               <div className="h-[300px] flex items-center justify-center text-gray-500">
@@ -311,39 +339,29 @@ export function ProjectDashboardPage() {
               </div>
             )}
           </div>
+        )}
 
+        {!isProjectManager && statusDistribution.length > 0 && (
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">تطور الميزانيات</h3>
-            {budgetTrend.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={budgetTrend}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                  <XAxis dataKey="month" tick={{ fill: '#6b7280' }} />
-                  <YAxis tick={{ fill: '#6b7280' }} />
-                  <Tooltip />
-                  <Line
-                    type="monotone"
-                    dataKey="budget"
-                    stroke="#3b82f6"
-                    strokeWidth={3}
-                    dot={{ fill: '#3b82f6', r: 5 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="h-[300px] flex items-center justify-center text-gray-500">
-                لا توجد بيانات لتحليل الميزانية
-              </div>
-            )}
+            <h3 className="text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={statusDistribution} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} interval={0} angle={-45} textAnchor="end" />
+                <YAxis tick={{ fill: '#6b7280' }} allowDecimals={false} />
+                <Tooltip />
+                <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="#3b82f6" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
-        </div>
+        )}
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className={`grid gap-6 ${isProjectManager ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-semibold">النشاط الأخير</h3>
               <button
-                onClick={() => navigate('/dashboard/project-management/activity/1')}
+                onClick={() => navigate('/dashboard/project-management/activity')}
                 className="text-sm text-blue-600 hover:text-blue-700"
               >
                 عرض الكل
@@ -375,43 +393,99 @@ export function ProjectDashboardPage() {
             </div>
           </div>
 
+          {isProjectManager && (
+            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-semibold flex items-center gap-2">
+                  <Bell className="w-5 h-5 text-amber-600" />
+                  إشعارات تتطلب إجراء
+                  {unreadCount > 0 && (
+                    <span className="bg-red-100 text-red-700 text-xs font-bold px-2 py-0.5 rounded-full">
+                      {unreadCount}
+                    </span>
+                  )}
+                </h3>
+                <button
+                  onClick={() => navigate('/dashboard/notifications')}
+                  className="text-sm text-blue-600 hover:text-blue-700"
+                >
+                  عرض الكل
+                </button>
+              </div>
+              <div className="space-y-3">
+                {notifications.filter((n) => n.status !== 'READ').length > 0 ? (
+                  notifications
+                    .filter((n) => n.status !== 'READ')
+                    .slice(0, 5)
+                    .map((notification) => (
+                      <div
+                        key={notification.id}
+                        onClick={() => navigate('/dashboard/notifications')}
+                        className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer border-r-4 border-r-amber-500"
+                      >
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-amber-100">
+                          <AlertTriangle className="w-4 h-4 text-amber-600" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-medium">{notification.title}</p>
+                          <p className="text-xs text-gray-500 line-clamp-2">{notification.body}</p>
+                          <p className="text-xs text-gray-400 mt-1">{timeAgo(notification.createdAt)}</p>
+                        </div>
+                      </div>
+                    ))
+                ) : (
+                  <div className="text-gray-500 text-center py-4">لا توجد إشعارات تتطلب إجراء</div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+
+        {isProjectManager && (
           <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">المواعيد القادمة</h3>
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <Bell className="w-5 h-5 text-blue-600" />
+                أحدث الإشعارات
+              </h3>
+              <button
+                onClick={() => navigate('/dashboard/notifications')}
+                className="text-sm text-blue-600 hover:text-blue-700"
+              >
+                عرض الكل
+              </button>
             </div>
-            <div className="space-y-4">
-              {upcomingDeadlines.length > 0 ? (
-                upcomingDeadlines.map((item, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between p-3 border border-gray-200 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      <Calendar className="w-5 h-5 text-gray-400" />
-                      <div>
-                        <p className="font-medium text-sm">{item.projectName}</p>
-                        <p className="text-xs text-gray-500">{item.deadline}</p>
-                      </div>
-                    </div>
-                    <span
-                      className={`text-xs px-2 py-1 rounded-full font-medium ${
-                        item.priority === 'high'
-                          ? 'bg-red-100 text-red-700'
-                          : item.priority === 'medium'
-                          ? 'bg-yellow-100 text-yellow-700'
-                          : 'bg-blue-100 text-blue-700'
+            <div className="space-y-3">
+              {notifications.length > 0 ? (
+                notifications.slice(0, 5).map((notification) => {
+                  const isUnread = notification.status !== 'READ';
+                  return (
+                    <div
+                      key={notification.id}
+                      onClick={() => navigate('/dashboard/notifications')}
+                      className={`flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer ${
+                        isUnread ? 'bg-amber-50/50 border-r-4 border-r-amber-500' : ''
                       }`}
                     >
-                      {item.daysLeft} يوم
-                    </span>
-                  </div>
-                ))
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100">
+                        <Info className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className={`text-sm ${isUnread ? 'font-medium' : 'text-gray-600'}`}>
+                          {notification.title}
+                        </p>
+                        <p className="text-xs text-gray-500 line-clamp-2">{notification.body}</p>
+                        <p className="text-xs text-gray-400 mt-1">{timeAgo(notification.createdAt)}</p>
+                      </div>
+                    </div>
+                  );
+                })
               ) : (
-                <div className="text-gray-500 text-center py-4">لا توجد مواعيد قادمة</div>
+                <div className="text-gray-500 text-center py-4">لا توجد إشعارات</div>
               )}
             </div>
           </div>
-        </div>
+        )}
 
       </div>
     </div>
