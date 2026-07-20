@@ -1,7 +1,7 @@
 /**
  * TopBar Component
  *
- * Displays header with search, theme toggle, notification bell, and user menu.
+ * Displays header with search, notification bell, and user menu.
  * Notifications are fetched from backend API.
  */
 import { useEffect } from 'react';
@@ -9,8 +9,6 @@ import { useNavigate } from 'react-router';
 import {
   Search,
   Bell,
-  Moon,
-  Sun,
   Menu,
   LogOut,
   CheckCircle,
@@ -170,15 +168,6 @@ export function TopBar({
 
       {/* Actions */}
       <div className="flex items-center gap-2">
-        {/* Theme Toggle */}
-        <button
-          onClick={onThemeToggle}
-          className="p-2 hover:bg-accent rounded-lg transition-colors"
-          aria-label="تبديل الوضع"
-        >
-          {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-        </button>
-
         {/* Notifications */}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
