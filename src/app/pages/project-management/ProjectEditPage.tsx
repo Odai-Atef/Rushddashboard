@@ -85,7 +85,6 @@ export function ProjectEditPage() {
     endDate: '',
     status: '' as ProjectStatus | string,
     llmResponseText: '',
-    presentationResponseText: '',
   });
 
   const startDateRef = useRef<HTMLInputElement | null>(null);
@@ -148,7 +147,6 @@ export function ProjectEditPage() {
       endDate: toDateInputValue(project.endDate),
       status: getDisplayStatus(project.status as string),
       llmResponseText: project.llmResponseText || '',
-      presentationResponseText: project.presentationResponseText || '',
     });
   }, [project]);
 
@@ -277,7 +275,6 @@ export function ProjectEditPage() {
       fundingAreaIds: formData.fundingAreaIds,
       status: toApiStatus(formData.status),
       llmResponseText: formData.llmResponseText,
-      presentationResponseText: formData.presentationResponseText,
     };
 
     setIsSaving(true);
@@ -529,19 +526,7 @@ export function ProjectEditPage() {
                     visibleDragBar={false}
                     preview="edit"
                     className="w-full"
-                  />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">نص العرض التقديمي (Markdown)</label>
-                <div dir="rtl" data-color-mode="light" className="bg-white rounded-xl border border-gray-200 min-h-[300px]">
-                  <MDEditor
-                    value={formData.presentationResponseText}
-                    onChange={(val) => updateField('presentationResponseText', val || '')}
-                    height="300px"
-                    visibleDragBar={false}
-                    preview="edit"
-                    className="w-full"
+                    textareaProps={{ style: { textAlign: 'right' } }}
                   />
                 </div>
               </div>
