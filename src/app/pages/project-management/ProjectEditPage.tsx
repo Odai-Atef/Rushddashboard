@@ -518,6 +518,12 @@ export function ProjectEditPage() {
               <h3 className="text-lg font-semibold">بيانات إضافية للمدير</h3>
               <div>
                 <label className="block text-sm font-medium mb-2">نص الدراسة (Markdown)</label>
+                <style>{`
+                  .md-editor-rtl .w-md-editor-text-pre,
+                  .md-editor-rtl .w-md-editor-text-input {
+                    text-align: right !important;
+                  }
+                `}</style>
                 <div dir="rtl" data-color-mode="light" className="bg-white rounded-xl border border-gray-200 min-h-[300px]">
                   <MDEditor
                     value={formData.llmResponseText}
@@ -525,7 +531,7 @@ export function ProjectEditPage() {
                     height="300px"
                     visibleDragBar={false}
                     preview="edit"
-                    className="w-full"
+                    className="w-full md-editor-rtl"
                     textareaProps={{ style: { textAlign: 'right' } }}
                   />
                 </div>
