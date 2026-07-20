@@ -701,7 +701,9 @@ export function ProjectDetailsPage() {
   const isDraftProject = displayStatus === 'draft';
   const isEntityManager = user?.roleSlug === 'entity-managers';
   const rawStatus = (project.status as string).toUpperCase().replace(/-/g, '_');
-  const showReviewButton = isEntityManager && rawStatus === 'CHARITY_REVIEW';
+  const showReviewButton = isEntityManager && (
+    rawStatus === 'CHARITY_REVIEW' || rawStatus === 'MODIFICATIONS_DONE_WAITING_FOR_REVIEW'
+  );
   const showGeneratePresentationButton = isProjectManager && rawStatus === 'DESIGN_TEAM';
   const showDesignReviewButton = isEntityManager && rawStatus === 'DESIGN_REVIEW';
   const showRedesignButton = isProjectManager && rawStatus === 'DESIGN_REJECTED';

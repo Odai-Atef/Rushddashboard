@@ -16,6 +16,7 @@ export type ProjectStatus =
   | 'charity-review'
   | 'charity-decision'
   | 'incubator-modifications'
+  | 'modifications-done-waiting-for-review'
   | 'charity-approval'
   | 'pm-approval'
   | 'financial-approval'
@@ -206,6 +207,7 @@ export const statusConfig: Record<
   'charity-review': { label: 'في انتظار مراجعة الجهة لمسودة المشروع', color: '#3b82f6', bg: '#dbeafe' },
   'charity-decision': { label: 'قرار الجهة', color: '#8b5cf6', bg: '#ede9fe' },
   'incubator-modifications': { label: 'تعديلات الجهة', color: '#f59e0b', bg: '#fef3c7' },
+  'modifications-done-waiting-for-review': { label: 'تم التعديل وبانتظار اعتماد الجمعية', color: '#3b82f6', bg: '#dbeafe' },
   'charity-approval': { label: 'تمت الموافقة من الجهة على المسودة', color: '#8b5cf6', bg: '#ede9fe' },
   'pm-approval': { label: 'بانتظار موافقة مدير المشروع', color: '#ec4899', bg: '#fce7f3' },
   'financial-approval': { label: 'موافقة مالية', color: '#14b8a6', bg: '#ccfbf1' },

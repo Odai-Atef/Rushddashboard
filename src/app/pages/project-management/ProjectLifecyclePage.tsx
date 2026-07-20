@@ -39,7 +39,7 @@ const PHASES: PhaseDef[] = [
   {
     id: 2,
     title: 'مراجعة الجهة',
-    statuses: ['draft', 'pm-approval', 'charity-review', 'incubator-modifications', 'charity-approval'],
+    statuses: ['draft', 'pm-approval', 'charity-review', 'incubator-modifications', 'modifications-done-waiting-for-review', 'charity-approval'],
   },
   {
     id: 3,

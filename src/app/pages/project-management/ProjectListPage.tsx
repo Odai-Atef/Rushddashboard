@@ -273,6 +273,7 @@ export function ProjectListPage() {
     ];
     const entityManagerStatuses = [
       'CHARITY_REVIEW',
+      'MODIFICATIONS_DONE_WAITING_FOR_REVIEW',
       'DESIGN_REVIEW',
       'OFFER_REVIEW',
     ];
