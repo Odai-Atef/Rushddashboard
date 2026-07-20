@@ -47,10 +47,7 @@ export function ActivateAccountPage() {
     const activate = async () => {
       setStatus('loading');
       try {
-        // Execute reCAPTCHA v2 Invisible
-        const recaptchaToken = await executeRecaptcha('activate_account');
-
-        const response = await authService.activateAccount(token, recaptchaToken);
+        const response = await authService.activateAccount(token);
         if (cancelled) return;
 
         if (response.success) {

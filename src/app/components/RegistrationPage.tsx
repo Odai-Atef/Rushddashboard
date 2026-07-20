@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, User, Phone, Building, CheckCircle, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
-import { executeRecaptcha } from '@/app/lib/recaptcha';
+import { renderRecaptchaWidget, getRecaptchaToken, resetRecaptchaWidget, destroyRecaptchaWidget } from '@/app/lib/recaptcha';
 import { TermsModal } from './TermsModal';
 
 export function RegistrationPage() {
@@ -23,6 +23,19 @@ export function RegistrationPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [apiError, setApiError] = useState('');
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      renderRecaptchaWidget('recaptcha-widget').catch((err) => {
+        console.error('reCAPTCHA render error:', err);
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      destroyRecaptchaWidget('recaptcha-widget');
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,12 +66,15 @@ export function RegistrationPage() {
       return;
     }
 
+    const recaptchaToken = getRecaptchaToken();
+    if (!recaptchaToken) {
+      setApiError('يرجى إكمال التحقق من reCAPTCHA');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // Execute reCAPTCHA v2 Invisible
-      const recaptchaToken = await executeRecaptcha('register');
-
       const response = await authService.register({
         email: formData.email,
         password: formData.password,
@@ -71,15 +87,15 @@ export function RegistrationPage() {
         navigate('/auth/login?registered=true');
       } else {
         setApiError(response.message || 'حدث خطأ أثناء إنشاء الحساب');
+        resetRecaptchaWidget();
       }
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setApiError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-      } else if (err?.message?.includes('reCAPTCHA')) {
-        setApiError('فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى');
       } else {
         setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
       }
+      resetRecaptchaWidget();
     } finally {
       setIsLoading(false);
     }
@@ -286,6 +302,11 @@ export function RegistrationPage() {
                 </span>
               </label>
               {errors.agreeToTerms && <p className="text-xs text-red-600 mt-1">{errors.agreeToTerms}</p>}
+            </div>
+
+            {/* reCAPTCHA Widget */}
+            <div className="flex justify-start">
+              <div id="recaptcha-widget" />
             </div>
 
             {/* Register Button */}

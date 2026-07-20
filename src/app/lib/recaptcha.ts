@@ -1,135 +1,211 @@
-import { useCallback, useRef } from 'react';
-
-// reCAPTCHA v2 Invisible site key from environment
+// reCAPTCHA v2 Checkbox site key from environment
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
-// Mutable promise resolvers for the global callback
-let resolveToken: ((token: string) => void) | null = null;
-let rejectToken: ((err: Error) => void) | null = null;
-let widgetId: number | null = null;
-let widgetElement: HTMLDivElement | null = null;
+/**
+ * Each mounted page gets its own widget state so multiple reCAPTCHA widgets
+ * can coexist without stomping on one another.
+ */
+interface WidgetState {
+  id: number | null;
+  token: string | null;
+}
+
+const widgets = new Map<string, WidgetState>();
+let scriptPromise: Promise<void> | null = null;
 
 /**
- * Global callback invoked by Google when the invisible challenge succeeds.
+ * Global callback invoked by Google when the checkbox challenge succeeds.
+ * Because Google calls this on the global window we accept a single token and
+ * assign it to every widget – in practice there is only one visible at a time.
  */
 function recaptchaCallback(token: string) {
-  if (resolveToken) {
-    resolveToken(token);
-    resolveToken = null;
-    rejectToken = null;
+  for (const state of widgets.values()) {
+    state.token = token;
   }
 }
 
 function recaptchaExpiredCallback() {
-  if (rejectToken) {
-    rejectToken(new Error('reCAPTCHA expired'));
-    resolveToken = null;
-    rejectToken = null;
+  for (const state of widgets.values()) {
+    state.token = null;
   }
 }
 
 function recaptchaErrorCallback() {
-  if (rejectToken) {
-    rejectToken(new Error('reCAPTCHA verification failed'));
-    resolveToken = null;
-    rejectToken = null;
+  for (const state of widgets.values()) {
+    state.token = null;
   }
+  console.error('[reCAPTCHA] error callback fired');
 }
 
-/**
- * Expose callbacks on window so reCAPTCHA v2 data-callback attributes can reach them.
- */
 (window as any).recaptchaCallback = recaptchaCallback;
 (window as any).recaptchaExpiredCallback = recaptchaExpiredCallback;
 (window as any).recaptchaErrorCallback = recaptchaErrorCallback;
 
-function createWidgetElement(): HTMLDivElement {
-  if (widgetElement) return widgetElement;
-
-  const div = document.createElement('div');
-  div.id = 'recaptcha-invisible-widget';
-  div.className = 'g-recaptcha';
-  div.style.display = 'none';
-  div.setAttribute('data-sitekey', RECAPTCHA_SITE_KEY || '');
-  div.setAttribute('data-size', 'invisible');
-  div.setAttribute('data-callback', 'recaptchaCallback');
-  div.setAttribute('data-expired-callback', 'recaptchaExpiredCallback');
-  div.setAttribute('data-error-callback', 'recaptchaErrorCallback');
-  document.body.appendChild(div);
-  widgetElement = div;
-  return div;
-}
-
-/**
- * Loads the Google reCAPTCHA v2 script dynamically if not already loaded.
- * Uses explicit rendering (v2 Invisible).
- */
 function loadRecaptchaScript(): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (window.grecaptcha && window.grecaptcha.render) {
+  if (scriptPromise) {
+    return scriptPromise;
+  }
+
+  scriptPromise = new Promise((resolve, reject) => {
+    // Already loaded?
+    if (typeof window.grecaptcha !== 'undefined' && window.grecaptcha.render) {
       resolve();
       return;
     }
 
+    // Script tag already present?
+    const existing = document.querySelector('script[src*="recaptcha/api.js"]');
+    if (existing) {
+      const iv = setInterval(() => {
+        if (typeof window.grecaptcha !== 'undefined' && window.grecaptcha.render) {
+          clearInterval(iv);
+          resolve();
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(iv);
+        reject(new Error('reCAPTCHA script loading timeout'));
+      }, 10000);
+      return;
+    }
+
     const script = document.createElement('script');
-    script.src = 'https://www.google.com/recaptcha/api.js?onload=onRecaptchaLoad&render=explicit';
+    script.src = 'https://www.google.com/recaptcha/api.js?render=explicit&hl=ar';
     script.async = true;
     script.defer = true;
 
-    (window as any).onRecaptchaLoad = () => {
-      resolve();
+    script.onload = () => {
+      const iv = setInterval(() => {
+        if (typeof window.grecaptcha !== 'undefined' && window.grecaptcha.render) {
+          clearInterval(iv);
+          resolve();
+        }
+      }, 100);
+      setTimeout(() => {
+        clearInterval(iv);
+        if (!(typeof window.grecaptcha !== 'undefined' && window.grecaptcha.render)) {
+          reject(new Error('reCAPTCHA script loaded but grecaptcha.render not available'));
+        }
+      }, 5000);
     };
 
-    script.onerror = () => reject(new Error('Failed to load reCAPTCHA'));
+    script.onerror = () => reject(new Error('Failed to load reCAPTCHA script'));
     document.head.appendChild(script);
-  });
-}
 
-function renderWidget(): number {
-  if (widgetId !== null) return widgetId;
-
-  const element = createWidgetElement();
-
-  widgetId = window.grecaptcha.render(element.id, {
-    sitekey: RECAPTCHA_SITE_KEY,
-    size: 'invisible',
-    callback: recaptchaCallback,
-    'expired-callback': recaptchaExpiredCallback,
-    'error-callback': recaptchaErrorCallback,
+    setTimeout(() => reject(new Error('reCAPTCHA script loading timeout')), 15000);
   });
 
-  return widgetId;
+  return scriptPromise;
 }
 
 /**
- * Executes reCAPTCHA v2 Invisible and returns the token.
+ * Renders a visible checkbox reCAPTCHA widget inside the given container.
+ * Call this once inside useEffect.
  */
-export async function executeRecaptcha(_action: string = 'submit'): Promise<string> {
+export async function renderRecaptchaWidget(containerId: string): Promise<void> {
   if (!RECAPTCHA_SITE_KEY) {
-    throw new Error(
-      'VITE_RECAPTCHA_SITE_KEY is not configured. Check your build environment.'
-    );
+    console.error('[reCAPTCHA] VITE_RECAPTCHA_SITE_KEY is not configured');
+    throw new Error('VITE_RECAPTCHA_SITE_KEY is not configured. Check your build environment.');
   }
 
+  console.log('[reCAPTCHA] Loading script…');
   await loadRecaptchaScript();
-  const id = renderWidget();
+  console.log('[reCAPTCHA] Script ready, waiting for container…');
 
-  return new Promise((resolve, reject) => {
-    resolveToken = resolve;
-    rejectToken = reject;
-    window.grecaptcha.execute(id);
-  });
+  // Wait for the container (React might not have flushed to DOM yet)
+  let container: HTMLElement | null = null;
+  for (let i = 0; i < 50; i++) {
+    container = document.getElementById(containerId);
+    if (container) break;
+    await new Promise(r => setTimeout(r, 100));
+  }
+
+  if (!container) {
+    console.error(`[reCAPTCHA] Container #${containerId} not found`);
+    throw new Error(`reCAPTCHA container #${containerId} not found`);
+  }
+
+  // Remove any previously rendered iframe inside this container
+  const existing = widgets.get(containerId);
+  if (existing?.id !== null) {
+    try { window.grecaptcha.reset(existing.id!); } catch {}
+  }
+  widgets.delete(containerId);
+
+  container.innerHTML = '';
+  // Ensure container is visible
+  container.style.display = 'flex';
+  container.style.alignItems = 'center';
+  container.style.justifyContent = 'center';
+  container.style.minHeight = '78px';
+  container.style.minWidth = '304px';
+
+  const inner = document.createElement('div');
+  const innerId = `recaptcha-inner-${containerId}-${Date.now()}`;
+  inner.id = innerId;
+  container.appendChild(inner);
+
+  try {
+    console.log('[reCAPTCHA] Calling grecaptcha.render…');
+    const widgetId = window.grecaptcha.render(innerId, {
+      sitekey: RECAPTCHA_SITE_KEY,
+      size: 'normal',
+      theme: 'light',
+      callback: recaptchaCallback,
+      'expired-callback': recaptchaExpiredCallback,
+      'error-callback': recaptchaErrorCallback,
+    });
+
+    widgets.set(containerId, { id: widgetId, token: null });
+    console.log(`[reCAPTCHA] Widget rendered, widgetId=${widgetId}`);
+  } catch (err: any) {
+    console.error('[reCAPTCHA] render() threw:', err);
+    container.innerHTML = `
+      <div style="padding:12px;border:1px solid #f5c6cb;background:#f8d7da;color:#721c24;border-radius:4px;font-size:14px;text-align:center;">
+        ⚠️ reCAPTCHA configuration error.<br/>
+        The site key may not support checkbox mode.<br/>
+        Please use a v2 Checkbox key.
+      </div>`;
+    throw err;
+  }
 }
 
-// Extend Window interface for grecaptcha v2
+/** Returns the current reCAPTCHA token or null. */
+export function getRecaptchaToken(): string | null {
+  for (const state of widgets.values()) {
+    if (state.token) return state.token;
+  }
+  return null;
+}
+
+/** Resets every widget so the user can verify again. */
+export function resetRecaptchaWidget(): void {
+  for (const [containerId, state] of widgets.entries()) {
+    if (state.id !== null) {
+      try { window.grecaptcha.reset(state.id); } catch {}
+    }
+    state.token = null;
+  }
+}
+
+/** Destroys the widget tied to a specific container (useEffect cleanup). */
+export function destroyRecaptchaWidget(containerId: string): void {
+  const state = widgets.get(containerId);
+  if (state?.id !== null) {
+    try { window.grecaptcha.reset(state.id!); } catch {}
+  }
+  widgets.delete(containerId);
+
+  const container = document.getElementById(containerId);
+  if (container) container.innerHTML = '';
+}
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 declare global {
   interface Window {
     grecaptcha: {
       render: (id: string, options: Record<string, any>) => number;
-      execute: (id: number) => void;
-      reset: (id: number) => void;
-      ready?: (callback: () => void) => void;
+      reset: (id?: number) => void;
     };
   }
 }

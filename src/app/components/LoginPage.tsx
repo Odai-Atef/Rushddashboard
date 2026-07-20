@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { Eye, EyeOff, Mail, Lock, Sparkles, TrendingUp, Target, BarChart3, Loader2, ArrowRight } from 'lucide-react';
 import { useAuth } from '../layouts/RootLayout';
 import { authService } from '@/api/services/auth-service';
-import { executeRecaptcha } from '@/app/lib/recaptcha';
+import { renderRecaptchaWidget, getRecaptchaToken, resetRecaptchaWidget, destroyRecaptchaWidget } from '@/app/lib/recaptcha';
 import type { UserProfile } from '@/api/services/auth-service';
 
 export function LoginPage() {
@@ -15,6 +15,20 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  useEffect(() => {
+    // Small delay to ensure DOM is ready
+    const timer = setTimeout(() => {
+      renderRecaptchaWidget('recaptcha-widget').catch((err) => {
+        console.error('reCAPTCHA render error:', err);
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      destroyRecaptchaWidget('recaptcha-widget');
+    };
+  }, []);
 
   const isExpired = searchParams.get('expired') === 'true';
   const redirectParam = searchParams.get('redirect');
@@ -50,12 +64,16 @@ export function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    const recaptchaToken = getRecaptchaToken();
+    if (!recaptchaToken) {
+      setError('يرجى إكمال التحقق من reCAPTCHA');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
-      // Execute reCAPTCHA v2 Invisible
-      const recaptchaToken = await executeRecaptcha('login');
-      
       const response = await authService.login({ email, password, recaptchaToken });
       if (response.success) {
         login();
@@ -64,15 +82,15 @@ export function LoginPage() {
         navigate(getSafeRedirectPath(user));
       } else {
         setError(response.message || 'حدث خطأ أثناء تسجيل الدخول');
+        resetRecaptchaWidget();
       }
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setError('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-      } else if (err?.message?.includes('reCAPTCHA')) {
-        setError('فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى');
       } else {
         setError(err?.message || 'البريد الإلكتروني أو كلمة المرور غير صحيحة');
       }
+      resetRecaptchaWidget();
     } finally {
       setIsLoading(false);
     }
@@ -204,6 +222,11 @@ export function LoginPage() {
               >
                 نسيت كلمة المرور؟
               </button>
+            </div>
+
+            {/* reCAPTCHA Widget */}
+            <div className="flex justify-start">
+              <div id="recaptcha-widget" />
             </div>
 
             {/* Login Button */}

@@ -13,7 +13,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { authService } from '@/api/services/auth-service';
-import { executeRecaptcha } from '@/app/lib/recaptcha';
+import { renderRecaptchaWidget, getRecaptchaToken, resetRecaptchaWidget } from '@/app/lib/recaptcha';
 import { evaluatePasswordStrength, isPasswordStrong } from '@/lib/password-rules';
 
 /**
@@ -54,37 +54,49 @@ export function ResetPasswordPage() {
     }
   }, [token]);
 
+  // Render reCAPTCHA widget when token is present and status is idle
+  useEffect(() => {
+    if (token && status === 'idle') {
+      renderRecaptchaWidget('recaptcha-widget').catch(() => {
+        // silently ignore render errors
+      });
+    }
+  }, [token, status]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token || !canSubmit) return;
 
-    setIsLoading(true);
     setStatus('idle');
     setErrorMessage('');
 
-    try {
-      // Execute reCAPTCHA v2 Invisible
-      const recaptchaToken = await executeRecaptcha('reset_password');
+    const recaptchaToken = getRecaptchaToken();
+    if (!recaptchaToken) {
+      setStatus('error');
+      setErrorMessage('يرجى إكمال التحقق من reCAPTCHA');
+      return;
+    }
 
+    setIsLoading(true);
+
+    try {
       const response = await authService.resetPassword(token, newPassword, recaptchaToken);
       if (response.success) {
         setStatus('success');
       } else {
         setStatus('error');
         setErrorMessage(response.message || 'حدث خطأ أثناء إعادة تعيين كلمة المرور');
+        resetRecaptchaWidget();
       }
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setStatus('error');
         setErrorMessage('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-      } else if (err?.message?.includes('reCAPTCHA')) {
-        setStatus('error');
-        setErrorMessage('فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى');
       } else {
-        // Backend returns 400 for invalid/expired tokens with a generic message
         setStatus('error');
         setErrorMessage(err?.message || 'الرمز غير صالح أو منتهي الصلاحية');
       }
+      resetRecaptchaWidget();
     } finally {
       setIsLoading(false);
     }
@@ -264,6 +276,11 @@ export function ResetPasswordPage() {
                       {confirmError}
                     </p>
                   )}
+                </div>
+
+                {/* reCAPTCHA Widget */}
+                <div className="flex justify-start">
+                  <div id="recaptcha-widget" />
                 </div>
 
                 {/* Submit Button */}

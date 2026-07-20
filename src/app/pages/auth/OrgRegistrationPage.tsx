@@ -17,6 +17,7 @@ import { authService, OrgRegistrationData } from '@/api/services/auth-service';
 import { onboardingService, FundingArea } from '@/api/services/onboarding-service';
 import { TermsModal } from '@/app/components/TermsModal';
 import { useAuth } from '@/app/layouts/RootLayout';
+import { renderRecaptchaWidget, getRecaptchaToken, resetRecaptchaWidget, destroyRecaptchaWidget } from '@/app/lib/recaptcha';
 
 type OrgTypeOption = 'charity' | 'private_company';
 
@@ -67,6 +68,17 @@ export function OrgRegistrationPage() {
       .catch(() => {
         // Silently ignore; validation will handle empty list
       });
+
+    const timer = setTimeout(() => {
+      renderRecaptchaWidget('recaptcha-widget').catch((err) => {
+        console.error('reCAPTCHA render error:', err);
+      });
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+      destroyRecaptchaWidget('recaptcha-widget');
+    };
   }, []);
 
   const setField = <K extends keyof FormData>(field: K, value: FormData[K]) => {
@@ -176,6 +188,12 @@ export function OrgRegistrationPage() {
       return;
     }
 
+    const recaptchaToken = getRecaptchaToken();
+    if (!recaptchaToken) {
+      setApiError('يرجى إكمال التحقق من reCAPTCHA');
+      return;
+    }
+
     setIsLoading(true);
 
     const payload: OrgRegistrationData = {
@@ -188,6 +206,7 @@ export function OrgRegistrationPage() {
       type: formData.orgType === 'private_company' ? 'COOP' : 'CHARITY',
       overview: formData.orgType === 'private_company' ? formData.activity.trim() : '',
       areasOfWork: formData.orgType === 'charity' ? formData.fundingAreas : [],
+      recaptchaToken,
     };
 
     try {
@@ -239,6 +258,7 @@ export function OrgRegistrationPage() {
       } else {
         setApiError(err?.message || 'حدث خطأ أثناء إنشاء الحساب');
       }
+      resetRecaptchaWidget();
     } finally {
       setIsLoading(false);
     }
@@ -505,6 +525,11 @@ export function OrgRegistrationPage() {
                 </span>
               </label>
               {errors.agreeToTerms && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.agreeToTerms }} />}
+            </div>
+
+            {/* reCAPTCHA Widget */}
+            <div className="flex justify-start">
+              <div id="recaptcha-widget" />
             </div>
 
             {/* Register Button */}

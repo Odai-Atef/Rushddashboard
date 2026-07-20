@@ -31,6 +31,7 @@ export interface OrgRegistrationData {
   type: 'CHARITY' | 'COOP';
   overview: string;
   areasOfWork: string[];
+  recaptchaToken?: string;
 }
 
 export interface OrgRegistrationResponse {

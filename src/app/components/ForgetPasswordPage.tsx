@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Mail, ArrowRight, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { authService } from '@/api/services/auth-service';
-import { executeRecaptcha } from '@/app/lib/recaptcha';
+import { renderRecaptchaWidget, getRecaptchaToken, resetRecaptchaWidget, destroyRecaptchaWidget } from '@/app/lib/recaptcha';
 
 export function ForgetPasswordPage() {
   const navigate = useNavigate();
@@ -11,34 +11,44 @@ export function ForgetPasswordPage() {
   const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
+  useEffect(() => {
+    renderRecaptchaWidget('recaptcha-widget').catch(() => {
+      // silently ignore render errors
+    });
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
     setStatus('idle');
     setErrorMessage('');
 
-    try {
-      // Execute reCAPTCHA v2 Invisible
-      const recaptchaToken = await executeRecaptcha('forgot_password');
+    const recaptchaToken = getRecaptchaToken();
+    if (!recaptchaToken) {
+      setStatus('error');
+      setErrorMessage('يرجى إكمال التحقق من reCAPTCHA');
+      return;
+    }
 
+    setIsLoading(true);
+
+    try {
       const response = await authService.forgotPassword(email, recaptchaToken);
       if (response.success) {
         setStatus('success');
       } else {
         setStatus('error');
         setErrorMessage(response.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
+        resetRecaptchaWidget();
       }
     } catch (err: any) {
       if (err?.message === 'Failed to fetch') {
         setStatus('error');
         setErrorMessage('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-      } else if (err?.message?.includes('reCAPTCHA')) {
-        setStatus('error');
-        setErrorMessage('فشل التحقق من reCAPTCHA، يرجى المحاولة مرة أخرى');
       } else {
         setStatus('error');
         setErrorMessage(err?.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
       }
+      resetRecaptchaWidget();
     } finally {
       setIsLoading(false);
     }
@@ -96,6 +106,11 @@ export function ForgetPasswordPage() {
                       required
                     />
                   </div>
+                </div>
+
+                {/* reCAPTCHA Widget */}
+                <div className="flex justify-start">
+                  <div id="recaptcha-widget" />
                 </div>
 
                 {/* Submit Button */}
