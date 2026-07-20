@@ -222,7 +222,7 @@ export const statusConfig: Record<
   'offer-approved': { label: 'تم اعتماد عرض السعر', color: '#10b981', bg: '#d1fae5' },
   'offer-rejected': { label: 'تم رفض عرض السعر', color: '#ef4444', bg: '#fee2e2' },
   'offer-generated': { label: 'تم إنشاء عرض السعر', color: '#3b82f6', bg: '#dbeafe' },
-  'ready-donor': { label: 'جاهز للمانحين', color: '#06b6d4', bg: '#cffafe' },
+  'ready-donor': { label: 'يجري الرفع للمانحين', color: '#06b6d4', bg: '#cffafe' },
   'submitted-donor': { label: 'مقدم للمانحين', color: '#0891b2', bg: '#cffafe' },
   funded: { label: 'ممول', color: '#10b981', bg: '#d1fae5' },
   execution: { label: 'قيد التنفيذ', color: '#3b82f6', bg: '#dbeafe' },
