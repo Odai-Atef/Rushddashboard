@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import {
   Search, Sparkles,
-  ExternalLink, FileText,
+  ExternalLink, FileText, Download,
   Loader2
 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -254,18 +254,33 @@ export function AIRecommendedDonors({
                     >
                       <ExternalLink className="w-3.5 h-3.5" /> زيارة الموقع
                     </a>
-                    <button
-                      onClick={() => handleGeneratePlan(donor.id, donor.name)}
-                      disabled={generatingId === donor.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {generatingId === donor.id ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      ) : (
-                        <FileText className="w-3.5 h-3.5" />
-                      )}
-                      {generatingId === donor.id ? 'جارٍ إنشاء الخطة...' : 'إنشاء خطة مشروع خاصة بهذه الجهة'}
-                    </button>
+                    {donor.hasGeneratedPlan ? (
+                      <button
+                        onClick={() => handleGeneratePlan(donor.id, donor.name)}
+                        disabled={generatingId === donor.id}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {generatingId === donor.id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <Download className="w-3.5 h-3.5" />
+                        )}
+                        {generatingId === donor.id ? 'جارٍ التحميل...' : 'تحميل الملف المطور'}
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => handleGeneratePlan(donor.id, donor.name)}
+                        disabled={generatingId === donor.id}
+                        className="flex items-center gap-1.5 px-3 py-1.5 text-xs bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {generatingId === donor.id ? (
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        ) : (
+                          <FileText className="w-3.5 h-3.5" />
+                        )}
+                        {generatingId === donor.id ? 'جارٍ إنشاء الخطة...' : 'إنشاء خطة مشروع خاصة بهذه الجهة'}
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

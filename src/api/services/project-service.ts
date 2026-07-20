@@ -63,6 +63,8 @@ export interface MatchDonorsDonor {
   url: string;
   source: 'online' | 'offline';
   status?: string | null;
+  hasGeneratedPlan?: boolean;
+  planFileUrl?: string | null;
 }
 
 export interface MatchDonorsResponse {
