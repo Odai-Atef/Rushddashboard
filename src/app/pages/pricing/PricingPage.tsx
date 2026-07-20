@@ -706,7 +706,7 @@ export function PricingPage() {
             واتساب
           </a>
         </div>
-        <p className="text-xs text-blue-600 mt-2 text-center">+966 55 653 4433</p>
+        <p className="text-xs text-blue-600 mt-2 text-center" dir="ltr">+966 55 653 4433</p>
       </div>
 
       {packages.length === 0 && !loading && (
