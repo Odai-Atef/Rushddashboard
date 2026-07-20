@@ -531,13 +531,15 @@ export function ProjectListPage() {
             >
               لوحة القيادة
             </button>
-            <button
-              onClick={() => navigate('/dashboard/project-management/create')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
-            >
-              <Plus className="w-5 h-5" />
-              مشروع جديد
-            </button>
+            {user?.roleSlug === 'entity-managers' && (
+              <button
+                onClick={() => navigate('/dashboard/project-management/create')}
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+              >
+                <Plus className="w-5 h-5" />
+                مشروع جديد
+              </button>
+            )}
           </div>
         </div>
 

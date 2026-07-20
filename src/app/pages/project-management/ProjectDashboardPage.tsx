@@ -211,13 +211,15 @@ export function ProjectDashboardPage() {
             <h1 className="text-3xl font-bold mb-2">لوحة المشاريع</h1>
             <p className="text-gray-600">نظرة شاملة على جميع المشاريع والأنشطة</p>
           </div>
-          <button
-            onClick={() => navigate('/dashboard/project-management/create')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
-          >
-            <Plus className="w-5 h-5" />
-            مشروع جديد
-          </button>
+          {roleSlug === 'entity-managers' && (
+            <button
+              onClick={() => navigate('/dashboard/project-management/create')}
+              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+            >
+              <Plus className="w-5 h-5" />
+              مشروع جديد
+            </button>
+          )}
         </div>
 
         <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
@@ -230,13 +232,15 @@ export function ProjectDashboardPage() {
               <List className="w-6 h-6 text-gray-400 mx-auto mb-2" />
               <p className="font-medium text-sm">عرض جميع المشاريع</p>
             </button>
-            <button
-              onClick={() => navigate('/dashboard/project-management/create')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
-            >
-              <Plus className="w-6 h-6 text-gray-400 mx-auto mb-2" />
-              <p className="font-medium text-sm">إنشاء مشروع جديد</p>
-            </button>
+            {roleSlug === 'entity-managers' && (
+              <button
+                onClick={() => navigate('/dashboard/project-management/create')}
+                className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+              >
+                <Plus className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+                <p className="font-medium text-sm">إنشاء مشروع جديد</p>
+              </button>
+            )}
             <button
               onClick={() => navigate('/dashboard/project-management/reporting')}
               className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"

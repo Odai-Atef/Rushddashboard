@@ -22,6 +22,16 @@ function daysBetween(start: string, end: string): number | null {
 export function ProjectCreatePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
+
+  // Only entity-managers can create projects
+  const isEntityManager = user?.roleSlug === 'entity-managers';
+
+  useEffect(() => {
+    if (!isEntityManager) {
+      navigate('/dashboard/project-management/list', { replace: true });
+    }
+  }, [isEntityManager, navigate]);
+
   const [localFieldErrors, setLocalFieldErrors] = useState<Record<string, string>>({});
   const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string }[]>([]);
   const [isLoadingOrganization, setIsLoadingOrganization] = useState(true);
