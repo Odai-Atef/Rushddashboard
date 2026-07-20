@@ -261,10 +261,10 @@ export class AuthService {
   /**
    * Activate a newly registered account using an email activation token.
    */
-  async activateAccount(token: string, recaptchaToken: string): Promise<ApiResponse<{ message?: string }>> {
+  async activateAccount(token: string): Promise<ApiResponse<{ message?: string }>> {
     return apiClient.get<{ message?: string }>(
       `${this.baseEndpoint}/activate`,
-      { params: { token, recaptchaToken }, skipAuthRedirect: true }
+      { params: { token }, skipAuthRedirect: true }
     );
   }
 

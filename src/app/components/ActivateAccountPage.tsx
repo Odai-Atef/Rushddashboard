@@ -8,7 +8,6 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { authService } from '@/api/services/auth-service';
-import { executeRecaptcha } from '@/app/lib/recaptcha';
 
 /**
  * ActivateAccountPage
