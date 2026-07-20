@@ -7,7 +7,7 @@
 
 import { useEffect, useState, useRef, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router';
-import { Check, X, Loader2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Check, X, Loader2, AlertTriangle, RefreshCw, Phone, MessageCircle } from 'lucide-react';
 import { subscriptionService } from '@/api/services/subscription-service';
 import apiClient from '@/api/client';
 
@@ -271,6 +271,33 @@ export function PaymentCallbackPage() {
             >
               العودة للرئيسية
             </button>
+          </div>
+        )}
+
+        {result !== 'success' && result !== 'verifying' && (
+          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-xl text-right">
+            <p className="text-sm text-blue-800 mb-3 font-medium">
+              واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
+            </p>
+            <div className="flex items-center justify-center gap-3">
+              <a
+                href="tel:+966556534433"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-blue-300 rounded-lg text-blue-700 text-sm font-medium hover:bg-blue-100 transition-colors"
+              >
+                <Phone className="w-4 h-4" />
+                اتصل بنا
+              </a>
+              <a
+                href="https://wa.me/+966556534433"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 transition-colors"
+              >
+                <MessageCircle className="w-4 h-4" />
+                واتساب
+              </a>
+            </div>
+            <p className="text-xs text-blue-600 mt-2 text-center">+966 55 653 4433</p>
           </div>
         )}
       </div>
