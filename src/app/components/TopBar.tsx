@@ -287,6 +287,7 @@ export function TopBar({
               className="bg-popover border border-border rounded-lg shadow-lg p-2 w-56 z-50"
               sideOffset={5}
               align="end"
+              dir="rtl"
             >
               <div className="px-3 py-2 border-b border-border mb-2">
                 <p className="font-medium">{displayName(user)}</p>
