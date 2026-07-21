@@ -14,18 +14,48 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }
   REJECTED: { label: 'تم الاعتذار', color: '#ef4444', bg: '#fee2e2' },
 };
 
-function formatDate(dateString: string | null): string {
+function timeAgo(dateString: string | null): string {
   if (!dateString) return '-';
-  return new Date(dateString).toLocaleDateString('ar-SA', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSecs = Math.floor(diffMs / 1000);
+  const diffMins = Math.floor(diffSecs / 60);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffDays > 0) return `منذ ${diffDays} يوم${diffDays > 1 ? 'ين' : ''}`;
+  if (diffHours > 0) return `منذ ${diffHours} ساعة`;
+  if (diffMins > 0) return `منذ ${diffMins} دقيقة`;
+  return 'الآن';
 }
 
-function formatCurrency(amount: number, currency: string): string {
-  if (!amount && amount !== 0) return '-';
-  const num = typeof amount === 'string' ? parseFloat(amount) : amount;
+function getDecimalAmount(budget: any): number {
+  if (typeof budget === 'number') return budget;
+  if (budget && typeof budget === 'object') {
+    // Prisma Decimal serialization: { d: [digits], e: exponent, s: sign }
+    if ('d' in budget && Array.isArray(budget.d)) {
+      const digits = budget.d as number[];
+      const sign = budget.s === -1 ? -1 : 1;
+      const exponent = typeof budget.e === 'number' ? budget.e : 0;
+      if (digits.length === 0) return 0;
+      const coefficient = digits
+        .map((chunk: number, index: number) => (index === 0 ? String(chunk) : String(chunk).padStart(7, '0')))
+        .join('');
+      const normalizedExponent = exponent - (coefficient.length - 1);
+      const amount = Number(`${coefficient}e${normalizedExponent}`);
+      return Number.isFinite(amount) ? sign * amount : 0;
+    }
+    // Fallback for plain strings or other objects
+    const parsed = parseFloat(String(budget));
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+  return 0;
+}
+
+function formatCurrency(amount: any, currency: string): string {
+  const num = getDecimalAmount(amount);
+  if (num === 0 && (!amount || (typeof amount === 'object' && (!('d' in amount) || (amount.d as number[]).length === 0)))) return '-';
   return `${num.toLocaleString('ar-SA')} ${currency || 'ر.س'}`;
 }
 
@@ -51,6 +81,9 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
         break;
       case 'projectName':
         comparison = a.projectName.localeCompare(b.projectName, 'ar');
+        break;
+      case 'organizationName':
+        comparison = (a.organizationName || '').localeCompare(b.organizationName || '', 'ar');
         break;
       case 'matchingScore':
         comparison = (a.matchingScore || 0) - (b.matchingScore || 0);
@@ -87,6 +120,7 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
             {[
               { key: 'name', label: 'الجهة المانحة' },
               { key: 'projectName', label: 'المشروع' },
+              { key: 'organizationName', label: 'الجهة' },
               { key: 'projectBudget', label: 'ميزانية المشروع' },
               { key: 'proposalSubmissionDate', label: 'تاريخ التقديم' },
               { key: 'status', label: 'الحالة' },
@@ -120,22 +154,14 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
                     </div>
                     <div>
                       <div className="font-medium">{donor.name}</div>
-                      {donor.website && (
-                        <a
-                          href={donor.website}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-blue-600 hover:underline"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {donor.website}
-                        </a>
-                      )}
                     </div>
                   </div>
                 </td>
                 <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
                   {donor.projectName}
+                </td>
+                <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
+                  {donor.organizationName || '-'}
                 </td>
                 <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
                   <div className="flex items-center gap-1.5">
@@ -146,7 +172,7 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
                 <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
                   <div className="flex items-center gap-1.5">
                     <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
-                    {formatDate(donor.proposalSubmissionDate)}
+                    {timeAgo(donor.proposalSubmissionDate)}
                   </div>
                 </td>
                 <td className="px-4 py-3 whitespace-nowrap">

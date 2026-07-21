@@ -13,9 +13,7 @@ export interface UseOrganizationDonorsReturn {
   total: number;
   isLoading: boolean;
   error: string | null;
-  filters: OrganizationDonorsFilters;
-  setFilters: (filters: OrganizationDonorsFilters) => void;
-  applyFilters: () => void;
+  applyFilters: (filters: OrganizationDonorsFilters) => void;
   clearFilters: () => void;
   refetch: () => void;
 }
@@ -25,11 +23,10 @@ export function useOrganizationDonors(): UseOrganizationDonorsReturn {
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [filters, setFilters] = useState<OrganizationDonorsFilters>({});
   const [activeFilters, setActiveFilters] = useState<OrganizationDonorsFilters>({});
   const abortControllerRef = useRef<AbortController | null>(null);
 
-  const fetch = useCallback(async () => {
+  const fetch = useCallback(async (filters: OrganizationDonorsFilters = {}) => {
     setIsLoading(true);
     setError(null);
 
@@ -41,15 +38,13 @@ export function useOrganizationDonors(): UseOrganizationDonorsReturn {
 
     try {
       const res = await projectService.getEntityManagerDonorMatches({
-        status: activeFilters.status,
-        projectId: activeFilters.projectId,
-        search: activeFilters.search,
+        status: filters.status,
+        projectId: filters.projectId,
+        search: filters.search,
         limit: 200,
         offset: 0,
       });
 
-      // apiClient returns { success, data } where data is the raw API body
-      // Raw body: { success: true, data: [...donors], total: N }
       const body = res.data as any;
       const donorsData = Array.isArray(body?.data) ? body.data : [];
       const totalCount = body?.total ?? 0;
@@ -68,35 +63,32 @@ export function useOrganizationDonors(): UseOrganizationDonorsReturn {
     } finally {
       setIsLoading(false);
     }
-  }, [activeFilters]);
+  }, []);
 
   useEffect(() => {
-    fetch();
+    fetch(activeFilters);
     return () => {
       abortControllerRef.current?.abort();
     };
-  }, [fetch]);
+  }, [fetch, activeFilters]);
 
-  const applyFilters = useCallback(() => {
+  const applyFilters = useCallback((filters: OrganizationDonorsFilters) => {
     setActiveFilters(filters);
-  }, [filters]);
+  }, []);
 
   const clearFilters = useCallback(() => {
-    setFilters({});
     setActiveFilters({});
   }, []);
 
   const refetch = useCallback(() => {
-    fetch();
-  }, [fetch]);
+    fetch(activeFilters);
+  }, [fetch, activeFilters]);
 
   return {
     donors,
     total,
     isLoading,
     error,
-    filters,
-    setFilters,
     applyFilters,
     clearFilters,
     refetch,

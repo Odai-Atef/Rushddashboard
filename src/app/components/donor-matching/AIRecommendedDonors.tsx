@@ -96,7 +96,7 @@ export function AIRecommendedDonors({
 
   const handleGeneratePlan = async (donorMatchId: string, donorName: string) => {
     const confirmed = await confirm({
-      title: 'هل أنت متأكد من إنشاء خطة مشروع خاصة بهذه الجهة؟',
+      title: 'هل أنت متأكد من إنشاء نسخة مشروع خاصة بهذه الجهة؟',
     });
     if (!confirmed) {
       return;
@@ -335,7 +335,7 @@ export function AIRecommendedDonors({
                           ) : (
                             <FileText className="w-3.5 h-3.5" />
                           )}
-                          {generatingId === donor.id ? 'جارٍ إنشاء الخطة...' : 'إنشاء خطة مشروع خاصة بهذه الجهة'}
+                          {generatingId === donor.id ? 'جارٍ إنشاء النسخة...' : 'إنشاء نسخة مشروع خاصة بهذه الجهة'}
                         </button>
                       )
                     )}

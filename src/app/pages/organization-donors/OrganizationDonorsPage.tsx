@@ -1,8 +1,9 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Building2 } from 'lucide-react';
 import { useOrganizationDonors } from '@/api/hooks/useOrganizationDonors';
 import { projectService } from '@/api/services/project-service';
 import { OrganizationDonorMatch } from '@/api/services/project-service';
+import { DonorDetailDrawer } from '@/app/components/donor-matching/DonorDetailDrawer';
 import { OrganizationDonorsFilters } from './OrganizationDonorsFilters';
 import { OrganizationDonorsTable } from './OrganizationDonorsTable';
 
@@ -12,8 +13,6 @@ export function OrganizationDonorsPage() {
     total,
     isLoading,
     error,
-    filters,
-    setFilters,
     applyFilters,
     clearFilters,
     refetch,
@@ -23,6 +22,10 @@ export function OrganizationDonorsPage() {
   const [statusFilter, setStatusFilter] = useState('');
   const [projectFilter, setProjectFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Drawer state
+  const [selectedDonor, setSelectedDonor] = useState<OrganizationDonorMatch | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Fetch projects for the dropdown
   useEffect(() => {
@@ -37,43 +40,37 @@ export function OrganizationDonorsPage() {
           )
         );
       } catch (err) {
-        // silently fail — projects dropdown is optional
+        // silently fail
       }
     };
     loadProjects();
   }, []);
 
-  // Client-side filtering
-  const filteredDonors = useMemo(() => {
-    return donors.filter((donor) => {
-      if (statusFilter && donor.status !== statusFilter) return false;
-      if (projectFilter && donor.projectId !== projectFilter) return false;
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        const matchName = donor.name?.toLowerCase().includes(q);
-        const matchProject = donor.projectName?.toLowerCase().includes(q);
-        if (!matchName && !matchProject) return false;
-      }
-      return true;
-    });
-  }, [donors, statusFilter, projectFilter, searchQuery]);
-
   const handleStatusChange = (status: string) => {
     setStatusFilter(status);
-    setFilters({ ...filters, status: status || undefined });
-    applyFilters();
+    applyFilters({
+      status: status || undefined,
+      projectId: projectFilter || undefined,
+      search: searchQuery || undefined,
+    });
   };
 
   const handleProjectChange = (projectId: string) => {
     setProjectFilter(projectId);
-    setFilters({ ...filters, projectId: projectId || undefined });
-    applyFilters();
+    applyFilters({
+      status: statusFilter || undefined,
+      projectId: projectId || undefined,
+      search: searchQuery || undefined,
+    });
   };
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
-    setFilters({ ...filters, search: query || undefined });
-    applyFilters();
+    applyFilters({
+      status: statusFilter || undefined,
+      projectId: projectFilter || undefined,
+      search: query || undefined,
+    });
   };
 
   const handleClear = () => {
@@ -84,8 +81,8 @@ export function OrganizationDonorsPage() {
   };
 
   const handleRowClick = (donor: OrganizationDonorMatch) => {
-    // Future: open detail drawer
-    console.log('Clicked donor:', donor);
+    setSelectedDonor(donor);
+    setDrawerOpen(true);
   };
 
   return (
@@ -99,7 +96,7 @@ export function OrganizationDonorsPage() {
           <div>
             <h1 className="text-xl font-bold">الجهات المانحة</h1>
             <p className="text-sm text-muted-foreground">
-              عرض {filteredDonors.length} من {total} جهة مانحة مقدمة
+              عرض {donors.length} من {total} جهة مانحة مقدمة
             </p>
           </div>
         </div>
@@ -133,8 +130,17 @@ export function OrganizationDonorsPage() {
 
       {/* Table */}
       <OrganizationDonorsTable
-        donors={filteredDonors}
+        donors={donors}
         onRowClick={handleRowClick}
+      />
+
+      {/* Detail Drawer */}
+      <DonorDetailDrawer
+        donor={selectedDonor}
+        isOpen={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        onStatusChange={refetch}
+        isExecution={true}
       />
     </div>
   );

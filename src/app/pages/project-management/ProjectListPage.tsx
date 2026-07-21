@@ -404,7 +404,7 @@ export function ProjectListPage() {
 
   const renderKanban = () => (
     <div className="flex gap-4 overflow-x-auto pb-4">
-      {['draft', 'charity-review', 'pm-approval', 'funded', 'execution', 'completed'].map((status) => {
+      {['draft', 'charity-review', 'pm-approval', 'funded', 'execution', 'project-suspended', 'completed'].map((status) => {
         const statusProjects = projects.filter((p) => getDisplayStatus(p.status) === status);
         const config = statusConfig[status as ProjectStatus];
 

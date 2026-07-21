@@ -104,7 +104,7 @@ function getDocumentTypeLabel(documentType: string): string {
 function getOrganizationTypeLabel(type: string | null | undefined): string {
   const labels: Record<string, string> = {
     CHARITY: 'جمعية خيرية',
-    FOUNDATION: 'مؤسسة',
+    FOUNDATION: 'جمعية',
     NGO: 'منظمة غير حكومية',
     COOP: 'تعاونية',
   };

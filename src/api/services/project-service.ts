@@ -132,8 +132,11 @@ export interface OrganizationDonorMatch {
   updatedAt: string;
   projectId: string;
   projectName: string;
-  projectBudget: number;
+  organizationName: string;
+  projectBudget: number | any;
   projectCurrencyCode: string;
+  url?: string;
+  hasGeneratedPlan?: boolean;
   donor?: {
     id: string;
     name: string;

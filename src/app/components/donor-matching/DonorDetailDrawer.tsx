@@ -183,7 +183,7 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
                       ) : (
                         <FileText className="w-3.5 h-3.5" />
                       )}
-                      إنشاء خطة مشروع
+                      إنشاء نسخة مشروع
                     </button>
                   )}
 

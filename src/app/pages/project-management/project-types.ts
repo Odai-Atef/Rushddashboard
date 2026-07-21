@@ -36,6 +36,7 @@ export type ProjectStatus =
   | 'funded'
   | 'execution'
   | 'completed'
+  | 'project-suspended'
   | 'closed';
 
 export type ProjectHealth = 'excellent' | 'good' | 'at-risk' | 'critical';
@@ -229,6 +230,7 @@ export const statusConfig: Record<
   funded: { label: 'ممول', color: '#10b981', bg: '#d1fae5' },
   execution: { label: 'قيد التنفيذ', color: '#3b82f6', bg: '#dbeafe' },
   completed: { label: 'مكتمل', color: '#22c55e', bg: '#dcfce7' },
+  'project-suspended': { label: 'تم تعليق المشروع', color: '#dc2626', bg: '#fee2e2' },
   closed: { label: 'مغلق', color: '#6b7280', bg: '#f3f4f6' },
 };
 
