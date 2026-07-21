@@ -750,12 +750,12 @@ export class ProjectService {
 
   /**
    * List all submitted donor matches for the current entity-manager's projects.
-   * GET /api/v1/projects/entity-manager/donor-matches
+   * GET /api/v1/projects/entity-manager-donor-matches
    */
   async getEntityManagerDonorMatches(
     options?: { status?: string; projectId?: string; search?: string; limit?: number; offset?: number }
   ): Promise<ApiResponse<{ data: OrganizationDonorMatch[]; total: number }>> {
-    return apiClient.get('/api/v1/projects/entity-manager/donor-matches', {
+    return apiClient.get('/api/v1/projects/entity-manager-donor-matches', {
       params: options,
     });
   }
