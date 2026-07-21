@@ -943,6 +943,12 @@ export function ProjectDetailsPage() {
                       {typeof project.beneficiariesCount === 'number' ? project.beneficiariesCount.toLocaleString('ar-SA') : '—'}
                     </p>
                   </div>
+                  <div>
+                    <p className="text-sm text-gray-600 mb-1">عدد التعديلات</p>
+                    <p className="font-medium">
+                      {typeof project.modificationsCount === 'number' ? project.modificationsCount.toLocaleString('ar-SA') : '0'}
+                    </p>
+                  </div>
                   {(project.fundingAreaIds?.length > 0 || project.fundingAreas?.length > 0) && (
                     <div>
                       <p className="text-sm text-gray-600 mb-1">مجالات العمل</p>

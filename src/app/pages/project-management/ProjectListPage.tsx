@@ -356,6 +356,7 @@ export function ProjectListPage() {
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الباقة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">آخر تحديث</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">عدد التعديلات</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">التقدم</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"></th>
             </tr>
@@ -385,6 +386,9 @@ export function ProjectListPage() {
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
                     {timeAgo(project.updatedAt)}
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                    {typeof project.modificationsCount === 'number' ? project.modificationsCount.toLocaleString('ar-SA') : '0'}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2 min-w-[140px]">

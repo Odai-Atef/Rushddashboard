@@ -111,6 +111,7 @@ export interface Project {
   fundingAreaIds?: string[];
   fundingAreas?: FundingAreaInfo[];
   unreadMessageCount?: number;
+  modificationsCount?: number;
 }
 
 export interface ProjectDetails extends Project {
