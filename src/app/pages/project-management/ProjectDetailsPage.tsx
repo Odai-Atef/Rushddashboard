@@ -753,11 +753,16 @@ export function ProjectDetailsPage() {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{project.name}</h1>
-              <div className="flex items-center gap-4 text-sm text-gray-600">
+              <div className="flex items-center gap-4 text-sm text-gray-600 flex-wrap">
                 <span className="flex items-center gap-1">
                   <Building2 className="w-4 h-4" />
                   {getOrganizationName(project)}
                 </span>
+                {project.packageName && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
+                    {project.packageName}
+                  </span>
+                )}
               </div>
             </div>
             <div className="flex gap-3 flex-wrap">

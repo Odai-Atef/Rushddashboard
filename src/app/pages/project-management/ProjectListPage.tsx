@@ -295,6 +295,7 @@ export function ProjectListPage() {
             <tr>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">اسم المشروع</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الجهه</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الباقة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">التقدم</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"></th>
@@ -314,6 +315,7 @@ export function ProjectListPage() {
                     </button>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{getProjectOrganization(project)}</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">{project.packageName || project.packageId || '-'}</td>
                   <td className="px-6 py-4">
                     <span
                       className="text-xs px-2 py-1 rounded-full font-medium"
@@ -403,7 +405,8 @@ export function ProjectListPage() {
                     className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
                   >
                     <h4 className="font-medium mb-2">{project.name}</h4>
-                    <p className="text-xs text-gray-600 mb-3">{getProjectOrganization(project)}</p>
+                    <p className="text-xs text-gray-600 mb-1">{getProjectOrganization(project)}</p>
+                    <p className="text-xs text-gray-500 mb-3">{project.packageName || project.packageId || '-'}</p>
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-gray-500">{getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س</span>
                       <span className="text-gray-500">{getProjectManager(project)}</span>
@@ -432,14 +435,15 @@ export function ProjectListPage() {
         {projects.map((project, idx) => (
           <div key={project.id} className="flex items-center gap-4">
             <div className="w-48 flex-shrink-0">
-              <button
-                onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
-                className="font-medium text-sm text-blue-600 hover:text-blue-700 text-right"
-              >
-                {project.name}
-              </button>
-              <p className="text-xs text-gray-500 mt-1">{getProjectOrganization(project)}</p>
-            </div>
+                <button
+                  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
+                  className="font-medium text-sm text-blue-600 hover:text-blue-700 text-right"
+                >
+                  {project.name}
+                </button>
+                <p className="text-xs text-gray-500 mt-1">{getProjectOrganization(project)}</p>
+                <p className="text-xs text-gray-400 mt-0.5">{project.packageName || project.packageId || '-'}</p>
+              </div>
             <div className="flex-1 relative h-12">
               <div className="absolute inset-0 flex items-center">
                 <div className="h-2 bg-gray-100 rounded-full w-full"></div>
