@@ -256,6 +256,22 @@ export function ProjectListPage() {
 
   const getRawStatus = (status: string): string => status.toUpperCase().replace(/-/g, '_');
 
+  const timeAgo = (dateString: string | undefined): string => {
+    if (!dateString) return '-';
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffSecs = Math.floor(diffMs / 1000);
+    const diffMins = Math.floor(diffSecs / 60);
+    const diffHours = Math.floor(diffMins / 60);
+    const diffDays = Math.floor(diffHours / 24);
+
+    if (diffDays > 0) return `منذ ${diffDays} يوم${diffDays > 1 ? 'ين' : ''}`;
+    if (diffHours > 0) return `منذ ${diffHours} ساعة`;
+    if (diffMins > 0) return `منذ ${diffMins} دقيقة`;
+    return 'الآن';
+  };
+
   const shouldShowPinIcon = (project: Project): boolean => {
     const rawStatus = getRawStatus(project.status);
     const roleSlug = user?.roleSlug;
@@ -297,6 +313,7 @@ export function ProjectListPage() {
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الجهه</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الباقة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">آخر تحديث</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">التقدم</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"></th>
             </tr>
@@ -323,6 +340,9 @@ export function ProjectListPage() {
                     >
                       {status.label}
                     </span>
+                  </td>
+                  <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                    {timeAgo(project.updatedAt)}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2 min-w-[140px]">
