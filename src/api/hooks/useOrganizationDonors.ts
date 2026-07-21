@@ -40,7 +40,7 @@ export function useOrganizationDonors(): UseOrganizationDonorsReturn {
     abortControllerRef.current = controller;
 
     try {
-      const res = await projectService.getOrganizationDonorMatches({
+      const res = await projectService.getEntityManagerDonorMatches({
         status: activeFilters.status,
         projectId: activeFilters.projectId,
         search: activeFilters.search,
