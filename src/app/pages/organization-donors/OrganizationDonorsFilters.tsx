@@ -1,9 +1,7 @@
-import { useMemo } from 'react';
-import { Search, Loader2, Building2, Calendar, Coins, FilterX } from 'lucide-react';
-import { OrganizationDonorMatch } from '@/api/services/project-service';
+import { Search, Loader2, FilterX } from 'lucide-react';
 
 interface OrganizationDonorsFiltersProps {
-  donors: OrganizationDonorMatch[];
+  projects: { id: string; name: string }[];
   statusFilter: string;
   projectFilter: string;
   searchQuery: string;
@@ -23,7 +21,7 @@ const STATUS_OPTIONS = [
 ];
 
 export function OrganizationDonorsFilters({
-  donors,
+  projects,
   statusFilter,
   projectFilter,
   searchQuery,
@@ -33,17 +31,6 @@ export function OrganizationDonorsFilters({
   onClear,
   isLoading,
 }: OrganizationDonorsFiltersProps) {
-  // Unique projects from donor data
-  const projects = useMemo(() => {
-    const map = new Map<string, string>();
-    donors.forEach((d) => {
-      if (d.projectId && d.projectName) {
-        map.set(d.projectId, d.projectName);
-      }
-    });
-    return Array.from(map.entries()).sort((a, b) => a[1].localeCompare(b[1], 'ar'));
-  }, [donors]);
-
   const hasFilters = statusFilter || projectFilter || searchQuery;
 
   return (

@@ -48,12 +48,15 @@ export function useOrganizationDonors(): UseOrganizationDonorsReturn {
         offset: 0,
       });
 
-      const payload = (res.data as any)?.data ?? res.data;
-      const data = payload ?? res.data;
+      // apiClient returns { success, data } where data is the raw API body
+      // Raw body: { success: true, data: [...donors], total: N }
+      const body = res.data as any;
+      const donorsData = Array.isArray(body?.data) ? body.data : [];
+      const totalCount = body?.total ?? 0;
 
       if (res.success) {
-        setDonors(data?.data ?? []);
-        setTotal(data?.total ?? 0);
+        setDonors(donorsData);
+        setTotal(totalCount);
       } else {
         throw new Error(res.message || 'فشل تحميل بيانات الجهات المانحة');
       }

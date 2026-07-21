@@ -1,6 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Building2 } from 'lucide-react';
 import { useOrganizationDonors } from '@/api/hooks/useOrganizationDonors';
+import { projectService } from '@/api/services/project-service';
 import { OrganizationDonorMatch } from '@/api/services/project-service';
 import { OrganizationDonorsFilters } from './OrganizationDonorsFilters';
 import { OrganizationDonorsTable } from './OrganizationDonorsTable';
@@ -18,9 +19,29 @@ export function OrganizationDonorsPage() {
     refetch,
   } = useOrganizationDonors();
 
+  const [projects, setProjects] = useState<{ id: string; name: string }[]>([]);
   const [statusFilter, setStatusFilter] = useState('');
   const [projectFilter, setProjectFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  // Fetch projects for the dropdown
+  useEffect(() => {
+    const loadProjects = async () => {
+      try {
+        const res = await projectService.getProjects({ page: 1, limit: 100 });
+        const body = res.data as any;
+        const list = body?.data ?? [];
+        setProjects(
+          list.map((p: any) => ({ id: p.id, name: p.name })).sort((a: any, b: any) =>
+            a.name.localeCompare(b.name, 'ar')
+          )
+        );
+      } catch (err) {
+        // silently fail — projects dropdown is optional
+      }
+    };
+    loadProjects();
+  }, []);
 
   // Client-side filtering
   const filteredDonors = useMemo(() => {
@@ -86,7 +107,7 @@ export function OrganizationDonorsPage() {
 
       {/* Filters */}
       <OrganizationDonorsFilters
-        donors={donors}
+        projects={projects}
         statusFilter={statusFilter}
         projectFilter={projectFilter}
         searchQuery={searchQuery}
