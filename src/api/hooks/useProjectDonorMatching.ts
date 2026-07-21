@@ -1,10 +1,10 @@
 /**
  * useProjectDonorMatching Hook
  *
- * Automatically executes AI donor matching for a given project ID on mount.
+ * Loads existing donor matches + optionally runs AI donor matching.
  */
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { projectService, MatchDonorsResponse } from '@/api/services/project-service';
 import { ApiResponse, ApiError } from '@/api/types';
 import { toast } from 'sonner';
@@ -13,6 +13,7 @@ export interface UseProjectDonorMatchingReturn {
   matchData: MatchDonorsResponse | null;
   isMatching: boolean;
   error: string | null;
+  refetch: () => void;
 }
 
 const getArabicMatchError = (error: unknown): string => {
@@ -54,8 +55,13 @@ export function useProjectDonorMatching(
   const [matchData, setMatchData] = useState<MatchDonorsResponse | null>(null);
   const [isMatching, setIsMatching] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [trigger, setTrigger] = useState(0);
 
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  const refetch = useCallback(() => {
+    setTrigger((t) => t + 1);
+  }, []);
 
   useEffect(() => {
     if (!projectId) return;
@@ -73,21 +79,52 @@ export function useProjectDonorMatching(
       setError(null);
 
       try {
-        const res: ApiResponse<MatchDonorsResponse> = await projectService.matchDonors(
+        // Load existing matches first
+        const existingRes = await projectService.getDonorMatches(projectId, undefined, {
+          signal: controller.signal,
+        });
+
+        // Extract resultId from existing matches first
+        const existingPayload = (existingRes.data as any)?.data ?? (existingRes.data as any)?.data?.data ?? (existingRes.data as any);
+        const existingDonors = Array.isArray(existingPayload) ? existingPayload : (existingPayload?.donors ?? []);
+        let resultId = existingDonors?.[0]?.matchingResultId || existingDonors?.[0]?.resultId || '';
+        let donors: any[] = existingDonors;
+
+        // Run AI matching to get fresh results + resultId
+        const aiRes: ApiResponse<MatchDonorsResponse> = await projectService.matchDonors(
           projectId,
           undefined,
           { signal: controller.signal }
         );
 
-        const payload = (res.data as { data?: MatchDonorsResponse })?.data ?? res.data;
-        const data = payload ?? res.data;
+        // Unwrap the response: apiClient returns { success, data }, and data is the raw API body
+        // The raw API body is: { success: true, data: { id, projectId, cached, donors, ... } }
+        const apiBody = aiRes.data as any;
+        const raw = apiBody?.data ?? apiBody;
+        const data: MatchDonorsResponse | null = raw ?? null;
+
+        if (data) {
+          // The resultId is in data.id (the matching result ID)
+          const aiResultId = data.id || (data as any)?.id || '';
+          if (aiResultId) {
+            resultId = aiResultId;
+          }
+
+          // Merge: existing donors + AI donors, deduplicate by id
+          const existingIds = new Set(existingDonors.map((d: any) => d.id));
+          const newDonors = (data.donors || []).filter((d) => !existingIds.has(d.id));
+          donors = [...existingDonors, ...newDonors];
+        }
 
         if (!cancelled) {
-          if (data) {
-            setMatchData(data);
-            toast.success(`تم العثور على ${data.donors?.length ?? 0} جهات مانحة متطابقة.`);
-          } else {
-            setError('لم يتم العثور على نتائج.');
+          setMatchData({
+            projectId: projectId,
+            resultId,
+            searchParameters: data?.searchParameters || { keywords: [], fundingAreas: [], locations: [], query: '' },
+            donors,
+          });
+          if (data?.donors?.length) {
+            toast.success(`تم العثور على ${data.donors.length} جهات مانحة متطابقة.`);
           }
         }
       } catch (err: any) {
@@ -118,9 +155,9 @@ export function useProjectDonorMatching(
       }
       controller.abort();
     };
-  }, [projectId]);
+  }, [projectId, trigger]);
 
-  return { matchData, isMatching, error };
+  return { matchData, isMatching, error, refetch };
 }
 
 export default useProjectDonorMatching;

@@ -57,20 +57,59 @@ export interface MatchDonorsSearchParameters {
 
 export interface MatchDonorsDonor {
   id: string;
+  matchingResultId?: string;
+  resultId?: string;
   name: string;
   description: string;
   matchingScore: number;
   url: string;
-  source: 'online' | 'offline';
+  source: 'online' | 'offline' | 'ONLINE' | 'OFFLINE' | 'MANUAL';
   status?: string | null;
   hasGeneratedPlan?: boolean;
   planFileUrl?: string | null;
 }
 
 export interface MatchDonorsResponse {
+  id?: string;               // matchingResultId from the backend
   projectId: string;
+  resultId?: string;
+  matchingResultId?: string;
+  cached?: boolean;
+  createdAt?: string;
   searchParameters: MatchDonorsSearchParameters;
   donors: MatchDonorsDonor[];
+}
+
+export interface DonorSubmissionHistoryItem {
+  id: string;
+  action: string;
+  fromStatus?: string;
+  toStatus?: string;
+  message?: string;
+  details?: Record<string, unknown>;
+  actorId: string;
+  createdAt: string;
+}
+
+export interface UpdateDonorMatchStatusPayload {
+  status: string;
+  proposalSubmissionDate?: string;
+  responseNotes?: string;
+  responseReceivedAt?: string;
+  sentProjectDocumentId?: string;
+  message?: string;
+}
+
+export interface CreateManualDonorPayload {
+  name: string;
+  description?: string;
+  website?: string;
+  matchingScore?: number;
+}
+
+export interface SendPlanToDonorPayload {
+  projectDocumentId: string;
+  message?: string;
 }
 
 export interface ProjectFilters {
@@ -612,6 +651,70 @@ export class ProjectService {
     config?: RequestConfig
   ): Promise<ApiResponse<{ success: boolean; message: string; projectId: string; newStatus: string; conversationId: string }>> {
     return apiClient.post(`/api/v1/projects/${id}/complete`, undefined, config);
+  }
+
+  /**
+   * List existing donor matches for a project.
+   * GET /api/v1/projects/:id/donor-matches
+   */
+  async getDonorMatches(
+    projectId: string,
+    options?: { status?: string; limit?: number; offset?: number }
+  ): Promise<ApiResponse<{ donors: MatchDonorsDonor[]; total: number }>> {
+    return apiClient.get(`/api/v1/projects/${projectId}/donor-matches`, {
+      params: options,
+    });
+  }
+
+  /**
+   * Update donor match status.
+   * PATCH /api/v1/projects/donor-matches/:matchId/status
+   */
+  async updateDonorMatchStatus(
+    matchId: string,
+    payload: UpdateDonorMatchStatusPayload
+  ): Promise<ApiResponse<any>> {
+    return apiClient.patch(`/api/v1/projects/donor-matches/${matchId}/status`, payload);
+  }
+
+  /**
+   * Add a manual donor match.
+   * POST /api/v1/projects/donor-matches/:resultId
+   */
+  async addManualDonor(
+    resultId: string,
+    payload: CreateManualDonorPayload
+  ): Promise<ApiResponse<any>> {
+    return apiClient.post(`/api/v1/projects/donor-matches/${resultId}`, payload);
+  }
+
+  /**
+   * Get submission history for a donor match.
+   * GET /api/v1/projects/donor-matches/:matchId/history
+   */
+  async getDonorMatchHistory(
+    matchId: string
+  ): Promise<ApiResponse<{ history: DonorSubmissionHistoryItem[] }>> {
+    return apiClient.get(`/api/v1/projects/donor-matches/${matchId}/history`);
+  }
+
+  /**
+   * Record sending a plan to a donor.
+   * POST /api/v1/projects/donor-matches/:matchId/send-plan
+   */
+  async sendPlanToDonor(
+    matchId: string,
+    payload: SendPlanToDonorPayload
+  ): Promise<ApiResponse<any>> {
+    return apiClient.post(`/api/v1/projects/donor-matches/${matchId}/send-plan`, payload);
+  }
+
+  /**
+   * Soft-delete a donor match.
+   * DELETE /api/v1/projects/donor-matches/:matchId
+   */
+  async deleteDonorMatch(matchId: string): Promise<ApiResponse<any>> {
+    return apiClient.delete(`/api/v1/projects/donor-matches/${matchId}`);
   }
 }
 
