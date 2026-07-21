@@ -69,6 +69,7 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'project-management-activity',
     'project-management-reporting',
     'pricing',
+    'organization-donors',
     'collaboration',
   ],
 };

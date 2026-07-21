@@ -30,6 +30,7 @@ export function DashboardLayout() {
     '/dashboard/project-management': 'project-management',
     '/dashboard/collaboration': 'collaboration',
     '/dashboard/donors': 'donors',
+    '/dashboard/organization-donors': 'organization-donors',
     '/dashboard/incubator-overview': 'incubator-overview',
     '/dashboard/charity-analytics': 'charity-analytics',
     '/dashboard/project-analytics': 'project-analytics',

@@ -29,6 +29,7 @@ export const MENU_ITEMS_FOR_GUARD: MenuItemDefinition[] = [
   { id: 'project-management-activity', label: 'نشاط المشروع', path: '/dashboard/project-management/activity' },
   { id: 'project-management-reporting', label: 'تقارير المشاريع', path: '/dashboard/project-management/reporting' },
   { id: 'donors', label: 'قاعدة الجهات المانحة', path: '/dashboard/donors' },
+  { id: 'organization-donors', label: 'الجهات المانحة', path: '/dashboard/organization-donors' },
   { id: 'pricing', label: 'الباقات والأسعار', path: '/dashboard/pricing' },
   { id: 'donor-matching', label: 'التطابق الذكي مع المانحين', path: '/dashboard/donor-matching' },
   { id: 'manage-org', label: 'إدارة تفعيل الجهات', path: '/dashboard/manage/org' },

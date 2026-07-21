@@ -56,6 +56,7 @@ import { MatchAnalysisPage } from './pages/donor-matching/MatchAnalysisPage';
 import { FundingReadinessAssessmentPage } from './pages/donor-matching/FundingReadinessAssessmentPage';
 import { SubmissionPreparationPage } from './pages/donor-matching/SubmissionPreparationPage';
 import { MatchingAnalyticsPage } from './pages/donor-matching/MatchingAnalyticsPage';
+import { OrganizationDonorsPage } from './pages/organization-donors/OrganizationDonorsPage';
 import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard';
 import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
@@ -591,6 +592,14 @@ export const router = createBrowserRouter([
           {
             path: 'operations-analytics',
             Component: OperationsPerformanceDashboard,
+          },
+          {
+            path: 'organization-donors',
+            element: (
+              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                <OrganizationDonorsPage />
+              </RoleRouteGuard>
+            ),
           },
           {
             path: 'donor-matching',

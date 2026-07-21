@@ -112,6 +112,37 @@ export interface SendPlanToDonorPayload {
   message?: string;
 }
 
+export interface OrganizationDonorMatch {
+  id: string;
+  matchingResultId: string;
+  donorId: string | null;
+  name: string;
+  description: string;
+  website: string;
+  source: string;
+  status: string;
+  matchingScore: number;
+  proposalSubmissionDate: string | null;
+  responseNotes: string | null;
+  responseReceivedAt: string | null;
+  projectDocumentId: string | null;
+  sentProjectDocumentId: string | null;
+  isDeleted: boolean;
+  createdAt: string;
+  updatedAt: string;
+  projectId: string;
+  projectName: string;
+  projectBudget: number;
+  projectCurrencyCode: string;
+  donor?: {
+    id: string;
+    name: string;
+    type: string;
+    description: string | null;
+    website: string | null;
+  } | null;
+}
+
 export interface ProjectFilters {
   page?: number;
   limit?: number;
@@ -715,6 +746,18 @@ export class ProjectService {
    */
   async deleteDonorMatch(matchId: string): Promise<ApiResponse<any>> {
     return apiClient.delete(`/api/v1/projects/donor-matches/${matchId}`);
+  }
+
+  /**
+   * List all submitted donor matches for the current user's organization.
+   * GET /api/v1/projects/organization/donor-matches
+   */
+  async getOrganizationDonorMatches(
+    options?: { status?: string; projectId?: string; search?: string; limit?: number; offset?: number }
+  ): Promise<ApiResponse<{ data: OrganizationDonorMatch[]; total: number }>> {
+    return apiClient.get('/api/v1/projects/organization/donor-matches', {
+      params: options,
+    });
   }
 }
 

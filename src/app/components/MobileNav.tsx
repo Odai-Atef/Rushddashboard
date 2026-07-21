@@ -21,7 +21,8 @@ import {
   ClipboardCheck,
   UserPlus,
   Brain,
-  MessageSquare
+  MessageSquare,
+  Building2
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
@@ -42,6 +43,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management/list' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
+    { id: 'organization-donors', label: 'الجهات المانحة', icon: Building2, path: '/dashboard/organization-donors' },
     { id: 'manage-org', label: 'إدارة تفعيل الجهات', icon: Users, path: '/dashboard/manage/org' },
     { id: 'pricing', label: 'الباقات والأسعار', icon: Package, path: '/dashboard/pricing' },
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
