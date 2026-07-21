@@ -758,9 +758,13 @@ export function ProjectDetailsPage() {
                   <Building2 className="w-4 h-4" />
                   {getOrganizationName(project)}
                 </span>
-                {project.packageName && (
+                {project.packageName ? (
                   <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 rounded-full text-xs font-medium">
                     {project.packageName}
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full text-xs font-medium">
+                    غير محددة
                   </span>
                 )}
               </div>
