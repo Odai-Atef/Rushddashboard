@@ -66,8 +66,8 @@ export function OrganizationDonorsFilters({
           className="px-3 py-2.5 text-sm border border-border rounded-lg bg-background text-foreground min-w-[200px]"
         >
           <option value="">جميع المشاريع</option>
-          {projects.map(([id, name]) => (
-            <option key={id} value={id}>{name}</option>
+          {projects.map((project) => (
+            <option key={project.id} value={project.id}>{project.name}</option>
           ))}
         </select>
 
