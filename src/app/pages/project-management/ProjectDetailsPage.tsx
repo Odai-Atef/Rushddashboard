@@ -20,6 +20,7 @@ import {
   FileText,
   Upload,
   MessageSquare,
+  CheckCircle,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -140,6 +141,25 @@ export function ProjectDetailsPage() {
     });
     if (confirmed && projectId) {
       navigate(`/dashboard/donor-matching/recommended/${projectId}`);
+    }
+  };
+
+  const handleCompleteProject = async () => {
+    const confirmed = await confirm({
+      title: 'هل أنت متأكد من إكمال هذا المشروع؟',
+      description: 'سيتم إغلاق المشروع وتحويل حالته إلى مكتمل.',
+    });
+    if (!confirmed) return;
+    try {
+      const res = await projectService.completeProject(projectId!);
+      if (res.success) {
+        toast.success(res.data?.message || 'تم إكمال المشروع بنجاح');
+        refetch();
+      } else {
+        toast.error(res.message || 'فشل إكمال المشروع');
+      }
+    } catch (err: any) {
+      toast.error(err?.message || 'حدث خطأ أثناء إكمال المشروع');
     }
   };
 
@@ -711,6 +731,14 @@ export function ProjectDetailsPage() {
   const showOfferReviewButton = isEntityManager && rawStatus === 'OFFER_REVIEW';
   const showSendDesignToOwnerButton = isProjectManager && rawStatus === 'DESIGN_TEAM_APPROVAL';
 
+  const packageStatusMap: Record<string, string> = {
+    'cmr405xny0076h5yqd1pubrry': 'DESIGN_APPROVED',   // Launch
+    'cmr405xo00077h5yqjnibx86p': 'SUBMITTED_DONOR',   // Growth
+    'cmr405xo10078h5yqqcrkrf0': 'EXECUTION',          // Impact
+  };
+  const showCompleteButton = isProjectManager && !!project?.packageId &&
+    packageStatusMap[project.packageId] === rawStatus;
+
   return (
     <div className="min-h-full bg-gray-50 p-6">
       <div className="space-y-6">
@@ -839,6 +867,15 @@ export function ProjectDetailsPage() {
                 >
                   <FileText className="w-5 h-5" />
                   اعتماد عرض السعر
+                </button>
+              )}
+              {showCompleteButton && (
+                <button
+                  onClick={handleCompleteProject}
+                  className="px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors flex items-center gap-2"
+                >
+                  <CheckCircle className="w-5 h-5" />
+                  إكمال المشروع
                 </button>
               )}
             </div>

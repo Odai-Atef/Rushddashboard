@@ -123,6 +123,8 @@ export interface ProjectDetails extends Project {
   aiStudy?: string;
   generatedStudy?: string;
   presentationResponseText?: string;
+  packageId?: string | null;
+  packageName?: string | null;
 }
 
 export interface CreateProjectDto {

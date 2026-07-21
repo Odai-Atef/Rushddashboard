@@ -602,6 +602,17 @@ export class ProjectService {
       }
     );
   }
+
+  /**
+   * Complete a project (mark as COMPLETED).
+   * POST /api/v1/projects/:id/complete
+   */
+  async completeProject(
+    id: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<{ success: boolean; message: string; projectId: string; newStatus: string; conversationId: string }>> {
+    return apiClient.post(`/api/v1/projects/${id}/complete`, undefined, config);
+  }
 }
 
 // Export singleton instance
