@@ -68,6 +68,10 @@ export function ProjectListPage() {
   const [qualificationLoading, setQualificationLoading] = useState(true);
   const [qualificationError, setQualificationError] = useState<string | null>(null);
 
+  // Organization list for project-manager filter
+  const [organizations, setOrganizations] = useState<Array<{ id: string; name: string }>>([]);
+  const [organizationsLoading, setOrganizationsLoading] = useState(false);
+
   useEffect(() => {
     if (isProjectManager) {
       setQualificationLoading(false);
@@ -105,6 +109,44 @@ export function ProjectListPage() {
     return () => {
       cancelled = true;
     };
+  }, [isProjectManager]);
+
+  // Load organizations for project-manager filter dropdown
+  useEffect(() => {
+    if (!isProjectManager) {
+      setOrganizations([]);
+      return;
+    }
+    let cancelled = false;
+    const loadOrgs = async () => {
+      setOrganizationsLoading(true);
+      try {
+        const res = await apiClient.get<{
+          success: boolean;
+          data: Array<{
+            id: string;
+            fullName: string;
+            email: string;
+            organization: { id: string; name: string } | null;
+          }>;
+          total: number;
+        }>('/api/v1/users/project-managers/organizations');
+        if (cancelled) return;
+        const data = res.data?.data ?? [];
+        const orgs = data
+          .filter((item) => item.organization)
+          .map((item) => ({ id: item.organization!.id, name: item.organization!.name }));
+        // Deduplicate by org id
+        const uniqueOrgs = Array.from(new Map(orgs.map((o) => [o.id, o])).values());
+        setOrganizations(uniqueOrgs);
+      } catch {
+        if (!cancelled) setOrganizations([]);
+      } finally {
+        if (!cancelled) setOrganizationsLoading(false);
+      }
+    };
+    loadOrgs();
+    return () => { cancelled = true; };
   }, [isProjectManager]);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -626,6 +668,27 @@ export function ProjectListPage() {
                     ))}
                   </select>
                 </div>
+                {isProjectManager && (
+                  <div>
+                    <label className="block text-sm font-medium mb-2">الجهة</label>
+                    <select
+                      value={pendingFilters.organizationId || 'all'}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        const orgId = value === 'all' ? undefined : value;
+                        setFilters({ organizationId: orgId });
+                        void applyFilters({ organizationId: orgId });
+                      }}
+                      disabled={organizationsLoading}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                    >
+                      <option value="all">جميع الجهات</option>
+                      {organizations.map((org) => (
+                        <option key={org.id} value={org.id}>{org.name}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
               </div>
 
               <div className="flex justify-end gap-3 mt-4">

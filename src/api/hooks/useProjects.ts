@@ -174,8 +174,8 @@ export function useProjects(): UseProjectsReturn {
     }));
   }, []);
 
-  const applyFilters = useCallback(async (override: Partial<ProjectFilters> = {}) => {
-    const newFilters = { ...state.pendingFilters, ...override, page: DEFAULT_PAGE };
+  const applyFilters = useCallback(async (filters?: ProjectFilters) => {
+    const newFilters = { ...(filters ?? state.pendingFilters), page: DEFAULT_PAGE };
     await load(newFilters, true);
   }, [state.pendingFilters, load]);
 

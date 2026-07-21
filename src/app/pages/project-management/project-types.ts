@@ -173,6 +173,7 @@ export interface ProjectFilters {
   page?: number;
   limit?: number;
   status?: string;
+  organizationId?: string;
   search?: string;
 }
 

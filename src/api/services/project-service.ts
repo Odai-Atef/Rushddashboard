@@ -353,6 +353,7 @@ function buildProjectQueryParams(filters: ProjectFilters): Record<string, string
   if (filters.limit !== undefined) params.limit = filters.limit;
   if (filters.status) params.status = filters.status.replace(/-/g, '_').toUpperCase();
   if (filters.search) params.search = filters.search;
+  if (filters.organizationId) params.organizationId = filters.organizationId;
 
   return params;
 }
