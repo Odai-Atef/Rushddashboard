@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import { useNavigate } from 'react-router';
 import {
   Users,
   Search,
@@ -16,6 +17,7 @@ import {
   Calendar,
   ArrowUp,
   ArrowDown,
+  Info,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import apiClient from '@/api/client';
@@ -175,6 +177,7 @@ function SortableHeader({
 }
 
 export function UserActivationPage() {
+  const navigate = useNavigate();
   const {
     users,
     pagination,
@@ -467,15 +470,30 @@ export function UserActivationPage() {
                         <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.updatedAt)}</div>
                       </TableCell>
                       <TableCell>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleOpenModal(user)}
-                          className="flex items-center gap-1.5"
-                        >
-                          <Eye className="w-4 h-4" />
-                          عرض
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleOpenModal(user)}
+                            className="flex items-center gap-1.5"
+                          >
+                            <Eye className="w-4 h-4" />
+                            عرض
+                          </Button>
+                          {user.organization?.id && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              title="بيانات الجهة المستخرجة"
+                              onClick={() =>
+                                navigate(`/dashboard/manage/org/${user.organization.id}/details`)
+                              }
+                              className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                            >
+                              <Info className="w-4 h-4" />
+                            </Button>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))}

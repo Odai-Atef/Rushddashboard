@@ -95,6 +95,39 @@ export interface RequestActionPayload {
   comment: string;
 }
 
+export type ExtractionStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'FAILED';
+
+export interface OrganizationInformation {
+  id: string;
+  organizationId: string;
+  organizationName: string | null;
+  licenseNumber: string | null;
+  organizationType: string | null;
+  region: string | null;
+  city: string | null;
+  approvedActivities: string[] | null;
+  targetGroups: string[] | null;
+  supervisingAuthority: string | null;
+  mainClassification: string | null;
+  subClassification1: string | null;
+  subClassification2: string | null;
+  organizationObjectives: string[] | null;
+  registrationDate: string | null;
+  licenseExpiryDate: string | null;
+  unifiedNumber700: string | null;
+  boardAppointmentDate: string | null;
+  boardEndDate: string | null;
+  chairmanName: string | null;
+  chairmanNationalId: string | null;
+  viceChairmanName: string | null;
+  viceChairmanNationalId: string | null;
+  extractionStatus: ExtractionStatus;
+  extractionError: string | null;
+  extractedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
 /**
  * Build clean query params by removing empty/undefined values.
  */
@@ -163,6 +196,20 @@ export class UserService {
     return apiClient.post<ApproveUserResponse>(
       `${this.baseEndpoint}/project-managers/${id}/request-action`,
       payload,
+      config
+    );
+  }
+
+  /**
+   * Get extracted organization information for project manager review.
+   * GET /api/v1/users/project-managers/organizations/:organizationId/information
+   */
+  async getOrganizationInformation(
+    organizationId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<{ data: OrganizationInformation | null }>> {
+    return apiClient.get<{ data: OrganizationInformation | null }>(
+      `${this.baseEndpoint}/project-managers/organizations/${organizationId}/information`,
       config
     );
   }

@@ -61,6 +61,7 @@ import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard'
 import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
 import { UserActivationPage } from './pages/admin/UserActivationPage';
+import { OrganizationInformationPage } from './pages/admin/OrganizationInformationPage';
 import { PaymentCallbackPage } from './pages/payment/PaymentCallbackPage';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { PackagesPage } from './pages/public/PackagesPage';
@@ -629,6 +630,14 @@ export const router = createBrowserRouter([
                 element: (
                   <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
                     <UserActivationPage />
+                  </RoleRouteGuard>
+                ),
+              },
+              {
+                path: 'org/:organizationId/details',
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OrganizationInformationPage />
                   </RoleRouteGuard>
                 ),
               },

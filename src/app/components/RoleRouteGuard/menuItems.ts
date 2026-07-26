@@ -33,5 +33,6 @@ export const MENU_ITEMS_FOR_GUARD: MenuItemDefinition[] = [
   { id: 'pricing', label: 'الباقات والأسعار', path: '/dashboard/pricing' },
   { id: 'donor-matching', label: 'التطابق الذكي مع المانحين', path: '/dashboard/donor-matching' },
   { id: 'manage-org', label: 'إدارة تفعيل الجهات', path: '/dashboard/manage/org' },
+  { id: 'manage-org-details', label: 'بيانات الجهة المستخرجة', path: '/dashboard/manage/org/details' },
   { id: 'collaboration', label: 'التعاون والتواصل', path: '/dashboard/collaboration' },
 ];
