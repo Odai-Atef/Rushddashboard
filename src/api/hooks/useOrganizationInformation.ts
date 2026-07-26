@@ -12,8 +12,10 @@ import { ApiError } from '@/api/types';
 export interface UseOrganizationInformationReturn {
   data: OrganizationInformation | null;
   isLoading: boolean;
+  isSyncing: boolean;
   error: string | null;
   refetch: () => Promise<void>;
+  sync: () => Promise<void>;
 }
 
 const getErrorMessage = (error: unknown): string => {
@@ -46,6 +48,7 @@ export function useOrganizationInformation(
 ): UseOrganizationInformationReturn {
   const [data, setData] = useState<OrganizationInformation | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const refetch = useCallback(async () => {
@@ -68,9 +71,28 @@ export function useOrganizationInformation(
     }
   }, [organizationId]);
 
+  const sync = useCallback(async () => {
+    if (!organizationId) {
+      setError('لا يوجد معرف جهة متاح لتشغيل المزامنة.');
+      return;
+    }
+
+    setIsSyncing(true);
+    setError(null);
+
+    try {
+      const response = await userService.triggerOrganizationInformationExtraction(organizationId);
+      setData(response.data.data ?? null);
+    } catch (err) {
+      setError(getErrorMessage(err));
+    } finally {
+      setIsSyncing(false);
+    }
+  }, [organizationId]);
+
   useEffect(() => {
     refetch();
   }, [refetch]);
 
-  return { data, isLoading, error, refetch };
+  return { data, isLoading, isSyncing, error, refetch, sync };
 }

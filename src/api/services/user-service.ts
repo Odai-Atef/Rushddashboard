@@ -66,9 +66,20 @@ export interface AdminUserFilters {
   page?: number;
   limit?: number;
   search?: string;
+  status?: string;
   sortBy?: string;
   sortOrder?: 'asc' | 'desc';
 }
+
+export const USER_STATUS_OPTIONS = [
+  { value: '', label: 'الكل' },
+  { value: 'ACTIVE', label: 'بانتظار التفعيل' },
+  { value: 'APPROVED', label: 'مفعل' },
+  { value: 'NEED_ACTION_FROM_ORG', label: 'مطلوب إكمال مستندات' },
+  { value: 'INACTIVE', label: 'غير نشط' },
+  { value: 'PENDING', label: 'معلق' },
+  { value: 'SUSPENDED', label: 'موقوف' },
+];
 
 export interface ApproveUserResponse {
   id: string;
@@ -139,6 +150,7 @@ function buildAdminUsersQueryParams(
   if (filters.page !== undefined) params.page = filters.page;
   if (filters.limit !== undefined) params.limit = filters.limit;
   if (filters.search?.trim()) params.search = filters.search.trim();
+  if (filters.status?.trim()) params.status = filters.status.trim();
   if (filters.sortBy?.trim()) params.sortBy = filters.sortBy.trim();
   if (filters.sortOrder) params.sortOrder = filters.sortOrder;
 
@@ -210,6 +222,21 @@ export class UserService {
   ): Promise<ApiResponse<{ data: OrganizationInformation | null }>> {
     return apiClient.get<{ data: OrganizationInformation | null }>(
       `${this.baseEndpoint}/project-managers/organizations/${organizationId}/information`,
+      config
+    );
+  }
+
+  /**
+   * Trigger AI OCR extraction for an organization.
+   * POST /api/v1/users/project-managers/organizations/:organizationId/extract
+   */
+  async triggerOrganizationInformationExtraction(
+    organizationId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<{ data: OrganizationInformation | null }>> {
+    return apiClient.post<{ data: OrganizationInformation | null }>(
+      `${this.baseEndpoint}/project-managers/organizations/${organizationId}/extract`,
+      {},
       config
     );
   }

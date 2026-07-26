@@ -18,11 +18,14 @@ import {
   ArrowUp,
   ArrowDown,
   Info,
+  Filter,
+  RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import apiClient from '@/api/client';
 import { useAdminUsers } from '@/api/hooks/useAdminUsers';
-import { AdminUser, OrganizationDocument, userService } from '@/api/services/user-service';
+import { useOrganizationInformation } from '@/api/hooks/useOrganizationInformation';
+import { AdminUser, OrganizationDocument, userService, USER_STATUS_OPTIONS } from '@/api/services/user-service';
 import { ApiError } from '@/api/types';
 import { Button } from '@/app/components/ui/button';
 import {
@@ -43,6 +46,7 @@ import {
 } from '@/app/components/ui/dialog';
 import { Badge } from '@/app/components/ui/badge';
 import { DonorsPagination } from '@/app/components/donors/DonorsPagination';
+import { OrganizationInformationDisplay, getExtractionStatusMeta } from '@/app/components/OrganizationInformationDisplay';
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50];
 
@@ -182,6 +186,7 @@ export function UserActivationPage() {
     users,
     pagination,
     pendingSearch,
+    pendingStatus,
     isLoading,
     error,
     sortBy,
@@ -191,15 +196,28 @@ export function UserActivationPage() {
     setSearch,
     applySearch,
     clearSearch,
+    setStatus,
+    clearStatus,
     refetch,
     toggleSort,
   } = useAdminUsers();
 
   const [selectedUser, setSelectedUser] = useState<AdminUser | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOrgModalOpen, setIsOrgModalOpen] = useState(false);
+  const [modalOrgId, setModalOrgId] = useState<string | undefined>(undefined);
   const [actionMode, setActionMode] = useState<'view' | 'reject' | 'confirm-approve' | 'confirm-reject'>('view');
   const [rejectComment, setRejectComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    data: orgInfo,
+    isLoading: orgInfoLoading,
+    isSyncing: orgInfoSyncing,
+    error: orgInfoError,
+    refetch: refetchOrgInfo,
+    sync: syncOrgInfo,
+  } = useOrganizationInformation(modalOrgId);
 
   const handleOpenModal = (user: AdminUser) => {
     setSelectedUser(user);
@@ -213,6 +231,19 @@ export function UserActivationPage() {
     setSelectedUser(null);
     setActionMode('view');
     setRejectComment('');
+  };
+
+  const handleOpenOrgModal = (user: AdminUser) => {
+    const orgId = user.organization?.id;
+    setSelectedUser(user);
+    setModalOrgId(orgId);
+    setIsOrgModalOpen(true);
+  };
+
+  const handleCloseOrgModal = () => {
+    setIsOrgModalOpen(false);
+    setSelectedUser(null);
+    setModalOrgId(undefined);
   };
 
   const openDirectFileUrl = (fileUrl: string, fileName: string) => {
@@ -351,10 +382,17 @@ export function UserActivationPage() {
 
   const renderEmpty = () => (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center">
-      <p className="text-gray-600 mb-4">لا يوجد مستخدمون مطابقون للبحث.</p>
-      <Button variant="outline" onClick={() => clearSearch()}>
-        مسح البحث
-      </Button>
+      <p className="text-gray-600 mb-4">لا يوجد جهات مطابقة للمعايير المحددة.</p>
+      <div className="flex items-center justify-center gap-2">
+        <Button variant="outline" onClick={() => clearSearch()}>
+          مسح البحث
+        </Button>
+        {pendingStatus && (
+          <Button variant="outline" onClick={() => clearStatus()}>
+            مسح الفلتر
+          </Button>
+        )}
+      </div>
     </div>
   );
 
@@ -386,7 +424,7 @@ export function UserActivationPage() {
           </div>
         </div>
 
-        {/* Search */}
+        {/* Filters */}
         <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
@@ -400,10 +438,24 @@ export function UserActivationPage() {
                 className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
+            <div className="relative min-w-[200px]">
+              <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <select
+                value={pendingStatus}
+                onChange={(e) => setStatus(e.target.value)}
+                className="w-full appearance-none pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+              >
+                {USER_STATUS_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
             <div className="flex gap-2">
               <Button onClick={() => applySearch()}>بحث</Button>
-              {pendingSearch && (
-                <Button variant="outline" onClick={() => clearSearch()}>
+              {(pendingSearch || pendingStatus) && (
+                <Button variant="outline" onClick={() => { clearSearch(); clearStatus(); }}>
                   مسح
                 </Button>
               )}
@@ -433,7 +485,7 @@ export function UserActivationPage() {
                     <SortableHeader column="status" label="الحالة" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="organization.createdAt" label="تاريخ الإنشاء" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="organization.updatedAt" label="تاريخ التحديث" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
-                    <TableHead className="text-right"></TableHead>
+                    <TableHead className="text-right whitespace-nowrap">الإجراءات</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -469,7 +521,7 @@ export function UserActivationPage() {
                         <div>{formatDate(user.organization?.updatedAt)}</div>
                         <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.updatedAt)}</div>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="whitespace-nowrap">
                         <div className="flex items-center gap-2">
                           <Button
                             variant="outline"
@@ -482,6 +534,18 @@ export function UserActivationPage() {
                           </Button>
                           {user.organization?.id && (
                             <Button
+                              variant="outline"
+                              size="sm"
+                              title="عرض بيانات الجهة الإضافية"
+                              onClick={() => handleOpenOrgModal(user)}
+                              className="flex items-center gap-1.5"
+                            >
+                              <Building2 className="w-4 h-4" />
+                              عرض الجهة
+                            </Button>
+                          )}
+                          {user.organization?.id && (
+                            <Button
                               variant="ghost"
                               size="icon"
                               title="بيانات الجهة المستخرجة"
@@ -492,6 +556,11 @@ export function UserActivationPage() {
                             >
                               <Info className="w-4 h-4" />
                             </Button>
+                          )}
+                          {!user.organization?.id && (
+                            <span className="text-xs text-gray-400" title="لا توجد جهة مرتبطة">
+                              لا توجد جهة
+                            </span>
                           )}
                         </div>
                       </TableCell>
@@ -784,6 +853,77 @@ export function UserActivationPage() {
             {(actionMode === 'confirm-approve' || actionMode === 'confirm-reject') && (
               <Button variant="outline" onClick={() => setActionMode('view')} disabled={isSubmitting}>
                 إلغاء
+              </Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Organization Extra Details Modal */}
+      <Dialog open={isOrgModalOpen} onOpenChange={setIsOrgModalOpen}>
+        <DialogContent className="max-h-[90vh] overflow-y-auto" style={{ maxWidth: '72rem', width: 'calc(100% - 2rem)' }} dir="rtl">
+          <DialogHeader>
+            <DialogTitle className="text-xl flex items-center gap-2 justify-between">
+              <div className="flex items-center gap-2">
+                <Building2 className="w-5 h-5" />
+                بيانات الجهة المستخرجة بالذكاء الاصطناعي
+              </div>
+              {orgInfo && (
+                <Badge className={getExtractionStatusMeta(orgInfo.extractionStatus).className}>
+                  {(() => {
+                    const StatusIcon = getExtractionStatusMeta(orgInfo.extractionStatus).icon;
+                    return <StatusIcon className="w-3.5 h-3.5 ml-1" />;
+                  })()}
+                  {getExtractionStatusMeta(orgInfo.extractionStatus).label}
+                </Badge>
+              )}
+            </DialogTitle>
+            <DialogDescription>
+              {selectedUser?.organization?.name || selectedUser?.fullName || 'الجهة'}
+            </DialogDescription>
+          </DialogHeader>
+
+          {orgInfoLoading ? (
+            <div className="py-12 flex items-center justify-center gap-2" dir="rtl">
+              <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
+              <span className="text-gray-600">جاري تحميل بيانات الجهة...</span>
+            </div>
+          ) : orgInfoError ? (
+            <div className="py-8 text-center text-red-600" dir="rtl">
+              {orgInfoError}
+            </div>
+          ) : orgInfo ? (
+            <OrganizationInformationDisplay data={orgInfo} />
+          ) : (
+            <div className="py-8 text-center text-gray-600" dir="rtl">
+              لا توجد بيانات مستخرجة لهذه الجهة بعد. اضغط "مزامنة" لاستخراج البيانات من المستندات.
+            </div>
+          )}
+
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={handleCloseOrgModal}>
+              إغلاق
+            </Button>
+            <Button
+              variant="default"
+              onClick={() => syncOrgInfo()}
+              disabled={orgInfoSyncing}
+            >
+              {orgInfoSyncing ? (
+                <Loader2 className="w-4 h-4 ml-1 animate-spin" />
+              ) : (
+                <RefreshCw className="w-4 h-4 ml-1" />
+              )}
+              مزامنة
+            </Button>
+            {modalOrgId && (
+              <Button
+                onClick={() => {
+                  handleCloseOrgModal();
+                  navigate(`/dashboard/manage/org/${modalOrgId}/details`);
+                }}
+              >
+                عرض الصفحة الكاملة
               </Button>
             )}
           </DialogFooter>

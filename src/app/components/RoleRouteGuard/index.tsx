@@ -34,6 +34,11 @@ export function RoleRouteGuard({ menuItems, children }: RoleRouteGuardProps) {
     );
   }
 
+  // Project management pages should be reachable for any authenticated user.
+  if (currentPath === '/dashboard/project-management' || currentPath.startsWith('/dashboard/project-management/')) {
+    return <>{children}</>;
+  }
+
   const allowed = isRouteAllowed(roleSlug, currentPath, menuItems);
 
   if (currentPath === '/dashboard/charity-assessment') {

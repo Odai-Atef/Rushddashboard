@@ -24,6 +24,7 @@ export interface AdminUsersState {
   };
   filters: AdminUserFilters;
   pendingSearch: string;
+  pendingStatus: string;
   isLoading: boolean;
   error: string | null;
   sortBy: string | null;
@@ -36,6 +37,8 @@ export interface UseAdminUsersReturn extends AdminUsersState {
   setSearch: (search: string) => void;
   applySearch: () => Promise<void>;
   clearSearch: () => Promise<void>;
+  setStatus: (status: string) => Promise<void>;
+  clearStatus: () => Promise<void>;
   refetch: () => Promise<void>;
   toggleSort: (column: string) => void;
 }
@@ -85,6 +88,7 @@ export function useAdminUsers(): UseAdminUsersReturn {
     },
     filters: {},
     pendingSearch: '',
+    pendingStatus: '',
     isLoading: false,
     error: null,
     sortBy: null,
@@ -119,6 +123,7 @@ export function useAdminUsers(): UseAdminUsersReturn {
         error: null,
         filters: requestFilters,
         pendingSearch: requestFilters.search ?? '',
+        pendingStatus: requestFilters.status ?? '',
       }));
 
       try {
@@ -189,6 +194,7 @@ export function useAdminUsers(): UseAdminUsersReturn {
     const cleared: AdminUserFilters = {
       page: DEFAULT_PAGE,
       limit: state.filters.limit ?? DEFAULT_LIMIT,
+      status: state.filters.status,
     };
     setState((prev) => ({
       ...prev,
@@ -196,7 +202,34 @@ export function useAdminUsers(): UseAdminUsersReturn {
       pendingSearch: '',
     }));
     await load(cleared);
-  }, [state.filters.limit, load]);
+  }, [state.filters.limit, state.filters.status, load]);
+
+  const setStatus = useCallback(
+    async (status: string) => {
+      const newFilters: AdminUserFilters = {
+        ...state.filters,
+        status,
+        page: DEFAULT_PAGE,
+      };
+      setState((prev) => ({ ...prev, filters: newFilters, pendingStatus: status }));
+      await load(newFilters);
+    },
+    [state.filters, load]
+  );
+
+  const clearStatus = useCallback(async () => {
+    const cleared: AdminUserFilters = {
+      page: DEFAULT_PAGE,
+      limit: state.filters.limit ?? DEFAULT_LIMIT,
+      search: state.filters.search,
+    };
+    setState((prev) => ({
+      ...prev,
+      filters: cleared,
+      pendingStatus: '',
+    }));
+    await load(cleared);
+  }, [state.filters.limit, state.filters.search, load]);
 
   const toggleSort = useCallback(
     (column: string) => {
@@ -237,6 +270,8 @@ export function useAdminUsers(): UseAdminUsersReturn {
     setSearch,
     applySearch,
     clearSearch,
+    setStatus,
+    clearStatus,
     refetch,
     toggleSort,
   };
