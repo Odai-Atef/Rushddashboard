@@ -38,6 +38,7 @@ export interface UserOrganization {
   currentStep: string;
   createdAt: string;
   updatedAt: string;
+  lastEvaluationScore?: number | null;
 }
 
 export interface AdminUser {

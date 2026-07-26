@@ -951,7 +951,7 @@ export function ProjectDetailsPage() {
                   </div>
                   {(project.fundingAreaIds?.length > 0 || project.fundingAreas?.length > 0) && (
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">مجالات العمل</p>
+                      <p className="text-sm text-gray-600 mb-1">مجالات المشاريع</p>
                       <div className="flex flex-wrap gap-2">
                         {(project.fundingAreas || project.fundingAreaIds?.map((id) => ({ id, name: id })) || []).map((area: FundingAreaInfo | { id: string; name: string }) => (
                           <span

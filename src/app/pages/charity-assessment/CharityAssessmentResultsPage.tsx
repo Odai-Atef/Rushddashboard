@@ -1,5 +1,6 @@
 import { useParams, useNavigate } from 'react-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import {
   Award,
   AlertTriangle,
@@ -66,11 +67,29 @@ function getSeverityClasses(severity: string) {
   }
 }
 
+function base64FromUrl(url: string): Promise<string> {
+  return fetch(url)
+    .then((res) => res.blob())
+    .then(
+      (blob) =>
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onloadend = () => resolve((reader.result as string) || '');
+          reader.onerror = reject;
+          reader.readAsDataURL(blob);
+        })
+    );
+}
+
 export function CharityAssessmentResultsPage() {
   const navigate = useNavigate();
   const { organizationId } = useParams<{ organizationId: string }>();
   const { data, isLoading, error, refetch } = useIsivAssessmentResults(organizationId);
   const [documentsMissing, setDocumentsMissing] = useState<boolean | null>(null);
+  const [isExporting, setIsExporting] = useState(false);
+  const [roadmapReady, setRoadmapReady] = useState(false);
+  const reportRef = useRef<HTMLDivElement>(null);
+  const roadmapIframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     if (!organizationId) return;
@@ -90,6 +109,97 @@ export function CharityAssessmentResultsPage() {
     check();
     return () => { cancelled = true; };
   }, [organizationId]);
+
+  useEffect(() => {
+    const onMessage = (event: MessageEvent) => {
+      if (event.data?.type === 'ROADMAP_CAPTURE_READY') {
+        setRoadmapReady(true);
+      }
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, []);
+
+  const waitForRoadmapReady = useCallback(async (timeoutMs = 10000) => {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      if (roadmapReady) return true;
+      await new Promise((r) => setTimeout(r, 200));
+    }
+    return false;
+  }, [roadmapReady]);
+
+  const captureRoadmapElement = useCallback(async () => {
+    const isReady = await waitForRoadmapReady();
+    if (!isReady) {
+      console.warn('Roadmap iframe did not signal ready; skipping roadmap capture');
+      return null;
+    }
+
+    const iframe = roadmapIframeRef.current;
+    if (!iframe?.contentWindow?.document) {
+      console.warn('Roadmap iframe not accessible');
+      return null;
+    }
+    const root = iframe.contentWindow.document.querySelector('[data-capture-root]') as HTMLElement | null;
+    if (!root) {
+      console.warn('Roadmap capture root not found inside iframe');
+      return null;
+    }
+
+    const { toCanvas } = await import('html-to-image');
+    const originalWidth = root.offsetWidth;
+    return toCanvas(root, {
+      pixelRatio: 2,
+      backgroundColor: '#ffffff',
+      cacheBust: true,
+      style: {
+        width: `${originalWidth || 1120}px`,
+        maxWidth: 'none',
+        margin: '0',
+      },
+    });
+  }, [waitForRoadmapReady]);
+
+    const addImageToPdf = (
+    pdf: any,
+    imgData: string,
+    canvasWidth: number,
+    canvasHeight: number,
+    logoBase64: string,
+    logoSize: number,
+    logoX: number,
+    logoY: number,
+    margin: number,
+    pageWidth: number,
+    pageHeight: number,
+    addLogoToFirstPage: boolean
+  ) => {
+    const imgWidth = pageWidth - margin * 2;
+    const imgHeight = (canvasHeight * imgWidth) / canvasWidth;
+    let position = logoY + logoSize + 8;
+    let heightLeft = imgHeight - (pageHeight - position);
+
+    const addLogo = () => {
+      if (!logoBase64) return;
+      try {
+        pdf.addImage(logoBase64, 'PNG', logoX, logoY, logoSize, logoSize);
+      } catch (e) {
+        console.warn('Failed to add logo image to PDF', e);
+      }
+    };
+
+    if (addLogoToFirstPage) addLogo();
+    pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+
+    while (heightLeft > 0) {
+      pdf.addPage();
+      if (addLogoToFirstPage) addLogo();
+      position = heightLeft - imgHeight + logoY + logoSize + 8;
+      pdf.addImage(imgData, 'PNG', margin, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight - logoY - logoSize - 8;
+    }
+  };
 
   if (isLoading || documentsMissing === null) {
     return (
@@ -132,6 +242,122 @@ export function CharityAssessmentResultsPage() {
       </div>
     );
   }
+
+  const handleExportPDF = async () => {
+    if (!reportRef.current) return;
+    setIsExporting(true);
+    try {
+      const [{ toCanvas }, { jsPDF }] = await Promise.all([
+        import('html-to-image'),
+        import('jspdf'),
+      ]);
+
+      let logoBase64 = '';
+      try {
+        logoBase64 = await base64FromUrl('/logo.png');
+      } catch (logoErr) {
+        console.warn('Failed to load logo for PDF export', logoErr);
+      }
+
+      const element = reportRef.current;
+      const sections = Array.from(element.querySelectorAll('[data-report-section]')) as HTMLElement[];
+      if (sections.length === 0) {
+        toast.error('لا توجد أقسام للتصدير');
+        setIsExporting(false);
+        return;
+      }
+
+      const pdf = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+        putOnlyUsedFonts: true,
+        floatPrecision: 16,
+      });
+
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      const margin = 14;
+
+      // Logo centered at top (square aspect ratio)
+      const logoSize = 20;
+      const logoX = (pageWidth - logoSize) / 2;
+      const logoY = 10;
+
+      const filterExcluded = (node: Node) => {
+        if (node instanceof HTMLElement && node.dataset.reportExclude === 'true') {
+          return false;
+        }
+        return true;
+      };
+
+      for (let i = 0; i < sections.length; i++) {
+        const section = sections[i];
+        if (i > 0) pdf.addPage();
+
+        const canvas = await toCanvas(section, {
+          pixelRatio: 2,
+          backgroundColor: '#ffffff',
+          cacheBust: true,
+          filter: filterExcluded,
+          style: {
+            width: `${section.offsetWidth || 1120}px`,
+            maxWidth: 'none',
+            margin: '0',
+          },
+        });
+
+        const imgData = canvas.toDataURL('image/png');
+        addImageToPdf(
+          pdf,
+          imgData,
+          canvas.width,
+          canvas.height,
+          logoBase64,
+          logoSize,
+          logoX,
+          logoY,
+          margin,
+          pageWidth,
+          pageHeight,
+          i === 0
+        );
+      }
+
+      // Append roadmap page(s) if the hidden iframe has loaded
+      try {
+        const roadmapCanvas = await captureRoadmapElement();
+        if (roadmapCanvas) {
+          const roadmapImgData = roadmapCanvas.toDataURL('image/png');
+          pdf.addPage();
+          addImageToPdf(
+            pdf,
+            roadmapImgData,
+            roadmapCanvas.width,
+            roadmapCanvas.height,
+            logoBase64,
+            logoSize,
+            logoX,
+            logoY,
+            margin,
+            pageWidth,
+            pageHeight,
+            false
+          );
+        }
+      } catch (roadmapErr) {
+        console.warn('Failed to capture roadmap for PDF export', roadmapErr);
+      }
+
+      pdf.save('rushd-readiness-report.pdf');
+      toast.success('تم تصدير التقرير بنجاح');
+    } catch (err) {
+      console.error('PDF export failed', err);
+      toast.error('فشل تصدير التقرير');
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const overallScore = data.overallScore ?? 0;
   const readinessLevel = getReadinessLevel(overallScore);
@@ -233,7 +459,7 @@ export function CharityAssessmentResultsPage() {
 
   return (
     <div className="min-h-full bg-background">
-      {/* Header */}
+      {/* Header - intentionally outside the exported report */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <div className="max-w-7xl mx-auto p-8">
           <div className="flex items-start justify-between mb-6">
@@ -250,8 +476,16 @@ export function CharityAssessmentResultsPage() {
               </p>
             </div>
             <div className="flex gap-3 flex-wrap items-center">
-              <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
-                <Download className="w-4 h-4" />
+              <button
+                onClick={handleExportPDF}
+                disabled={isExporting}
+                className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {isExporting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Download className="w-4 h-4" />
+                )}
                 تصدير PDF
               </button>
               <button
@@ -298,9 +532,9 @@ export function CharityAssessmentResultsPage() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+      {/* Main Content / Exportable Report */}
+      <div ref={reportRef} data-report-root className="max-w-7xl mx-auto p-8">
+        <div data-report-section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Radar Chart */}
           <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-6">نظرة شاملة على الأداء</h2>
@@ -384,7 +618,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Benchmark Comparison */}
-        <div className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
           <h2 className="text-xl font-semibold mb-6">المقارنة المعيارية</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={benchmarkData}>
@@ -402,7 +636,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Strengths */}
-        <div id="strengths-section" className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div id="strengths-section" data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <Star className="w-6 h-6 text-yellow-500" />
             <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
@@ -447,7 +681,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Gaps */}
-        <div id="gaps-section" className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div id="gaps-section" data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <AlertTriangle className="w-6 h-6 text-orange-500" />
             <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
@@ -492,7 +726,7 @@ export function CharityAssessmentResultsPage() {
 
         {/* Progress Tracking */}
         {progressData && progressData.length > 0 && (
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
+          <div data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
             <h2 className="text-xl font-semibold mb-6">تتبع التقدم</h2>
             <ResponsiveContainer width="100%" height={300}>
               <RechartsLineChart data={progressData}>
@@ -514,7 +748,7 @@ export function CharityAssessmentResultsPage() {
         )}
 
         {/* CTA */}
-        <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-8 text-center">
+        <div data-report-exclude className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-8 text-center">
           <h3 className="text-2xl font-semibold mb-3">جاهز للخطوة التالية؟</h3>
           <p className="text-muted-foreground mb-6">
             استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك
@@ -528,6 +762,17 @@ export function CharityAssessmentResultsPage() {
           </button>
         </div>
       </div>
+
+      {/* Hidden iframe used to render the roadmap page for PDF export */}
+      {organizationId && (
+        <iframe
+          ref={roadmapIframeRef}
+          src={`/dashboard/charity-assessment/roadmap/${organizationId}?pdf-capture=1`}
+          title="roadmap-capture"
+          className="pointer-events-none fixed -left-[9999px] top-0 w-[1200px] h-[800px] border-0 opacity-0"
+          sandbox="allow-same-origin allow-scripts"
+        />
+      )}
     </div>
   );
 }

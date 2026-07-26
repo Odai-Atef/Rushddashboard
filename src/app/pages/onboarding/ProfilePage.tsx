@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
+import { MultiSelect } from '@/app/components/ui/multi-select';
 import { toast } from 'sonner';
 
 interface ProfileData {
@@ -79,7 +80,7 @@ export function ProfilePage() {
     }
 
     if (profileData.areasOfWork.length === 0) {
-      nextErrors.areasOfWork = 'مجالات العمل مطلوبة';
+      nextErrors.areasOfWork = 'مجالات المشاريع مطلوبة';
     }
 
     if (!profileData.targetBeneficiaries.trim()) {
@@ -214,36 +215,27 @@ export function ProfilePage() {
 
             {/* Areas of Work */}
             <div>
-              <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+              <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
               {fundingAreas.length === 0 && (
                 <p className="text-sm text-gray-500 mb-2">
-                  لا توجد مجالات عمل متاحة حالياً. يرجى المحاولة لاحقاً.
+                  لا توجد مجالات مشاريع متاحة حالياً. يرجى المحاولة لاحقاً.
                 </p>
               )}
-              <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${errors.areasOfWork ? 'border-red-500 bg-red-50' : 'border-transparent'}`}>
-                {fundingAreas.map((area) => (
-                  <label
-                    key={area.id}
-                    className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer bg-white"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={profileData.areasOfWork.includes(area.id)}
-                      onChange={(e) => {
-                        setProfileData((prev) => {
-                          const nextAreas = e.target.checked
-                            ? [...prev.areasOfWork, area.id]
-                            : prev.areasOfWork.filter((a) => a !== area.id);
-                          return { ...prev, areasOfWork: nextAreas };
-                        });
-                        clearFieldError('areasOfWork');
-                      }}
-                      className="w-4 h-4 text-blue-600 rounded"
-                    />
-                    <span className="text-sm">{area.name}</span>
-                  </label>
-                ))}
-              </div>
+              {fundingAreas.length > 0 && (
+                <MultiSelect
+                  options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
+                  selected={profileData.areasOfWork}
+                  onChange={(next) => {
+                    setProfileData((prev) => ({ ...prev, areasOfWork: next }));
+                    clearFieldError('areasOfWork');
+                  }}
+                  placeholder="اختر مجالات المشاريع"
+                  searchPlaceholder="ابحث في مجالات المشاريع..."
+                  emptyMessage="لا توجد نتائج مطابقة"
+                  error={!!errors.areasOfWork}
+                  className="min-h-[46px]"
+                />
+              )}
               {errors.areasOfWork && (
                 <p className="mt-1 text-sm text-red-600">{errors.areasOfWork}</p>
               )}

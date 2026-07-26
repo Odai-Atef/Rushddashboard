@@ -426,6 +426,7 @@ export function UserActivationPage() {
                     <SortableHeader column="organization.type" label="نوع الجهة" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="organization.licenseNumber" label="رقم الترخيص" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <TableHead className="text-right">المستندات</TableHead>
+                    <SortableHeader column="organization.lastEvaluationScore" label="آخر تقييم" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="status" label="الحالة" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="organization.createdAt" label="تاريخ الإنشاء" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="organization.updatedAt" label="تاريخ التحديث" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
@@ -446,6 +447,15 @@ export function UserActivationPage() {
                         <Badge variant="outline">
                           {user.documents?.length || 0} مستند
                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                        {typeof user.organization?.lastEvaluationScore === 'number' ? (
+                          <span className="inline-flex items-center justify-center rounded-full bg-blue-50 px-2.5 py-0.5 text-sm font-medium text-blue-700">
+                            {user.organization.lastEvaluationScore}%
+                          </span>
+                        ) : (
+                          <span className="text-sm text-gray-400">-</span>
+                        )}
                       </TableCell>
                       <TableCell>{getStatusBadge(user.status)}</TableCell>
                       <TableCell>

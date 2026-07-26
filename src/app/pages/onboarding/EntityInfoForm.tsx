@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { OrganizationType } from '@/api/services/onboarding-service';
+import { MultiSelect } from '@/app/components/ui/multi-select';
 import { toast } from 'sonner';
 
 type OrgTypeOption = 'charity' | 'private_company';
@@ -81,7 +82,7 @@ export function EntityInfoForm() {
       }
     } else if (registrationData.orgType === 'charity') {
       if (registrationData.fundingAreas.length === 0) {
-        nextErrors.fundingAreas = 'مجالات العمل مطلوبة';
+        nextErrors.fundingAreas = 'مجالات المشاريع مطلوبة';
       }
     }
 
@@ -284,28 +285,29 @@ export function EntityInfoForm() {
         {/* Charity funding areas */}
         {isCharitySelected && (
           <div>
-            <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+            <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
             {fundingAreas.length === 0 && (
               <p className="text-sm text-gray-500 mb-2">
-                لا توجد مجالات عمل متاحة حالياً. يرجى المحاولة لاحقاً.
+                لا توجد مجالات مشاريع متاحة حالياً. يرجى المحاولة لاحقاً.
               </p>
             )}
-            <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${errors.fundingAreas ? 'border-red-500 bg-red-50' : 'border-transparent'}`}>
-              {fundingAreas.map((area) => (
-                <label
-                  key={area.id}
-                  className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer bg-white"
-                >
-                  <input
-                    type="checkbox"
-                    checked={registrationData.fundingAreas.includes(area.id)}
-                    onChange={() => toggleFundingArea(area.id)}
-                    className="w-4 h-4 text-blue-600 rounded"
-                  />
-                  <span className="text-sm">{area.name}</span>
-                </label>
-              ))}
-            </div>
+            {fundingAreas.length > 0 && (
+              <MultiSelect
+                options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
+                selected={registrationData.fundingAreas}
+                onChange={(next) => {
+                  setRegistrationData((prev) => ({ ...prev, fundingAreas: next }));
+                  if (errors.fundingAreas) {
+                    setErrors((prev) => ({ ...prev, fundingAreas: undefined }));
+                  }
+                }}
+                placeholder="اختر مجالات المشاريع"
+                searchPlaceholder="ابحث في مجالات المشاريع..."
+                emptyMessage="لا توجد نتائج مطابقة"
+                error={!!errors.fundingAreas}
+                className="min-h-[46px]"
+              />
+            )}
             {errors.fundingAreas && (
               <p className="mt-1 text-sm text-red-600">{errors.fundingAreas}</p>
             )}

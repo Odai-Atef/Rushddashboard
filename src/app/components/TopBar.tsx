@@ -282,7 +282,10 @@ export function TopBar({
                 <p className="font-medium">{displayName(user)}</p>
                 <p className="text-muted-foreground text-sm">{user?.email ?? ''}</p>
               </div>
-              <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">
+              <DropdownMenu.Item
+                className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none"
+                onSelect={() => navigate('/dashboard/profile')}
+              >
                 الملف الشخصي
               </DropdownMenu.Item>
               <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">
