@@ -193,7 +193,7 @@ export class SubscriptionService {
   async getManagedSubscriptions(
     params?: Record<string, string | number | undefined>,
     config?: RequestConfig
-  ): Promise<ApiResponse<ManagedSubscriptionListResponse>> {
+  ): Promise<ApiResponse<{ data: ManagedSubscriptionListResponse }>> {
     const searchParams = new URLSearchParams();
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -203,7 +203,7 @@ export class SubscriptionService {
       });
     }
     const query = searchParams.toString();
-    return apiClient.get<ManagedSubscriptionListResponse>(
+    return apiClient.get<{ data: ManagedSubscriptionListResponse }>(
       `/api/v1/admin/subscriptions${query ? `?${query}` : ''}`,
       config
     );
@@ -216,7 +216,7 @@ export class SubscriptionService {
   async getCoupons(
     params?: { status?: string; code?: string },
     config?: RequestConfig
-  ): Promise<ApiResponse<Coupon[]>> {
+  ): Promise<ApiResponse<{ data: Coupon[] }>> {
     const searchParams = new URLSearchParams();
     if (params) {
       Object.entries(params).forEach(([key, value]) => {
@@ -226,7 +226,7 @@ export class SubscriptionService {
       });
     }
     const query = searchParams.toString();
-    return apiClient.get<Coupon[]>(`/api/v1/admin/coupons${query ? `?${query}` : ''}`, config);
+    return apiClient.get<{ data: Coupon[] }>(`/api/v1/admin/coupons${query ? `?${query}` : ''}`, config);
   }
 
   /**

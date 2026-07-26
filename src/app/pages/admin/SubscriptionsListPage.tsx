@@ -50,10 +50,10 @@ export function SubscriptionsListPage() {
         status: filters.status || undefined,
       });
 
-      if (response.success && response.data) {
-        setSubscriptions(response.data.data);
-        setTotal(response.data.total);
-        setTotalPages(response.data.totalPages);
+      if (response.success && response.data?.data) {
+        setSubscriptions(response.data.data.data);
+        setTotal(response.data.data.total);
+        setTotalPages(response.data.data.totalPages);
       } else {
         setError(response.message || 'تعذر تحميل الاشتراكات');
       }

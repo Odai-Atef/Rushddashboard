@@ -52,8 +52,8 @@ export function CouponsPage() {
         status: filters.status || undefined,
         code: filters.code || undefined,
       });
-      if (response.success && response.data) {
-        setCoupons(response.data);
+      if (response.success && response.data?.data) {
+        setCoupons(response.data.data);
       } else {
         setError(response.message || 'تعذر تحميل الكوبونات');
       }
