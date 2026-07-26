@@ -579,36 +579,6 @@ export function CharityAssessmentRoadmapPage() {
           </div>
         </div>
 
-        {/* Support Section */}
-        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-200 mt-8">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">الدعم من حاضنة رشد</h3>
-              <p className="text-gray-700 mb-4">فريقنا جاهز لدعمك في تنفيذ خطة التطوير. ستحصل على:</p>
-              <ul className="space-y-2 mb-4">
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  استشارات متخصصة في كل محور
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  برامج تدريبية وورش عمل
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  منصة متابعة وتقييم مستمر
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  شبكة من الخبراء والشركاء
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );
