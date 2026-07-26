@@ -27,6 +27,7 @@ import {
   FolderKanban,
   Activity,
   Ticket,
+  CreditCard,
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
