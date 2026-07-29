@@ -22,7 +22,8 @@ import {
   UserPlus,
   Brain,
   MessageSquare,
-  Building2
+  Building2,
+  BarChart3
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
