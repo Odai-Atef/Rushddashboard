@@ -41,6 +41,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
 
   const commonNavItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = [
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
+    { id: 'charity-assessment-results', label: 'نتائج تقييم الجاهزية', icon: BarChart3, path: '/dashboard/charity-assessment/results' },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management/list' },
     { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
     { id: 'organization-donors', label: 'الجهات المانحة', icon: Building2, path: '/dashboard/organization-donors' },
