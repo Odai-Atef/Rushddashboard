@@ -7,11 +7,17 @@ interface ThemeContext {
 }
 
 export function AuthLayout() {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const context = useOutletContext<ThemeContext>();
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboard/charity-assessment" replace />;
+    const isProjectManager = user?.roleSlug === 'project-managers';
+    return (
+      <Navigate
+        to={isProjectManager ? '/dashboard/project-management/list' : '/dashboard/charity-assessment'}
+        replace
+      />
+    );
   }
 
   return <Outlet context={context} />;

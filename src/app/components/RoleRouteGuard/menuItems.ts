@@ -15,6 +15,7 @@ export const MENU_ITEMS_FOR_GUARD: MenuItemDefinition[] = [
   { id: 'onboarding-analysis', label: 'تحليل الفجوات', path: '/dashboard/onboarding/analysis' },
   { id: 'onboarding-roadmap', label: 'خطة التحسين', path: '/dashboard/onboarding/roadmap' },
   { id: 'onboarding-processing', label: 'معالجة البيانات', path: '/dashboard/onboarding/processing' },
+  { id: 'onboarding-profile', label: 'الملف الشخصي', path: '/dashboard/onboarding/profile' },
   { id: 'charity-assessment', label: 'تقييم الجاهزية', path: '/dashboard/charity-assessment' },
   { id: 'charity-assessment-results', label: 'نتائج تقييم الجاهزية', path: '/dashboard/charity-assessment/results' },
   { id: 'charity-assessment-roadmap', label: 'خطة تحسين الجاهزية', path: '/dashboard/charity-assessment/roadmap' },

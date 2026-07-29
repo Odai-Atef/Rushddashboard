@@ -13,12 +13,19 @@ interface RoleRouteGuardProps {
   children: React.ReactNode;
 }
 
+const DEFAULT_FALLBACK = '/dashboard/charity-assessment';
+const PROJECT_MANAGER_FALLBACK = '/dashboard/project-management/list';
+
+function getDefaultFallback(roleSlug: string | null): string {
+  return roleSlug === 'project-managers' ? PROJECT_MANAGER_FALLBACK : DEFAULT_FALLBACK;
+}
+
 /**
  * Route guard that redirects to the safe fallback route when the current user
  * does not have access to the requested path based on their role slug.
  *
- * The charity-assessment landing page is always allowed regardless of role so
- * it can serve as the application's default entry point.
+ * Project-managers are redirected to the project-management list as their default,
+ * while other roles fall back to the charity-assessment landing page.
  */
 export function RoleRouteGuard({ menuItems, children }: RoleRouteGuardProps) {
   const { user, isLoading } = useAuth();
@@ -36,12 +43,8 @@ export function RoleRouteGuard({ menuItems, children }: RoleRouteGuardProps) {
 
   const allowed = isRouteAllowed(roleSlug, currentPath, menuItems);
 
-  if (currentPath === '/dashboard/charity-assessment') {
-    return <>{children}</>;
-  }
-
   if (!allowed) {
-    return <Navigate to="/dashboard/charity-assessment" replace />;
+    return <Navigate to={getDefaultFallback(roleSlug)} replace />;
   }
 
   return <>{children}</>;

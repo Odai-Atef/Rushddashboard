@@ -97,6 +97,8 @@ export function TopBar({
 }: TopBarProps) {
   const navigate = useNavigate();
   const { logout, user } = useAuth();
+  const roleSlug = user?.roleSlug ?? null;
+  const isProjectManager = roleSlug === 'project-managers';
 
   const {
     notifications,
@@ -282,9 +284,14 @@ export function TopBar({
                 <p className="font-medium">{displayName(user)}</p>
                 <p className="text-muted-foreground text-sm">{user?.email ?? ''}</p>
               </div>
-              <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">
-                الملف الشخصي
-              </DropdownMenu.Item>
+              {!isProjectManager && (
+                <DropdownMenu.Item
+                  className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none"
+                  onSelect={() => navigate('/dashboard/onboarding/profile')}
+                >
+                  الملف الشخصي
+                </DropdownMenu.Item>
+              )}
               <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">
                 الإعدادات
               </DropdownMenu.Item>
