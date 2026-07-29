@@ -9,6 +9,7 @@ import { onboardingService } from '@/api/services/onboarding-service';
 import type { FundingArea } from '@/api/services/onboarding-service';
 import { statusConfig, ProjectStatus, UpdateProjectDto, ProjectDetails as ProjectDetailsType } from './project-types';
 import { useAuth } from '@/app/layouts/RootLayout';
+import { MultiSelect } from '@/app/components/ui/multi-select';
 import MDEditor from '@uiw/react-md-editor';
 
 const STATUS_OPTIONS: ProjectStatus[] = Object.keys(statusConfig) as ProjectStatus[];
@@ -362,31 +363,33 @@ export function ProjectEditPage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+              <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
               {getFieldError('fundingAreaIds') && <p className="text-red-600 text-sm mb-1">{getFieldError('fundingAreaIds')}</p>}
               {isLoadingFundingAreas ? (
                 <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
-                  جاري تحميل مجالات العمل...
+                  جاري تحميل مجالات المشاريع...
                 </div>
               ) : fundingAreas.length === 0 ? (
-                <p className="text-sm text-gray-500">لا توجد مجالات عمل متاحة حالياً.</p>
+                <p className="text-sm text-gray-500">لا توجد مجالات مشاريع متاحة حالياً.</p>
               ) : (
-                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${getFieldError('fundingAreaIds') ? 'border-red-500 bg-red-50' : 'border-gray-200'}`}>
-                  {fundingAreas.map((area) => (
-                    <label
-                      key={area.id}
-                      className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer bg-white"
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.fundingAreaIds.includes(area.id)}
-                        onChange={() => toggleFundingArea(area.id)}
-                        className="w-4 h-4 text-blue-600 rounded"
-                      />
-                      <span className="text-sm">{area.name}</span>
-                    </label>
-                  ))}
-                </div>
+                <MultiSelect
+                  options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
+                  selected={formData.fundingAreaIds}
+                  onChange={(next) => {
+                    setFormData((prev) => ({ ...prev, fundingAreaIds: next }));
+                    setLocalFieldErrors((prev) => {
+                      const nextErrors = { ...prev };
+                      delete nextErrors.fundingAreaIds;
+                      return nextErrors;
+                    });
+                    setSaveError(null);
+                  }}
+                  placeholder="اختر مجالات المشاريع"
+                  searchPlaceholder="ابحث في مجالات المشاريع..."
+                  emptyMessage="لا توجد نتائج مطابقة"
+                  error={!!getFieldError('fundingAreaIds')}
+                  className="min-h-[46px]"
+                />
               )}
             </div>
 

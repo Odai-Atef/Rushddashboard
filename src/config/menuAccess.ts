@@ -45,6 +45,8 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'donors',
     'donor-matching',
     'manage-org',
+    'manage-subscriptions',
+    'manage-coupons',
     'collaboration',
   ],
   'entity-managers': [

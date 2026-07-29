@@ -35,14 +35,27 @@ import { statusConfig, ProjectStatus } from './project-types';
 export function ProjectDashboardPage() {
   const navigate = useNavigate();
   const { data, isLoading, error } = useProjectDashboard();
+  const { user } = useAuth();
+  const roleSlug = user?.roleSlug ?? null;
+  const isProjectManager = roleSlug === 'project-managers';
+
   const [hasOrg, setHasOrg] = useState(false);
   const [isQualified, setIsQualified] = useState(false);
   const [assessmentMissing, setAssessmentMissing] = useState(false);
-  const [isCheckingQualification, setIsCheckingQualification] = useState(true);
+  const [isCheckingQualification, setIsCheckingQualification] = useState(!isProjectManager);
 
   useEffect(() => {
     let cancelled = false;
     const check = async () => {
+      if (isProjectManager) {
+        if (!cancelled) {
+          setHasOrg(true);
+          setIsQualified(true);
+          setAssessmentMissing(false);
+          setIsCheckingQualification(false);
+        }
+        return;
+      }
       try {
         const orgRes = await onboardingService.getMyOrganization();
         const org = orgRes.data;
@@ -101,11 +114,7 @@ export function ProjectDashboardPage() {
     };
     check();
     return () => { cancelled = true; };
-  }, []);
-
-  const { user } = useAuth();
-  const roleSlug = user?.roleSlug ?? null;
-  const isProjectManager = roleSlug === 'project-managers';
+  }, [isProjectManager]);
 
   const {
     notifications,
@@ -187,21 +196,27 @@ export function ProjectDashboardPage() {
 
   if (error || !data) {
     const isForbidden = error === 'ليس لديك الصلاحية لعرض لوحة المشاريع.';
-    if (isForbidden) {
+    if (isForbidden && !isProjectManager) {
       return renderQualificationBlocker();
     }
-    return (
-      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
-        <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
-      </div>
-    );
+    if (!isProjectManager) {
+      return (
+        <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+          <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
+        </div>
+      );
+    }
   }
 
   if (showQualificationBlocker) {
     return renderQualificationBlocker();
   }
 
-  const { stats, statusDistribution, recentActivity } = data;
+  const { stats, statusDistribution, recentActivity } = data ?? {
+    stats: { total: 0, active: 0, completed: 0, suspended: 0, totalBudget: 0, totalRaised: 0 },
+    statusDistribution: [],
+    recentActivity: [],
+  };
 
   return (
     <div className="min-h-full bg-gray-50 p-6">

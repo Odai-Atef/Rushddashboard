@@ -569,6 +569,9 @@ export type DocumentType =
   | 'national_address'
   | 'registration'
   | 'board_approval_letter'
+  | 'basic_bylaws'
+  | 'representative_authorization'
+  | 'startup_associations_additional'
   | 'other';
 
 /** Lifecycle status of an uploaded organization document */
@@ -600,6 +603,9 @@ export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
   address: 'national_address',
   profile: 'registration',
   board_approval: 'board_approval_letter',
+  basic_bylaws: 'basic_bylaws',
+  representative_authorization: 'representative_authorization',
+  startup_associations_additional: 'startup_associations_additional',
   projects: 'other',
   financial: 'financial',
   annual: 'other',
@@ -623,6 +629,12 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
   BOARD_APPROVAL_LETTER: 'board_approval',
   board_approval_letter: 'board_approval',
   BOARD_APPROVAL: 'board_approval',
+  BASIC_BYLAWS: 'basic_bylaws',
+  basic_bylaws: 'basic_bylaws',
+  REPRESENTATIVE_AUTHORIZATION: 'representative_authorization',
+  representative_authorization: 'representative_authorization',
+  STARTUP_ASSOCIATIONS_ADDITIONAL: 'startup_associations_additional',
+  startup_associations_additional: 'startup_associations_additional',
   PROJECTS: 'projects',
   PREVIOUS_PROJECTS: 'projects',
   ANNUAL_REPORT: 'annual',
@@ -632,7 +644,19 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
 };
 
 /** All known frontend document slot IDs */
-export type DocumentSlotId = 'license' | 'bank' | 'address' | 'profile' | 'board_approval' | 'projects' | 'financial' | 'annual' | 'brand';
+export type DocumentSlotId =
+  | 'license'
+  | 'bank'
+  | 'address'
+  | 'profile'
+  | 'board_approval'
+  | 'basic_bylaws'
+  | 'representative_authorization'
+  | 'startup_associations_additional'
+  | 'projects'
+  | 'financial'
+  | 'annual'
+  | 'brand';
 
 /**
  * Onboarding Service class

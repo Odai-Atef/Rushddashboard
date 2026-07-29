@@ -39,96 +39,34 @@ interface UploadedFile {
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 const TOAST_DURATION = 5000;
 
+const PDF_ONLY_RULE = {
+  accept: '.pdf',
+  extensions: ['.pdf'],
+  mimeTypes: ['application/pdf'],
+  label: 'PDF',
+};
+
 const SLOT_FILE_VALIDATION: Record<
   DocumentSlotId,
   { accept: string; extensions: string[]; mimeTypes: string[]; label: string }
 > = {
-  license: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
-  bank: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
-  address: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
-  profile: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
-  board_approval: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
+  license: PDF_ONLY_RULE,
+  bank: PDF_ONLY_RULE,
+  address: PDF_ONLY_RULE,
+  profile: PDF_ONLY_RULE,
+  board_approval: PDF_ONLY_RULE,
+  basic_bylaws: PDF_ONLY_RULE,
+  representative_authorization: PDF_ONLY_RULE,
+  startup_associations_additional: PDF_ONLY_RULE,
   brand: {
-    accept: '.png,.jpeg,.jpg,.svg',
-    extensions: ['.png', '.jpeg', '.jpg', '.svg'],
-    mimeTypes: ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'],
-    label: 'PNG, JPEG, JPG, SVG',
+    accept: '.png',
+    extensions: ['.png'],
+    mimeTypes: ['image/png'],
+    label: 'PNG',
   },
-  projects: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
-  financial: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
-  annual: {
-    accept: '.pdf,.doc,.docx',
-    extensions: ['.pdf', '.doc', '.docx'],
-    mimeTypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
-    label: 'PDF, Word',
-  },
+  projects: PDF_ONLY_RULE,
+  financial: PDF_ONLY_RULE,
+  annual: PDF_ONLY_RULE,
 };
 
 function getFileExtension(fileName: string): string {
@@ -158,24 +96,32 @@ function validateFile(
     return {
       valid: false,
       error: isBrand
-        ? 'يُسمح فقط بملفات الصور (PNG, JPEG, JPG, SVG) للهوية البصرية.'
-        : 'يُسمح فقط بملفات PDF وWord لهذا المستند.',
+        ? 'يُسمح فقط بملفات PNG للهوية البصرية.'
+        : 'يُسمح فقط بملفات PDF لهذا المستند.',
     };
   }
 
   return { valid: true };
 }
 
-const documentSlots: { id: DocumentSlotId; label: string; required: boolean }[] = [
+const documentSlots: { id: DocumentSlotId; label: string; required: boolean; templateUrl?: string }[] = [
   { id: 'license', label: 'رخصة الجمعية الخيرية', required: true },
   { id: 'bank', label: 'شهادة الحساب البنكي', required: true },
   { id: 'address', label: 'العنوان الوطني', required: true },
   { id: 'profile', label: 'الملف التعريفي للجمعية', required: true },
-  { id: 'board_approval', label: 'خطاب اعتماد مجلس الإدارة', required: true },
+  { id: 'board_approval', label: 'قرار تشكيل مجلس الإدارة', required: true },
+  { id: 'basic_bylaws', label: 'اللائحة الأساسية', required: true },
+  { id: 'representative_authorization', label: 'خطاب تفويض ممثل الجهة', required: true },
   { id: 'brand', label: 'الهوية البصرية', required: true },
   { id: 'projects', label: 'المشاريع السابقة', required: false },
   { id: 'financial', label: 'التقارير المالية', required: false },
   { id: 'annual', label: 'التقارير السنوية', required: false },
+  {
+    id: 'startup_associations_additional',
+    label: 'المستندات الإضافية الخاصة بالجمعيات الناشئة (التي لم تكمل سنة من تاريخ التأسيس)',
+    required: false,
+    templateUrl: '/templates/startup-association-letter.pdf',
+  },
 ];
 
 const mapSlotToDocumentType = (slotId: DocumentSlotId): string =>
@@ -479,6 +425,16 @@ export function OrganizationDocumentsForm() {
     }
   };
 
+  const handleDownloadTemplate = (templateUrl: string, fileName: string) => {
+    const a = document.createElement('a');
+    a.href = templateUrl;
+    a.download = fileName;
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  };
+
   const handleSave = () => {
     if (hasPendingUploads) {
       toast.error('يرجى انتظار اكتمال رفع الملفات الجارية', { duration: TOAST_DURATION });
@@ -639,9 +595,14 @@ export function OrganizationDocumentsForm() {
                       />
                     )}
                     <div className="min-w-0">
-                      <p className="font-medium truncate">{doc.label}</p>
+                      <p
+                        className="font-medium leading-snug line-clamp-2"
+                        title={doc.label}
+                      >
+                        {doc.label}
+                      </p>
                       <p className="text-xs text-gray-500">
-                        {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF, Word'} - الحد الأقصى 10 ميجابايت
+                        {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
                       </p>
                       {isCompleted && file?.name && (
                         <p
@@ -750,10 +711,26 @@ export function OrganizationDocumentsForm() {
                       />
                     )}
                     <div className="min-w-0">
-                      <p className="font-medium truncate">{doc.label}</p>
-                      <p className="text-xs text-gray-500">
-                        {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF, Word'} - الحد الأقصى 10 ميجابايت
+                      <p
+                        className="font-medium leading-snug line-clamp-2"
+                        title={doc.label}
+                      >
+                        {doc.label}
                       </p>
+                      <p className="text-xs text-gray-500">
+                        {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
+                      </p>
+                      {doc.templateUrl && !isCompleted && (
+                        <button
+                          onClick={() =>
+                            handleDownloadTemplate(doc.templateUrl!, 'نموذج خطاب مقترح.pdf')
+                          }
+                          className="text-xs text-blue-600 hover:text-blue-800 hover:underline mt-1 text-right"
+                          type="button"
+                        >
+                          نموذج خطاب مقترح
+                        </button>
+                      )}
                       {isCompleted && file?.name && (
                         <p
                           className="text-sm text-green-700 truncate max-w-xs"

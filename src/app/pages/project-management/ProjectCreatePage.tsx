@@ -8,6 +8,7 @@ import { CreateProjectDto, ProjectEligibility } from '@/api/services/project-ser
 import { onboardingService } from '@/api/services/onboarding-service';
 import type { FundingArea } from '@/api/services/onboarding-service';
 import { useAuth } from '@/app/layouts/RootLayout';
+import { MultiSelect } from '@/app/components/ui/multi-select';
 import { toast } from 'sonner';
 
 function daysBetween(start: string, end: string): number | null {
@@ -18,6 +19,20 @@ function daysBetween(start: string, end: string): number | null {
   const diff = e.getTime() - s.getTime();
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
   return days >= 0 ? days : null;
+}
+
+function normalizeForMatch(value?: string | null): string {
+  return (value || '').trim().toLowerCase();
+}
+
+function extractProfilePayload(data: unknown): any {
+  if (!data || typeof data !== 'object') return null;
+  const d = data as Record<string, any>;
+  // Backend may return either the raw profile object or a wrapped envelope { success, data, message }
+  if ('data' in d && typeof d.data === 'object' && d.data !== null && 'fundingAreas' in d.data) {
+    return d.data;
+  }
+  return d;
 }
 
 export function ProjectCreatePage() {
@@ -41,6 +56,8 @@ export function ProjectCreatePage() {
   const [organizationError, setOrganizationError] = useState<string | null>(null);
   const [fundingAreas, setFundingAreas] = useState<FundingArea[]>([]);
   const [isLoadingFundingAreas, setIsLoadingFundingAreas] = useState(true);
+  const [allowedFundingAreaIds, setAllowedFundingAreaIds] = useState<Set<string> | null>(null);
+  const [allowedFundingAreaNames, setAllowedFundingAreaNames] = useState<Set<string> | null>(null);
   const [createErrorReason, setCreateErrorReason] = useState<ProjectEligibility['reason'] | null>(null);
   const [eligibilityToastShown, setEligibilityToastShown] = useState(false);
   const [formData, setFormData] = useState({
@@ -89,6 +106,30 @@ export function ProjectCreatePage() {
           if (org?.id) {
             setOrganizationOptions([{ id: org.id, name: org.name }]);
             setFormData((prev) => ({ ...prev, organizationId: org.id }));
+            // For entity-managers, restrict work areas to those selected during onboarding
+            if (isEntityManager) {
+              try {
+                const profileRes = await onboardingService.getProfile(org.id);
+                const profile = extractProfilePayload(profileRes.data);
+                const selectedFundingAreas = profile?.fundingAreas ?? [];
+                const selectedIds = new Set(
+                  selectedFundingAreas
+                    .map((fa: any) => fa.fundingAreaId || fa.id)
+                    .filter(Boolean)
+                );
+                const selectedNames = new Set(
+                  selectedFundingAreas
+                    .map((fa: any) => normalizeForMatch(fa.nameAr || fa.name))
+                    .filter(Boolean)
+                );
+                setAllowedFundingAreaIds(selectedIds);
+                setAllowedFundingAreaNames(selectedNames);
+              } catch {
+                // Fallback: allow all funding areas if profile cannot be loaded
+                setAllowedFundingAreaIds(null);
+                setAllowedFundingAreaNames(null);
+              }
+            }
           } else {
             setOrganizationError('لم يتم العثور على جهه مرتبطة بحسابك.');
           }
@@ -436,32 +477,35 @@ export function ProjectCreatePage() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-2">مجالات العمل *</label>
+              <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
               {getFieldError('fundingAreaIds') && <p className="text-red-600 text-sm mb-1">{getFieldError('fundingAreaIds')}</p>}
               {isLoadingFundingAreas ? (
                 <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
-                  جاري تحميل مجالات العمل...
+                  جاري تحميل مجالات المشاريع...
                 </div>
-              ) : fundingAreas.length === 0 ? (
-                <p className="text-sm text-gray-500">لا توجد مجالات عمل متاحة حالياً.</p>
+              ) : visibleFundingAreas.length === 0 ? (
+                <p className="text-sm text-gray-500">لا توجد مجالات مشاريع متاحة حالياً.</p>
               ) : (
-                <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${getFieldError('fundingAreaIds') ? 'border-red-500 bg-red-50' : 'border-gray-200'} ${formDisabled ? 'bg-gray-50' : ''}`}>
-                  {fundingAreas.map((area) => (
-                    <label
-                      key={area.id}
-                      className={`flex items-center gap-2 p-3 border border-gray-200 rounded-lg bg-white ${formDisabled ? 'cursor-not-allowed opacity-70' : 'hover:bg-gray-50 cursor-pointer'}`}
-                    >
-                      <input
-                        type="checkbox"
-                        checked={formData.fundingAreaIds.includes(area.id)}
-                        onChange={() => toggleFundingArea(area.id)}
-                        disabled={formDisabled}
-                        className="w-4 h-4 text-blue-600 rounded disabled:cursor-not-allowed"
-                      />
-                      <span className="text-sm">{area.name}</span>
-                    </label>
-                  ))}
-                </div>
+                <MultiSelect
+                  options={visibleFundingAreas.map((area) => ({ value: area.id, label: area.name }))}
+                  selected={formData.fundingAreaIds}
+                  onChange={(next) => {
+                    setFormData((prev) => ({ ...prev, fundingAreaIds: next }));
+                    clearFieldError('fundingAreaIds');
+                    setLocalFieldErrors((prev) => {
+                      const nextErrors = { ...prev };
+                      delete nextErrors.fundingAreaIds;
+                      return nextErrors;
+                    });
+                    if (error) clearError();
+                  }}
+                  placeholder="اختر مجالات المشاريع"
+                  searchPlaceholder="ابحث في مجالات المشاريع..."
+                  emptyMessage="لا توجد نتائج مطابقة"
+                  disabled={formDisabled}
+                  error={!!getFieldError('fundingAreaIds')}
+                  className="min-h-[46px]"
+                />
               )}
             </div>
 

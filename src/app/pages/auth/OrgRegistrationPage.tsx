@@ -16,6 +16,7 @@ import { toast } from 'sonner';
 import { authService, OrgRegistrationData } from '@/api/services/auth-service';
 import { onboardingService, FundingArea } from '@/api/services/onboarding-service';
 import { TermsModal } from '@/app/components/TermsModal';
+import { MultiSelect } from '@/app/components/ui/multi-select';
 import { useAuth } from '@/app/layouts/RootLayout';
 import { renderRecaptchaWidget, getRecaptchaToken, resetRecaptchaWidget, destroyRecaptchaWidget } from '@/app/lib/recaptcha';
 
@@ -358,22 +359,20 @@ export function OrgRegistrationPage() {
                       لا توجد مجالات عمل متاحة حالياً. يرجى المحاولة لاحقاً.
                     </p>
                   )}
-                  <div className={`grid grid-cols-2 md:grid-cols-3 gap-3 p-2 rounded-lg border ${errors.fundingAreas ? 'border-red-500 bg-red-500/5' : 'border-transparent'}`}>
-                    {fundingAreas.map((area) => (
-                      <label
-                        key={area.id}
-                        className="flex items-center gap-2 p-3 border border-border rounded-lg hover:bg-accent cursor-pointer bg-card"
-                      >
-                        <input
-                          type="checkbox"
-                          checked={formData.fundingAreas.includes(area.id)}
-                          onChange={() => toggleFundingArea(area.id)}
-                          className="w-4 h-4 text-primary rounded"
-                        />
-                        <span className="text-sm">{area.name}</span>
-                      </label>
-                    ))}
-                  </div>
+                  {fundingAreas.length > 0 && (
+                    <MultiSelect
+                      options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
+                      selected={formData.fundingAreas}
+                      onChange={(next) => {
+                        setField('fundingAreas', next);
+                      }}
+                      placeholder="اختر مجالات العمل"
+                      searchPlaceholder="ابحث في مجالات العمل..."
+                      emptyMessage="لا توجد نتائج مطابقة"
+                      error={!!errors.fundingAreas}
+                      className="min-h-[46px]"
+                    />
+                  )}
                   {errors.fundingAreas && <p className="text-xs text-red-600 mt-1" dangerouslySetInnerHTML={{ __html: errors.fundingAreas }} />}
                 </div>
               )}

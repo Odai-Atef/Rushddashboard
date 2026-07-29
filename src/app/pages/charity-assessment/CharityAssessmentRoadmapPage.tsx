@@ -1,4 +1,4 @@
-import { useParams, useNavigate } from 'react-router';
+import { useParams, useNavigate, useSearchParams } from 'react-router';
 import {
   CheckCircle2,
   Clock,
@@ -79,6 +79,8 @@ function formatPhaseLabel(phase: string): string {
 export function CharityAssessmentRoadmapPage() {
   const navigate = useNavigate();
   const { organizationId } = useParams<{ organizationId: string }>();
+  const [searchParams] = useSearchParams();
+  const isCaptureMode = searchParams.get('pdf-capture') === '1';
   const [evaluation, setEvaluation] = useState<LoadedEvaluation | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -113,6 +115,9 @@ export function CharityAssessmentRoadmapPage() {
         if (!cancelled) {
           if (payload) {
             setEvaluation({ data: payload, cached });
+            if (isCaptureMode && window.parent !== window) {
+              window.parent.postMessage({ type: 'ROADMAP_CAPTURE_READY', organizationId }, '*');
+            }
           } else {
             setError('لم يتم استلام بيانات التقييم');
           }
@@ -227,7 +232,7 @@ export function CharityAssessmentRoadmapPage() {
     | undefined;
 
   return (
-    <div ref={reportContainerRef} className="min-h-full bg-background">
+    <div ref={reportContainerRef} data-capture-root className="min-h-full bg-background">
       {/* Header */}
       <div className="bg-card border-b border-border">
         <div className="max-w-7xl mx-auto p-8">
@@ -238,21 +243,23 @@ export function CharityAssessmentRoadmapPage() {
                 {data?.comments?.overall?.ar || 'خطة مخصصة لتحسين جاهزية منظمتك'}
               </p>
             </div>
-            <div className="flex gap-3 report-exclude flex-wrap">
-              <button
-                onClick={() =>
-                  navigate(
-                    organizationId
-                      ? `/dashboard/charity-assessment/results/${organizationId}`
-                      : '/dashboard/charity-assessment/results'
-                  )
-                }
-                className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
-              >
-                <ArrowRight className="w-4 h-4" />
-                العودة للنتائج
-              </button>
-            </div>
+            {!isCaptureMode && (
+              <div className="flex gap-3 report-exclude flex-wrap">
+                <button
+                  onClick={() =>
+                    navigate(
+                      organizationId
+                        ? `/dashboard/charity-assessment/results/${organizationId}`
+                        : '/dashboard/charity-assessment/results'
+                    )
+                  }
+                  className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+                >
+                  <ArrowRight className="w-4 h-4" />
+                  العودة للنتائج
+                </button>
+              </div>
+            )}
           </div>
 
           {/* Stats */}
@@ -579,36 +586,6 @@ export function CharityAssessmentRoadmapPage() {
           </div>
         </div>
 
-        {/* Support Section */}
-        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-200 mt-8">
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-2">الدعم من حاضنة رشد</h3>
-              <p className="text-gray-700 mb-4">فريقنا جاهز لدعمك في تنفيذ خطة التطوير. ستحصل على:</p>
-              <ul className="space-y-2 mb-4">
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  استشارات متخصصة في كل محور
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  برامج تدريبية وورش عمل
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  منصة متابعة وتقييم مستمر
-                </li>
-                <li className="flex items-center gap-2 text-sm">
-                  <CheckCircle2 className="w-4 h-4 text-indigo-600" />
-                  شبكة من الخبراء والشركاء
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

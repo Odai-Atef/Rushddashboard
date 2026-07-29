@@ -61,10 +61,13 @@ import { RoleRouteGuard, MenuItemDefinition } from './components/RoleRouteGuard'
 import { MENU_ITEMS_FOR_GUARD } from './components/RoleRouteGuard/menuItems';
 import { AssessmentAllowedGuard } from './components/AssessmentAllowedGuard';
 import { UserActivationPage } from './pages/admin/UserActivationPage';
+import { OrganizationInformationPage } from './pages/admin/OrganizationInformationPage';
 import { PaymentCallbackPage } from './pages/payment/PaymentCallbackPage';
 import { PricingPage } from './pages/pricing/PricingPage';
 import { PackagesPage } from './pages/public/PackagesPage';
 import { SLAPage } from './pages/public/SLAPage';
+import { SubscriptionsListPage } from './pages/admin/SubscriptionsListPage';
+import { CouponsPage } from './pages/admin/CouponsPage';
 
 const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
 const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
@@ -629,6 +632,30 @@ export const router = createBrowserRouter([
                 element: (
                   <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
                     <UserActivationPage />
+                  </RoleRouteGuard>
+                ),
+              },
+              {
+                path: 'org/:organizationId/details',
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <OrganizationInformationPage />
+                  </RoleRouteGuard>
+                ),
+              },
+              {
+                path: 'subscriptions',
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <SubscriptionsListPage />
+                  </RoleRouteGuard>
+                ),
+              },
+              {
+                path: 'coupons',
+                element: (
+                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+                    <CouponsPage />
                   </RoleRouteGuard>
                 ),
               },
