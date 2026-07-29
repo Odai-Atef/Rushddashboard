@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Users,
   Search,
@@ -26,7 +26,6 @@ import apiClient from '@/api/client';
 import { useAdminUsers } from '@/api/hooks/useAdminUsers';
 import { useOrganizationInformation } from '@/api/hooks/useOrganizationInformation';
 import { AdminUser, OrganizationDocument, userService, USER_STATUS_OPTIONS } from '@/api/services/user-service';
-import { onboardingService, AssessmentStatus } from '@/api/services/onboarding-service';
 import { ApiError } from '@/api/types';
 import { useAuth } from '@/app/layouts/RootLayout';
 import { Button } from '@/app/components/ui/button';
@@ -213,58 +212,6 @@ export function UserActivationPage() {
   const [actionMode, setActionMode] = useState<'view' | 'reject' | 'confirm-approve' | 'confirm-reject'>('view');
   const [rejectComment, setRejectComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [latestScores, setLatestScores] = useState<Record<string, AssessmentStatus>>({});
-  const [isLoadingScores, setIsLoadingScores] = useState(false);
-
-  useEffect(() => {
-    if (!isProjectManager || users.length === 0) {
-      setLatestScores({});
-      return;
-    }
-
-    let cancelled = false;
-    const abortControllers = new Set<AbortController>();
-
-    async function loadScores() {
-      setIsLoadingScores(true);
-      const initialScores: Record<string, AssessmentStatus> = {};
-
-      await Promise.all(
-        users.map(async (userItem) => {
-          const orgId = userItem.organization?.id;
-          if (!orgId) return;
-
-          const controller = new AbortController();
-          abortControllers.add(controller);
-
-          try {
-            const response = await onboardingService.getAssessmentStatus(orgId, {
-              signal: controller.signal,
-            });
-            const status = response.data as AssessmentStatus | undefined;
-            if (!cancelled && status) {
-              initialScores[orgId] = status;
-            }
-          } catch (err) {
-            // Silently ignore per-organization fetch failures; missing scores
-            // will render as "غير متاح".
-          }
-        })
-      );
-
-      if (!cancelled) {
-        setLatestScores(initialScores);
-      }
-      setIsLoadingScores(false);
-    }
-
-    loadScores();
-
-    return () => {
-      cancelled = true;
-      abortControllers.forEach((controller) => controller.abort());
-    };
-  }, [isProjectManager, users]);
 
   const {
     data: orgInfo,
@@ -541,17 +488,13 @@ export function UserActivationPage() {
                     <SortableHeader column="status" label="الحالة" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="organization.createdAt" label="تاريخ الإنشاء" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
                     <SortableHeader column="organization.updatedAt" label="تاريخ التحديث" sortBy={sortBy} sortOrder={sortOrder} onSort={toggleSort} />
-                    {isProjectManager && (
-                      <TableHead className="text-right">أحدث نتيجة</TableHead>
-                    )}
                     <TableHead className="text-right"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {users.map((user) => {
                     const orgId = user.organization?.id;
-                    const scoreInfo = orgId ? latestScores[orgId] : undefined;
-                    const hasScore = scoreInfo?.status === 'COMPLETED' && typeof scoreInfo?.overallScore === 'number';
+                    const hasScore = typeof user.organization?.lastEvaluationScore === 'number';
                     return (
                     <TableRow key={user.id}>
                       <TableCell className="font-medium">
@@ -567,10 +510,20 @@ export function UserActivationPage() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        {typeof user.organization?.lastEvaluationScore === 'number' ? (
-                          <span className="inline-flex items-center justify-center rounded-full bg-blue-50 px-2.5 py-0.5 text-sm font-medium text-blue-700">
-                            {user.organization.lastEvaluationScore}%
-                          </span>
+                        {hasScore ? (
+                          isProjectManager ? (
+                            <button
+                              type="button"
+                              onClick={() => orgId && navigate(`/dashboard/charity-assessment/results/${orgId}`)}
+                              className="inline-flex items-center justify-center rounded-full bg-blue-50 px-2.5 py-0.5 text-sm font-medium text-blue-700 hover:text-blue-800 hover:bg-blue-100 transition-colors"
+                            >
+                              {user.organization!.lastEvaluationScore}%
+                            </button>
+                          ) : (
+                            <span className="inline-flex items-center justify-center rounded-full bg-blue-50 px-2.5 py-0.5 text-sm font-medium text-blue-700">
+                              {user.organization!.lastEvaluationScore}%
+                            </span>
+                          )
                         ) : (
                           <span className="text-sm text-gray-400">-</span>
                         )}
@@ -584,23 +537,6 @@ export function UserActivationPage() {
                         <div>{formatDate(user.organization?.updatedAt)}</div>
                         <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.updatedAt)}</div>
                       </TableCell>
-                      {isProjectManager && (
-                        <TableCell>
-                          {isLoadingScores ? (
-                            <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
-                          ) : hasScore ? (
-                            <button
-                              type="button"
-                              onClick={() => orgId && navigate(`/dashboard/charity-assessment/results/${orgId}`)}
-                              className="font-medium text-blue-600 hover:text-blue-700 underline underline-offset-2"
-                            >
-                              {scoreInfo.overallScore}%
-                            </button>
-                          ) : (
-                            <span className="text-gray-500">غير متاح</span>
-                          )}
-                        </TableCell>
-                      )}
                       <TableCell>
                         <Button
                           variant="outline"
