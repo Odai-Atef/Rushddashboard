@@ -94,6 +94,28 @@ export interface RequestActionPayload {
   comment: string;
 }
 
+export interface OrganizationProjectQuota {
+  allowed: boolean;
+  current: number;
+  limit: number;
+  remaining: number;
+  reason?: 'NO_ACTIVE_SUBSCRIPTION' | 'PROJECT_LIMIT_REACHED' | string;
+}
+
+export interface EligibleOrganizationForProjectCreation {
+  id: string;
+  name: string;
+  ownerId: string;
+  ownerName: string;
+  ownerEmail: string;
+  quota: OrganizationProjectQuota;
+}
+
+export interface EligibleOrganizationsForProjectCreationResponse {
+  data: EligibleOrganizationForProjectCreation[];
+  total: number;
+}
+
 /**
  * Build clean query params by removing empty/undefined values.
  */
@@ -162,6 +184,19 @@ export class UserService {
     return apiClient.post<ApproveUserResponse>(
       `${this.baseEndpoint}/project-managers/${id}/request-action`,
       payload,
+      config
+    );
+  }
+
+  /**
+   * List organizations with valid subscriptions and remaining project quota.
+   * GET /api/v1/users/project-managers/organizations/eligible-for-project
+   */
+  async getEligibleOrganizationsForProjectCreation(
+    config?: RequestConfig
+  ): Promise<ApiResponse<EligibleOrganizationsForProjectCreationResponse>> {
+    return apiClient.get<EligibleOrganizationsForProjectCreationResponse>(
+      `${this.baseEndpoint}/project-managers/organizations/eligible-for-project`,
       config
     );
   }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { ChevronRight, Loader2 } from 'lucide-react';
 import { useProjectCreate } from '@/api/hooks/useProjectCreate';
 import { useProjectEligibility } from '@/api/hooks/useProjectEligibility';
+import { useEligibleProjectOrganizations } from '@/api/hooks/useEligibleProjectOrganizations';
 import { CreateProjectDto, ProjectEligibility } from '@/api/services/project-service';
 import { onboardingService } from '@/api/services/onboarding-service';
 import type { FundingArea } from '@/api/services/onboarding-service';
@@ -23,17 +24,19 @@ export function ProjectCreatePage() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  // Only entity-managers can create projects
+  // Both entity-managers and project-managers can create projects
   const isEntityManager = user?.roleSlug === 'entity-managers';
+  const isProjectManager = user?.roleSlug === 'project-managers';
+  const canCreateProject = isEntityManager || isProjectManager;
 
   useEffect(() => {
-    if (!isEntityManager) {
+    if (!canCreateProject) {
       navigate('/dashboard/project-management/list', { replace: true });
     }
-  }, [isEntityManager, navigate]);
+  }, [canCreateProject, navigate]);
 
   const [localFieldErrors, setLocalFieldErrors] = useState<Record<string, string>>({});
-  const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string }[]>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string; quota?: { remaining: number } }[]>([]);
   const [isLoadingOrganization, setIsLoadingOrganization] = useState(true);
   const [organizationError, setOrganizationError] = useState<string | null>(null);
   const [fundingAreas, setFundingAreas] = useState<FundingArea[]>([]);
@@ -55,11 +58,17 @@ export function ProjectCreatePage() {
   });
 
   const {
+    organizations: eligibleOrganizations,
+    isLoading: isLoadingEligibleOrganizations,
+    error: eligibleOrganizationsError,
+  } = useEligibleProjectOrganizations(isProjectManager);
+
+  const {
     data: eligibility,
     isLoading: isLoadingEligibility,
     error: eligibilityError,
     reason: eligibilityReason,
-  } = useProjectEligibility(formData.organizationId);
+  } = useProjectEligibility(isEntityManager ? formData.organizationId : null);
 
   // Destructure errorCode from the hook to detect eligibility-related failures
   const { create, isLoading, error, errorCode, fieldErrors, clearFieldError, clearError } = useProjectCreate();
@@ -95,6 +104,33 @@ export function ProjectCreatePage() {
       }
     }
 
+    function loadProjectManagerOrganizations() {
+      setIsLoadingOrganization(true);
+      setOrganizationError(eligibleOrganizationsError);
+      if (eligibleOrganizationsError) {
+        setIsLoadingOrganization(false);
+        return;
+      }
+
+      if (!cancelled) {
+        const options = eligibleOrganizations.map((org) => ({
+          id: org.id,
+          name: org.name,
+          quota: { remaining: org.quota.remaining },
+        }));
+        setOrganizationOptions(options);
+        if (options.length > 0) {
+          setFormData((prev) => ({
+            ...prev,
+            organizationId: prev.organizationId || options[0].id,
+          }));
+        } else {
+          setOrganizationError('لا توجد جهات مؤهلة لإنشاء مشروع حالياً.');
+        }
+        setIsLoadingOrganization(false);
+      }
+    }
+
     async function loadFundingAreas() {
       setIsLoadingFundingAreas(true);
       try {
@@ -111,27 +147,47 @@ export function ProjectCreatePage() {
       }
     }
 
-    loadOrganization();
+    if (isEntityManager) {
+      loadOrganization();
+    } else if (isProjectManager) {
+      loadProjectManagerOrganizations();
+    } else {
+      setIsLoadingOrganization(false);
+    }
+
     loadFundingAreas();
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [isEntityManager, isProjectManager, eligibleOrganizations, eligibleOrganizationsError]);
 
-  const isEligible = Boolean(eligibility?.canCreate ?? eligibility?.allowed);
+  const isEligible = isProjectManager
+    ? organizationOptions.length > 0 && !!formData.organizationId
+    : Boolean(eligibility?.canCreate ?? eligibility?.allowed);
   const effectiveEligibilityReason = eligibilityReason || createErrorReason;
   const showPricingCta =
     effectiveEligibilityReason === 'NO_ACTIVE_SUBSCRIPTION' ||
     effectiveEligibilityReason === 'PROJECT_LIMIT_REACHED';
-  const formDisabled = isLoading || isLoadingEligibility || !!organizationError || !isEligible;
+  const formDisabled =
+    isLoading ||
+    (isEntityManager && isLoadingEligibility) ||
+    (isProjectManager && isLoadingEligibleOrganizations) ||
+    !!organizationError ||
+    !isEligible;
 
   useEffect(() => {
-    if (!isLoadingEligibility && !isEligible && eligibilityError && !eligibilityToastShown) {
+    if (
+      isEntityManager &&
+      !isLoadingEligibility &&
+      !isEligible &&
+      eligibilityError &&
+      !eligibilityToastShown
+    ) {
       toast.error(eligibilityError);
       setEligibilityToastShown(true);
     }
-  }, [isLoadingEligibility, isEligible, eligibilityError, eligibilityToastShown]);
+  }, [isEntityManager, isLoadingEligibility, isEligible, eligibilityError, eligibilityToastShown]);
 
   const updateField = (field: keyof typeof formData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -279,7 +335,7 @@ export function ProjectCreatePage() {
     }
   };
 
-  if (isLoadingEligibility) {
+  if (isEntityManager && isLoadingEligibility) {
     return (
       <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
@@ -290,7 +346,19 @@ export function ProjectCreatePage() {
     );
   }
 
-  const eligibilityBannerMessage = eligibilityError || error || null;
+  if (isProjectManager && isLoadingEligibleOrganizations) {
+    return (
+      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          <p className="text-gray-600">جارٍ تحميل الجهات المؤهلة...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const eligibilityBannerMessage =
+    (isEntityManager ? eligibilityError : eligibleOrganizationsError) || error || null;
 
   return (
     <div className="min-h-full bg-gray-50 p-6">
@@ -327,6 +395,32 @@ export function ProjectCreatePage() {
                 )}
               </div>
             )}
+
+            <div>
+              <label className="block text-sm font-medium mb-2">الجهة *</label>
+              {organizationError && <p className="text-red-600 text-sm mb-1">{organizationError}</p>}
+              {isLoadingOrganization ? (
+                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                  جاري تحميل الجهات...
+                </div>
+              ) : (
+                <select
+                  value={formData.organizationId}
+                  onChange={(e) => updateField('organizationId', e.target.value)}
+                  disabled={formDisabled || organizationOptions.length === 0}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                >
+                  {organizationOptions.map((org) => (
+                    <option key={org.id} value={org.id}>
+                      {org.name}
+                      {isProjectManager && org.quota !== undefined
+                        ? ` (متبقي ${org.quota.remaining})`
+                        : ''}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </div>
 
             <div>
               <label className="block text-sm font-medium mb-2">اسم المشروع *</label>
