@@ -287,14 +287,11 @@ export function TopBar({
               {!isProjectManager && (
                 <DropdownMenu.Item
                   className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none"
-                  onSelect={() => navigate('/dashboard/onboarding/profile')}
+                  onSelect={() => navigate('/dashboard/onboarding/info?tab=info')}
                 >
                   الملف الشخصي
                 </DropdownMenu.Item>
               )}
-              <DropdownMenu.Item className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none">
-                الإعدادات
-              </DropdownMenu.Item>
               <DropdownMenu.Separator className="h-px bg-border my-2" />
               <DropdownMenu.Item
                 className="px-3 py-2 hover:bg-accent rounded cursor-pointer outline-none text-destructive flex items-center gap-2"

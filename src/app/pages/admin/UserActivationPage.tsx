@@ -1,5 +1,7 @@
-import { useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
+  CheckCircle2,
+  XCircle,
   Users,
   Search,
   Loader2,
@@ -8,7 +10,6 @@ import {
   FileText,
   CheckCircle,
   AlertTriangle,
-  X,
   Building2,
   Mail,
   Phone,
@@ -16,7 +17,6 @@ import {
   Calendar,
   ArrowUp,
   ArrowDown,
-  Info,
   Filter,
   RefreshCw,
 } from 'lucide-react';
@@ -29,6 +29,14 @@ import { AdminUser, OrganizationDocument, userService, USER_STATUS_OPTIONS } fro
 import { ApiError } from '@/api/types';
 import { useAuth } from '@/app/layouts/RootLayout';
 import { Button } from '@/app/components/ui/button';
+import {
+  DocumentSlotId,
+  documentSlots,
+  getDocumentSlotLabel,
+  getSlotIdByDocumentType,
+  requiredDocumentSlots,
+  optionalDocumentSlots,
+} from '@/app/utils/document-slots';
 import {
   Table,
   TableBody,
@@ -78,6 +86,96 @@ function formatRelativeTime(dateString: string): string {
   if (diffWeeks < 4) return `منذ ${diffWeeks} أسبوع`;
   if (diffMonths < 12) return `منذ ${diffMonths} شهر`;
   return `منذ ${diffYears} سنة`;
+}
+
+interface DocumentChecklistProps {
+  documents: OrganizationDocument[];
+}
+
+function DocumentChecklist({ documents }: DocumentChecklistProps) {
+  const documentsBySlot = useMemo(() => {
+    const map = new Map<DocumentSlotId, OrganizationDocument>();
+    documents.forEach((doc) => {
+      const slotId = getSlotIdByDocumentType(doc.documentType);
+      if (slotId && !map.has(slotId)) {
+        map.set(slotId, doc);
+      }
+    });
+    return map;
+  }, [documents]);
+
+  const renderSlot = (slot: { id: DocumentSlotId; label: string; required: boolean }) => {
+    const doc = documentsBySlot.get(slot.id);
+    const isPresent = !!doc;
+    return (
+      <div
+        key={slot.id}
+        className="p-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+      >
+        <div className="flex items-center gap-3">
+          <FileText className={`w-5 h-5 ${isPresent ? 'text-blue-600' : 'text-gray-400'}`} />
+          <div>
+            <div className="font-medium text-base">{slot.label}</div>
+            {doc && (
+              <div className="text-sm text-gray-600">
+                {doc.fileName || doc.originalName || getDocumentTypeLabel(doc.documentType)}
+              </div>
+            )}
+            {doc && (
+              <div className="text-xs text-gray-500">
+                {formatFileSize(doc.fileSize || doc.size)} • {formatDate(doc.uploadedAt || doc.createdAt)}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          {isPresent ? (
+            <>
+              <span className="inline-flex items-center gap-1.5 text-sm font-medium text-green-700">
+                <CheckCircle2 className="w-4 h-4" />
+                مُرفق
+              </span>
+              <Button variant="outline" size="sm" onClick={() => doc && handleOpenDocument(doc)}>
+                عرض / تحميل
+              </Button>
+            </>
+          ) : (
+            <span
+              className={`inline-flex items-center gap-1.5 text-sm font-medium ${
+                slot.required ? 'text-red-600' : 'text-gray-500'
+              }`}
+            >
+              {slot.required ? <XCircle className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
+              غير مُرفق
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="space-y-4">
+      {/* Required documents */}
+      <div>
+        <h4 className="text-sm font-semibold text-red-700 mb-2 flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4" />
+          المستندات الإلزامية
+        </h4>
+        <div className="border border-gray-200 rounded-lg divide-y divide-gray-200">
+          {requiredDocumentSlots.map(renderSlot)}
+        </div>
+      </div>
+
+      {/* Optional documents */}
+      <div>
+        <h4 className="text-sm font-semibold text-gray-700 mb-2">المستندات الاختيارية</h4>
+        <div className="border border-gray-200 rounded-lg divide-y divide-gray-200">
+          {optionalDocumentSlots.map(renderSlot)}
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function formatFileSize(bytes: number): string {
@@ -212,6 +310,8 @@ export function UserActivationPage() {
   const [actionMode, setActionMode] = useState<'view' | 'reject' | 'confirm-approve' | 'confirm-reject'>('view');
   const [rejectComment, setRejectComment] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [syncingOrgId, setSyncingOrgId] = useState<string | null>(null);
+  const [processingOrgIds, setProcessingOrgIds] = useState<Set<string>>(new Set());
 
   const {
     data: orgInfo,
@@ -221,6 +321,12 @@ export function UserActivationPage() {
     refetch: refetchOrgInfo,
     sync: syncOrgInfo,
   } = useOrganizationInformation(modalOrgId);
+
+  useEffect(() => {
+    if (modalOrgId && orgInfo && orgInfo.extractionStatus !== 'PROCESSING') {
+      markOrgProcessingDone(modalOrgId);
+    }
+  }, [modalOrgId, orgInfo]);
 
   const handleOpenModal = (user: AdminUser) => {
     setSelectedUser(user);
@@ -247,6 +353,35 @@ export function UserActivationPage() {
     setIsOrgModalOpen(false);
     setSelectedUser(null);
     setModalOrgId(undefined);
+  };
+
+  const handleSyncOrg = async (orgId: string) => {
+    setSyncingOrgId(orgId);
+    try {
+      const response = await userService.triggerOrganizationInformationExtraction(orgId);
+      toast.success('تم تشغيل استخراج بيانات الجهة بنجاح.');
+      const extracted = response.data?.data;
+      if (extracted?.extractionStatus === 'PROCESSING') {
+        setProcessingOrgIds((prev) => new Set(prev).add(orgId));
+      }
+      if (modalOrgId === orgId) {
+        await refetchOrgInfo();
+      }
+    } catch (err) {
+      const apiError = err as ApiError;
+      toast.error(apiError.message || 'تعذر تشغيل استخراج بيانات الجهة.');
+    } finally {
+      setSyncingOrgId(null);
+    }
+  };
+
+  const markOrgProcessingDone = (orgId: string | undefined) => {
+    if (!orgId) return;
+    setProcessingOrgIds((prev) => {
+      const next = new Set(prev);
+      next.delete(orgId);
+      return next;
+    });
   };
 
   const openDirectFileUrl = (fileUrl: string, fileName: string) => {
@@ -538,15 +673,48 @@ export function UserActivationPage() {
                         <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.updatedAt)}</div>
                       </TableCell>
                       <TableCell>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleOpenModal(user)}
-                          className="flex items-center gap-1.5"
-                        >
-                          <Eye className="w-4 h-4" />
-                          عرض
-                        </Button>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleOpenModal(user)}
+                            className="flex items-center gap-1.5"
+                          >
+                            <Eye className="w-4 h-4" />
+                            عرض
+                          </Button>
+                          {isProjectManager && user.organization?.id && (
+                            <>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleOpenOrgModal(user)}
+                                className="flex items-center gap-1.5"
+                              >
+                                <Building2 className="w-4 h-4" />
+                                عرض الجهة
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={
+                                  syncingOrgId === user.organization.id ||
+                                  processingOrgIds.has(user.organization.id)
+                                }
+                                onClick={() => handleSyncOrg(user.organization.id)}
+                                className="flex items-center gap-1.5"
+                              >
+                                {syncingOrgId === user.organization.id ||
+                                processingOrgIds.has(user.organization.id) ? (
+                                  <Loader2 className="w-4 h-4 animate-spin" />
+                                ) : (
+                                  <RefreshCw className="w-4 h-4" />
+                                )}
+                                مزامنة
+                              </Button>
+                            </>
+                          )}
+                        </div>
                       </TableCell>
                     </TableRow>
                   );})}
@@ -659,41 +827,10 @@ export function UserActivationPage() {
                 </div>
               </div>
 
-              {/* Documents */}
+              {/* Document Checklist */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">المستندات المرفوعة</h3>
-                {selectedUser.documents && selectedUser.documents.length > 0 ? (
-                  <div className="border border-gray-200 rounded-lg divide-y divide-gray-200">
-                    {selectedUser.documents.map((doc) => (
-                      <div
-                        key={doc.id}
-                        className="p-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
-                      >
-                        <div className="flex items-center gap-3">
-                          <FileText className="w-5 h-5 text-blue-600" />
-                          <div>
-                            <div className="font-medium text-base">{getDocumentTypeLabel(doc.documentType)}</div>
-                            <div className="text-sm text-gray-600">{doc.fileName}</div>
-                            <div className="text-xs text-gray-500">
-                              {formatFileSize(doc.fileSize)} • {formatDate(doc.uploadedAt)}
-                            </div>
-                          </div>
-                        </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleOpenDocument(doc)}
-                        >
-                          عرض / تحميل
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-sm text-gray-500 bg-gray-50 rounded-lg p-4">
-                    لا توجد مستندات مرفوعة.
-                  </div>
-                )}
+                <h3 className="font-semibold text-gray-900">قائمة المستندات</h3>
+                <DocumentChecklist documents={selectedUser.documents || []} />
               </div>
 
               {/* Reject Comment */}
@@ -891,9 +1028,9 @@ export function UserActivationPage() {
             <Button
               variant="default"
               onClick={() => syncOrgInfo()}
-              disabled={orgInfoSyncing}
+              disabled={orgInfoSyncing || orgInfo?.extractionStatus === 'PROCESSING'}
             >
-              {orgInfoSyncing ? (
+              {orgInfoSyncing || orgInfo?.extractionStatus === 'PROCESSING' ? (
                 <Loader2 className="w-4 h-4 ml-1 animate-spin" />
               ) : (
                 <RefreshCw className="w-4 h-4 ml-1" />

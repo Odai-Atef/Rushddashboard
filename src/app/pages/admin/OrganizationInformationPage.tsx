@@ -108,9 +108,13 @@ export function OrganizationInformationPage() {
             variant="outline"
             size="sm"
             onClick={() => sync()}
-            disabled={isSyncing}
+            disabled={isSyncing || data?.extractionStatus === 'PROCESSING'}
           >
-            {isSyncing ? <Loader2 className="w-4 h-4 ml-1 animate-spin" /> : <RefreshCw className="w-4 h-4 ml-1" />}
+            {isSyncing || data?.extractionStatus === 'PROCESSING' ? (
+              <Loader2 className="w-4 h-4 ml-1 animate-spin" />
+            ) : (
+              <RefreshCw className="w-4 h-4 ml-1" />
+            )}
             مزامنة
           </Button>
           <Button variant="outline" size="sm" onClick={() => refetch()}>

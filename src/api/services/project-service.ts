@@ -19,6 +19,8 @@ export interface CreateProjectDto {
   beneficiariesCount: number;
   geographicScope: string;
   managerId: string;
+  creatorId: string;
+  ownerId: string;
   organizationId: string;
   fundingAreaIds: string[];
 }

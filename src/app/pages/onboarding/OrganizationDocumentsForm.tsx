@@ -6,6 +6,7 @@ import {
   ChevronLeft,
   Clock,
   Download,
+  ExternalLink,
   FileText,
   Info,
   Loader2,
@@ -18,9 +19,15 @@ import { useSearchParams } from 'react-router';
 import {
   BACKEND_DOCUMENT_TYPE_TO_SLOT,
   DOCUMENT_SLOT_MAPPING,
-  DocumentSlotId,
   OrganizationDocument,
 } from '@/api/services/onboarding-service';
+import {
+  DocumentSlotId,
+  documentSlots,
+  requiredDocumentSlots,
+  optionalDocumentSlots,
+  getDocumentSlotLabel,
+} from '@/app/utils/document-slots';
 
 interface UploadedFile {
   id: string;
@@ -104,26 +111,6 @@ function validateFile(
   return { valid: true };
 }
 
-const documentSlots: { id: DocumentSlotId; label: string; required: boolean; templateUrl?: string }[] = [
-  { id: 'license', label: 'رخصة الجمعية الخيرية', required: true },
-  { id: 'bank', label: 'شهادة الحساب البنكي', required: true },
-  { id: 'address', label: 'العنوان الوطني', required: true },
-  { id: 'profile', label: 'الملف التعريفي للجمعية', required: true },
-  { id: 'board_approval', label: 'قرار تشكيل مجلس الإدارة', required: true },
-  { id: 'basic_bylaws', label: 'اللائحة الأساسية', required: true },
-  { id: 'representative_authorization', label: 'خطاب تفويض ممثل الجهة', required: true },
-  { id: 'brand', label: 'الهوية البصرية', required: true },
-  { id: 'projects', label: 'المشاريع السابقة', required: false },
-  { id: 'financial', label: 'التقارير المالية', required: false },
-  { id: 'annual', label: 'التقارير السنوية', required: false },
-  {
-    id: 'startup_associations_additional',
-    label: 'المستندات الإضافية الخاصة بالجمعيات الناشئة (التي لم تكمل سنة من تاريخ التأسيس)',
-    required: false,
-    templateUrl: '/templates/startup-association-letter.pdf',
-  },
-];
-
 const mapSlotToDocumentType = (slotId: DocumentSlotId): string =>
   DOCUMENT_SLOT_MAPPING[slotId] || 'other';
 
@@ -149,8 +136,8 @@ export function OrganizationDocumentsForm() {
       : null;
   });
 
-  const requiredSlots = documentSlots.filter((s) => s.required);
-  const optionalSlots = documentSlots.filter((s) => !s.required);
+  const requiredSlots = requiredDocumentSlots;
+  const optionalSlots = optionalDocumentSlots;
 
   const completedRequiredCount = requiredSlots.filter((slot) => {
     const doc = uploadedFiles.find(
@@ -279,7 +266,7 @@ export function OrganizationDocumentsForm() {
         file,
         docType,
         activeOrganizationId || '',
-        documentSlots.find((s) => s.id === slotId)?.label
+        getDocumentSlotLabel(slotId)
       );
       clearInterval(progressInterval);
 
@@ -316,7 +303,7 @@ export function OrganizationDocumentsForm() {
       );
 
       toast.success(
-        `تم رفع ${documentSlots.find((s) => s.id === slotId)?.label} بنجاح`,
+        `تم رفع ${getDocumentSlotLabel(slotId)} بنجاح`,
         { duration: TOAST_DURATION }
       );
     } catch (err) {
@@ -422,6 +409,35 @@ export function OrganizationDocumentsForm() {
       toast.success('تم تحميل الملف بنجاح', { duration: TOAST_DURATION });
     } catch {
       toast.error('فشل تحميل الملف', { duration: TOAST_DURATION });
+    }
+  };
+
+  const handleViewFile = async (fileId?: string) => {
+    if (!fileId) {
+      toast.error('لا يوجد معرف للملف', { duration: TOAST_DURATION });
+      return;
+    }
+    try {
+      const { collaborationService } = await import('@/api/services/collaboration-service');
+      const res = await collaborationService.downloadFileById(fileId);
+      if (!res.success || !res.data) throw new Error('Download failed');
+
+      const blob = res.data;
+      const url = window.URL.createObjectURL(blob);
+      const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        const a = document.createElement('a');
+        a.href = url;
+        a.target = '_blank';
+        a.download = 'document';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+      toast.success('تم فتح الملف في تبويب جديد', { duration: TOAST_DURATION });
+      setTimeout(() => window.URL.revokeObjectURL(url), 60000);
+    } catch {
+      toast.error('فشل فتح الملف', { duration: TOAST_DURATION });
     }
   };
 
@@ -634,13 +650,22 @@ export function OrganizationDocumentsForm() {
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0">
                     {isCompleted && file?.fileId && (
-                      <button
-                        onClick={() => handleDownloadFile(file.fileId)}
-                        className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
-                        title="تحميل"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
+                      <>
+                        <button
+                          onClick={() => handleDownloadFile(file.fileId)}
+                          className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
+                          title="تحميل"
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleViewFile(file.fileId)}
+                          className="px-3 py-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors text-sm font-medium"
+                          title="عرض في تبويب جديد"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </button>
+                      </>
                     )}
                     <button
                       onClick={() => handleSelectFile(doc.id)}
@@ -758,13 +783,22 @@ export function OrganizationDocumentsForm() {
                   </div>
                    <div className="flex items-center gap-2 flex-shrink-0">
                     {isCompleted && file?.fileId && (
-                      <button
-                        onClick={() => handleDownloadFile(file.fileId)}
-                        className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
-                        title="تحميل"
-                      >
-                        <Download className="w-4 h-4" />
-                      </button>
+                      <>
+                        <button
+                          onClick={() => handleDownloadFile(file.fileId)}
+                          className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
+                          title="تحميل"
+                        >
+                          <Download className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleViewFile(file.fileId)}
+                          className="px-3 py-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors text-sm font-medium"
+                          title="عرض في تبويب جديد"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                        </button>
+                      </>
                     )}
                     <button
                       onClick={() => handleSelectFile(doc.id)}

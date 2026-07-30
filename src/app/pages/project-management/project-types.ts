@@ -92,6 +92,8 @@ export interface Project {
   endDate: string;
   progress: number;
   managerId: string | null;
+  creatorId?: string | null;
+  ownerId?: string | null;
   description: string;
   beneficiaries: string;
   beneficiariesCount?: number;
@@ -102,6 +104,8 @@ export interface Project {
   createdAt?: string;
   updatedAt?: string;
   manager?: ProjectManager | string | null;
+  creator?: ProjectManager | string | null;
+  owner?: ProjectManager | string | null;
   activities?: ProjectActivity[];
   budgets?: ProjectBudgetItem[];
   milestones?: ProjectMilestone[];
@@ -140,6 +144,8 @@ export interface CreateProjectDto {
   beneficiariesCount: number;
   geographicScope: string;
   managerId: string;
+  creatorId: string;
+  ownerId: string;
   organizationId: string;
   fundingAreaIds: string[];
 }

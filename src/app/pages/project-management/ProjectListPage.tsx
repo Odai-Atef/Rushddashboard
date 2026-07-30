@@ -274,6 +274,13 @@ export function ProjectListPage() {
     return project.manager || project.managerId || '-';
   };
 
+  const getProjectCreator = (project: Project): string => {
+    if (project.creator && typeof project.creator === 'object') {
+      return project.creator.name || project.creator.email || project.creator.id || '-';
+    }
+    return project.creator || project.creatorId || '-';
+  };
+
   const getBudgetAmount = (budget: Project['budget']): number => {
     if (typeof budget === 'number') return budget;
     if (budget && typeof budget === 'object' && 's' in budget) {
@@ -353,6 +360,7 @@ export function ProjectListPage() {
             <tr>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">اسم المشروع</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الجهه</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المنشئ</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الباقة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">آخر تحديث</th>
@@ -375,6 +383,7 @@ export function ProjectListPage() {
                     </button>
                   </td>
                   <td className="px-6 py-4 text-sm text-gray-600">{getProjectOrganization(project)}</td>
+                  <td className="px-6 py-4 text-sm text-gray-600">{getProjectCreator(project)}</td>
                   <td className="px-6 py-4 text-sm text-gray-500">{project.packageName || project.packageId || 'غير محددة'}</td>
                   <td className="px-6 py-4">
                     <span

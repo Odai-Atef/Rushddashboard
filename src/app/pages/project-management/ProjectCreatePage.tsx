@@ -51,7 +51,7 @@ export function ProjectCreatePage() {
   }, [canCreateProject, navigate]);
 
   const [localFieldErrors, setLocalFieldErrors] = useState<Record<string, string>>({});
-  const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string; quota?: { remaining: number } }[]>([]);
+  const [organizationOptions, setOrganizationOptions] = useState<{ id: string; name: string; ownerId?: string; quota?: { remaining: number } }[]>([]);
   const [isLoadingOrganization, setIsLoadingOrganization] = useState(true);
   const [organizationError, setOrganizationError] = useState<string | null>(null);
   const [fundingAreas, setFundingAreas] = useState<FundingArea[]>([]);
@@ -104,7 +104,7 @@ export function ProjectCreatePage() {
         const org = response.data;
         if (!cancelled) {
           if (org?.id) {
-            setOrganizationOptions([{ id: org.id, name: org.name }]);
+            setOrganizationOptions([{ id: org.id, name: org.name, ownerId: org.ownerId }]);
             setFormData((prev) => ({ ...prev, organizationId: org.id }));
             // For entity-managers, restrict work areas to those selected during onboarding
             if (isEntityManager) {
@@ -157,6 +157,7 @@ export function ProjectCreatePage() {
         const options = eligibleOrganizations.map((org) => ({
           id: org.id,
           name: org.name,
+          ownerId: org.ownerId,
           quota: { remaining: org.quota.remaining },
         }));
         setOrganizationOptions(options);
@@ -338,6 +339,9 @@ export function ProjectCreatePage() {
     }
     setLocalFieldErrors({});
 
+    const selectedOrg = organizationOptions.find((org) => org.id === formData.organizationId);
+    const ownerId = selectedOrg?.ownerId || '';
+
     const dto: CreateProjectDto = {
       name: formData.name,
       description: formData.description,
@@ -349,6 +353,8 @@ export function ProjectCreatePage() {
       beneficiariesCount: Number(formData.beneficiariesCount) || 0,
       geographicScope: formData.geographicScope,
       managerId: user?.id || '',
+      creatorId: user?.id || '',
+      ownerId,
       organizationId: formData.organizationId,
       fundingAreaIds: formData.fundingAreaIds,
     };
@@ -437,31 +443,33 @@ export function ProjectCreatePage() {
               </div>
             )}
 
-            <div>
-              <label className="block text-sm font-medium mb-2">الجهة *</label>
-              {organizationError && <p className="text-red-600 text-sm mb-1">{organizationError}</p>}
-              {isLoadingOrganization ? (
-                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
-                  جاري تحميل الجهات...
-                </div>
-              ) : (
-                <select
-                  value={formData.organizationId}
-                  onChange={(e) => updateField('organizationId', e.target.value)}
-                  disabled={formDisabled || organizationOptions.length === 0}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
-                >
-                  {organizationOptions.map((org) => (
-                    <option key={org.id} value={org.id}>
-                      {org.name}
-                      {isProjectManager && org.quota !== undefined
-                        ? ` (متبقي ${org.quota.remaining})`
-                        : ''}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </div>
+            {isProjectManager && (
+              <div>
+                <label className="block text-sm font-medium mb-2">الجهة *</label>
+                {organizationError && <p className="text-red-600 text-sm mb-1">{organizationError}</p>}
+                {isLoadingOrganization ? (
+                  <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                    جاري تحميل الجهات...
+                  </div>
+                ) : (
+                  <select
+                    value={formData.organizationId}
+                    onChange={(e) => updateField('organizationId', e.target.value)}
+                    disabled={formDisabled || organizationOptions.length === 0}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  >
+                    {organizationOptions.map((org) => (
+                      <option key={org.id} value={org.id}>
+                        {org.name}
+                        {org.quota !== undefined
+                          ? ` (متبقي ${org.quota.remaining})`
+                          : ''}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium mb-2">اسم المشروع *</label>
@@ -483,11 +491,11 @@ export function ProjectCreatePage() {
                 <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
                   جاري تحميل مجالات المشاريع...
                 </div>
-              ) : visibleFundingAreas.length === 0 ? (
+              ) : fundingAreas.length === 0 ? (
                 <p className="text-sm text-gray-500">لا توجد مجالات مشاريع متاحة حالياً.</p>
               ) : (
                 <MultiSelect
-                  options={visibleFundingAreas.map((area) => ({ value: area.id, label: area.name }))}
+                  options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
                   selected={formData.fundingAreaIds}
                   onChange={(next) => {
                     setFormData((prev) => ({ ...prev, fundingAreaIds: next }));
