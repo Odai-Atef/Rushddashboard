@@ -30,7 +30,6 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
     'onboarding-roadmap',
     'onboarding-processing',
     'onboarding-profile',
-    'charity-assessment-results',
     'charity-assessment-roadmap',
     'project-management',
     'project-management-dashboard',
