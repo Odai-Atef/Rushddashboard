@@ -476,7 +476,24 @@ export function TopBar({
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
 
-        {/* User Profile */}
+        {/* Theme Toggle */}
+        <button
+          onClick={handleThemeToggle}
+          title={themeLabel(theme)}
+          className={cn(
+            'relative flex items-center justify-center w-10 h-10 rounded-xl',
+            'transition-all duration-200',
+            isDark
+              ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
+              : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+          )}
+          aria-label={`تبديل الوضع الحالي: ${themeLabel(theme)}`}
+        >
+          <ThemeIcon className="w-5 h-5" />
+        </button>
+
+        /** User Profile */
+
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <button
