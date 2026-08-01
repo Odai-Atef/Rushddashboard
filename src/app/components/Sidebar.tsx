@@ -298,7 +298,6 @@ export function Sidebar({ activeView, className }: SidebarProps) {
       { id: 'marketing', label: 'لوحة التسويق', icon: TrendingUp, path: '/dashboard/marketing', restricted: true },
       { id: 'recommendations', label: 'لوحة التوصيات', icon: Lightbulb, path: '/dashboard/recommendations', restricted: true },
       { id: 'opportunities', label: 'لوحة الفرص', icon: FileCheck, path: '/dashboard/opportunities', restricted: true },
-      { id: 'settings', label: 'الإعدادات', icon: Settings, path: '/dashboard/settings', restricted: true },
     ];
 
     const navItems: NavItem[] =
