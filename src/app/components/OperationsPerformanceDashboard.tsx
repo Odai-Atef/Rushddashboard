@@ -182,12 +182,12 @@ export function OperationsPerformanceDashboard() {
  </thead>
  <tbody>
  {slaByCategory.map((row, i) => (
- <tr key={i} className="border-b border-[var(--border)]/50 hover:bg-secondary dark:hover:bg-muted/50">
+ <tr key={i} className="border-b border-[var(--border)]/50 hover:bg-[var(--hover)] dark:hover:bg-muted/50">
  <td className="py-3 text-[var(--text-primary)]">{row.name}</td>
  <td className="py-3 text-center text-[var(--text-muted)]">{row.sla} ساعة</td>
- <td className={`py-3 text-center ${row.status === 'breach' ? 'text-red-500' : 'text-[var(--primary)]'}`}>{row.actual} ساعة</td>
+ <td className={`py-3 text-center ${row.status === 'breach' ? 'text-[var(--destructive)]' : 'text-[var(--primary)]'}`}>{row.actual} ساعة</td>
  <td className="py-3">
- <span className={`px-2 py-0.5 rounded-full text-xs ${row.status === 'breach' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : 'bg-emerald-100 text-[var(--primary)]'}`}>
+ <span className={`px-2 py-0.5 rounded-full text-xs ${row.status === 'breach' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : 'bg-[var(--primary)]/[0.1] text-[var(--primary)]'}`}>
  {row.status === 'breach' ? 'خرق' : 'ملتزم'}
  </span>
  </td>

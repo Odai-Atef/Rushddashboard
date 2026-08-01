@@ -236,7 +236,7 @@ export function IncubatorOverviewDashboard() {
  </div>
  <div className="space-y-[var(--spacing-small-gap)]">
  {insights.map((insight, i) => (
- <div key={i} className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-secondary/50">
+ <div key={i} className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-muted/50">
  <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${insight.positive === true ? 'bg-[var(--primary)]/[0.08]0' : insight.positive === false ? 'bg-[var(--destructive)]' : 'bg-[var(--primary)]'}`} />
  <p className="text-sm text-[var(--text-primary)] leading-snug">{insight.text}</p>
  </div>

@@ -260,7 +260,7 @@ export function OpportunitiesDashboard() {
  </div>
  <div className="space-y-4">
  {newPrograms.map((program) => (
- <div key={program.id} className="p-4 bg-secondary/50 rounded-[var(--radius-button)]">
+ <div key={program.id} className="p-4 bg-muted/50 rounded-[var(--radius-button)]">
  <div className="flex items-center justify-between mb-2">
  <h4 className="font-medium">{program.name}</h4>
  <span className="text-sm text-[var(--text-muted)]">
@@ -291,7 +291,7 @@ export function OpportunitiesDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الشريك</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">النوع</th>
@@ -299,9 +299,9 @@ export function OpportunitiesDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الإمكانات</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {partnerships.map((partner) => (
- <tr key={partner.id} className="hover:bg-secondary/50 transition-colors">
+ <tr key={partner.id} className="hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4">
  <p className="font-medium">{partner.partner}</p>
  </td>

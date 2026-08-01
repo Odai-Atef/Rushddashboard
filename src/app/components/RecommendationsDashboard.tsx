@@ -309,7 +309,7 @@ export function RecommendationsDashboard() {
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {/* Right Column */}
  <div className="space-y-4">
- <div className="p-4 bg-secondary/50 rounded-[var(--radius-button)]">
+ <div className="p-4 bg-muted/50 rounded-[var(--radius-button)]">
  <p className="text-sm text-[var(--text-muted)] mb-1">السبب</p>
  <p className="text-sm leading-relaxed">{rec.reason}</p>
  </div>
@@ -328,7 +328,7 @@ export function RecommendationsDashboard() {
 
  {/* Left Column */}
  <div className="space-y-4">
- <div className="p-4 bg-secondary/50 rounded-[var(--radius-button)]">
+ <div className="p-4 bg-muted/50 rounded-[var(--radius-button)]">
  <p className="text-sm text-[var(--text-muted)] mb-1">الإجراء المقترح</p>
  <p className="text-sm leading-relaxed">{rec.suggestedAction}</p>
  </div>

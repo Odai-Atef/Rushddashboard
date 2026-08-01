@@ -280,7 +280,7 @@ export function MarketingDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الحملة</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الإنفاق</th>
@@ -289,9 +289,9 @@ export function MarketingDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">ROI</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {campaigns.map((campaign) => (
- <tr key={campaign.id} className="hover:bg-secondary/50 transition-colors">
+ <tr key={campaign.id} className="hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4">
  <p className="font-medium">{campaign.name}</p>
  </td>

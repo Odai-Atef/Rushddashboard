@@ -330,7 +330,7 @@ export function OperationsDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">#</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الفريق</th>
@@ -341,9 +341,9 @@ export function OperationsDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الاتجاه</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {teamProductivity.map((team) => (
- <tr key={team.id} className="hover:bg-secondary/50 transition-colors">
+ <tr key={team.id} className="hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4 text-sm text-[var(--text-muted)]">{team.id}</td>
  <td className="px-6 py-4">
  <p className="font-medium">{team.team}</p>

@@ -241,7 +241,7 @@ export function CouponsPage() {
  ))}
  </div>
  <table className="w-full text-sm hidden sm:table">
- <thead className="bg-secondary border-b border-[var(--border)]">
+ <thead className="bg-muted/50 border-b border-[var(--border)]">
  <tr>
  <th className="px-4 py-3 text-right font-medium text-foreground">الكود</th>
  <th className="px-4 py-3 text-right font-medium text-foreground">النوع</th>
@@ -253,9 +253,9 @@ export function CouponsPage() {
  <th className="px-4 py-3 text-right font-medium text-foreground">الحالة</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-[var(--border)]">
  {coupons.map((coupon) => (
- <tr key={coupon.id} className="hover:bg-secondary">
+ <tr key={coupon.id} className="hover:bg-[var(--hover)]">
  <td className="px-4 py-3 font-medium text-foreground">{coupon.code}</td>
  <td className="px-4 py-3 text-foreground">{getTypeLabel(coupon.type)}</td>
  <td className="px-4 py-3 text-foreground">

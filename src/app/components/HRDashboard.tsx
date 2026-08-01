@@ -290,7 +290,7 @@ export function HRDashboard() {
 
  <div className="flex flex-col justify-center space-y-[var(--spacing-small-gap)]">
  {resignationReasonsData.map((item, index) => (
- <div key={index} className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-secondary/50 rounded-[var(--radius-button)]">
+ <div key={index} className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-muted/50 rounded-[var(--radius-button)]">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: item.color }}></div>
  <span className="font-medium">{item.name}</span>
@@ -320,7 +320,7 @@ export function HRDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">#</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">البرنامج التدريبي</th>
@@ -330,9 +330,9 @@ export function HRDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">نسبة الإنجاز</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {trainingProgress.map((program) => (
- <tr key={program.id} className="hover:bg-secondary/50 transition-colors">
+ <tr key={program.id} className="hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4 text-sm text-[var(--text-muted)]">{program.id}</td>
  <td className="px-6 py-4">
  <p className="font-medium">{program.program}</p>

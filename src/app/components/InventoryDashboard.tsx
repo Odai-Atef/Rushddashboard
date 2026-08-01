@@ -395,7 +395,7 @@ export function InventoryDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">المنتج</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">المخزون الحالي</th>
@@ -405,9 +405,9 @@ export function InventoryDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الإجراء</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {lowStockAlerts.map((alert) => (
- <tr key={alert.id} className="hover:bg-secondary dark:hover:bg-muted/50 transition-colors">
+ <tr key={alert.id} className="hover:bg-[var(--hover)] dark:hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4">
  <p className="font-medium">{alert.product}</p>
  </td>

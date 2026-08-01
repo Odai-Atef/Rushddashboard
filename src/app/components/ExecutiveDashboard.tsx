@@ -306,7 +306,7 @@ export function ExecutiveDashboard() {
  </div>
  <div className="p-4 space-y-[var(--spacing-small-gap)]">
  {topRecommendations.map((rec, index) => (
- <div key={rec.id} className="p-4 bg-secondary/50 rounded-[var(--radius-card)] hover:bg-muted dark:hover:bg-muted/50 transition-colors">
+ <div key={rec.id} className="p-4 bg-muted/50 rounded-[var(--radius-card)] hover:bg-muted dark:hover:bg-muted/50 transition-colors">
  <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <div className="w-8 h-8 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center text-sm font-medium flex-shrink-0">
  {index + 1}

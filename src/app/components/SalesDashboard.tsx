@@ -245,7 +245,7 @@ export function SalesDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">#</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">المنتج</th>
@@ -254,9 +254,9 @@ export function SalesDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">النمو</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {topProducts.map((product) => (
- <tr key={product.id} className="hover:bg-secondary/50 transition-colors">
+ <tr key={product.id} className="hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4 text-sm text-[var(--text-muted)]">{product.id}</td>
  <td className="px-6 py-4">
  <p className="font-medium">{product.name}</p>

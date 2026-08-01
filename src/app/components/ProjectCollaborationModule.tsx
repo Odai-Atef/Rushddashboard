@@ -440,7 +440,7 @@ export function ProjectCollaborationModule() {
  to={projectId ? `/dashboard/collaboration/${projectId}/chat?conv=${conv.id}` : '/dashboard/collaboration/chat'}
  key={conv.id}
  onClick={() => selectConversation(conv.id)}
- className="w-full p-6 hover:bg-secondary transition-colors text-right block"
+ className="w-full p-6 hover:bg-[var(--hover)] transition-colors text-right block"
  >
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1">
@@ -821,7 +821,7 @@ function ChatView({
  <button
  key={conv.id}
  onClick={() => selectConversation(conv.id)}
- className={`relative w-full p-4 border-b border-border hover:bg-secondary text-right ${
+ className={`relative w-full p-4 border-b border-border hover:bg-[var(--hover)] text-right ${
  selectedConversation === conv.id ? 'bg-primary/10' : ''
  }`}
  >
@@ -1183,7 +1183,7 @@ function MessageBubble({
  key={attachment.id}
  onClick={() => handleDownloadAttachment(attachment)}
  disabled={downloadingAttachmentId === attachment.id}
- className="w-full flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-small-gap)] rounded-lg bg-card border border-border hover:bg-secondary transition-colors text-right disabled:opacity-50"
+ className="w-full flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-small-gap)] rounded-lg bg-card border border-border hover:bg-[var(--hover)] transition-colors text-right disabled:opacity-50"
  >
  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary">
  {downloadingAttachmentId === attachment.id ? (
@@ -1422,7 +1422,7 @@ const DiscussionsView = () => {
  className={`px-4 py-2 rounded-lg text-sm font-medium ${
  selectedStatus === option.value
  ? 'bg-primary text-primary-foreground'
- : 'bg-card text-foreground border border-border hover:bg-secondary'
+ : 'bg-card text-foreground border border-border hover:bg-[var(--hover)]'
  }`}
  >
  {option.label}
@@ -1439,7 +1439,7 @@ const DiscussionsView = () => {
  className={`px-4 py-2 rounded-lg text-sm font-medium ${
  selectedSection === section.value
  ? 'bg-primary text-primary-foreground'
- : 'bg-card text-foreground border border-border hover:bg-secondary'
+ : 'bg-card text-foreground border border-border hover:bg-[var(--hover)]'
  }`}
  >
  {section.label}
@@ -1628,7 +1628,7 @@ const DiscussionsView = () => {
  className={`px-3 py-1 text-xs rounded-lg border ${
  discussion.status === s
  ? 'bg-primary text-primary-foreground border-ring'
- : 'bg-card text-foreground border-border hover:bg-secondary'
+ : 'bg-card text-foreground border-border hover:bg-[var(--hover)]'
  } disabled:opacity-50`}
  >
  {statusBadgeLabel(s)}
@@ -2137,7 +2137,7 @@ const DiscussionsView = () => {
  </thead>
  <tbody>
  {attachments.map((file) => (
- <tr key={file.id} className="border-b border-border hover:bg-secondary">
+ <tr key={file.id} className="border-b border-border hover:bg-[var(--hover)]">
  <td className="p-4 flex items-center gap-[var(--spacing-small-gap)]">
  {getFileIcon(file)}
  <span className="font-medium">{file.fileName}</span>
@@ -2279,7 +2279,7 @@ const DiscussionsView = () => {
  className={`px-4 py-2 rounded-lg text-sm font-medium ${
  filterStatus === status
  ? 'bg-primary text-primary-foreground'
- : 'bg-card text-foreground border border-border hover:bg-secondary'
+ : 'bg-card text-foreground border border-border hover:bg-[var(--hover)]'
  }`}
  >
  {status === 'all' ? 'الكل' : status === 'open' ? 'مفتوحة' : status === 'in-progress' ? 'قيد العمل' : status === 'resolved' ? 'محلولة' : 'مرفوضة'}
@@ -2693,7 +2693,7 @@ const DiscussionsView = () => {
  { name: 'فاطمة أحمد', requests: 15, avgTime: '3.1 ساعة', sla: 87, rating: 'جيد جداً' },
  { name: 'خالد سعيد', requests: 8, avgTime: '4.2 ساعة', sla: 75, rating: 'جيد' }
  ].map((member, idx) => (
- <tr key={idx} className="border-b border-border hover:bg-secondary">
+ <tr key={idx} className="border-b border-border hover:bg-[var(--hover)]">
  <td className="p-4 font-medium">{member.name}</td>
  <td className="p-4">{member.requests}</td>
  <td className="p-4">{member.avgTime}</td>

@@ -89,7 +89,7 @@ export function ProjectAnalyticsDashboard() {
  { label: 'إجمالي المشاريع', value: '2,480', icon: GitBranch, color: 'text-indigo-600', bg: 'bg-[var(--secondary)]/[0.08]' },
  { label: 'معدل الاعتماد', value: '33.2%', icon: TrendingUp, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]' },
  { label: 'متوسط زمن الاعتماد', value: '11 يوم', icon: Clock, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]' },
- { label: 'مشاريع متأخرة', value: '41', icon: AlertTriangle, color: 'text-red-500', bg: 'bg-[var(--destructive)]/[0.08]' },
+ { label: 'مشاريع متأخرة', value: '41', icon: AlertTriangle, color: 'text-[var(--destructive)]', bg: 'bg-[var(--destructive)]/[0.08]' },
  ].map((card, i) => {
  const Icon = card.icon;
  return (
@@ -164,19 +164,19 @@ export function ProjectAnalyticsDashboard() {
  {bottlenecks.map((b, i) => {
  const isOver = b.avgDays > b.target;
  return (
- <tr key={i} className="border-b border-[var(--border)]/50 hover:bg-secondary dark:hover:bg-muted/50">
+ <tr key={i} className="border-b border-[var(--border)]/50 hover:bg-[var(--hover)] dark:hover:bg-muted/50">
  <td className="py-3 text-[var(--text-primary)]">{b.stage}</td>
  <td className="py-3 text-center text-[var(--text-muted)]">{b.target} أيام</td>
- <td className={`py-3 text-center ${isOver ? 'text-red-500' : 'text-[var(--primary)]'}`}>{b.avgDays} أيام</td>
+ <td className={`py-3 text-center ${isOver ? 'text-[var(--destructive)]' : 'text-[var(--primary)]'}`}>{b.avgDays} أيام</td>
  <td className="py-3 text-center">
- <span className={`px-2 py-0.5 rounded-full text-xs ${b.overdue > 20 ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : 'bg-amber-100 text-[var(--warning)]'}`}>{b.overdue}</span>
+ <span className={`px-2 py-0.5 rounded-full text-xs ${b.overdue > 20 ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : 'bg-[var(--warning)]/[0.1] text-[var(--warning)]'}`}>{b.overdue}</span>
  </td>
  <td className="py-3">
  <div className="flex items-center gap-[var(--spacing-small-gap)] justify-end">
  <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
- <div className={`h-full rounded-full ${isOver ? 'bg-red-400' : 'bg-[var(--primary)]/[0.08]0'}`} style={{ width: `${Math.min((b.target / b.avgDays) * 100, 100)}%` }} />
+ <div className={`h-full rounded-full ${isOver ? 'bg-[var(--destructive)]' : 'bg-[var(--primary)]/[0.08]0'}`} style={{ width: `${Math.min((b.target / b.avgDays) * 100, 100)}%` }} />
  </div>
- {isOver ? <AlertTriangle className="w-3.5 h-3.5 text-red-500" /> : <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />}
+ {isOver ? <AlertTriangle className="w-3.5 h-3.5 text-[var(--destructive)]" /> : <TrendingUp className="w-3.5 h-3.5 text-[var(--primary)]" />}
  </div>
  </td>
  </tr>
@@ -229,7 +229,7 @@ export function ProjectAnalyticsDashboard() {
  <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">المشاريع حسب القطاع</h2>
  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
  {sectorBreakdown.map((sector, i) => (
- <div key={i} className="text-center p-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-secondary/50 hover:bg-muted dark:hover:bg-muted/50 transition-colors">
+ <div key={i} className="text-center p-4 rounded-[var(--radius-card)] border border-[var(--border)] bg-muted/50 hover:bg-muted dark:hover:bg-muted/50 transition-colors">
  <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: `${sector.color}20` }}>
  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: sector.color }} />
  </div>

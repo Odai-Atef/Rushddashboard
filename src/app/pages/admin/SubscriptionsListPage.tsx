@@ -217,7 +217,7 @@ export function SubscriptionsListPage() {
  ))}
  </div>
  <table className="w-full text-sm hidden sm:table">
- <thead className="bg-secondary border-b border-[var(--border)]">
+ <thead className="bg-muted/50 border-b border-[var(--border)]">
  <tr>
  <th className="px-4 py-3 text-right font-medium text-foreground">الجهة</th>
  <th className="px-4 py-3 text-right font-medium text-foreground">الباقة</th>
@@ -227,9 +227,9 @@ export function SubscriptionsListPage() {
  <th className="px-4 py-3 text-right font-medium text-foreground">التجديد التلقائي</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-100">
+ <tbody className="divide-y divide-[var(--border)]">
  {subscriptions.map((subscription) => (
- <tr key={subscription.id} className="hover:bg-secondary">
+ <tr key={subscription.id} className="hover:bg-[var(--hover)]">
  <td className="px-4 py-3">
  {subscription.organization ? (
  <div>

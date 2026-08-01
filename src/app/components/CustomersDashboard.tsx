@@ -304,7 +304,7 @@ export function CustomersDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">#</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">اسم العميل</th>
@@ -313,9 +313,9 @@ export function CustomersDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">درجة الرضا</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {highValueCustomers.map((customer) => (
- <tr key={customer.id} className="hover:bg-secondary/50 transition-colors">
+ <tr key={customer.id} className="hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4 text-sm text-[var(--text-muted)]">{customer.id}</td>
  <td className="px-6 py-4">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">

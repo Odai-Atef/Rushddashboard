@@ -323,7 +323,7 @@ export function ProfitabilityDashboard() {
  </ResponsiveContainer>
  <div className="grid grid-cols-1 gap-[var(--spacing-small-gap)] mt-4">
  {costBreakdownData.map((item, index) => (
- <div key={index} className="flex items-center justify-between p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] hover:bg-secondary/50 transition-colors">
+ <div key={index} className="flex items-center justify-between p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] hover:bg-muted/50 transition-colors">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
  <span className="text-sm">{item.name}</span>
@@ -422,7 +422,7 @@ export function ProfitabilityDashboard() {
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
- <thead className="bg-secondary/50">
+ <thead className="bg-muted/50">
  <tr>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">#</th>
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الخدمة</th>
@@ -432,9 +432,9 @@ export function ProfitabilityDashboard() {
  <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الهامش</th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+ <tbody className="divide-y divide-[var(--border)]">
  {topServices.map((service) => (
- <tr key={service.id} className="hover:bg-secondary/50 transition-colors">
+ <tr key={service.id} className="hover:bg-muted/50 transition-colors">
  <td className="px-6 py-4 text-sm text-[var(--text-muted)]">{service.id}</td>
  <td className="px-6 py-4">
  <p className="font-medium">{service.service}</p>

@@ -671,7 +671,7 @@ export function DonorDatabaseModule() {
  </thead>
  <tbody>
  {donors.map((donor) => (
- <tr key={donor.id} className="border-b border-border hover:bg-secondary">
+ <tr key={donor.id} className="border-b border-border hover:bg-[var(--hover)]">
  <td className="p-4">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
@@ -1178,7 +1178,7 @@ export function DonorDatabaseModule() {
  </thead>
  <tbody>
  {opportunities.map((opp) => (
- <tr key={opp.id} className="border-b border-border hover:bg-secondary">
+ <tr key={opp.id} className="border-b border-border hover:bg-[var(--hover)]">
  <td className="p-4">
  <p className="font-semibold">{opp.name}</p>
  <p className="text-sm text-muted-foreground">{opp.fundingArea}</p>
@@ -1552,7 +1552,7 @@ export function DonorDatabaseModule() {
  setSelectedDonor(donor.id);
  setCurrentView('profile');
  }}
- className="w-full text-right hover:bg-secondary p-[var(--spacing-card-padding)] rounded-lg transition-colors"
+ className="w-full text-right hover:bg-[var(--hover)] p-[var(--spacing-card-padding)] rounded-lg transition-colors"
  >
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
@@ -2018,7 +2018,7 @@ export function DonorDatabaseModule() {
  </thead>
  <tbody>
  {donors.map((donor, idx) => (
- <tr key={donor.id} className="border-b border-border hover:bg-secondary">
+ <tr key={donor.id} className="border-b border-border hover:bg-[var(--hover)]">
  <td className="p-4">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Hash className="w-4 h-4 text-muted-foreground" />
