@@ -40,26 +40,26 @@ const getComplexityColor = (complexity: string) => {
  case 'بسيط':
  return 'bg-[var(--primary)]/[0.1] text-[var(--primary)] border-[var(--primary)]/[0.2]';
  case 'متوسط':
- return 'bg-[var(--primary)]/10 text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
+ return 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
  case 'متقدم':
- return 'bg-purple-500/10 text-purple-600 border-purple-500/20';
+ return 'bg-[var(--info)]/[0.1] text-[var(--info)] border-[var(--info)]/[0.2]';
  default:
- return 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
+ return 'bg-[var(--muted)]/[0.1] text-muted-foreground border-[var(--border)]';
  }
 };
 
 const getImpactColor = (impact: string) => {
  switch (impact) {
  case 'حرج':
- return 'bg-[var(--destructive)]/10 text-[var(--destructive)] border-red-500/20';
+ return 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)] border-[var(--destructive)]/[0.2]';
  case 'عالي':
- return 'bg-orange-500/10 text-[var(--warning)] border-orange-500/20';
+ return 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
  case 'متوسط':
- return 'bg-yellow-500/10 text-[var(--warning)] border-yellow-500/20';
+ return 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
  case 'منخفض':
- return 'bg-[var(--primary)]/10 text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
+ return 'bg-[var(--primary)]/[0.1] text-[var(--primary)] border-[var(--primary)]/[0.2]';
  default:
- return 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
+ return 'bg-[var(--muted)]/[0.1] text-muted-foreground border-[var(--border)]';
  }
 };
 
@@ -71,14 +71,14 @@ function BadgeChip({ label }: { label: string }) {
  let colorClass = 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
 
  if (label === 'موصى به' || label.includes('موصى')) {
- icon = <Star className="w-3 h-3 fill-yellow-600" />;
- colorClass = 'bg-yellow-500/10 text-[var(--warning)] border-yellow-500/20';
+ icon = <Star className="w-3 h-3 fill-[var(--warning)]" />;
+ colorClass = 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
  } else if (label === 'رائج' || label.includes('رائج')) {
  icon = <Flame className="w-3 h-3" />;
- colorClass = 'bg-orange-500/10 text-[var(--warning)] border-orange-500/20';
+ colorClass = 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
  } else if (label === 'AI' || label.includes('AI')) {
  icon = <Sparkles className="w-3 h-3" />;
- colorClass = 'bg-purple-500/10 text-purple-600 border-purple-500/20';
+ colorClass = 'bg-[var(--info)]/[0.1] text-[var(--info)] border-[var(--info)]/[0.2]';
  }
 
  return (
@@ -242,7 +242,7 @@ export function AnalysisLibraryModal({
 
  {!isLoading && error && (
  <div className="flex flex-col items-center justify-center h-full text-center">
- <AlertTriangle className="w-10 h-10 text-red-500 mb-4" />
+ <AlertTriangle className="w-10 h-10 text-[var(--destructive)] mb-4" />
  <h3 className="text-lg font-medium mb-2">تعذر تحميل التحليلات</h3>
  <p className="text-muted-foreground mb-4">
  {error.message || 'حدث خطأ غير متوقع'}

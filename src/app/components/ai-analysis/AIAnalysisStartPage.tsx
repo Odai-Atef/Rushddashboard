@@ -74,9 +74,9 @@ const getImpactColor = (impact: string) => {
  case 'حرج':
  return 'bg-[var(--destructive)]/10 text-[var(--destructive)] border-red-500/20';
  case 'عالي':
- return 'bg-orange-500/10 text-[var(--warning)] border-orange-500/20';
+ return 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
  case 'متوسط':
- return 'bg-yellow-500/10 text-[var(--warning)] border-yellow-500/20';
+ return 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
  case 'منخفض':
  return 'bg-[var(--primary)]/10 text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
  default:
@@ -242,7 +242,7 @@ export function AIAnalysisStartPage() {
  <div className="flex-1">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <h3 className="font-semibold text-base">{card.title}</h3>
- {card.recommended && <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />}
+ {card.recommended && <Star className="w-4 h-4 text-[var(--warning)] fill-[var(--warning)]" />}
  </div>
  <p className="text-xs text-muted-foreground">{card.category}</p>
  </div>

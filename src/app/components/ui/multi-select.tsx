@@ -124,7 +124,7 @@ export function MultiSelect({
  key={option.value}
  className={cn(
  "inline-flex items-center gap-[var(--spacing-small-gap)] rounded-md px-2 py-0.5 text-xs font-medium transition-colors",
- "bg-emerald-100 text-[var(--primary)]"
+ "bg-[var(--primary)]/[0.1] text-[var(--primary)]"
  )}
  onClick={(e) => {
  e.stopPropagation();
@@ -132,7 +132,7 @@ export function MultiSelect({
  }}
  >
  {option.label}
- <X className="size-3 cursor-pointer hover:text-[var(--primary)] dark:hover:text-emerald-200" />
+ <X className="size-3 cursor-pointer hover:text-[var(--primary)] dark:hover:text-[var(--primary)]" />
  </span>
  ))
  )}

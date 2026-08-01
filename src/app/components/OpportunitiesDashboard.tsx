@@ -239,7 +239,7 @@ export function OpportunitiesDashboard() {
 
  {/* Actions */}
  <div className="flex gap-[var(--spacing-small-gap)] mt-4">
- <button className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors text-sm">
+ <button className="flex-1 px-4 py-2 bg-[var(--secondary)] hover:bg-[var(--secondary)]/90 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors text-sm">
  دراسة الفرصة
  </button>
  <button className="px-4 py-2 border border-[var(--border)] hover:bg-secondary dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors text-sm text-[var(--text-primary)]">

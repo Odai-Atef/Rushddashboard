@@ -1,3 +1,4 @@
+import { cn } from '@/app/utils/cn';
 import { X, ExternalLink, FileText, Download, Send, Trash2 } from 'lucide-react';
 import { projectService } from '@/api/services/project-service';
 import { DonorStatusActions } from './DonorStatusActions';
@@ -14,13 +15,13 @@ interface DonorDetailDrawerProps {
  isExecution?: boolean;
 }
 
-const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
- MATCHED: { label: 'مطابق', color: '#10b981', bg: '#d1fae5' },
- SUBMITTED: { label: 'تم الإرسال', color: '#3b82f6', bg: '#dbeafe' },
- ACCEPTED: { label: 'تم القبول', color: '#059669', bg: '#d1fae5' },
- REJECTED: { label: 'تم الاعتذار', color: '#ef4444', bg: '#fee2e2' },
- FUNDED: { label: 'تم التمويل', color: '#d97706', bg: '#fef3c7' },
- GENERATED: { label: 'تم إنشاء الخطة', color: '#8b5cf6', bg: '#ede9fe' },
+const STATUS_CONFIG: Record<string, { label: string; colorClass: string; bgClass: string }> = {
+ MATCHED: { label: 'مطابق', colorClass: 'text-[var(--primary)]', bgClass: 'bg-[var(--primary)]/[0.1] border-[var(--primary)]/[0.2]' },
+ SUBMITTED: { label: 'تم الإرسال', colorClass: 'text-[var(--secondary)]', bgClass: 'bg-[var(--secondary)]/[0.1] border-[var(--secondary)]/[0.2]' },
+ ACCEPTED: { label: 'تم القبول', colorClass: 'text-[var(--primary)]', bgClass: 'bg-[var(--primary)]/[0.1] border-[var(--primary)]/[0.2]' },
+ REJECTED: { label: 'تم الاعتذار', colorClass: 'text-[var(--destructive)]', bgClass: 'bg-[var(--destructive)]/[0.1] border-[var(--destructive)]/[0.2]' },
+ FUNDED: { label: 'تم التمويل', colorClass: 'text-[var(--warning)]', bgClass: 'bg-[var(--warning)]/[0.1] border-[var(--warning)]/[0.2]' },
+ GENERATED: { label: 'تم إنشاء الخطة', colorClass: 'text-[var(--secondary)]', bgClass: 'bg-[var(--secondary)]/[0.1] border-[var(--secondary)]/[0.2]' },
 };
 
 export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, projectId, isExecution }: DonorDetailDrawerProps) {
@@ -88,14 +89,17 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
  {/* Header */}
  <div className="flex items-center justify-between mb-6">
  <div className="flex items-center gap-3">
- <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[var(--primary-foreground)] text-lg">
+ <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--secondary)] to-[var(--primary)] flex items-center justify-center text-[var(--primary-foreground)] text-lg">
  {donor.name?.charAt(0)}
  </div>
  <div>
  <h2 className="text-xl font-bold">{donor.name}</h2>
  <span
- className="inline-block px-2 py-0.5 rounded-full text-xs font-medium mt-1"
- style={{ backgroundColor: statusCfg.bg, color: statusCfg.color }}
+ className={cn(
+ 'inline-block px-2 py-0.5 rounded-full text-xs font-medium mt-1 border',
+ statusCfg.bgClass,
+ statusCfg.colorClass
+ )}
  >
  {statusCfg.label}
  </span>
@@ -110,14 +114,14 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
  </div>
 
  {/* Score */}
- <div className="mb-6 p-4 bg-secondary rounded-xl">
+ <div className="mb-6 p-4 bg-[var(--secondary)]/[0.08] rounded-xl border border-[var(--secondary)]/[0.15]">
  <div className="flex items-center justify-between mb-2">
  <span className="text-sm font-medium text-muted-foreground">درجة التطابق</span>
- <span className="text-lg font-bold text-indigo-600">{donor.matchingScore}%</span>
+ <span className="text-lg font-bold text-[var(--secondary)]">{donor.matchingScore}%</span>
  </div>
  <div className="h-2 bg-muted rounded-full overflow-hidden">
  <div
- className="h-full bg-indigo-600 rounded-full transition-all"
+ className="h-full bg-[var(--secondary)] rounded-full transition-all"
  style={{ width: `${donor.matchingScore}%` }}
  />
  </div>
@@ -176,7 +180,7 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
  <button
  onClick={handleGeneratePlan}
  disabled={generatingId === donor.id}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-violet-600 text-[var(--primary-foreground)] rounded-lg hover:bg-violet-700 transition-colors disabled:opacity-50"
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[var(--secondary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--secondary)]/90 transition-colors disabled:opacity-50"
  >
  {generatingId === donor.id ? (
  <FileText className="w-3.5 h-3.5 animate-spin" />

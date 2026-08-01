@@ -223,7 +223,7 @@ export function AIProjectInnovationModule() {
  </div>
  <h3 className="text-xl font-bold mb-2">تجهيز للمانحين</h3>
  <p className="text-muted-foreground mb-4">حضّر مشروعك للعرض على المانحين بمعايير احترافية</p>
- <div className="flex items-center gap-[var(--spacing-small-gap)] text-purple-600 font-medium">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-[var(--info)] font-medium">
  <span>جهّز الآن</span>
  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
  </div>
@@ -233,7 +233,7 @@ export function AIProjectInnovationModule() {
  {/* AI Insights Panel */}
  <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
- <Brain className="w-5 h-5 text-indigo-600" />
+ <Brain className="w-5 h-5 text-[var(--secondary)]" />
  <h3 className="text-lg font-semibold">رؤى ذكية</h3>
  </div>
  <div className="space-y-[var(--spacing-small-gap)]">
@@ -259,7 +259,7 @@ export function AIProjectInnovationModule() {
  </div>
  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
  opp.priority === 'high' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' :
- opp.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+ opp.priority === 'medium' ? 'bg-[var(--warning)]/[0.1] text-[var(--warning)]' :
  'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]'
  }`}>
  {opp.priority === 'high' ? 'عاجل' : opp.priority === 'medium' ? 'مهم' : 'مقترح'}
@@ -281,7 +281,7 @@ export function AIProjectInnovationModule() {
  </div>
  <div className="bg-card rounded-xl p-6 border border-border">
  <div className="flex items-center justify-between mb-2">
- <Sparkles className="w-8 h-8 text-purple-600" />
+ <Sparkles className="w-8 h-8 text-[var(--info)]" />
  </div>
  <p className="text-3xl font-bold text-foreground">24</p>
  <p className="text-sm text-muted-foreground mt-1">مشاريع مُنشأة بالذكاء الاصطناعي</p>
@@ -891,8 +891,8 @@ export function AIProjectInnovationModule() {
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-8 h-8 text-[var(--warning)]" />
  <div>
- <p className="font-semibold text-yellow-900">قيد المراجعة</p>
- <p className="text-sm text-yellow-700">تم إرسال المشروع لمراجعة فريق الحاضنة</p>
+ <p className="font-semibold text-[var(--warning)]">قيد المراجعة</p>
+ <p className="text-sm text-[var(--warning)]">تم إرسال المشروع لمراجعة فريق الحاضنة</p>
  </div>
  </div>
  </div>
@@ -1009,7 +1009,7 @@ export function AIProjectInnovationModule() {
  <h3 className="text-lg font-semibold">الإصدار {version.version}</h3>
  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
  version.status === 'approved' ? 'bg-[var(--primary)]/[0.1] text-[var(--primary)]' :
- version.status === 'under-review' ? 'bg-yellow-100 text-yellow-700' :
+ version.status === 'under-review' ? 'bg-[var(--warning)]/[0.1] text-[var(--warning)]' :
  'bg-muted text-foreground'
  }`}>
  {version.status === 'approved' ? 'معتمد' : version.status === 'under-review' ? 'قيد المراجعة' : 'مسودة'}
@@ -1100,7 +1100,7 @@ export function AIProjectInnovationModule() {
  <div
  className={`h-full transition-all ${
  item.score >= 80 ? 'bg-[var(--primary)]' :
- item.score >= 60 ? 'bg-yellow-500' :
+ item.score >= 60 ? 'bg-[var(--warning)]' :
  'bg-[var(--destructive)]'
  }`}
  style={{ width: `${item.score}%` }}
@@ -1127,13 +1127,13 @@ export function AIProjectInnovationModule() {
 
  {/* Missing Info */}
  <div className="bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.3] rounded-xl p-6">
- <h3 className="font-semibold text-yellow-900 mb-4">معلومات ناقصة</h3>
+ <h3 className="font-semibold text-[var(--warning)] mb-4">معلومات ناقصة</h3>
  <ul className="space-y-[var(--spacing-small-gap)]">
- <li className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-yellow-800">
+ <li className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-[var(--warning)]">
  <AlertCircle className="w-4 h-4" />
  <span>يُنصح بإضافة مؤشرات أداء إضافية لقياس الأثر</span>
  </li>
- <li className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-yellow-800">
+ <li className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-[var(--warning)]">
  <AlertCircle className="w-4 h-4" />
  <span>توضيح خطة التخفيف من المخاطر</span>
  </li>

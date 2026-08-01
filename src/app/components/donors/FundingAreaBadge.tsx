@@ -15,15 +15,15 @@ interface FundingAreaBadgeProps {
 
 const COLOR_PALETTE = [
  'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.3]',
- 'bg-[var(--primary)]/[0.1] text-[var(--primary)] border-green-200',
- 'bg-amber-100 text-[var(--warning)] border-[var(--warning)]/[0.3]',
- 'bg-rose-100 text-rose-700 border-rose-200',
+ 'bg-[var(--primary)]/[0.1] text-[var(--primary)] border-[var(--primary)]/[0.3]',
+ 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.3]',
+ 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)] border-[var(--destructive)]/[0.3]',
  'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.3]',
- 'bg-cyan-100 text-cyan-700 border-cyan-200',
- 'bg-emerald-100 text-[var(--primary)] border-[var(--primary)]/[0.3]',
- 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-orange-200',
- 'bg-indigo-100 text-[var(--secondary)] border-indigo-200',
- 'bg-teal-100 text-teal-700 border-teal-200',
+ 'bg-[var(--info)]/[0.1] text-[var(--info)] border-[var(--info)]/[0.3]',
+ 'bg-[var(--primary)]/[0.1] text-[var(--primary)] border-[var(--primary)]/[0.3]',
+ 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.3]',
+ 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.3]',
+ 'bg-[var(--success)]/[0.1] text-[var(--success)] border-[var(--success)]/[0.3]',
 ];
 
 /**

@@ -66,7 +66,7 @@ export function InventoryDashboard() {
  description: 'منتجات لم تتحرك منذ أكثر من 90 يوم',
  icon: Clock,
  color: 'from-orange-500 to-red-600',
- bgColor: 'bg-orange-500/10',
+ bgColor: 'bg-[var(--warning)]/[0.1]',
  borderColor: 'border-orange-500'
  },
  {
@@ -90,7 +90,7 @@ export function InventoryDashboard() {
  description: 'منتجات تحتاج إلى معالجة أو استبدال',
  icon: XCircle,
  color: 'from-yellow-500 to-orange-600',
- bgColor: 'bg-yellow-500/10',
+ bgColor: 'bg-[var(--warning)]/[0.1]',
  borderColor: 'border-yellow-500'
  },
  {
@@ -134,7 +134,7 @@ export function InventoryDashboard() {
  isPositive: true,
  icon: Clock,
  color: 'text-[var(--warning)]',
- bgColor: 'bg-orange-500/10'
+ bgColor: 'bg-[var(--warning)]/[0.1]'
  },
  {
  title: 'المنتجات التالفة',
@@ -143,7 +143,7 @@ export function InventoryDashboard() {
  isPositive: false,
  icon: XCircle,
  color: 'text-[var(--warning)]',
- bgColor: 'bg-yellow-500/10'
+ bgColor: 'bg-[var(--warning)]/[0.1]'
  },
  ];
 

@@ -40,7 +40,7 @@ function AccordionTrigger({
  className={cn(
  "flex flex-1 items-start justify-between gap-[var(--spacing-grid-gap)] rounded-lg py-4 text-left text-sm font-semibold transition-all duration-200 outline-none",
  "text-[var(--text-primary)]",
- "hover:text-[var(--primary)] dark:hover:text-emerald-300",
+ "hover:text-[var(--primary)] dark:hover:text-[var(--primary)]",
  "focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:ring-offset-2",
  "disabled:pointer-events-none disabled:opacity-50",
  "[&[data-state=open]>svg]:rotate-180",

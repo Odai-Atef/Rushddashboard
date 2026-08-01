@@ -19,9 +19,9 @@ interface DonorsTableProps {
 
 const TYPE_COLORS: Record<DonorType, string> = {
  FOUNDATION: 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]',
- GOVERNMENT: 'bg-purple-100 text-purple-700',
- PRIVATE: 'bg-amber-100 text-[var(--warning)]',
- INTERNATIONAL: 'bg-cyan-100 text-cyan-700',
+ GOVERNMENT: 'bg-[var(--info)]/[0.1] text-[var(--info)]',
+ PRIVATE: 'bg-[var(--warning)]/[0.1] text-[var(--warning)]',
+ INTERNATIONAL: 'bg-[var(--info)]/[0.1] text-[var(--info)]',
  LOCAL: 'bg-[var(--primary)]/[0.1] text-[var(--primary)]',
 };
 

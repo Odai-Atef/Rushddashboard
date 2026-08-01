@@ -265,7 +265,7 @@ export function ProjectCollaborationModule() {
  switch (status) {
  case 'ACTIVE': return 'bg-[var(--primary)]/[0.1] text-[var(--primary)]';
  case 'ARCHIVED': return 'bg-muted text-foreground';
- case 'MUTED': return 'bg-yellow-100 text-yellow-700';
+ case 'MUTED': return 'bg-[var(--warning)]/[0.1] text-[var(--warning)]';
  default: return 'bg-muted text-foreground';
  }
  };
@@ -1673,7 +1673,7 @@ const DiscussionsView = () => {
  </span>
  )}
  {isOptimistic && (reply as { pending: boolean; failed: boolean }).pending && (
- <span className="px-2 py-1 bg-yellow-100 text-yellow-700 text-xs rounded-full">
+ <span className="px-2 py-1 bg-[var(--warning)]/[0.1] text-[var(--warning)] text-xs rounded-full">
  جاري الإرسال...
  </span>
  )}
@@ -1827,7 +1827,7 @@ const DiscussionsView = () => {
 
  const getFileIcon = (attachment: ApiAttachment) => {
  const mime = attachment.mimeType || '';
- if (mime.startsWith('image/')) return <ImageIcon className="w-8 h-8 text-purple-600" />;
+ if (mime.startsWith('image/')) return <ImageIcon className="w-8 h-8 text-[var(--info)]" />;
  if (mime.startsWith('video/')) return <Film className="w-8 h-8 text-[var(--destructive)]" />;
  if (mime.startsWith('audio/')) return <Mic className="w-8 h-8 text-[var(--warning)]" />;
  if (mime.includes('pdf')) return <FileText className="w-8 h-8 text-[var(--destructive)]" />;
@@ -1906,7 +1906,7 @@ const DiscussionsView = () => {
  <p className="text-sm text-muted-foreground">حجم التخزين</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-border">
- <Users className="w-8 h-8 text-purple-600 mb-3" />
+ <Users className="w-8 h-8 text-[var(--info)] mb-3" />
  <p className="text-[var(--text-section-title)] font-bold">{new Set(attachments.map((a) => a.uploadedByUserId)).size}</p>
  <p className="text-sm text-muted-foreground">المساهمون</p>
  </div>
@@ -2079,7 +2079,7 @@ const DiscussionsView = () => {
  <p className="text-[var(--destructive)] text-sm">{mutationError}</p>
  <button
  onClick={() => clearError()}
- className="text-sm text-[var(--destructive)] hover:text-red-800"
+ className="text-sm text-[var(--destructive)] hover:text-[var(--destructive)]"
  >
  إخفاء
  </button>
@@ -2112,7 +2112,7 @@ const DiscussionsView = () => {
  <button
  onClick={() => setDeleteTargetId(file.id)}
  disabled={isDeleting}
- className="flex-1 p-[var(--spacing-small-gap)] bg-[var(--destructive)]/[0.1] text-[var(--destructive)] rounded-lg hover:bg-red-200 disabled:opacity-50"
+ className="flex-1 p-[var(--spacing-small-gap)] bg-[var(--destructive)]/[0.1] text-[var(--destructive)] rounded-lg hover:bg-[var(--destructive)]/20 disabled:opacity-50"
  >
  <Trash2 className="w-4 h-4 mx-auto" />
  </button>
@@ -2218,7 +2218,7 @@ const DiscussionsView = () => {
  const getStatusColor = (status: string) => {
  switch (status) {
  case 'open': return 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]';
- case 'in-progress': return 'bg-yellow-100 text-yellow-700';
+ case 'in-progress': return 'bg-[var(--warning)]/[0.1] text-[var(--warning)]';
  case 'resolved': return 'bg-[var(--primary)]/[0.1] text-[var(--primary)]';
  case 'rejected': return 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]';
  default: return 'bg-muted text-foreground';
@@ -2264,7 +2264,7 @@ const DiscussionsView = () => {
  <p className="text-[var(--text-section-title)] font-bold text-[var(--primary)]">8</p>
  <p className="text-sm text-muted-foreground mt-1">محلولة</p>
  </div>
- <div className="bg-card rounded-xl p-6 border border-red-500/30">
+ <div className="bg-card rounded-xl p-6 border border-[var(--destructive)]/[0.3]">
  <p className="text-[var(--text-section-title)] font-bold text-[var(--destructive)]">2</p>
  <p className="text-sm text-muted-foreground mt-1">مرفوضة</p>
  </div>
@@ -2433,7 +2433,7 @@ const DiscussionsView = () => {
  switch (type) {
  case 'message': return <MessageSquare className="w-5 h-5 text-primary" />;
  case 'attachment': return <Paperclip className="w-5 h-5 text-[var(--primary)]" />;
- case 'approval': return <CheckCircle2 className="w-5 h-5 text-purple-600" />;
+ case 'approval': return <CheckCircle2 className="w-5 h-5 text-[var(--info)]" />;
  case 'revision': return <Edit className="w-5 h-5 text-[var(--warning)]" />;
  case 'overdue': return <AlertCircle className="w-5 h-5 text-[var(--destructive)]" />;
  case 'update': return <RefreshCw className="w-5 h-5 text-primary" />;
@@ -2461,7 +2461,7 @@ const DiscussionsView = () => {
  <p className="text-[var(--text-section-title)] font-bold text-primary">{notifications.filter(n => !n.read).length}</p>
  <p className="text-sm text-muted-foreground">إشعارات غير مقروءة</p>
  </div>
- <div className="bg-card rounded-xl p-6 border border-red-500/30">
+ <div className="bg-card rounded-xl p-6 border border-[var(--destructive)]/[0.3]">
  <AlertCircle className="w-8 h-8 text-[var(--destructive)] mb-3" />
  <p className="text-[var(--text-section-title)] font-bold text-[var(--destructive)]">{notifications.filter(n => n.priority === 'high').length}</p>
  <p className="text-sm text-muted-foreground">أولوية عالية</p>
@@ -2533,7 +2533,7 @@ const DiscussionsView = () => {
  </span>
  <span className={`px-2 py-1 text-xs rounded-full ${
  notif.priority === 'high' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' :
- notif.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
+ notif.priority === 'medium' ? 'bg-[var(--warning)]/[0.1] text-[var(--warning)]' :
  'bg-muted text-foreground'
  }`}>
  {notif.priority === 'high' ? 'عالية' : notif.priority === 'medium' ? 'متوسطة' : 'منخفضة'}
@@ -2623,7 +2623,7 @@ const DiscussionsView = () => {
  </div>
 
  <div className="bg-card rounded-xl p-6 border border-border">
- <Target className="w-8 h-8 text-purple-600 mb-3" />
+ <Target className="w-8 h-8 text-[var(--info)] mb-3" />
  <p className="text-[var(--text-section-title)] font-bold">24 ساعة</p>
  <p className="text-sm text-muted-foreground">هدف SLA</p>
  </div>
@@ -2701,7 +2701,7 @@ const DiscussionsView = () => {
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden max-w-[100px]">
  <div
- className={`h-full ${member.sla >= 90 ? 'bg-[var(--primary)]' : member.sla >= 80 ? 'bg-yellow-600' : 'bg-[var(--destructive)]'}`}
+ className={`h-full ${member.sla >= 90 ? 'bg-[var(--primary)]' : member.sla >= 80 ? 'bg-[var(--warning)]' : 'bg-[var(--destructive)]'}`}
  style={{ width: `${member.sla}%` }}
  ></div>
  </div>
@@ -2712,7 +2712,7 @@ const DiscussionsView = () => {
  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
  member.rating === 'ممتاز' ? 'bg-[var(--primary)]/[0.1] text-[var(--primary)]' :
  member.rating === 'جيد جداً' ? 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]' :
- 'bg-yellow-100 text-yellow-700'
+ 'bg-[var(--warning)]/[0.1] text-[var(--warning)]'
  }`}>
  {member.rating}
  </span>
@@ -2725,7 +2725,7 @@ const DiscussionsView = () => {
  </div>
 
  {/* Overdue Requests */}
- <div className="bg-card rounded-xl p-6 border border-red-500/30">
+ <div className="bg-card rounded-xl p-6 border border-[var(--destructive)]/[0.3]">
  <div className="flex items-center justify-between mb-4">
  <h3 className="font-semibold flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5 text-[var(--destructive)]" />
@@ -2836,7 +2836,7 @@ const DiscussionsView = () => {
  <p className="text-[var(--text-card-number)] font-bold mb-2">92%</p>
  <p className="text-sm text-muted-foreground">من أعضاء الفريق نشطون</p>
  <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
- <div className="h-full bg-yellow-600" style={{ width: '92%' }}></div>
+ <div className="h-full bg-[var(--warning)]" style={{ width: '92%' }}></div>
  </div>
  </div>
 
@@ -3063,7 +3063,7 @@ const DiscussionsView = () => {
  switch (type) {
  case 'message': return <MessageSquare className="w-5 h-5 text-primary" />;
  case 'file': return <Paperclip className="w-5 h-5 text-[var(--primary)]" />;
- case 'discussion': return <GitBranch className="w-5 h-5 text-purple-600" />;
+ case 'discussion': return <GitBranch className="w-5 h-5 text-[var(--info)]" />;
  case 'revision': return <Edit className="w-5 h-5 text-[var(--warning)]" />;
  case 'approval': return <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />;
  default: return <Activity className="w-5 h-5 text-muted-foreground" />;
@@ -3123,7 +3123,7 @@ const DiscussionsView = () => {
  <p className="text-xs text-muted-foreground">ملف</p>
  </div>
  <div className="bg-card rounded-xl p-4 border border-border text-center">
- <GitBranch className="w-6 h-6 text-purple-600 mx-auto mb-2" />
+ <GitBranch className="w-6 h-6 text-[var(--info)] mx-auto mb-2" />
  <p className="text-xl font-bold">22</p>
  <p className="text-xs text-muted-foreground">نقاش</p>
  </div>
@@ -3186,12 +3186,12 @@ const DiscussionsView = () => {
  </>
  )}
  {activity.type === 'discussion' && (
- <button className="text-xs px-3 py-1 bg-[var(--secondary)]/[0.08] text-purple-600 rounded-lg hover:bg-purple-100">
+ <button className="text-xs px-3 py-1 bg-[var(--secondary)]/[0.08] text-[var(--info)] rounded-lg hover:bg-[var(--info)]/20">
  عرض النقاش
  </button>
  )}
  {activity.type === 'revision' && (
- <button className="text-xs px-3 py-1 bg-[var(--warning)]/[0.1] text-[var(--warning)] rounded-lg hover:bg-yellow-100">
+ <button className="text-xs px-3 py-1 bg-[var(--warning)]/[0.1] text-[var(--warning)] rounded-lg hover:bg-[var(--warning)]/20">
  عرض الطلب
  </button>
  )}

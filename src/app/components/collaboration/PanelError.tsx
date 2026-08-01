@@ -13,7 +13,7 @@ export function PanelError({
 }: PanelErrorProps) {
  return (
  <div className="flex flex-col items-center justify-center p-8 text-center">
- <AlertCircle className="w-8 h-8 text-red-500 mb-3" />
+ <AlertCircle className="w-8 h-8 text-[var(--destructive)] mb-3" />
  <p className="text-foreground mb-4 max-w-md">{message}</p>
  {onRetry && (
  <button

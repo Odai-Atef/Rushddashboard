@@ -308,7 +308,7 @@ export function NotificationsPage() {
  {getCategoryLabel(notification.type)}
  </span>
  {isUnread && (
- <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
+ <span className="w-2 h-2 rounded-full bg-[var(--warning)] shrink-0"></span>
  )}
  </div>
 

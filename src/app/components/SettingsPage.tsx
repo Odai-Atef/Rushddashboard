@@ -923,7 +923,7 @@ export function SettingsPage() {
  </div>
  </div>
 
- <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+ <div className="bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.2] rounded-lg p-4">
  <div className="flex gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--warning)] flex-shrink-0 mt-0.5" />
  <div>
@@ -1012,7 +1012,7 @@ export function SettingsPage() {
  <div className="border border-border rounded-lg p-4">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
- <div className="w-12 h-12 rounded-lg bg-orange-500 flex items-center justify-center text-[var(--primary-foreground)] font-bold">
+ <div className="w-12 h-12 rounded-lg bg-[var(--warning)] flex items-center justify-center text-[var(--primary-foreground)] font-bold">
  GS
  </div>
  <div>

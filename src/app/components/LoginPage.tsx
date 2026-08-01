@@ -119,7 +119,7 @@ export function LoginPage() {
 
  {/* Session Expired Message */}
  {isExpired && (
- <div className="mb-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+ <div className="mb-6 p-4 bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.2] rounded-lg">
  <p className="text-sm text-[var(--warning)]">
  انتهت صلاحية جلستك، يرجى تسجيل الدخول مرة أخرى
  </p>

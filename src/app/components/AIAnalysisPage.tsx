@@ -967,7 +967,7 @@ export function AIAnalysisPage() {
  <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--text-primary)]/[0.5]">
  <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
- <div className="p-[var(--spacing-small-gap)] bg-yellow-500/10 rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--warning)]/[0.1] rounded-lg">
  <AlertTriangle className="w-5 h-5 text-[var(--warning)]" />
  </div>
  <h3 className="font-semibold text-lg">تحليل قيد التشغيل</h3>

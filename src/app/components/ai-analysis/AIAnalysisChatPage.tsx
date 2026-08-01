@@ -528,11 +528,11 @@ export function AIAnalysisChatPage() {
 
  const getImpactColor = (impact: string) => {
  switch (impact) {
- case 'حرج': return 'bg-[var(--destructive)]/10 text-[var(--destructive)] border-red-500/20';
- case 'عالي': return 'bg-orange-500/10 text-[var(--warning)] border-orange-500/20';
- case 'متوسط': return 'bg-yellow-500/10 text-[var(--warning)] border-yellow-500/20';
- case 'منخفض': return 'bg-[var(--primary)]/10 text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
- default: return 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
+ case 'حرج': return 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)] border-[var(--destructive)]/[0.2]';
+ case 'عالي': return 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
+ case 'متوسط': return 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
+ case 'منخفض': return 'bg-[var(--primary)]/[0.1] text-[var(--primary)] border-[var(--primary)]/[0.2]';
+ default: return 'bg-[var(--muted)]/[0.1] text-muted-foreground border-[var(--border)]';
  }
  };
 
@@ -709,7 +709,7 @@ export function AIAnalysisChatPage() {
  <p className="mb-3">{history.error}</p>
  <button
  onClick={() => history.retry()}
- className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-red-200 rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)]"
+ className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-[var(--destructive)]/20 rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <RefreshCw className="w-3 h-3" />
  إعادة المحاولة
@@ -794,7 +794,7 @@ export function AIAnalysisChatPage() {
  {/* Main Workspace */}
  {isUrlChatMissing ? (
  <div className="flex-1 flex flex-col items-center justify-center p-12 text-center">
- <div className="p-4 bg-yellow-500/10 rounded-xl mb-4">
+ <div className="p-4 bg-[var(--warning)]/[0.1] rounded-xl mb-4">
  <AlertTriangle className="w-10 h-10 text-[var(--warning)]" />
  </div>
  <h2 className="text-xl font-bold mb-2">الدردشة غير موجودة</h2>
@@ -966,7 +966,7 @@ export function AIAnalysisChatPage() {
  {/* Error Banner above Chat Input */}
  {(hasError || isEmptyComplete) && (
  <div className="p-4 border-t border-border bg-card">
- <div className={`p-4 border rounded-lg text-sm ${hasError ? 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.3] text-[var(--destructive)]' : 'bg-[var(--warning)]/[0.1] border-[var(--warning)]/[0.3] text-yellow-800'}`}>
+ <div className={`p-4 border rounded-lg text-sm ${hasError ? 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.3] text-[var(--destructive)]' : 'bg-[var(--warning)]/[0.1] border-[var(--warning)]/[0.3] text-[var(--warning)]'}`}>
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <AlertTriangle className="w-4 h-4" />
  <span className="font-medium">{hasError ? 'حدث خطأ' : 'لم يتم استلام نتيجة التحليل'}</span>
@@ -986,7 +986,7 @@ export function AIAnalysisChatPage() {
  <button
  onClick={handleRetryFollowUp}
  disabled={streaming.isLoading}
- className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-red-200 rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-[var(--destructive)]/20 rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <RefreshCw className="w-3 h-3" />
  إعادة المحاولة
@@ -1033,7 +1033,7 @@ export function AIAnalysisChatPage() {
  {/* Executive Summary */}
  <div className="p-4 bg-gradient-to-br from-purple-50 to-[var(--secondary)]/10 border border-[var(--secondary)]/[0.2] rounded-lg">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
- <Brain className="w-4 h-4 text-purple-600" />
+ <Brain className="w-4 h-4 text-[var(--info)]" />
  <h4 className="font-medium text-sm">ملخص تنفيذي</h4>
  </div>
  <div className="prose prose-sm max-w-none text-right w-full break-words text-sm leading-relaxed text-muted-foreground">
@@ -1133,7 +1133,7 @@ export function AIAnalysisChatPage() {
  <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--text-primary)]/[0.5]">
  <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl overflow-y-auto max-h-[90vh]">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
- <div className="p-[var(--spacing-small-gap)] bg-yellow-500/10 rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--warning)]/[0.1] rounded-lg">
  <AlertTriangle className="w-5 h-5 text-[var(--warning)]" />
  </div>
  <h3 className="font-semibold text-lg">تحليل قيد التشغيل</h3>

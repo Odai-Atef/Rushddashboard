@@ -106,7 +106,7 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
  <button
  onClick={() => handleActionClick('تسجيل التمويل', 'FUNDED')}
  disabled={isLoading}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-amber-600 text-[var(--primary-foreground)] rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50"
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[var(--warning)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--warning)]/90 transition-colors disabled:opacity-50"
  >
  <Coins className="w-3.5 h-3.5" />
  تم التمويل
@@ -118,7 +118,7 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
  <button
  onClick={() => handleActionClick('تسجيل التمويل', 'FUNDED')}
  disabled={isLoading}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-amber-600 text-[var(--primary-foreground)] rounded-lg hover:bg-amber-700 transition-colors disabled:opacity-50"
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[var(--warning)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--warning)]/90 transition-colors disabled:opacity-50"
  >
  <Coins className="w-3.5 h-3.5" />
  تم التمويل
@@ -152,7 +152,7 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
  type="date"
  value={dateValue}
  onChange={(e) => setDateValue(e.target.value)}
- className="w-full border border-border rounded-lg pl-10 pr-3 py-2 text-sm cursor-pointer"
+ className="w-full border border-border rounded-lg pl-10 pr-3 py-2 text-sm cursor-pointer bg-input text-foreground"
  />
  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
  </div>
@@ -163,7 +163,7 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
  value={notesValue}
  onChange={(e) => setNotesValue(e.target.value)}
  rows={3}
- className="w-full border border-border rounded-lg px-3 py-2 text-sm"
+ className="w-full border border-border rounded-lg px-3 py-2 text-sm bg-input text-foreground"
  placeholder="أضف ملاحظات حول هذا الإجراء..."
  />
  </div>

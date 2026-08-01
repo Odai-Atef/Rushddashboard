@@ -155,26 +155,26 @@ const getCategoryIcon = (category: Analysis['category']) => {
 const getCategoryColor = (category: Analysis['category']) => {
  switch (category) {
  case 'sales': return 'text-[var(--secondary)]';
- case 'customers': return 'text-purple-500';
- case 'operations': return 'text-orange-500';
- case 'marketing': return 'text-pink-500';
+ case 'customers': return 'text-[var(--info)]';
+ case 'operations': return 'text-[var(--warning)]';
+ case 'marketing': return 'text-[var(--secondary)]';
  case 'profitability': return 'text-[var(--primary)]';
- case 'inventory': return 'text-yellow-500';
- case 'risks': return 'text-red-500';
- case 'executive': return 'text-indigo-500';
+ case 'inventory': return 'text-[var(--warning)]';
+ case 'risks': return 'text-[var(--destructive)]';
+ case 'executive': return 'text-[var(--secondary)]';
  }
 };
 
 const getCategoryBg = (category: Analysis['category']) => {
  switch (category) {
- case 'sales': return 'bg-[var(--primary)]/10';
- case 'customers': return 'bg-purple-500/10';
- case 'operations': return 'bg-orange-500/10';
- case 'marketing': return 'bg-pink-500/10';
+ case 'sales': return 'bg-[var(--primary)]/[0.1]';
+ case 'customers': return 'bg-[var(--info)]/[0.1]';
+ case 'operations': return 'bg-[var(--warning)]/[0.1]';
+ case 'marketing': return 'bg-[var(--secondary)]/[0.1]';
  case 'profitability': return 'bg-[var(--primary)]/[0.1]';
- case 'inventory': return 'bg-yellow-500/10';
- case 'risks': return 'bg-[var(--destructive)]/10';
- case 'executive': return 'bg-indigo-500/10';
+ case 'inventory': return 'bg-[var(--warning)]/[0.1]';
+ case 'risks': return 'bg-[var(--destructive)]/[0.1]';
+ case 'executive': return 'bg-[var(--secondary)]/[0.1]';
  }
 };
 
@@ -190,7 +190,7 @@ const getStatusColor = (status: Analysis['status']) => {
  switch (status) {
  case 'running': return 'text-[var(--secondary)]';
  case 'completed': return 'text-[var(--primary)]';
- case 'failed': return 'text-red-500';
+ case 'failed': return 'text-[var(--destructive)]';
  }
 };
 
@@ -433,7 +433,7 @@ export function AIAnalysisHistoryPage() {
  e.stopPropagation();
  handleDelete(analysis.id);
  }}
- className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-[var(--destructive)]/10 text-red-500 hover:bg-[var(--destructive)]/20 rounded-lg transition-colors text-sm"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-[var(--destructive)]/[0.1] text-[var(--destructive)] hover:bg-[var(--destructive)]/20 rounded-lg transition-colors text-sm"
  >
  <Trash2 className="w-4 h-4" />
  حذف
@@ -606,7 +606,7 @@ export function AIAnalysisHistoryPage() {
  setSelectedAnalysis(null);
  handleDelete(selectedAnalysis.id);
  }}
- className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--destructive)]/10 text-red-500 hover:bg-[var(--destructive)]/20 rounded-lg transition-colors"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--destructive)]/[0.1] text-[var(--destructive)] hover:bg-[var(--destructive)]/20 rounded-lg transition-colors"
  >
  <Trash2 className="w-5 h-5" />
  حذف
@@ -625,7 +625,7 @@ export function AIAnalysisHistoryPage() {
  <div className="bg-card border border-border rounded-xl w-full max-w-md p-6">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <div className="p-[var(--spacing-card-padding)] bg-[var(--destructive)]/10 rounded-lg">
- <AlertTriangle className="w-6 h-6 text-red-500" />
+ <AlertTriangle className="w-6 h-6 text-[var(--destructive)]" />
  </div>
  <div>
  <h3 className="text-xl font-medium">تأكيد الحذف</h3>

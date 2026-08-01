@@ -147,8 +147,8 @@ export function OrganizationInformationDisplay({ data }: OrganizationInformation
  <div className="p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex items-start gap-[var(--spacing-small-gap)]">
  <XCircle className="w-5 h-5 text-[var(--destructive)] shrink-0 mt-0.5" />
  <div>
- <h3 className="font-semibold text-red-900 text-sm">خطأ أثناء الاستخراج</h3>
- <p className="text-sm text-red-800 mt-0.5">{data.extractionError}</p>
+ <h3 className="font-semibold text-[var(--destructive)] text-sm">خطأ أثناء الاستخراج</h3>
+ <p className="text-sm text-[var(--destructive)] mt-0.5">{data.extractionError}</p>
  </div>
  </div>
  )}

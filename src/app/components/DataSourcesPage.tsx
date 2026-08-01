@@ -130,7 +130,7 @@ export function DataSourcesPage() {
  case 'disconnected':
  return 'text-muted-foreground';
  case 'error':
- return 'text-red-500';
+ return 'text-[var(--destructive)]';
  case 'syncing':
  return 'text-[var(--secondary)]';
  }
@@ -143,7 +143,7 @@ export function DataSourcesPage() {
  case 'good':
  return 'bg-[var(--primary)]';
  case 'fair':
- return 'bg-yellow-500';
+ return 'bg-[var(--warning)]';
  case 'poor':
  return 'bg-[var(--destructive)]';
  }
@@ -256,9 +256,9 @@ export function DataSourcesPage() {
  <div className="flex items-center justify-between">
  <div>
  <p className="text-muted-foreground text-sm">أخطاء</p>
- <p className="text-2xl mt-1 text-red-500">{stats.errors}</p>
+ <p className="text-2xl mt-1 text-[var(--destructive)]">{stats.errors}</p>
  </div>
- <AlertCircle className="w-8 h-8 text-red-500" />
+ <AlertCircle className="w-8 h-8 text-[var(--destructive)]" />
  </div>
  </div>
  </div>
@@ -322,7 +322,7 @@ export function DataSourcesPage() {
  <Settings className="w-4 h-4" />
  </button>
  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors">
- <Trash2 className="w-4 h-4 text-red-500" />
+ <Trash2 className="w-4 h-4 text-[var(--destructive)]" />
  </button>
  </div>
  </div>
@@ -591,7 +591,7 @@ export function DataSourcesPage() {
  {sync.status === 'success' ? (
  <CheckCircle2 className="w-4 h-4 text-[var(--primary)]" />
  ) : (
- <AlertCircle className="w-4 h-4 text-yellow-500" />
+ <AlertCircle className="w-4 h-4 text-[var(--warning)]" />
  )}
  <span className="text-sm">{sync.time}</span>
  </div>
