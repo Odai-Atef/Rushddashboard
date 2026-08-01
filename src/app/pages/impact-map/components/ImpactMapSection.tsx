@@ -1,6 +1,7 @@
+import React from 'react';
 import { cn } from '@/app/utils/cn';
 import { ImpactCard } from './ImpactCard';
-import { ImpactMap, MapSkeleton, MapErrorState, MapEmptyState } from './map';
+import { AmChartsMap, MapSkeleton, MapErrorState, MapEmptyState } from './map';
 import type { Region } from '../types';
 
 export interface ImpactMapSectionProps {
@@ -11,6 +12,16 @@ export interface ImpactMapSectionProps {
   selectedRegionId?: string | null;
   onRegionSelect?: (regionId: string) => void;
   className?: string;
+}
+
+/** Build impact-data record from Region array for the amCharts map */
+function buildImpactData(regions: Region[]): Record<string, number> {
+  const data: Record<string, number> = {};
+  for (const r of regions) {
+    // Derive impact score from totalFunding relative to max
+    data[r.id] = r.sroiValue ? Math.min(r.sroiValue * 20, 100) : 0;
+  }
+  return data;
 }
 
 export function ImpactMapSection({
@@ -80,13 +91,39 @@ export function ImpactMapSection({
     );
   }
 
+  const handleRegionClick = React.useCallback(
+    (_amChartsId: string, regionName: string) => {
+      // Find region by Arabic name (amCharts supplies the geoJSON name)
+      const region = regions.find(
+        (r) => r.name === regionName || r.nameEn === regionName
+      );
+      if (region && onRegionSelect) {
+        onRegionSelect(region.id);
+      }
+    },
+    [regions, onRegionSelect]
+  );
+
+  const impactData = React.useMemo(
+    () => buildImpactData(regions),
+    [regions]
+  );
+
   return (
     <ImpactCard
       title="الخارطة التفاعلية"
       description="انقر على المنطقة لعرض التفاصيل"
       className={cn('animate-fade-in', className)}
     >
-      <ImpactMap isLoading={isLoading} isError={isError} onRetry={onRetry} />
+      <AmChartsMap
+        onRegionClick={handleRegionClick}
+        selectedRegion={selectedRegionId ?? null}
+        impactData={impactData}
+        isLoading={isLoading}
+        isError={isError}
+        onRetry={onRetry}
+        className="rounded-[var(--impact-radius-map-panel)]"
+      />
     </ImpactCard>
   );
 }

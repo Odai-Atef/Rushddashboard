@@ -56,3 +56,27 @@ export interface MapViewState {
   panX: number;
   panY: number;
 }
+
+/* ─── amCharts Region ID Mapping ─────────────────────────────── */
+
+/** amCharts ISO region ID → internal region ID */
+export const AMCHARTS_TO_INTERNAL: Record<string, string> = {
+  'SA-01': 'riyadh',
+  'SA-02': 'makkah',
+  'SA-03': 'madinah',
+  'SA-04': 'eastern',
+  'SA-05': 'qassim',
+  'SA-06': 'hail',
+  'SA-07': 'tabuk',
+  'SA-08': 'northern-borders',
+  'SA-09': 'jazan',
+  'SA-10': 'najran',
+  'SA-11': 'al-baha',
+  'SA-12': 'al-jawf',
+  'SA-14': 'asir',
+};
+
+/** Internal region ID → amCharts ISO region ID */
+export const INTERNAL_TO_AMCHARTS: Record<string, string> = Object.fromEntries(
+  Object.entries(AMCHARTS_TO_INTERNAL).map(([k, v]) => [v, k])
+);

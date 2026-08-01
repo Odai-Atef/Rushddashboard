@@ -1,4 +1,5 @@
 export { ImpactMap } from './ImpactMap';
+export { AmChartsMap } from './AmChartsMap';
 export { MapRegion } from './MapRegion';
 export { ImpactMarker } from './ImpactMarker';
 export { MapTooltip } from './MapTooltip';
