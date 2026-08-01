@@ -120,19 +120,7 @@ function buildNavGroups(items: NavItem[], roleSlug: string | null): NavGroup[] {
   if (roleSlug === 'project-managers') {
     return [
       {
-        items: items.filter(
-          (i) =>
-            i.id === 'project-management-dashboard' ||
-            i.id === 'collaboration'
-        ),
-      },
-      {
-        label: 'أدوات',
-        items: items.filter(
-          (i) =>
-            i.id !== 'project-management-dashboard' &&
-            i.id !== 'collaboration'
-        ),
+        items,
       },
     ];
   }
