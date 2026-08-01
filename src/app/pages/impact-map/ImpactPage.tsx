@@ -54,6 +54,7 @@ import {
   mockBottomKpiMetrics,
 } from './mock';
 import { useAuth } from '@/app/layouts/RootLayout';
+import { cn } from '@/app/utils/cn';
 import './styles/impact-theme.css';
 
 export function ImpactPage() {
