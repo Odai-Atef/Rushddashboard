@@ -95,10 +95,10 @@ export function AnalysisPage() {
         ];
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => goToStep('results')}
             className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-4"
@@ -106,19 +106,19 @@ export function AnalysisPage() {
             <ChevronRight className="w-5 h-5" />
             رجوع إلى النتائج
           </button>
-          <h1 className="text-3xl font-bold mb-2">تحليل نقاط القوة والضعف</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-2">تحليل نقاط القوة والضعف</h1>
           <p className="text-gray-600">
             تحليل تفصيلي لأداء مؤسستك عبر جميع المحاور
           </p>
         </div>
 
         {/* Strengths */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
               <Star className="w-5 h-5 text-green-600" />
             </div>
-            <h2 className="text-2xl font-bold">نقاط القوة</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">نقاط القوة</h2>
           </div>
           <div className="space-y-4">
             {strengths.map((item, idx) => {
@@ -126,7 +126,7 @@ export function AnalysisPage() {
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl shadow-sm border-2 border-green-200 p-6"
+                  className="bg-white rounded-xl shadow-sm border-2 border-green-200 p-4 sm:p-6"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -158,12 +158,12 @@ export function AnalysisPage() {
         </div>
 
         {/* Weaknesses */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
-            <h2 className="text-2xl font-bold">مجالات التحسين</h2>
+            <h2 className="text-xl sm:text-2xl font-bold">مجالات التحسين</h2>
           </div>
           <div className="space-y-4">
             {weaknesses.map((item, idx) => {
@@ -188,7 +188,7 @@ export function AnalysisPage() {
               return (
                 <div
                   key={idx}
-                  className={`bg-white rounded-xl shadow-sm border-2 ${severityConfig.border} p-6`}
+                  className={`bg-white rounded-xl shadow-sm border-2 ${severityConfig.border} p-4 sm:p-6`}
                 >
                   <div className="flex items-start gap-4">
                     <div
@@ -231,7 +231,7 @@ export function AnalysisPage() {
         </div>
 
         {/* AI Recommendations */}
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6 border border-blue-200">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <Brain className="w-6 h-6 text-white" />

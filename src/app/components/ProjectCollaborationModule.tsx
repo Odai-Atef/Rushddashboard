@@ -1559,7 +1559,7 @@ const DiscussionsView = () => {
         <div className="space-y-4">
           {discussions.map((discussionItem) => (
             <div key={discussionItem.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
-              <div className="p-6">
+              <div className="p-3 sm:p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
@@ -2630,7 +2630,7 @@ const DiscussionsView = () => {
         </div>
 
         {/* Charts Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:p-6">
           {/* Response Time Trend */}
           <div className="bg-white rounded-xl p-6 border border-gray-200">
             <h3 className="font-semibold mb-4">متوسط أوقات الاستجابة (ساعات)</h3>
@@ -3215,7 +3215,7 @@ const DiscussionsView = () => {
 
   // Render views
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
       {currentView === 'hub' && <HubView />}
       {currentView === 'chat' && (
         <ChatView

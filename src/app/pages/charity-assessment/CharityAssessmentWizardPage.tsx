@@ -27,7 +27,7 @@ export function CharityAssessmentWizardPage() {
     <div className="min-h-full bg-background">
       {/* Progress Header */}
       <div className="bg-card border-b border-border sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto p-6">
+        <div className="max-w-4xl mx-auto p-3 sm:p-4 sm:p-6">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h2 className="text-xl font-semibold">{currentCategory.name}</h2>
@@ -50,8 +50,8 @@ export function CharityAssessmentWizardPage() {
       </div>
 
       {/* Questions */}
-      <div className="max-w-4xl mx-auto p-6">
-        <div className="bg-card border border-border rounded-xl p-8 mb-6">
+      <div className="max-w-4xl mx-auto p-3 sm:p-4 sm:p-6">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-8 mb-6">
           <div className="flex items-center gap-3 mb-6">
             {(() => {
               const Icon = currentCategory.icon;
@@ -62,7 +62,7 @@ export function CharityAssessmentWizardPage() {
 
           <div className="space-y-6">
             {currentCategory.questions.map((q, index) => (
-              <div key={q.id} className="border border-border rounded-lg p-6">
+              <div key={q.id} className="border border-border rounded-lg p-3 sm:p-4 sm:p-6">
                 <p className="font-medium mb-4">
                   {index + 1}. {q.question}
                 </p>

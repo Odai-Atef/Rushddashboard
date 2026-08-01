@@ -155,10 +155,10 @@ export function RoadmapPage() {
   const isQualified = data?.qualificationStatus?.toUpperCase() === 'QUALIFIED';
 
   return (
-    <div ref={reportContainerRef} className="min-h-full bg-gray-50 p-6">
+    <div ref={reportContainerRef} className="min-h-full bg-gray-50 p-3 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <button
             onClick={() => goToStep('analysis')}
             className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-4"
@@ -168,7 +168,7 @@ export function RoadmapPage() {
           </button>
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
-              <h1 className="text-3xl font-bold mb-2">خطة التطوير والتحسين</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-2">خطة التطوير والتحسين</h1>
               <p className="text-gray-600">
                 {data?.comments?.overall?.ar || 'خارطة طريق مخصصة لتطوير الجمعية'}
               </p>
@@ -192,7 +192,7 @@ export function RoadmapPage() {
         </div>
 
         {/* Overall Score & Duration */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold mb-4">نتيجة التقييم العامة</h3>
             <div className="flex items-center gap-4">
@@ -248,9 +248,9 @@ export function RoadmapPage() {
 
         {/* Recommendations */}
         {recommendations.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
             <h3 className="text-lg font-semibold mb-4">التوصيات المقترحة</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {recommendations.map((rec: EvaluationRecommendation, idx: number) => (
                 <div
                   key={idx}
@@ -290,7 +290,7 @@ export function RoadmapPage() {
               return (
                 <div
                   key={initiative.id}
-                  className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow"
+                  className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -321,7 +321,7 @@ export function RoadmapPage() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 p-4 bg-gray-50 rounded-lg">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
                     <div>
                       <div className="text-xs text-gray-600 mb-1">الجهة المسؤولة</div>
                       <div className="font-medium flex items-center gap-2">
@@ -342,7 +342,7 @@ export function RoadmapPage() {
                   {initiative.tasks.length > 0 && (
                     <div>
                       <div className="text-sm font-medium mb-2">المهام الرئيسية:</div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {initiative.tasks.map((task, idx) => (
                           <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
                             <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0">
@@ -362,7 +362,7 @@ export function RoadmapPage() {
         </div>
 
         {/* Support Section */}
-        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-6 border border-indigo-200 mt-6">
+        <div className="bg-gradient-to-br from-indigo-50 to-blue-50 rounded-xl p-4 sm:p-6 border border-indigo-200 mt-6">
           <div className="flex items-start gap-4">
             <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <Sparkles className="w-6 h-6 text-white" />

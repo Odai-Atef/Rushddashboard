@@ -256,17 +256,17 @@ export function ResultsPage() {
   }
 
   return (
-    <div ref={reportContainerRef} className="min-h-full bg-gray-50 p-6">
+    <div ref={reportContainerRef} className="min-h-full bg-gray-50 p-3 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-8 mb-6 text-white">
-          <div className="flex items-center justify-between">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-4 sm:p-8 mb-6 text-white">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div>
               <div className="inline-flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full mb-3">
                 <Sparkles className="w-4 h-4" />
                 <span className="text-sm">نتائج التقييم</span>
               </div>
-              <h1 className="text-4xl font-bold mb-2">تهانينا! تم إكمال التقييم</h1>
+              <h1 className="text-2xl sm:text-4xl font-bold mb-2">تهانينا! تم إكمال التقييم</h1>
               <p className="text-blue-100">تم تحليل مؤسستك بنجاح. اطّلع على النتائج التفصيلية أدناه</p>
             </div>
             <div className="text-center">
@@ -285,8 +285,8 @@ export function ResultsPage() {
         </div>
 
         {/* Qualification Status */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex items-center justify-between">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className={`w-16 h-16 rounded-full flex items-center justify-center bg-opacity-10 ${statusOption.bgClass.replace('bg-', 'bg-').replace('-400', '-50')}`}>
                 <statusOption.icon className={`w-8 h-8 ${statusOption.textClass.replace('900', '600')}`} />
@@ -309,7 +309,7 @@ export function ResultsPage() {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold mb-4">التحليل الشامل</h3>
             {radarData.length > 0 ? (
@@ -352,7 +352,7 @@ export function ResultsPage() {
         </div>
 
         {/* Diagnostic Feedback */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
           <div className="lg:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 className="text-lg font-semibold mb-3">التشخيص</h3>
             <p className="text-gray-700 leading-relaxed">{isivResult?.diagnosis || 'لا يوجد تشخيص متاح.'}</p>
@@ -449,7 +449,7 @@ export function ResultsPage() {
         </div>
 
         {/* Action Buttons */}
-        <div className="report-exclude flex gap-4">
+        <div className="report-exclude flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={() => goToStep('analysis')}
             className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"

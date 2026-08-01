@@ -163,7 +163,7 @@ export function ProfilePage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
       {isSaving && (
         <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
@@ -182,9 +182,9 @@ export function ProfilePage() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-8">
           <div className="mb-6">
-            <h1 className="text-3xl font-bold mb-2">الملف التعريفي للجمعية</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold mb-2">الملف التعريفي للجمعية</h1>
             <p className="text-gray-600">معلومات تفصيلية عن نشاط الجمعية وبرامجها</p>
           </div>
 
@@ -342,11 +342,11 @@ export function ProfilePage() {
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-6 border-t">
+            <div className="flex items-center justify-between pt-4 sm:pt-6 border-t flex-col sm:flex-row gap-3">
               <button
                 type="button"
                 onClick={() => goToStep('registration')}
-                className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2"
+                className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
               >
                 <ChevronRight className="w-5 h-5" />
                 رجوع
@@ -355,7 +355,7 @@ export function ProfilePage() {
                 type="button"
                 onClick={handleProfileNext}
                 disabled={isSaving}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto justify-center sm:justify-start"
               >
                 {isSaving ? (
                   <>

@@ -100,12 +100,12 @@ export function CharityAssessmentStartPage() {
   return (
     <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
       <div className="max-w-4xl w-full">
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6">
-            <Sparkles className="w-10 h-10 text-white" />
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6">
+            <Sparkles className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
           </div>
-          <h1 className="text-4xl font-bold mb-4">تقييم ISIV</h1>
-          <p className="text-xl text-muted-foreground mb-2">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-4">تقييم ISIV</h1>
+          <p className="text-lg sm:text-xl text-muted-foreground mb-2">
             تقييم جاهزية المنظمات الخيرية - نموذج ISIV
           </p>
           <p className="text-muted-foreground">
@@ -113,9 +113,9 @@ export function CharityAssessmentStartPage() {
           </p>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-8 mb-6">
-          <h2 className="text-2xl font-semibold mb-6">أبعاد التقييم</h2>
-          <div className="grid grid-cols-2 gap-4">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-8 mb-6">
+          <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">أبعاد التقييم</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {isivDimensions.map((dim) => {
               const Icon = dim.icon;
               return (
@@ -139,7 +139,7 @@ export function CharityAssessmentStartPage() {
           </div>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-8 mb-6">
+        <div className="bg-card border border-border rounded-xl p-4 sm:p-8 mb-6">
           <h3 className="font-semibold mb-4">ما الذي ستحصل عليه:</h3>
           <div className="space-y-3">
             {[
@@ -158,7 +158,7 @@ export function CharityAssessmentStartPage() {
           </div>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             disabled={!organizationId}
             onClick={() =>

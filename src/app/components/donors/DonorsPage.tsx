@@ -160,7 +160,7 @@ export function DonorsPage() {
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6 p-3 sm:p-6">
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-3 sm:p-6">
       {currentView === 'dashboard' && (
         <>
           {/* Header */}
@@ -251,7 +251,7 @@ export function DonorsPage() {
           </div>
 
           {/* Recent Updates */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:p-6">
             <div className="bg-card border border-border rounded-xl overflow-hidden">
               <div className="p-6 border-b border-border">
                 <div className="flex items-center gap-2">

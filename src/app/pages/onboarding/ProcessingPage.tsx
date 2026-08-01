@@ -72,14 +72,14 @@ export function ProcessingPage() {
   }, [activeOrganizationId, goToStep, setAssessmentResult, setAssessmentStatus]);
 
   return (
-    <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
+    <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-3 sm:p-6 flex items-center justify-center">
       <div className="max-w-2xl w-full">
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 sm:p-12 text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
             <Brain className="w-12 h-12 text-white" />
           </div>
 
-          <h1 className="text-3xl font-bold mb-3">جارٍ تحليل البيانات...</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-3">جارٍ تحليل البيانات...</h1>
           <p className="text-gray-600 mb-8">
             يقوم الذكاء الاصطناعي بتحليل إجاباتك والمستندات المرفوعة لإعداد تقرير
             شامل

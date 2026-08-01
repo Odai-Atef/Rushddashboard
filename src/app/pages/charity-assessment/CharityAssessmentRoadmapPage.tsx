@@ -169,7 +169,7 @@ export function CharityAssessmentRoadmapPage() {
   if (error) {
     return (
       <div className="min-h-full bg-background flex items-center justify-center p-8">
-        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
+        <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center max-w-md">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">تعذر تحميل الخطة</h2>
           <p className="text-muted-foreground mb-6">{error}</p>
@@ -404,7 +404,7 @@ export function CharityAssessmentRoadmapPage() {
         {/* Roadmap Items */}
         <div className="space-y-4 mb-8">
           {initiatives.length === 0 ? (
-            <div className="bg-card border border-border rounded-xl p-8 text-center text-muted-foreground">
+            <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center text-muted-foreground">
               لا توجد مبادرات متاحة في خطة التطوير
             </div>
           ) : (

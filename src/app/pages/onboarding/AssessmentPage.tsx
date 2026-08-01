@@ -412,7 +412,7 @@ export function AssessmentPage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
       <div className="max-w-4xl mx-auto">
           {/* Category Steps */}
           <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
@@ -481,20 +481,20 @@ export function AssessmentPage() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-8">
           {/* Category Header */}
-          <div className="flex items-center gap-4 mb-8">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 sm:mb-8">
             <div
-              className="w-16 h-16 rounded-xl flex items-center justify-center"
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center flex-shrink-0"
               style={{ backgroundColor: `${currentCategory.color}20` }}
             >
               <CategoryIcon
-                className="w-8 h-8"
+                className="w-6 h-6 sm:w-8 sm:h-8"
                 style={{ color: currentCategory.color }}
               />
             </div>
             <div className="flex-1">
-              <h2 className="text-2xl font-bold">{currentCategory.name}</h2>
+              <h2 className="text-xl sm:text-2xl font-bold">{currentCategory.name}</h2>
               <p className="text-gray-600">
                 تم الإجابة على {currentProgress.answered} من{' '}
                 {currentProgress.total} أسئلة

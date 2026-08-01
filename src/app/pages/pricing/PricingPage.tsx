@@ -560,7 +560,7 @@ export function PricingPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:p-3 sm:p-6">
         {packages.map((pkg, idx) => {
           const Icon = accentIcons[idx % accentIcons.length];
           const accent = accentColors[idx % accentColors.length];

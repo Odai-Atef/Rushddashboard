@@ -215,7 +215,7 @@ export function CharityAssessmentResultsPage() {
   if (error) {
     return (
       <div className="min-h-full bg-background flex items-center justify-center p-8">
-        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
+        <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center max-w-md">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">تعذر تحميل النتائج</h2>
           <p className="text-muted-foreground mb-6">{error}</p>
@@ -234,7 +234,7 @@ export function CharityAssessmentResultsPage() {
   if (!data) {
     return (
       <div className="min-h-full bg-background flex items-center justify-center p-8">
-        <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
+        <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center max-w-md">
           <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">لا توجد نتائج</h2>
           <p className="text-muted-foreground">لم يتم العثور على نتائج تقييم لهذه المنظمة.</p>
@@ -534,7 +534,7 @@ export function CharityAssessmentResultsPage() {
 
       {/* Main Content / Exportable Report */}
       <div ref={reportRef} data-report-root className="max-w-7xl mx-auto p-8">
-        <div data-report-section className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div data-report-section className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:p-6 mb-6 sm:mb-8">
           {/* Radar Chart */}
           <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6">
             <h2 className="text-xl font-semibold mb-6">نظرة شاملة على الأداء</h2>
@@ -618,7 +618,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Benchmark Comparison */}
-        <div data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
           <h2 className="text-xl font-semibold mb-6">المقارنة المعيارية</h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={benchmarkData}>
@@ -636,7 +636,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Strengths */}
-        <div id="strengths-section" data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div id="strengths-section" data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-6">
             <Star className="w-6 h-6 text-yellow-500" />
             <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
@@ -681,7 +681,7 @@ export function CharityAssessmentResultsPage() {
         </div>
 
         {/* Gaps */}
-        <div id="gaps-section" data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
+        <div id="gaps-section" data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
           <div className="flex items-center gap-3 mb-6">
             <AlertTriangle className="w-6 h-6 text-orange-500" />
             <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
@@ -726,7 +726,7 @@ export function CharityAssessmentResultsPage() {
 
         {/* Progress Tracking */}
         {progressData && progressData.length > 0 && (
-          <div data-report-section className="bg-card border border-border rounded-xl p-6 mb-8">
+          <div data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
             <h2 className="text-xl font-semibold mb-6">تتبع التقدم</h2>
             <ResponsiveContainer width="100%" height={300}>
               <RechartsLineChart data={progressData}>
@@ -748,7 +748,7 @@ export function CharityAssessmentResultsPage() {
         )}
 
         {/* CTA */}
-        <div data-report-exclude className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-8 text-center">
+        <div data-report-exclude className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-6 sm:p-6 sm:p-8 text-center">
           <h3 className="text-2xl font-semibold mb-3">جاهز للخطوة التالية؟</h3>
           <p className="text-muted-foreground mb-6">
             استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك

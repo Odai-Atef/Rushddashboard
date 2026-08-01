@@ -36,7 +36,7 @@ export function InfoPage() {
   const showActionRequiredAlert = user?.status?.toUpperCase() === 'NEED_ACTION_FROM_ORG' && !!user?.actionRequired;
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
       <div className="max-w-3xl mx-auto">
         {/* Action required alert */}
         {showActionRequiredAlert && (
@@ -52,8 +52,8 @@ export function InfoPage() {
         )}
 
         {/* Tabs Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
-          <div className="flex w-full">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-4 sm:mb-6">
+          <div className="flex w-full overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
