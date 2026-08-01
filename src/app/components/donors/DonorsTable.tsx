@@ -32,7 +32,7 @@ export function DonorsTable({ donors, onRowClick }: DonorsTableProps) {
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full border-collapse">
+      <table className="w-full border-collapse min-w-[700px]">
         <thead>
           <tr className="border-b border-border bg-muted/50">
             <th className="text-right px-4 py-3 text-sm font-semibold text-muted-foreground whitespace-nowrap">

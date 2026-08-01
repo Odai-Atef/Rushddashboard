@@ -35,9 +35,9 @@ export function DonorsFilters({
   return (
     <div className="space-y-3">
       {/* Search and Filters Row */}
-      <div className="flex flex-wrap gap-3 items-center">
+      <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center">
         {/* Search Input */}
-        <div className="relative flex-1 min-w-[250px]">
+        <div className="relative flex-1 min-w-0">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <input
             type="text"
@@ -63,7 +63,7 @@ export function DonorsFilters({
             const value = e.target.value;
             onTypeChange(value ? (value as DonorType) : null);
           }}
-          className="px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          className="px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring w-full sm:w-auto"
         >
           <option value="">جميع الأنواع</option>
           {(Object.entries(DONOR_TYPE_LABELS) as [DonorType, string][]).map(([type, label]) => (
@@ -80,7 +80,7 @@ export function DonorsFilters({
             const value = e.target.value;
             onFundingAreaChange(value || null);
           }}
-          className="px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring min-w-[180px]"
+          className="px-3 py-2 rounded-lg border border-border bg-background text-sm focus:outline-none focus:ring-2 focus:ring-ring w-full sm:w-auto min-w-0 sm:min-w-[180px]"
         >
           <option value="">جميع مجالات التمويل</option>
           {availableFundingAreas.map((area) => (
@@ -94,7 +94,7 @@ export function DonorsFilters({
         {activeFiltersCount > 0 && (
           <button
             onClick={onClearAll}
-            className="flex items-center gap-1 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+            className="flex items-center justify-center sm:justify-start gap-1 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors w-full sm:w-auto"
           >
             <X className="w-4 h-4" />
             مسح الفلاتر ({activeFiltersCount})

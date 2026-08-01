@@ -408,21 +408,21 @@ export function ProjectCreatePage() {
     (isEntityManager ? eligibilityError : eligibleOrganizationsError) || error || null;
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
-      <div className="space-y-6 max-w-4xl mx-auto">
-        <div className="mb-6">
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+      <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto">
+        <div className="mb-4 sm:mb-6">
           <button
             onClick={() => navigate('/dashboard/project-management/list')}
-            className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-4"
+            className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-3 sm:mb-4 text-sm sm:text-base"
           >
-            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-4 sm:w-5 h-4 sm:h-5" />
             رجوع إلى قائمة المشاريع
           </button>
-          <h1 className="text-3xl font-bold mb-2">إنشاء مشروع جديد</h1>
-          <p className="text-gray-600">املأ التفاصيل الأساسية للمشروع</p>
+          <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">إنشاء مشروع جديد</h1>
+          <p className="text-gray-600 text-sm sm:text-base">املأ التفاصيل الأساسية للمشروع</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-8">
           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
             {eligibilityBannerMessage && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
