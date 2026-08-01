@@ -29,6 +29,8 @@ export function ImpactMapSection({
   isLoading,
   isError,
   onRetry,
+  selectedRegionId,
+  onRegionSelect,
   className,
 }: ImpactMapSectionProps) {
   if (isError) {

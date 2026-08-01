@@ -22,8 +22,6 @@ import {
   Sun,
   Moon,
   Monitor,
-  MessageSquare,
-  Download,
   ChevronDown,
   X,
 } from 'lucide-react';
@@ -671,20 +669,6 @@ export function TopBar({
             <NotificationDropdownContent width="w-96" />
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
-
-        {/* Messages */}
-        <IconButton
-          onClick={() => navigate('/dashboard/collaboration')}
-          label="الرسائل"
-          hiddenOn="sm"
-        >
-          <MessageSquare className="w-[18px] h-[18px]" />
-        </IconButton>
-
-        {/* Downloads */}
-        <IconButton label="التنزيلات" hiddenOn="md">
-          <Download className="w-[18px] h-[18px]" />
-        </IconButton>
 
         {/* Theme Toggle */}
         <button
