@@ -51,7 +51,17 @@ function InputOTPSlot({
       data-slot="input-otp-slot"
       data-active={isActive}
       className={cn(
-        "data-[active=true]:border-ring data-[active=true]:ring-ring/50 data-[active=true]:aria-invalid:ring-destructive/20 dark:data-[active=true]:aria-invalid:ring-destructive/40 aria-invalid:border-destructive data-[active=true]:aria-invalid:border-destructive dark:bg-input/30 border-input relative flex h-9 w-9 items-center justify-center border-y border-r text-sm bg-input-background transition-all outline-none first:rounded-l-md first:border-l last:rounded-r-md data-[active=true]:z-10 data-[active=true]:ring-[3px]",
+        "relative flex h-10 w-10 items-center justify-center text-sm transition-all duration-200 ease-in-out",
+        "bg-white dark:bg-gray-900/50",
+        "text-gray-900 dark:text-white",
+        "border-y border-r border-gray-200 dark:border-gray-700",
+        "first:rounded-l-md first:border-l last:rounded-r-md",
+        "focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none",
+        "dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30",
+        "data-[active=true]:border-emerald-500 data-[active=true]:ring-2 data-[active=true]:ring-emerald-500/30 data-[active=true]:z-10",
+        "dark:data-[active=true]:border-emerald-400 dark:data-[active=true]:ring-emerald-400/30",
+        "aria-invalid:border-red-500 dark:aria-invalid:border-red-400",
+        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         className,
       )}
       {...props}
@@ -59,7 +69,7 @@ function InputOTPSlot({
       {char}
       {hasFakeCaret && (
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <div className="animate-caret-blink bg-foreground h-4 w-px duration-1000" />
+          <div className="animate-caret-blink bg-gray-900 dark:bg-white h-4 w-px duration-1000" />
         </div>
       )}
     </div>
@@ -69,7 +79,7 @@ function InputOTPSlot({
 function InputOTPSeparator({ ...props }: React.ComponentProps<"div">) {
   return (
     <div data-slot="input-otp-separator" role="separator" {...props}>
-      <MinusIcon />
+      <MinusIcon className="text-gray-400 dark:text-gray-500" />
     </div>
   );
 }

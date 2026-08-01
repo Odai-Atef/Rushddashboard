@@ -14,7 +14,18 @@ function Checkbox({
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        "peer border bg-input-background dark:bg-input/30 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground dark:data-[state=checked]:bg-primary data-[state=checked]:border-primary focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive size-4 shrink-0 rounded-[4px] border shadow-xs transition-shadow outline-none focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50",
+        "peer size-5 shrink-0 rounded-[5px] border shadow-sm",
+        "bg-white dark:bg-gray-900/50",
+        "border-gray-300 dark:border-gray-600",
+        "text-white",
+        "transition-all duration-200 ease-in-out",
+        "hover:border-gray-400 dark:hover:border-gray-500",
+        "focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:outline-none",
+        "dark:focus-visible:border-emerald-400 dark:focus-visible:ring-emerald-400/30",
+        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
+        "data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 dark:data-[state=checked]:bg-emerald-500 dark:data-[state=checked]:border-emerald-500",
+        "data-[state=indeterminate]:bg-emerald-600 data-[state=indeterminate]:border-emerald-600 dark:data-[state=indeterminate]:bg-emerald-500 dark:data-[state=indeterminate]:border-emerald-500",
+        "aria-invalid:border-red-500 aria-invalid:ring-red-500/20 dark:aria-invalid:border-red-400 dark:aria-invalid:ring-red-400/20",
         className,
       )}
       {...props}

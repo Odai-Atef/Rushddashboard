@@ -103,51 +103,58 @@ export function MultiSelect({
           type="button"
           disabled={disabled}
           className={cn(
-            "flex w-full items-center justify-between gap-2 rounded-md border bg-white px-3 py-2 text-sm shadow-sm transition-colors",
-            "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
-            disabled && "cursor-not-allowed opacity-50 bg-gray-50",
-            error && "border-red-500 bg-red-50",
-            !error && "border-gray-300 hover:border-gray-400",
+            "flex w-full items-center justify-between gap-2 rounded-lg border px-4 py-2.5 text-sm shadow-sm transition-colors duration-200 ease-in-out",
+            "bg-white dark:bg-gray-900/50",
+            "text-gray-900 dark:text-white",
+            "border-gray-200 dark:border-gray-700",
+            "focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none",
+            "dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30",
+            disabled && "cursor-not-allowed opacity-50 bg-gray-100 dark:bg-gray-800",
+            error && "border-red-500 ring-red-500/20 bg-red-50 dark:bg-red-900/10",
+            !error && "hover:border-gray-300 dark:hover:border-gray-600",
             className
           )}
         >
           <span className="flex flex-wrap items-center gap-1.5 overflow-hidden">
             {selectedOptions.length === 0 ? (
-              <span className="text-gray-400">{placeholder}</span>
+              <span className="text-gray-400 dark:text-gray-500">{placeholder}</span>
             ) : (
               selectedOptions.map((option) => (
                 <span
                   key={option.value}
-                  className="inline-flex items-center gap-1 rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700"
+                  className={cn(
+                    "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium transition-colors",
+                    "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                  )}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (!disabled) removeValue(option.value);
                   }}
                 >
                   {option.label}
-                  <X className="h-3 w-3 cursor-pointer hover:text-blue-900" />
+                  <X className="size-3 cursor-pointer hover:text-emerald-900 dark:hover:text-emerald-200" />
                 </span>
               ))
             )}
           </span>
-          <ChevronsUpDown className="h-4 w-4 shrink-0 text-gray-400" />
+          <ChevronsUpDown className="size-4 shrink-0 text-gray-400 dark:text-gray-500" />
         </button>
       </PopoverTrigger>
       <PopoverContent
         className="w-[var(--radix-popover-trigger-width)] p-0"
         align="start"
       >
-        <Command className="rounded-md border shadow-md bg-white">
+        <Command className="rounded-lg border shadow-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
           <CommandInput
             placeholder={searchPlaceholder}
             value={search}
             onValueChange={setSearch}
             onKeyDown={handleKeyDown}
             ref={inputRef}
-            className={cn("h-9", inputClassName)}
+            className={cn("h-11", inputClassName)}
           />
           <CommandList className="max-h-60 overflow-auto">
-            <CommandEmpty className="py-4 text-center text-sm text-gray-500">
+            <CommandEmpty className="py-4 text-center text-sm text-gray-500 dark:text-gray-400">
               {emptyMessage}
             </CommandEmpty>
             <CommandGroup>
@@ -160,17 +167,17 @@ export function MultiSelect({
                     disabled={option.disabled}
                     onSelect={() => {
                       toggleValue(option.value);
-                      // Keep the popover open so multiple items can be picked
                       inputRef.current?.focus();
                     }}
                     className={cn(
-                      "flex cursor-pointer items-center justify-between px-3 py-2 text-sm",
-                      isSelected && "bg-blue-50 text-blue-700"
+                      "flex cursor-pointer items-center justify-between px-3 py-2.5 text-sm transition-colors duration-150",
+                      "text-gray-900 dark:text-white",
+                      isSelected && "bg-emerald-50 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
                     )}
                   >
                     <span>{option.label}</span>
                     {isSelected && (
-                      <span className="text-blue-600 text-xs font-medium">
+                      <span className="text-emerald-600 dark:text-emerald-400 text-xs font-medium">
                         ✓
                       </span>
                     )}
