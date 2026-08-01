@@ -23,6 +23,9 @@ import {
   ImpactSidebar,
   ImpactSROISection,
   ImpactSectorSection,
+  ImpactBeneficiariesSection,
+  ImpactFundingSection,
+  ImpactRegionalSection,
   ImpactProjectsSection,
 } from './components';
 import {
@@ -32,6 +35,11 @@ import {
   mockProjects,
   mockSROI,
   mockActivities,
+  beneficiariesDistribution,
+  sroiTrendData,
+  projectsBySector,
+  fundingGrowthData,
+  regionalImpactData,
 } from './mock';
 import { cn } from '@/app/utils/cn';
 import { useAuth } from '@/app/layouts/RootLayout';
@@ -164,22 +172,50 @@ export function ImpactPage() {
         </div>
       </section>
 
-      {/* SROI Analytics & Projects by Sector */}
-      <section aria-label="تحليلات SROI والقطاعات">
+      {/* Beneficiaries Distribution & SROI Trend */}
+      <section aria-label="توزيع المستفيدين والعائد الاجتماعي">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+          <ImpactBeneficiariesSection
+            data={beneficiariesDistribution}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={handleRetry}
+          />
           <ImpactSROISection
             sroiData={mockSROI}
             isLoading={isLoading}
             isError={isError}
             onRetry={handleRetry}
           />
+        </div>
+      </section>
+
+      {/* Projects by Sector & Funding Growth */}
+      <section aria-label="المشاريع حسب القطاع ونمو التمويل">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
           <ImpactSectorSection
             sectors={mockSectors}
             isLoading={isLoading}
             isError={isError}
             onRetry={handleRetry}
           />
+          <ImpactFundingSection
+            data={fundingGrowthData}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={handleRetry}
+          />
         </div>
+      </section>
+
+      {/* Regional Impact */}
+      <section aria-label="الأثر الإقليمي">
+        <ImpactRegionalSection
+          data={regionalImpactData}
+          isLoading={isLoading}
+          isError={isError}
+          onRetry={handleRetry}
+        />
       </section>
 
       {/* Recent Projects */}

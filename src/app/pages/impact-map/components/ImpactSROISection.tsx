@@ -1,4 +1,12 @@
+/**
+ * ImpactSROISection — SROI Analytics
+ *
+ * Displays SROI trend line chart alongside summary metrics.
+ */
+
+import { useMemo } from 'react';
 import { cn } from '@/app/utils/cn';
+import { LineChartCard } from './charts/LineChartCard';
 import { ImpactCard } from './ImpactCard';
 import { LoadingSkeleton } from './LoadingSkeleton';
 import { ErrorState } from './ErrorState';
@@ -20,102 +28,117 @@ export function ImpactSROISection({
   onRetry,
   className,
 }: ImpactSROISectionProps) {
+  const totalInvestment = useMemo(
+    () => sroiData.reduce((sum, s) => sum + s.investment, 0),
+    [sroiData]
+  );
+  const totalReturn = useMemo(
+    () => sroiData.reduce((sum, s) => sum + s.socialReturn, 0),
+    [sroiData]
+  );
+  const avgRatio = useMemo(
+    () =>
+      sroiData.length > 0
+        ? sroiData.reduce((sum, s) => sum + s.ratio, 0) / sroiData.length
+        : 0,
+    [sroiData]
+  );
+
   if (isError) {
     return (
-      <ImpactCard title="تحليل العائد الاجتماعي" className={className}>
-        <ErrorState
-          title="تعذر تحميل بيانات العائد الاجتماعي"
-          message="حدث خطأ أثناء جلب بيانات العائد الاجتماعي."
+      <div className={className}>
+        <LineChartCard
+          title="اتجاه العائد الاجتماعي"
+          description="تطور مؤشر العائد الاجتماعي على الاستثمار"
+          data={[]}
+          isError={true}
           onRetry={onRetry}
         />
-      </ImpactCard>
+      </div>
     );
   }
 
   if (isLoading) {
     return (
-      <ImpactCard title="تحليل العائد الاجتماعي" className={className}>
-        <LoadingSkeleton variant="chart" />
-      </ImpactCard>
-    );
-  }
-
-  if (!sroiData.length) {
-    return (
-      <ImpactCard title="تحليل العائد الاجتماعي" className={className}>
-        <EmptyState
-          title="لا توجد بيانات SROI"
-          description="لم يتم العثور على بيانات العائد الاجتماعي حالياً."
+      <div className={className}>
+        <LineChartCard
+          title="اتجاه العائد الاجتماعي"
+          description="تطور مؤشر العائد الاجتماعي على الاستثمار"
+          data={[]}
+          isLoading={true}
         />
-      </ImpactCard>
+      </div>
     );
   }
 
-  const totalInvestment = sroiData.reduce((sum, s) => sum + s.investment, 0);
-  const totalReturn = sroiData.reduce((sum, s) => sum + s.socialReturn, 0);
-  const avgRatio = sroiData.length > 0
-    ? sroiData.reduce((sum, s) => sum + s.ratio, 0) / sroiData.length
-    : 0;
+  // Build trend data from SROI entries grouped by year
+  const trendData = useMemo(() => {
+    const byYear: Record<number, { investment: number; return: number; count: number }> = {};
+    sroiData.forEach((s) => {
+      if (!byYear[s.year]) byYear[s.year] = { investment: 0, return: 0, count: 0 };
+      byYear[s.year].investment += s.investment;
+      byYear[s.year].return += s.socialReturn;
+      byYear[s.year].count += 1;
+    });
+
+    const years = Object.keys(byYear).sort();
+    return years.map((year) => ({
+      year,
+      value: Number((byYear[Number(year)].return / byYear[Number(year)].investment).toFixed(1)),
+      target: Number((byYear[Number(year)].return / byYear[Number(year)].investment * 1.1).toFixed(1)),
+    }));
+  }, [sroiData]);
 
   return (
-    <ImpactCard
-      title="تحليل العائد الاجتماعي (SROI)"
-      description="عائد الاستثمار الاجتماعي لكل ريال مستثمر"
-      className={cn('animate-fade-in', className)}
-    >
-      <div className="space-y-6">
-        {/* Summary Bar */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="p-4 rounded-xl bg-[var(--hover)]/30 text-center">
-            <div className="text-xs text-[var(--text-muted)] mb-1">إجمالي الاستثمار</div>
-            <div className="text-xl font-bold text-[var(--text-primary)]">
-              {(totalInvestment / 1_000_000).toFixed(1)} مليون
-            </div>
-          </div>
-          <div className="p-4 rounded-xl bg-[var(--primary)]/[0.06] text-center">
-            <div className="text-xs text-[var(--text-muted)] mb-1">إجمالي العائد</div>
-            <div className="text-xl font-bold text-[var(--primary)]">
-              {(totalReturn / 1_000_000).toFixed(1)} مليون
-            </div>
-          </div>
-          <div className="p-4 rounded-xl bg-[var(--secondary)]/[0.06] text-center">
-            <div className="text-xs text-[var(--text-muted)] mb-1">متوسط العائد</div>
-            <div className="text-xl font-bold text-[var(--secondary)]">
-              {avgRatio.toFixed(1)}x
-            </div>
-          </div>
-        </div>
+    <div className={cn('space-y-4', className)}>
+      <LineChartCard
+        title="اتجاه العائد الاجتماعي"
+        description="تطور مؤشر العائد الاجتماعي على الاستثمار"
+        data={trendData}
+        showTarget={true}
+      />
 
-        {/* SROI Bars */}
-        <div className="space-y-4">
-          {sroiData.map((sroi) => (
-            <div key={sroi.id} className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium text-[var(--text-primary)] truncate max-w-[60%]">
-                  {sroi.projectName}
-                </span>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-bold text-[var(--primary)]">
-                    {sroi.ratio}x
-                  </span>
-                  <span className="text-xs text-[var(--text-muted)]">
-                    {sroi.beneficiariesImpacted.toLocaleString('ar-SA')} مستفيد
-                  </span>
-                </div>
-              </div>
-              <div className="relative h-2.5 rounded-full bg-[var(--hover)] overflow-hidden">
-                <div
-                  className="absolute top-0 right-0 h-full rounded-full transition-all duration-700 ease-out"
-                  style={{
-                    width: `${Math.min((sroi.ratio / 6) * 100, 100)}%`,
-                    background: 'linear-gradient(90deg, var(--primary), var(--secondary))',
-                  }}
-                />
-              </div>
-            </div>
-          ))}
-        </div>
+      {/* Summary Metrics */}
+      <div className="grid grid-cols-3 gap-3">
+        <SummaryPill
+          label="إجمالي الاستثمار"
+          value={`${(totalInvestment / 1_000_000).toFixed(1)} مليون`}
+          variant="default"
+        />
+        <SummaryPill
+          label="إجمالي العائد"
+          value={`${(totalReturn / 1_000_000).toFixed(1)} مليون`}
+          variant="primary"
+        />
+        <SummaryPill
+          label="متوسط العائد"
+          value={`${avgRatio.toFixed(1)}x`}
+          variant="accent"
+        />
       </div>
-    </ImpactCard>
+    </div>
+  );
+}
+
+function SummaryPill({
+  label,
+  value,
+  variant,
+}: {
+  label: string;
+  value: string;
+  variant: 'default' | 'primary' | 'accent';
+}) {
+  const variantClasses = {
+    default: 'bg-[var(--impact-surface-secondary)] text-[var(--impact-text-primary)]',
+    primary: 'bg-[var(--impact-primary)]/10 text-[var(--impact-primary)]',
+    accent: 'bg-[var(--impact-success)]/10 text-[var(--impact-success)]',
+  };
+
+  return (
+    <div className={cn('rounded-xl p-3 text-center', variantClasses[variant])}>
+      <div className="text-xs text-[var(--impact-text-muted)] mb-1">{label}</div>
+      <div className="text-lg font-bold">{value}</div>
+    </div>
   );
 }

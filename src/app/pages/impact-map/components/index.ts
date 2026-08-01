@@ -11,9 +11,31 @@ export { ImpactSidebar } from './ImpactSidebar';
 export { ImpactSROISection } from './ImpactSROISection';
 export { ImpactSectorSection } from './ImpactSectorSection';
 export { ImpactProjectsSection } from './ImpactProjectsSection';
+export { ImpactBeneficiariesSection } from './ImpactBeneficiariesSection';
+export { ImpactFundingSection } from './ImpactFundingSection';
+export { ImpactRegionalSection } from './ImpactRegionalSection';
 
 /* ──────────────────────────────────────────────────────────────── */
 /*  KPI Components                                                  */
 /* ──────────────────────────────────────────────────────────────── */
 
 export { KpiCard, KpiIcon, KpiValue, TrendBadge, KpiGrid } from './kpi';
+
+/* ──────────────────────────────────────────────────────────────── */
+/*  Chart Components                                                  */
+/* ──────────────────────────────────────────────────────────────── */
+
+export {
+  ExecutiveChartCard,
+  ChartHeader,
+  ChartLegend,
+  ChartTooltip,
+  ChartSkeleton,
+  EmptyChartState,
+  ErrorChartState,
+  DonutChartCard,
+  LineChartCard,
+  BarChartCard,
+  AreaChartCard,
+  RegionalBarChartCard,
+} from './charts';
