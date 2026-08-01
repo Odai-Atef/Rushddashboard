@@ -19,6 +19,16 @@ export interface KPI {
   description?: string;
 }
 
+/* Re-export new KPI types */
+export type {
+  KpiData,
+  KpiCardProps,
+  KpiIconProps,
+  KpiValueProps,
+  TrendBadgeProps,
+  KpiGridProps,
+} from './kpi';
+
 /* ──────────────────────────────────────────────────────────────── */
 /*  Region                                                          */
 /* ──────────────────────────────────────────────────────────────── */

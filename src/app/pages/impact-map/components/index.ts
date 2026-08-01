@@ -11,3 +11,9 @@ export { ImpactSidebar } from './ImpactSidebar';
 export { ImpactSROISection } from './ImpactSROISection';
 export { ImpactSectorSection } from './ImpactSectorSection';
 export { ImpactProjectsSection } from './ImpactProjectsSection';
+
+/* ──────────────────────────────────────────────────────────────── */
+/*  KPI Components                                                  */
+/* ──────────────────────────────────────────────────────────────── */
+
+export { KpiCard, KpiIcon, KpiValue, TrendBadge, KpiGrid } from './kpi';
