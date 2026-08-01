@@ -1,14 +1,8 @@
-import { Outlet, Navigate, useOutletContext } from 'react-router';
+import { Outlet, Navigate } from 'react-router';
 import { useAuth } from './RootLayout';
-
-interface ThemeContext {
-  theme: 'light' | 'dark';
-  setTheme: (theme: 'light' | 'dark') => void;
-}
 
 export function AuthLayout() {
   const { isAuthenticated, user } = useAuth();
-  const context = useOutletContext<ThemeContext>();
 
   if (isAuthenticated) {
     const isProjectManager = user?.roleSlug === 'project-managers';
@@ -20,5 +14,5 @@ export function AuthLayout() {
     );
   }
 
-  return <Outlet context={context} />;
+  return <Outlet />;
 }

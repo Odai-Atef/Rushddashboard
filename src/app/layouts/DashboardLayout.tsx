@@ -1,18 +1,14 @@
 import { useState } from 'react';
-import { Outlet, Navigate, useOutletContext, useLocation } from 'react-router';
+import { Outlet, Navigate, useLocation } from 'react-router';
 import { useAuth } from './RootLayout';
+import { useTheme } from '../hooks/useTheme';
 import { Sidebar } from '../components/Sidebar';
 import { TopBar } from '../components/TopBar';
 import { MobileNav } from '../components/MobileNav';
 
-interface ThemeContext {
-  theme: 'light' | 'dark';
-  setTheme: (theme: 'light' | 'dark') => void;
-}
-
 export function DashboardLayout() {
   const { isAuthenticated } = useAuth();
-  const context = useOutletContext<ThemeContext>();
+  const { resolvedTheme, setTheme } = useTheme();
   const location = useLocation();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
@@ -69,8 +65,8 @@ export function DashboardLayout() {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopBar
-          theme={context.theme}
-          onThemeToggle={() => context.setTheme(context.theme === 'dark' ? 'light' : 'dark')}
+          theme={resolvedTheme}
+          onThemeToggle={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
           onMenuClick={() => setIsMobileNavOpen(true)}
         />
 

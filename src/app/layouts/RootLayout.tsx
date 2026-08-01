@@ -3,6 +3,7 @@ import { useState, useEffect, createContext, useContext, useCallback } from 'rea
 import apiClient from '@/api/client';
 import { authService, UserProfile, UserRole } from '@/api/services/auth-service';
 import { Toaster } from '@/app/components/ui/sonner';
+import { ThemeProvider } from '@/app/components/ThemeProvider';
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -12,10 +13,7 @@ interface AuthContextType {
   logout: () => void;
 }
 
-interface ThemeContext {
-  theme: 'light' | 'dark';
-  setTheme: (theme: 'light' | 'dark') => void;
-}
+// Removed inline ThemeContext — use the ThemeProvider from @/app/components/ThemeProvider
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
@@ -54,11 +52,6 @@ export function RootLayout() {
   const [isAuthenticated, setIsAuthenticated] = useState(() => apiClient.isAuthenticated());
   const [isLoading, setIsLoading] = useState(isAuthenticated);
   const [user, setUser] = useState<UserProfile | null>(null);
-  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
-    const saved = localStorage.getItem('rushd_theme');
-    return (saved === 'dark' || saved === 'light') ? saved : 'light';
-  });
-
   // Load user profile on mount if authenticated
   useEffect(() => {
     if (apiClient.isAuthenticated()) {
@@ -79,12 +72,6 @@ export function RootLayout() {
     document.documentElement.setAttribute('dir', 'rtl');
     document.documentElement.setAttribute('lang', 'ar');
   }, []);
-
-  useEffect(() => {
-    document.documentElement.classList.remove('light', 'dark');
-    document.documentElement.classList.add(theme);
-    localStorage.setItem('rushd_theme', theme);
-  }, [theme]);
 
   const login = useCallback(() => {
     setIsAuthenticated(true);
@@ -121,16 +108,13 @@ export function RootLayout() {
   };
 
   return (
-    <AuthContext.Provider value={authValue}>
-      <div className={theme}>
-        <Outlet context={{ theme, setTheme } satisfies ThemeContext} />
+    <ThemeProvider>
+      <AuthContext.Provider value={authValue}>
+        <Outlet />
         <Toaster position="top-center" richColors duration={5000} />
-      </div>
-    </AuthContext.Provider>
+      </AuthContext.Provider>
+    </ThemeProvider>
   );
 }
 
-export const useTheme = () => {
-  const context = useContext(AuthContext);
-  return context;
-};
+// Removed inline useTheme — import from @/app/hooks/useTheme
