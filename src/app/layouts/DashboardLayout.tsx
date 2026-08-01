@@ -24,6 +24,7 @@ export function DashboardLayout() {
     '/dashboard/analysis-history': 'analysis-history',
     '/dashboard/project-journey': 'project-journey',
     '/dashboard/project-management': 'project-management',
+    '/dashboard/impact-map': 'impact-map',
     '/dashboard/collaboration': 'collaboration',
     '/dashboard/donors': 'donors',
     '/dashboard/organization-donors': 'organization-donors',
@@ -57,7 +58,8 @@ export function DashboardLayout() {
       location.pathname.startsWith('/dashboard/project-management') ? 'project-management' :
         location.pathname.startsWith('/dashboard/charity-assessment') ? 'charity-assessment' :
           location.pathname.startsWith('/dashboard/ai-analysis') ? 'ai-analysis' :
-            'executive');
+            location.pathname.startsWith('/dashboard/impact-map') ? 'impact-map' :
+              'executive');
 
   return (
     <div className="flex h-screen bg-background overflow-hidden">

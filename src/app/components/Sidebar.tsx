@@ -42,6 +42,7 @@ import {
   Menu,
   LogOut,
   LifeBuoy,
+  MapPin,
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
@@ -307,6 +308,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
       roleSlug === 'project-managers'
         ? [
             { id: 'project-management-dashboard', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+            { id: 'impact-map', label: 'خارطة الأثر', icon: MapPin, path: '/dashboard/impact-map' },
             { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
             ...commonNavItems.filter((item) => item.id !== 'project-management'),
           ]

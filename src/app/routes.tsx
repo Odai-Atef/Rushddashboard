@@ -68,6 +68,7 @@ import { PackagesPage } from './pages/public/PackagesPage';
 import { SLAPage } from './pages/public/SLAPage';
 import { SubscriptionsListPage } from './pages/admin/SubscriptionsListPage';
 import { CouponsPage } from './pages/admin/CouponsPage';
+import { ImpactPage } from './pages/impact-map';
 
 const OnboardingLandingPage = lazy(() => import('./pages/onboarding/LandingPage').then(m => ({ default: m.LandingPage })));
 const OnboardingRegistrationPage = lazy(() => import('./pages/onboarding/RegistrationPage').then(m => ({ default: m.RegistrationPage })));
@@ -252,6 +253,14 @@ export const router = createBrowserRouter([
  {
  path: 'settings',
  Component: SettingsPage,
+ },
+ {
+ path: 'impact-map',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ImpactPage />
+ </RoleRouteGuard>
+ ),
  },
  {
  path: 'notifications',

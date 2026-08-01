@@ -41,6 +41,7 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
  'project-management-versions',
  'project-management-activity',
  'project-management-reporting',
+ 'impact-map',
  'donors',
  'donor-matching',
  'manage-org',
