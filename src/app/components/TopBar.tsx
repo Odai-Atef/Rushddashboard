@@ -492,7 +492,7 @@ export function TopBar({
           <ThemeIcon className="w-5 h-5" />
         </button>
 
-        /** User Profile */
+        {/* User Profile */}
 
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
