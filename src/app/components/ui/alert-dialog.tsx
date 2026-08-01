@@ -8,176 +8,176 @@ import { cn } from "./utils";
 import { buttonVariants } from "./button";
 
 function AlertDialog({
-  ...props
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Root>) {
-  return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
+ return <AlertDialogPrimitive.Root data-slot="alert-dialog" {...props} />;
 }
 
 function AlertDialogTrigger({
-  ...props
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Trigger>) {
-  return (
-    <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
-  );
+ return (
+ <AlertDialogPrimitive.Trigger data-slot="alert-dialog-trigger" {...props} />
+ );
 }
 
 function AlertDialogPortal({
-  ...props
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Portal>) {
-  return (
-    <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
-  );
+ return (
+ <AlertDialogPrimitive.Portal data-slot="alert-dialog-portal" {...props} />
+ );
 }
 
 function AlertDialogOverlay({
-  className,
-  ...props
+ className,
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Overlay>) {
-  return (
-    <AlertDialogPrimitive.Overlay
-      data-slot="alert-dialog-overlay"
-      className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50",
-        "bg-black/50 dark:bg-white/10 backdrop-blur-sm transition-all duration-[var(--transition-duration)]",
-        className,
-      )}
-      {...props}
-    />
-  );
+ return (
+ <AlertDialogPrimitive.Overlay
+ data-slot="alert-dialog-overlay"
+ className={cn(
+ "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50",
+ "bg-[var(--text-primary)]/[0.5] backdrop-blur-sm transition-all duration-[var(--transition-duration)]",
+ className,
+ )}
+ {...props}
+ />
+ );
 }
 
 function AlertDialogContent({
-  className,
-  children,
-  ...props
+ className,
+ children,
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Content> & {
-  children: React.ReactNode;
+ children: React.ReactNode;
 }) {
-  return (
-    <AlertDialogPortal>
-      <AlertDialogOverlay />
-      <AlertDialogPrimitive.Content
-        data-slot="alert-dialog-content"
-        className={cn(
-          "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-[var(--spacing-card-padding)] shadow-[var(--shadow-xl)] duration-[var(--transition-duration)] sm:max-w-lg",
-          "rounded-[var(--radius-dialog)] border",
-          "bg-[var(--card)] text-[var(--text-primary)]",
-          "border-[var(--border)]",
-          "data-[state=open]:animate-in data-[state=closed]:animate-out",
-          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
-          "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-          "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
-          "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
-          className,
-        )}
-        {...props}
-      >
-        {children}
-        <AlertDialogPrimitive.Cancel
-          className={cn(
-            "absolute top-4 right-4 rounded-[var(--radius-button)] p-1.5 opacity-70 transition-all duration-[var(--transition-duration)]",
-            "hover:opacity-100 hover:bg-[var(--hover)]",
-            "focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30 focus:ring-offset-2 focus:ring-offset-background",
-          )}
-          aria-label="Close dialog"
-        >
-          <XIcon className="size-5 text-[var(--text-muted)]" />
-          <span className="sr-only">Close</span>
-        </AlertDialogPrimitive.Cancel>
-      </AlertDialogPrimitive.Content>
-    </AlertDialogPortal>
-  );
+ return (
+ <AlertDialogPortal>
+ <AlertDialogOverlay />
+ <AlertDialogPrimitive.Content
+ data-slot="alert-dialog-content"
+ className={cn(
+ "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-[var(--spacing-card-padding)] shadow-[var(--shadow-xl)] duration-[var(--transition-duration)] sm:max-w-lg",
+ "rounded-[var(--radius-dialog)] border",
+ "bg-[var(--card)] text-[var(--text-primary)]",
+ "border-[var(--border)]",
+ "data-[state=open]:animate-in data-[state=closed]:animate-out",
+ "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+ "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+ "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
+ "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
+ className,
+ )}
+ {...props}
+ >
+ {children}
+ <AlertDialogPrimitive.Cancel
+ className={cn(
+ "absolute top-4 right-4 rounded-[var(--radius-button)] p-1.5 opacity-70 transition-all duration-[var(--transition-duration)]",
+ "hover:opacity-100 hover:bg-[var(--hover)]",
+ "focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30 focus:ring-offset-2 focus:ring-offset-background",
+ )}
+ aria-label="Close dialog"
+ >
+ <XIcon className="size-5 text-[var(--text-muted)]" />
+ <span className="sr-only">Close</span>
+ </AlertDialogPrimitive.Cancel>
+ </AlertDialogPrimitive.Content>
+ </AlertDialogPortal>
+ );
 }
 
 function AlertDialogHeader({
-  className,
-  ...props
+ className,
+ ...props
 }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="alert-dialog-header"
-      className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
-      {...props}
-    />
-  );
+ return (
+ <div
+ data-slot="alert-dialog-header"
+ className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+ {...props}
+ />
+ );
 }
 
 function AlertDialogFooter({
-  className,
-  ...props
+ className,
+ ...props
 }: React.ComponentProps<"div">) {
-  return (
-    <div
-      data-slot="alert-dialog-footer"
-      className={cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end pt-2",
-        className,
-      )}
-      {...props}
-    />
-  );
+ return (
+ <div
+ data-slot="alert-dialog-footer"
+ className={cn(
+ "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end pt-2",
+ className,
+ )}
+ {...props}
+ />
+ );
 }
 
 function AlertDialogTitle({
-  className,
-  ...props
+ className,
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Title>) {
-  return (
-    <AlertDialogPrimitive.Title
-      data-slot="alert-dialog-title"
-      className={cn("text-lg font-bold tracking-tight text-[var(--text-primary)]", className)}
-      {...props}
-    />
-  );
+ return (
+ <AlertDialogPrimitive.Title
+ data-slot="alert-dialog-title"
+ className={cn("text-lg font-bold tracking-tight text-[var(--text-primary)]", className)}
+ {...props}
+ />
+ );
 }
 
 function AlertDialogDescription({
-  className,
-  ...props
+ className,
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Description>) {
-  return (
-    <AlertDialogPrimitive.Description
-      data-slot="alert-dialog-description"
-      className={cn("text-sm text-[var(--text-muted)] leading-relaxed", className)}
-      {...props}
-    />
-  );
+ return (
+ <AlertDialogPrimitive.Description
+ data-slot="alert-dialog-description"
+ className={cn("text-sm text-[var(--text-muted)] leading-relaxed", className)}
+ {...props}
+ />
+ );
 }
 
 function AlertDialogAction({
-  className,
-  ...props
+ className,
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Action>) {
-  return (
-    <AlertDialogPrimitive.Action
-      className={cn(buttonVariants(), className)}
-      {...props}
-    />
-  );
+ return (
+ <AlertDialogPrimitive.Action
+ className={cn(buttonVariants(), className)}
+ {...props}
+ />
+ );
 }
 
 function AlertDialogCancel({
-  className,
-  ...props
+ className,
+ ...props
 }: React.ComponentProps<typeof AlertDialogPrimitive.Cancel>) {
-  return (
-    <AlertDialogPrimitive.Cancel
-      className={cn(buttonVariants({ variant: "outline" }), className)}
-      {...props}
-    />
-  );
+ return (
+ <AlertDialogPrimitive.Cancel
+ className={cn(buttonVariants({ variant: "outline" }), className)}
+ {...props}
+ />
+ );
 }
 
 export {
-  AlertDialog,
-  AlertDialogPortal,
-  AlertDialogOverlay,
-  AlertDialogTrigger,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogFooter,
-  AlertDialogTitle,
-  AlertDialogDescription,
-  AlertDialogAction,
-  AlertDialogCancel,
+ AlertDialog,
+ AlertDialogPortal,
+ AlertDialogOverlay,
+ AlertDialogTrigger,
+ AlertDialogContent,
+ AlertDialogHeader,
+ AlertDialogFooter,
+ AlertDialogTitle,
+ AlertDialogDescription,
+ AlertDialogAction,
+ AlertDialogCancel,
 };

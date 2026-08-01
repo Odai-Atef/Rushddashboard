@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback } from 'react';
 import { analysisService, Category } from '@/api/services/analysis-service';
 
 export interface UseAnalysisCategoriesResult {
-  categories: Category[];
-  isLoading: boolean;
-  error: Error | null;
-  retry: () => void;
+ categories: Category[];
+ isLoading: boolean;
+ error: Error | null;
+ retry: () => void;
 }
 
 /**
@@ -20,41 +20,41 @@ export interface UseAnalysisCategoriesResult {
  * const { categories, isLoading, error, retry } = useAnalysisCategories();
  */
 export function useAnalysisCategories(): UseAnalysisCategoriesResult {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+ const [categories, setCategories] = useState<Category[]>([]);
+ const [isLoading, setIsLoading] = useState<boolean>(true);
+ const [error, setError] = useState<Error | null>(null);
 
-  const fetchCategories = useCallback(async () => {
-    setIsLoading(true);
-    setError(null);
+ const fetchCategories = useCallback(async () => {
+ setIsLoading(true);
+ setError(null);
 
-    try {
-      const response = await analysisService.getCategories();
-      const payload = response.data;
-      const list = Array.isArray(payload) ? payload : (payload as { data?: Category[] } | undefined)?.data;
-      if (response.success && Array.isArray(list)) {
-        const sorted = [...list].sort(
-          (a, b) => (a.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.sortOrder ?? Number.MAX_SAFE_INTEGER)
-        );
-        setCategories(sorted);
-      } else {
-        setCategories([]);
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error('Failed to load categories'));
-      setCategories([]);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+ try {
+ const response = await analysisService.getCategories();
+ const payload = response.data;
+ const list = Array.isArray(payload) ? payload : (payload as { data?: Category[] } | undefined)?.data;
+ if (response.success && Array.isArray(list)) {
+ const sorted = [...list].sort(
+ (a, b) => (a.sortOrder ?? Number.MAX_SAFE_INTEGER) - (b.sortOrder ?? Number.MAX_SAFE_INTEGER)
+ );
+ setCategories(sorted);
+ } else {
+ setCategories([]);
+ }
+ } catch (err) {
+ setError(err instanceof Error ? err : new Error('Failed to load categories'));
+ setCategories([]);
+ } finally {
+ setIsLoading(false);
+ }
+ }, []);
 
-  const retry = useCallback(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+ const retry = useCallback(() => {
+ fetchCategories();
+ }, [fetchCategories]);
 
-  useEffect(() => {
-    fetchCategories();
-  }, [fetchCategories]);
+ useEffect(() => {
+ fetchCategories();
+ }, [fetchCategories]);
 
-  return { categories, isLoading, error, retry };
+ return { categories, isLoading, error, retry };
 }

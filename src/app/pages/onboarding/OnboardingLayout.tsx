@@ -10,14 +10,14 @@ import { useSearchParams, Outlet } from 'react-router';
 import { OnboardingProvider } from '@/app/context/OnboardingContext';
 
 export function OnboardingLayout() {
-  const [searchParams] = useSearchParams();
-  const organizationId = searchParams.get('organizationId') || null;
+ const [searchParams] = useSearchParams();
+ const organizationId = searchParams.get('organizationId') || null;
 
-  return (
-    <OnboardingProvider organizationId={organizationId}>
-      <div className="min-h-full bg-background">
-        <Outlet />
-      </div>
-    </OnboardingProvider>
-  );
+ return (
+ <OnboardingProvider organizationId={organizationId}>
+ <div className="min-h-full bg-background">
+ <Outlet />
+ </div>
+ </OnboardingProvider>
+ );
 }

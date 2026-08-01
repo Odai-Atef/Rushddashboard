@@ -15,64 +15,64 @@ import { SubscriptionService, subscriptionService } from './subscription-service
 import { UserService, userService } from './user-service';
 
 export interface Services {
-  auth: AuthService;
-  dashboard: DashboardService;
-  donor: DonorService;
-  notification: NotificationService;
-  onboarding: OnboardingService;
-  project: ProjectService;
-  subscription: SubscriptionService;
-  user: UserService;
+ auth: AuthService;
+ dashboard: DashboardService;
+ donor: DonorService;
+ notification: NotificationService;
+ onboarding: OnboardingService;
+ project: ProjectService;
+ subscription: SubscriptionService;
+ user: UserService;
 }
 
 class ServiceRegistry {
-  private services: Services;
+ private services: Services;
 
-  constructor(services: Services) {
-    this.services = services;
-  }
+ constructor(services: Services) {
+ this.services = services;
+ }
 
-  getAuthService(): AuthService {
-    return this.services.auth;
-  }
+ getAuthService(): AuthService {
+ return this.services.auth;
+ }
 
-  getDashboardService(): DashboardService {
-    return this.services.dashboard;
-  }
+ getDashboardService(): DashboardService {
+ return this.services.dashboard;
+ }
 
-  getDonorService(): DonorService {
-    return this.services.donor;
-  }
+ getDonorService(): DonorService {
+ return this.services.donor;
+ }
 
-  getOnboardingService(): OnboardingService {
-    return this.services.onboarding;
-  }
+ getOnboardingService(): OnboardingService {
+ return this.services.onboarding;
+ }
 
-  getProjectService(): ProjectService {
-    return this.services.project;
-  }
+ getProjectService(): ProjectService {
+ return this.services.project;
+ }
 
-  getNotificationService(): NotificationService {
-    return this.services.notification;
-  }
+ getNotificationService(): NotificationService {
+ return this.services.notification;
+ }
 
-  getSubscriptionService(): SubscriptionService {
-    return this.services.subscription;
-  }
+ getSubscriptionService(): SubscriptionService {
+ return this.services.subscription;
+ }
 
-  getUserService(): UserService {
-    return this.services.user;
-  }
+ getUserService(): UserService {
+ return this.services.user;
+ }
 }
 const defaultServices: Services = {
-  auth: authService,
-  dashboard: dashboardService,
-  donor: donorService,
-  notification: notificationService,
-  onboarding: onboardingService,
-  project: projectService,
-  subscription: subscriptionService,
-  user: userService,
+ auth: authService,
+ dashboard: dashboardService,
+ donor: donorService,
+ notification: notificationService,
+ onboarding: onboardingService,
+ project: projectService,
+ subscription: subscriptionService,
+ user: userService,
 };
 
 // Export singleton registry

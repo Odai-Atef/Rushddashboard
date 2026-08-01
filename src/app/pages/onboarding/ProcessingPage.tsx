@@ -5,133 +5,133 @@ import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { onboardingService } from '@/api/services';
 
 export function ProcessingPage() {
-  const { goToStep } = useOnboardingNavigate();
-  const { activeOrganizationId, setAssessmentResult, setAssessmentStatus } =
-    useOnboardingContext();
-  const [processingProgress, setProcessingProgress] = useState(0);
-  const startedRef = useRef(false);
+ const { goToStep } = useOnboardingNavigate();
+ const { activeOrganizationId, setAssessmentResult, setAssessmentStatus } =
+ useOnboardingContext();
+ const [processingProgress, setProcessingProgress] = useState(0);
+ const startedRef = useRef(false);
 
-  useEffect(() => {
-    if (!activeOrganizationId || startedRef.current) return;
-    startedRef.current = true;
+ useEffect(() => {
+ if (!activeOrganizationId || startedRef.current) return;
+ startedRef.current = true;
 
-    let progressInterval: ReturnType<typeof setInterval> | null = null;
-    const startProgress = () => {
-      setProcessingProgress(0);
-      progressInterval = setInterval(() => {
-        setProcessingProgress((prev) => {
-          const next = prev + 10;
-          if (next >= 90) {
-            if (progressInterval) clearInterval(progressInterval);
-            return 90;
-          }
-          return next;
-        });
-      }, 300);
-    };
-    const stopProgress = () => {
-      if (progressInterval) clearInterval(progressInterval);
-      setProcessingProgress(100);
-    };
+ let progressInterval: ReturnType<typeof setInterval> | null = null;
+ const startProgress = () => {
+ setProcessingProgress(0);
+ progressInterval = setInterval(() => {
+ setProcessingProgress((prev) => {
+ const next = prev + 10;
+ if (next >= 90) {
+ if (progressInterval) clearInterval(progressInterval);
+ return 90;
+ }
+ return next;
+ });
+ }, 300);
+ };
+ const stopProgress = () => {
+ if (progressInterval) clearInterval(progressInterval);
+ setProcessingProgress(100);
+ };
 
-    const submit = async () => {
-      startProgress();
-      const startTime = Date.now();
-      try {
-        await onboardingService.submitAssessment(activeOrganizationId);
-        const evalRes = await onboardingService.getIsivAssessmentResults(
-          activeOrganizationId
-        );
-        const resultData = (evalRes.data as any)?.data ?? evalRes.data;
-        const elapsed = Date.now() - startTime;
-        const remaining = Math.max(0, 3000 - elapsed);
-        if (remaining > 0) {
-          await new Promise((resolve) => setTimeout(resolve, remaining));
-        }
-        stopProgress();
-        setAssessmentResult(resultData);
-        setAssessmentStatus({
-          status: 'COMPLETED',
-          overallScore: resultData?.overallScore ?? null,
-          completedAt: resultData?.assessedAt ?? null,
-        });
-        goToStep('results');
-      } catch (err: any) {
-        stopProgress();
-        const message =
-          err?.message ||
-          'فشل في تقييم الجمعية. يرجى المحاولة مرة أخرى.';
-        goToStep('assessment');
-      }
-    };
+ const submit = async () => {
+ startProgress();
+ const startTime = Date.now();
+ try {
+ await onboardingService.submitAssessment(activeOrganizationId);
+ const evalRes = await onboardingService.getIsivAssessmentResults(
+ activeOrganizationId
+ );
+ const resultData = (evalRes.data as any)?.data ?? evalRes.data;
+ const elapsed = Date.now() - startTime;
+ const remaining = Math.max(0, 3000 - elapsed);
+ if (remaining > 0) {
+ await new Promise((resolve) => setTimeout(resolve, remaining));
+ }
+ stopProgress();
+ setAssessmentResult(resultData);
+ setAssessmentStatus({
+ status: 'COMPLETED',
+ overallScore: resultData?.overallScore ?? null,
+ completedAt: resultData?.assessedAt ?? null,
+ });
+ goToStep('results');
+ } catch (err: any) {
+ stopProgress();
+ const message =
+ err?.message ||
+ 'فشل في تقييم الجمعية. يرجى المحاولة مرة أخرى.';
+ goToStep('assessment');
+ }
+ };
 
-    submit();
-    return () => {
-      if (progressInterval) clearInterval(progressInterval);
-    };
-  }, [activeOrganizationId, goToStep, setAssessmentResult, setAssessmentStatus]);
+ submit();
+ return () => {
+ if (progressInterval) clearInterval(progressInterval);
+ };
+ }, [activeOrganizationId, goToStep, setAssessmentResult, setAssessmentStatus]);
 
-  return (
-    <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
-      <div className="max-w-2xl w-full">
-        <div className="bg-white rounded-xl shadow-lg border border-border p-6 sm:p-12 text-center">
-          <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
-            <Brain className="w-12 h-12 text-white" />
-          </div>
+ return (
+ <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="max-w-2xl w-full">
+ <div className="bg-[var(--card)] rounded-xl shadow-lg border border-border p-6 sm:p-12 text-center">
+ <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
+ <Brain className="w-12 h-12 text-[var(--primary-foreground)]" />
+ </div>
 
-          <h1 className="text-2xl sm:text-3xl font-bold mb-3">جارٍ تحليل البيانات...</h1>
-          <p className="text-muted-foreground mb-8">
-            يقوم الذكاء الاصطناعي بتحليل إجاباتك والمستندات المرفوعة لإعداد تقرير
-            شامل
-          </p>
+ <h1 className="text-2xl sm:text-3xl font-bold mb-3">جارٍ تحليل البيانات...</h1>
+ <p className="text-muted-foreground mb-8">
+ يقوم الذكاء الاصطناعي بتحليل إجاباتك والمستندات المرفوعة لإعداد تقرير
+ شامل
+ </p>
 
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-foreground">التقدم</span>
-              <span className="text-sm font-medium text-primary">
-                {processingProgress}٪
-              </span>
-            </div>
-            <div className="h-3 bg-muted rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
-                style={{ width: `${processingProgress}%` }}
-              ></div>
-            </div>
-          </div>
+ <div className="mb-6">
+ <div className="flex items-center justify-between mb-2">
+ <span className="text-sm font-medium text-foreground">التقدم</span>
+ <span className="text-sm font-medium text-primary">
+ {processingProgress}٪
+ </span>
+ </div>
+ <div className="h-3 bg-muted rounded-full overflow-hidden">
+ <div
+ className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
+ style={{ width: `${processingProgress}%` }}
+ ></div>
+ </div>
+ </div>
 
-          <div className="space-y-3 text-right">
-            {[
-              { threshold: 20, label: 'تحليل الإجابات' },
-              { threshold: 50, label: 'مراجعة المستندات' },
-              { threshold: 80, label: 'حساب النتيجة النهائية' },
-            ].map((item) => {
-              const done = processingProgress > item.threshold;
-              return (
-                <div
-                  key={item.label}
-                  className={`flex items-center gap-3 p-3 rounded-lg ${
-                    done ? 'bg-green-50' : 'bg-secondary'
-                  }`}
-                >
-                  {done ? (
-                    <CheckCircle2 className="w-5 h-5 text-green-600" />
-                  ) : (
-                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
-                  )}
-                  <span className={done ? 'text-green-900' : 'text-foreground'}>
-                    {item.label}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+ <div className="space-y-3 text-right">
+ {[
+ { threshold: 20, label: 'تحليل الإجابات' },
+ { threshold: 50, label: 'مراجعة المستندات' },
+ { threshold: 80, label: 'حساب النتيجة النهائية' },
+ ].map((item) => {
+ const done = processingProgress > item.threshold;
+ return (
+ <div
+ key={item.label}
+ className={`flex items-center gap-3 p-3 rounded-lg ${
+ done ? 'bg-[var(--primary)]/[0.08]' : 'bg-secondary'
+ }`}
+ >
+ {done ? (
+ <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />
+ ) : (
+ <Loader2 className="w-5 h-5 text-primary animate-spin" />
+ )}
+ <span className={done ? 'text-[var(--primary)]/[0.9]' : 'text-foreground'}>
+ {item.label}
+ </span>
+ </div>
+ );
+ })}
+ </div>
 
-          <p className="text-sm text-muted-foreground mt-8">
-            الوقت المتوقع: ٣٠ - ٦٠ ثانية
-          </p>
-        </div>
-      </div>
-    </div>
-  );
+ <p className="text-sm text-muted-foreground mt-8">
+ الوقت المتوقع: ٣٠ - ٦٠ ثانية
+ </p>
+ </div>
+ </div>
+ </div>
+ );
 }

@@ -5,246 +5,246 @@ import { authService } from '@/api/services/auth-service';
 import { renderRecaptchaWidget, getRecaptchaToken, resetRecaptchaWidget, destroyRecaptchaWidget } from '@/app/lib/recaptcha';
 
 export function ForgetPasswordPage() {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [errorMessage, setErrorMessage] = useState('');
+ const navigate = useNavigate();
+ const [email, setEmail] = useState('');
+ const [isLoading, setIsLoading] = useState(false);
+ const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
+ const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    renderRecaptchaWidget('recaptcha-widget').catch(() => {
-      // silently ignore render errors
-    });
-  }, []);
+ useEffect(() => {
+ renderRecaptchaWidget('recaptcha-widget').catch(() => {
+ // silently ignore render errors
+ });
+ }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('idle');
-    setErrorMessage('');
+ const handleSubmit = async (e: React.FormEvent) => {
+ e.preventDefault();
+ setStatus('idle');
+ setErrorMessage('');
 
-    const recaptchaToken = getRecaptchaToken();
-    if (!recaptchaToken) {
-      setStatus('error');
-      setErrorMessage('يرجى إكمال التحقق من reCAPTCHA');
-      return;
-    }
+ const recaptchaToken = getRecaptchaToken();
+ if (!recaptchaToken) {
+ setStatus('error');
+ setErrorMessage('يرجى إكمال التحقق من reCAPTCHA');
+ return;
+ }
 
-    setIsLoading(true);
+ setIsLoading(true);
 
-    try {
-      const response = await authService.forgotPassword(email, recaptchaToken);
-      if (response.success) {
-        setStatus('success');
-      } else {
-        setStatus('error');
-        setErrorMessage(response.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
-        resetRecaptchaWidget();
-      }
-    } catch (err: any) {
-      if (err?.message === 'Failed to fetch') {
-        setStatus('error');
-        setErrorMessage('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
-      } else {
-        setStatus('error');
-        setErrorMessage(err?.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
-      }
-      resetRecaptchaWidget();
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ try {
+ const response = await authService.forgotPassword(email, recaptchaToken);
+ if (response.success) {
+ setStatus('success');
+ } else {
+ setStatus('error');
+ setErrorMessage(response.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
+ resetRecaptchaWidget();
+ }
+ } catch (err: any) {
+ if (err?.message === 'Failed to fetch') {
+ setStatus('error');
+ setErrorMessage('تعذر الاتصال بالخادم، يرجى التحقق من اتصال الإنترنت');
+ } else {
+ setStatus('error');
+ setErrorMessage(err?.message || 'حدث خطأ أثناء إرسال طلب إعادة تعيين كلمة المرور');
+ }
+ resetRecaptchaWidget();
+ } finally {
+ setIsLoading(false);
+ }
+ };
 
-  return (
-    <div className="min-h-screen flex">
-      {/* Left Side - Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-background">
-        <div className="w-full max-w-md">
-          {/* Logo */}
-          <div className="mb-8 text-center">
-            <img
-              src="/logo.png"
-              alt="Rushd Platform"
-              className="w-[200px] h-[200px] object-contain mx-auto mb-3"
-            />
-            <p className="text-muted-foreground">منصة القرارات الذكية</p>
-          </div>
+ return (
+ <div className="min-h-screen flex">
+ {/* Left Side - Form */}
+ <div className="flex-1 flex items-center justify-center p-8 bg-background">
+ <div className="w-full max-w-md">
+ {/* Logo */}
+ <div className="mb-8 text-center">
+ <img
+ src="/logo.png"
+ alt="Rushd Platform"
+ className="w-[200px] h-[200px] object-contain mx-auto mb-3"
+ />
+ <p className="text-muted-foreground">منصة القرارات الذكية</p>
+ </div>
 
-          {status === 'idle' ? (
-            <>
-              {/* Page Title */}
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold mb-2">نسيت كلمة المرور؟</h2>
-                <p className="text-muted-foreground">
-                  أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور
-                </p>
-              </div>
+ {status === 'idle' ? (
+ <>
+ {/* Page Title */}
+ <div className="mb-8">
+ <h2 className="text-2xl font-bold mb-2">نسيت كلمة المرور؟</h2>
+ <p className="text-muted-foreground">
+ أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور
+ </p>
+ </div>
 
-              {/* Error Message */}
-              {status === 'error' && (
-                <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-lg flex items-start gap-3">
-                  <AlertCircle className="w-5 h-5 text-red-600 dark:text-red-400 flex-shrink-0 mt-0.5" />
-                  <p className="text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
-                </div>
-              )}
+ {/* Error Message */}
+ {status === 'error' && (
+ <div className="mb-6 p-4 bg-[var(--destructive)]/10 border border-red-500/20 rounded-lg flex items-start gap-3">
+ <AlertCircle className="w-5 h-5 text-[var(--destructive)] flex-shrink-0 mt-0.5" />
+ <p className="text-sm text-[var(--destructive)]">{errorMessage}</p>
+ </div>
+ )}
 
-              {/* Form */}
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Email Field */}
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium mb-2">
-                    البريد الإلكتروني
-                  </label>
-                  <div className="relative">
-                    <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                      id="email"
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      placeholder="name@company.com"
-                      className="w-full pr-11 pl-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
-                      required
-                    />
-                  </div>
-                </div>
+ {/* Form */}
+ <form onSubmit={handleSubmit} className="space-y-6">
+ {/* Email Field */}
+ <div>
+ <label htmlFor="email" className="block text-sm font-medium mb-2">
+ البريد الإلكتروني
+ </label>
+ <div className="relative">
+ <Mail className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+ <input
+ id="email"
+ type="email"
+ value={email}
+ onChange={(e) => setEmail(e.target.value)}
+ placeholder="name@company.com"
+ className="w-full pr-11 pl-4 py-3 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all"
+ required
+ />
+ </div>
+ </div>
 
-                {/* reCAPTCHA Widget */}
-                <div className="flex justify-start">
-                  <div id="recaptcha-widget" />
-                </div>
+ {/* reCAPTCHA Widget */}
+ <div className="flex justify-start">
+ <div id="recaptcha-widget" />
+ </div>
 
-                {/* Submit Button */}
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                      <span>جاري الإرسال...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>إرسال رابط إعادة التعيين</span>
-                      <ArrowRight className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
-              </form>
+ {/* Submit Button */}
+ <button
+ type="submit"
+ disabled={isLoading}
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ >
+ {isLoading ? (
+ <>
+ <Loader2 className="w-5 h-5 animate-spin" />
+ <span>جاري الإرسال...</span>
+ </>
+ ) : (
+ <>
+ <span>إرسال رابط إعادة التعيين</span>
+ <ArrowRight className="w-5 h-5" />
+ </>
+ )}
+ </button>
+ </form>
 
-              {/* Back to Login */}
-              <button
-                onClick={() => navigate('/auth/login')}
-                className="mt-6 w-full text-center text-sm text-primary hover:underline"
-              >
-                العودة إلى تسجيل الدخول
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Success State */}
-              <div className="text-center">
-                <div className="inline-flex items-center justify-center w-16 h-16 bg-green-500/20 rounded-full mb-6">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
-                </div>
+ {/* Back to Login */}
+ <button
+ onClick={() => navigate('/auth/login')}
+ className="mt-6 w-full text-center text-sm text-primary hover:underline"
+ >
+ العودة إلى تسجيل الدخول
+ </button>
+ </>
+ ) : (
+ <>
+ {/* Success State */}
+ <div className="text-center">
+ <div className="inline-flex items-center justify-center w-16 h-16 bg-[var(--primary)]/[0.2] rounded-full mb-6">
+ <CheckCircle className="w-8 h-8 text-[var(--primary)]" />
+ </div>
 
-                <h2 className="text-2xl font-bold mb-3">تم إرسال الرابط!</h2>
+ <h2 className="text-2xl font-bold mb-3">تم إرسال الرابط!</h2>
 
-                <p className="text-muted-foreground mb-2">
-                  تم إرسال رابط إعادة تعيين كلمة المرور إلى:
-                </p>
-                <p className="text-foreground font-medium mb-6">{email}</p>
+ <p className="text-muted-foreground mb-2">
+ تم إرسال رابط إعادة تعيين كلمة المرور إلى:
+ </p>
+ <p className="text-foreground font-medium mb-6">{email}</p>
 
-                <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg mb-6 text-right">
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    يرجى التحقق من صندوق الوارد الخاص بك. إذا لم تجد الرسالة، تحقق من مجلد البريد المزعج.
-                    الرابط صالح لمدة 24 ساعة.
-                  </p>
-                </div>
+ <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg mb-6 text-right">
+ <p className="text-sm text-muted-foreground leading-relaxed">
+ يرجى التحقق من صندوق الوارد الخاص بك. إذا لم تجد الرسالة، تحقق من مجلد البريد المزعج.
+ الرابط صالح لمدة 24 ساعة.
+ </p>
+ </div>
 
-                {/* Actions */}
-                <div className="space-y-3">
-                  <button
-                    onClick={() => navigate('/auth/login')}
-                    className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-                  >
-                    العودة إلى تسجيل الدخول
-                  </button>
+ {/* Actions */}
+ <div className="space-y-3">
+ <button
+ onClick={() => navigate('/auth/login')}
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+ >
+ العودة إلى تسجيل الدخول
+ </button>
 
-                  <button
-                    onClick={() => setStatus('idle')}
-                    className="w-full py-3 border border-border hover:bg-accent rounded-lg transition-colors"
-                  >
-                    إعادة إرسال الرابط
-                  </button>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
+ <button
+ onClick={() => setStatus('idle')}
+ className="w-full py-3 border border-border hover:bg-accent rounded-lg transition-colors"
+ >
+ إعادة إرسال الرابط
+ </button>
+ </div>
+ </div>
+ </>
+ )}
+ </div>
+ </div>
 
-      {/* Right Side - Security Info */}
-      <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
-        {/* Decorative circles */}
-        <div className="absolute top-20 right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+ {/* Right Side - Security Info */}
+ <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
+ {/* Decorative circles */}
+ <div className="absolute top-20 right-20 w-64 h-64 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
+ <div className="absolute bottom-20 left-20 w-96 h-96 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
 
-        <div className="relative z-10 max-w-lg text-white">
-          <h2 className="text-4xl font-bold mb-6">
-            أمان حسابك
-            <br />
-            أولويتنا
-          </h2>
-          <p className="text-xl mb-8 text-white/90">
-            نستخدم أحدث تقنيات الأمان لحماية بياناتك ومعلوماتك الحساسة
-          </p>
+ <div className="relative z-10 max-w-lg text-[var(--primary-foreground)]">
+ <h2 className="text-4xl font-bold mb-6">
+ أمان حسابك
+ <br />
+ أولويتنا
+ </h2>
+ <p className="text-xl mb-8 text-[var(--primary-foreground)]/90">
+ نستخدم أحدث تقنيات الأمان لحماية بياناتك ومعلوماتك الحساسة
+ </p>
 
-          {/* Security Features */}
-          <div className="space-y-4">
-            <div className="flex items-start gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">تشفير متقدم</h3>
-                <p className="text-sm text-white/80">جميع البيانات محمية بتشفير من الدرجة العسكرية</p>
-              </div>
-            </div>
+ {/* Security Features */}
+ <div className="space-y-4">
+ <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <CheckCircle className="w-5 h-5" />
+ </div>
+ <div>
+ <h3 className="font-medium mb-1">تشفير متقدم</h3>
+ <p className="text-sm text-[var(--primary-foreground)]/80">جميع البيانات محمية بتشفير من الدرجة العسكرية</p>
+ </div>
+ </div>
 
-            <div className="flex items-start gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">مصادقة ثنائية</h3>
-                <p className="text-sm text-white/80">طبقة حماية إضافية لحسابك</p>
-              </div>
-            </div>
+ <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <CheckCircle className="w-5 h-5" />
+ </div>
+ <div>
+ <h3 className="font-medium mb-1">مصادقة ثنائية</h3>
+ <p className="text-sm text-[var(--primary-foreground)]/80">طبقة حماية إضافية لحسابك</p>
+ </div>
+ </div>
 
-            <div className="flex items-start gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">مراقبة 24/7</h3>
-                <p className="text-sm text-white/80">فريق أمان متخصص يراقب النظام باستمرار</p>
-              </div>
-            </div>
+ <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <CheckCircle className="w-5 h-5" />
+ </div>
+ <div>
+ <h3 className="font-medium mb-1">مراقبة 24/7</h3>
+ <p className="text-sm text-[var(--primary-foreground)]/80">فريق أمان متخصص يراقب النظام باستمرار</p>
+ </div>
+ </div>
 
-            <div className="flex items-start gap-3 p-4 bg-white/10 backdrop-blur-sm rounded-lg">
-              <div className="p-2 bg-white/20 rounded-lg flex-shrink-0">
-                <CheckCircle className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-medium mb-1">امتثال كامل</h3>
-                <p className="text-sm text-white/80">متوافق مع معايير GDPR و ISO 27001</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+ <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <CheckCircle className="w-5 h-5" />
+ </div>
+ <div>
+ <h3 className="font-medium mb-1">امتثال كامل</h3>
+ <p className="text-sm text-[var(--primary-foreground)]/80">متوافق مع معايير GDPR و ISO 27001</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ );
 }

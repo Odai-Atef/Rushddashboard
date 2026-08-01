@@ -84,593 +84,593 @@ const OnboardingDecisionPage = lazy(() => import('./pages/onboarding/DecisionPag
 const OnboardingThanksPage = lazy(() => import('./pages/onboarding/ThanksPage').then(m => ({ default: m.ThanksPage })));
 
 const OnboardingPageShell = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={<div className="min-h-full flex items-center justify-center"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>}>
-    {children}
-  </Suspense>
+ <Suspense fallback={<div className="min-h-full flex items-center justify-center"><div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" /></div>}>
+ {children}
+ </Suspense>
 );
 
 function RouterErrorBoundary() {
-  const error = useRouteError() as Error;
-  console.error('Router error:', error);
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-background p-4" dir="rtl">
-      <div className="bg-card rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
-        <div className="text-6xl mb-4">⚠️</div>
-        <h1 className="text-2xl font-bold text-foreground mb-2">عذراً، حدث خطأ</h1>
-        <p className="text-muted-foreground mb-6">{error?.message || 'حدث خطأ غير متوقع أثناء تحميل الصفحة'}</p>
-        <button
-          onClick={() => window.location.href = '/dashboard/charity-assessment'}
-          className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          العودة للرئيسية
-        </button>
-      </div>
-    </div>
-  );
+ const error = useRouteError() as Error;
+ console.error('Router error:', error);
+ return (
+ <div className="min-h-screen flex items-center justify-center bg-background p-4" dir="rtl">
+ <div className="bg-card rounded-2xl shadow-lg p-8 max-w-md w-full text-center">
+ <div className="text-6xl mb-4">⚠️</div>
+ <h1 className="text-2xl font-bold text-foreground mb-2">عذراً، حدث خطأ</h1>
+ <p className="text-muted-foreground mb-6">{error?.message || 'حدث خطأ غير متوقع أثناء تحميل الصفحة'}</p>
+ <button
+ onClick={() => window.location.href = '/dashboard/charity-assessment'}
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
+ >
+ العودة للرئيسية
+ </button>
+ </div>
+ </div>
+ );
 }
 
 export const router = createBrowserRouter([
-  {
-    path: '/',
-    Component: RootLayout,
-    children: [
-      {
-        index: true,
-        element: <Navigate to="/dashboard/charity-assessment" replace />,
-      },
-      {
-        path: 'auth',
-        Component: AuthLayout,
-        children: [
-          {
-            index: true,
-            element: <Navigate to="/auth/login" replace />,
-          },
-          {
-            path: 'login',
-            Component: LoginPage,
-          },
-          {
-            path: 'register',
-            Component: RegistrationPage,
-          },
-          {
-            path: 'register/org',
-            Component: OrgRegistrationPage,
-          },
-          {
-            path: 'forgot-password',
-            Component: ForgetPasswordPage,
-          },
-          {
-            path: 'reset-password',
-            Component: ResetPasswordPage,
-          },
-          {
-            path: 'activate',
-            Component: ActivateAccountPage,
-          },
-        ],
-      },
-      {
-        path: 'packages',
-        element: <PackagesPage />,
-      },
-      {
-        path: 'sla/:packageId',
-        element: <SLAPage />,
-      },
-      {
-        path: 'reset-password',
-        Component: ResetPasswordPage,
-      },
-      {
-        path: 'payment/callback',
-        element: (
-          <PaymentCallbackPage />
-        ),
-      },
-      {
-        path: 'dashboard',
-        Component: DashboardLayout,
-        errorElement: <RouterErrorBoundary />,
-        children: [
-          {
-            index: true,
-            Component: ExecutiveDashboard,
-          },
-          {
-            path: 'ai-analysis',
-            children: [
-              {
-                index: true,
-                Component: AIAnalysisStartPage,
-              },
-              {
-                path: 'start',
-                Component: AIAnalysisStartPage,
-              },
-              {
-                path: 'chat',
-                children: [
-                  {
-                    index: true,
-                    Component: AIAnalysisChatPage,
-                  },
-                  {
-                    path: ':chatId',
-                    Component: AIAnalysisChatPage,
-                  },
-                ],
-              },
-              {
-                path: 'history',
-                Component: AIAnalysisHistoryPage,
-              },
-              {
-                path: '*',
-                element: <Navigate to="/dashboard/ai-analysis" replace />,
-              },
-            ],
-          },
-          {
-            path: 'sales',
-            Component: SalesDashboard,
-          },
-          {
-            path: 'customers',
-            Component: CustomersDashboard,
-          },
-          {
-            path: 'operations',
-            Component: OperationsDashboard,
-          },
-          {
-            path: 'marketing',
-            Component: MarketingDashboard,
-          },
-          {
-            path: 'recommendations',
-            Component: RecommendationsDashboard,
-          },
-          {
-            path: 'opportunities',
-            Component: OpportunitiesDashboard,
-          },
-          {
-            path: 'profitability',
-            Component: ProfitabilityDashboard,
-          },
-          {
-            path: 'hr',
-            Component: HRDashboard,
-          },
-          {
-            path: 'inventory',
-            Component: InventoryDashboard,
-          },
-          {
-            path: 'settings',
-            Component: SettingsPage,
-          },
-          {
-            path: 'notifications',
-            Component: NotificationsPage,
-          },
-          {
-            path: 'data-sources',
-            Component: DataSourcesPage,
-          },
-          {
-            path: 'compliance-risk',
-            Component: ComplianceRiskPage,
-          },
-          {
-            path: 'analysis-history',
-            Component: AnalysisHistoryPage,
-          },
-          {
-            path: 'project-journey',
-            Component: ProjectJourneyPage,
-          },
-          {
-            path: 'charity-assessment',
-            children: [
-              {
-                index: true,
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <CharityAssessmentStartPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'assessment/:organizationId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <CharityAssessmentWizardPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'assessment',
-                element: <Navigate to="/dashboard/charity-assessment" replace />,
-              },
-              {
-                path: 'results/:organizationId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <CharityAssessmentResultsPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'roadmap/:organizationId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <CharityAssessmentRoadmapPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'roadmap',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <CharityAssessmentRoadmapPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: '*',
-                element: <Navigate to="/dashboard/charity-assessment" replace />,
-              },
-            ],
-          },
-          {
-            path: 'onboarding',
-            element: <OnboardingLayout />,
-            children: [
-              {
-                index: true,
-                element: <Navigate to="/dashboard/onboarding/landing" replace />,
-              },
-              {
-                path: 'landing',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingLandingPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'registration',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingRegistrationPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'info',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingInfoPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'profile',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingProfilePage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'assessment',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell>
-                      <AssessmentAllowedGuard>
-                        <OnboardingAssessmentPage />
-                      </AssessmentAllowedGuard>
-                    </OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'documents',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingDocumentsPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'thanks',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingThanksPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'preloader',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingPreloaderPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'processing',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingProcessingPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'results',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingResultsPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'analysis',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingAnalysisPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'roadmap',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingRoadmapPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'decision',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OnboardingPageShell><OnboardingDecisionPage /></OnboardingPageShell>
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: '*',
-                element: <Navigate to="/dashboard/onboarding/landing" replace />,
-              },
-            ],
-          },
-          {
-            path: 'project-management',
-            children: [
-              {
-                index: true,
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectDashboardPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'list',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectListPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'create',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectCreatePage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'edit/:projectId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectEditPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'details/:projectId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectDetailsPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'lifecycle/:projectId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectLifecyclePage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'versions/:projectId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectVersionsPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'activity/:projectId',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectActivityPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'reporting',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <ProjectReportingPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: '*',
-                element: <Navigate to="/dashboard/project-management" replace />,
-              },
-            ],
-          },
-          {
-            path: 'pricing',
-            element: (
-              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                <PricingPage />
-              </RoleRouteGuard>
-            ),
-          },
-          {
-            path: 'ai-innovation',
-            Component: AIProjectInnovationModule,
-          },
-          {
-            path: 'collaboration',
-            element: (
-              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                <Outlet />
-              </RoleRouteGuard>
-            ),
-            children: [
-              {
-                index: true,
-                element: <Navigate to="/dashboard/project-management/list" replace />,
-              },
-              {
-                path: ':projectId',
-                children: [
-                  {
-                    index: true,
-                    element: <Navigate to="hub" replace />,
-                  },
-                  {
-                    path: ':view',
-                    Component: ProjectCollaborationModule,
-                  },
-                ],
-              },
-            ],
-          },
-          {
-            path: 'donors',
-            element: (
-              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                <DonorsPage />
-              </RoleRouteGuard>
-            ),
-          },
-          {
-            path: 'incubator-overview',
-            Component: IncubatorOverviewDashboard,
-          },
-          {
-            path: 'charity-analytics',
-            Component: CharityAnalyticsDashboard,
-          },
-          {
-            path: 'project-analytics',
-            Component: ProjectAnalyticsDashboard,
-          },
-          {
-            path: 'funding-analytics',
-            Component: FundingDonorAnalytics,
-          },
-          {
-            path: 'operations-analytics',
-            Component: OperationsPerformanceDashboard,
-          },
-          {
-            path: 'organization-donors',
-            element: (
-              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                <OrganizationDonorsPage />
-              </RoleRouteGuard>
-            ),
-          },
-          {
-            path: 'donor-matching',
-            element: (
-              <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                <DonorMatchingLayout />
-              </RoleRouteGuard>
-            ),
-            children: [
-              { index: true, element: <DonorMatchingDashboardPage /> },
-               { path: 'recommended/:projectId', element: <AIRecommendedDonorsPage /> },
-              { path: 'analysis/:donorId', element: <MatchAnalysisPage /> },
-              { path: 'readiness', element: <FundingReadinessAssessmentPage /> },
-              { path: 'submission/:donorId', element: <SubmissionPreparationPage /> },
-              { path: 'analytics', element: <MatchingAnalyticsPage /> },
-            ],
-          },
-          {
-            path: 'manage',
-            children: [
-              {
-                index: true,
-                element: <Navigate to="/dashboard/manage/org" replace />,
-              },
-              {
-                path: 'org',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <UserActivationPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'org/:organizationId/details',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <OrganizationInformationPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'subscriptions',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <SubscriptionsListPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: 'coupons',
-                element: (
-                  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
-                    <CouponsPage />
-                  </RoleRouteGuard>
-                ),
-              },
-              {
-                path: '*',
-                element: <Navigate to="/dashboard/manage/org" replace />,
-              },
-            ],
-          },
-        ],
-      },
-      {
-        path: '*',
-        element: <Navigate to="/dashboard/charity-assessment" replace />,
-      },
-    ],
-  },
+ {
+ path: '/',
+ Component: RootLayout,
+ children: [
+ {
+ index: true,
+ element: <Navigate to="/dashboard/charity-assessment" replace />,
+ },
+ {
+ path: 'auth',
+ Component: AuthLayout,
+ children: [
+ {
+ index: true,
+ element: <Navigate to="/auth/login" replace />,
+ },
+ {
+ path: 'login',
+ Component: LoginPage,
+ },
+ {
+ path: 'register',
+ Component: RegistrationPage,
+ },
+ {
+ path: 'register/org',
+ Component: OrgRegistrationPage,
+ },
+ {
+ path: 'forgot-password',
+ Component: ForgetPasswordPage,
+ },
+ {
+ path: 'reset-password',
+ Component: ResetPasswordPage,
+ },
+ {
+ path: 'activate',
+ Component: ActivateAccountPage,
+ },
+ ],
+ },
+ {
+ path: 'packages',
+ element: <PackagesPage />,
+ },
+ {
+ path: 'sla/:packageId',
+ element: <SLAPage />,
+ },
+ {
+ path: 'reset-password',
+ Component: ResetPasswordPage,
+ },
+ {
+ path: 'payment/callback',
+ element: (
+ <PaymentCallbackPage />
+ ),
+ },
+ {
+ path: 'dashboard',
+ Component: DashboardLayout,
+ errorElement: <RouterErrorBoundary />,
+ children: [
+ {
+ index: true,
+ Component: ExecutiveDashboard,
+ },
+ {
+ path: 'ai-analysis',
+ children: [
+ {
+ index: true,
+ Component: AIAnalysisStartPage,
+ },
+ {
+ path: 'start',
+ Component: AIAnalysisStartPage,
+ },
+ {
+ path: 'chat',
+ children: [
+ {
+ index: true,
+ Component: AIAnalysisChatPage,
+ },
+ {
+ path: ':chatId',
+ Component: AIAnalysisChatPage,
+ },
+ ],
+ },
+ {
+ path: 'history',
+ Component: AIAnalysisHistoryPage,
+ },
+ {
+ path: '*',
+ element: <Navigate to="/dashboard/ai-analysis" replace />,
+ },
+ ],
+ },
+ {
+ path: 'sales',
+ Component: SalesDashboard,
+ },
+ {
+ path: 'customers',
+ Component: CustomersDashboard,
+ },
+ {
+ path: 'operations',
+ Component: OperationsDashboard,
+ },
+ {
+ path: 'marketing',
+ Component: MarketingDashboard,
+ },
+ {
+ path: 'recommendations',
+ Component: RecommendationsDashboard,
+ },
+ {
+ path: 'opportunities',
+ Component: OpportunitiesDashboard,
+ },
+ {
+ path: 'profitability',
+ Component: ProfitabilityDashboard,
+ },
+ {
+ path: 'hr',
+ Component: HRDashboard,
+ },
+ {
+ path: 'inventory',
+ Component: InventoryDashboard,
+ },
+ {
+ path: 'settings',
+ Component: SettingsPage,
+ },
+ {
+ path: 'notifications',
+ Component: NotificationsPage,
+ },
+ {
+ path: 'data-sources',
+ Component: DataSourcesPage,
+ },
+ {
+ path: 'compliance-risk',
+ Component: ComplianceRiskPage,
+ },
+ {
+ path: 'analysis-history',
+ Component: AnalysisHistoryPage,
+ },
+ {
+ path: 'project-journey',
+ Component: ProjectJourneyPage,
+ },
+ {
+ path: 'charity-assessment',
+ children: [
+ {
+ index: true,
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <CharityAssessmentStartPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'assessment/:organizationId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <CharityAssessmentWizardPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'assessment',
+ element: <Navigate to="/dashboard/charity-assessment" replace />,
+ },
+ {
+ path: 'results/:organizationId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <CharityAssessmentResultsPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'roadmap/:organizationId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <CharityAssessmentRoadmapPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'roadmap',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <CharityAssessmentRoadmapPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: '*',
+ element: <Navigate to="/dashboard/charity-assessment" replace />,
+ },
+ ],
+ },
+ {
+ path: 'onboarding',
+ element: <OnboardingLayout />,
+ children: [
+ {
+ index: true,
+ element: <Navigate to="/dashboard/onboarding/landing" replace />,
+ },
+ {
+ path: 'landing',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingLandingPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'registration',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingRegistrationPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'info',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingInfoPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'profile',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingProfilePage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'assessment',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell>
+ <AssessmentAllowedGuard>
+ <OnboardingAssessmentPage />
+ </AssessmentAllowedGuard>
+ </OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'documents',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingDocumentsPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'thanks',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingThanksPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'preloader',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingPreloaderPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'processing',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingProcessingPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'results',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingResultsPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'analysis',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingAnalysisPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'roadmap',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingRoadmapPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'decision',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OnboardingPageShell><OnboardingDecisionPage /></OnboardingPageShell>
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: '*',
+ element: <Navigate to="/dashboard/onboarding/landing" replace />,
+ },
+ ],
+ },
+ {
+ path: 'project-management',
+ children: [
+ {
+ index: true,
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectDashboardPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'list',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectListPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'create',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectCreatePage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'edit/:projectId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectEditPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'details/:projectId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectDetailsPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'lifecycle/:projectId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectLifecyclePage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'versions/:projectId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectVersionsPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'activity/:projectId',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectActivityPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'reporting',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectReportingPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: '*',
+ element: <Navigate to="/dashboard/project-management" replace />,
+ },
+ ],
+ },
+ {
+ path: 'pricing',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <PricingPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'ai-innovation',
+ Component: AIProjectInnovationModule,
+ },
+ {
+ path: 'collaboration',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <Outlet />
+ </RoleRouteGuard>
+ ),
+ children: [
+ {
+ index: true,
+ element: <Navigate to="/dashboard/project-management/list" replace />,
+ },
+ {
+ path: ':projectId',
+ children: [
+ {
+ index: true,
+ element: <Navigate to="hub" replace />,
+ },
+ {
+ path: ':view',
+ Component: ProjectCollaborationModule,
+ },
+ ],
+ },
+ ],
+ },
+ {
+ path: 'donors',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <DonorsPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'incubator-overview',
+ Component: IncubatorOverviewDashboard,
+ },
+ {
+ path: 'charity-analytics',
+ Component: CharityAnalyticsDashboard,
+ },
+ {
+ path: 'project-analytics',
+ Component: ProjectAnalyticsDashboard,
+ },
+ {
+ path: 'funding-analytics',
+ Component: FundingDonorAnalytics,
+ },
+ {
+ path: 'operations-analytics',
+ Component: OperationsPerformanceDashboard,
+ },
+ {
+ path: 'organization-donors',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OrganizationDonorsPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'donor-matching',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <DonorMatchingLayout />
+ </RoleRouteGuard>
+ ),
+ children: [
+ { index: true, element: <DonorMatchingDashboardPage /> },
+ { path: 'recommended/:projectId', element: <AIRecommendedDonorsPage /> },
+ { path: 'analysis/:donorId', element: <MatchAnalysisPage /> },
+ { path: 'readiness', element: <FundingReadinessAssessmentPage /> },
+ { path: 'submission/:donorId', element: <SubmissionPreparationPage /> },
+ { path: 'analytics', element: <MatchingAnalyticsPage /> },
+ ],
+ },
+ {
+ path: 'manage',
+ children: [
+ {
+ index: true,
+ element: <Navigate to="/dashboard/manage/org" replace />,
+ },
+ {
+ path: 'org',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <UserActivationPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'org/:organizationId/details',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <OrganizationInformationPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'subscriptions',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <SubscriptionsListPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'coupons',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <CouponsPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: '*',
+ element: <Navigate to="/dashboard/manage/org" replace />,
+ },
+ ],
+ },
+ ],
+ },
+ {
+ path: '*',
+ element: <Navigate to="/dashboard/charity-assessment" replace />,
+ },
+ ],
+ },
 ]);

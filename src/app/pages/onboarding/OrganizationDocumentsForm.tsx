@@ -1,854 +1,854 @@
 import { DragEvent, useCallback, useEffect, useRef, useState } from 'react';
 import {
-  AlertCircle,
-  AlertTriangle,
-  CheckCircle2,
-  ChevronLeft,
-  Clock,
-  Download,
-  ExternalLink,
-  FileText,
-  Info,
-  Loader2,
-  Upload,
-  X,
+ AlertCircle,
+ AlertTriangle,
+ CheckCircle2,
+ ChevronLeft,
+ Clock,
+ Download,
+ ExternalLink,
+ FileText,
+ Info,
+ Loader2,
+ Upload,
+ X,
 } from 'lucide-react';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
 import { toast } from 'sonner';
 import { useSearchParams } from 'react-router';
 import {
-  BACKEND_DOCUMENT_TYPE_TO_SLOT,
-  DOCUMENT_SLOT_MAPPING,
-  OrganizationDocument,
+ BACKEND_DOCUMENT_TYPE_TO_SLOT,
+ DOCUMENT_SLOT_MAPPING,
+ OrganizationDocument,
 } from '@/api/services/onboarding-service';
 import {
-  DocumentSlotId,
-  documentSlots,
-  requiredDocumentSlots,
-  optionalDocumentSlots,
-  getDocumentSlotLabel,
+ DocumentSlotId,
+ documentSlots,
+ requiredDocumentSlots,
+ optionalDocumentSlots,
+ getDocumentSlotLabel,
 } from '@/app/utils/document-slots';
 
 interface UploadedFile {
-  id: string;
-  name: string;
-  type: string;
-  size: number;
-  status: 'uploading' | 'completed' | 'error';
-  progress: number;
-  documentType?: string;
-  backendId?: string;
-  backendStatus?: string;
-  fileUrl?: string;
-  fileId?: string;
+ id: string;
+ name: string;
+ type: string;
+ size: number;
+ status: 'uploading' | 'completed' | 'error';
+ progress: number;
+ documentType?: string;
+ backendId?: string;
+ backendStatus?: string;
+ fileUrl?: string;
+ fileId?: string;
 }
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 const TOAST_DURATION = 5000;
 
 const PDF_ONLY_RULE = {
-  accept: '.pdf',
-  extensions: ['.pdf'],
-  mimeTypes: ['application/pdf'],
-  label: 'PDF',
+ accept: '.pdf',
+ extensions: ['.pdf'],
+ mimeTypes: ['application/pdf'],
+ label: 'PDF',
 };
 
 const SLOT_FILE_VALIDATION: Record<
-  DocumentSlotId,
-  { accept: string; extensions: string[]; mimeTypes: string[]; label: string }
+ DocumentSlotId,
+ { accept: string; extensions: string[]; mimeTypes: string[]; label: string }
 > = {
-  license: PDF_ONLY_RULE,
-  bank: PDF_ONLY_RULE,
-  address: PDF_ONLY_RULE,
-  profile: PDF_ONLY_RULE,
-  board_approval: PDF_ONLY_RULE,
-  basic_bylaws: PDF_ONLY_RULE,
-  representative_authorization: PDF_ONLY_RULE,
-  startup_associations_additional: PDF_ONLY_RULE,
-  brand: {
-    accept: '.png',
-    extensions: ['.png'],
-    mimeTypes: ['image/png'],
-    label: 'PNG',
-  },
-  projects: PDF_ONLY_RULE,
-  financial: PDF_ONLY_RULE,
-  annual: PDF_ONLY_RULE,
+ license: PDF_ONLY_RULE,
+ bank: PDF_ONLY_RULE,
+ address: PDF_ONLY_RULE,
+ profile: PDF_ONLY_RULE,
+ board_approval: PDF_ONLY_RULE,
+ basic_bylaws: PDF_ONLY_RULE,
+ representative_authorization: PDF_ONLY_RULE,
+ startup_associations_additional: PDF_ONLY_RULE,
+ brand: {
+ accept: '.png',
+ extensions: ['.png'],
+ mimeTypes: ['image/png'],
+ label: 'PNG',
+ },
+ projects: PDF_ONLY_RULE,
+ financial: PDF_ONLY_RULE,
+ annual: PDF_ONLY_RULE,
 };
 
 function getFileExtension(fileName: string): string {
-  const dotIndex = fileName.lastIndexOf('.');
-  return dotIndex >= 0 ? fileName.slice(dotIndex).toLowerCase() : '';
+ const dotIndex = fileName.lastIndexOf('.');
+ return dotIndex >= 0 ? fileName.slice(dotIndex).toLowerCase() : '';
 }
 
 function validateFile(
-  slotId: DocumentSlotId,
-  file: File
+ slotId: DocumentSlotId,
+ file: File
 ): { valid: boolean; error?: string } {
-  if (file.size > MAX_FILE_SIZE_BYTES) {
-    return { valid: false, error: 'حجم الملف يتجاوز الحد المسموح (10 ميجابايت).' };
-  }
+ if (file.size > MAX_FILE_SIZE_BYTES) {
+ return { valid: false, error: 'حجم الملف يتجاوز الحد المسموح (10 ميجابايت).' };
+ }
 
-  const rules = SLOT_FILE_VALIDATION[slotId];
-  if (!rules) {
-    return { valid: true };
-  }
+ const rules = SLOT_FILE_VALIDATION[slotId];
+ if (!rules) {
+ return { valid: true };
+ }
 
-  const extension = getFileExtension(file.name);
-  const isExtensionAllowed = rules.extensions.includes(extension);
-  const isMimeTypeAllowed = rules.mimeTypes.includes(file.type);
+ const extension = getFileExtension(file.name);
+ const isExtensionAllowed = rules.extensions.includes(extension);
+ const isMimeTypeAllowed = rules.mimeTypes.includes(file.type);
 
-  if (!isExtensionAllowed && !isMimeTypeAllowed) {
-    const isBrand = slotId === 'brand';
-    return {
-      valid: false,
-      error: isBrand
-        ? 'يُسمح فقط بملفات PNG للهوية البصرية.'
-        : 'يُسمح فقط بملفات PDF لهذا المستند.',
-    };
-  }
+ if (!isExtensionAllowed && !isMimeTypeAllowed) {
+ const isBrand = slotId === 'brand';
+ return {
+ valid: false,
+ error: isBrand
+ ? 'يُسمح فقط بملفات PNG للهوية البصرية.'
+ : 'يُسمح فقط بملفات PDF لهذا المستند.',
+ };
+ }
 
-  return { valid: true };
+ return { valid: true };
 }
 
 const mapSlotToDocumentType = (slotId: DocumentSlotId): string =>
-  DOCUMENT_SLOT_MAPPING[slotId] || 'other';
+ DOCUMENT_SLOT_MAPPING[slotId] || 'other';
 
 const isCompletedStatus = (status?: string) =>
-  !!status &&
-  (status.toUpperCase() === 'UPLOADED' ||
-    status.toUpperCase() === 'PENDING_REVIEW');
+ !!status &&
+ (status.toUpperCase() === 'UPLOADED' ||
+ status.toUpperCase() === 'PENDING_REVIEW');
 
 export function OrganizationDocumentsForm() {
-  const [searchParams] = useSearchParams();
-  const { activeOrganizationId } = useOnboardingContext();
+ const [searchParams] = useSearchParams();
+ const { activeOrganizationId } = useOnboardingContext();
 
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
-  const [documentsLoadError, setDocumentsLoadError] = useState<string | null>(null);
-  const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [dragOverSlotId, setDragOverSlotId] = useState<DocumentSlotId | null>(null);
-  const uploadingSlotsRef = useRef<Set<string>>(new Set());
-  const [redirectMessage] = useState<string | null>(() => {
-    const fromResults = searchParams.get('from') === 'results';
-    return fromResults
-      ? 'لعرض النتائج، يجب عليك إكمال الملف التعريفي برفع المستندات المطلوبة.'
-      : null;
-  });
+ const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
+ const [documentsLoadError, setDocumentsLoadError] = useState<string | null>(null);
+ const [isLoadingDocuments, setIsLoadingDocuments] = useState(false);
+ const [isSaving, setIsSaving] = useState(false);
+ const [dragOverSlotId, setDragOverSlotId] = useState<DocumentSlotId | null>(null);
+ const uploadingSlotsRef = useRef<Set<string>>(new Set());
+ const [redirectMessage] = useState<string | null>(() => {
+ const fromResults = searchParams.get('from') === 'results';
+ return fromResults
+ ? 'لعرض النتائج، يجب عليك إكمال الملف التعريفي برفع المستندات المطلوبة.'
+ : null;
+ });
 
-  const requiredSlots = requiredDocumentSlots;
-  const optionalSlots = optionalDocumentSlots;
+ const requiredSlots = requiredDocumentSlots;
+ const optionalSlots = optionalDocumentSlots;
 
-  const completedRequiredCount = requiredSlots.filter((slot) => {
-    const doc = uploadedFiles.find(
-      (f) => f.id === slot.id && isCompletedStatus(f.backendStatus)
-    );
-    return !!doc;
-  }).length;
+ const completedRequiredCount = requiredSlots.filter((slot) => {
+ const doc = uploadedFiles.find(
+ (f) => f.id === slot.id && isCompletedStatus(f.backendStatus)
+ );
+ return !!doc;
+ }).length;
 
-  const uploadedCount = uploadedFiles.filter(
-    (f) => f.backendStatus === 'UPLOADED'
-  ).length;
-  const pendingReviewCount = uploadedFiles.filter(
-    (f) => f.backendStatus === 'PENDING_REVIEW'
-  ).length;
-  const hasPendingUploads = uploadedFiles.some((f) => f.status === 'uploading');
-  const isDocumentsComplete =
-    completedRequiredCount === requiredSlots.length && !hasPendingUploads;
+ const uploadedCount = uploadedFiles.filter(
+ (f) => f.backendStatus === 'UPLOADED'
+ ).length;
+ const pendingReviewCount = uploadedFiles.filter(
+ (f) => f.backendStatus === 'PENDING_REVIEW'
+ ).length;
+ const hasPendingUploads = uploadedFiles.some((f) => f.status === 'uploading');
+ const isDocumentsComplete =
+ completedRequiredCount === requiredSlots.length && !hasPendingUploads;
 
-  const loadExistingDocuments = useCallback(async () => {
-    const orgId = activeOrganizationId;
-    if (!orgId) return;
+ const loadExistingDocuments = useCallback(async () => {
+ const orgId = activeOrganizationId;
+ if (!orgId) return;
 
-    setIsLoadingDocuments(true);
-    setDocumentsLoadError(null);
-    try {
-      const { onboardingService } = await import('@/api/services');
-      const res = await onboardingService.getOrganizationDocuments(orgId);
-      if (!res.success) {
-        throw new Error(res.message || 'Failed to load documents');
-      }
-      const docs = (res.data || []) as OrganizationDocument[];
-      const mappedFiles: UploadedFile[] = [];
+ setIsLoadingDocuments(true);
+ setDocumentsLoadError(null);
+ try {
+ const { onboardingService } = await import('@/api/services');
+ const res = await onboardingService.getOrganizationDocuments(orgId);
+ if (!res.success) {
+ throw new Error(res.message || 'Failed to load documents');
+ }
+ const docs = (res.data || []) as OrganizationDocument[];
+ const mappedFiles: UploadedFile[] = [];
 
-      const docsBySlot = new Map<DocumentSlotId, OrganizationDocument[]>();
-      for (const doc of docs) {
-        const slotId = BACKEND_DOCUMENT_TYPE_TO_SLOT[doc.documentType.toUpperCase()];
-        if (!slotId) continue;
-        if (!docsBySlot.has(slotId)) docsBySlot.set(slotId, []);
-        docsBySlot.get(slotId)!.push(doc);
-      }
+ const docsBySlot = new Map<DocumentSlotId, OrganizationDocument[]>();
+ for (const doc of docs) {
+ const slotId = BACKEND_DOCUMENT_TYPE_TO_SLOT[doc.documentType.toUpperCase()];
+ if (!slotId) continue;
+ if (!docsBySlot.has(slotId)) docsBySlot.set(slotId, []);
+ docsBySlot.get(slotId)!.push(doc);
+ }
 
-      for (const [slotId, slotDocs] of docsBySlot.entries()) {
-        const sorted = slotDocs.sort((a, b) => {
-          const aTime = a.uploadedAt || a.createdAt || '';
-          const bTime = b.uploadedAt || b.createdAt || '';
-          return bTime.localeCompare(aTime);
-        });
-        const doc = sorted[0];
-        if (!doc) continue;
+ for (const [slotId, slotDocs] of docsBySlot.entries()) {
+ const sorted = slotDocs.sort((a, b) => {
+ const aTime = a.uploadedAt || a.createdAt || '';
+ const bTime = b.uploadedAt || b.createdAt || '';
+ return bTime.localeCompare(aTime);
+ });
+ const doc = sorted[0];
+ if (!doc) continue;
 
-        mappedFiles.push({
-          id: slotId,
-          name: doc.fileName || doc.originalName || '',
-          type: doc.mimeType || '',
-          size: doc.fileSize || doc.size || 0,
-          status: 'completed',
-          progress: 100,
-          documentType: doc.documentType,
-          backendId: doc.id,
-          backendStatus: doc.status,
-          fileUrl: doc.fileUrl,
-          fileId: doc.fileId,
-        });
-      }
+ mappedFiles.push({
+ id: slotId,
+ name: doc.fileName || doc.originalName || '',
+ type: doc.mimeType || '',
+ size: doc.fileSize || doc.size || 0,
+ status: 'completed',
+ progress: 100,
+ documentType: doc.documentType,
+ backendId: doc.id,
+ backendStatus: doc.status,
+ fileUrl: doc.fileUrl,
+ fileId: doc.fileId,
+ });
+ }
 
-      setUploadedFiles((prev) => {
-        const keep = prev.filter((f) => f.status === 'uploading');
-        const keepIds = new Set(keep.map((f) => f.id));
-        const merged = [
-          ...keep,
-          ...mappedFiles.filter((f) => !keepIds.has(f.id)),
-        ];
-        return merged;
-      });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Failed to load documents';
-      setDocumentsLoadError(message);
-      toast.error(message, { duration: TOAST_DURATION });
-    } finally {
-      setIsLoadingDocuments(false);
-    }
-  }, [activeOrganizationId]);
+ setUploadedFiles((prev) => {
+ const keep = prev.filter((f) => f.status === 'uploading');
+ const keepIds = new Set(keep.map((f) => f.id));
+ const merged = [
+ ...keep,
+ ...mappedFiles.filter((f) => !keepIds.has(f.id)),
+ ];
+ return merged;
+ });
+ } catch (err) {
+ const message = err instanceof Error ? err.message : 'Failed to load documents';
+ setDocumentsLoadError(message);
+ toast.error(message, { duration: TOAST_DURATION });
+ } finally {
+ setIsLoadingDocuments(false);
+ }
+ }, [activeOrganizationId]);
 
-  useEffect(() => {
-    if (activeOrganizationId) {
-      loadExistingDocuments();
-    }
-  }, [activeOrganizationId, loadExistingDocuments]);
+ useEffect(() => {
+ if (activeOrganizationId) {
+ loadExistingDocuments();
+ }
+ }, [activeOrganizationId, loadExistingDocuments]);
 
-  const handleUpload = async (slotId: DocumentSlotId, file: File) => {
-    if (uploadingSlotsRef.current.has(slotId)) return;
-    uploadingSlotsRef.current.add(slotId);
+ const handleUpload = async (slotId: DocumentSlotId, file: File) => {
+ if (uploadingSlotsRef.current.has(slotId)) return;
+ uploadingSlotsRef.current.add(slotId);
 
-    const docType = mapSlotToDocumentType(slotId);
-    const previousDoc = uploadedFiles.find((f) => f.id === slotId);
+ const docType = mapSlotToDocumentType(slotId);
+ const previousDoc = uploadedFiles.find((f) => f.id === slotId);
 
-    setUploadedFiles((prev) => {
-      const filtered = prev.filter((f) => f.id !== slotId);
-      return [
-        ...filtered,
-        {
-          id: slotId,
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          status: 'uploading',
-          progress: 0,
-          documentType: docType,
-        },
-      ];
-    });
+ setUploadedFiles((prev) => {
+ const filtered = prev.filter((f) => f.id !== slotId);
+ return [
+ ...filtered,
+ {
+ id: slotId,
+ name: file.name,
+ type: file.type,
+ size: file.size,
+ status: 'uploading',
+ progress: 0,
+ documentType: docType,
+ },
+ ];
+ });
 
-    const progressInterval = setInterval(() => {
-      setUploadedFiles((prev) =>
-        prev.map((f) =>
-          f.id === slotId && f.status === 'uploading' && f.progress < 90
-            ? { ...f, progress: Math.min(f.progress + 10, 90) }
-            : f
-        )
-      );
-    }, 250);
+ const progressInterval = setInterval(() => {
+ setUploadedFiles((prev) =>
+ prev.map((f) =>
+ f.id === slotId && f.status === 'uploading' && f.progress < 90
+ ? { ...f, progress: Math.min(f.progress + 10, 90) }
+ : f
+ )
+ );
+ }, 250);
 
-    try {
-      const { onboardingService } = await import('@/api/services');
-      const res = await onboardingService.uploadOrganizationDocument(
-        file,
-        docType,
-        activeOrganizationId || '',
-        getDocumentSlotLabel(slotId)
-      );
-      clearInterval(progressInterval);
+ try {
+ const { onboardingService } = await import('@/api/services');
+ const res = await onboardingService.uploadOrganizationDocument(
+ file,
+ docType,
+ activeOrganizationId || '',
+ getDocumentSlotLabel(slotId)
+ );
+ clearInterval(progressInterval);
 
-      if (!res.success) {
-        throw new Error(res.message || 'Upload failed');
-      }
+ if (!res.success) {
+ throw new Error(res.message || 'Upload failed');
+ }
 
-      const data = res.data;
+ const data = res.data;
 
-      if (previousDoc?.backendId) {
-        try {
-          await onboardingService.deleteOrganizationDocument(previousDoc.backendId, activeOrganizationId || '');
-        } catch (deleteErr) {
-          console.warn('Failed to delete previous document', deleteErr);
-        }
-      }
+ if (previousDoc?.backendId) {
+ try {
+ await onboardingService.deleteOrganizationDocument(previousDoc.backendId, activeOrganizationId || '');
+ } catch (deleteErr) {
+ console.warn('Failed to delete previous document', deleteErr);
+ }
+ }
 
-      setUploadedFiles((prev) =>
-        prev.map((f) =>
-          f.id === slotId
-            ? {
-                ...f,
-                status: 'completed',
-                progress: 100,
-                name: data.originalName || data.fileName || file.name,
-                documentType: data.documentType,
-                backendId: data.id,
-                backendStatus: data.status,
-                fileUrl: data.fileUrl,
-                fileId: data.fileId,
-              }
-            : f
-        )
-      );
+ setUploadedFiles((prev) =>
+ prev.map((f) =>
+ f.id === slotId
+ ? {
+ ...f,
+ status: 'completed',
+ progress: 100,
+ name: data.originalName || data.fileName || file.name,
+ documentType: data.documentType,
+ backendId: data.id,
+ backendStatus: data.status,
+ fileUrl: data.fileUrl,
+ fileId: data.fileId,
+ }
+ : f
+ )
+ );
 
-      toast.success(
-        `تم رفع ${getDocumentSlotLabel(slotId)} بنجاح`,
-        { duration: TOAST_DURATION }
-      );
-    } catch (err) {
-      clearInterval(progressInterval);
-      const message = err instanceof Error ? err.message : 'Upload failed';
-      setUploadedFiles((prev) =>
-        prev.map((f) =>
-          f.id === slotId ? { ...f, status: 'error', progress: 0 } : f
-        )
-      );
-      toast.error(message, { duration: TOAST_DURATION });
-    } finally {
-      uploadingSlotsRef.current.delete(slotId);
-    }
-  };
+ toast.success(
+ `تم رفع ${getDocumentSlotLabel(slotId)} بنجاح`,
+ { duration: TOAST_DURATION }
+ );
+ } catch (err) {
+ clearInterval(progressInterval);
+ const message = err instanceof Error ? err.message : 'Upload failed';
+ setUploadedFiles((prev) =>
+ prev.map((f) =>
+ f.id === slotId ? { ...f, status: 'error', progress: 0 } : f
+ )
+ );
+ toast.error(message, { duration: TOAST_DURATION });
+ } finally {
+ uploadingSlotsRef.current.delete(slotId);
+ }
+ };
 
-  const handleDelete = async (slotId: DocumentSlotId) => {
-    const doc = uploadedFiles.find((f) => f.id === slotId);
-    if (!doc?.backendId) {
-      setUploadedFiles((prev) => prev.filter((f) => f.id !== slotId));
-      return;
-    }
+ const handleDelete = async (slotId: DocumentSlotId) => {
+ const doc = uploadedFiles.find((f) => f.id === slotId);
+ if (!doc?.backendId) {
+ setUploadedFiles((prev) => prev.filter((f) => f.id !== slotId));
+ return;
+ }
 
-    try {
-      const { onboardingService } = await import('@/api/services');
-      await onboardingService.deleteOrganizationDocument(doc.backendId, activeOrganizationId || '');
-      setUploadedFiles((prev) => prev.filter((f) => f.id !== slotId));
-      toast.success('تم حذف المستند بنجاح', { duration: TOAST_DURATION });
-    } catch (err) {
-      const message = err instanceof Error ? err.message : 'Delete failed';
-      toast.error(message, { duration: TOAST_DURATION });
-    }
-  };
+ try {
+ const { onboardingService } = await import('@/api/services');
+ await onboardingService.deleteOrganizationDocument(doc.backendId, activeOrganizationId || '');
+ setUploadedFiles((prev) => prev.filter((f) => f.id !== slotId));
+ toast.success('تم حذف المستند بنجاح', { duration: TOAST_DURATION });
+ } catch (err) {
+ const message = err instanceof Error ? err.message : 'Delete failed';
+ toast.error(message, { duration: TOAST_DURATION });
+ }
+ };
 
-  const handleSelectFile = (slotId: DocumentSlotId) => {
-    if (hasPendingUploads) return;
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = SLOT_FILE_VALIDATION[slotId]?.accept || '';
-    input.onchange = (e) => {
-      const target = e.target as HTMLInputElement;
-      if (target.files && target.files[0]) {
-        const validation = validateFile(slotId, target.files[0]);
-        if (!validation.valid) {
-          toast.error(validation.error || 'ملف غير صالح', { duration: TOAST_DURATION });
-          return;
-        }
-        handleUpload(slotId, target.files[0]);
-      }
-    };
-    input.click();
-  };
+ const handleSelectFile = (slotId: DocumentSlotId) => {
+ if (hasPendingUploads) return;
+ const input = document.createElement('input');
+ input.type = 'file';
+ input.accept = SLOT_FILE_VALIDATION[slotId]?.accept || '';
+ input.onchange = (e) => {
+ const target = e.target as HTMLInputElement;
+ if (target.files && target.files[0]) {
+ const validation = validateFile(slotId, target.files[0]);
+ if (!validation.valid) {
+ toast.error(validation.error || 'ملف غير صالح', { duration: TOAST_DURATION });
+ return;
+ }
+ handleUpload(slotId, target.files[0]);
+ }
+ };
+ input.click();
+ };
 
-  const handleRowDragOver = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
-    if (hasPendingUploads) return;
-    event.preventDefault();
-    event.dataTransfer.dropEffect = 'copy';
-    if (dragOverSlotId !== slotId) {
-      setDragOverSlotId(slotId);
-    }
-  };
+ const handleRowDragOver = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
+ if (hasPendingUploads) return;
+ event.preventDefault();
+ event.dataTransfer.dropEffect = 'copy';
+ if (dragOverSlotId !== slotId) {
+ setDragOverSlotId(slotId);
+ }
+ };
 
-  const handleRowDragLeave = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
-    if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
-    if (dragOverSlotId === slotId) {
-      setDragOverSlotId(null);
-    }
-  };
+ const handleRowDragLeave = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
+ if (event.currentTarget.contains(event.relatedTarget as Node | null)) return;
+ if (dragOverSlotId === slotId) {
+ setDragOverSlotId(null);
+ }
+ };
 
-  const handleRowDrop = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
-    event.preventDefault();
-    setDragOverSlotId(null);
-    if (hasPendingUploads) return;
-    const file = event.dataTransfer.files?.[0];
-    if (!file) return;
-    const validation = validateFile(slotId, file);
-    if (!validation.valid) {
-      toast.error(validation.error || 'ملف غير صالح', { duration: TOAST_DURATION });
-      return;
-    }
-    handleUpload(slotId, file);
-  };
+ const handleRowDrop = (event: DragEvent<HTMLDivElement>, slotId: DocumentSlotId) => {
+ event.preventDefault();
+ setDragOverSlotId(null);
+ if (hasPendingUploads) return;
+ const file = event.dataTransfer.files?.[0];
+ if (!file) return;
+ const validation = validateFile(slotId, file);
+ if (!validation.valid) {
+ toast.error(validation.error || 'ملف غير صالح', { duration: TOAST_DURATION });
+ return;
+ }
+ handleUpload(slotId, file);
+ };
 
-  const handleDownloadFile = async (fileId?: string) => {
-    if (!fileId) {
-      toast.error('لا يوجد معرف للملف', { duration: TOAST_DURATION });
-      return;
-    }
-    try {
-      const { collaborationService } = await import('@/api/services/collaboration-service');
-      const res = await collaborationService.downloadFileById(fileId);
-      if (!res.success || !res.data) throw new Error('Download failed');
+ const handleDownloadFile = async (fileId?: string) => {
+ if (!fileId) {
+ toast.error('لا يوجد معرف للملف', { duration: TOAST_DURATION });
+ return;
+ }
+ try {
+ const { collaborationService } = await import('@/api/services/collaboration-service');
+ const res = await collaborationService.downloadFileById(fileId);
+ if (!res.success || !res.data) throw new Error('Download failed');
 
-      const blob = res.data;
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'document';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-      toast.success('تم تحميل الملف بنجاح', { duration: TOAST_DURATION });
-    } catch {
-      toast.error('فشل تحميل الملف', { duration: TOAST_DURATION });
-    }
-  };
+ const blob = res.data;
+ const url = window.URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url;
+ a.download = 'document';
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ window.URL.revokeObjectURL(url);
+ toast.success('تم تحميل الملف بنجاح', { duration: TOAST_DURATION });
+ } catch {
+ toast.error('فشل تحميل الملف', { duration: TOAST_DURATION });
+ }
+ };
 
-  const handleViewFile = async (fileId?: string) => {
-    if (!fileId) {
-      toast.error('لا يوجد معرف للملف', { duration: TOAST_DURATION });
-      return;
-    }
-    try {
-      const { collaborationService } = await import('@/api/services/collaboration-service');
-      const res = await collaborationService.downloadFileById(fileId);
-      if (!res.success || !res.data) throw new Error('Download failed');
+ const handleViewFile = async (fileId?: string) => {
+ if (!fileId) {
+ toast.error('لا يوجد معرف للملف', { duration: TOAST_DURATION });
+ return;
+ }
+ try {
+ const { collaborationService } = await import('@/api/services/collaboration-service');
+ const res = await collaborationService.downloadFileById(fileId);
+ if (!res.success || !res.data) throw new Error('Download failed');
 
-      const blob = res.data;
-      const url = window.URL.createObjectURL(blob);
-      const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-        const a = document.createElement('a');
-        a.href = url;
-        a.target = '_blank';
-        a.download = 'document';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-      toast.success('تم فتح الملف في تبويب جديد', { duration: TOAST_DURATION });
-      setTimeout(() => window.URL.revokeObjectURL(url), 60000);
-    } catch {
-      toast.error('فشل فتح الملف', { duration: TOAST_DURATION });
-    }
-  };
+ const blob = res.data;
+ const url = window.URL.createObjectURL(blob);
+ const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+ if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+ const a = document.createElement('a');
+ a.href = url;
+ a.target = '_blank';
+ a.download = 'document';
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ }
+ toast.success('تم فتح الملف في تبويب جديد', { duration: TOAST_DURATION });
+ setTimeout(() => window.URL.revokeObjectURL(url), 60000);
+ } catch {
+ toast.error('فشل فتح الملف', { duration: TOAST_DURATION });
+ }
+ };
 
-  const handleDownloadTemplate = (templateUrl: string, fileName: string) => {
-    const a = document.createElement('a');
-    a.href = templateUrl;
-    a.download = fileName;
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
+ const handleDownloadTemplate = (templateUrl: string, fileName: string) => {
+ const a = document.createElement('a');
+ a.href = templateUrl;
+ a.download = fileName;
+ a.target = '_blank';
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ };
 
-  const handleSave = () => {
-    if (hasPendingUploads) {
-      toast.error('يرجى انتظار اكتمال رفع الملفات الجارية', { duration: TOAST_DURATION });
-      return;
-    }
+ const handleSave = () => {
+ if (hasPendingUploads) {
+ toast.error('يرجى انتظار اكتمال رفع الملفات الجارية', { duration: TOAST_DURATION });
+ return;
+ }
 
-    setIsSaving(true);
-    try {
-      if (!isDocumentsComplete) {
-        toast.error('يرجى رفع جميع المستندات الإلزامية قبل الحفظ', { duration: TOAST_DURATION });
-        return;
-      }
-      toast.success('تم حفظ المستندات بنجاح', { duration: TOAST_DURATION });
-    } finally {
-      setIsSaving(false);
-    }
-  };
+ setIsSaving(true);
+ try {
+ if (!isDocumentsComplete) {
+ toast.error('يرجى رفع جميع المستندات الإلزامية قبل الحفظ', { duration: TOAST_DURATION });
+ return;
+ }
+ toast.success('تم حفظ المستندات بنجاح', { duration: TOAST_DURATION });
+ } finally {
+ setIsSaving(false);
+ }
+ };
 
-  if (!activeOrganizationId) {
-    return (
-      <div className="bg-white rounded-xl shadow-sm border border-border p-8">
-        <div className="max-w-lg mx-auto text-center">
-          <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
-          <h2 className="text-xl font-bold mb-2">تعذر تحميل المستندات</h2>
-          <p className="text-muted-foreground mb-6">
-            لم يتم العثور على معلومات المنظمة. يرجى العودة وإكمال التسجيل أولاً.
-          </p>
-        </div>
-      </div>
-    );
-  }
+ if (!activeOrganizationId) {
+ return (
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-8">
+ <div className="max-w-lg mx-auto text-center">
+ <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+ <h2 className="text-xl font-bold mb-2">تعذر تحميل المستندات</h2>
+ <p className="text-muted-foreground mb-6">
+ لم يتم العثور على معلومات المنظمة. يرجى العودة وإكمال التسجيل أولاً.
+ </p>
+ </div>
+ </div>
+ );
+ }
 
-  return (
-    <div className="space-y-6">
-      {isLoadingDocuments && !uploadedFiles.length && (
-        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        </div>
-      )}
+ return (
+ <div className="space-y-6">
+ {isLoadingDocuments && !uploadedFiles.length && (
+ <div className="fixed inset-0 bg-[var(--card)]/80 z-50 flex items-center justify-center">
+ <Loader2 className="w-8 h-8 text-primary animate-spin" />
+ </div>
+ )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-border p-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold mb-2">المستندات المطلوبة</h1>
-          <p className="text-muted-foreground">يرجى رفع المستندات المطلوبة لإكمال التقييم</p>
-        </div>
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-8">
+ {/* Header */}
+ <div className="mb-8">
+ <h1 className="text-3xl font-bold mb-2">المستندات المطلوبة</h1>
+ <p className="text-muted-foreground">يرجى رفع المستندات المطلوبة لإكمال التقييم</p>
+ </div>
 
-        {/* Upload Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 items-stretch">
-          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-primary/10 dark:bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                <FileText className="w-6 h-6 text-primary dark:text-primary" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{completedRequiredCount}/{requiredSlots.length}</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">مستندات مطلوبة</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{uploadedCount}</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">تم الرفع</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-yellow-50 dark:bg-yellow-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
-              </div>
-              <div>
-                <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{pendingReviewCount}</p>
-                <p className="text-sm text-muted-foreground dark:text-muted-foreground">قيد المراجعة</p>
-              </div>
-            </div>
-          </div>
-        </div>
+ {/* Upload Stats */}
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 items-stretch">
+ <div className="bg-[var(--card)] rounded-2xl p-5 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="flex items-center gap-4">
+ <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+ <FileText className="w-6 h-6 text-primary" />
+ </div>
+ <div>
+ <p className="text-3xl font-bold text-foreground tracking-tight">{completedRequiredCount}/{requiredSlots.length}</p>
+ <p className="text-sm text-muted-foreground">مستندات مطلوبة</p>
+ </div>
+ </div>
+ </div>
+ <div className="bg-[var(--card)] rounded-2xl p-5 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="flex items-center gap-4">
+ <div className="w-12 h-12 bg-[var(--primary)]/[0.08] rounded-xl flex items-center justify-center flex-shrink-0">
+ <CheckCircle2 className="w-6 h-6 text-[var(--primary)]" />
+ </div>
+ <div>
+ <p className="text-3xl font-bold text-foreground tracking-tight">{uploadedCount}</p>
+ <p className="text-sm text-muted-foreground">تم الرفع</p>
+ </div>
+ </div>
+ </div>
+ <div className="bg-[var(--card)] rounded-2xl p-5 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="flex items-center gap-4">
+ <div className="w-12 h-12 bg-[var(--warning)]/[0.1] rounded-xl flex items-center justify-center flex-shrink-0">
+ <Clock className="w-6 h-6 text-[var(--warning)]" />
+ </div>
+ <div>
+ <p className="text-3xl font-bold text-foreground tracking-tight">{pendingReviewCount}</p>
+ <p className="text-sm text-muted-foreground">قيد المراجعة</p>
+ </div>
+ </div>
+ </div>
+ </div>
 
-        {/* Load error */}
-        {documentsLoadError && (
-          <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <AlertCircle className="w-5 h-5 text-red-600" />
-              <span className="text-red-700">{documentsLoadError}</span>
-            </div>
-            <button
-              onClick={loadExistingDocuments}
-              className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm font-medium"
-            >
-              إعادة المحاولة
-            </button>
-          </div>
-        )}
+ {/* Load error */}
+ {documentsLoadError && (
+ <div className="bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl p-4 mb-6 flex items-center justify-between">
+ <div className="flex items-center gap-3">
+ <AlertCircle className="w-5 h-5 text-[var(--destructive)]" />
+ <span className="text-[var(--destructive)]">{documentsLoadError}</span>
+ </div>
+ <button
+ onClick={loadExistingDocuments}
+ className="px-4 py-2 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors text-sm font-medium"
+ >
+ إعادة المحاولة
+ </button>
+ </div>
+ )}
 
-        {/* Redirect message from results page */}
-        {redirectMessage && (
-          <div className="bg-secondary border border-border rounded-xl p-4 mb-6 flex items-start gap-3">
-            <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-            <span className="text-primary">{redirectMessage}</span>
-          </div>
-        )}
+ {/* Redirect message from results page */}
+ {redirectMessage && (
+ <div className="bg-secondary border border-border rounded-xl p-4 mb-6 flex items-start gap-3">
+ <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+ <span className="text-primary">{redirectMessage}</span>
+ </div>
+ )}
 
-        {/* Required warning */}
-        {!isDocumentsComplete && !hasPendingUploads && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 mb-6 flex items-center gap-3">
-            <AlertTriangle className="w-5 h-5 text-yellow-600" />
-            <span className="text-yellow-700">
-              يرجى رفع جميع المستندات الإلزامية قبل المتابعة.
-            </span>
-          </div>
-        )}
+ {/* Required warning */}
+ {!isDocumentsComplete && !hasPendingUploads && (
+ <div className="bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.3] rounded-xl p-4 mb-6 flex items-center gap-3">
+ <AlertTriangle className="w-5 h-5 text-[var(--warning)]" />
+ <span className="text-yellow-700">
+ يرجى رفع جميع المستندات الإلزامية قبل المتابعة.
+ </span>
+ </div>
+ )}
 
-        {/* Required Documents */}
-        <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 text-red-500" />
-            المستندات الإلزامية
-          </h2>
-          <div className="space-y-3">
-            {requiredSlots.map((doc) => {
-              const file = uploadedFiles.find((f) => f.id === doc.id);
-              const isUploading = file?.status === 'uploading';
-              const isCompleted = file?.status === 'completed';
-              const isError = file?.status === 'error';
-              const isDragOver = dragOverSlotId === doc.id;
-              return (
-                <div
-                  key={doc.id}
-                  onDragOver={(event) => handleRowDragOver(event, doc.id)}
-                  onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
-                  onDrop={(event) => handleRowDrop(event, doc.id)}
-                  className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
-                    isDragOver
-                      ? 'border-2 border-primary bg-primary/10'
-                      : isCompleted
-                      ? 'border-2 border-green-200 bg-green-50/50'
-                      : isError
-                      ? 'border-2 border-red-300 bg-red-50/50'
-                      : 'border-2 border-dashed border-border hover:border-primary hover:bg-primary/10'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    {isCompleted ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                    ) : (
-                      <FileText
-                        className={`w-5 h-5 flex-shrink-0 ${
-                          isError ? 'text-red-500' : 'text-muted-foreground'
-                        }`}
-                      />
-                    )}
-                    <div className="min-w-0">
-                      <p
-                        className="font-medium leading-snug line-clamp-2"
-                        title={doc.label}
-                      >
-                        {doc.label}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
-                      </p>
-                      {isCompleted && file?.name && (
-                        <p
-                          className="text-sm text-green-700 truncate max-w-xs"
-                          title={file.name}
-                        >
-                          {file.name}
-                        </p>
-                      )}
-                      {isUploading && (
-                        <div className="w-32 mt-1">
-                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-primary transition-all duration-300"
-                              style={{ width: `${file.progress}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      )}
-                      {isError && (
-                        <p className="text-sm text-red-600">
-                          فشل الرفع. يرجى المحاولة مرة أخرى.
-                        </p>
-                      )}
-                      {!isCompleted && !isUploading && !isError && (
-                        <p className="text-sm text-red-600">مطلوب *</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-shrink-0">
-                    {isCompleted && file?.fileId && (
-                      <>
-                        <button
-                          onClick={() => handleDownloadFile(file.fileId)}
-                          className="px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm font-medium"
-                          title="تحميل"
-                        >
-                          <Download className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleViewFile(file.fileId)}
-                          className="px-3 py-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors text-sm font-medium"
-                          title="عرض في تبويب جديد"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </button>
-                      </>
-                    )}
-                    <button
-                      onClick={() => handleSelectFile(doc.id)}
-                      disabled={hasPendingUploads}
-                      className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isUploading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          جارٍ الرفع
-                        </>
-                      ) : isCompleted ? (
-                        <>
-                          <Upload className="w-4 h-4" />
-                          استبدال
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="w-4 h-4" />
-                          رفع
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+ {/* Required Documents */}
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6 mb-6">
+ <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+ <AlertCircle className="w-5 h-5 text-red-500" />
+ المستندات الإلزامية
+ </h2>
+ <div className="space-y-3">
+ {requiredSlots.map((doc) => {
+ const file = uploadedFiles.find((f) => f.id === doc.id);
+ const isUploading = file?.status === 'uploading';
+ const isCompleted = file?.status === 'completed';
+ const isError = file?.status === 'error';
+ const isDragOver = dragOverSlotId === doc.id;
+ return (
+ <div
+ key={doc.id}
+ onDragOver={(event) => handleRowDragOver(event, doc.id)}
+ onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
+ onDrop={(event) => handleRowDrop(event, doc.id)}
+ className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
+ isDragOver
+ ? 'border-2 border-primary bg-primary/10'
+ : isCompleted
+ ? 'border-2 border-green-200 bg-[var(--primary)]/[0.08]/50'
+ : isError
+ ? 'border-2 border-red-300 bg-[var(--destructive)]/[0.08]/50'
+ : 'border-2 border-dashed border-border hover:border-primary hover:bg-primary/10'
+ }`}
+ >
+ <div className="flex items-center gap-3 min-w-0">
+ {isCompleted ? (
+ <CheckCircle2 className="w-5 h-5 text-[var(--primary)] flex-shrink-0" />
+ ) : (
+ <FileText
+ className={`w-5 h-5 flex-shrink-0 ${
+ isError ? 'text-red-500' : 'text-muted-foreground'
+ }`}
+ />
+ )}
+ <div className="min-w-0">
+ <p
+ className="font-medium leading-snug line-clamp-2"
+ title={doc.label}
+ >
+ {doc.label}
+ </p>
+ <p className="text-xs text-muted-foreground">
+ {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
+ </p>
+ {isCompleted && file?.name && (
+ <p
+ className="text-sm text-[var(--primary)] truncate max-w-xs"
+ title={file.name}
+ >
+ {file.name}
+ </p>
+ )}
+ {isUploading && (
+ <div className="w-32 mt-1">
+ <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+ <div
+ className="h-full bg-primary transition-all duration-300"
+ style={{ width: `${file.progress}%` }}
+ ></div>
+ </div>
+ </div>
+ )}
+ {isError && (
+ <p className="text-sm text-[var(--destructive)]">
+ فشل الرفع. يرجى المحاولة مرة أخرى.
+ </p>
+ )}
+ {!isCompleted && !isUploading && !isError && (
+ <p className="text-sm text-[var(--destructive)]">مطلوب *</p>
+ )}
+ </div>
+ </div>
+ <div className="flex items-center gap-2 flex-shrink-0">
+ {isCompleted && file?.fileId && (
+ <>
+ <button
+ onClick={() => handleDownloadFile(file.fileId)}
+ className="px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm font-medium"
+ title="تحميل"
+ >
+ <Download className="w-4 h-4" />
+ </button>
+ <button
+ onClick={() => handleViewFile(file.fileId)}
+ className="px-3 py-2 text-[var(--primary)] hover:bg-[var(--primary)]/[0.1] rounded-lg transition-colors text-sm font-medium"
+ title="عرض في تبويب جديد"
+ >
+ <ExternalLink className="w-4 h-4" />
+ </button>
+ </>
+ )}
+ <button
+ onClick={() => handleSelectFile(doc.id)}
+ disabled={hasPendingUploads}
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ >
+ {isUploading ? (
+ <>
+ <Loader2 className="w-4 h-4 animate-spin" />
+ جارٍ الرفع
+ </>
+ ) : isCompleted ? (
+ <>
+ <Upload className="w-4 h-4" />
+ استبدال
+ </>
+ ) : (
+ <>
+ <Upload className="w-4 h-4" />
+ رفع
+ </>
+ )}
+ </button>
+ </div>
+ </div>
+ );
+ })}
+ </div>
+ </div>
 
-        {/* Optional Documents */}
-        <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">المستندات الاختيارية</h2>
-          <p className="text-sm text-muted-foreground mb-4">
-            رفع هذه المستندات يساعد في تحسين دقة التقييم
-          </p>
-          <div className="space-y-3">
-            {optionalSlots.map((doc) => {
-              const file = uploadedFiles.find((f) => f.id === doc.id);
-              const isUploading = file?.status === 'uploading';
-              const isCompleted = file?.status === 'completed';
-              const isError = file?.status === 'error';
-              const isDragOver = dragOverSlotId === doc.id;
-              return (
-                <div
-                  key={doc.id}
-                  onDragOver={(event) => handleRowDragOver(event, doc.id)}
-                  onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
-                  onDrop={(event) => handleRowDrop(event, doc.id)}
-                  className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
-                    isDragOver
-                      ? 'border-2 border-primary bg-primary/10'
-                      : isCompleted
-                      ? 'border-2 border-green-200 bg-green-50/50'
-                      : isError
-                      ? 'border-2 border-red-300 bg-red-50/50'
-                      : 'border border-border hover:bg-secondary'
-                  }`}
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    {isCompleted ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                    ) : (
-                      <FileText
-                        className={`w-5 h-5 flex-shrink-0 ${
-                          isError ? 'text-red-500' : 'text-muted-foreground'
-                        }`}
-                      />
-                    )}
-                    <div className="min-w-0">
-                      <p
-                        className="font-medium leading-snug line-clamp-2"
-                        title={doc.label}
-                      >
-                        {doc.label}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
-                      </p>
-                      {doc.templateUrl && !isCompleted && (
-                        <button
-                          onClick={() =>
-                            handleDownloadTemplate(doc.templateUrl!, 'نموذج خطاب مقترح.pdf')
-                          }
-                          className="text-xs text-primary hover:text-primary hover:underline mt-1 text-right"
-                          type="button"
-                        >
-                          نموذج خطاب مقترح
-                        </button>
-                      )}
-                      {isCompleted && file?.name && (
-                        <p
-                          className="text-sm text-green-700 truncate max-w-xs"
-                          title={file.name}
-                        >
-                          {file.name}
-                        </p>
-                      )}
-                      {isUploading && (
-                        <div className="w-32 mt-1">
-                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-primary transition-all duration-300"
-                              style={{ width: `${file.progress}%` }}
-                            ></div>
-                          </div>
-                        </div>
-                      )}
-                      {isError && (
-                        <p className="text-sm text-red-600">
-                          فشل الرفع. يرجى المحاولة مرة أخرى.
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                   <div className="flex items-center gap-2 flex-shrink-0">
-                    {isCompleted && file?.fileId && (
-                      <>
-                        <button
-                          onClick={() => handleDownloadFile(file.fileId)}
-                          className="px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm font-medium"
-                          title="تحميل"
-                        >
-                          <Download className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => handleViewFile(file.fileId)}
-                          className="px-3 py-2 text-green-600 hover:bg-green-100 rounded-lg transition-colors text-sm font-medium"
-                          title="عرض في تبويب جديد"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </button>
-                      </>
-                    )}
-                    <button
-                      onClick={() => handleSelectFile(doc.id)}
-                      disabled={hasPendingUploads}
-                      className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {isUploading ? (
-                        <>
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          جارٍ الرفع
-                        </>
-                      ) : isCompleted ? (
-                        <>
-                          <Upload className="w-4 h-4" />
-                          استبدال
-                        </>
-                      ) : (
-                        <>
-                          <Upload className="w-4 h-4" />
-                          رفع
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+ {/* Optional Documents */}
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6 mb-6">
+ <h2 className="text-xl font-semibold mb-4">المستندات الاختيارية</h2>
+ <p className="text-sm text-muted-foreground mb-4">
+ رفع هذه المستندات يساعد في تحسين دقة التقييم
+ </p>
+ <div className="space-y-3">
+ {optionalSlots.map((doc) => {
+ const file = uploadedFiles.find((f) => f.id === doc.id);
+ const isUploading = file?.status === 'uploading';
+ const isCompleted = file?.status === 'completed';
+ const isError = file?.status === 'error';
+ const isDragOver = dragOverSlotId === doc.id;
+ return (
+ <div
+ key={doc.id}
+ onDragOver={(event) => handleRowDragOver(event, doc.id)}
+ onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
+ onDrop={(event) => handleRowDrop(event, doc.id)}
+ className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
+ isDragOver
+ ? 'border-2 border-primary bg-primary/10'
+ : isCompleted
+ ? 'border-2 border-green-200 bg-[var(--primary)]/[0.08]/50'
+ : isError
+ ? 'border-2 border-red-300 bg-[var(--destructive)]/[0.08]/50'
+ : 'border border-border hover:bg-secondary'
+ }`}
+ >
+ <div className="flex items-center gap-3 min-w-0">
+ {isCompleted ? (
+ <CheckCircle2 className="w-5 h-5 text-[var(--primary)] flex-shrink-0" />
+ ) : (
+ <FileText
+ className={`w-5 h-5 flex-shrink-0 ${
+ isError ? 'text-red-500' : 'text-muted-foreground'
+ }`}
+ />
+ )}
+ <div className="min-w-0">
+ <p
+ className="font-medium leading-snug line-clamp-2"
+ title={doc.label}
+ >
+ {doc.label}
+ </p>
+ <p className="text-xs text-muted-foreground">
+ {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
+ </p>
+ {doc.templateUrl && !isCompleted && (
+ <button
+ onClick={() =>
+ handleDownloadTemplate(doc.templateUrl!, 'نموذج خطاب مقترح.pdf')
+ }
+ className="text-xs text-primary hover:text-primary hover:underline mt-1 text-right"
+ type="button"
+ >
+ نموذج خطاب مقترح
+ </button>
+ )}
+ {isCompleted && file?.name && (
+ <p
+ className="text-sm text-[var(--primary)] truncate max-w-xs"
+ title={file.name}
+ >
+ {file.name}
+ </p>
+ )}
+ {isUploading && (
+ <div className="w-32 mt-1">
+ <div className="h-1.5 bg-muted rounded-full overflow-hidden">
+ <div
+ className="h-full bg-primary transition-all duration-300"
+ style={{ width: `${file.progress}%` }}
+ ></div>
+ </div>
+ </div>
+ )}
+ {isError && (
+ <p className="text-sm text-[var(--destructive)]">
+ فشل الرفع. يرجى المحاولة مرة أخرى.
+ </p>
+ )}
+ </div>
+ </div>
+ <div className="flex items-center gap-2 flex-shrink-0">
+ {isCompleted && file?.fileId && (
+ <>
+ <button
+ onClick={() => handleDownloadFile(file.fileId)}
+ className="px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm font-medium"
+ title="تحميل"
+ >
+ <Download className="w-4 h-4" />
+ </button>
+ <button
+ onClick={() => handleViewFile(file.fileId)}
+ className="px-3 py-2 text-[var(--primary)] hover:bg-[var(--primary)]/[0.1] rounded-lg transition-colors text-sm font-medium"
+ title="عرض في تبويب جديد"
+ >
+ <ExternalLink className="w-4 h-4" />
+ </button>
+ </>
+ )}
+ <button
+ onClick={() => handleSelectFile(doc.id)}
+ disabled={hasPendingUploads}
+ className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ >
+ {isUploading ? (
+ <>
+ <Loader2 className="w-4 h-4 animate-spin" />
+ جارٍ الرفع
+ </>
+ ) : isCompleted ? (
+ <>
+ <Upload className="w-4 h-4" />
+ استبدال
+ </>
+ ) : (
+ <>
+ <Upload className="w-4 h-4" />
+ رفع
+ </>
+ )}
+ </button>
+ </div>
+ </div>
+ );
+ })}
+ </div>
+ </div>
 
-        {/* Save Button */}
-        <div className="flex items-center justify-end">
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={isSaving || hasPendingUploads}
-            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isSaving ? (
-              <>
-                <Loader2 className="w-5 h-5 animate-spin" />
-                جارٍ الحفظ...
-              </>
-            ) : (
-              <>
-                حفظ
-                <ChevronLeft className="w-5 h-5" />
-              </>
-            )}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+ {/* Save Button */}
+ <div className="flex items-center justify-end">
+ <button
+ type="button"
+ onClick={handleSave}
+ disabled={isSaving || hasPendingUploads}
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ >
+ {isSaving ? (
+ <>
+ <Loader2 className="w-5 h-5 animate-spin" />
+ جارٍ الحفظ...
+ </>
+ ) : (
+ <>
+ حفظ
+ <ChevronLeft className="w-5 h-5" />
+ </>
+ )}
+ </button>
+ </div>
+ </div>
+ </div>
+ );
 }

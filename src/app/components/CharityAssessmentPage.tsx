@@ -1,946 +1,946 @@
 import { useState } from 'react';
 import {
-  Sparkles,
-  Award,
-  TrendingUp,
-  AlertTriangle,
-  CheckCircle2,
-  Target,
-  Brain,
-  LineChart,
-  BarChart3,
-  ArrowRight,
-  ArrowLeft,
-  Save,
-  Play,
-  Clock,
-  Users,
-  DollarSign,
-  Shield,
-  Zap,
-  BookOpen,
-  Building,
-  Heart,
-  Star,
-  ChevronRight,
-  Download,
-  Share2,
-  RefreshCw,
-  Lightbulb,
-  Calendar,
-  Activity
+ Sparkles,
+ Award,
+ TrendingUp,
+ AlertTriangle,
+ CheckCircle2,
+ Target,
+ Brain,
+ LineChart,
+ BarChart3,
+ ArrowRight,
+ ArrowLeft,
+ Save,
+ Play,
+ Clock,
+ Users,
+ DollarSign,
+ Shield,
+ Zap,
+ BookOpen,
+ Building,
+ Heart,
+ Star,
+ ChevronRight,
+ Download,
+ Share2,
+ RefreshCw,
+ Lightbulb,
+ Calendar,
+ Activity
 } from 'lucide-react';
 import { RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, ResponsiveContainer, LineChart as RechartsLineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar, Cell } from 'recharts';
 
 interface IsivDimension {
-  id: string;
-  code: string;
-  name: string;
-  nameEn: string;
-  icon: any;
-  maxScore: number;
-  questions: Question[];
-  score?: number;
+ id: string;
+ code: string;
+ name: string;
+ nameEn: string;
+ icon: any;
+ maxScore: number;
+ questions: Question[];
+ score?: number;
 }
 
 interface Question {
-  id: string;
-  question: string;
-  questionType: 'SCALE' | 'YES_NO' | 'MULTIPLE_CHOICE';
-  options?: string[];
-  answer?: any;
+ id: string;
+ question: string;
+ questionType: 'SCALE' | 'YES_NO' | 'MULTIPLE_CHOICE';
+ options?: string[];
+ answer?: any;
 }
 
 interface Strength {
-  category: string;
-  score: number;
-  insight: string;
+ category: string;
+ score: number;
+ insight: string;
 }
 
 interface Gap {
-  category: string;
-  severity: 'critical' | 'high' | 'medium';
-  issue: string;
-  recommendation: string;
+ category: string;
+ severity: 'critical' | 'high' | 'medium';
+ issue: string;
+ recommendation: string;
 }
 
 interface RoadmapItem {
-  id: string;
-  title: string;
-  priority: 'high' | 'medium' | 'low';
-  effort: string;
-  impact: string;
-  category: string;
-  status: 'pending' | 'in-progress' | 'completed';
-  dueDate: string;
+ id: string;
+ title: string;
+ priority: 'high' | 'medium' | 'low';
+ effort: string;
+ impact: string;
+ category: string;
+ status: 'pending' | 'in-progress' | 'completed';
+ dueDate: string;
 }
 
 interface Strength {
-  category: string;
-  score: number;
-  insight: string;
+ category: string;
+ score: number;
+ insight: string;
 }
 
 interface Gap {
-  category: string;
-  severity: 'critical' | 'high' | 'medium';
-  issue: string;
-  recommendation: string;
+ category: string;
+ severity: 'critical' | 'high' | 'medium';
+ issue: string;
+ recommendation: string;
 }
 
 interface RoadmapItem {
-  id: string;
-  title: string;
-  priority: 'high' | 'medium' | 'low';
-  effort: string;
-  impact: string;
-  category: string;
-  status: 'pending' | 'in-progress' | 'completed';
-  dueDate: string;
+ id: string;
+ title: string;
+ priority: 'high' | 'medium' | 'low';
+ effort: string;
+ impact: string;
+ category: string;
+ status: 'pending' | 'in-progress' | 'completed';
+ dueDate: string;
 }
 
 export function CharityAssessmentPage() {
-  console.log('✓ CharityAssessmentPage component rendered successfully');
-  const [currentView, setCurrentView] = useState<'start' | 'assessment' | 'results' | 'roadmap'>('start');
-  const [currentStep, setCurrentStep] = useState(0);
-  const [showAIInsights, setShowAIInsights] = useState(true);
+ console.log('✓ CharityAssessmentPage component rendered successfully');
+ const [currentView, setCurrentView] = useState<'start' | 'assessment' | 'results' | 'roadmap'>('start');
+ const [currentStep, setCurrentStep] = useState(0);
+ const [showAIInsights, setShowAIInsights] = useState(true);
 
-  // ISIV Dimensions (4 dimensions, 6 questions each = 24 questions, 120 points max)
-  const dimensions: IsivDimension[] = [
-    {
-      id: 'institutional_building',
-      code: 'I',
-      name: 'البناء المؤسسي',
-      nameEn: 'Institutional Building',
-      icon: Building,
-      maxScore: 30,
-      questions: [
-        { id: 'ib1', question: 'هل لديكم هيكل تنظيمي رسمي وموثق؟', questionType: 'YES_NO' },
-        { id: 'ib2', question: 'مدى وضوح الأدوار والمسؤوليات في المنظمة؟', questionType: 'SCALE' },
-        { id: 'ib3', question: 'هل توجد سياسات وإجراءات موثقة للعمليات الرئيسية؟', questionType: 'YES_NO' },
-        { id: 'ib4', question: 'مستوى تطوير البنية التحتية المؤسسية؟', questionType: 'SCALE' },
-        { id: 'ib5', question: 'هل يوجد مجلس إدارة فعال ومنتظم؟', questionType: 'YES_NO' },
-        { id: 'ib6', question: 'مدى استقلالية مجلس الإدارة؟', questionType: 'SCALE' }
-      ],
-      score: 75
-    },
-    {
-      id: 'governance',
-      code: 'S',
-      name: 'الحوكمة',
-      nameEn: 'Governance',
-      icon: Shield,
-      maxScore: 30,
-      questions: [
-        { id: 'g1', question: 'هل توجد لوائح وسياسات حوكمة واضحة؟', questionType: 'YES_NO' },
-        { id: 'g2', question: 'مستوى الامتثال للأنظمة واللوائح الحكومية؟', questionType: 'SCALE' },
-        { id: 'g3', question: 'هل يتم إجراء تدقيق داخلي منتظم؟', questionType: 'YES_NO' },
-        { id: 'g4', question: 'مدى الشفافية في الإبلاغ المالي؟', questionType: 'SCALE' },
-        { id: 'g5', question: 'هل توجد آلية للإبلاغ عن المخالفات؟', questionType: 'YES_NO' },
-        { id: 'g6', question: 'مستوى إدارة التعارضات المحتملة؟', questionType: 'SCALE' }
-      ],
-      score: 68
-    },
-    {
-      id: 'org_intelligence',
-      code: 'I',
-      name: 'الذكاء المؤسسي',
-      nameEn: 'Organizational Intelligence',
-      icon: Brain,
-      maxScore: 30,
-      questions: [
-        { id: 'oi1', question: 'هل تستخدمون أنظمة رقمية لإدارة البيانات؟', questionType: 'YES_NO' },
-        { id: 'oi2', question: 'مستوى استخدام التحليلات في اتخاذ القرار؟', questionType: 'SCALE' },
-        { id: 'oi3', question: 'هل يوجد فريق تقنية معلومات متخصص؟', questionType: 'YES_NO' },
-        { id: 'oi4', question: 'مدى توفر مؤشرات أداء رئيسية KPIs؟', questionType: 'SCALE' },
-        { id: 'oi5', question: 'هل يتم جمع وتحليل ملاحظات المستفيدين؟', questionType: 'YES_NO' },
-        { id: 'oi6', question: 'مستوى توثيق العمليات والمعرفة المؤسسية؟', questionType: 'SCALE' }
-      ],
-      score: 58
-    },
-    {
-      id: 'value_sustainability',
-      code: 'V',
-      name: 'القيمة والاستدامة',
-      nameEn: 'Value & Sustainability',
-      icon: TrendingUp,
-      maxScore: 30,
-      questions: [
-        { id: 'vs1', question: 'هل توجد رؤية ورسالة واضحة ومحددة؟', questionType: 'YES_NO' },
-        { id: 'vs2', question: 'مستوى قياس الأثر الاجتماعي للمنظمة؟', questionType: 'SCALE' },
-        { id: 'vs3', question: 'هل لديكم خطة استراتيجية طويلة المدى؟', questionType: 'YES_NO' },
-        { id: 'vs4', question: 'مدى تنوع مصادر التمويل؟', questionType: 'SCALE' },
-        { id: 'vs5', question: 'هل يوجد نموذج استدامة مالي واضح؟', questionType: 'YES_NO' },
-        { id: 'vs6', question: 'مستوى قدرة المنظمة على التكيف والتطور؟', questionType: 'SCALE' }
-      ],
-      score: 72
-    }
-  ];
+ // ISIV Dimensions (4 dimensions, 6 questions each = 24 questions, 120 points max)
+ const dimensions: IsivDimension[] = [
+ {
+ id: 'institutional_building',
+ code: 'I',
+ name: 'البناء المؤسسي',
+ nameEn: 'Institutional Building',
+ icon: Building,
+ maxScore: 30,
+ questions: [
+ { id: 'ib1', question: 'هل لديكم هيكل تنظيمي رسمي وموثق؟', questionType: 'YES_NO' },
+ { id: 'ib2', question: 'مدى وضوح الأدوار والمسؤوليات في المنظمة؟', questionType: 'SCALE' },
+ { id: 'ib3', question: 'هل توجد سياسات وإجراءات موثقة للعمليات الرئيسية؟', questionType: 'YES_NO' },
+ { id: 'ib4', question: 'مستوى تطوير البنية التحتية المؤسسية؟', questionType: 'SCALE' },
+ { id: 'ib5', question: 'هل يوجد مجلس إدارة فعال ومنتظم؟', questionType: 'YES_NO' },
+ { id: 'ib6', question: 'مدى استقلالية مجلس الإدارة؟', questionType: 'SCALE' }
+ ],
+ score: 75
+ },
+ {
+ id: 'governance',
+ code: 'S',
+ name: 'الحوكمة',
+ nameEn: 'Governance',
+ icon: Shield,
+ maxScore: 30,
+ questions: [
+ { id: 'g1', question: 'هل توجد لوائح وسياسات حوكمة واضحة؟', questionType: 'YES_NO' },
+ { id: 'g2', question: 'مستوى الامتثال للأنظمة واللوائح الحكومية؟', questionType: 'SCALE' },
+ { id: 'g3', question: 'هل يتم إجراء تدقيق داخلي منتظم؟', questionType: 'YES_NO' },
+ { id: 'g4', question: 'مدى الشفافية في الإبلاغ المالي؟', questionType: 'SCALE' },
+ { id: 'g5', question: 'هل توجد آلية للإبلاغ عن المخالفات؟', questionType: 'YES_NO' },
+ { id: 'g6', question: 'مستوى إدارة التعارضات المحتملة؟', questionType: 'SCALE' }
+ ],
+ score: 68
+ },
+ {
+ id: 'org_intelligence',
+ code: 'I',
+ name: 'الذكاء المؤسسي',
+ nameEn: 'Organizational Intelligence',
+ icon: Brain,
+ maxScore: 30,
+ questions: [
+ { id: 'oi1', question: 'هل تستخدمون أنظمة رقمية لإدارة البيانات؟', questionType: 'YES_NO' },
+ { id: 'oi2', question: 'مستوى استخدام التحليلات في اتخاذ القرار؟', questionType: 'SCALE' },
+ { id: 'oi3', question: 'هل يوجد فريق تقنية معلومات متخصص؟', questionType: 'YES_NO' },
+ { id: 'oi4', question: 'مدى توفر مؤشرات أداء رئيسية KPIs؟', questionType: 'SCALE' },
+ { id: 'oi5', question: 'هل يتم جمع وتحليل ملاحظات المستفيدين؟', questionType: 'YES_NO' },
+ { id: 'oi6', question: 'مستوى توثيق العمليات والمعرفة المؤسسية؟', questionType: 'SCALE' }
+ ],
+ score: 58
+ },
+ {
+ id: 'value_sustainability',
+ code: 'V',
+ name: 'القيمة والاستدامة',
+ nameEn: 'Value & Sustainability',
+ icon: TrendingUp,
+ maxScore: 30,
+ questions: [
+ { id: 'vs1', question: 'هل توجد رؤية ورسالة واضحة ومحددة؟', questionType: 'YES_NO' },
+ { id: 'vs2', question: 'مستوى قياس الأثر الاجتماعي للمنظمة؟', questionType: 'SCALE' },
+ { id: 'vs3', question: 'هل لديكم خطة استراتيجية طويلة المدى؟', questionType: 'YES_NO' },
+ { id: 'vs4', question: 'مدى تنوع مصادر التمويل؟', questionType: 'SCALE' },
+ { id: 'vs5', question: 'هل يوجد نموذج استدامة مالي واضح؟', questionType: 'YES_NO' },
+ { id: 'vs6', question: 'مستوى قدرة المنظمة على التكيف والتطور؟', questionType: 'SCALE' }
+ ],
+ score: 72
+ }
+ ];
 
-  // ISIV Score Calculation (out of 120 points, displayed as percentage)
-  const totalMaxScore = dimensions.reduce((sum, dim) => sum + dim.maxScore, 0); // 120 points
-  const totalScore = dimensions.reduce((sum, dim) => sum + (dim.score || 0), 0);
-  const overallScore = Math.round((totalScore / totalMaxScore) * 100);
+ // ISIV Score Calculation (out of 120 points, displayed as percentage)
+ const totalMaxScore = dimensions.reduce((sum, dim) => sum + dim.maxScore, 0); // 120 points
+ const totalScore = dimensions.reduce((sum, dim) => sum + (dim.score || 0), 0);
+ const overallScore = Math.round((totalScore / totalMaxScore) * 100);
 
-  // ISIV Qualification Status
-  const getQualificationStatus = (score: number) => {
-    if (score >= 80) return { 
-      status: 'QUALIFIED' as const, 
-      label: 'مؤهل', 
-      labelEn: 'Qualified',
-      color: 'text-green-500', 
-      bg: 'bg-green-500' 
-    };
-    if (score >= 60) return { 
-      status: 'WITH_IMPROVEMENT' as const, 
-      label: 'مؤهل مع تحسينات', 
-      labelEn: 'Qualified with Improvement',
-      color: 'text-yellow-500', 
-      bg: 'bg-yellow-500' 
-    };
-    return { 
-      status: 'NOT_QUALIFIED' as const, 
-      label: 'غير مؤهل', 
-      labelEn: 'Not Qualified',
-      color: 'text-red-500', 
-      bg: 'bg-red-500' 
-    };
-  };
+ // ISIV Qualification Status
+ const getQualificationStatus = (score: number) => {
+ if (score >= 80) return { 
+ status: 'QUALIFIED' as const, 
+ label: 'مؤهل', 
+ labelEn: 'Qualified',
+ color: 'text-[var(--primary)]', 
+ bg: 'bg-[var(--primary)]' 
+ };
+ if (score >= 60) return { 
+ status: 'WITH_IMPROVEMENT' as const, 
+ label: 'مؤهل مع تحسينات', 
+ labelEn: 'Qualified with Improvement',
+ color: 'text-yellow-500', 
+ bg: 'bg-yellow-500' 
+ };
+ return { 
+ status: 'NOT_QUALIFIED' as const, 
+ label: 'غير مؤهل', 
+ labelEn: 'Not Qualified',
+ color: 'text-red-500', 
+ bg: 'bg-[var(--destructive)]' 
+ };
+ };
 
-  const qualificationStatus = getQualificationStatus(overallScore);
+ const qualificationStatus = getQualificationStatus(overallScore);
 
-  // Radar Chart Data - ISIV 4 dimensions
-  const radarData = dimensions.map(dim => ({
-    dimension: dim.name,
-    dimensionCode: dim.code,
-    score: dim.score || 0,
-    maxScore: 30,
-    fullMark: 30
-  }));
+ // Radar Chart Data - ISIV 4 dimensions
+ const radarData = dimensions.map(dim => ({
+ dimension: dim.name,
+ dimensionCode: dim.code,
+ score: dim.score || 0,
+ maxScore: 30,
+ fullMark: 30
+ }));
 
-  // ISIV Strengths (top dimensions)
-  const sortedDimensions = [...dimensions].sort((a, b) => (b.score || 0) - (a.score || 0));
-  const topDimensions = sortedDimensions.slice(0, 2);
-  const bottomDimensions = sortedDimensions.slice(-2).reverse();
+ // ISIV Strengths (top dimensions)
+ const sortedDimensions = [...dimensions].sort((a, b) => (b.score || 0) - (a.score || 0));
+ const topDimensions = sortedDimensions.slice(0, 2);
+ const bottomDimensions = sortedDimensions.slice(-2).reverse();
 
-  const strengths: Strength[] = topDimensions.map(dim => ({
-    category: dim.name,
-    score: dim.score || 0,
-    insight: `أداء قوي في بُعد ${dim.name} يعكس التزام المنظمة بهذا المحور`
-  }));
+ const strengths: Strength[] = topDimensions.map(dim => ({
+ category: dim.name,
+ score: dim.score || 0,
+ insight: `أداء قوي في بُعد ${dim.name} يعكس التزام المنظمة بهذا المحور`
+ }));
 
-  // ISIV Gaps (bottom dimensions)
-  const gaps: Gap[] = bottomDimensions.map(dim => ({
-    category: dim.name,
-    severity: (dim.score || 0) < 50 ? 'critical' : (dim.score || 0) < 65 ? 'high' : 'medium',
-    issue: `درجة ${(dim.score || 0)}% في ${dim.name} تعكس فجوة في هذا المحور`,
-    recommendation: `يُنصح بتحسين الأداء في ${dim.name} من خلال برامج تطوير مستهدفة`
-  }));
+ // ISIV Gaps (bottom dimensions)
+ const gaps: Gap[] = bottomDimensions.map(dim => ({
+ category: dim.name,
+ severity: (dim.score || 0) < 50 ? 'critical' : (dim.score || 0) < 65 ? 'high' : 'medium',
+ issue: `درجة ${(dim.score || 0)}% في ${dim.name} تعكس فجوة في هذا المحور`,
+ recommendation: `يُنصح بتحسين الأداء في ${dim.name} من خلال برامج تطوير مستهدفة`
+ }));
 
-  // ISIV Roadmap Items
-  const roadmapItems: RoadmapItem[] = [
-    {
-      id: 'r1',
-      title: 'تطوير الذكاء المؤسسي',
-      priority: 'high',
-      effort: '3-6 أشهر',
-      impact: 'عالي',
-      category: 'الذكاء المؤسسي',
-      status: 'pending',
-      dueDate: '2026-09-01'
-    },
-    {
-      id: 'r2',
-      title: 'تعزيز الحوكمة والامتثال',
-      priority: 'high',
-      effort: '2-3 أشهر',
-      impact: 'عالي',
-      category: 'الحوكمة',
-      status: 'in-progress',
-      dueDate: '2026-07-15'
-    },
-    {
-      id: 'r3',
-      title: 'تحسين البناء المؤسسي',
-      priority: 'medium',
-      effort: '2-4 أشهر',
-      impact: 'عالي',
-      category: 'البناء المؤسسي',
-      status: 'in-progress',
-      dueDate: '2026-08-01'
-    },
-    {
-      id: 'r4',
-      title: 'تطوير القيمة والاستدامة',
-      priority: 'medium',
-      effort: '3-6 أشهر',
-      impact: 'متوسط',
-      category: 'القيمة والاستدامة',
-      status: 'pending',
-      dueDate: '2026-10-01'
-    }
-  ];
+ // ISIV Roadmap Items
+ const roadmapItems: RoadmapItem[] = [
+ {
+ id: 'r1',
+ title: 'تطوير الذكاء المؤسسي',
+ priority: 'high',
+ effort: '3-6 أشهر',
+ impact: 'عالي',
+ category: 'الذكاء المؤسسي',
+ status: 'pending',
+ dueDate: '2026-09-01'
+ },
+ {
+ id: 'r2',
+ title: 'تعزيز الحوكمة والامتثال',
+ priority: 'high',
+ effort: '2-3 أشهر',
+ impact: 'عالي',
+ category: 'الحوكمة',
+ status: 'in-progress',
+ dueDate: '2026-07-15'
+ },
+ {
+ id: 'r3',
+ title: 'تحسين البناء المؤسسي',
+ priority: 'medium',
+ effort: '2-4 أشهر',
+ impact: 'عالي',
+ category: 'البناء المؤسسي',
+ status: 'in-progress',
+ dueDate: '2026-08-01'
+ },
+ {
+ id: 'r4',
+ title: 'تطوير القيمة والاستدامة',
+ priority: 'medium',
+ effort: '3-6 أشهر',
+ impact: 'متوسط',
+ category: 'القيمة والاستدامة',
+ status: 'pending',
+ dueDate: '2026-10-01'
+ }
+ ];
 
-  // Progress Data
-  const progressData = [
-    { month: 'يناير', score: 65 },
-    { month: 'فبراير', score: 68 },
-    { month: 'مارس', score: 70 },
-    { month: 'أبريل', score: 71 },
-    { month: 'مايو', score: 73 }
-  ];
+ // Progress Data
+ const progressData = [
+ { month: 'يناير', score: 65 },
+ { month: 'فبراير', score: 68 },
+ { month: 'مارس', score: 70 },
+ { month: 'أبريل', score: 71 },
+ { month: 'مايو', score: 73 }
+ ];
 
-  // Benchmark Comparison
-  const benchmarkData = [
-    { name: 'منظمتك', value: overallScore, color: '#3b82f6' },
-    { name: 'متوسط القطاع', value: 68, color: '#94a3b8' },
-    { name: 'أفضل ممارسة', value: 85, color: '#10b981' }
-  ];
+ // Benchmark Comparison
+ const benchmarkData = [
+ { name: 'منظمتك', value: overallScore, color: '#3b82f6' },
+ { name: 'متوسط القطاع', value: 68, color: '#94a3b8' },
+ { name: 'أفضل ممارسة', value: 85, color: '#10b981' }
+ ];
 
-  const getPriorityColor = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'text-red-500';
-      case 'medium':
-        return 'text-yellow-500';
-      default:
-        return 'text-blue-500';
-    }
-  };
+ const getPriorityColor = (priority: string) => {
+ switch (priority) {
+ case 'high':
+ return 'text-red-500';
+ case 'medium':
+ return 'text-yellow-500';
+ default:
+ return 'text-[var(--secondary)]';
+ }
+ };
 
-  const getPriorityBg = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'bg-red-500/10 border-red-500/20';
-      case 'medium':
-        return 'bg-yellow-500/10 border-yellow-500/20';
-      default:
-        return 'bg-blue-500/10 border-blue-500/20';
-    }
-  };
+ const getPriorityBg = (priority: string) => {
+ switch (priority) {
+ case 'high':
+ return 'bg-[var(--destructive)]/10 border-red-500/20';
+ case 'medium':
+ return 'bg-yellow-500/10 border-yellow-500/20';
+ default:
+ return 'bg-[var(--primary)]/10 border-[var(--secondary)]/[0.2]';
+ }
+ };
 
-  const getPriorityLabel = (priority: string) => {
-    switch (priority) {
-      case 'high':
-        return 'عالي';
-      case 'medium':
-        return 'متوسط';
-      default:
-        return 'منخفض';
-    }
-  };
+ const getPriorityLabel = (priority: string) => {
+ switch (priority) {
+ case 'high':
+ return 'عالي';
+ case 'medium':
+ return 'متوسط';
+ default:
+ return 'منخفض';
+ }
+ };
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical':
-        return 'text-red-500';
-      case 'high':
-        return 'text-orange-500';
-      default:
-        return 'text-yellow-500';
-    }
-  };
+ const getSeverityColor = (severity: string) => {
+ switch (severity) {
+ case 'critical':
+ return 'text-red-500';
+ case 'high':
+ return 'text-orange-500';
+ default:
+ return 'text-yellow-500';
+ }
+ };
 
-  // Start Screen
-  if (currentView === 'start') {
-    return (
-      <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
-        <div className="max-w-4xl w-full">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6">
-              <Sparkles className="w-10 h-10 text-white" />
-            </div>
-            <h1 className="text-4xl font-bold mb-4">تقييم ISIV</h1>
-            <p className="text-xl text-muted-foreground mb-2">
-              تقييم جاهزية المنظمات الخيرية - نموذج ISIV
-            </p>
-            <p className="text-muted-foreground">
-              4 أبعاد • 24 سؤال • 120 نقطة
-            </p>
-          </div>
+ // Start Screen
+ if (currentView === 'start') {
+ return (
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
+ <div className="max-w-4xl w-full">
+ <div className="text-center mb-8">
+ <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6">
+ <Sparkles className="w-10 h-10 text-[var(--primary-foreground)]" />
+ </div>
+ <h1 className="text-4xl font-bold mb-4">تقييم ISIV</h1>
+ <p className="text-xl text-muted-foreground mb-2">
+ تقييم جاهزية المنظمات الخيرية - نموذج ISIV
+ </p>
+ <p className="text-muted-foreground">
+ 4 أبعاد • 24 سؤال • 120 نقطة
+ </p>
+ </div>
 
-          <div className="bg-card border border-border rounded-xl p-8 mb-6">
-            <h2 className="text-2xl font-semibold mb-6">أبعاد التقييم</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {dimensions.map((dim) => {
-                const Icon = dim.icon;
-                return (
-                  <div key={dim.id} className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
-                    <Icon className="w-5 h-5 text-blue-500" />
-                    <div>
-                      <span className="font-medium">{dim.name}</span>
-                      <p className="text-xs text-muted-foreground">{dim.nameEn} ({dim.code})</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-              <p className="text-sm text-muted-foreground">
-                <strong>ISIV</strong> = <strong>I</strong>nstitutional Building + <strong>S</strong>ustainability + <strong>I</strong>ntelligence + <strong>V</strong>alue
-              </p>
-              <p className="text-sm text-muted-foreground mt-1">
-                كل بُعد يحتوي على 6 أسئلة، بحد أقصى 30 نقطة لكل بُعد (5 نقاط للسؤال)
-              </p>
-            </div>
-          </div>
+ <div className="bg-card border border-border rounded-xl p-8 mb-6">
+ <h2 className="text-2xl font-semibold mb-6">أبعاد التقييم</h2>
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+ {dimensions.map((dim) => {
+ const Icon = dim.icon;
+ return (
+ <div key={dim.id} className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+ <Icon className="w-5 h-5 text-[var(--secondary)]" />
+ <div>
+ <span className="font-medium">{dim.name}</span>
+ <p className="text-xs text-muted-foreground">{dim.nameEn} ({dim.code})</p>
+ </div>
+ </div>
+ );
+ })}
+ </div>
+ <div className="mt-4 p-4 bg-[var(--secondary)]/[0.08] rounded-lg">
+ <p className="text-sm text-muted-foreground">
+ <strong>ISIV</strong> = <strong>I</strong>nstitutional Building + <strong>S</strong>ustainability + <strong>I</strong>ntelligence + <strong>V</strong>alue
+ </p>
+ <p className="text-sm text-muted-foreground mt-1">
+ كل بُعد يحتوي على 6 أسئلة، بحد أقصى 30 نقطة لكل بُعد (5 نقاط للسؤال)
+ </p>
+ </div>
+ </div>
 
-          <div className="bg-card border border-border rounded-xl p-8 mb-6">
-            <h3 className="font-semibold mb-4">ما الذي ستحصل عليه:</h3>
-            <div className="space-y-3">
-              {[
-                'تقييم شامل عبر 4 أبعاد استراتيجية (ISIV)',
-                'درجة إجمالية من 120 نقطة مع حالة التأهيل',
-                'تحليل الفجوات ونقاط القوة لكل بُعد',
-                'خارطة طريق مخصصة للتحسين',
-                'توصيات مدعومة بالذكاء الاصطناعي',
-                'مقارنة مع معايير القطاع'
-              ].map((item, index) => (
-                <div key={index} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+ <div className="bg-card border border-border rounded-xl p-8 mb-6">
+ <h3 className="font-semibold mb-4">ما الذي ستحصل عليه:</h3>
+ <div className="space-y-3">
+ {[
+ 'تقييم شامل عبر 4 أبعاد استراتيجية (ISIV)',
+ 'درجة إجمالية من 120 نقطة مع حالة التأهيل',
+ 'تحليل الفجوات ونقاط القوة لكل بُعد',
+ 'خارطة طريق مخصصة للتحسين',
+ 'توصيات مدعومة بالذكاء الاصطناعي',
+ 'مقارنة مع معايير القطاع'
+ ].map((item, index) => (
+ <div key={index} className="flex items-start gap-3">
+ <CheckCircle2 className="w-5 h-5 text-[var(--primary)] flex-shrink-0 mt-0.5" />
+ <span>{item}</span>
+ </div>
+ ))}
+ </div>
+ </div>
 
-          <div className="flex gap-4">
-            <button
-              onClick={() => setCurrentView('assessment')}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all text-lg font-medium"
-            >
-              <Play className="w-5 h-5" />
-              بدء التقييم
-            </button>
-            <button
-              onClick={() => setCurrentView('results')}
-              className="px-6 py-4 border border-border rounded-xl hover:bg-muted transition-colors font-medium"
-            >
-              عرض نتائج سابقة
-            </button>
-          </div>
+ <div className="flex gap-4">
+ <button
+ onClick={() => setCurrentView('assessment')}
+ className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all text-lg font-medium"
+ >
+ <Play className="w-5 h-5" />
+ بدء التقييم
+ </button>
+ <button
+ onClick={() => setCurrentView('results')}
+ className="px-6 py-4 border border-border rounded-xl hover:bg-muted transition-colors font-medium"
+ >
+ عرض نتائج سابقة
+ </button>
+ </div>
 
-          <p className="text-center text-sm text-muted-foreground mt-6">
-            <Clock className="w-4 h-4 inline mr-1" />
-            المدة المتوقعة: 15-20 دقيقة (6 أسئلة لكل بُعد)
-          </p>
-        </div>
-      </div>
-    );
-  }
+ <p className="text-center text-sm text-muted-foreground mt-6">
+ <Clock className="w-4 h-4 inline mr-1" />
+ المدة المتوقعة: 15-20 دقيقة (6 أسئلة لكل بُعد)
+ </p>
+ </div>
+ </div>
+ );
+ }
 
-  // Assessment Wizard - ISIV 4 Dimensions, 6 Questions Each
-  if (currentView === 'assessment') {
-    const currentDimension = dimensions[currentStep];
-    const progress = ((currentStep + 1) / dimensions.length) * 100;
-    const questionProgress = ((currentDimension.questions.filter(q => q.answer !== undefined).length) / currentDimension.questions.length) * 100;
+ // Assessment Wizard - ISIV 4 Dimensions, 6 Questions Each
+ if (currentView === 'assessment') {
+ const currentDimension = dimensions[currentStep];
+ const progress = ((currentStep + 1) / dimensions.length) * 100;
+ const questionProgress = ((currentDimension.questions.filter(q => q.answer !== undefined).length) / currentDimension.questions.length) * 100;
 
-    return (
-      <div className="min-h-full bg-background">
-        {/* Progress Header */}
-        <div className="bg-card border-b border-border sticky top-0 z-10">
-          <div className="max-w-4xl mx-auto p-6">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h2 className="text-xl font-semibold">{currentCategory.name}</h2>
-                <p className="text-sm text-muted-foreground">
-                  القسم {currentStep + 1} من {categories.length}
-                </p>
-              </div>
-              <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
-                <Save className="w-4 h-4" />
-                حفظ ومتابعة لاحقاً
-              </button>
-            </div>
-            <div className="w-full bg-muted rounded-full h-2">
-              <div
-                className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-          </div>
-        </div>
+ return (
+ <div className="min-h-full bg-background">
+ {/* Progress Header */}
+ <div className="bg-card border-b border-border sticky top-0 z-10">
+ <div className="max-w-4xl mx-auto p-6">
+ <div className="flex items-center justify-between mb-4">
+ <div>
+ <h2 className="text-xl font-semibold">{currentCategory.name}</h2>
+ <p className="text-sm text-muted-foreground">
+ القسم {currentStep + 1} من {categories.length}
+ </p>
+ </div>
+ <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+ <Save className="w-4 h-4" />
+ حفظ ومتابعة لاحقاً
+ </button>
+ </div>
+ <div className="w-full bg-muted rounded-full h-2">
+ <div
+ className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all"
+ style={{ width: `${progress}%` }}
+ />
+ </div>
+ </div>
+ </div>
 
-        {/* Questions */}
-        <div className="max-w-4xl mx-auto p-6">
-          <div className="bg-card border border-border rounded-xl p-8 mb-6">
-            <div className="flex items-center gap-3 mb-6">
-              {(() => {
-                const Icon = currentCategory.icon;
-                return <Icon className="w-6 h-6 text-blue-500" />;
-              })()}
-              <h3 className="text-lg font-medium">الأسئلة</h3>
-            </div>
+ {/* Questions */}
+ <div className="max-w-4xl mx-auto p-6">
+ <div className="bg-card border border-border rounded-xl p-8 mb-6">
+ <div className="flex items-center gap-3 mb-6">
+ {(() => {
+ const Icon = currentCategory.icon;
+ return <Icon className="w-6 h-6 text-[var(--secondary)]" />;
+ })()}
+ <h3 className="text-lg font-medium">الأسئلة</h3>
+ </div>
 
-            <div className="space-y-6">
-              {currentCategory.questions.map((q, index) => (
-                <div key={q.id} className="border border-border rounded-lg p-6">
-                  <p className="font-medium mb-4">
-                    {index + 1}. {q.question}
-                  </p>
+ <div className="space-y-6">
+ {currentCategory.questions.map((q, index) => (
+ <div key={q.id} className="border border-border rounded-lg p-6">
+ <p className="font-medium mb-4">
+ {index + 1}. {q.question}
+ </p>
 
-                  {q.type === 'yesno' && (
-                    <div className="flex gap-3">
-                      <button className="flex-1 px-4 py-3 border-2 border-green-500 text-green-500 rounded-lg hover:bg-green-500/10 transition-colors">
-                        نعم
-                      </button>
-                      <button className="flex-1 px-4 py-3 border-2 border-border rounded-lg hover:bg-muted transition-colors">
-                        لا
-                      </button>
-                    </div>
-                  )}
+ {q.type === 'yesno' && (
+ <div className="flex gap-3">
+ <button className="flex-1 px-4 py-3 border-2 border-green-500 text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1] transition-colors">
+ نعم
+ </button>
+ <button className="flex-1 px-4 py-3 border-2 border-border rounded-lg hover:bg-muted transition-colors">
+ لا
+ </button>
+ </div>
+ )}
 
-                  {q.type === 'scale' && (
-                    <div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        defaultValue="50"
-                        className="w-full mb-2"
-                      />
-                      <div className="flex justify-between text-sm text-muted-foreground">
-                        <span>منخفض</span>
-                        <span>متوسط</span>
-                        <span>عالي</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+ {q.type === 'scale' && (
+ <div>
+ <input
+ type="range"
+ min="0"
+ max="100"
+ defaultValue="50"
+ className="w-full mb-2"
+ />
+ <div className="flex justify-between text-sm text-muted-foreground">
+ <span>منخفض</span>
+ <span>متوسط</span>
+ <span>عالي</span>
+ </div>
+ </div>
+ )}
+ </div>
+ ))}
+ </div>
+ </div>
 
-          {/* AI Insights */}
-          {showAIInsights && (
-            <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-6 mb-6">
-              <div className="flex items-start gap-3">
-                <Brain className="w-6 h-6 text-purple-500 flex-shrink-0" />
-                <div>
-                  <h4 className="font-medium mb-2">ملاحظة من الذكاء الاصطناعي</h4>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    بناءً على إجاباتك السابقة، نلاحظ أن لديكم أساس قوي في {currentCategory.name}.
-                    للحصول على تقييم دقيق، يُنصح بالإجابة على جميع الأسئلة بموضوعية.
-                  </p>
-                  <button className="text-sm text-purple-500 hover:underline">
-                    معرفة المزيد عن كيفية التقييم
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
+ {/* AI Insights */}
+ {showAIInsights && (
+ <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-6 mb-6">
+ <div className="flex items-start gap-3">
+ <Brain className="w-6 h-6 text-purple-500 flex-shrink-0" />
+ <div>
+ <h4 className="font-medium mb-2">ملاحظة من الذكاء الاصطناعي</h4>
+ <p className="text-sm text-muted-foreground mb-3">
+ بناءً على إجاباتك السابقة، نلاحظ أن لديكم أساس قوي في {currentCategory.name}.
+ للحصول على تقييم دقيق، يُنصح بالإجابة على جميع الأسئلة بموضوعية.
+ </p>
+ <button className="text-sm text-purple-500 hover:underline">
+ معرفة المزيد عن كيفية التقييم
+ </button>
+ </div>
+ </div>
+ </div>
+ )}
 
-          {/* Navigation */}
-          <div className="flex gap-4">
-            {currentStep > 0 && (
-              <button
-                onClick={() => setCurrentStep(currentStep - 1)}
-                className="flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors"
-              >
-                <ArrowRight className="w-5 h-5" />
-                السابق
-              </button>
-            )}
-            <button
-              onClick={() => {
-                if (currentStep < categories.length - 1) {
-                  setCurrentStep(currentStep + 1);
-                } else {
-                  setCurrentView('results');
-                }
-              }}
-              className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
-            >
-              {currentStep < categories.length - 1 ? 'التالي' : 'إنهاء التقييم'}
-              <ArrowLeft className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+ {/* Navigation */}
+ <div className="flex gap-4">
+ {currentStep > 0 && (
+ <button
+ onClick={() => setCurrentStep(currentStep - 1)}
+ className="flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors"
+ >
+ <ArrowRight className="w-5 h-5" />
+ السابق
+ </button>
+ )}
+ <button
+ onClick={() => {
+ if (currentStep < categories.length - 1) {
+ setCurrentStep(currentStep + 1);
+ } else {
+ setCurrentView('results');
+ }
+ }}
+ className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+ >
+ {currentStep < categories.length - 1 ? 'التالي' : 'إنهاء التقييم'}
+ <ArrowLeft className="w-5 h-5" />
+ </button>
+ </div>
+ </div>
+ </div>
+ );
+ }
 
-  // Results Dashboard
-  if (currentView === 'results') {
-    return (
-      <div className="min-h-full bg-background">
-        {/* Header */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-          <div className="max-w-7xl mx-auto p-8">
-            <div className="flex items-start justify-between mb-6">
-              <div>
-                <h1 className="text-3xl font-bold mb-2">نتائج تقييم الجاهزية</h1>
-                <p className="text-blue-100">تم إكمال التقييم بنجاح • تم التحديث في 11 مايو 2026</p>
-              </div>
-              <div className="flex gap-3">
-                <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
-                  <Download className="w-4 h-4" />
-                  تصدير PDF
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors">
-                  <Share2 className="w-4 h-4" />
-                  مشاركة
-                </button>
-                <button
-                  onClick={() => setCurrentView('assessment')}
-                  className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  إعادة التقييم
-                </button>
-              </div>
-            </div>
+ // Results Dashboard
+ if (currentView === 'results') {
+ return (
+ <div className="min-h-full bg-background">
+ {/* Header */}
+ <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)]">
+ <div className="max-w-7xl mx-auto p-8">
+ <div className="flex items-start justify-between mb-6">
+ <div>
+ <h1 className="text-3xl font-bold mb-2">نتائج تقييم الجاهزية</h1>
+ <p className="text-[var(--secondary)]/[0.4]">تم إكمال التقييم بنجاح • تم التحديث في 11 مايو 2026</p>
+ </div>
+ <div className="flex gap-3">
+ <button className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors">
+ <Download className="w-4 h-4" />
+ تصدير PDF
+ </button>
+ <button className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors">
+ <Share2 className="w-4 h-4" />
+ مشاركة
+ </button>
+ <button
+ onClick={() => setCurrentView('assessment')}
+ className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors"
+ >
+ <RefreshCw className="w-4 h-4" />
+ إعادة التقييم
+ </button>
+ </div>
+ </div>
 
-            {/* Overall Score */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <div className="bg-white/10 backdrop-blur rounded-xl p-6">
-                <p className="text-blue-100 mb-2">درجة الجاهزية الإجمالية</p>
-                <div className="flex items-end gap-3">
-                  <span className="text-5xl font-bold">{overallScore}%</span>
-                  <span className={`px-3 py-1 ${readinessLevel.bg}/20 border border-white/20 rounded-full text-sm mb-2`}>
-                    {readinessLevel.label}
-                  </span>
-                </div>
-              </div>
+ {/* Overall Score */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+ <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
+ <p className="text-[var(--secondary)]/[0.4] mb-2">درجة الجاهزية الإجمالية</p>
+ <div className="flex items-end gap-3">
+ <span className="text-5xl font-bold">{overallScore}%</span>
+ <span className={`px-3 py-1 ${readinessLevel.bg}/20 border border-[var(--primary-foreground)]/[0.2] rounded-full text-sm mb-2`}>
+ {readinessLevel.label}
+ </span>
+ </div>
+ </div>
 
-              <div className="bg-white/10 backdrop-blur rounded-xl p-6">
-                <p className="text-blue-100 mb-2">مقارنة بمتوسط القطاع</p>
-                <div className="flex items-end gap-2">
-                  <TrendingUp className="w-6 h-6 mb-1" />
-                  <span className="text-3xl font-bold">+5%</span>
-                </div>
-                <p className="text-sm text-blue-100 mt-2">أعلى من المتوسط</p>
-              </div>
+ <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
+ <p className="text-[var(--secondary)]/[0.4] mb-2">مقارنة بمتوسط القطاع</p>
+ <div className="flex items-end gap-2">
+ <TrendingUp className="w-6 h-6 mb-1" />
+ <span className="text-3xl font-bold">+5%</span>
+ </div>
+ <p className="text-sm text-[var(--secondary)]/[0.4] mt-2">أعلى من المتوسط</p>
+ </div>
 
-              <div className="bg-white/10 backdrop-blur rounded-xl p-6">
-                <p className="text-blue-100 mb-2">التقدم منذ آخر تقييم</p>
-                <div className="flex items-end gap-2">
-                  <Activity className="w-6 h-6 mb-1" />
-                  <span className="text-3xl font-bold">+8%</span>
-                </div>
-                <p className="text-sm text-blue-100 mt-2">تحسن ملحوظ</p>
-              </div>
-            </div>
-          </div>
-        </div>
+ <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
+ <p className="text-[var(--secondary)]/[0.4] mb-2">التقدم منذ آخر تقييم</p>
+ <div className="flex items-end gap-2">
+ <Activity className="w-6 h-6 mb-1" />
+ <span className="text-3xl font-bold">+8%</span>
+ </div>
+ <p className="text-sm text-[var(--secondary)]/[0.4] mt-2">تحسن ملحوظ</p>
+ </div>
+ </div>
+ </div>
+ </div>
 
-        {/* Main Content */}
-        <div className="max-w-7xl mx-auto p-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {/* Radar Chart */}
-            <div className="col-span-2 bg-card border border-border rounded-xl p-6">
-              <h2 className="text-xl font-semibold mb-6">نظرة شاملة على الأداء</h2>
-              <ResponsiveContainer width="100%" height={400}>
-                <RadarChart data={radarData}>
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="category" />
-                  <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                  <Radar name="درجتك" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
-                  <Radar name="المتوسط" dataKey={80} stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.3} />
-                  <Tooltip />
-                </RadarChart>
-              </ResponsiveContainer>
-            </div>
+ {/* Main Content */}
+ <div className="max-w-7xl mx-auto p-8">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+ {/* Radar Chart */}
+ <div className="col-span-2 bg-card border border-border rounded-xl p-6">
+ <h2 className="text-xl font-semibold mb-6">نظرة شاملة على الأداء</h2>
+ <ResponsiveContainer width="100%" height={400}>
+ <RadarChart data={radarData}>
+ <PolarGrid />
+ <PolarAngleAxis dataKey="category" />
+ <PolarRadiusAxis angle={90} domain={[0, 100]} />
+ <Radar name="درجتك" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.6} />
+ <Radar name="المتوسط" dataKey={80} stroke="#94a3b8" fill="#94a3b8" fillOpacity={0.3} />
+ <Tooltip />
+ </RadarChart>
+ </ResponsiveContainer>
+ </div>
 
-            {/* Quick Stats */}
-            <div className="space-y-4">
-              <div className="bg-card border border-border rounded-xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Star className="w-8 h-8 text-yellow-500" />
-                  <Award className="w-6 h-6 text-blue-500" />
-                </div>
-                <p className="text-2xl font-bold mb-1">3</p>
-                <p className="text-sm text-muted-foreground">نقاط قوة رئيسية</p>
-              </div>
+ {/* Quick Stats */}
+ <div className="space-y-4">
+ <div className="bg-card border border-border rounded-xl p-6">
+ <div className="flex items-center justify-between mb-4">
+ <Star className="w-8 h-8 text-yellow-500" />
+ <Award className="w-6 h-6 text-[var(--secondary)]" />
+ </div>
+ <p className="text-2xl font-bold mb-1">3</p>
+ <p className="text-sm text-muted-foreground">نقاط قوة رئيسية</p>
+ </div>
 
-              <div className="bg-card border border-border rounded-xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <AlertTriangle className="w-8 h-8 text-orange-500" />
-                  <Target className="w-6 h-6 text-red-500" />
-                </div>
-                <p className="text-2xl font-bold mb-1">3</p>
-                <p className="text-sm text-muted-foreground">مجالات تحتاج تحسين</p>
-              </div>
+ <div className="bg-card border border-border rounded-xl p-6">
+ <div className="flex items-center justify-between mb-4">
+ <AlertTriangle className="w-8 h-8 text-orange-500" />
+ <Target className="w-6 h-6 text-red-500" />
+ </div>
+ <p className="text-2xl font-bold mb-1">3</p>
+ <p className="text-sm text-muted-foreground">مجالات تحتاج تحسين</p>
+ </div>
 
-              <div className="bg-card border border-border rounded-xl p-6">
-                <div className="flex items-center justify-between mb-4">
-                  <Lightbulb className="w-8 h-8 text-purple-500" />
-                  <Sparkles className="w-6 h-6 text-blue-500" />
-                </div>
-                <p className="text-2xl font-bold mb-1">5</p>
-                <p className="text-sm text-muted-foreground">توصيات مخصصة</p>
-              </div>
-            </div>
-          </div>
+ <div className="bg-card border border-border rounded-xl p-6">
+ <div className="flex items-center justify-between mb-4">
+ <Lightbulb className="w-8 h-8 text-purple-500" />
+ <Sparkles className="w-6 h-6 text-[var(--secondary)]" />
+ </div>
+ <p className="text-2xl font-bold mb-1">5</p>
+ <p className="text-sm text-muted-foreground">توصيات مخصصة</p>
+ </div>
+ </div>
+ </div>
 
-          {/* Benchmark Comparison */}
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-6">المقارنة المعيارية</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={benchmarkData}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis dataKey="name" />
-                <YAxis domain={[0, 100]} />
-                <Tooltip />
-                <Bar dataKey="value" radius={[8, 8, 0, 0]}>
-                  {benchmarkData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Bar>
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
+ {/* Benchmark Comparison */}
+ <div className="bg-card border border-border rounded-xl p-6 mb-8">
+ <h2 className="text-xl font-semibold mb-6">المقارنة المعيارية</h2>
+ <ResponsiveContainer width="100%" height={300}>
+ <BarChart data={benchmarkData}>
+ <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+ <XAxis dataKey="name" />
+ <YAxis domain={[0, 100]} />
+ <Tooltip />
+ <Bar dataKey="value" radius={[8, 8, 0, 0]}>
+ {benchmarkData.map((entry, index) => (
+ <Cell key={`cell-${index}`} fill={entry.color} />
+ ))}
+ </Bar>
+ </BarChart>
+ </ResponsiveContainer>
+ </div>
 
-          {/* Strengths */}
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Star className="w-6 h-6 text-yellow-500" />
-              <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
-            </div>
-            <div className="space-y-4">
-              {strengths.map((strength, index) => (
-                <div key={index} className="bg-green-500/5 border border-green-500/20 rounded-lg p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="font-medium mb-1">{strength.category}</h3>
-                      <p className="text-sm text-muted-foreground">{strength.insight}</p>
-                    </div>
-                    <div className="text-left">
-                      <p className="text-2xl font-bold text-green-500">{strength.score}%</p>
-                    </div>
-                  </div>
-                  <div className="w-full bg-muted rounded-full h-2">
-                    <div
-                      className="bg-green-500 h-2 rounded-full"
-                      style={{ width: `${strength.score}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+ {/* Strengths */}
+ <div className="bg-card border border-border rounded-xl p-6 mb-8">
+ <div className="flex items-center gap-3 mb-6">
+ <Star className="w-6 h-6 text-yellow-500" />
+ <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
+ </div>
+ <div className="space-y-4">
+ {strengths.map((strength, index) => (
+ <div key={index} className="bg-[var(--primary)]/5 border border-[var(--primary)]/[0.2] rounded-lg p-5">
+ <div className="flex items-start justify-between mb-3">
+ <div>
+ <h3 className="font-medium mb-1">{strength.category}</h3>
+ <p className="text-sm text-muted-foreground">{strength.insight}</p>
+ </div>
+ <div className="text-left">
+ <p className="text-2xl font-bold text-[var(--primary)]">{strength.score}%</p>
+ </div>
+ </div>
+ <div className="w-full bg-muted rounded-full h-2">
+ <div
+ className="bg-[var(--primary)] h-2 rounded-full"
+ style={{ width: `${strength.score}%` }}
+ />
+ </div>
+ </div>
+ ))}
+ </div>
+ </div>
 
-          {/* Gaps */}
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <div className="flex items-center gap-3 mb-6">
-              <AlertTriangle className="w-6 h-6 text-orange-500" />
-              <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
-            </div>
-            <div className="space-y-4">
-              {gaps.map((gap, index) => (
-                <div key={index} className={`border rounded-lg p-5 ${
-                  gap.severity === 'critical' ? 'bg-red-500/5 border-red-500/20' :
-                  gap.severity === 'high' ? 'bg-orange-500/5 border-orange-500/20' :
-                  'bg-yellow-500/5 border-yellow-500/20'
-                }`}>
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h3 className="font-medium">{gap.category}</h3>
-                        <span className={`px-2 py-0.5 rounded-lg text-xs ${getSeverityColor(gap.severity)}`}>
-                          {gap.severity === 'critical' ? 'حرج' : gap.severity === 'high' ? 'عالي' : 'متوسط'}
-                        </span>
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
-                      <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
-                        <Lightbulb className="w-4 h-4 text-blue-500 flex-shrink-0 mt-0.5" />
-                        <p className="text-sm">{gap.recommendation}</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+ {/* Gaps */}
+ <div className="bg-card border border-border rounded-xl p-6 mb-8">
+ <div className="flex items-center gap-3 mb-6">
+ <AlertTriangle className="w-6 h-6 text-orange-500" />
+ <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
+ </div>
+ <div className="space-y-4">
+ {gaps.map((gap, index) => (
+ <div key={index} className={`border rounded-lg p-5 ${
+ gap.severity === 'critical' ? 'bg-[var(--destructive)]/5 border-red-500/20' :
+ gap.severity === 'high' ? 'bg-orange-500/5 border-orange-500/20' :
+ 'bg-yellow-500/5 border-yellow-500/20'
+ }`}>
+ <div className="flex items-start justify-between mb-3">
+ <div className="flex-1">
+ <div className="flex items-center gap-2 mb-2">
+ <h3 className="font-medium">{gap.category}</h3>
+ <span className={`px-2 py-0.5 rounded-lg text-xs ${getSeverityColor(gap.severity)}`}>
+ {gap.severity === 'critical' ? 'حرج' : gap.severity === 'high' ? 'عالي' : 'متوسط'}
+ </span>
+ </div>
+ <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
+ <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
+ <Lightbulb className="w-4 h-4 text-[var(--secondary)] flex-shrink-0 mt-0.5" />
+ <p className="text-sm">{gap.recommendation}</p>
+ </div>
+ </div>
+ </div>
+ </div>
+ ))}
+ </div>
+ </div>
 
-          {/* Progress Tracking */}
-          <div className="bg-card border border-border rounded-xl p-6 mb-8">
-            <h2 className="text-xl font-semibold mb-6">تتبع التقدم</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <RechartsLineChart data={progressData}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-                <XAxis dataKey="month" />
-                <YAxis domain={[0, 100]} />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={3} name="درجة الجاهزية" />
-              </RechartsLineChart>
-            </ResponsiveContainer>
-          </div>
+ {/* Progress Tracking */}
+ <div className="bg-card border border-border rounded-xl p-6 mb-8">
+ <h2 className="text-xl font-semibold mb-6">تتبع التقدم</h2>
+ <ResponsiveContainer width="100%" height={300}>
+ <RechartsLineChart data={progressData}>
+ <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
+ <XAxis dataKey="month" />
+ <YAxis domain={[0, 100]} />
+ <Tooltip />
+ <Legend />
+ <Line type="monotone" dataKey="score" stroke="#3b82f6" strokeWidth={3} name="درجة الجاهزية" />
+ </RechartsLineChart>
+ </ResponsiveContainer>
+ </div>
 
-          {/* CTA */}
-          <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-blue-500/20 rounded-xl p-8 text-center">
-            <h3 className="text-2xl font-semibold mb-3">جاهز للخطوة التالية؟</h3>
-            <p className="text-muted-foreground mb-6">
-              استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك
-            </p>
-            <button
-              onClick={() => setCurrentView('roadmap')}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
-            >
-              عرض خارطة الطريق
-              <ChevronRight className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
+ {/* CTA */}
+ <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-[var(--secondary)]/[0.2] rounded-xl p-8 text-center">
+ <h3 className="text-2xl font-semibold mb-3">جاهز للخطوة التالية؟</h3>
+ <p className="text-muted-foreground mb-6">
+ استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك
+ </p>
+ <button
+ onClick={() => setCurrentView('roadmap')}
+ className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+ >
+ عرض خارطة الطريق
+ <ChevronRight className="w-5 h-5" />
+ </button>
+ </div>
+ </div>
+ </div>
+ );
+ }
 
-  // Improvement Roadmap
-  if (currentView === 'roadmap') {
-    return (
-      <div className="min-h-full bg-background">
-        {/* Header */}
-        <div className="bg-card border-b border-border">
-          <div className="max-w-7xl mx-auto p-8">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h1 className="text-3xl font-bold mb-2">خارطة الطريق للتحسين</h1>
-                <p className="text-muted-foreground">خطة مخصصة لتحسين جاهزية منظمتك</p>
-              </div>
-              <button
-                onClick={() => setCurrentView('results')}
-                className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
-              >
-                <ArrowRight className="w-4 h-4" />
-                العودة للنتائج
-              </button>
-            </div>
+ // Improvement Roadmap
+ if (currentView === 'roadmap') {
+ return (
+ <div className="min-h-full bg-background">
+ {/* Header */}
+ <div className="bg-card border-b border-border">
+ <div className="max-w-7xl mx-auto p-8">
+ <div className="flex items-center justify-between mb-4">
+ <div>
+ <h1 className="text-3xl font-bold mb-2">خارطة الطريق للتحسين</h1>
+ <p className="text-muted-foreground">خطة مخصصة لتحسين جاهزية منظمتك</p>
+ </div>
+ <button
+ onClick={() => setCurrentView('results')}
+ className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+ >
+ <ArrowRight className="w-4 h-4" />
+ العودة للنتائج
+ </button>
+ </div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-muted/50 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">إجمالي المبادرات</p>
-                <p className="text-2xl font-bold">{roadmapItems.length}</p>
-              </div>
-              <div className="bg-blue-500/10 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">قيد التنفيذ</p>
-                <p className="text-2xl font-bold text-blue-500">
-                  {roadmapItems.filter(i => i.status === 'in-progress').length}
-                </p>
-              </div>
-              <div className="bg-green-500/10 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">مكتمل</p>
-                <p className="text-2xl font-bold text-green-500">
-                  {roadmapItems.filter(i => i.status === 'completed').length}
-                </p>
-              </div>
-              <div className="bg-purple-500/10 rounded-lg p-4">
-                <p className="text-sm text-muted-foreground mb-1">التأثير المتوقع</p>
-                <p className="text-2xl font-bold text-purple-500">+15%</p>
-              </div>
-            </div>
-          </div>
-        </div>
+ {/* Stats */}
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+ <div className="bg-muted/50 rounded-lg p-4">
+ <p className="text-sm text-muted-foreground mb-1">إجمالي المبادرات</p>
+ <p className="text-2xl font-bold">{roadmapItems.length}</p>
+ </div>
+ <div className="bg-[var(--primary)]/10 rounded-lg p-4">
+ <p className="text-sm text-muted-foreground mb-1">قيد التنفيذ</p>
+ <p className="text-2xl font-bold text-[var(--secondary)]">
+ {roadmapItems.filter(i => i.status === 'in-progress').length}
+ </p>
+ </div>
+ <div className="bg-[var(--primary)]/[0.1] rounded-lg p-4">
+ <p className="text-sm text-muted-foreground mb-1">مكتمل</p>
+ <p className="text-2xl font-bold text-[var(--primary)]">
+ {roadmapItems.filter(i => i.status === 'completed').length}
+ </p>
+ </div>
+ <div className="bg-purple-500/10 rounded-lg p-4">
+ <p className="text-sm text-muted-foreground mb-1">التأثير المتوقع</p>
+ <p className="text-2xl font-bold text-purple-500">+15%</p>
+ </div>
+ </div>
+ </div>
+ </div>
 
-        {/* Roadmap Items */}
-        <div className="max-w-7xl mx-auto p-8">
-          <div className="space-y-4">
-            {roadmapItems.map((item, index) => (
-              <div key={item.id} className={`border rounded-xl p-6 ${getPriorityBg(item.priority)}`}>
-                <div className="flex items-start gap-4">
-                  <div className="flex flex-col items-center gap-2">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      item.status === 'completed' ? 'bg-green-500' :
-                      item.status === 'in-progress' ? 'bg-blue-500' : 'bg-muted'
-                    }`}>
-                      {item.status === 'completed' ? (
-                        <CheckCircle2 className="w-5 h-5 text-white" />
-                      ) : item.status === 'in-progress' ? (
-                        <Clock className="w-5 h-5 text-white" />
-                      ) : (
-                        <span className="text-white font-bold">{index + 1}</span>
-                      )}
-                    </div>
-                    {index < roadmapItems.length - 1 && (
-                      <div className="w-0.5 h-16 bg-border" />
-                    )}
-                  </div>
+ {/* Roadmap Items */}
+ <div className="max-w-7xl mx-auto p-8">
+ <div className="space-y-4">
+ {roadmapItems.map((item, index) => (
+ <div key={item.id} className={`border rounded-xl p-6 ${getPriorityBg(item.priority)}`}>
+ <div className="flex items-start gap-4">
+ <div className="flex flex-col items-center gap-2">
+ <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
+ item.status === 'completed' ? 'bg-[var(--primary)]' :
+ item.status === 'in-progress' ? 'bg-[var(--primary)]' : 'bg-muted'
+ }`}>
+ {item.status === 'completed' ? (
+ <CheckCircle2 className="w-5 h-5 text-[var(--primary-foreground)]" />
+ ) : item.status === 'in-progress' ? (
+ <Clock className="w-5 h-5 text-[var(--primary-foreground)]" />
+ ) : (
+ <span className="text-[var(--primary-foreground)] font-bold">{index + 1}</span>
+ )}
+ </div>
+ {index < roadmapItems.length - 1 && (
+ <div className="w-0.5 h-16 bg-border" />
+ )}
+ </div>
 
-                  <div className="flex-1">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <div className="flex items-center gap-2 mb-2">
-                          <h3 className="text-lg font-semibold">{item.title}</h3>
-                          <span className={`px-2 py-0.5 rounded-lg text-xs ${getPriorityColor(item.priority)}`}>
-                            أولوية {getPriorityLabel(item.priority)}
-                          </span>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{item.category}</p>
-                      </div>
-                      <div className="text-left">
-                        <p className="text-sm text-muted-foreground mb-1">موعد الانتهاء</p>
-                        <div className="flex items-center gap-1">
-                          <Calendar className="w-4 h-4" />
-                          <span className="font-medium">{item.dueDate}</span>
-                        </div>
-                      </div>
-                    </div>
+ <div className="flex-1">
+ <div className="flex items-start justify-between mb-3">
+ <div>
+ <div className="flex items-center gap-2 mb-2">
+ <h3 className="text-lg font-semibold">{item.title}</h3>
+ <span className={`px-2 py-0.5 rounded-lg text-xs ${getPriorityColor(item.priority)}`}>
+ أولوية {getPriorityLabel(item.priority)}
+ </span>
+ </div>
+ <p className="text-sm text-muted-foreground">{item.category}</p>
+ </div>
+ <div className="text-left">
+ <p className="text-sm text-muted-foreground mb-1">موعد الانتهاء</p>
+ <div className="flex items-center gap-1">
+ <Calendar className="w-4 h-4" />
+ <span className="font-medium">{item.dueDate}</span>
+ </div>
+ </div>
+ </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                      <div className="bg-card/50 rounded-lg p-3">
-                        <p className="text-xs text-muted-foreground mb-1">الجهد المطلوب</p>
-                        <p className="font-medium">{item.effort}</p>
-                      </div>
-                      <div className="bg-card/50 rounded-lg p-3">
-                        <p className="text-xs text-muted-foreground mb-1">التأثير المتوقع</p>
-                        <p className="font-medium">{item.impact}</p>
-                      </div>
-                    </div>
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+ <div className="bg-card/50 rounded-lg p-3">
+ <p className="text-xs text-muted-foreground mb-1">الجهد المطلوب</p>
+ <p className="font-medium">{item.effort}</p>
+ </div>
+ <div className="bg-card/50 rounded-lg p-3">
+ <p className="text-xs text-muted-foreground mb-1">التأثير المتوقع</p>
+ <p className="font-medium">{item.impact}</p>
+ </div>
+ </div>
 
-                    {item.status === 'in-progress' && (
-                      <div className="mb-3">
-                        <div className="flex items-center justify-between text-sm mb-1">
-                          <span>التقدم</span>
-                          <span>35%</span>
-                        </div>
-                        <div className="w-full bg-muted rounded-full h-2">
-                          <div className="bg-blue-500 h-2 rounded-full" style={{ width: '35%' }} />
-                        </div>
-                      </div>
-                    )}
+ {item.status === 'in-progress' && (
+ <div className="mb-3">
+ <div className="flex items-center justify-between text-sm mb-1">
+ <span>التقدم</span>
+ <span>35%</span>
+ </div>
+ <div className="w-full bg-muted rounded-full h-2">
+ <div className="bg-[var(--primary)] h-2 rounded-full" style={{ width: '35%' }} />
+ </div>
+ </div>
+ )}
 
-                    <div className="flex gap-2">
-                      <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm">
-                        عرض التفاصيل
-                      </button>
-                      {item.status === 'pending' && (
-                        <button className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
-                          بدء العمل
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+ <div className="flex gap-2">
+ <button className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)] transition-colors text-sm">
+ عرض التفاصيل
+ </button>
+ {item.status === 'pending' && (
+ <button className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm">
+ بدء العمل
+ </button>
+ )}
+ </div>
+ </div>
+ </div>
+ </div>
+ ))}
+ </div>
 
-          {/* AI Recommendations */}
-          <div className="mt-8 bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-8">
-            <div className="flex items-start gap-4">
-              <Brain className="w-8 h-8 text-purple-500 flex-shrink-0" />
-              <div>
-                <h3 className="text-xl font-semibold mb-3">توصيات الذكاء الاصطناعي</h3>
-                <div className="space-y-3">
-                  <p className="text-muted-foreground">
-                    بناءً على تحليل شامل لنتائج تقييمك ومقارنتها بأفضل الممارسات في القطاع، نوصي بالبدء بـ "تطوير البنية التحتية التقنية" و "إنشاء إطار إدارة المخاطر" كأولوية قصوى.
-                  </p>
-                  <div className="flex items-start gap-2">
-                    <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
-                    <p className="text-sm">
-                      إتمام هاتين المبادرتين سيرفع درجة جاهزيتك الإجمالية من <strong>73%</strong> إلى <strong>81%</strong> المتوقعة.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
+ {/* AI Recommendations */}
+ <div className="mt-8 bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-8">
+ <div className="flex items-start gap-4">
+ <Brain className="w-8 h-8 text-purple-500 flex-shrink-0" />
+ <div>
+ <h3 className="text-xl font-semibold mb-3">توصيات الذكاء الاصطناعي</h3>
+ <div className="space-y-3">
+ <p className="text-muted-foreground">
+ بناءً على تحليل شامل لنتائج تقييمك ومقارنتها بأفضل الممارسات في القطاع، نوصي بالبدء بـ "تطوير البنية التحتية التقنية" و "إنشاء إطار إدارة المخاطر" كأولوية قصوى.
+ </p>
+ <div className="flex items-start gap-2">
+ <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+ <p className="text-sm">
+ إتمام هاتين المبادرتين سيرفع درجة جاهزيتك الإجمالية من <strong>73%</strong> إلى <strong>81%</strong> المتوقعة.
+ </p>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ );
+ }
 
-  return null;
+ return null;
 }

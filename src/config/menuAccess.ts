@@ -7,9 +7,9 @@
 export type RoleSlug = 'project-managers' | 'entity-managers' | string;
 
 export interface MenuItemDefinition {
-  id: string;
-  label: string;
-  path: string;
+ id: string;
+ label: string;
+ path: string;
 }
 
 /**
@@ -20,61 +20,61 @@ export interface MenuItemDefinition {
  * - entity-managers: 'معلوماتي', 'تقييم الجاهزية', 'إدارة المشاريع'
  */
 export const ROLE_MENU_MAP: Record<string, string[]> = {
-  'project-managers': [
-    'onboarding-assessment',
-    'onboarding-preloader',
-    'onboarding-results',
-    'onboarding-documents',
-    'onboarding-thanks',
-    'onboarding-analysis',
-    'onboarding-roadmap',
-    'onboarding-processing',
-    'onboarding-profile',
-    'charity-assessment-roadmap',
-    'project-management',
-    'project-management-dashboard',
-    'project-management-list',
-    'project-management-create',
-    'project-management-edit',
-    'project-management-details',
-    'project-management-lifecycle',
-    'project-management-versions',
-    'project-management-activity',
-    'project-management-reporting',
-    'donors',
-    'donor-matching',
-    'manage-org',
-    'manage-subscriptions',
-    'manage-coupons',
-    'collaboration',
-  ],
-  'entity-managers': [
-    'onboarding',
-    'onboarding-assessment',
-    'onboarding-preloader',
-    'onboarding-results',
-    'onboarding-documents',
-    'onboarding-thanks',
-    'onboarding-analysis',
-    'onboarding-roadmap',
-    'onboarding-processing',
-    'onboarding-profile',
-    'charity-assessment',
-    'charity-assessment-results',
-    'charity-assessment-roadmap',
-    'project-management',
-    'project-management-dashboard',
-    'project-management-list',
-    'project-management-create',
-    'project-management-details',
-    'project-management-lifecycle',
-    'project-management-versions',
-    'project-management-activity',
-    'project-management-reporting',
-    'pricing',
-    'organization-donors',
-    'collaboration',
-  ],
+ 'project-managers': [
+ 'onboarding-assessment',
+ 'onboarding-preloader',
+ 'onboarding-results',
+ 'onboarding-documents',
+ 'onboarding-thanks',
+ 'onboarding-analysis',
+ 'onboarding-roadmap',
+ 'onboarding-processing',
+ 'onboarding-profile',
+ 'charity-assessment-roadmap',
+ 'project-management',
+ 'project-management-dashboard',
+ 'project-management-list',
+ 'project-management-create',
+ 'project-management-edit',
+ 'project-management-details',
+ 'project-management-lifecycle',
+ 'project-management-versions',
+ 'project-management-activity',
+ 'project-management-reporting',
+ 'donors',
+ 'donor-matching',
+ 'manage-org',
+ 'manage-subscriptions',
+ 'manage-coupons',
+ 'collaboration',
+ ],
+ 'entity-managers': [
+ 'onboarding',
+ 'onboarding-assessment',
+ 'onboarding-preloader',
+ 'onboarding-results',
+ 'onboarding-documents',
+ 'onboarding-thanks',
+ 'onboarding-analysis',
+ 'onboarding-roadmap',
+ 'onboarding-processing',
+ 'onboarding-profile',
+ 'charity-assessment',
+ 'charity-assessment-results',
+ 'charity-assessment-roadmap',
+ 'project-management',
+ 'project-management-dashboard',
+ 'project-management-list',
+ 'project-management-create',
+ 'project-management-details',
+ 'project-management-lifecycle',
+ 'project-management-versions',
+ 'project-management-activity',
+ 'project-management-reporting',
+ 'pricing',
+ 'organization-donors',
+ 'collaboration',
+ ],
 };
 
 /**
@@ -82,8 +82,8 @@ export const ROLE_MENU_MAP: Record<string, string[]> = {
  * Unrecognized or missing slugs yield an empty array.
  */
 export function getAllowedMenuIds(roleSlug: string | null | undefined): string[] {
-  if (!roleSlug) return [];
-  return ROLE_MENU_MAP[roleSlug] ?? [];
+ if (!roleSlug) return [];
+ return ROLE_MENU_MAP[roleSlug] ?? [];
 }
 
 /**
@@ -93,33 +93,33 @@ export function getAllowedMenuIds(roleSlug: string | null | undefined): string[]
  * Note: child routes are considered allowed if their parent menu item path is allowed.
  */
 export function isRouteAllowed(
-  roleSlug: string | null | undefined,
-  path: string,
-  menuItems: MenuItemDefinition[]
+ roleSlug: string | null | undefined,
+ path: string,
+ menuItems: MenuItemDefinition[]
 ): boolean {
-  const allowedIds = new Set(getAllowedMenuIds(roleSlug));
-  const allowedPaths = new Set(
-    menuItems.filter((item) => allowedIds.has(item.id)).map((item) => item.path)
-  );
+ const allowedIds = new Set(getAllowedMenuIds(roleSlug));
+ const allowedPaths = new Set(
+ menuItems.filter((item) => allowedIds.has(item.id)).map((item) => item.path)
+ );
 
-  // Exact match first
-  if (allowedPaths.has(path)) return true;
+ // Exact match first
+ if (allowedPaths.has(path)) return true;
 
-  // Allow child routes of an allowed parent menu item
-  for (const allowedPath of allowedPaths) {
-    if (path === allowedPath || path.startsWith(`${allowedPath}/`)) return true;
-  }
+ // Allow child routes of an allowed parent menu item
+ for (const allowedPath of allowedPaths) {
+ if (path === allowedPath || path.startsWith(`${allowedPath}/`)) return true;
+ }
 
-  return false;
+ return false;
 }
 
 /**
  * Filter a list of menu items down to the ones allowed for the role slug.
  */
 export function filterMenuItemsByRole<T extends { id: string }>(
-  items: T[],
-  roleSlug: string | null | undefined
+ items: T[],
+ roleSlug: string | null | undefined
 ): T[] {
-  const allowedIds = new Set(getAllowedMenuIds(roleSlug));
-  return items.filter((item) => allowedIds.has(item.id));
+ const allowedIds = new Set(getAllowedMenuIds(roleSlug));
+ return items.filter((item) => allowedIds.has(item.id));
 }

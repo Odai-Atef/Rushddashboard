@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import {
-  Briefcase,
-  ChevronLeft,
-  ChevronRight,
-  Heart,
-  Loader2,
-  Users,
+ Briefcase,
+ ChevronLeft,
+ ChevronRight,
+ Heart,
+ Loader2,
+ Users,
 } from 'lucide-react';
 import { useOnboardingNavigate } from '@/app/hooks/useOnboardingNavigate';
 import { useOnboardingContext } from '@/app/hooks/useOnboardingContext';
@@ -13,366 +13,366 @@ import { MultiSelect } from '@/app/components/ui/multi-select';
 import { toast } from 'sonner';
 
 interface ProfileData {
-  overview: string;
-  areasOfWork: string[];
-  targetBeneficiaries: string;
-  geographicCoverage: string;
-  employeeCount: string;
-  volunteerCount: string;
-  activeProjects: string;
+ overview: string;
+ areasOfWork: string[];
+ targetBeneficiaries: string;
+ geographicCoverage: string;
+ employeeCount: string;
+ volunteerCount: string;
+ activeProjects: string;
 }
 
 export function ProfilePage() {
-  const { goToStep } = useOnboardingNavigate();
-  const { organization, profile, fundingAreas, loadFundingAreas, refreshOrganization, setOrganization } =
-    useOnboardingContext();
+ const { goToStep } = useOnboardingNavigate();
+ const { organization, profile, fundingAreas, loadFundingAreas, refreshOrganization, setOrganization } =
+ useOnboardingContext();
 
-  const [profileData, setProfileData] = useState<ProfileData>({
-    overview: '',
-    areasOfWork: [],
-    targetBeneficiaries: '',
-    geographicCoverage: '',
-    employeeCount: '',
-    volunteerCount: '',
-    activeProjects: '',
-  });
-  const [isSaving, setIsSaving] = useState(false);
-  const [errors, setErrors] = useState<Partial<Record<keyof ProfileData, string>>>({});
+ const [profileData, setProfileData] = useState<ProfileData>({
+ overview: '',
+ areasOfWork: [],
+ targetBeneficiaries: '',
+ geographicCoverage: '',
+ employeeCount: '',
+ volunteerCount: '',
+ activeProjects: '',
+ });
+ const [isSaving, setIsSaving] = useState(false);
+ const [errors, setErrors] = useState<Partial<Record<keyof ProfileData, string>>>({});
 
-  useEffect(() => {
-    loadFundingAreas();
-  }, [loadFundingAreas]);
+ useEffect(() => {
+ loadFundingAreas();
+ }, [loadFundingAreas]);
 
-  useEffect(() => {
-    if (profile) {
-      setProfileData({
-        overview: profile.overview || '',
-        targetBeneficiaries: profile.targetBeneficiaries || '',
-        geographicCoverage: profile.geographicCoverage
-          ? profile.geographicCoverage.toLowerCase()
-          : '',
-        employeeCount: profile.employeeCount != null ? String(profile.employeeCount) : '',
-        volunteerCount: profile.volunteerCount != null ? String(profile.volunteerCount) : '',
-        activeProjects: profile.activeProjects != null ? String(profile.activeProjects) : '',
-        areasOfWork: (profile.fundingAreas || []).map((fa) => fa.id).filter(Boolean),
-      });
-    } else if (organization?.profile) {
-      const p = organization.profile;
-      setProfileData({
-        overview: p.overview || '',
-        targetBeneficiaries: p.targetBeneficiaries || '',
-        geographicCoverage: p.geographicCoverage
-          ? p.geographicCoverage.toLowerCase()
-          : '',
-        employeeCount: p.employeeCount != null ? String(p.employeeCount) : '',
-        volunteerCount: p.volunteerCount != null ? String(p.volunteerCount) : '',
-        activeProjects: p.activeProjects != null ? String(p.activeProjects) : '',
-        areasOfWork: (p.fundingAreas || []).map((fa) => fa.fundingAreaId).filter(Boolean),
-      });
-    }
-  }, [profile, organization?.profile]);
+ useEffect(() => {
+ if (profile) {
+ setProfileData({
+ overview: profile.overview || '',
+ targetBeneficiaries: profile.targetBeneficiaries || '',
+ geographicCoverage: profile.geographicCoverage
+ ? profile.geographicCoverage.toLowerCase()
+ : '',
+ employeeCount: profile.employeeCount != null ? String(profile.employeeCount) : '',
+ volunteerCount: profile.volunteerCount != null ? String(profile.volunteerCount) : '',
+ activeProjects: profile.activeProjects != null ? String(profile.activeProjects) : '',
+ areasOfWork: (profile.fundingAreas || []).map((fa) => fa.id).filter(Boolean),
+ });
+ } else if (organization?.profile) {
+ const p = organization.profile;
+ setProfileData({
+ overview: p.overview || '',
+ targetBeneficiaries: p.targetBeneficiaries || '',
+ geographicCoverage: p.geographicCoverage
+ ? p.geographicCoverage.toLowerCase()
+ : '',
+ employeeCount: p.employeeCount != null ? String(p.employeeCount) : '',
+ volunteerCount: p.volunteerCount != null ? String(p.volunteerCount) : '',
+ activeProjects: p.activeProjects != null ? String(p.activeProjects) : '',
+ areasOfWork: (p.fundingAreas || []).map((fa) => fa.fundingAreaId).filter(Boolean),
+ });
+ }
+ }, [profile, organization?.profile]);
 
-  const validate = (): boolean => {
-    const nextErrors: Partial<Record<keyof ProfileData, string>> = {};
+ const validate = (): boolean => {
+ const nextErrors: Partial<Record<keyof ProfileData, string>> = {};
 
-    if (!profileData.overview.trim()) {
-      nextErrors.overview = 'نبذة عن الجمعية مطلوبة';
-    }
+ if (!profileData.overview.trim()) {
+ nextErrors.overview = 'نبذة عن الجمعية مطلوبة';
+ }
 
-    if (profileData.areasOfWork.length === 0) {
-      nextErrors.areasOfWork = 'مجالات المشاريع مطلوبة';
-    }
+ if (profileData.areasOfWork.length === 0) {
+ nextErrors.areasOfWork = 'مجالات المشاريع مطلوبة';
+ }
 
-    if (!profileData.targetBeneficiaries.trim()) {
-      nextErrors.targetBeneficiaries = 'الفئات المستهدفة مطلوبة';
-    }
+ if (!profileData.targetBeneficiaries.trim()) {
+ nextErrors.targetBeneficiaries = 'الفئات المستهدفة مطلوبة';
+ }
 
-    if (!profileData.geographicCoverage) {
-      nextErrors.geographicCoverage = 'النطاق الجغرافي مطلوب';
-    }
+ if (!profileData.geographicCoverage) {
+ nextErrors.geographicCoverage = 'النطاق الجغرافي مطلوب';
+ }
 
-    setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
-  };
+ setErrors(nextErrors);
+ return Object.keys(nextErrors).length === 0;
+ };
 
-  const clearFieldError = (field: keyof ProfileData) => {
-    setErrors((prev) => {
-      if (!prev[field]) return prev;
-      const { [field]: _, ...rest } = prev;
-      return rest;
-    });
-  };
+ const clearFieldError = (field: keyof ProfileData) => {
+ setErrors((prev) => {
+ if (!prev[field]) return prev;
+ const { [field]: _, ...rest } = prev;
+ return rest;
+ });
+ };
 
-  const handleProfileNext = async () => {
-    console.log('[ProfilePage] Next clicked');
-    if (!validate()) {
-      console.log('[ProfilePage] validation failed', errors);
-      toast.error('يرجى تصحيح الأخطاء في النموذج قبل المتابعة');
-      return;
-    }
+ const handleProfileNext = async () => {
+ console.log('[ProfilePage] Next clicked');
+ if (!validate()) {
+ console.log('[ProfilePage] validation failed', errors);
+ toast.error('يرجى تصحيح الأخطاء في النموذج قبل المتابعة');
+ return;
+ }
 
-    const orgId = organization?.id;
-    console.log('[ProfilePage] orgId:', orgId, 'organization:', organization);
-    if (!orgId) {
-      toast.error('لم يتم العثور على معرف الجمعية. يرجى إكمال التسجيل أولاً.');
-      return;
-    }
+ const orgId = organization?.id;
+ console.log('[ProfilePage] orgId:', orgId, 'organization:', organization);
+ if (!orgId) {
+ toast.error('لم يتم العثور على معرف الجمعية. يرجى إكمال التسجيل أولاً.');
+ return;
+ }
 
-    const { onboardingService } = await import('@/api/services');
-    setIsSaving(true);
-    console.log('[ProfilePage] saving profile...');
-    try {
-      await onboardingService.createProfile(orgId, {
-        overview: profileData.overview.trim(),
-        targetBeneficiaries: profileData.targetBeneficiaries.trim(),
-        geographicCoverage: profileData.geographicCoverage.toUpperCase() as any,
-        employeeCount: profileData.employeeCount
-          ? parseInt(profileData.employeeCount, 10)
-          : undefined,
-        volunteerCount: profileData.volunteerCount
-          ? parseInt(profileData.volunteerCount, 10)
-          : undefined,
-        activeProjects: profileData.activeProjects
-          ? parseInt(profileData.activeProjects, 10)
-          : undefined,
-        areasOfWork: profileData.areasOfWork,
-      });
-      await onboardingService.setFundingAreas(orgId, {
-        fundingAreaIds: profileData.areasOfWork,
-      });
-      console.log('[ProfilePage] profile saved, refreshing org');
-      const refreshedOrg = await refreshOrganization();
-      console.log('[ProfilePage] refreshedOrg:', refreshedOrg);
+ const { onboardingService } = await import('@/api/services');
+ setIsSaving(true);
+ console.log('[ProfilePage] saving profile...');
+ try {
+ await onboardingService.createProfile(orgId, {
+ overview: profileData.overview.trim(),
+ targetBeneficiaries: profileData.targetBeneficiaries.trim(),
+ geographicCoverage: profileData.geographicCoverage.toUpperCase() as any,
+ employeeCount: profileData.employeeCount
+ ? parseInt(profileData.employeeCount, 10)
+ : undefined,
+ volunteerCount: profileData.volunteerCount
+ ? parseInt(profileData.volunteerCount, 10)
+ : undefined,
+ activeProjects: profileData.activeProjects
+ ? parseInt(profileData.activeProjects, 10)
+ : undefined,
+ areasOfWork: profileData.areasOfWork,
+ });
+ await onboardingService.setFundingAreas(orgId, {
+ fundingAreaIds: profileData.areasOfWork,
+ });
+ console.log('[ProfilePage] profile saved, refreshing org');
+ const refreshedOrg = await refreshOrganization();
+ console.log('[ProfilePage] refreshedOrg:', refreshedOrg);
 
-      // Optimistically advance currentStep to PROFILE if the backend hasn't
-      // updated it yet. This prevents the route guard from redirecting back
-      // from documents because it still sees REGISTRATION.
-      if (refreshedOrg && refreshedOrg.currentStep?.toUpperCase() === 'REGISTRATION') {
-        console.log('[ProfilePage] patching currentStep to PROFILE');
-        setOrganization({ ...refreshedOrg, currentStep: 'PROFILE' });
-      }
+ // Optimistically advance currentStep to PROFILE if the backend hasn't
+ // updated it yet. This prevents the route guard from redirecting back
+ // from documents because it still sees REGISTRATION.
+ if (refreshedOrg && refreshedOrg.currentStep?.toUpperCase() === 'REGISTRATION') {
+ console.log('[ProfilePage] patching currentStep to PROFILE');
+ setOrganization({ ...refreshedOrg, currentStep: 'PROFILE' });
+ }
 
-      console.log('[ProfilePage] navigating to documents');
-      goToStep('documents');
-    } catch (err: any) {
-      console.error('[ProfilePage] save failed', err);
-      toast.error(err?.message || 'فشل حفظ الملف التعريفي');
-    } finally {
-      setIsSaving(false);
-    }
-  };
+ console.log('[ProfilePage] navigating to documents');
+ goToStep('documents');
+ } catch (err: any) {
+ console.error('[ProfilePage] save failed', err);
+ toast.error(err?.message || 'فشل حفظ الملف التعريفي');
+ } finally {
+ setIsSaving(false);
+ }
+ };
 
-  return (
-    <div className="min-h-full bg-background p-3 sm:p-6">
-      {isSaving && (
-        <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-primary animate-spin" />
-        </div>
-      )}
-      <div className="max-w-3xl mx-auto">
-        {/* Progress */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-muted-foreground">الخطوة ٢ من ٤</span>
-            <span className="text-sm font-medium text-primary">٥٠٪</span>
-          </div>
-          <div className="h-2 bg-muted rounded-full overflow-hidden">
-            <div className="h-full bg-primary transition-all duration-300" style={{ width: '50%' }}></div>
-          </div>
-        </div>
+ return (
+ <div className="min-h-full bg-background p-3 sm:p-6">
+ {isSaving && (
+ <div className="fixed inset-0 bg-[var(--card)]/80 z-50 flex items-center justify-center">
+ <Loader2 className="w-8 h-8 text-primary animate-spin" />
+ </div>
+ )}
+ <div className="max-w-3xl mx-auto">
+ {/* Progress */}
+ <div className="mb-8">
+ <div className="flex items-center justify-between mb-2">
+ <span className="text-sm text-muted-foreground">الخطوة ٢ من ٤</span>
+ <span className="text-sm font-medium text-primary">٥٠٪</span>
+ </div>
+ <div className="h-2 bg-muted rounded-full overflow-hidden">
+ <div className="h-full bg-primary transition-all duration-300" style={{ width: '50%' }}></div>
+ </div>
+ </div>
 
-        {/* Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-border p-4 sm:p-8">
-          <div className="mb-6">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-2">الملف التعريفي للجمعية</h1>
-            <p className="text-muted-foreground">معلومات تفصيلية عن نشاط الجمعية وبرامجها</p>
-          </div>
+ {/* Form Card */}
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-4 sm:p-8">
+ <div className="mb-6">
+ <h1 className="text-2xl sm:text-3xl font-bold mb-2">الملف التعريفي للجمعية</h1>
+ <p className="text-muted-foreground">معلومات تفصيلية عن نشاط الجمعية وبرامجها</p>
+ </div>
 
-          <form className="space-y-6">
-            {/* Organization Overview */}
-            <div>
-              <label className="block text-sm font-medium mb-2">نبذة عن الجمعية *</label>
-              <textarea
-                value={profileData.overview}
-                onChange={(e) => {
-                  setProfileData((prev) => ({ ...prev, overview: e.target.value }));
-                  clearFieldError('overview');
-                }}
-                rows={4}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
-                  errors.overview
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'border-border'
-                }`}
-                placeholder="اكتب نبذة مختصرة عن رؤية ورسالة وأهداف الجمعية..."
-              />
-              {errors.overview ? (
-                <p className="mt-1 text-sm text-red-600">{errors.overview}</p>
-              ) : (
-                <p className="text-xs text-muted-foreground mt-1">٢٠٠ - ٥٠٠ كلمة</p>
-              )}
-            </div>
+ <form className="space-y-6">
+ {/* Organization Overview */}
+ <div>
+ <label className="block text-sm font-medium mb-2">نبذة عن الجمعية *</label>
+ <textarea
+ value={profileData.overview}
+ onChange={(e) => {
+ setProfileData((prev) => ({ ...prev, overview: e.target.value }));
+ clearFieldError('overview');
+ }}
+ rows={4}
+ className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
+ errors.overview
+ ? 'border-red-500 focus:ring-red-500'
+ : 'border-border'
+ }`}
+ placeholder="اكتب نبذة مختصرة عن رؤية ورسالة وأهداف الجمعية..."
+ />
+ {errors.overview ? (
+ <p className="mt-1 text-sm text-[var(--destructive)]">{errors.overview}</p>
+ ) : (
+ <p className="text-xs text-muted-foreground mt-1">٢٠٠ - ٥٠٠ كلمة</p>
+ )}
+ </div>
 
-            {/* Areas of Work */}
-            <div>
-              <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
-              {fundingAreas.length === 0 && (
-                <p className="text-sm text-muted-foreground mb-2">
-                  لا توجد مجالات مشاريع متاحة حالياً. يرجى المحاولة لاحقاً.
-                </p>
-              )}
-              {fundingAreas.length > 0 && (
-                <MultiSelect
-                  options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
-                  selected={profileData.areasOfWork}
-                  onChange={(next) => {
-                    setProfileData((prev) => ({ ...prev, areasOfWork: next }));
-                    clearFieldError('areasOfWork');
-                  }}
-                  placeholder="اختر مجالات المشاريع"
-                  searchPlaceholder="ابحث في مجالات المشاريع..."
-                  emptyMessage="لا توجد نتائج مطابقة"
-                  error={!!errors.areasOfWork}
-                  className="min-h-[46px]"
-                />
-              )}
-              {errors.areasOfWork && (
-                <p className="mt-1 text-sm text-red-600">{errors.areasOfWork}</p>
-              )}
-            </div>
+ {/* Areas of Work */}
+ <div>
+ <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
+ {fundingAreas.length === 0 && (
+ <p className="text-sm text-muted-foreground mb-2">
+ لا توجد مجالات مشاريع متاحة حالياً. يرجى المحاولة لاحقاً.
+ </p>
+ )}
+ {fundingAreas.length > 0 && (
+ <MultiSelect
+ options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
+ selected={profileData.areasOfWork}
+ onChange={(next) => {
+ setProfileData((prev) => ({ ...prev, areasOfWork: next }));
+ clearFieldError('areasOfWork');
+ }}
+ placeholder="اختر مجالات المشاريع"
+ searchPlaceholder="ابحث في مجالات المشاريع..."
+ emptyMessage="لا توجد نتائج مطابقة"
+ error={!!errors.areasOfWork}
+ className="min-h-[46px]"
+ />
+ )}
+ {errors.areasOfWork && (
+ <p className="mt-1 text-sm text-[var(--destructive)]">{errors.areasOfWork}</p>
+ )}
+ </div>
 
-            {/* Target Beneficiaries */}
-            <div>
-              <label className="block text-sm font-medium mb-2">الفئات المستهدفة *</label>
-              <input
-                type="text"
-                value={profileData.targetBeneficiaries}
-                onChange={(e) => {
-                  setProfileData((prev) => ({ ...prev, targetBeneficiaries: e.target.value }));
-                  clearFieldError('targetBeneficiaries');
-                }}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.targetBeneficiaries
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'border-border'
-                }`}
-                placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن"
-              />
-              {errors.targetBeneficiaries && (
-                <p className="mt-1 text-sm text-red-600">{errors.targetBeneficiaries}</p>
-              )}
-            </div>
+ {/* Target Beneficiaries */}
+ <div>
+ <label className="block text-sm font-medium mb-2">الفئات المستهدفة *</label>
+ <input
+ type="text"
+ value={profileData.targetBeneficiaries}
+ onChange={(e) => {
+ setProfileData((prev) => ({ ...prev, targetBeneficiaries: e.target.value }));
+ clearFieldError('targetBeneficiaries');
+ }}
+ className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+ errors.targetBeneficiaries
+ ? 'border-red-500 focus:ring-red-500'
+ : 'border-border'
+ }`}
+ placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن"
+ />
+ {errors.targetBeneficiaries && (
+ <p className="mt-1 text-sm text-[var(--destructive)]">{errors.targetBeneficiaries}</p>
+ )}
+ </div>
 
-            {/* Geographic Coverage */}
-            <div>
-              <label className="block text-sm font-medium mb-2">النطاق الجغرافي *</label>
-              <select
-                value={profileData.geographicCoverage}
-                onChange={(e) => {
-                  setProfileData((prev) => ({ ...prev, geographicCoverage: e.target.value }));
-                  clearFieldError('geographicCoverage');
-                }}
-                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
-                  errors.geographicCoverage
-                    ? 'border-red-500 focus:ring-red-500'
-                    : 'border-border'
-                }`}
-              >
-                <option value="">اختر النطاق الجغرافي</option>
-                <option value="local">محلي (مدينة واحدة)</option>
-                <option value="regional">إقليمي (منطقة واحدة)</option>
-                <option value="national">وطني (على مستوى المملكة)</option>
-                <option value="international">دولي</option>
-              </select>
-              {errors.geographicCoverage && (
-                <p className="mt-1 text-sm text-red-600">{errors.geographicCoverage}</p>
-              )}
-            </div>
+ {/* Geographic Coverage */}
+ <div>
+ <label className="block text-sm font-medium mb-2">النطاق الجغرافي *</label>
+ <select
+ value={profileData.geographicCoverage}
+ onChange={(e) => {
+ setProfileData((prev) => ({ ...prev, geographicCoverage: e.target.value }));
+ clearFieldError('geographicCoverage');
+ }}
+ className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+ errors.geographicCoverage
+ ? 'border-red-500 focus:ring-red-500'
+ : 'border-border'
+ }`}
+ >
+ <option value="">اختر النطاق الجغرافي</option>
+ <option value="local">محلي (مدينة واحدة)</option>
+ <option value="regional">إقليمي (منطقة واحدة)</option>
+ <option value="national">وطني (على مستوى المملكة)</option>
+ <option value="international">دولي</option>
+ </select>
+ {errors.geographicCoverage && (
+ <p className="mt-1 text-sm text-[var(--destructive)]">{errors.geographicCoverage}</p>
+ )}
+ </div>
 
-            {/* Team Statistics */}
-            <div>
-              <label className="block text-sm font-medium mb-4">حجم الفريق والمتطوعين</label>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs text-muted-foreground mb-2">عدد الموظفين</label>
-                  <div className="relative">
-                    <Users className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                      type="number"
-                      value={profileData.employeeCount}
-                      onChange={(e) =>
-                        setProfileData((prev) => ({ ...prev, employeeCount: e.target.value }))
-                      }
-                      className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs text-muted-foreground mb-2">عدد المتطوعين</label>
-                  <div className="relative">
-                    <Heart className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                      type="number"
-                      value={profileData.volunteerCount}
-                      onChange={(e) =>
-                        setProfileData((prev) => ({ ...prev, volunteerCount: e.target.value }))
-                      }
-                      className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-xs text-muted-foreground mb-2">المشاريع النشطة</label>
-                  <div className="relative">
-                    <Briefcase className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-                    <input
-                      type="number"
-                      value={profileData.activeProjects}
-                      onChange={(e) =>
-                        setProfileData((prev) => ({ ...prev, activeProjects: e.target.value }))
-                      }
-                      className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                      placeholder="0"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
+ {/* Team Statistics */}
+ <div>
+ <label className="block text-sm font-medium mb-4">حجم الفريق والمتطوعين</label>
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+ <div>
+ <label className="block text-xs text-muted-foreground mb-2">عدد الموظفين</label>
+ <div className="relative">
+ <Users className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+ <input
+ type="number"
+ value={profileData.employeeCount}
+ onChange={(e) =>
+ setProfileData((prev) => ({ ...prev, employeeCount: e.target.value }))
+ }
+ className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ placeholder="0"
+ />
+ </div>
+ </div>
+ <div>
+ <label className="block text-xs text-muted-foreground mb-2">عدد المتطوعين</label>
+ <div className="relative">
+ <Heart className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+ <input
+ type="number"
+ value={profileData.volunteerCount}
+ onChange={(e) =>
+ setProfileData((prev) => ({ ...prev, volunteerCount: e.target.value }))
+ }
+ className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ placeholder="0"
+ />
+ </div>
+ </div>
+ <div>
+ <label className="block text-xs text-muted-foreground mb-2">المشاريع النشطة</label>
+ <div className="relative">
+ <Briefcase className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+ <input
+ type="number"
+ value={profileData.activeProjects}
+ onChange={(e) =>
+ setProfileData((prev) => ({ ...prev, activeProjects: e.target.value }))
+ }
+ className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ placeholder="0"
+ />
+ </div>
+ </div>
+ </div>
+ </div>
 
-            {/* Action Buttons */}
-            <div className="flex items-center justify-between pt-4 sm:pt-6 border-t flex-col sm:flex-row gap-3">
-              <button
-                type="button"
-                onClick={() => goToStep('registration')}
-                className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
-              >
-                <ChevronRight className="w-5 h-5" />
-                رجوع
-              </button>
-              <button
-                type="button"
-                onClick={handleProfileNext}
-                disabled={isSaving}
-                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto justify-center sm:justify-start"
-              >
-                {isSaving ? (
-                  <>
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                    جارٍ الحفظ...
-                  </>
-                ) : (
-                  <>
-                    التالي
-                    <ChevronLeft className="w-5 h-5" />
-                  </>
-                )}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
+ {/* Action Buttons */}
+ <div className="flex items-center justify-between pt-4 sm:pt-6 border-t flex-col sm:flex-row gap-3">
+ <button
+ type="button"
+ onClick={() => goToStep('registration')}
+ className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+ >
+ <ChevronRight className="w-5 h-5" />
+ رجوع
+ </button>
+ <button
+ type="button"
+ onClick={handleProfileNext}
+ disabled={isSaving}
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto justify-center sm:justify-start"
+ >
+ {isSaving ? (
+ <>
+ <Loader2 className="w-5 h-5 animate-spin" />
+ جارٍ الحفظ...
+ </>
+ ) : (
+ <>
+ التالي
+ <ChevronLeft className="w-5 h-5" />
+ </>
+ )}
+ </button>
+ </div>
+ </form>
+ </div>
+ </div>
+ </div>
+ );
 }

@@ -15,71 +15,71 @@ import { Message } from '@/api/services/collaboration-service';
 const REALTIME_ENABLED = false;
 
 export interface UseConversationRealtimeReturn {
-  isConnected: boolean;
+ isConnected: boolean;
 }
 
 export function useConversationRealtime(
-  projectId: string | undefined,
-  conversationId: string | null,
-  onMessage: (message: Message) => void
+ projectId: string | undefined,
+ conversationId: string | null,
+ onMessage: (message: Message) => void
 ): UseConversationRealtimeReturn {
-  const isConnectedRef = useRef(false);
-  const onMessageRef = useRef(onMessage);
-  onMessageRef.current = onMessage;
+ const isConnectedRef = useRef(false);
+ const onMessageRef = useRef(onMessage);
+ onMessageRef.current = onMessage;
 
-  const connect = useCallback(() => {
-    if (!REALTIME_ENABLED || !projectId || !conversationId) {
-      isConnectedRef.current = false;
-      return null;
-    }
+ const connect = useCallback(() => {
+ if (!REALTIME_ENABLED || !projectId || !conversationId) {
+ isConnectedRef.current = false;
+ return null;
+ }
 
-    const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) || '';
-    if (!token) {
-      isConnectedRef.current = false;
-      return null;
-    }
+ const token = localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) || '';
+ if (!token) {
+ isConnectedRef.current = false;
+ return null;
+ }
 
-    const baseURL = apiClient.defaults.baseURL;
-    const url = `${baseURL}/api/v1/projects/${projectId}/conversations/${conversationId}/stream?token=${encodeURIComponent(token)}`;
+ const baseURL = apiClient.defaults.baseURL;
+ const url = `${baseURL}/api/v1/projects/${projectId}/conversations/${conversationId}/stream?token=${encodeURIComponent(token)}`;
 
-    let eventSource: EventSource | null = null;
-    try {
-      eventSource = new EventSource(url);
-      eventSource.onopen = () => {
-        isConnectedRef.current = true;
-      };
-      eventSource.onmessage = (event) => {
-        try {
-          const payload = JSON.parse(event.data);
-          if (payload?.type === 'conversation:message' && payload?.data) {
-            onMessageRef.current(payload.data as Message);
-          }
-        } catch {
-          // Ignore malformed events.
-        }
-      };
-      eventSource.onerror = () => {
-        isConnectedRef.current = false;
-      };
-    } catch {
-      isConnectedRef.current = false;
-      return null;
-    }
+ let eventSource: EventSource | null = null;
+ try {
+ eventSource = new EventSource(url);
+ eventSource.onopen = () => {
+ isConnectedRef.current = true;
+ };
+ eventSource.onmessage = (event) => {
+ try {
+ const payload = JSON.parse(event.data);
+ if (payload?.type === 'conversation:message' && payload?.data) {
+ onMessageRef.current(payload.data as Message);
+ }
+ } catch {
+ // Ignore malformed events.
+ }
+ };
+ eventSource.onerror = () => {
+ isConnectedRef.current = false;
+ };
+ } catch {
+ isConnectedRef.current = false;
+ return null;
+ }
 
-    return eventSource;
-  }, [projectId, conversationId]);
+ return eventSource;
+ }, [projectId, conversationId]);
 
-  useEffect(() => {
-    const eventSource = connect();
-    return () => {
-      isConnectedRef.current = false;
-      if (eventSource) {
-        eventSource.close();
-      }
-    };
-  }, [connect]);
+ useEffect(() => {
+ const eventSource = connect();
+ return () => {
+ isConnectedRef.current = false;
+ if (eventSource) {
+ eventSource.close();
+ }
+ };
+ }, [connect]);
 
-  return { isConnected: isConnectedRef.current };
+ return { isConnected: isConnectedRef.current };
 }
 
 export default useConversationRealtime;
