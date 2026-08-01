@@ -26,7 +26,7 @@ const badgeVariants = cva(
  info:
  "border-transparent bg-[var(--info)]/[0.12] text-[var(--info)] hover:bg-[var(--info)]/[0.20]",
  pending:
- "border-transparent bg-[#F59E0B]/[0.12] text-[#B45309] hover:bg-[#F59E0B]/[0.20]",
+ "border-transparent bg-[var(--warning)]/[0.12] text-[var(--warning)] hover:bg-[var(--warning)]/[0.20]",
  },
  },
  defaultVariants: {

@@ -50,7 +50,7 @@ export function StatCard({
  return (
  <div
  className={cn(
- // Light mode — exact card color #FFFFFF
+ // Light/Dark modes derive from theme tokens
  'bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)]',
  // Dark mode — exact card color #102942 with glass effect
  '',

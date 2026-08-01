@@ -12,7 +12,7 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
  "bg-[var(--input-background)]",
  "text-[var(--text-primary)]",
  "border-[var(--border)]",
- "hover:border-[#CBD5E1]",
+ "hover:border-[var(--border)]",
  "placeholder:text-[var(--text-muted)]",
  "selection:bg-[var(--primary)] selection:text-[var(--primary-foreground)]",
  "transition-all duration-[var(--transition-duration)] ease-in-out",

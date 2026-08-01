@@ -119,40 +119,40 @@
  Dark Theme — Exact Design System Values
  ============================================================ */
 .dark {
- --background: #0F172A;
- --foreground: #F8FAFC;
- --card: #1E293B;
- --card-foreground: #F8FAFC;
- --popover: #1E293B;
- --popover-foreground: #F8FAFC;
+ --background: #071626;
+ --foreground: #FFFFFF;
+ --card: #102942;
+ --card-foreground: #FFFFFF;
+ --popover: #102942;
+ --popover-foreground: #FFFFFF;
 
  /* Brand colors */
- --primary: #3B82F6;
+ --primary: #10B981;
  --primary-foreground: #FFFFFF;
  --secondary: #3B82F6;
  --secondary-foreground: #FFFFFF;
- --accent: #3B82F6;
+ --accent: #10B981;
  --accent-foreground: #FFFFFF;
 
  /* Surfaces & muted */
- --muted: #334155;
- --muted-foreground: #94A3B8;
- --surface: #1E293B;
- --surface-secondary: #334155;
+ --muted: #0D2238;
+ --muted-foreground: #7C95AA;
+ --surface: #0C2238;
+ --surface-secondary: #0D2238;
 
  /* Destructive */
  --destructive: #EF4444;
  --destructive-foreground: #FFFFFF;
 
  /* Borders & inputs */
- --border: #475569;
- --input: #475569;
- --input-background: #1E293B;
+ --border: rgba(255, 255, 255, 0.08);
+ --input: rgba(255, 255, 255, 0.08);
+ --input-background: #102942;
  --switch-background: #475569;
 
  /* Hover */
- --hover: rgba(59, 130, 246, 0.08);
- --hover-primary: rgba(59, 130, 246, 0.15);
+ --hover: rgba(255, 255, 255, 0.04);
+ --hover-primary: rgba(16, 185, 129, 0.12);
 
  /* Ring / focus */
  --ring: #3B82F6;

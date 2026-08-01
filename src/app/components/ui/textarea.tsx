@@ -11,7 +11,7 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
  "bg-[var(--input-background)]",
  "text-[var(--text-primary)]",
  "border-[var(--border)]",
- "hover:border-[#CBD5E1]",
+ "hover:border-[var(--border)]",
  "placeholder:text-[var(--text-muted)]",
  "selection:bg-[var(--primary)] selection:text-[var(--primary-foreground)]",
  "transition-all duration-[var(--transition-duration)] ease-in-out",
