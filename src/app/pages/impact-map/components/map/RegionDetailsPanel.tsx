@@ -45,12 +45,14 @@ export function RegionDetailsPanel({
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-[var(--impact-divider)]">
-        <h3
-          className="text-base font-bold"
-          className="text-[var(--impact-text-primary)]"
-        >
-          {region.nameAr}
-        </h3>
+      <h3
+        className={cn(
+          'text-base font-bold',
+          'text-[var(--impact-text-primary)]'
+        )}
+      >
+        {region.nameAr}
+      </h3>
         <button
           onClick={onClose}
           className={cn(
@@ -99,18 +101,22 @@ export function RegionDetailsPanel({
 
         {/* Recent project */}
         <div className="space-y-1">
-          <span
-            className="text-xs font-medium"
-            className="text-[var(--impact-text-muted)]"
-          >
-            أحدث مشروع
-          </span>
-          <p
-            className="text-sm font-semibold leading-relaxed"
-            className="text-[var(--impact-text-primary)]"
-          >
-            {recentProject}
-          </p>
+        <span
+          className={cn(
+            'text-xs font-medium',
+            'text-[var(--impact-text-muted)]'
+          )}
+        >
+          أحدث مشروع
+        </span>
+        <p
+          className={cn(
+            'text-sm font-semibold leading-relaxed',
+            'text-[var(--impact-text-primary)]'
+          )}
+        >
+          {recentProject}
+        </p>
         </div>
       </div>
 

@@ -38,14 +38,15 @@ export function MapTooltip({ region, x, y, visible }: MapTooltipProps) {
         'transition-opacity duration-150',
         visible ? 'opacity-100' : 'opacity-0'
       )}
-      style={{ left: x, top: y }}
-      style={{ boxShadow: 'var(--impact-shadow-2)' }}
+      style={{ left: x, top: y, boxShadow: 'var(--impact-shadow-2)' }}
       role="tooltip"
       aria-label={`تفاصيل منطقة ${region.nameAr}`}
     >
       <h4
-        className="text-sm font-bold mb-2.5"
-        className="text-[var(--impact-text-primary)]"
+        className={cn(
+          'text-sm font-bold mb-2.5',
+          'text-[var(--impact-text-primary)]'
+        )}
       >
         {region.nameAr}
       </h4>

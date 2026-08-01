@@ -21,9 +21,7 @@ export function MapSkeleton({ className }: MapSkeletonProps) {
       <div className="absolute inset-0 skeleton-shimmer" />
 
       {/* Mock map outline */}
-      <div className="relative w-full h-full p-6 md:p-10"
-        className="min-h-full"
-      >
+      <div className={cn('relative w-full h-full p-6 md:p-10', 'min-h-full')}>
         {/* Saudi-like abstract shape */}
         <svg
           viewBox="0 0 1000 1000"
