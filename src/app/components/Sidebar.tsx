@@ -410,7 +410,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                     fontWeight: 400,
                   }}
                 >
-                  Rushd Virtual Incubator
+                  حاضنة رشد الافتراضية
                 </p>
               </div>
             )}

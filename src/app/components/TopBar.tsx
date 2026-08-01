@@ -472,7 +472,7 @@ export function TopBar({
               Rushd
             </p>
             <p className="text-xs font-medium text-[var(--muted-foreground)]">
-              Rushd Virtual Incubator
+              حاضنة رشد الافتراضية
             </p>
           </div>
         </div>

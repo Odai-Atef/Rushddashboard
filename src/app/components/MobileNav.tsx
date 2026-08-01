@@ -145,7 +145,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
  <img src="/logo.png" alt="منصة رشد" className="w-10 h-10 object-contain" />
  <div>
  <h1 className="text-[var(--foreground)] text-base font-bold">منصة رشد</h1>
- <p className="text-[var(--text-muted)] text-xs mt-0.5">Rushd Virtual Incubator</p>
+  <p className="text-[var(--text-muted)] text-xs mt-0.5">حاضنة رشد الافتراضية</p>
  </div>
  </div>
  <button
