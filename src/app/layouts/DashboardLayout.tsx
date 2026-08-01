@@ -65,8 +65,6 @@ export function DashboardLayout() {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopBar
-          theme={resolvedTheme}
-          onThemeToggle={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
           onMenuClick={() => setIsMobileNavOpen(true)}
         />
 
