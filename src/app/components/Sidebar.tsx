@@ -216,21 +216,7 @@ function buildNavGroups(items: NavItem[], roleSlug: string | null): NavGroup[] {
       i.id !== 'pricing'
   );
 
-  const groups: NavGroup[] = [];
-
-  if (overviewItems.length > 0) groups.push({ label: 'نظرة عامة', items: overviewItems });
-  if (projectItems.length > 0) groups.push({ label: 'المشاريع', items: projectItems });
-  if (assessmentItems.length > 0) groups.push({ label: 'التقييم', items: assessmentItems });
-  if (donorItems.length > 0) groups.push({ label: 'الجهات المانحة', items: donorItems });
-  if (analyticsItems.length > 0) groups.push({ label: 'التحليلات', items: analyticsItems });
-  if (analysisItems.length > 0) groups.push({ label: 'الذكاء الاصطناعي', items: analysisItems });
-  if (businessItems.length > 0) groups.push({ label: 'الأعمال', items: businessItems });
-  if (insightItems.length > 0) groups.push({ label: 'الرؤى', items: insightItems });
-  if (managementItems.length > 0) groups.push({ label: 'الإدارة', items: managementItems });
-  if (systemItems.length > 0) groups.push({ label: 'النظام', items: systemItems });
-  if (otherItems.length > 0) groups.push({ items: otherItems });
-
-  return groups;
+  return [{ items }];
 }
 
 /* ------------------------------------------------------------------ */
