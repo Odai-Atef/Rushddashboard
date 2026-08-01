@@ -136,7 +136,7 @@ export function ProjectDashboardPage() {
 
   if (isLoading || isCheckingQualification || notificationsLoading) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-gray-50 p-3 sm:p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -166,13 +166,13 @@ export function ProjectDashboardPage() {
       : '/dashboard/charity-assessment';
 
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
-        <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center max-w-lg">
-          <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
-          <h2 className="text-2xl font-bold mb-4 text-red-700">{title}</h2>
-          <p className="text-gray-600 mb-2">{subtitle}</p>
+      <div className="min-h-full bg-gray-50 p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+        <div className="bg-white rounded-xl border border-red-200 shadow-sm p-6 sm:p-12 text-center max-w-lg mx-4">
+          <AlertTriangle className="w-12 sm:w-16 h-12 sm:h-16 text-red-500 mx-auto mb-4 sm:mb-6" />
+          <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-red-700">{title}</h2>
+          <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">{subtitle}</p>
           {assessmentMissing && hasOrg && (
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
               يمكنك بدء التقييم الآن{" "}
               <button
                 onClick={() => navigate('/dashboard/charity-assessment')}
@@ -185,7 +185,7 @@ export function ProjectDashboardPage() {
           )}
           <button
             onClick={() => navigate(ctaPath)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 mx-auto"
+            className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2 mx-auto"
           >
             {cta}
           </button>
@@ -201,7 +201,7 @@ export function ProjectDashboardPage() {
     }
     if (!isProjectManager) {
       return (
-        <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+        <div className="min-h-full bg-gray-50 p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
           <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
         </div>
       );
@@ -219,99 +219,103 @@ export function ProjectDashboardPage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">لوحة المشاريع</h1>
-            <p className="text-gray-600">نظرة شاملة على جميع المشاريع والأنشطة</p>
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+      <div className="space-y-4 sm:space-y-6">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="w-full">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">لوحة المشاريع</h1>
+            <p className="text-gray-600 text-sm sm:text-base">نظرة شاملة على جميع المشاريع والأنشطة</p>
           </div>
           {(roleSlug === 'entity-managers' || roleSlug === 'project-managers') && (
             <button
               onClick={() => navigate('/dashboard/project-management/create')}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+              className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2 shrink-0"
             >
-              <Plus className="w-5 h-5" />
+              <Plus className="w-4 sm:w-5 h-4 sm:h-5" />
               مشروع جديد
             </button>
           )}
         </div>
 
-        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-          <h3 className="text-lg font-semibold mb-4">إجراءات سريعة</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {/* Quick Actions */}
+        <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+          <h3 className="text-base sm:text-lg font-semibold mb-4">إجراءات سريعة</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <button
               onClick={() => navigate('/dashboard/project-management/list')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
             >
-              <List className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+              <List className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 mx-auto mb-2" />
               <p className="font-medium text-sm">عرض جميع المشاريع</p>
             </button>
             {(roleSlug === 'entity-managers' || roleSlug === 'project-managers') && (
               <button
                 onClick={() => navigate('/dashboard/project-management/create')}
-                className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
               >
-                <Plus className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+                <Plus className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 mx-auto mb-2" />
                 <p className="font-medium text-sm">إنشاء مشروع جديد</p>
               </button>
             )}
             <button
               onClick={() => navigate('/dashboard/project-management/reporting')}
-              className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
             >
-              <BarChart3 className="w-6 h-6 text-gray-400 mx-auto mb-2" />
+              <BarChart3 className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 mx-auto mb-2" />
               <p className="font-medium text-sm">التقارير الإدارية</p>
             </button>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <Briefcase className="w-8 h-8 text-gray-400 mb-2" />
-            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
-            <p className="text-sm text-gray-600 mt-1">إجمالي المشاريع</p>
+        {/* Stats Cards */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+            <Briefcase className="w-6 sm:w-8 h-6 sm:h-8 text-gray-400 mb-2" />
+            <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.total}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">إجمالي المشاريع</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-blue-200 shadow-sm">
-            <Activity className="w-8 h-8 text-blue-600 mb-2" />
-            <p className="text-3xl font-bold text-blue-600">{stats.active}</p>
-            <p className="text-sm text-gray-600 mt-1">المشاريع النشطة</p>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-blue-200 shadow-sm">
+            <Activity className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600 mb-2" />
+            <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.active}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">المشاريع النشطة</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <FileText className="w-8 h-8 text-gray-400 mb-2" />
-            <p className="text-3xl font-bold text-gray-600">{stats.draft}</p>
-            <p className="text-sm text-gray-600 mt-1">مسودات</p>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+            <FileText className="w-6 sm:w-8 h-6 sm:h-8 text-gray-400 mb-2" />
+            <p className="text-2xl sm:text-3xl font-bold text-gray-600">{stats.draft}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">مسودات</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-yellow-200 shadow-sm">
-            <Clock className="w-8 h-8 text-yellow-600 mb-2" />
-            <p className="text-3xl font-bold text-yellow-600">{stats.awaitingApproval}</p>
-            <p className="text-sm text-gray-600 mt-1">بانتظار الموافقة</p>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-yellow-200 shadow-sm">
+            <Clock className="w-6 sm:w-8 h-6 sm:h-8 text-yellow-600 mb-2" />
+            <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.awaitingApproval}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">بانتظار الموافقة</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-green-200 shadow-sm">
-            <CheckCircle2 className="w-8 h-8 text-green-600 mb-2" />
-            <p className="text-3xl font-bold text-green-600">{stats.approved}</p>
-            <p className="text-sm text-gray-600 mt-1">معتمد</p>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-green-200 shadow-sm">
+            <CheckCircle2 className="w-6 sm:w-8 h-6 sm:h-8 text-green-600 mb-2" />
+            <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.approved}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">معتمد</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-emerald-200 shadow-sm">
-            <DollarSign className="w-8 h-8 text-emerald-600 mb-2" />
-            <p className="text-3xl font-bold text-emerald-600">{stats.funded}</p>
-            <p className="text-sm text-gray-600 mt-1">ممول</p>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-emerald-200 shadow-sm">
+            <DollarSign className="w-6 sm:w-8 h-6 sm:h-8 text-emerald-600 mb-2" />
+            <p className="text-2xl sm:text-3xl font-bold text-emerald-600">{stats.funded}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">ممول</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-purple-200 shadow-sm">
-            <Target className="w-8 h-8 text-purple-600 mb-2" />
-            <p className="text-3xl font-bold text-purple-600">{stats.completed}</p>
-            <p className="text-sm text-gray-600 mt-1">مكتمل</p>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-purple-200 shadow-sm">
+            <Target className="w-6 sm:w-8 h-6 sm:h-8 text-purple-600 mb-2" />
+            <p className="text-2xl sm:text-3xl font-bold text-purple-600">{stats.completed}</p>
+            <p className="text-xs sm:text-sm text-gray-600 mt-1">مكتمل</p>
           </div>
         </div>
 
+        {/* Status Distribution Cards (for PM) */}
         {isProjectManager && statusDistribution.length > 0 && (
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
             {statusDistribution
               .filter((item) => item.value > 0)
               .map((item, idx) => {
@@ -324,13 +328,13 @@ export function ProjectDashboardPage() {
                 return (
                   <div
                     key={idx}
-                    className="bg-white rounded-xl p-6 border shadow-sm"
+                    className="bg-white rounded-xl p-4 sm:p-6 border shadow-sm"
                   >
-                    <Activity className="w-8 h-8 mb-2" style={{ color: config.color }} />
-                    <p className="text-3xl font-bold" style={{ color: config.color }}>
+                    <Activity className="w-6 sm:w-8 h-6 sm:h-8 mb-2" style={{ color: config.color }} />
+                    <p className="text-2xl sm:text-3xl font-bold" style={{ color: config.color }}>
                       {item.value}
                     </p>
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
                       {config.label}
                     </p>
                   </div>
@@ -339,12 +343,36 @@ export function ProjectDashboardPage() {
           </div>
         )}
 
+        {/* Status Distribution Chart */}
         {isProjectManager && (
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
-            {statusDistribution.length > 0 ? (
-              <ResponsiveContainer width="100%" height={300}>
-                <BarChart data={statusDistribution.filter((item) => item.value > 0)} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+            <h3 className="text-base sm:text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
+            <div className="overflow-x-auto">
+              {statusDistribution.length > 0 ? (
+                <ResponsiveContainer width="100%" height={300} minWidth={300}>
+                  <BarChart data={statusDistribution.filter((item) => item.value > 0)} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                    <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} interval={0} angle={-45} textAnchor="end" />
+                    <YAxis tick={{ fill: '#6b7280' }} allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="#3b82f6" />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="h-[300px] flex items-center justify-center text-gray-500">
+                  لا توجد بيانات لتوزيع الحالات
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {!isProjectManager && statusDistribution.length > 0 && (
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+            <h3 className="text-base sm:text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
+            <div className="overflow-x-auto">
+              <ResponsiveContainer width="100%" height={300} minWidth={300}>
+                <BarChart data={statusDistribution} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                   <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} interval={0} angle={-45} textAnchor="end" />
                   <YAxis tick={{ fill: '#6b7280' }} allowDecimals={false} />
@@ -352,33 +380,15 @@ export function ProjectDashboardPage() {
                   <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="#3b82f6" />
                 </BarChart>
               </ResponsiveContainer>
-            ) : (
-              <div className="h-[300px] flex items-center justify-center text-gray-500">
-                لا توجد بيانات لتوزيع الحالات
-              </div>
-            )}
+            </div>
           </div>
         )}
 
-        {!isProjectManager && statusDistribution.length > 0 && (
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
-            <ResponsiveContainer width="100%" height={300}>
-              <BarChart data={statusDistribution} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="name" tick={{ fill: '#6b7280', fontSize: 12 }} interval={0} angle={-45} textAnchor="end" />
-                <YAxis tick={{ fill: '#6b7280' }} allowDecimals={false} />
-                <Tooltip />
-                <Bar dataKey="value" radius={[4, 4, 0, 0]} fill="#3b82f6" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-
-        <div className={`grid gap-6 ${isProjectManager ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+        {/* Recent Activity + Notifications */}
+        <div className={`grid gap-4 sm:gap-6 ${isProjectManager ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold">النشاط الأخير</h3>
+              <h3 className="text-base sm:text-lg font-semibold">النشاط الأخير</h3>
               <button
                 onClick={() => navigate('/dashboard/project-management/activity')}
                 className="text-sm text-blue-600 hover:text-blue-700"
@@ -386,12 +396,12 @@ export function ProjectDashboardPage() {
                 عرض الكل
               </button>
             </div>
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {recentActivity.length > 0 ? (
                 recentActivity.map((activity, idx) => (
                   <div
                     key={idx}
-                    className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                    className="flex items-start gap-3 p-2 sm:p-3 hover:bg-gray-50 rounded-lg transition-colors"
                   >
                     <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                       <User className="w-4 h-4 text-blue-600" />
@@ -413,9 +423,9 @@ export function ProjectDashboardPage() {
           </div>
 
           {isProjectManager && (
-            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+            <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold flex items-center gap-2">
+                <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
                   <Bell className="w-5 h-5 text-amber-600" />
                   إشعارات تتطلب إجراء
                   {unreadCount > 0 && (
@@ -460,10 +470,11 @@ export function ProjectDashboardPage() {
           )}
         </div>
 
+        {/* Latest Notifications (for PM) */}
         {isProjectManager && (
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold flex items-center gap-2">
+              <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
                 <Bell className="w-5 h-5 text-blue-600" />
                 أحدث الإشعارات
               </h3>

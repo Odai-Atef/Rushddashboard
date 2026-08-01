@@ -103,18 +103,18 @@ export function SubscriptionsListPage() {
   const hasActiveFilters = filters.organizationId || filters.organizationName || filters.packageId || filters.status;
 
   return (
-    <div className="min-h-full bg-gray-50 p-6" dir="rtl">
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6" dir="rtl">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
           <div className="flex items-center gap-3">
             <CreditCard className="w-7 h-7 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">إدارة الاشتراكات</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-gray-900">إدارة الاشتراكات</h1>
           </div>
           <span className="text-sm text-gray-500">إجمالي: {total}</span>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
-          <div className="flex flex-col md:flex-row gap-4 flex-wrap">
+          <div className="flex flex-col sm:flex-row gap-4 flex-wrap">
             <div className="flex-1 min-w-[200px]">
               <label className="block text-sm font-medium text-gray-700 mb-1">اسم الجهة</label>
               <div className="relative">

@@ -596,34 +596,34 @@ export function ProjectListPage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold mb-2">إدارة المشاريع</h1>
-            <p className="text-gray-600">{pagination.total} مشروع</p>
+    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+      <div className="space-y-4 sm:space-y-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div className="w-full">
+            <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">إدارة المشاريع</h1>
+            <p className="text-gray-600 text-sm sm:text-base">{pagination.total} مشروع</p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex gap-3 w-full sm:w-auto">
             <button
               onClick={() => navigate('/dashboard/project-management')}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+              className="flex-1 sm:flex-none px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base"
             >
               لوحة القيادة
             </button>
             {(user?.roleSlug === 'entity-managers' || user?.roleSlug === 'project-managers') && (
               <button
                 onClick={() => navigate('/dashboard/project-management/create')}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
               >
-                <Plus className="w-5 h-5" />
+                <Plus className="w-4 sm:w-5 h-4 sm:h-5" />
                 مشروع جديد
               </button>
             )}
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-          <div className="flex flex-col md:flex-row gap-4">
+        <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <input
@@ -632,11 +632,11 @@ export function ProjectListPage() {
                 onChange={(e) => updateFilter('search', e.target.value)}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="بحث في المشاريع..."
-                className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
               />
             </div>
 
-            <div className="flex gap-2 border border-gray-300 rounded-lg p-1">
+            <div className="flex gap-2 border border-gray-300 rounded-lg p-1 shrink-0">
               <button
                 onClick={() => setListViewMode('list')}
                 className={`p-2 rounded ${listViewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
@@ -659,7 +659,7 @@ export function ProjectListPage() {
 
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`px-4 py-2 border rounded-lg transition-colors flex items-center gap-2 ${showFilters ? 'border-blue-600 text-blue-600 bg-blue-50' : 'border-gray-300 hover:bg-gray-50'}`}
+              className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0 ${showFilters ? 'border-blue-600 text-blue-600 bg-blue-50' : 'border-gray-300 hover:bg-gray-50'}`}
             >
               <Filter className="w-5 h-5" />
               تصفية
@@ -668,7 +668,7 @@ export function ProjectListPage() {
 
           {showFilters && (
             <div className="mt-4 pt-4 border-t border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">الحالة</label>
                   <select
@@ -722,7 +722,7 @@ export function ProjectListPage() {
         ) : !isProjectManager && !isQualified ? (
           renderQualificationBlocker()
         ) : (
-          renderListContent()
+          <div className="overflow-x-auto -mx-3 sm:mx-0 px-3 sm:px-0">{renderListContent()}</div>
         )}
 
         {!isLoading && !error && projects.length > 0 && renderPagination()}

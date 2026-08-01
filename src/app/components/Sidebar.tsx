@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router';
+import { useState } from 'react';
 import {
   LayoutDashboard,
   Users,
@@ -28,6 +29,7 @@ import {
   Activity,
   Ticket,
   CreditCard,
+  Menu,
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
@@ -56,6 +58,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
   const currentUserId = user?.id;
   const canSeeRestricted = Boolean(currentUserId && allowedUserIds.includes(currentUserId));
   const roleSlug = user?.roleSlug ?? null;
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const commonNavItems: NavItem[] = [
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment', restricted: false },
@@ -109,15 +112,32 @@ export function Sidebar({ activeView, className }: SidebarProps) {
   const visibleItems = roleAllowedItems.filter((item) => !item.restricted || canSeeRestricted);
 
   return (
-    <aside className={cn("bg-sidebar border-l border-sidebar-border flex flex-col", className)}>
+    <aside className={cn(
+      "bg-sidebar border-l border-sidebar-border flex-col hidden lg:flex transition-all duration-300",
+      isCollapsed ? "w-[80px]" : "w-[280px]",
+      className
+    )}>
       {/* Logo */}
-      <div className="p-6 border-b border-sidebar-border text-center">
+      <div className="p-4 border-b border-sidebar-border text-center relative">
         <img
           src="/logo.png"
           alt="منصة رشد"
-          className="w-[80px] h-[80px] object-contain mx-auto mb-2"
+          className={cn(
+            "object-contain mx-auto mb-2 transition-all duration-300",
+            isCollapsed ? "w-[48px] h-[48px]" : "w-[80px] h-[80px]"
+          )}
         />
-        <p className="text-muted-foreground text-sm">منصة رشد</p>
+        {!isCollapsed && (
+          <p className="text-muted-foreground text-sm">منصة رشد</p>
+        )}
+        {/* Collapse toggle for desktop */}
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-md hover:bg-sidebar-accent/50 text-sidebar-foreground/60 hover:text-sidebar-foreground transition-colors"
+          aria-label={isCollapsed ? 'توسيع القائمة' : 'طي القائمة'}
+        >
+          <Menu className={cn("w-4 h-4 transition-transform duration-300", isCollapsed && "rotate-180")} />
+        </button>
       </div>
 
       {/* Navigation */}
@@ -131,6 +151,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
               <li key={item.id}>
                 <NavLink
                   to={item.linkTo ?? item.path}
+                  title={item.label}
                   className={cn(
                     "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-right",
                     isActive
@@ -139,7 +160,9 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   )}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
-                  <span>{item.label}</span>
+                  {!isCollapsed && (
+                    <span className="whitespace-nowrap overflow-hidden text-ellipsis">{item.label}</span>
+                  )}
                 </NavLink>
               </li>
             );
@@ -149,9 +172,17 @@ export function Sidebar({ activeView, className }: SidebarProps) {
 
       {/* Footer */}
       <div className="p-4 border-t border-sidebar-border">
-        <p className="text-muted-foreground text-xs text-center">
-          © 2026 منصة رشد
-        </p>
+        {!isCollapsed ? (
+          <p className="text-muted-foreground text-xs text-center">
+            © 2026 منصة رشد
+          </p>
+        ) : (
+          <div className="flex justify-center">
+            <div className="w-6 h-6 rounded-full bg-sidebar-accent/30 flex items-center justify-center text-[10px] text-muted-foreground">
+              ر
+            </div>
+          </div>
+        )}
       </div>
     </aside>
   );

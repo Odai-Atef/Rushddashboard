@@ -160,18 +160,20 @@ export function DonorsPage() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-6">
       {currentView === 'dashboard' && (
         <>
           {/* Header */}
-          <div>
-            <h1 className="text-3xl font-bold mb-2">لوحة قاعدة الجهات المانحة</h1>
-            <p className="text-muted-foreground">نظرة شاملة على الجهات المانحة وفرص التمويل</p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div className="w-full">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">لوحة قاعدة الجهات المانحة</h1>
+              <p className="text-muted-foreground text-sm sm:text-base">نظرة شاملة على الجهات المانحة وفرص التمويل</p>
+            </div>
           </div>
 
           {/* KPI Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="p-3 bg-chart-1/10 rounded-lg">
                   <Building2 className="w-5 h-5 text-chart-1" />
@@ -181,70 +183,70 @@ export function DonorsPage() {
                   +12%
                 </span>
               </div>
-              <p className="text-3xl font-bold">{stats.totalDonors}</p>
-              <p className="text-sm text-muted-foreground mt-1">إجمالي الجهات المانحة</p>
+              <p className="text-2xl sm:text-3xl font-bold">{stats.totalDonors}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">إجمالي الجهات المانحة</p>
             </div>
 
-            <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="p-3 bg-chart-2/10 rounded-lg">
                   <CheckCircle2 className="w-5 h-5 text-chart-2" />
                 </div>
               </div>
-              <p className="text-3xl font-bold text-green-600">{stats.withContact}</p>
-              <p className="text-sm text-muted-foreground mt-1">جهات بها بيانات تواصل</p>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.withContact}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">جهات بها بيانات تواصل</p>
             </div>
 
-            <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="p-3 bg-chart-3/10 rounded-lg">
                   <Target className="w-5 h-5 text-chart-3" />
                 </div>
               </div>
-              <p className="text-3xl font-bold text-chart-3">{stats.totalFundingAreas}</p>
-              <p className="text-sm text-muted-foreground mt-1">مجالات تمويل مسجلة</p>
+              <p className="text-2xl sm:text-3xl font-bold text-chart-3">{stats.totalFundingAreas}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">مجالات تمويل مسجلة</p>
             </div>
 
-            <div className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
               <div className="flex items-center justify-between mb-3">
                 <div className="p-3 bg-chart-4/10 rounded-lg">
                   <AlertCircle className="w-5 h-5 text-chart-4" />
                 </div>
               </div>
-              <p className="text-3xl font-bold text-chart-4">{stats.withWebsite}</p>
-              <p className="text-sm text-muted-foreground mt-1">جهات لديها موقع إلكتروني</p>
+              <p className="text-2xl sm:text-3xl font-bold text-chart-4">{stats.withWebsite}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground mt-1">جهات لديها موقع إلكتروني</p>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
             <button
               onClick={goToTable}
-              className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
+              className="p-4 sm:p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
             >
-              <List className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-              <p className="font-medium text-sm">تصفح الجهات المانحة</p>
+              <List className="w-6 sm:w-8 h-6 sm:h-8 text-muted-foreground mx-auto mb-2 sm:mb-3" />
+              <p className="font-medium text-xs sm:text-sm">تصفح الجهات المانحة</p>
             </button>
             <button
               onClick={goToTable}
-              className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
+              className="p-4 sm:p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
             >
-              <Target className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-              <p className="font-medium text-sm">فرص التمويل</p>
+              <Target className="w-6 sm:w-8 h-6 sm:h-8 text-muted-foreground mx-auto mb-2 sm:mb-3" />
+              <p className="font-medium text-xs sm:text-sm">فرص التمويل</p>
             </button>
             <button
               onClick={goToTable}
-              className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
+              className="p-4 sm:p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
             >
-              <Bell className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-              <p className="font-medium text-sm">التنبيهات والمتابعة</p>
+              <Bell className="w-6 sm:w-8 h-6 sm:h-8 text-muted-foreground mx-auto mb-2 sm:mb-3" />
+              <p className="font-medium text-xs sm:text-sm">التنبيهات والمتابعة</p>
             </button>
             <button
               onClick={goToTable}
-              className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
+              className="p-4 sm:p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
             >
-              <BarChart3 className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
-              <p className="font-medium text-sm">التحليلات</p>
+              <BarChart3 className="w-6 sm:w-8 h-6 sm:h-8 text-muted-foreground mx-auto mb-2 sm:mb-3" />
+              <p className="font-medium text-xs sm:text-sm">التحليلات</p>
             </button>
           </div>
 

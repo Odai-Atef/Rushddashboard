@@ -82,6 +82,17 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
 
   const visibleItems = filterMenuItemsByRole(navItems, roleSlug);
 
+  // Close on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -101,10 +112,16 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
       <div
         className="fixed inset-0 bg-black/50 z-40 lg:hidden"
         onClick={onClose}
+        aria-hidden="true"
       />
 
       {/* Drawer */}
-      <div className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-sidebar border-l border-sidebar-border z-50 flex flex-col lg:hidden">
+      <div
+        className="fixed top-0 right-0 h-full w-[min(320px,85vw)] bg-sidebar border-l border-sidebar-border z-50 flex flex-col lg:hidden shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-label="التنقل"
+      >
         {/* Header */}
         <div className="p-6 border-b border-sidebar-border flex items-center justify-between">
           <div>

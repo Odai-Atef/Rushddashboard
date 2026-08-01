@@ -150,14 +150,20 @@ export function TopBar({
       {/* Mobile Menu Button */}
       <button
         onClick={onMenuClick}
-        className="lg:hidden p-2 hover:bg-accent rounded-lg transition-colors"
+        className="lg:hidden p-2 hover:bg-accent rounded-lg transition-colors shrink-0"
         aria-label="القائمة"
       >
         <Menu className="w-5 h-5" />
       </button>
 
+      {/* Logo for mobile (hidden on desktop) */}
+      <div className="lg:hidden flex items-center gap-2 shrink-0">
+        <img src="/logo.png" alt="منصة رشد" className="w-8 h-8 object-contain" />
+        <span className="font-bold text-sm">رشد</span>
+      </div>
+
       {/* Search */}
-      <div className="flex-1 max-w-xl mx-4">
+      <div className="flex-1 max-w-xl mx-4 hidden sm:block">
         <div className="relative">
           <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
           <input
@@ -169,7 +175,7 @@ export function TopBar({
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 sm:gap-2">
         {/* Notifications */}
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
