@@ -41,7 +41,7 @@ export const ChartTooltip = ({
   return (
     <div
       className={cn(
-        'rounded-lg border px-4 py-3 shadow-lg',
+        'rounded-[12px] border px-4 py-3 shadow-[var(--impact-shadow-2)]',
         'bg-[var(--impact-surface)] border-[var(--impact-border)]',
         'dark:bg-[var(--impact-main-surface)] dark:border-[var(--impact-border)]',
         'min-w-[180px]',

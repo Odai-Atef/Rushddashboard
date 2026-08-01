@@ -22,7 +22,7 @@ export function MapSkeleton({ className }: MapSkeletonProps) {
 
       {/* Mock map outline */}
       <div className="relative w-full h-full p-6 md:p-10"
-        style={{ minHeight: 'inherit' }}
+        className="min-h-full"
       >
         {/* Saudi-like abstract shape */}
         <svg

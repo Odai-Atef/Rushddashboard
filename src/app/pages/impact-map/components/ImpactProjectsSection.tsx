@@ -36,7 +36,7 @@ export function ImpactProjectsSection({
   return (
     <section
       className={cn(
-        'space-y-[var(--spacing-grid-gap)]',
+        'space-y-6',
         'animate-fade-in',
         className
       )}

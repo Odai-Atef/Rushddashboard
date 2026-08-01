@@ -128,8 +128,8 @@ export const LineChartCard = ({
           >
             <defs>
               <linearGradient id="sroiGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2563EB" stopOpacity={0.25} />
-                <stop offset="100%" stopColor="#2563EB" stopOpacity={0.02} />
+                <stop offset="0%" stopColor="var(--impact-primary)" stopOpacity={0.25} />
+                <stop offset="100%" stopColor="var(--impact-primary)" stopOpacity={0.02} />
               </linearGradient>
             </defs>
 
@@ -173,7 +173,7 @@ export const LineChartCard = ({
               type="monotone"
               dataKey="value"
               name="العائد الفعلي"
-              stroke="#2563EB"
+              stroke="var(--impact-primary)"
               strokeWidth={2.5}
               fill="url(#sroiGradient)"
               animationDuration={ANIMATION_DURATION}
@@ -197,7 +197,7 @@ export const LineChartCard = ({
                 type="monotone"
                 dataKey="target"
                 name="الهدف"
-                stroke="#94A3B8"
+                stroke="var(--impact-text-muted)"
                 strokeWidth={2}
                 strokeDasharray="6 4"
                 fill="none"

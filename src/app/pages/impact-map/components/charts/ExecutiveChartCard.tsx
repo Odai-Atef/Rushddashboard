@@ -32,7 +32,7 @@ export const ExecutiveChartCard = ({
   return (
     <div
       className={cn(
-        'rounded-[16px] border p-5 md:p-6',
+        'rounded-[var(--impact-radius-chart)] border p-5 md:p-6',
         'bg-[var(--impact-surface)] border-[var(--impact-border)]',
         'shadow-[var(--impact-shadow-1)]',
         'transition-all duration-200 ease-in-out',

@@ -151,10 +151,7 @@ function MetricRow({ metric, index }: { metric: SummaryMetric; index: number }) 
         className={cn(
           'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0'
         )}
-        style={{
-          backgroundColor: 'var(--primary)',
-          opacity: 0.1,
-        }}
+        className="bg-[var(--primary)]/10"
       >
         <Icon className="w-5 h-5 text-[var(--primary)]" />
       </div>

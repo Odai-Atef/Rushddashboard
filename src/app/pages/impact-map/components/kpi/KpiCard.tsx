@@ -20,9 +20,9 @@ export function KpiCard({ data, index = 0, className }: KpiCardProps) {
       className={cn(
         // Card base: 16px radius, 1px border, soft shadow, 24px padding
         'rounded-[16px] border p-6',
-        // Background gradient: Light (#FFFFFF → #F8FAFC), Dark (#0F172A → #16253D)
-        'bg-gradient-to-b from-white to-[#F8FAFC]',
-        'dark:from-[#0F172A] dark:to-[#16253D]',
+        // Background gradient using semantic tokens
+        'bg-gradient-to-b from-[var(--impact-surface)] to-[var(--impact-surface-secondary)]',
+        'dark:from-[var(--impact-main-surface)] dark:to-[var(--impact-elevated)]',
         // Border color
         'border-[var(--impact-border)]',
         // Shadow
@@ -49,13 +49,13 @@ export function KpiCard({ data, index = 0, className }: KpiCardProps) {
       tabIndex={0}
     >
       {/* Top row: Icon (left) + Trend badge (right) */}
-      <div className="flex items-start justify-between mb-5">
+      <div className="flex items-start justify-between mb-4">
         <KpiIcon iconName={icon} />
         <TrendBadge percentage={trendPercentage} direction={trendDirection} />
       </div>
 
       {/* KPI value */}
-      <div className="mt-auto">
+      <div className="mt-auto mb-2">
         <KpiValue value={value} formattedValue={formattedValue} />
       </div>
 

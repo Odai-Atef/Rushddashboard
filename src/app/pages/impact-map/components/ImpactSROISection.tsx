@@ -136,7 +136,7 @@ function SummaryPill({
   };
 
   return (
-    <div className={cn('rounded-xl p-3 text-center', variantClasses[variant])}>
+    <div className={cn('rounded-[var(--impact-radius-card)] p-4 text-center', variantClasses[variant])}>
       <div className="text-xs text-[var(--impact-text-muted)] mb-1">{label}</div>
       <div className="text-lg font-bold">{value}</div>
     </div>

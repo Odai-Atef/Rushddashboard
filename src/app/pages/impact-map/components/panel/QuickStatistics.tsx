@@ -78,7 +78,7 @@ const ICON_MAP: Record<string, typeof FolderKanban> = {
 function StatCard({ stat, index }: { stat: QuickStatistic; index: number }) {
   const Icon = ICON_MAP[stat.icon] ?? FolderKanban;
   const TrendIcon = stat.trend === 'up' ? TrendingUp : TrendingDown;
-  const trendColor = stat.trend === 'up' ? '#22C55E' : '#EF4444';
+  const trendColor = stat.trend === 'up' ? 'var(--impact-success)' : 'var(--impact-danger)';
 
   return (
     <motion.div
@@ -105,10 +105,7 @@ function StatCard({ stat, index }: { stat: QuickStatistic; index: number }) {
         className={cn(
           'w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0'
         )}
-        style={{
-          backgroundColor: 'var(--primary)',
-          opacity: 0.1,
-        }}
+        className="bg-[var(--primary)]/10"
       >
         <Icon className="w-5 h-5 text-[var(--primary)]" />
       </div>

@@ -39,7 +39,7 @@ export function RankingCard({
   const { rank, regionAr, projects, funding, impactScore, trend } = ranking;
   const isTopThree = rank <= 3;
   const TrendIcon = trend === 'up' ? TrendingUp : TrendingDown;
-  const trendColor = trend === 'up' ? '#22C55E' : '#EF4444';
+  const trendColor = trend === 'up' ? 'var(--impact-success)' : 'var(--impact-danger)';
 
   return (
     <motion.div

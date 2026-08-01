@@ -26,9 +26,7 @@ export function MapLegend({ items, className }: MapLegendProps) {
         'transition-all duration-200',
         className
       )}
-      style={{
-        boxShadow: '0 4px 16px rgba(15,23,42,0.08)',
-      }}
+
       role="region"
       aria-label="مفتاح الخارطة"
     >

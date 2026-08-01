@@ -21,7 +21,7 @@ export function KpiValue({ value, formattedValue, className }: KpiValueProps) {
     if (!isInView || hasAnimated.current) return;
     hasAnimated.current = true;
 
-    const duration = 600; // ms
+    const duration = 600; // Counter animation: 600ms (var(--impact-transition-counter))
     const startTime = performance.now();
     const startValue = 0;
     const endValue = value;

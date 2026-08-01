@@ -22,7 +22,7 @@ export function ImpactCard({
       className={cn(
         'bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)]',
         'shadow-[var(--shadow-card)]',
-        'transition-all duration-[var(--transition-duration)] ease-out',
+        'transition-all duration-200 ease-out', // Card hover: 200ms
         'hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px]',
         'flex flex-col',
         className

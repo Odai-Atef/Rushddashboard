@@ -68,13 +68,13 @@ export const BarChartCard = ({
   );
 
   const barColors = [
-    '#2563EB',
-    '#3B82F6',
-    '#0EA5E9',
-    '#22C55E',
-    '#F59E0B',
-    '#EF4444',
-    '#8B5CF6',
+    'var(--impact-primary)',
+    'var(--impact-info)',
+    'var(--impact-success)',
+    'var(--impact-warning)',
+    'var(--impact-danger)',
+    'var(--impact-primary-hover)',
+    'var(--impact-info)',
   ];
 
   const renderTooltip = useCallback(
@@ -205,8 +205,8 @@ export const BarChartCard = ({
             <Bar
               dataKey="value"
               name="المشاريع"
-              radius={horizontal ? [0, 8, 8, 0] : [8, 8, 0, 0]}
-              animationDuration={ANIMATION_DURATION}
+              radius={horizontal ? [0, 6, 6, 0] : [6, 6, 0, 0]}
+              animationDuration={ANIMATION_DURATION} // Chart animation: 500ms
               animationEasing="ease-out"
               maxBarSize={horizontal ? 28 : 40}
             >

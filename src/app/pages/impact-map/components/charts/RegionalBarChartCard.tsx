@@ -68,9 +68,9 @@ export const RegionalBarChartCard = ({
   const yDomain = useMemo(() => [0, Math.ceil(maxValue * 1.15)], [maxValue]);
 
   const barColors = [
-    '#2563EB', '#3B82F6', '#0EA5E9', '#22C55E',
-    '#F59E0B', '#EF4444', '#8B5CF6', '#14B8A6',
-    '#EC4899', '#6366F1', '#F97316', '#84CC16', '#06B6D4',
+    'var(--impact-primary)', 'var(--impact-info)', 'var(--impact-success)', 'var(--impact-warning)',
+    'var(--impact-danger)', 'var(--impact-primary-hover)', 'var(--impact-info)', 'var(--impact-success)',
+    'var(--impact-warning)', 'var(--impact-danger)', 'var(--impact-primary)', 'var(--impact-info)', 'var(--impact-success)',
   ];
 
   const renderTooltip = useCallback(
@@ -201,7 +201,7 @@ export const RegionalBarChartCard = ({
             <Bar
               dataKey="value"
               name="المشاريع"
-              radius={[8, 8, 0, 0]}
+              radius={[6, 6, 0, 0]}
               animationDuration={ANIMATION_DURATION}
               animationEasing="ease-out"
               maxBarSize={36}

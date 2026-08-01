@@ -54,7 +54,7 @@ export function MapRegion({
       strokeWidth={strokeWidth}
       strokeLinejoin="round"
       className={cn(
-        'cursor-pointer transition-all duration-200',
+        'cursor-pointer transition-all duration-200', // Map hover: 200ms
         'focus:outline-none'
       )}
       style={{

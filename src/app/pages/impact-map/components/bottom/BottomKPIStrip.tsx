@@ -179,10 +179,7 @@ function KpiStripCard({
         className={cn(
           'w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0'
         )}
-        style={{
-          backgroundColor: 'var(--primary)',
-          opacity: 0.1,
-        }}
+        className="bg-[var(--primary)]/10"
       >
         <Icon className="w-5 h-5 text-[var(--primary)]" />
       </div>
@@ -199,7 +196,7 @@ function KpiStripCard({
                 backgroundColor: isPositive
                   ? 'rgba(34, 197, 94, 0.10)'
                   : 'rgba(239, 68, 68, 0.10)',
-                color: isPositive ? '#22C55E' : '#EF4444',
+                color: isPositive ? 'var(--impact-success)' : 'var(--impact-danger)',
               }}
             >
               {isPositive ? '+' : ''}{metric.trendValue}%

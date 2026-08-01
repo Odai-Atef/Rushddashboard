@@ -13,7 +13,7 @@ export function SectionHeader({
 }: SectionHeaderProps) {
   return (
     <div className={cn('space-y-1 mb-[var(--spacing-section-gap)]', className)}>
-      <h2 className="text-2xl md:text-3xl font-bold text-[var(--text-primary)] leading-tight">
+      <h2 className="text-[32px] md:text-[40px] font-bold text-[var(--text-primary)] leading-tight">
         {title}
       </h2>
       {subtitle && (

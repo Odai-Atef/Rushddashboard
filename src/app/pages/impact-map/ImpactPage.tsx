@@ -86,7 +86,7 @@ export function ImpactPage() {
 
   const handleRetry = useCallback(() => {
     // Retry logic will be implemented with API integration
-    console.log('Retry loading data...');
+    // Retry logic placeholder
   }, []);
 
   const handleViewAllProjects = useCallback(() => {
@@ -272,10 +272,11 @@ function FilterPlaceholder({ label }: { label: string }) {
     <button
       disabled
       className={cn(
-        'px-3 py-1.5 rounded-md text-sm text-[var(--text-muted)]',
+        'px-3 py-1.5 rounded-[12px] text-sm text-[var(--text-muted)]',
         'bg-[var(--hover)]/50 border border-[var(--border)]',
         'cursor-not-allowed opacity-60',
-        'focus:outline-none'
+        'focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30',
+        'min-h-[32px]'
       )}
       aria-label={`فلتر ${label} - قيد التطوير`}
     >

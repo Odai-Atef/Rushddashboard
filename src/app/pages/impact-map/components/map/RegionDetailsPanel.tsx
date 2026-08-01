@@ -39,9 +39,7 @@ export function RegionDetailsPanel({
         'animate-slide-in-right',
         className
       )}
-      style={{
-        boxShadow: '0 12px 32px rgba(15,23,42,0.14)',
-      }}
+
       role="dialog"
       aria-label={`تفاصيل منطقة ${region.nameAr}`}
     >
@@ -49,7 +47,7 @@ export function RegionDetailsPanel({
       <div className="flex items-center justify-between p-4 border-b border-[var(--impact-divider)]">
         <h3
           className="text-base font-bold"
-          style={{ color: 'var(--impact-text-primary)' }}
+          className="text-[var(--impact-text-primary)]"
         >
           {region.nameAr}
         </h3>
@@ -103,13 +101,13 @@ export function RegionDetailsPanel({
         <div className="space-y-1">
           <span
             className="text-xs font-medium"
-            style={{ color: 'var(--impact-text-muted)' }}
+            className="text-[var(--impact-text-muted)]"
           >
             أحدث مشروع
           </span>
           <p
             className="text-sm font-semibold leading-relaxed"
-            style={{ color: 'var(--impact-text-primary)' }}
+            className="text-[var(--impact-text-primary)]"
           >
             {recentProject}
           </p>
@@ -123,7 +121,7 @@ export function RegionDetailsPanel({
           className={cn(
             'w-full flex items-center justify-center gap-2',
             'px-4 py-2.5 rounded-xl text-sm font-medium',
-            'bg-[var(--impact-primary)] text-white',
+            'bg-[var(--impact-primary)] text-[var(--impact-surface)]',
             'hover:bg-[var(--impact-primary-hover)]',
             'transition-colors duration-200',
             'focus:outline-none focus:ring-2 focus:ring-[var(--impact-primary)]/40'
@@ -152,16 +150,10 @@ function StatRow({
         {icon}
       </div>
       <div className="flex-1">
-        <div
-          className="text-xs"
-          style={{ color: 'var(--impact-text-muted)' }}
-        >
+        <div className="text-xs text-[var(--impact-text-muted)]">
           {label}
         </div>
-        <div
-          className="text-sm font-bold tabular-nums"
-          style={{ color: 'var(--impact-text-primary)' }}
-        >
+        <div className="text-sm font-bold tabular-nums text-[var(--impact-text-primary)]">
           {value}
         </div>
       </div>

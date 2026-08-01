@@ -102,7 +102,7 @@ function EnhancedRankingRow({
   const { rank, regionAr, projects, funding, impactScore, trend } = region;
   const isTopThree = rank <= 3;
   const TrendIcon = trend === 'up' ? TrendingUp : TrendingDown;
-  const trendColor = trend === 'up' ? '#22C55E' : '#EF4444';
+  const trendColor = trend === 'up' ? 'var(--impact-success)' : 'var(--impact-danger)';
 
   return (
     <motion.div
@@ -192,10 +192,10 @@ function EnhancedRankingRow({
               style={{
                 backgroundColor:
                   impactScore >= 90
-                    ? '#22C55E'
+                    ? 'var(--impact-success)'
                     : impactScore >= 80
-                      ? '#2563EB'
-                      : '#F59E0B',
+                      ? 'var(--impact-primary)'
+                      : 'var(--impact-warning)',
               }}
               initial={{ width: 0 }}
               animate={{ width: `${(funding / maxFunding) * 100}%` }}

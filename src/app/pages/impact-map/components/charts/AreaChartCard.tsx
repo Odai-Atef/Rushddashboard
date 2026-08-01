@@ -123,9 +123,9 @@ export const AreaChartCard = ({
           >
             <defs>
               <linearGradient id="fundingGradient" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#2563EB" stopOpacity={0.2} />
-                <stop offset="60%" stopColor="#2563EB" stopOpacity={0.06} />
-                <stop offset="100%" stopColor="#2563EB" stopOpacity={0} />
+                <stop offset="0%" stopColor="var(--impact-primary)" stopOpacity={0.2} />
+                <stop offset="60%" stopColor="var(--impact-primary)" stopOpacity={0.06} />
+                <stop offset="100%" stopColor="var(--impact-primary)" stopOpacity={0} />
               </linearGradient>
             </defs>
 
@@ -169,7 +169,7 @@ export const AreaChartCard = ({
               type="monotone"
               dataKey="value"
               name="التمويل الشهري"
-              stroke="#2563EB"
+              stroke="var(--impact-primary)"
               strokeWidth={2.5}
               fill="url(#fundingGradient)"
               animationDuration={ANIMATION_DURATION}

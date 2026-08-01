@@ -18,11 +18,11 @@ const levelSize = {
 };
 
 const levelColor = {
-  'very-high': '#2563EB',
-  high: '#3B82F6',
-  medium: '#38BDF8',
-  low: '#93C5FD',
-  'very-low': '#DBEAFE',
+  'very-high': 'var(--impact-primary)',
+  high: 'var(--impact-primary-hover)',
+  medium: 'var(--impact-info)',
+  low: 'var(--impact-info)',
+  'very-low': 'var(--impact-border)',
 };
 
 export function ImpactMarker({ marker, size, className }: ImpactMarkerProps) {

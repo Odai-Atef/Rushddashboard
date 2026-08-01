@@ -46,7 +46,7 @@ export function ImpactSidebar({
       className={cn(
         'w-full lg:w-[380px] xl:w-[420px]',
         'flex-shrink-0',
-        'space-y-[var(--spacing-grid-gap)]',
+        'space-y-6',
         'animate-fade-in',
         className
       )}

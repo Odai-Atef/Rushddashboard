@@ -47,7 +47,7 @@ export function RegionalSummary({
       <div className="space-y-3">
         {regions.map((region, index) => {
           const TrendIcon = region.trend === 'up' ? TrendingUp : TrendingDown;
-          const trendColor = region.trend === 'up' ? '#22C55E' : '#EF4444';
+          const trendColor = region.trend === 'up' ? 'var(--impact-success)' : 'var(--impact-danger)';
           const isTopThree = index < 3;
 
           return (

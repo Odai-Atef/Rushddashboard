@@ -53,7 +53,7 @@ export const ChartSkeleton = ({
               key={i}
               className="w-full mx-1 rounded-t-md bg-[var(--impact-border)] dark:bg-[var(--impact-border)] opacity-40"
               style={{
-                height: `${Math.max(15, Math.random() * 80)}%`,
+                height: `${20 + ((i * 17) % 60)}%`,
                 animationDelay: `${i * 100}ms`,
               }}
             />

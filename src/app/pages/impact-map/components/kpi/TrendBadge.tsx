@@ -28,10 +28,10 @@ export function TrendBadge({
         'text-xs font-semibold leading-none',
         // Minimum touch target
         'min-h-[28px]',
-        // Color variants
+        // Color variants using semantic tokens
         isPositive
-          ? 'bg-[#DCFCE7] text-[#166534] dark:bg-[rgba(34,197,94,0.20)] dark:text-[#4ADE80]'
-          : 'bg-[#FEE2E2] text-[#991B1B] dark:bg-[rgba(239,68,68,0.20)] dark:text-[#F87171]',
+          ? 'bg-[var(--impact-success)]/10 text-[var(--impact-success)] dark:bg-[var(--impact-success)]/20 dark:text-[var(--impact-success)]'
+          : 'bg-[var(--impact-danger)]/10 text-[var(--impact-danger)] dark:bg-[var(--impact-danger)]/20 dark:text-[var(--impact-danger)]',
         className
       )}
       initial={{ opacity: 0, scale: 0.9 }}

@@ -43,7 +43,7 @@ export function ProgressBar({
         aria-label={`نسبة التقدم ${clampedProgress}%`}
       >
         <div
-          className="h-full rounded-full transition-all duration-500 ease-out"
+          className="h-full rounded-full transition-all duration-300 ease-out"
           style={{
             width: `${clampedProgress}%`,
             backgroundColor: color,
