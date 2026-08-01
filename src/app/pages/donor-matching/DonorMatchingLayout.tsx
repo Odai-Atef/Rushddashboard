@@ -35,7 +35,7 @@ export function DonorMatchingLayout() {
  )}
 
  {/* Content */}
- <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)]">
+ <div className="flex-1 overflow-y-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8 w-full min-w-0">
  <Outlet />
  </div>
  </div>

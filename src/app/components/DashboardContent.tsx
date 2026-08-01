@@ -19,7 +19,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Executive Dashboard when executive view is active
  if (activeView === 'executive') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <ExecutiveDashboard />
  </div>
  );
@@ -28,7 +28,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render AI Analysis Page when ai-analysis view is active
  if (activeView === 'ai-analysis') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <AIAnalysisPage />
  </div>
  );
@@ -37,7 +37,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Sales Dashboard when sales view is active
  if (activeView === 'sales') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <SalesDashboard />
  </div>
  );
@@ -46,7 +46,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Customers Dashboard when customers view is active
  if (activeView === 'customers') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <CustomersDashboard />
  </div>
  );
@@ -55,7 +55,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Profitability Dashboard when profitability view is active
  if (activeView === 'profitability') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <ProfitabilityDashboard />
  </div>
  );
@@ -64,7 +64,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Operations Dashboard when operations view is active
  if (activeView === 'operations') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <OperationsDashboard />
  </div>
  );
@@ -73,7 +73,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render HR Dashboard when hr view is active
  if (activeView === 'hr') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <HRDashboard />
  </div>
  );
@@ -82,7 +82,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Marketing Dashboard when marketing view is active
  if (activeView === 'marketing') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <MarketingDashboard />
  </div>
  );
@@ -91,7 +91,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Recommendations Dashboard when recommendations view is active
  if (activeView === 'recommendations') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <RecommendationsDashboard />
  </div>
  );
@@ -100,7 +100,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  // Render Opportunities Dashboard when opportunities view is active
  if (activeView === 'opportunities') {
  return (
- <div className="p-4 md:p-6 lg:p-8 bg-background">
+ <div className="w-full min-w-0">
  <OpportunitiesDashboard />
  </div>
  );
@@ -133,7 +133,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  };
 
  return (
- <div className="p-[var(--spacing-page-padding)] space-y-[var(--spacing-section-gap)] bg-[var(--background)]">
+ <div className="w-full min-w-0 space-y-[var(--spacing-section-gap)] bg-[var(--background)]">
  {/* Header */}
  <div className="border-b border-[var(--border)] pb-[var(--spacing-card-padding)]">
  <h2 className="text-[var(--text-page-title)] font-bold text-[var(--text-primary)] mb-2">{getViewTitle()}</h2>

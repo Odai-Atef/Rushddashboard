@@ -30,3 +30,140 @@ img, video, canvas, svg {
 table {
   max-width: 100%;
 }
+
+/* ============================================================
+   MOBILE-FIRST RESPONSIVE SPACING SYSTEM
+   ============================================================ */
+
+/* Mobile: 320px - 767px */
+@media (max-width: 767px) {
+  :root {
+    --spacing-page-padding: 1rem;
+    --spacing-card-padding: 1rem;
+    --spacing-grid-gap: 1rem;
+    --spacing-section-gap: 1.5rem;
+  }
+
+  /* Ensure all page content uses full viewport on mobile */
+  #root {
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 0;
+    overflow-x: hidden;
+  }
+
+  /* Force main content to use full width */
+  main {
+    width: 100% !important;
+    max-width: 100vw !important;
+    min-width: 0 !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Ensure direct children of main expand to full width */
+  main > * {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Remove max-width constraints from page containers */
+  /* This targets common patterns: max-w-7xl, max-w-6xl, max-w-5xl, max-w-4xl, max-w-3xl, max-w-2xl, max-w-xl */
+  [class*="max-w-7xl"],
+  [class*="max-w-6xl"],
+  [class*="max-w-5xl"],
+  [class*="max-w-4xl"],
+  [class*="max-w-3xl"],
+  [class*="max-w-2xl"],
+  [class*="max-w-xl"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  /* Remove large padding from cards and containers */
+  .p-8, .p-10, .p-12,
+  [class*="p-8"],
+  [class*="p-10"],
+  [class*="p-12"] {
+    padding: 1rem !important;
+  }
+
+  .px-8, .px-10, .px-12 {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .py-8, .py-10, .py-12 {
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  /* Ensure cards use full width */
+  [class*="card"],
+  .card,
+  [class*="Card"] {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* Ensure dialogs/sheets use almost full viewport */
+  [data-slot="dialog-content"],
+  [data-slot="sheet-content"],
+  [data-slot="drawer-content"] {
+    max-width: calc(100vw - 2rem) !important;
+    width: calc(100vw - 2rem) !important;
+  }
+
+  /* Ensure forms and inputs stretch to full width */
+  input, textarea, select, button {
+    max-width: 100%;
+  }
+
+  /* Force grids to single column on mobile */
+  .grid:not([class*="grid-cols-1"]) {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Ensure tables don't overflow */
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+  }
+
+  /* Stack flex rows vertically */
+  .flex-row:not(.flex-col) {
+    flex-direction: column !important;
+  }
+}
+
+/* Tablet: 768px - 1023px */
+@media (min-width: 768px) and (max-width: 1023px) {
+  :root {
+    --spacing-page-padding: 1.5rem;
+    --spacing-card-padding: 1.25rem;
+    --spacing-grid-gap: 1.25rem;
+    --spacing-section-gap: 1.75rem;
+  }
+}
+
+/* Desktop: 1024px+ */
+@media (min-width: 1024px) {
+  :root {
+    --spacing-page-padding: 2rem;
+    --spacing-card-padding: 1.5rem;
+    --spacing-grid-gap: 1.5rem;
+    --spacing-section-gap: 2rem;
+  }
+}

@@ -62,9 +62,9 @@ function SheetContent({
  "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-[var(--spacing-grid-gap)] shadow-[var(--shadow-xl)] transition-all duration-[var(--transition-duration)]",
  "bg-[var(--card)] text-[var(--card-foreground)]",
  side === "right" &&
- "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l border-[var(--border)] sm:max-w-sm rounded-l-[var(--radius-dialog)]",
+ "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-[min(85vw,100%)] border-l border-[var(--border)] sm:max-w-sm rounded-l-[var(--radius-dialog)]",
  side === "left" &&
- "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r border-[var(--border)] sm:max-w-sm rounded-r-[var(--radius-dialog)]",
+ "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-[min(85vw,100%)] border-r border-[var(--border)] sm:max-w-sm rounded-r-[var(--radius-dialog)]",
  side === "top" &&
  "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b border-[var(--border)] rounded-b-[var(--radius-dialog)]",
  side === "bottom" &&

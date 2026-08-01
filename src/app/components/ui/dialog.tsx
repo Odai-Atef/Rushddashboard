@@ -58,7 +58,11 @@ function DialogContent({
  <DialogPrimitive.Content
  data-slot="dialog-content"
  className={cn(
- "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-[var(--spacing-grid-gap)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-xl)] duration-[var(--transition-duration)] sm:max-w-lg",
+ "fixed top-[50%] left-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-[var(--spacing-grid-gap)] shadow-[var(--shadow-xl)] duration-[var(--transition-duration)]",
+ /* Mobile-first: almost full viewport, then restore desktop max-width */
+ "max-w-[calc(100vw-2rem)] sm:max-w-lg",
+ /* Mobile: smaller padding, desktop: theme variable */
+ "p-4 sm:p-[var(--spacing-card-padding)]",
  "rounded-[var(--radius-dialog)] border",
  "bg-[var(--card)] text-[var(--text-primary)]",
  "border-[var(--border)]",

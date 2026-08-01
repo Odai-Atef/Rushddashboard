@@ -111,6 +111,10 @@
  --spacing-section-gap: 2rem;
  --spacing-small-gap: 0.5rem;
 
+ /* Mobile-first responsive spacing (overridden via media queries in globals.css) */
+ --spacing-page-padding-mobile: 1rem;
+ --spacing-page-padding-tablet: 1.5rem;
+
  /* Animation */
  --transition-duration: 200ms;
 }
@@ -214,6 +218,10 @@
  --spacing-grid-gap: 1.5rem;
  --spacing-section-gap: 2rem;
  --spacing-small-gap: 0.5rem;
+
+ /* Mobile-first responsive spacing (overridden via media queries in globals.css) */
+ --spacing-page-padding-mobile: 1rem;
+ --spacing-page-padding-tablet: 1.5rem;
 
  /* Animation */
  --transition-duration: 200ms;
