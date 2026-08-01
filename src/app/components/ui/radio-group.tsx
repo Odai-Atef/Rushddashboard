@@ -28,8 +28,8 @@ function RadioGroupItem({
       data-slot="radio-group-item"
       className={cn(
         "aspect-square size-5 shrink-0 rounded-full border shadow-sm",
-        "bg-white dark:bg-gray-900/50",
-        "border-gray-300 dark:border-gray-600",
+        "bg-white dark:bg-card/50",
+        "border-gray-300 dark:border-border",
         "text-emerald-600 dark:text-emerald-400",
         "transition-all duration-200 ease-in-out",
         "hover:border-gray-400 dark:hover:border-gray-500",

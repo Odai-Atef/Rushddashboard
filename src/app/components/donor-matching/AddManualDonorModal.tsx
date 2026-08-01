@@ -64,14 +64,14 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" dir="rtl">
-      <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-xl">
+      <div className="bg-card rounded-xl w-full max-w-lg p-6 shadow-xl">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-bold">إضافة جهة مانحة يدوياً</h3>
           <button
             onClick={handleClose}
-            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            className="p-2 hover:bg-muted rounded-lg transition-colors"
           >
-            <X className="w-5 h-5 text-gray-500" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
@@ -82,7 +82,7 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="مثال: جمعية الوليد للإنسانية"
               required
             />
@@ -94,7 +94,7 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="وصف موجز للجهة المانحة..."
             />
           </div>
@@ -105,7 +105,7 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
               type="url"
               value={website}
               onChange={(e) => setWebsite(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               placeholder="https://example.com"
             />
           </div>
@@ -120,18 +120,18 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
               onChange={(e) => setMatchingScore(Number(e.target.value))}
               className="w-full"
             />
-            <div className="flex justify-between text-xs text-gray-500 mt-1">
+            <div className="flex justify-between text-xs text-muted-foreground mt-1">
               <span>0%</span>
               <span>50%</span>
               <span>100%</span>
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-gray-100">
+          <div className="flex items-center justify-end gap-3 mt-6 pt-4 border-t border-border">
             <button
               type="button"
               onClick={handleClose}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+              className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
             >
               إلغاء
             </button>

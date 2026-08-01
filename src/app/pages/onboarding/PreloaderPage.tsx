@@ -122,16 +122,16 @@ export function PreloaderPage() {
     return (
       <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
         <div className="max-w-xl w-full">
-          <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-10 text-center">
+          <div className="bg-white rounded-xl shadow-lg border border-border p-10 text-center">
             <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
               <Clock className="w-10 h-10 text-amber-600" />
             </div>
             <h1 className="text-2xl font-bold mb-3">التقييم غير متاح حالياً</h1>
-            <p className="text-gray-600 mb-8">
+            <p className="text-muted-foreground mb-8">
               لقد أجريت تقييماً مؤخراً. يمكنك إجراء التقييم مرة أخرى بعد{' '}
               {formatRemainingTime(cooldownInfo.remainingSeconds)}.
             </p>
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-muted-foreground">
               الوقت المتبقي: {formatRemainingTime(cooldownInfo.remainingSeconds)}
             </div>
             <button
@@ -153,25 +153,25 @@ export function PreloaderPage() {
   return (
     <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
       <div className="max-w-2xl w-full">
-        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-12 text-center">
+        <div className="bg-white rounded-xl shadow-lg border border-border p-12 text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
             <Brain className="w-12 h-12 text-white" />
           </div>
 
           <h1 className="text-3xl font-bold mb-3">جارٍ تحليل البيانات...</h1>
-          <p className="text-gray-600 mb-8">
+          <p className="text-muted-foreground mb-8">
             يقوم الذكاء الاصطناعي بتحليل إجاباتك لإعداد تقرير
             شامل
           </p>
 
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-700">التقدم</span>
+              <span className="text-sm font-medium text-foreground">التقدم</span>
               <span className="text-sm font-medium text-blue-600">
                 {processingProgress}٪
               </span>
             </div>
-            <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-3 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300 ease-out"
                 style={{ width: `${processingProgress}%` }}
@@ -190,7 +190,7 @@ export function PreloaderPage() {
                 <div
                   key={item.label}
                   className={`flex items-center gap-3 p-3 rounded-lg ${
-                    done ? 'bg-green-50' : 'bg-gray-50'
+                    done ? 'bg-green-50' : 'bg-secondary'
                   }`}
                 >
                   {done ? (
@@ -198,7 +198,7 @@ export function PreloaderPage() {
                   ) : (
                     <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
                   )}
-                  <span className={done ? 'text-green-900' : 'text-gray-700'}>
+                  <span className={done ? 'text-green-900' : 'text-foreground'}>
                     {item.label}
                   </span>
                 </div>
@@ -206,7 +206,7 @@ export function PreloaderPage() {
             })}
           </div>
 
-          <p className="text-sm text-gray-500 mt-8">
+          <p className="text-sm text-muted-foreground mt-8">
             الوقت المتوقع: ٣٠ - ٦٠ ثانية
           </p>
         </div>

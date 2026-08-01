@@ -143,9 +143,9 @@ export function ExecutiveDashboard() {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* Header */}
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">لوحة القيادة التنفيذية</h2>
-        <p className="text-gray-500 dark:text-gray-400 text-base">نظرة عامة سريعة عن الوضع العام للمنصة</p>
+      <div className="border-b border-border dark:border-border pb-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-2">لوحة القيادة التنفيذية</h2>
+        <p className="text-muted-foreground dark:text-muted-foreground text-base">نظرة عامة سريعة عن الوضع العام للمنصة</p>
       </div>
 
       {/* KPI Cards */}
@@ -153,7 +153,7 @@ export function ExecutiveDashboard() {
         {kpis.map((kpi, index) => {
           const Icon = kpi.icon;
           return (
-            <div key={index} className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 hover:shadow-md dark:hover:shadow-emerald-500/10 transition-all duration-200 flex flex-col justify-between h-full">
+            <div key={index} className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 hover:shadow-md dark:hover:shadow-emerald-500/10 transition-all duration-200 flex flex-col justify-between h-full">
               <div className="flex items-start justify-between mb-5">
                 <div className={`p-3 rounded-xl ${kpi.bgColor}`}>
                   <Icon className={`w-6 h-6 ${kpi.color}`} />
@@ -163,8 +163,8 @@ export function ExecutiveDashboard() {
                   {kpi.change}
                 </div>
               </div>
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5">{kpi.title}</h3>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{kpi.value}</p>
+              <h3 className="text-sm font-medium text-muted-foreground dark:text-muted-foreground mb-1.5">{kpi.title}</h3>
+              <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{kpi.value}</p>
             </div>
           );
         })}
@@ -178,12 +178,12 @@ export function ExecutiveDashboard() {
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white">الملخص التنفيذي</h3>
+              <h3 className="text-xl font-semibold text-foreground dark:text-white">الملخص التنفيذي</h3>
               <span className="px-2 py-1 bg-violet-500/20 text-violet-600 dark:text-violet-400 text-xs rounded-full">AI Executive</span>
             </div>
-            <p className="text-gray-600 dark:text-gray-300 leading-relaxed mb-4">
+            <p className="text-muted-foreground dark:text-muted-foreground leading-relaxed mb-4">
               الأداء العام للمنصة <span className="font-bold text-emerald-600">إيجابي ومستقر</span> مع نمو 18.7% في الإيرادات و12.3% في قاعدة العملاء.
-              القناة B2B تُظهر <span className="font-bold text-gray-900 dark:text-white">إمكانات نمو استثنائية</span> بهامش ربح 45%.
+              القناة B2B تُظهر <span className="font-bold text-foreground dark:text-white">إمكانات نمو استثنائية</span> بهامش ربح 45%.
               يوجد <span className="font-bold text-amber-600 dark:text-amber-400">12 تنبيه نشط</span> يحتاج اهتماماً فورياً، أبرزها انخفاض معدل التحويل وارتفاع الشكاوى.
             </p>
           </div>
@@ -193,10 +193,10 @@ export function ExecutiveDashboard() {
       {/* Charts */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Revenue Trend */}
-        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+        <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">اتجاه الإيرادات</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">الإيرادات الشهرية خلال آخر 6 أشهر</p>
+            <h3 className="text-lg font-semibold text-foreground dark:text-white mb-1">اتجاه الإيرادات</h3>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">الإيرادات الشهرية خلال آخر 6 أشهر</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={revenueData}>
@@ -216,7 +216,7 @@ export function ExecutiveDashboard() {
                   backgroundColor: 'var(--color-card)',
                   border: '1px solid var(--color-border)',
                   borderRadius: '0.5rem',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                  boxShadow: 'var(--shadow-md)'
                 }}
                 labelStyle={{ color: 'var(--color-foreground)', fontWeight: 'bold' }}
                 formatter={(value: number) => [`${value.toLocaleString()} ر.س`, 'الإيرادات']}
@@ -234,10 +234,10 @@ export function ExecutiveDashboard() {
         </div>
 
         {/* Customer Growth */}
-        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+        <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">نمو العملاء</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">عدد العملاء النشطين خلال آخر 6 أشهر</p>
+            <h3 className="text-lg font-semibold text-foreground dark:text-white mb-1">نمو العملاء</h3>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">عدد العملاء النشطين خلال آخر 6 أشهر</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={customerGrowthData}>
@@ -257,7 +257,7 @@ export function ExecutiveDashboard() {
                   backgroundColor: 'var(--color-card)',
                   border: '1px solid var(--color-border)',
                   borderRadius: '0.5rem',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                  boxShadow: 'var(--shadow-md)'
                 }}
                 formatter={(value: number) => [`${value.toLocaleString()} عميل`, 'العملاء']}
               />
@@ -274,11 +274,11 @@ export function ExecutiveDashboard() {
       {/* Alerts and Recommendations */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Alerts Panel */}
-        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
+          <div className="p-6 border-b border-border dark:border-border">
             <div className="flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-amber-600" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">التنبيهات</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white">التنبيهات</h3>
             </div>
           </div>
           <div className="p-4 space-y-3">
@@ -297,31 +297,31 @@ export function ExecutiveDashboard() {
         </div>
 
         {/* Top 3 Recommendations */}
-        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
+          <div className="p-6 border-b border-border dark:border-border">
             <div className="flex items-center gap-2">
               <Target className="w-5 h-5 text-emerald-600" />
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white">أهم 3 توصيات</h3>
+              <h3 className="text-lg font-semibold text-foreground dark:text-white">أهم 3 توصيات</h3>
             </div>
           </div>
           <div className="p-4 space-y-3">
             {topRecommendations.map((rec, index) => (
-              <div key={rec.id} className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
+              <div key={rec.id} className="p-4 bg-secondary dark:bg-muted/50 rounded-xl hover:bg-muted dark:hover:bg-muted/50 transition-colors">
                 <div className="flex items-start gap-3">
                   <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-medium flex-shrink-0">
                     {index + 1}
                   </div>
                   <div className="flex-1">
-                    <h4 className="font-medium text-gray-900 dark:text-white mb-1">{rec.title}</h4>
+                    <h4 className="font-medium text-foreground dark:text-white mb-1">{rec.title}</h4>
                     <div className="flex items-center gap-2 text-sm">
                       <span className="text-emerald-600 dark:text-emerald-400 font-medium">{rec.impact}</span>
-                      <span className="text-gray-400 dark:text-gray-500">•</span>
+                      <span className="text-muted-foreground dark:text-muted-foreground">•</span>
                       <span className={`px-2 py-0.5 rounded-full text-xs ${getPriorityBadge(rec.priority)}`}>
                         {rec.priority === 'urgent' ? 'عاجل' : 'أولوية عالية'}
                       </span>
                     </div>
                   </div>
-                  <CheckCircle className="w-5 h-5 text-gray-400 dark:text-gray-500 cursor-pointer hover:text-emerald-600 transition-colors" />
+                  <CheckCircle className="w-5 h-5 text-muted-foreground dark:text-muted-foreground cursor-pointer hover:text-emerald-600 transition-colors" />
                 </div>
               </div>
             ))}

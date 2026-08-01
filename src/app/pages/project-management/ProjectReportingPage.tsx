@@ -5,7 +5,7 @@ export function ProjectReportingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="space-y-6">
         <button
           onClick={() => navigate('/dashboard/project-management')}
@@ -15,14 +15,14 @@ export function ProjectReportingPage() {
           رجوع إلى لوحة القيادة
         </button>
         <h1 className="text-3xl font-bold mb-4">التقارير الإدارية</h1>
-        <div className="bg-white rounded-xl p-8 border border-gray-200">
+        <div className="bg-card rounded-xl p-8 border border-border">
           <div className="flex items-center gap-3 mb-6">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <BarChart3 className="w-6 h-6 text-blue-600" />
             </div>
             <p className="text-xl font-bold">تقارير تنفيذية شاملة</p>
           </div>
-          <p className="text-gray-600 text-center">تقارير تنفيذية شاملة - قريباً</p>
+          <p className="text-muted-foreground text-center">تقارير تنفيذية شاملة - قريباً</p>
         </div>
       </div>
     </div>

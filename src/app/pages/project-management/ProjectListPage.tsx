@@ -191,13 +191,13 @@ export function ProjectListPage() {
   };
 
   const renderLoading = () => (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-12 flex items-center justify-center">
+    <div className="bg-card rounded-xl border border-border shadow-sm p-12 flex items-center justify-center">
       <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
     </div>
   );
 
   const renderError = () => (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8 text-center">
+    <div className="bg-card rounded-xl border border-border shadow-sm p-8 text-center">
       <div className="text-red-600 mb-4">{error}</div>
       <button
         onClick={() => refetch()}
@@ -210,11 +210,11 @@ export function ProjectListPage() {
   );
 
   const renderEmpty = () => (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center">
-      <p className="text-gray-600 mb-4">لا توجد مشاريع مطابقة للمعايير المحددة.</p>
+    <div className="bg-card rounded-xl border border-border shadow-sm p-12 text-center">
+      <p className="text-muted-foreground mb-4">لا توجد مشاريع مطابقة للمعايير المحددة.</p>
       <button
         onClick={() => clearFilters()}
-        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+        className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors font-medium"
       >
         مسح المعايير
       </button>
@@ -225,18 +225,18 @@ export function ProjectListPage() {
     if (pagination.totalPages <= 1) return null;
 
     return (
-      <div className="flex items-center justify-between bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+      <div className="flex items-center justify-between bg-card rounded-xl border border-border shadow-sm p-4">
         <div className="flex items-center gap-2">
           <select
             value={pagination.limit}
             onChange={(e) => setLimit(Number(e.target.value))}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
           >
             {PAGE_SIZE_OPTIONS.map((size) => (
               <option key={size} value={size}>{size} لكل صفحة</option>
             ))}
           </select>
-          <span className="text-sm text-gray-600">
+          <span className="text-sm text-muted-foreground">
             صفحة {pagination.page} من {pagination.totalPages} (إجمالي {pagination.total})
           </span>
         </div>
@@ -245,14 +245,14 @@ export function ProjectListPage() {
           <button
             onClick={() => setPage(pagination.page - 1)}
             disabled={pagination.page <= 1}
-            className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronRight className="w-5 h-5" />
           </button>
           <button
             onClick={() => setPage(pagination.page + 1)}
             disabled={pagination.page >= pagination.totalPages}
-            className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
@@ -353,27 +353,27 @@ export function ProjectListPage() {
   };
 
   const renderTable = () => (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-      <div className="overflow-x-auto">
+    <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
+      <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
         <table className="w-full">
-          <thead className="bg-gray-50 border-b border-gray-200">
+          <thead className="bg-secondary border-b border-border">
             <tr>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">اسم المشروع</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الجهه</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">المنشئ</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الباقة</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">الحالة</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">آخر تحديث</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">عدد التعديلات</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">التقدم</th>
-              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase"></th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">اسم المشروع</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">الجهه</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">المنشئ</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">الباقة</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">الحالة</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">آخر تحديث</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">عدد التعديلات</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">التقدم</th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase"></th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">
             {projects.map((project) => {
               const status = statusConfig[getDisplayStatus(project.status)];
               return (
-                <tr key={project.id} className="hover:bg-gray-50 transition-colors">
+                <tr key={project.id} className="hover:bg-secondary transition-colors">
                   <td className="px-6 py-4">
                     <button
                       onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
@@ -382,9 +382,9 @@ export function ProjectListPage() {
                       {project.name}
                     </button>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{getProjectOrganization(project)}</td>
-                  <td className="px-6 py-4 text-sm text-gray-600">{getProjectCreator(project)}</td>
-                  <td className="px-6 py-4 text-sm text-gray-500">{project.packageName || project.packageId || 'غير محددة'}</td>
+                  <td className="px-6 py-4 text-sm text-muted-foreground">{getProjectOrganization(project)}</td>
+                  <td className="px-6 py-4 text-sm text-muted-foreground">{getProjectCreator(project)}</td>
+                  <td className="px-6 py-4 text-sm text-muted-foreground">{project.packageName || project.packageId || 'غير محددة'}</td>
                   <td className="px-6 py-4">
                     <span
                       className="text-xs px-2 py-1 rounded-full font-medium"
@@ -393,21 +393,21 @@ export function ProjectListPage() {
                       {status.label}
                     </span>
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-muted-foreground whitespace-nowrap">
                     {timeAgo(project.updatedAt)}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-600 whitespace-nowrap">
+                  <td className="px-6 py-4 text-sm text-muted-foreground whitespace-nowrap">
                     {typeof project.modificationsCount === 'number' ? project.modificationsCount.toLocaleString('ar-SA') : '0'}
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2 min-w-[140px]">
-                      <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                         <div
                           className="h-full bg-blue-600 transition-all"
                           style={{ width: `${project.progress}%` }}
                         />
                       </div>
-                      <span className="text-xs font-medium text-gray-600">{project.progress}%</span>
+                      <span className="text-xs font-medium text-muted-foreground">{project.progress}%</span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -420,19 +420,19 @@ export function ProjectListPage() {
                       )}
                       <a
                         href={`/dashboard/project-management/details/${project.id}`}
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
                       >
                         <Eye className="w-3.5 h-3.5" />
                         عرض
                       </a>
     <Link
       to={`/dashboard/collaboration/${project.id}/chat`}
-      className="relative inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+      className="relative inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
     >
       <MessageSquare className="w-3.5 h-3.5" />
       متابعة تحديثات المشروع - شات
       {Number(project.unreadMessageCount) > 0 && (
-        <span className="absolute -top-1.5 -left-1.5 min-w-[18px] h-[18px] bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold px-1">
+        <span className="absolute -top-1.5 -left-1.5 min-w-4.5 h-4.5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center font-bold px-1">
           {Number(project.unreadMessageCount) > 99 ? '99+' : project.unreadMessageCount}
         </span>
       )}
@@ -440,7 +440,7 @@ export function ProjectListPage() {
                       {isProjectManager && (
                         <a
                           href={`/dashboard/project-management/edit/${project.id}`}
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-700 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 hover:text-blue-600 transition-colors"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
                         >
                           <Pencil className="w-3.5 h-3.5" />
                           تعديل
@@ -465,11 +465,11 @@ export function ProjectListPage() {
 
         return (
           <div key={status} className="flex-shrink-0 w-80">
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-              <div className="p-4 border-b border-gray-200">
+            <div className="bg-white rounded-xl border border-border shadow-sm">
+              <div className="p-4 border-b border-border">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{config.label}</h3>
-                  <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded-full">{statusProjects.length}</span>
+                  <span className="text-xs px-2 py-1 bg-muted text-muted-foreground rounded-full">{statusProjects.length}</span>
                 </div>
               </div>
               <div className="p-4 space-y-3 max-h-[600px] overflow-y-auto">
@@ -477,17 +477,17 @@ export function ProjectListPage() {
                   <div
                     key={project.id}
                     onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
-                    className="p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+                    className="p-4 border border-border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
                   >
                     <h4 className="font-medium mb-2">{project.name}</h4>
-                    <p className="text-xs text-gray-600 mb-1">{getProjectOrganization(project)}</p>
-                    <p className="text-xs text-gray-500 mb-3">{project.packageName || project.packageId || 'غير محددة'}</p>
+                    <p className="text-xs text-muted-foreground mb-1">{getProjectOrganization(project)}</p>
+                    <p className="text-xs text-muted-foreground mb-3">{project.packageName || project.packageId || 'غير محددة'}</p>
                     <div className="flex items-center justify-between text-xs">
-                      <span className="text-gray-500">{getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س</span>
-                      <span className="text-gray-500">{getProjectManager(project)}</span>
+                      <span className="text-muted-foreground">{getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س</span>
+                      <span className="text-muted-foreground">{getProjectManager(project)}</span>
                     </div>
                     <div className="mt-3">
-                      <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="h-1 bg-muted rounded-full overflow-hidden">
                         <div
                           className="h-full bg-blue-600"
                           style={{ width: `${project.progress}%` }}
@@ -505,7 +505,7 @@ export function ProjectListPage() {
   );
 
   const renderTimeline = () => (
-    <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+    <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
       <div className="space-y-4">
         {projects.map((project, idx) => (
           <div key={project.id} className="flex items-center gap-4">
@@ -516,12 +516,12 @@ export function ProjectListPage() {
                 >
                   {project.name}
                 </button>
-                <p className="text-xs text-gray-500 mt-1">{getProjectOrganization(project)}</p>
-                <p className="text-xs text-gray-400 mt-0.5">{project.packageName || project.packageId || 'غير محددة'}</p>
+                <p className="text-xs text-muted-foreground mt-1">{getProjectOrganization(project)}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{project.packageName || project.packageId || 'غير محددة'}</p>
               </div>
             <div className="flex-1 relative h-12">
               <div className="absolute inset-0 flex items-center">
-                <div className="h-2 bg-gray-100 rounded-full w-full"></div>
+                <div className="h-2 bg-muted rounded-full w-full"></div>
               </div>
               <div
                 className="absolute top-1/2 -translate-y-1/2 h-6 rounded-lg flex items-center px-3"
@@ -539,7 +539,7 @@ export function ProjectListPage() {
                 </span>
               </div>
             </div>
-            <div className="w-32 flex-shrink-0 text-left text-xs text-gray-500">{project.startDate}</div>
+            <div className="w-32 flex-shrink-0 text-left text-xs text-muted-foreground">{project.startDate}</div>
           </div>
         ))}
       </div>
@@ -554,12 +554,12 @@ export function ProjectListPage() {
   const renderQualificationBlocker = () => {
     const hasOrg = !!organization?.id;
     return (
-      <div className="bg-white rounded-xl border border-red-200 shadow-sm p-12 text-center">
+      <div className="bg-card rounded-xl border border-red-200 shadow-sm p-12 text-center">
         <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-6" />
         <h2 className="text-2xl font-bold mb-4 text-red-700">
           {hasOrg ? 'جهتك غير مؤهلة لاستخدام خصائص منصة رشد' : 'لم يتم ربط جهة بحسابك بعد'}
         </h2>
-        <p className="text-gray-600 mb-8 max-w-md mx-auto">
+        <p className="text-muted-foreground mb-8 max-w-md mx-auto">
           {hasOrg
             ? 'لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.'
             : 'يجب إنشاء حساب جهة أولاً لاستخدام خصائص منصة رشد.'}
@@ -596,17 +596,17 @@ export function ProjectListPage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="w-full">
             <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">إدارة المشاريع</h1>
-            <p className="text-gray-600 text-sm sm:text-base">{pagination.total} مشروع</p>
+            <p className="text-muted-foreground text-sm sm:text-base">{pagination.total} مشروع</p>
           </div>
           <div className="flex gap-3 w-full sm:w-auto">
             <button
               onClick={() => navigate('/dashboard/project-management')}
-              className="flex-1 sm:flex-none px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium text-sm sm:text-base"
+              className="flex-1 sm:flex-none px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors font-medium text-sm sm:text-base"
             >
               لوحة القيادة
             </button>
@@ -622,36 +622,36 @@ export function ProjectListPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
+        <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
           <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 type="text"
                 value={pendingFilters.search || ''}
                 onChange={(e) => updateFilter('search', e.target.value)}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="بحث في المشاريع..."
-                className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+                className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
               />
             </div>
 
-            <div className="flex gap-2 border border-gray-300 rounded-lg p-1 shrink-0">
+            <div className="flex gap-2 border border-border rounded-lg p-1 shrink-0">
               <button
                 onClick={() => setListViewMode('list')}
-                className={`p-2 rounded ${listViewMode === 'list' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`p-2 rounded-lg ${listViewMode === 'list' ? 'bg-blue-600 text-white' : 'text-muted-foreground hover:bg-muted'}`}
               >
                 <List className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setListViewMode('kanban')}
-                className={`p-2 rounded ${listViewMode === 'kanban' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`p-2 rounded-lg ${listViewMode === 'kanban' ? 'bg-blue-600 text-white' : 'text-muted-foreground hover:bg-muted'}`}
               >
                 <LayoutGrid className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setListViewMode('timeline')}
-                className={`p-2 rounded ${listViewMode === 'timeline' ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`p-2 rounded-lg ${listViewMode === 'timeline' ? 'bg-blue-600 text-white' : 'text-muted-foreground hover:bg-muted'}`}
               >
                 <GanttChart className="w-5 h-5" />
               </button>
@@ -659,7 +659,7 @@ export function ProjectListPage() {
 
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0 ${showFilters ? 'border-blue-600 text-blue-600 bg-blue-50' : 'border-gray-300 hover:bg-gray-50'}`}
+              className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0 ${showFilters ? 'border-blue-600 text-blue-600 bg-blue-50' : 'border-border hover:bg-secondary'}`}
             >
               <Filter className="w-5 h-5" />
               تصفية
@@ -667,14 +667,14 @@ export function ProjectListPage() {
           </div>
 
           {showFilters && (
-            <div className="mt-4 pt-4 border-t border-gray-200">
+            <div className="mt-4 pt-4 border-t border-border">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">الحالة</label>
                   <select
                     value={pendingFilters.status || 'all'}
                     onChange={(e) => updateStatusFilter(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
                     {STATUS_OPTIONS.map((option) => (
                       <option key={option.value} value={option.value}>{option.label}</option>
@@ -693,7 +693,7 @@ export function ProjectListPage() {
                         void applyFilters({ organizationId: orgId });
                       }}
                       disabled={organizationsLoading}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+                      className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
                     >
                       <option value="all">جميع الجهات</option>
                       {organizations.map((org) => (
@@ -707,7 +707,7 @@ export function ProjectListPage() {
               <div className="flex justify-end gap-3 mt-4">
                 <button
                   onClick={() => clearFilters()}
-                  className="px-4 py-2 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2"
+                  className="px-4 py-2 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2"
                 >
                   <X className="w-4 h-4" />
                   مسح

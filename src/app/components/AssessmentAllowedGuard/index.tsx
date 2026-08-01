@@ -93,10 +93,10 @@ export function AssessmentAllowedGuard({ children }: AssessmentAllowedGuardProps
 
   if (state.loading) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-          <p className="text-gray-600">جارٍ التحقق من إمكانية بدء التقييم...</p>
+          <p className="text-muted-foreground">جارٍ التحقق من إمكانية بدء التقييم...</p>
         </div>
       </div>
     );
@@ -104,11 +104,11 @@ export function AssessmentAllowedGuard({ children }: AssessmentAllowedGuardProps
 
   if (!state.allowed) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-lg w-full text-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+        <div className="bg-card rounded-xl shadow-sm border border-border p-8 max-w-lg w-full text-center">
           <h2 className="text-xl font-bold mb-2">لا يمكن بدء التقييم الآن</h2>
           <div
-            className="text-gray-600 mb-6"
+            className="text-muted-foreground mb-6"
             dangerouslySetInnerHTML={{ __html: state.message ?? '' }}
           />
         </div>

@@ -60,9 +60,9 @@ function DialogContent({
         className={cn(
           "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 shadow-xl duration-300 sm:max-w-lg",
           "rounded-2xl border",
-          "bg-white dark:bg-gray-900",
+          "bg-white dark:bg-card",
           "text-gray-900 dark:text-white",
-          "border-gray-200 dark:border-gray-700",
+          "border-gray-200 dark:border-border",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
@@ -76,7 +76,7 @@ function DialogContent({
         <DialogPrimitive.Close
           className={cn(
             "absolute top-4 right-4 rounded-lg p-1.5 opacity-70 transition-all duration-200",
-            "hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-800",
+            "hover:opacity-100 hover:bg-gray-100 dark:hover:bg-muted",
             "focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:ring-offset-2 focus:ring-offset-background",
             "disabled:pointer-events-none",
           )}

@@ -514,7 +514,7 @@ export function OrgRegistrationPage() {
                   type="checkbox"
                   checked={formData.agreeToTerms}
                   onChange={(e) => setField('agreeToTerms', e.target.checked)}
-                  className={`mt-0.5 w-4 h-4 rounded border text-primary focus:ring-2 focus:ring-primary ${
+                  className={`mt-0.5 w-4 h-4 rounded-lg border text-primary focus:ring-2 focus:ring-primary ${
                     errors.agreeToTerms ? 'border-red-500' : 'border-border'
                   }`}
                 />

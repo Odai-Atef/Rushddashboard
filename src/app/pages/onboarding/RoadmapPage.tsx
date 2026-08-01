@@ -114,10 +114,10 @@ export function RoadmapPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">جارٍ تحميل خطة التطوير...</p>
+          <p className="text-muted-foreground">جارٍ تحميل خطة التطوير...</p>
         </div>
       </div>
     );
@@ -125,11 +125,11 @@ export function RoadmapPage() {
 
   if (error) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-red-200 p-8 text-center">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">تعذر تحميل الخطة</h2>
-          <p className="text-gray-600 mb-6">{error}</p>
+          <p className="text-muted-foreground mb-6">{error}</p>
           <button
             onClick={() => window.location.reload()}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -155,7 +155,7 @@ export function RoadmapPage() {
   const isQualified = data?.qualificationStatus?.toUpperCase() === 'QUALIFIED';
 
   return (
-    <div ref={reportContainerRef} className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div ref={reportContainerRef} className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
@@ -169,7 +169,7 @@ export function RoadmapPage() {
           <div className="flex items-center justify-between flex-wrap gap-4">
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold mb-2">خطة التطوير والتحسين</h1>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 {data?.comments?.overall?.ar || 'خارطة طريق مخصصة لتطوير الجمعية'}
               </p>
             </div>
@@ -177,7 +177,7 @@ export function RoadmapPage() {
               <button
                 onClick={handleDownloadPlan}
                 disabled={isDownloading}
-                className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {isDownloading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
@@ -193,7 +193,7 @@ export function RoadmapPage() {
 
         {/* Overall Score & Duration */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-border p-6">
             <h3 className="text-lg font-semibold mb-4">نتيجة التقييم العامة</h3>
             <div className="flex items-center gap-4">
               <div
@@ -212,7 +212,7 @@ export function RoadmapPage() {
                 </span>
               </div>
               <div>
-                <p className="text-sm text-gray-600 mb-1">حالة الأهلية</p>
+                <p className="text-sm text-muted-foreground mb-1">حالة الأهلية</p>
                 <span
                   className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                     isQualified
@@ -226,19 +226,19 @@ export function RoadmapPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-border p-6">
             <h3 className="text-lg font-semibold mb-4">الجدول الزمني للتنفيذ</h3>
             <div className="flex items-center gap-2 mb-2">
-              <div className="text-sm text-gray-600">إجمالي المدة المتوقعة:</div>
+              <div className="text-sm text-muted-foreground">إجمالي المدة المتوقعة:</div>
               <div className="text-lg font-bold text-blue-600">{totalDurationMonths} شهراً</div>
             </div>
-            <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full bg-gradient-to-r from-blue-500 to-indigo-600"
                 style={{ width: `${roadmap?.overallProgress ?? 0}%` }}
               ></div>
             </div>
-            <div className="flex items-center justify-between mt-2 text-xs text-gray-500">
+            <div className="flex items-center justify-between mt-2 text-xs text-muted-foreground">
               <span>البداية</span>
               <span>{Math.round(totalDurationMonths / 2)} أشهر</span>
               <span>الانتهاء</span>
@@ -248,23 +248,23 @@ export function RoadmapPage() {
 
         {/* Recommendations */}
         {recommendations.length > 0 && (
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+          <div className="bg-white rounded-xl shadow-sm border border-border p-4 sm:p-6 mb-6">
             <h3 className="text-lg font-semibold mb-4">التوصيات المقترحة</h3>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {recommendations.map((rec: EvaluationRecommendation, idx: number) => (
                 <div
                   key={idx}
-                  className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors"
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
                       {rec.priority}
                     </span>
-                    <span className="text-sm font-medium text-gray-600">{rec.dimension}</span>
+                    <span className="text-sm font-medium text-muted-foreground">{rec.dimension}</span>
                   </div>
                   <h4 className="font-semibold mb-1">{rec.serviceNameAr || rec.serviceNameEn}</h4>
                   {rec.packageBundle && (
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       الباقة: {rec.packageBundle.nameAr || rec.packageBundle.nameEn}
                     </p>
                   )}
@@ -278,7 +278,7 @@ export function RoadmapPage() {
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">المبادرات التطويرية</h3>
           {initiatives.length === 0 ? (
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center text-gray-500">
+            <div className="bg-white rounded-xl shadow-sm border border-border p-8 text-center text-muted-foreground">
               لا توجد مبادرات متاحة في خطة التطوير
             </div>
           ) : (
@@ -290,7 +290,7 @@ export function RoadmapPage() {
               return (
                 <div
                   key={initiative.id}
-                  className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 hover:shadow-md transition-shadow"
+                  className="bg-white rounded-xl shadow-sm border border-border p-4 sm:p-6 hover:shadow-md transition-shadow"
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex-1">
@@ -310,29 +310,29 @@ export function RoadmapPage() {
                           </span>
                         )}
                       </div>
-                      <div className="text-sm text-gray-600 mb-1">المحور: {initiative.area}</div>
+                      <div className="text-sm text-muted-foreground mb-1">المحور: {initiative.area}</div>
                       {initiative.dimension && (
-                        <div className="text-sm text-gray-600">البُعد: {initiative.dimension}</div>
+                        <div className="text-sm text-muted-foreground">البُعد: {initiative.dimension}</div>
                       )}
                     </div>
                     <div className="text-left">
-                      <div className="text-sm text-gray-600">المدة</div>
+                      <div className="text-sm text-muted-foreground">المدة</div>
                       <div className="font-semibold">{initiative.duration}</div>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 p-3 sm:p-4 bg-gray-50 rounded-lg">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 p-3 sm:p-4 bg-secondary rounded-lg">
                     <div>
-                      <div className="text-xs text-gray-600 mb-1">الجهة المسؤولة</div>
+                      <div className="text-xs text-muted-foreground mb-1">الجهة المسؤولة</div>
                       <div className="font-medium flex items-center gap-2">
-                        <Users className="w-4 h-4 text-gray-400" />
+                        <Users className="w-4 h-4 text-muted-foreground" />
                         {initiative.responsible}
                       </div>
                     </div>
                     <div>
-                      <div className="text-xs text-gray-600 mb-1">النتيجة المتوقعة</div>
+                      <div className="text-xs text-muted-foreground mb-1">النتيجة المتوقعة</div>
                       <div className="font-medium flex items-center gap-2">
-                        <Target className="w-4 h-4 text-gray-400" />
+                        <Target className="w-4 h-4 text-muted-foreground" />
                         {initiative.outcome}
                       </div>
                     </div>
@@ -344,8 +344,8 @@ export function RoadmapPage() {
                       <div className="text-sm font-medium mb-2">المهام الرئيسية:</div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                         {initiative.tasks.map((task, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
-                            <div className="w-5 h-5 rounded-full border-2 border-gray-300 flex items-center justify-center flex-shrink-0">
+                          <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+                            <div className="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0">
                               <span className="text-xs">{idx + 1}</span>
                             </div>
                             {task}
@@ -369,7 +369,7 @@ export function RoadmapPage() {
             </div>
             <div className="flex-1">
               <h3 className="text-lg font-semibold mb-2">الدعم من حاضنة رشد</h3>
-              <p className="text-gray-700 mb-4">فريقنا جاهز لدعمك في تنفيذ خطة التطوير. ستحصل على:</p>
+              <p className="text-foreground mb-4">فريقنا جاهز لدعمك في تنفيذ خطة التطوير. ستحصل على:</p>
               <ul className="space-y-2 mb-4">
                 <li className="flex items-center gap-2 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-indigo-600" />

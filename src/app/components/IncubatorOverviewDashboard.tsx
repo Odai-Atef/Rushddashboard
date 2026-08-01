@@ -79,21 +79,21 @@ export function IncubatorOverviewDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">لوحة القيادة التنفيذية الشاملة</h1>
-          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">نظرة 360° على أداء الحاضنة • آخر تحديث: الآن</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white">لوحة القيادة التنفيذية الشاملة</h1>
+          <p className="text-muted-foreground dark:text-muted-foreground mt-1 text-sm">نظرة 360° على أداء الحاضنة • آخر تحديث: الآن</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <select
             value={dateRange}
             onChange={e => setDateRange(e.target.value)}
-            className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+            className="text-sm border border-border dark:border-border rounded-xl px-3 py-2 bg-white dark:bg-muted text-foreground dark:text-white"
           >
             <option value="1month">آخر شهر</option>
             <option value="3months">آخر 3 أشهر</option>
             <option value="6months">آخر 6 أشهر</option>
             <option value="1year">آخر سنة</option>
           </select>
-          <button onClick={() => handleExport('excel')} className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-background hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white transition-colors">
+          <button onClick={() => handleExport('excel')} className="flex items-center gap-2 px-3 py-2 text-sm border border-border dark:border-border rounded-xl bg-background hover:bg-muted dark:hover:bg-muted text-foreground dark:text-white transition-colors">
             <Download className="w-4 h-4" />
             Excel
           </button>
@@ -120,7 +120,7 @@ export function IncubatorOverviewDashboard() {
                 </span>
               </div>
               <p className={`text-xl ${kpi.color}`}>{kpi.value}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-tight">{kpi.title}</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1 leading-tight">{kpi.title}</p>
             </div>
           );
         })}
@@ -131,8 +131,8 @@ export function IncubatorOverviewDashboard() {
         {/* Trend Chart */}
         <div className="lg:col-span-2 u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-gray-900 dark:text-white">اتجاهات النمو</h2>
-            <span className="text-xs text-gray-500 dark:text-gray-400">آخر 6 أشهر</span>
+            <h2 className="text-foreground dark:text-white">اتجاهات النمو</h2>
+            <span className="text-xs text-muted-foreground dark:text-muted-foreground">آخر 6 أشهر</span>
           </div>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={trendData}>
@@ -159,15 +159,15 @@ export function IncubatorOverviewDashboard() {
 
         {/* Pipeline Funnel */}
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
-          <h2 className="text-gray-900 dark:text-white mb-4">مسار المؤسسات</h2>
+          <h2 className="text-foreground dark:text-white mb-4">مسار المؤسسات</h2>
           <div className="space-y-3">
             {pipelineData.map((item, i) => (
               <div key={i}>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-500 dark:text-gray-400">{item.name}</span>
-                  <span className="text-gray-900 dark:text-white">{item.value}</span>
+                  <span className="text-muted-foreground dark:text-muted-foreground">{item.name}</span>
+                  <span className="text-foreground dark:text-white">{item.value}</span>
                 </div>
-                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div className="h-2 bg-muted dark:bg-muted rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{ width: `${(item.value / 247) * 100}%`, backgroundColor: item.color }}
@@ -187,7 +187,7 @@ export function IncubatorOverviewDashboard() {
         {/* Recent Activity */}
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-gray-900 dark:text-white">النشاط الأخير</h2>
+            <h2 className="text-foreground dark:text-white">النشاط الأخير</h2>
             <button className="text-xs text-emerald-600 hover:underline flex items-center gap-1">
               عرض الكل <ChevronRight className="w-3 h-3" />
             </button>
@@ -197,12 +197,12 @@ export function IncubatorOverviewDashboard() {
               const Icon = item.icon;
               return (
                 <div key={item.id} className="flex items-start gap-3">
-                  <div className="p-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 flex-shrink-0">
+                  <div className="p-1.5 rounded-xl bg-muted dark:bg-muted flex-shrink-0">
                     <Icon className={`w-3.5 h-3.5 ${item.color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-gray-900 dark:text-white leading-snug">{item.text}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
+                    <p className="text-sm text-foreground dark:text-white leading-snug">{item.text}</p>
+                    <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-0.5 flex items-center gap-1">
                       <Clock className="w-3 h-3" />{item.time}
                     </p>
                   </div>
@@ -215,14 +215,14 @@ export function IncubatorOverviewDashboard() {
         {/* Alerts */}
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-gray-900 dark:text-white">التنبيهات</h2>
-            <Bell className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+            <h2 className="text-foreground dark:text-white">التنبيهات</h2>
+            <Bell className="w-4 h-4 text-muted-foreground dark:text-muted-foreground" />
           </div>
           <div className="space-y-3">
             {alerts.map(alert => (
               <div key={alert.id} className={`p-3 rounded-xl border ${alert.color}`}>
-                <p className="text-sm text-gray-900 dark:text-white">{alert.title}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{alert.desc}</p>
+                <p className="text-sm text-foreground dark:text-white">{alert.title}</p>
+                <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">{alert.desc}</p>
               </div>
             ))}
           </div>
@@ -231,14 +231,14 @@ export function IncubatorOverviewDashboard() {
         {/* Quick Insights */}
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-gray-900 dark:text-white">رؤى سريعة</h2>
+            <h2 className="text-foreground dark:text-white">رؤى سريعة</h2>
             <Zap className="w-4 h-4 text-amber-500" />
           </div>
           <div className="space-y-3">
             {insights.map((insight, i) => (
-              <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50">
+              <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-secondary dark:bg-muted/50">
                 <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${insight.positive === true ? 'bg-emerald-500' : insight.positive === false ? 'bg-red-500' : 'bg-blue-500'}`} />
-                <p className="text-sm text-gray-900 dark:text-white leading-snug">{insight.text}</p>
+                <p className="text-sm text-foreground dark:text-white leading-snug">{insight.text}</p>
               </div>
             ))}
           </div>

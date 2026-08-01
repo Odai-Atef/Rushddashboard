@@ -173,7 +173,7 @@ export function ComplianceRiskPage() {
       case 'low':
         return 'text-blue-500';
       default:
-        return 'text-gray-500';
+        return 'text-muted-foreground';
     }
   };
 
@@ -188,7 +188,7 @@ export function ComplianceRiskPage() {
       case 'low':
         return 'bg-blue-500/10 border-blue-500/20';
       default:
-        return 'bg-gray-500/10 border-gray-500/20';
+        return 'bg-secondary0/10 border-gray-500/20';
     }
   };
 
@@ -216,7 +216,7 @@ export function ComplianceRiskPage() {
       case 'non-compliant':
         return 'text-red-500';
       default:
-        return 'text-gray-500';
+        return 'text-muted-foreground';
     }
   };
 
@@ -610,7 +610,7 @@ export function ComplianceRiskPage() {
               <div className="flex items-start justify-between gap-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
-                    <span className={`px-2 py-1 rounded text-xs font-medium ${getSeverityColor(risk.severity)} ${getSeverityBg(risk.severity)}`}>
+                    <span className={`px-2 py-1 rounded-lg text-xs font-medium ${getSeverityColor(risk.severity)} ${getSeverityBg(risk.severity)}`}>
                       {getSeverityLabel(risk.severity)}
                     </span>
                     <span className="text-sm text-muted-foreground">{getCategoryLabel(risk.category)}</span>
@@ -663,7 +663,7 @@ export function ComplianceRiskPage() {
                   <p className="text-muted-foreground">{selectedRisk.description}</p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="bg-muted/50 rounded-lg p-4">
                     <p className="text-sm text-muted-foreground mb-1">الاحتمالية</p>
                     <p className="text-2xl font-medium">{selectedRisk.probability}%</p>

@@ -163,7 +163,7 @@ export function FundingReadinessAssessment({ onNavigate }: FundingReadinessAsses
               <div key={doc.id} className="flex items-center gap-3 p-3 rounded-lg border border-border hover:bg-muted/30 transition-colors">
                 <div className="flex gap-2 flex-shrink-0">
                   {doc.status !== 'ready' && (
-                    <button className="text-xs px-2 py-0.5 border border-border rounded text-muted-foreground hover:bg-muted transition-colors flex items-center gap-1">
+                    <button className="text-xs px-2 py-0.5 border border-border rounded-lg text-muted-foreground hover:bg-muted transition-colors flex items-center gap-1">
                       <Upload className="w-3 h-3" /> رفع
                     </button>
                   )}

@@ -74,7 +74,7 @@ export function DecisionPage() {
   return (
     <div ref={reportContainerRef} className="min-h-full bg-gradient-to-br from-green-50 to-emerald-50 p-6 flex items-center justify-center">
       <div className="max-w-3xl w-full">
-        <div className="bg-white rounded-2xl shadow-xl border border-gray-200 p-12">
+        <div className="bg-white rounded-2xl shadow-xl border border-border p-12">
           {/* Success Icon */}
           <div className={`w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6 ${
             isAccepted
@@ -91,7 +91,7 @@ export function DecisionPage() {
                 ? 'مبارك! تم قبولك في حاضنة رشد'
                 : 'تم إكمال التقييم'}
             </h1>
-            <p className="text-xl text-gray-600">
+            <p className="text-xl text-muted-foreground">
               {isAccepted
                   ? 'نهنئك على اجتياز التقييم. أنت الآن جزء من مجتمع رشد للجمعيات الخيرية الرائدة'
                 : 'شكراً لاكتمال التقييم. فريق الحاضنة سيقوم بمراجعة نتيجتك والتواصل معك'}
@@ -113,25 +113,25 @@ export function DecisionPage() {
           <div className="mb-8">
             <h2 className="text-xl font-semibold mb-4 text-center">الخطوات القادمة</h2>
             <div className="space-y-3">
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
                 <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
                 <div>
                   <div className="font-medium">إنشاء حساب الجمعية</div>
-                  <div className="text-sm text-gray-600">سجّل الدخول إلى منصة الحاضنة وأكمل ملفك التعريفي</div>
+                  <div className="text-sm text-muted-foreground">سجّل الدخول إلى منصة الحاضنة وأكمل ملفك التعريفي</div>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
                 <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
                 <div>
                   <div className="font-medium">الاجتماع التعريفي</div>
-                  <div className="text-sm text-gray-600">سيتواصل معك فريق الحاضنة لتحديد موعد الاجتماع التعريفي</div>
+                  <div className="text-sm text-muted-foreground">سيتواصل معك فريق الحاضنة لتحديد موعد الاجتماع التعريفي</div>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-lg">
+              <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
                 <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
                 <div>
                   <div className="font-medium">بدء خطة التطوير</div>
-                  <div className="text-sm text-gray-600">ابدأ العمل على خطة التحسين مع دعم فريق الخبراء</div>
+                  <div className="text-sm text-muted-foreground">ابدأ العمل على خطة التحسين مع دعم فريق الخبراء</div>
                 </div>
               </div>
             </div>
@@ -145,15 +145,15 @@ export function DecisionPage() {
             </h3>
             <div className="space-y-2 text-sm">
               <div className="flex items-center gap-2">
-                <span className="text-gray-600">البريد الإلكتروني:</span>
+                <span className="text-muted-foreground">البريد الإلكتروني:</span>
                 <span className="font-medium">incubator@rushd.sa</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-gray-600">الهاتف:</span>
+                <span className="text-muted-foreground">الهاتف:</span>
                 <span className="font-medium" dir="ltr">+966 11 XXX XXXX</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-gray-600">ساعات العمل:</span>
+                <span className="text-muted-foreground">ساعات العمل:</span>
                 <span className="font-medium">الأحد - الخميس، ٩ص - ٥م</span>
               </div>
             </div>
@@ -164,7 +164,7 @@ export function DecisionPage() {
             <button
               onClick={handleDownloadReport}
               disabled={isDownloading}
-              className="flex-1 px-6 py-4 border-2 border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 px-6 py-4 border-2 border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isDownloading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -176,7 +176,7 @@ export function DecisionPage() {
           </div> */}
 
           {/* Footer Note */}
-          <p className="text-center text-sm text-gray-500 mt-6">
+          <p className="text-center text-sm text-muted-foreground mt-6">
             سيتم إرسال نسخة من التقرير إلى بريدك الإلكتروني: {organization?.email || 'email@example.com'}
           </p>
         </div>

@@ -104,12 +104,12 @@ export function MultiSelect({
           disabled={disabled}
           className={cn(
             "flex w-full items-center justify-between gap-2 rounded-lg border px-4 py-2.5 text-sm shadow-sm transition-colors duration-200 ease-in-out",
-            "bg-white dark:bg-gray-900/50",
+            "bg-white dark:bg-card/50",
             "text-gray-900 dark:text-white",
-            "border-gray-200 dark:border-gray-700",
+            "border-gray-200 dark:border-border",
             "focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none",
             "dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30",
-            disabled && "cursor-not-allowed opacity-50 bg-gray-100 dark:bg-gray-800",
+            disabled && "cursor-not-allowed opacity-50 bg-gray-100 dark:bg-muted",
             error && "border-red-500 ring-red-500/20 bg-red-50 dark:bg-red-900/10",
             !error && "hover:border-gray-300 dark:hover:border-gray-600",
             className
@@ -144,7 +144,7 @@ export function MultiSelect({
         className="w-[var(--radix-popover-trigger-width)] p-0"
         align="start"
       >
-        <Command className="rounded-lg border shadow-md bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700">
+        <Command className="rounded-lg border shadow-md bg-white dark:bg-card border-gray-200 dark:border-border">
           <CommandInput
             placeholder={searchPlaceholder}
             value={search}

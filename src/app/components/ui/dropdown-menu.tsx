@@ -43,9 +43,9 @@ function DropdownMenuContent({
         sideOffset={sideOffset}
         className={cn(
           "relative z-50 max-h-[var(--radix-dropdown-menu-content-available-height)] min-w-[8rem] origin-[--radix-dropdown-menu-content-transform-origin] overflow-x-hidden overflow-y-auto rounded-lg border p-1 shadow-lg",
-          "bg-white dark:bg-gray-900",
+          "bg-white dark:bg-card",
           "text-gray-900 dark:text-white",
-          "border-gray-200 dark:border-gray-700",
+          "border-gray-200 dark:border-border",
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           className,
         )}
@@ -176,7 +176,7 @@ function DropdownMenuLabel({
       data-slot="dropdown-menu-label"
       data-inset={inset}
       className={cn(
-        "px-3 py-1.5 text-sm font-semibold text-gray-700 dark:text-gray-200",
+        "px-3 py-1.5 text-sm font-semibold text-gray-700 dark:text-muted-foreground",
         "data-[inset]:pl-8",
         className,
       )}
@@ -192,7 +192,7 @@ function DropdownMenuSeparator({
   return (
     <DropdownMenuPrimitive.Separator
       data-slot="dropdown-menu-separator"
-      className={cn("-mx-1 my-1 h-px bg-gray-200 dark:bg-gray-700", className)}
+      className={cn("-mx-1 my-1 h-px bg-gray-200 dark:bg-muted", className)}
       {...props}
     />
   );
@@ -257,9 +257,9 @@ function DropdownMenuSubContent({
       data-slot="dropdown-menu-sub-content"
       className={cn(
         "relative z-50 min-w-[8rem] origin-[--radix-dropdown-menu-content-transform-origin] overflow-hidden rounded-lg border p-1 shadow-lg",
-        "bg-white dark:bg-gray-900",
+        "bg-white dark:bg-card",
         "text-gray-900 dark:text-white",
-        "border-gray-200 dark:border-gray-700",
+        "border-gray-200 dark:border-border",
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
         className,
       )}

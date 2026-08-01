@@ -688,7 +688,7 @@ export function ProjectDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -696,7 +696,7 @@ export function ProjectDetailsPage() {
 
   if (error) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
         <div className="text-red-600 text-center">{error}</div>
         <button
           onClick={() => refetch()}
@@ -740,7 +740,7 @@ export function ProjectDetailsPage() {
     packageStatusMap[project.packageId] === rawStatus;
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="space-y-6">
         <div className="mb-6">
           <button
@@ -753,7 +753,7 @@ export function ProjectDetailsPage() {
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <h1 className="text-3xl font-bold mb-2">{project.name}</h1>
-              <div className="flex items-center gap-4 text-sm text-gray-600 flex-wrap">
+              <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
                 <span className="flex items-center gap-1">
                   <Building2 className="w-4 h-4" />
                   {getOrganizationName(project)}
@@ -763,7 +763,7 @@ export function ProjectDetailsPage() {
                     {project.packageName}
                   </span>
                 ) : (
-                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full text-xs font-medium">
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium">
                     غير محددة
                   </span>
                 )}
@@ -892,10 +892,10 @@ export function ProjectDetailsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-stretch">
-          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-6 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">حالة المشروع</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-3">حالة المشروع</p>
                 <span
                   className="inline-block px-4 py-1.5 rounded-full text-sm font-medium"
                   style={{ backgroundColor: status.bg, color: status.color }}
@@ -903,20 +903,20 @@ export function ProjectDetailsPage() {
                   {status.label}
                 </span>
               </div>
-              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80">
-                <Activity className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+              <div className="p-2.5 rounded-xl bg-muted dark:bg-muted/80">
+                <Activity className="w-6 h-6 text-muted-foreground dark:text-muted-foreground" />
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 border border-blue-200/80 dark:border-blue-500/30 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-6 border border-blue-200/80 dark:border-blue-500/30 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
             <div className="flex items-start justify-between mb-3">
-              <p className="text-sm text-gray-500 dark:text-gray-400">نسبة الإنجاز</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">نسبة الإنجاز</p>
               <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-500/10">
                 <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-muted dark:bg-muted rounded-full overflow-hidden">
                 <div
                   className="h-full bg-blue-600 dark:bg-blue-500"
                   style={{ width: `${project.progress}%` }}
@@ -929,41 +929,41 @@ export function ProjectDetailsPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
+            <div className="bg-card rounded-xl p-6 border border-border">
               <h2 className="text-xl font-semibold mb-4">نظرة عامة</h2>
-              <p className="text-gray-700 leading-relaxed">{project.description}</p>
+              <p className="text-foreground leading-relaxed">{project.description}</p>
             </div>
 
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
+            <div className="bg-card rounded-xl p-6 border border-border">
               <h2 className="text-xl font-semibold mb-4">معلومات المشروع</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">الفئة المستهدفة</p>
+                  <p className="text-sm text-muted-foreground mb-1">الفئة المستهدفة</p>
                   <p className="font-medium">{toDisplayString(project.beneficiaries)}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">النطاق الجغرافي</p>
+                  <p className="text-sm text-muted-foreground mb-1">النطاق الجغرافي</p>
                   <p className="font-medium flex items-center gap-1">
-                    <MapPin className="w-4 h-4 text-gray-400" />
+                    <MapPin className="w-4 h-4 text-muted-foreground" />
                     {toDisplayString(project.geographicScope)}
                   </p>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2">
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">عدد المستفيدين</p>
+                    <p className="text-sm text-muted-foreground mb-1">عدد المستفيدين</p>
                     <p className="font-medium">
                       {typeof project.beneficiariesCount === 'number' ? project.beneficiariesCount.toLocaleString('ar-SA') : '—'}
                     </p>
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600 mb-1">عدد التعديلات</p>
+                    <p className="text-sm text-muted-foreground mb-1">عدد التعديلات</p>
                     <p className="font-medium">
                       {typeof project.modificationsCount === 'number' ? project.modificationsCount.toLocaleString('ar-SA') : '0'}
                     </p>
                   </div>
                   {(project.fundingAreaIds?.length > 0 || project.fundingAreas?.length > 0) && (
                     <div>
-                      <p className="text-sm text-gray-600 mb-1">مجالات المشاريع</p>
+                      <p className="text-sm text-muted-foreground mb-1">مجالات المشاريع</p>
                       <div className="flex flex-wrap gap-2">
                         {(project.fundingAreas || project.fundingAreaIds?.map((id) => ({ id, name: id })) || []).map((area: FundingAreaInfo | { id: string; name: string }) => (
                           <span
@@ -980,28 +980,28 @@ export function ProjectDetailsPage() {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md">
+            <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-6 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md">
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">ملخص الميزانية</h2>
+                <h2 className="text-xl font-semibold text-foreground dark:text-white">ملخص الميزانية</h2>
                 <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10">
                   <DollarSign className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
                 </div>
               </div>
-              <div className="flex items-center justify-between p-5 bg-gray-50 dark:bg-gray-800/60 rounded-xl">
-                <span className="text-gray-600 dark:text-gray-400 text-sm">إجمالي الميزانية</span>
-                <span className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+              <div className="flex items-center justify-between p-5 bg-secondary dark:bg-muted/60 rounded-xl">
+                <span className="text-muted-foreground dark:text-muted-foreground text-sm">إجمالي الميزانية</span>
+                <span className="text-3xl font-bold text-foreground dark:text-white tracking-tight">
                   {getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س
                 </span>
               </div>
             </div>
 
             {(project.llmResponseText || project.presentationResponseText) && (
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
-                <div className="flex items-center gap-4 border-b border-gray-200 mb-4">
+              <div className="bg-card rounded-xl p-6 border border-border">
+                <div className="flex items-center gap-4 border-b border-border mb-4">
                   {project.llmResponseText && (
                     <button
                       onClick={() => setActiveDocTab('study')}
-                      className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'study' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                      className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'study' ? 'border-blue-600 text-blue-600' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
                     >
                       دراسة المشروع
                     </button>
@@ -1009,14 +1009,14 @@ export function ProjectDetailsPage() {
                   {project.presentationResponseText && (
                     <button
                       onClick={() => setActiveDocTab('presentation')}
-                      className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'presentation' ? 'border-blue-600 text-blue-600' : 'border-transparent text-gray-500 hover:text-gray-700'}`}
+                      className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'presentation' ? 'border-blue-600 text-blue-600' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
                     >
                       تصميم العرض
                     </button>
                   )}
                 </div>
                 {activeDocTab === 'study' && project.llmResponseText && (
-                  <div dir="rtl" className="bg-white rounded-xl border border-gray-200 min-h-[300px] text-right">
+                  <div dir="rtl" className="bg-white rounded-xl border border-border min-h-[300px] text-right">
                     <MDEditor
                       value={project.llmResponseText}
                       onChange={() => {}}
@@ -1030,7 +1030,7 @@ export function ProjectDetailsPage() {
                   </div>
                 )}
                 {activeDocTab === 'presentation' && project.presentationResponseText && (
-                  <div dir="rtl" className="bg-white rounded-xl border border-gray-200 p-6 min-h-[300px] text-right">
+                  <div dir="rtl" className="bg-white rounded-xl border border-border p-6 min-h-[300px] text-right">
                     <div
                       className="prose prose-sm max-w-none w-full break-words [&>*]:text-right"
                       dangerouslySetInnerHTML={{ __html: project.presentationResponseText }}
@@ -1041,13 +1041,13 @@ export function ProjectDetailsPage() {
             )}
 
             {project.budgets && project.budgets.length > 0 && (
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-card rounded-xl p-6 border border-border">
                 <h2 className="text-xl font-semibold mb-4">تفاصيل الميزانية</h2>
                 <div className="space-y-3">
                   {project.budgets.map((budget) => (
-                    <div key={budget.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div key={budget.id} className="flex items-center justify-between p-3 bg-secondary rounded-lg">
                       <span className="font-medium">{budget.category}</span>
-                      <div className="text-sm text-gray-600">
+                      <div className="text-sm text-muted-foreground">
                         مخصص: {budget.allocated.toLocaleString('ar-SA')} / منفق: {budget.spent.toLocaleString('ar-SA')} {budget.currencyCode}
                       </div>
                     </div>
@@ -1057,17 +1057,17 @@ export function ProjectDetailsPage() {
             )}
 
             {project.milestones && project.milestones.length > 0 && (
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-card rounded-xl p-6 border border-border">
                 <h2 className="text-xl font-semibold mb-4">المعالم الرئيسية</h2>
                 <div className="space-y-3">
                   {project.milestones.map((milestone) => (
-                    <div key={milestone.id} className="p-3 bg-gray-50 rounded-lg">
+                    <div key={milestone.id} className="p-3 bg-secondary rounded-lg">
                       <div className="flex items-center justify-between mb-2">
                         <span className="font-medium">{milestone.title}</span>
                         <span className="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full">{milestone.status}</span>
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">{milestone.description}</p>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                      <p className="text-sm text-muted-foreground mb-2">{milestone.description}</p>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         <span>تاريخ الاستحقاق: {new Date(milestone.dueDate).toLocaleDateString('ar-SA')}</span>
                         <span>التقدم: {milestone.progress}%</span>
                       </div>
@@ -1079,45 +1079,45 @@ export function ProjectDetailsPage() {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
+            <div className="bg-card rounded-xl p-6 border border-border">
               <h3 className="font-semibold mb-4">إجراءات سريعة</h3>
               <div className="space-y-2">
                 <button
                   onClick={() => navigate(`/dashboard/project-management/lifecycle/${project.id}`)}
-                  className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
+                  className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
                 >
-                  <GitBranch className="w-5 h-5 text-gray-400" />
+                  <GitBranch className="w-5 h-5 text-muted-foreground" />
                   <span>رحلة المشروع</span>
                 </button>
                 <button
                   onClick={() => navigate(`/dashboard/project-management/versions/${project.id}`)}
-                  className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
+                  className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
                 >
-                  <Inbox className="w-5 h-5 text-gray-400" />
+                  <Inbox className="w-5 h-5 text-muted-foreground" />
                   <span>البريد الوارد</span>
                 </button>
                 <button
                   onClick={() => navigate(`/dashboard/collaboration/${project.id}/chat`)}
-                  className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
+                  className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
                 >
-                  <MessageSquare className="w-5 h-5 text-gray-400" />
+                  <MessageSquare className="w-5 h-5 text-muted-foreground" />
                   <span>المحادثة</span>
                 </button>
                 <button
                   onClick={() => navigate(`/dashboard/project-management/activity/${project.id}`)}
-                  className="w-full px-4 py-3 text-right border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-3"
+                  className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
                 >
-                  <Activity className="w-5 h-5 text-gray-400" />
+                  <Activity className="w-5 h-5 text-muted-foreground" />
                   <span>النشاط</span>
                 </button>
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
+            <div className="bg-card rounded-xl p-6 border border-border">
               <h3 className="font-semibold mb-4">الفريق المسؤول</h3>
               <div className="space-y-3">
                 {['مدير المشروع', 'مسؤول مالي', 'ممثل الجمعية'].map((role) => (
-                  <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center gap-3 p-3 bg-secondary rounded-lg">
                     <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                       <User className="w-5 h-5 text-blue-600" />
                     </div>
@@ -1130,14 +1130,14 @@ export function ProjectDetailsPage() {
             </div>
 
             {project.activities && project.activities.length > 0 && (
-              <div className="bg-white rounded-xl p-6 border border-gray-200">
+              <div className="bg-card rounded-xl p-6 border border-border">
                 <h3 className="font-semibold mb-4">آخر الأنشطة</h3>
                 <div className="space-y-3">
                   {project.activities.slice(0, 5).map((activity) => (
                     <div key={activity.id} className="text-sm">
                       <p className="font-medium">{activity.action}</p>
-                      <p className="text-gray-600 text-xs">{activity.description}</p>
-                      <p className="text-gray-400 text-xs mt-1">
+                      <p className="text-muted-foreground text-xs">{activity.description}</p>
+                      <p className="text-muted-foreground text-xs mt-1">
                         {new Date(activity.createdAt).toLocaleDateString('ar-SA')} ({formatDateTime(activity.createdAt)})
                       </p>
                     </div>
@@ -1156,19 +1156,19 @@ export function ProjectDetailsPage() {
             onClick={() => setPlanOpen(false)}
           />
           <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] max-w-[90vw] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between p-6 border-b border-border bg-white">
               <div>
                 <h2 className="text-xl font-semibold">خطة المشروع</h2>
-                <p className="text-sm text-gray-500 mt-1">تحرير ومعاينة خطة المشروع</p>
+                <p className="text-sm text-muted-foreground mt-1">تحرير ومعاينة خطة المشروع</p>
               </div>
               <div className="flex items-center gap-3">
-                <div className="flex items-center bg-gray-100 rounded-lg p-1 ml-2">
+                <div className="flex items-center bg-muted rounded-lg p-1 ml-2">
                   <button
                     onClick={() => setPlanView('preview')}
                     className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${
                       planView === 'preview'
                         ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
                     <Eye className="w-4 h-4" />
@@ -1179,7 +1179,7 @@ export function ProjectDetailsPage() {
                     className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${
                       planView === 'edit'
                         ? 'bg-white text-blue-600 shadow-sm'
-                        : 'text-gray-600 hover:text-gray-900'
+                        : 'text-muted-foreground hover:text-foreground'
                     }`}
                   >
                     <Edit className="w-4 h-4" />
@@ -1212,24 +1212,24 @@ export function ProjectDetailsPage() {
                 </button>
                 <button
                   onClick={() => setPlanOpen(false)}
-                  className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                  className="p-2 text-muted-foreground hover:text-foreground transition-colors"
                 >
                   ✕
                 </button>
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-6 bg-secondary">
               {planLoading ? (
                 <div className="flex items-center justify-center h-full">
                   <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
                 </div>
               ) : planView === 'preview' ? (
-                <div className="prose prose-sm max-w-none text-right w-full break-words bg-white rounded-xl p-6 border border-gray-200 min-h-full [&>*]:text-right">
+                <div className="prose prose-sm max-w-none text-right w-full break-words bg-card rounded-xl p-6 border border-border min-h-full [&>*]:text-right">
                   <Markdown remarkPlugins={[remarkGfm]}>{planMarkdown || '\u00A0'}</Markdown>
                 </div>
               ) : (
-                <div dir="rtl" data-color-mode="light" className="bg-white rounded-xl border border-gray-200 min-h-full h-full">
+                <div dir="rtl" data-color-mode="light" className="bg-white rounded-xl border border-border min-h-full h-full">
                   <MDEditor
                     value={planMarkdown}
                     onChange={(val) => setPlanMarkdown(val || '')}
@@ -1252,47 +1252,47 @@ export function ProjectDetailsPage() {
             onClick={handleCloseReview}
           />
           <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] max-w-[90vw] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between p-6 border-b border-border bg-white">
               <div>
                 <h2 className="text-xl font-semibold">مراجعة مسودة المشروع</h2>
-                <p className="text-sm text-gray-500 mt-1">يرجى مراجعة الدراسة المُولدة ثم اختيار القرار المناسب</p>
+                <p className="text-sm text-muted-foreground mt-1">يرجى مراجعة الدراسة المُولدة ثم اختيار القرار المناسب</p>
               </div>
               <button
                 onClick={handleCloseReview}
-                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-6 bg-secondary">
               {reviewStep === 'view' ? (
                 <div className="space-y-6">
-                  <div className="prose prose-sm max-w-none text-right w-full break-words bg-white rounded-xl p-6 border border-gray-200 min-h-full [&>*]:text-right">
+                  <div className="prose prose-sm max-w-none text-right w-full break-words bg-card rounded-xl p-6 border border-border min-h-full [&>*]:text-right">
                     <Markdown remarkPlugins={[remarkGfm]}>{getProjectStudy() || 'لا توجد دراسة مُولدة لهذا المشروع'}</Markdown>
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-lg font-semibold">طلب تعديلات</h3>
-                  <p className="text-sm text-gray-600">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
+                  <p className="text-sm text-muted-foreground">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
                   <textarea
                     value={reviewNotes}
                     onChange={(e) => setReviewNotes(e.target.value)}
                     placeholder="اكتب ملاحظاتك هنا..."
                     rows={8}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
                   />
                 </div>
               )}
             </div>
 
-            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+            <div className="p-6 border-t border-border bg-white flex items-center justify-between gap-3 flex-wrap">
               {reviewStep === 'view' ? (
                 <>
                   <button
                     onClick={handleCloseReview}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                   >
                     إلغاء
                   </button>
@@ -1319,7 +1319,7 @@ export function ProjectDetailsPage() {
                 <>
                   <button
                     onClick={() => setReviewStep('view')}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                   >
                     رجوع
                   </button>
@@ -1347,24 +1347,24 @@ export function ProjectDetailsPage() {
             onClick={handleCloseDesignReview}
           />
           <div dir="rtl" className="relative z-10 flex flex-col w-full max-w-xl max-h-[80vh] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between p-6 border-b border-border bg-white">
               <div>
                 <h2 className="text-xl font-semibold">اعتماد تصميم المشروع</h2>
-                <p className="text-sm text-gray-500 mt-1">يرجى مراجعة التصميم المعروض أدناه ثم اختيار القرار المناسب</p>
+                <p className="text-sm text-muted-foreground mt-1">يرجى مراجعة التصميم المعروض أدناه ثم اختيار القرار المناسب</p>
               </div>
               <button
                 onClick={handleCloseDesignReview}
-                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-6 bg-secondary">
               {designStep === 'view' ? (
                 <div className="space-y-6 w-full">
                   <div className="bg-blue-50 border border-blue-100 rounded-lg p-4">
-                    <p className="text-sm text-gray-700 mb-3">
+                    <p className="text-sm text-foreground mb-3">
                       الملف التسويقي جاهز الآن يمكنك تحميله ومراجعته بالضغط على تحميل وبعدها يمكنك اعتماده أو طلب تعديل
                     </p>
                     <button
@@ -1382,36 +1382,36 @@ export function ProjectDetailsPage() {
                   </div>
                 </div>
               ) : (
-                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-lg font-semibold">طلب تعديل على التصميم</h3>
-                  <p className="text-sm text-gray-600">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
+                  <p className="text-sm text-muted-foreground">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
                   <textarea
                     value={designNotes}
                     onChange={(e) => setDesignNotes(e.target.value)}
                     placeholder="اكتب ملاحظات التعديلات هنا..."
                     rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
                   />
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">ملاحظات داخلية (اختياري)</label>
+                    <label className="text-sm font-medium text-foreground">ملاحظات داخلية (اختياري)</label>
                     <textarea
                       value={designInternalNotes}
                       onChange={(e) => setDesignInternalNotes(e.target.value)}
                       placeholder="ملاحظات داخلية غير مرسلة للجهة..."
                       rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
                     />
                   </div>
                 </div>
               )}
             </div>
 
-            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+            <div className="p-6 border-t border-border bg-white flex items-center justify-between gap-3 flex-wrap">
               {designStep === 'view' ? (
                 <>
                   <button
                     onClick={handleCloseDesignReview}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                   >
                     إلغاء
                   </button>
@@ -1438,7 +1438,7 @@ export function ProjectDetailsPage() {
                 <>
                   <button
                     onClick={() => setDesignStep('view')}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                   >
                     رجوع
                   </button>
@@ -1466,10 +1466,10 @@ export function ProjectDetailsPage() {
             onClick={handleCloseOfferReview}
           />
           <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between p-6 border-b border-border bg-white">
               <div>
                 <h2 className="text-xl font-semibold">اعتماد عرض السعر</h2>
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-muted-foreground mt-1">
                   {offerStep === 'view'
                     ? 'يرجى تحميل عرض السعر المُولد ومراجعته قبل اتخاذ القرار'
                     : offerStep === 'approve'
@@ -1479,20 +1479,20 @@ export function ProjectDetailsPage() {
               </div>
               <button
                 onClick={handleCloseOfferReview}
-                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+            <div className="flex-1 overflow-y-auto p-6 bg-secondary">
               {offerStep === 'view' && (
                 <div className="space-y-6 max-w-3xl mx-auto">
                   <div className="bg-blue-50 border border-blue-100 rounded-xl p-6 text-center space-y-4">
                     <FileText className="w-16 h-16 text-blue-600 mx-auto" />
                     <div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">عرض السعر</h3>
-                      <p className="text-sm text-gray-600">يمكنك تحميل عرض السعر المُولد لمراجعته قبل اتخاذ القرار.</p>
+                      <h3 className="text-lg font-semibold text-foreground mb-1">عرض السعر</h3>
+                      <p className="text-sm text-muted-foreground">يمكنك تحميل عرض السعر المُولد لمراجعته قبل اتخاذ القرار.</p>
                     </div>
                     <button
                       onClick={handleDownloadPriceOffer}
@@ -1511,18 +1511,18 @@ export function ProjectDetailsPage() {
               )}
 
               {offerStep === 'approve' && (
-                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-lg font-semibold">رفع عرض السعر الموقع</h3>
-                  <p className="text-sm text-gray-600">يرجى رفع نسخة عرض السعر الموقع بصيغة PDF أو Word فقط (بحد أقصى 10 ميجابايت).</p>
+                  <p className="text-sm text-muted-foreground">يرجى رفع نسخة عرض السعر الموقع بصيغة PDF أو Word فقط (بحد أقصى 10 ميجابايت).</p>
                   <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700">الملف الموقع</label>
-                    <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
-                      <div className="flex flex-col items-center gap-2 text-gray-600">
+                    <label className="block text-sm font-medium text-foreground">الملف الموقع</label>
+                    <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-secondary transition-colors">
+                      <div className="flex flex-col items-center gap-2 text-muted-foreground">
                         <Upload className="w-8 h-8" />
                         <span className="text-sm font-medium">
                           {offerFile ? offerFile.name : 'انقر لاختيار ملف PDF أو Word'}
                         </span>
-                        <span className="text-xs text-gray-400">PDF أو Word - بحد أقصى 10 ميجابايت</span>
+                        <span className="text-xs text-muted-foreground">PDF أو Word - بحد أقصى 10 ميجابايت</span>
                       </div>
                       <input
                         type="file"
@@ -1536,39 +1536,39 @@ export function ProjectDetailsPage() {
                     )}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">ملاحظات داخلية (اختياري)</label>
+                    <label className="text-sm font-medium text-foreground">ملاحظات داخلية (اختياري)</label>
                     <textarea
                       value={offerInternalNotes}
                       onChange={(e) => setOfferInternalNotes(e.target.value)}
                       placeholder="ملاحظات داخلية غير مرسلة للجهة..."
                       rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
                     />
                   </div>
                 </div>
               )}
 
               {offerStep === 'reject' && (
-                <div className="space-y-4 max-w-2xl mx-auto bg-white rounded-xl p-6 border border-gray-200">
+                <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
                   <h3 className="text-lg font-semibold">رفض عرض السعر</h3>
-                  <p className="text-sm text-gray-600">يرجى توضيح سبب رفض عرض السعر ليتم إرساله إلى مدير المشروع.</p>
+                  <p className="text-sm text-muted-foreground">يرجى توضيح سبب رفض عرض السعر ليتم إرساله إلى مدير المشروع.</p>
                   <textarea
                     value={offerRejectReason}
                     onChange={(e) => setOfferRejectReason(e.target.value)}
                     placeholder="اكتب سبب الرفض هنا..."
                     rows={8}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
                   />
                 </div>
               )}
             </div>
 
-            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+            <div className="p-6 border-t border-border bg-white flex items-center justify-between gap-3 flex-wrap">
               {offerStep === 'view' ? (
                 <>
                   <button
                     onClick={handleCloseOfferReview}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                   >
                     إلغاء
                   </button>
@@ -1591,7 +1591,7 @@ export function ProjectDetailsPage() {
                 <>
                   <button
                     onClick={() => setOfferStep('view')}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                   >
                     رجوع
                   </button>
@@ -1610,7 +1610,7 @@ export function ProjectDetailsPage() {
                 <>
                   <button
                     onClick={() => setOfferStep('view')}
-                    className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                    className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                   >
                     رجوع
                   </button>
@@ -1638,24 +1638,24 @@ export function ProjectDetailsPage() {
             onClick={handleCloseSendDesign}
           />
           <div dir="rtl" className="relative z-10 flex flex-col w-full max-w-2xl max-h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden text-right">
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-white">
+            <div className="flex items-center justify-between p-6 border-b border-border bg-white">
               <div>
                 <h2 className="text-xl font-semibold">إرسال التصميم إلى الجهة الخيرية</h2>
               </div>
               <button
                 onClick={handleCloseSendDesign}
-                className="p-2 text-gray-500 hover:text-gray-700 transition-colors"
+                className="p-2 text-muted-foreground hover:text-foreground transition-colors"
               >
                 ✕
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-6 bg-gray-50 space-y-5">
-              <p className="text-sm text-gray-600 bg-blue-50 border border-blue-100 rounded-lg p-4">
+            <div className="flex-1 overflow-y-auto p-6 bg-secondary space-y-5">
+              <p className="text-sm text-muted-foreground bg-blue-50 border border-blue-100 rounded-lg p-4">
                 إذا لم تقم برفع ملف جديد، سيتم إرسال الملف التسويقي المولد تلقائياً إلى الجهة الخيرية. إذا قمت برفع ملف، فسيُرسل بدلاً من الملف الافتراضي. بالاعتماد، سيتم إرسال التصميم إلى العميل.
               </p>
 
-              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
+              <div className="bg-white rounded-xl p-5 border border-border space-y-3">
                 <h3 className="font-medium">الملف التسويقي المولد</h3>
                 <button
                   onClick={handleDownloadGeneratedPresentation}
@@ -1671,10 +1671,10 @@ export function ProjectDetailsPage() {
                 </button>
               </div>
 
-              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
+              <div className="bg-white rounded-xl p-5 border border-border space-y-3">
                 <h3 className="font-medium">ملف التصميم البديل (اختياري)</h3>
                 <label className="flex flex-col gap-2 cursor-pointer">
-                  <div className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium text-gray-700">
+                  <div className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-foreground">
                     <Upload className="w-4 h-4" />
                     <span>اختر ملف PPTX أو PDF</span>
                   </div>
@@ -1686,42 +1686,42 @@ export function ProjectDetailsPage() {
                   />
                 </label>
                 {sendDesignFile && (
-                  <p className="text-sm text-gray-600">الملف المحدد: {sendDesignFile.name}</p>
+                  <p className="text-sm text-muted-foreground">الملف المحدد: {sendDesignFile.name}</p>
                 )}
                 {sendDesignFileError && (
                   <p className="text-sm text-red-600">{sendDesignFileError}</p>
                 )}
               </div>
 
-              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
-                <label className="block text-sm font-medium text-gray-700">ملاحظات (اختياري)</label>
+              <div className="bg-white rounded-xl p-5 border border-border space-y-3">
+                <label className="block text-sm font-medium text-foreground">ملاحظات (اختياري)</label>
                 <textarea
                   value={sendDesignNotes}
                   onChange={(e) => setSendDesignNotes(e.target.value.slice(0, 2000))}
                   placeholder="اكتب الملاحظات التي ستُرسل مع التصميم..."
                   rows={4}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
                 />
-                <p className="text-xs text-gray-500 text-left">{sendDesignNotes.length}/2000</p>
+                <p className="text-xs text-muted-foreground text-left">{sendDesignNotes.length}/2000</p>
               </div>
 
-              <div className="bg-white rounded-xl p-5 border border-gray-200 space-y-3">
-                <label className="block text-sm font-medium text-gray-700">ملاحظات داخلية (اختياري)</label>
+              <div className="bg-white rounded-xl p-5 border border-border space-y-3">
+                <label className="block text-sm font-medium text-foreground">ملاحظات داخلية (اختياري)</label>
                 <textarea
                   value={sendDesignInternalNotes}
                   onChange={(e) => setSendDesignInternalNotes(e.target.value.slice(0, 2000))}
                   placeholder="ملاحظات داخلية غير مرسلة للجهة..."
                   rows={3}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
                 />
-                <p className="text-xs text-gray-500 text-left">{sendDesignInternalNotes.length}/2000</p>
+                <p className="text-xs text-muted-foreground text-left">{sendDesignInternalNotes.length}/2000</p>
               </div>
             </div>
 
-            <div className="p-6 border-t border-gray-200 bg-white flex items-center justify-between gap-3 flex-wrap">
+            <div className="p-6 border-t border-border bg-white flex items-center justify-between gap-3 flex-wrap">
               <button
                 onClick={handleCloseSendDesign}
-                className="px-5 py-2.5 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
               >
                 إلغاء
               </button>

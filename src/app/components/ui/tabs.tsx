@@ -27,8 +27,8 @@ function TabsList({
       data-slot="tabs-list"
       className={cn(
         "inline-flex h-10 w-fit items-center justify-center rounded-xl p-1 flex",
-        "bg-gray-100 dark:bg-gray-800",
-        "border border-gray-200 dark:border-gray-700",
+        "bg-gray-100 dark:bg-muted",
+        "border border-gray-200 dark:border-border",
         className,
       )}
       {...props}

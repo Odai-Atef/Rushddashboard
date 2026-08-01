@@ -22,7 +22,7 @@ function Command({
       data-slot="command"
       className={cn(
         "flex h-full w-full flex-col overflow-hidden rounded-lg",
-        "bg-white dark:bg-gray-900",
+        "bg-white dark:bg-card",
         "text-gray-900 dark:text-white",
         className,
       )}
@@ -62,7 +62,7 @@ function CommandInput({
   return (
     <div
       data-slot="command-input-wrapper"
-      className="flex h-11 items-center gap-2 border-b border-gray-200 dark:border-gray-700 px-3"
+      className="flex h-11 items-center gap-2 border-b border-gray-200 dark:border-border px-3"
     >
       <SearchIcon className="size-4 shrink-0 text-gray-400 dark:text-gray-500" />
       <CommandPrimitive.Input
@@ -134,7 +134,7 @@ function CommandSeparator({
   return (
     <CommandPrimitive.Separator
       data-slot="command-separator"
-      className={cn("-mx-1 h-px bg-gray-200 dark:bg-gray-700", className)}
+      className={cn("-mx-1 h-px bg-gray-200 dark:bg-muted", className)}
       {...props}
     />
   );

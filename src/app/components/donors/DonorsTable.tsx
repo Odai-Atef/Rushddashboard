@@ -31,7 +31,7 @@ export function DonorsTable({ donors, onRowClick }: DonorsTableProps) {
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
       <table className="w-full border-collapse min-w-[700px]">
         <thead>
           <tr className="border-b border-border bg-muted/50">
@@ -87,7 +87,7 @@ export function DonorsTable({ donors, onRowClick }: DonorsTableProps) {
                 <span
                   className={cn(
                     'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                    TYPE_COLORS[donor.type] || 'bg-gray-100 text-gray-700'
+                    TYPE_COLORS[donor.type] || 'bg-muted text-foreground'
                   )}
                 >
                   {DONOR_TYPE_LABELS[donor.type] || donor.type}

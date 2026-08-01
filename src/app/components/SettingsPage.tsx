@@ -205,7 +205,7 @@ export function SettingsPage() {
                 </select>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium mb-2">حجم الشركة</label>
                   <select className="w-full px-4 py-2.5 bg-muted border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary">
@@ -333,17 +333,17 @@ export function SettingsPage() {
                 <label className="block text-sm font-medium mb-3">وضع العرض</label>
                 <div className="grid grid-cols-3 gap-3">
                   <button className="p-4 border-2 border-primary bg-primary/5 rounded-lg">
-                    <div className="w-full h-20 bg-gradient-to-br from-white to-gray-100 dark:from-gray-800 dark:to-gray-900 rounded mb-3 border border-border"></div>
+                    <div className="w-full h-20 bg-gradient-to-br from-background to-muted dark:from-gray-800 dark:to-gray-900 rounded-lg mb-3 border border-border"></div>
                     <p className="font-medium text-sm">فاتح</p>
                   </button>
                   <button className="p-4 border-2 border-border rounded-lg hover:border-primary/50 transition-colors">
-                    <div className="w-full h-20 bg-gradient-to-br from-gray-900 to-black rounded mb-3"></div>
+                    <div className="w-full h-20 bg-gradient-to-br from-foreground to-background rounded-lg mb-3"></div>
                     <p className="font-medium text-sm">داكن</p>
                   </button>
                   <button className="p-4 border-2 border-border rounded-lg hover:border-primary/50 transition-colors">
-                    <div className="w-full h-20 rounded mb-3 overflow-hidden">
-                      <div className="h-1/2 bg-gradient-to-br from-white to-gray-100"></div>
-                      <div className="h-1/2 bg-gradient-to-br from-gray-900 to-black"></div>
+                    <div className="w-full h-20 rounded-lg mb-3 overflow-hidden">
+                      <div className="h-1/2 bg-gradient-to-br from-background to-muted"></div>
+                      <div className="h-1/2 bg-gradient-to-br from-foreground to-background"></div>
                     </div>
                     <p className="font-medium text-sm">تلقائي</p>
                   </button>
@@ -823,7 +823,7 @@ export function SettingsPage() {
                       <p className="font-medium">مشاهد</p>
                       <p className="text-sm text-muted-foreground">عرض التقارير فقط</p>
                     </div>
-                    <span className="text-xs bg-gray-500/10 text-gray-600 px-3 py-1 rounded-full">
+                    <span className="text-xs bg-secondary0/10 text-muted-foreground px-3 py-1 rounded-full">
                       8 مستخدمين
                     </span>
                   </div>
@@ -873,18 +873,18 @@ export function SettingsPage() {
                     <button className="text-xs text-destructive hover:underline">حذف</button>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 px-3 py-2 bg-muted rounded font-mono text-sm">
+                    <div className="flex-1 px-3 py-2 bg-muted rounded-lg font-mono text-sm">
                       {showApiKey ? 'rushd_sk_live_1a2b3c4d5e6f7g8h9i0j' : '••••••••••••••••••••••••'}
                     </div>
                     <button
                       onClick={() => setShowApiKey(!showApiKey)}
-                      className="p-2 hover:bg-accent rounded transition-colors"
+                      className="p-2 hover:bg-accent rounded-lg transition-colors"
                     >
                       {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                     </button>
                     <button
                       onClick={handleCopyApiKey}
-                      className="p-2 hover:bg-accent rounded transition-colors"
+                      className="p-2 hover:bg-accent rounded-lg transition-colors"
                     >
                       {copiedKey ? <Check className="w-4 h-4 text-green-600" /> : <Copy className="w-4 h-4" />}
                     </button>
@@ -905,13 +905,13 @@ export function SettingsPage() {
                     <button className="text-xs text-destructive hover:underline">حذف</button>
                   </div>
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 px-3 py-2 bg-muted rounded font-mono text-sm">
+                    <div className="flex-1 px-3 py-2 bg-muted rounded-lg font-mono text-sm">
                       ••••••••••••••••••••••••
                     </div>
-                    <button className="p-2 hover:bg-accent rounded transition-colors">
+                    <button className="p-2 hover:bg-accent rounded-lg transition-colors">
                       <Eye className="w-4 h-4" />
                     </button>
-                    <button className="p-2 hover:bg-accent rounded transition-colors">
+                    <button className="p-2 hover:bg-accent rounded-lg transition-colors">
                       <Copy className="w-4 h-4" />
                     </button>
                   </div>
@@ -1001,7 +1001,7 @@ export function SettingsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs bg-gray-500/10 text-gray-600 px-3 py-1 rounded-full">
+                    <span className="text-xs bg-secondary0/10 text-muted-foreground px-3 py-1 rounded-full">
                       غير متصل
                     </span>
                     <button className="text-sm text-primary hover:underline">ربط</button>
@@ -1021,7 +1021,7 @@ export function SettingsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs bg-gray-500/10 text-gray-600 px-3 py-1 rounded-full">
+                    <span className="text-xs bg-secondary0/10 text-muted-foreground px-3 py-1 rounded-full">
                       غير متصل
                     </span>
                     <button className="text-sm text-primary hover:underline">ربط</button>
@@ -1041,7 +1041,7 @@ export function SettingsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-xs bg-gray-500/10 text-gray-600 px-3 py-1 rounded-full">
+                    <span className="text-xs bg-secondary0/10 text-muted-foreground px-3 py-1 rounded-full">
                       غير متصل
                     </span>
                     <button className="text-sm text-primary hover:underline">ربط</button>

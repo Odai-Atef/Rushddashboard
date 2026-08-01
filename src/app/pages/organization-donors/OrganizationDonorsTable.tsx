@@ -113,7 +113,7 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border" dir="rtl">
+    <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0 rounded-xl border border-border" dir="rtl">
       <table className="w-full border-collapse">
         <thead>
           <tr className="border-b border-border bg-muted/50">

@@ -36,7 +36,7 @@ export function InfoPage() {
   const showActionRequiredAlert = user?.status?.toUpperCase() === 'NEED_ACTION_FROM_ORG' && !!user?.actionRequired;
 
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="max-w-3xl mx-auto">
         {/* Action required alert */}
         {showActionRequiredAlert && (
@@ -52,7 +52,7 @@ export function InfoPage() {
         )}
 
         {/* Tabs Header */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-4 sm:mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-border overflow-hidden mb-4 sm:mb-6">
           <div className="flex w-full overflow-x-auto">
             {tabs.map((tab) => {
               const Icon = tab.icon;
@@ -66,7 +66,7 @@ export function InfoPage() {
                     'w-1/2 flex items-center justify-center gap-2 px-4 py-4 text-center font-medium transition-colors',
                     isActive
                       ? 'bg-blue-50 text-blue-700 border-b-2 border-blue-600'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 border-b-2 border-transparent'
+                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground border-b-2 border-transparent'
                   )}
                 >
                   <Icon className="w-5 h-5" />

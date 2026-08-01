@@ -294,7 +294,7 @@ export function ProjectEditPage() {
 
   if (!isProjectManager) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -302,7 +302,7 @@ export function ProjectEditPage() {
 
   if (isLoadingProject) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -310,7 +310,7 @@ export function ProjectEditPage() {
 
   if (error) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
         <div className="text-red-600 text-center">{error}</div>
         <button
           onClick={() => refetch()}
@@ -328,7 +328,7 @@ export function ProjectEditPage() {
   }
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="space-y-6 max-w-4xl mx-auto">
         <div className="mb-6">
           <button
@@ -339,10 +339,10 @@ export function ProjectEditPage() {
             رجوع إلى تفاصيل المشروع
           </button>
           <h1 className="text-3xl font-bold mb-2">تعديل المشروع</h1>
-          <p className="text-gray-600">تحديث تفاصيل المشروع</p>
+          <p className="text-muted-foreground">تحديث تفاصيل المشروع</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8">
+        <div className="bg-white rounded-xl border border-border shadow-sm p-8">
           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
             {saveError && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
@@ -357,7 +357,7 @@ export function ProjectEditPage() {
                 type="text"
                 value={formData.name}
                 onChange={(e) => updateField('name', e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 placeholder="مثال: برنامج الأسر المنتجة"
               />
             </div>
@@ -366,11 +366,11 @@ export function ProjectEditPage() {
               <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
               {getFieldError('fundingAreaIds') && <p className="text-red-600 text-sm mb-1">{getFieldError('fundingAreaIds')}</p>}
               {isLoadingFundingAreas ? (
-                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                <div className="w-full px-4 py-3 border border-border rounded-lg bg-secondary text-muted-foreground">
                   جاري تحميل مجالات المشاريع...
                 </div>
               ) : fundingAreas.length === 0 ? (
-                <p className="text-sm text-gray-500">لا توجد مجالات مشاريع متاحة حالياً.</p>
+                <p className="text-sm text-muted-foreground">لا توجد مجالات مشاريع متاحة حالياً.</p>
               ) : (
                 <MultiSelect
                   options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
@@ -400,7 +400,7 @@ export function ProjectEditPage() {
                 value={formData.description}
                 onChange={(e) => updateField('description', e.target.value)}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 placeholder="اكتب وصفاً تفصيلياً للمشروع..."
               />
             </div>
@@ -413,7 +413,7 @@ export function ProjectEditPage() {
                   type="number"
                   value={formData.budget}
                   onChange={(e) => updateField('budget', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="250000"
                 />
               </div>
@@ -424,7 +424,7 @@ export function ProjectEditPage() {
                   type="text"
                   value={formData.beneficiaries}
                   onChange={(e) => updateField('beneficiaries', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="مثال: الأسر المحتاجة"
                 />
               </div>
@@ -440,7 +440,7 @@ export function ProjectEditPage() {
                   step="1"
                   value={formData.beneficiariesCount}
                   onChange={(e) => updateField('beneficiariesCount', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                   placeholder="مثال: 500"
                 />
               </div>
@@ -451,7 +451,7 @@ export function ProjectEditPage() {
                   type="text"
                   value={formData.geographicScope}
                   onChange={(e) => updateField('geographicScope', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   placeholder="مثال: الرياض"
                 />
               </div>
@@ -466,7 +466,7 @@ export function ProjectEditPage() {
                 <select
                   value={formData.status}
                   onChange={(e) => updateField('status', e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="">اختر الحالة</option>
                   {STATUS_OPTIONS.map((status) => (
@@ -483,37 +483,37 @@ export function ProjectEditPage() {
               {(getFieldError('startDate') || getFieldError('endDate')) && (
                 <p className="text-red-600 text-sm mb-1">{getFieldError('startDate') || getFieldError('endDate')}</p>
               )}
-              <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-red-50' : 'border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'}`}>
+              <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-red-50' : 'border-border focus-within:ring-2 focus-within:ring-blue-500'}`}>
                 <div
                   className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
                   onClick={() => startDateRef.current?.showPicker?.()}
                 >
-                  <span className="text-[10px] text-gray-400 mb-0.5">من</span>
+                  <span className="text-xs text-muted-foreground mb-0.5">من</span>
                   <input
                     ref={startDateRef}
                     type="date"
                     value={formData.startDate}
                     onChange={(e) => updateField('startDate', e.target.value)}
-                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer"
+                    className="w-full bg-transparent outline-none text-sm text-foreground cursor-pointer"
                   />
                 </div>
-                <div className="w-px bg-gray-200 self-stretch my-2" />
+                <div className="w-px bg-muted self-stretch my-2" />
                 <div
                   className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
                   onClick={() => endDateRef.current?.showPicker?.()}
                 >
-                  <span className="text-[10px] text-gray-400 mb-0.5">إلى</span>
+                  <span className="text-xs text-muted-foreground mb-0.5">إلى</span>
                   <input
                     ref={endDateRef}
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => updateField('endDate', e.target.value)}
-                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer"
+                    className="w-full bg-transparent outline-none text-sm text-foreground cursor-pointer"
                   />
                 </div>
               </div>
               {durationDays !== null && (
-                <p className="text-gray-500 text-xs mt-2">مدة المشروع: {durationDays} يوم</p>
+                <p className="text-muted-foreground text-xs mt-2">مدة المشروع: {durationDays} يوم</p>
               )}
             </div>
 
@@ -527,7 +527,7 @@ export function ProjectEditPage() {
                     text-align: right !important;
                   }
                 `}</style>
-                <div dir="rtl" data-color-mode="light" className="bg-white rounded-xl border border-gray-200 min-h-[300px]">
+                <div dir="rtl" data-color-mode="light" className="bg-white rounded-xl border border-border min-h-[300px]">
                   <MDEditor
                     value={formData.llmResponseText}
                     onChange={(val) => updateField('llmResponseText', val || '')}
@@ -545,7 +545,7 @@ export function ProjectEditPage() {
               <button
                 type="button"
                 onClick={() => navigate(`/dashboard/project-management/details/${projectId}`)}
-                className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium"
+                className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium"
               >
                 إلغاء
               </button>

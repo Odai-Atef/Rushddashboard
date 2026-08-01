@@ -50,7 +50,7 @@ function ScoreRing({ score }: { score: number }) {
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="text-sm text-foreground leading-none">{score}%</span>
-        <span className="text-[9px] text-muted-foreground">تطابق</span>
+        <span className="text-xs text-muted-foreground">تطابق</span>
       </div>
     </div>
   );
@@ -148,9 +148,9 @@ export function AIRecommendedDonors({
     <div className="space-y-5">
       {/* Project Info */}
       {(isLoadingProject || project || projectError) && (
-        <div className="p-4 rounded-xl bg-gray-50 border border-gray-200">
+        <div className="p-4 rounded-xl bg-secondary border border-border">
           {isLoadingProject && (
-            <div className="flex items-center gap-2 text-sm text-gray-600">
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Loader2 className="w-4 h-4 animate-spin" />
               جارٍ تحميل بيانات المشروع...
             </div>
@@ -161,7 +161,7 @@ export function AIRecommendedDonors({
           {project && (
             <div className="flex items-center justify-between">
               <div className="text-right">
-                <p className="text-sm text-gray-600 mb-1">
+                <p className="text-sm text-muted-foreground mb-1">
                   نتائج التطابق للمشروع: <strong className="text-foreground">{project.name}</strong>
                 </p>
                 <div className="flex items-center gap-2">
@@ -301,7 +301,7 @@ export function AIRecommendedDonors({
                   <DonorHistoryAccordion matchId={donor.id} />
 
                   {/* Actions */}
-                  <div className="flex items-center justify-start gap-2 flex-wrap mt-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+                  <div className="flex items-center justify-start gap-2 flex-wrap mt-3 pt-3 border-t border-border dark:border-gray-800">
                     <a
                       href={donor.url}
                       target="_blank"

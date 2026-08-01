@@ -58,7 +58,7 @@ export function getExtractionStatusMeta(status: string) {
       return {
         label: 'معلق',
         icon: Clock,
-        className: 'bg-gray-100 text-gray-700 border-gray-200',
+        className: 'bg-muted text-foreground border-border',
       };
   }
 }
@@ -72,11 +72,11 @@ interface ReadOnlyFieldProps {
 export function ReadOnlyField({ label, value, icon: Icon }: ReadOnlyFieldProps) {
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-1.5 text-xs text-gray-500">
+      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
         {Icon && <Icon className="w-3.5 h-3.5" />}
         <span>{label}</span>
       </div>
-      <div className="text-sm font-medium text-gray-900 break-words">
+      <div className="text-sm font-medium text-foreground break-words">
         {value && value.trim() ? value : '-'}
       </div>
     </div>
@@ -93,11 +93,11 @@ export function ReadOnlyListField({ label, items, icon: Icon }: ReadOnlyListFiel
   const hasItems = items && items.length > 0;
   return (
     <div className="space-y-1">
-      <div className="flex items-center gap-1.5 text-xs text-gray-500">
+      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
         {Icon && <Icon className="w-3.5 h-3.5" />}
         <span>{label}</span>
       </div>
-      <div className="text-sm font-medium text-gray-900">
+      <div className="text-sm font-medium text-foreground">
         {hasItems ? (
           <ul className="list-disc list-inside space-y-0.5">
             {items.map((item, idx) => (
@@ -122,7 +122,7 @@ export function SectionCard({ title, icon: Icon, children }: SectionCardProps) {
   return (
     <Card>
       <CardHeader className="pb-3">
-        <CardTitle className="text-base font-semibold flex items-center gap-2 text-gray-900">
+        <CardTitle className="text-base font-semibold flex items-center gap-2 text-foreground">
           {Icon && <Icon className="w-5 h-5 text-blue-600" />}
           {title}
         </CardTitle>

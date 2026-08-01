@@ -177,32 +177,32 @@ export function EntityInfoForm() {
     `w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
       errors[field]
         ? 'border-red-500 focus:ring-red-500'
-        : 'border-gray-300'
+        : 'border-border'
     }`;
 
   const getIconInputClassName = (field: keyof RegistrationData) =>
     `w-full pr-10 pl-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
       errors[field]
         ? 'border-red-500 focus:ring-red-500'
-        : 'border-gray-300'
+        : 'border-border'
     }`;
 
   if (!organization && isSaving) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 flex items-center justify-center">
+      <div className="bg-white rounded-xl shadow-sm border border-border p-8 flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+    <div className="bg-white rounded-xl shadow-sm border border-border p-8">
       <form className="space-y-6">
         {/* Organization Name */}
         <div>
           <label className="block text-sm font-medium mb-2">اسم الجهه *</label>
           <div className="relative">
-            <Building2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+            <Building2 className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
             <input
               type="text"
               value={registrationData.orgName}
@@ -234,7 +234,7 @@ export function EntityInfoForm() {
           <div>
             <label className="block text-sm font-medium mb-2">تاريخ التسجيل *</label>
             <div className="relative">
-              <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 type="date"
                 value={registrationData.registrationDate}
@@ -287,7 +287,7 @@ export function EntityInfoForm() {
           <div>
             <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
             {fundingAreas.length === 0 && (
-              <p className="text-sm text-gray-500 mb-2">
+              <p className="text-sm text-muted-foreground mb-2">
                 لا توجد مجالات مشاريع متاحة حالياً. يرجى المحاولة لاحقاً.
               </p>
             )}

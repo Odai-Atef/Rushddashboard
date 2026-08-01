@@ -83,7 +83,7 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
       />
 
       {/* Drawer */}
-      <div className="fixed inset-y-0 right-0 w-full max-w-lg bg-white shadow-2xl z-50 overflow-y-auto" dir="rtl">
+      <div className="fixed inset-y-0 right-0 w-full max-w-lg bg-card shadow-2xl z-50 overflow-y-auto" dir="rtl">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
@@ -103,19 +103,19 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
             </div>
             <button
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              className="p-2 hover:bg-muted rounded-lg transition-colors"
             >
-              <X className="w-5 h-5 text-gray-500" />
+              <X className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
 
           {/* Score */}
-          <div className="mb-6 p-4 bg-gray-50 rounded-xl">
+          <div className="mb-6 p-4 bg-secondary rounded-xl">
             <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">درجة التطابق</span>
+              <span className="text-sm font-medium text-muted-foreground">درجة التطابق</span>
               <span className="text-lg font-bold text-indigo-600">{donor.matchingScore}%</span>
             </div>
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+            <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div
                 className="h-full bg-indigo-600 rounded-full transition-all"
                 style={{ width: `${donor.matchingScore}%` }}
@@ -125,14 +125,14 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
 
           {/* Description */}
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">الوصف</h3>
-            <p className="text-sm text-gray-700 leading-relaxed">{donor.description || 'لا يوجد وصف'}</p>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">الوصف</h3>
+            <p className="text-sm text-foreground leading-relaxed">{donor.description || 'لا يوجد وصف'}</p>
           </div>
 
           {/* Source */}
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">المصدر</h3>
-            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">المصدر</h3>
+            <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted text-foreground">
               {donor.source === 'online' ? 'عبر الإنترنت' : donor.source === 'offline' ? 'قواعد البيانات' : donor.source || 'غير محدد'}
             </span>
             {donor.source === 'MANUAL' && (
@@ -144,7 +144,7 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
 
           {/* Actions */}
           <div className="mb-6 space-y-3">
-            <h3 className="text-sm font-medium text-gray-500 mb-2">الإجراءات</h3>
+            <h3 className="text-sm font-medium text-muted-foreground mb-2">الإجراءات</h3>
             
             <div className="flex flex-wrap gap-2">
               <a

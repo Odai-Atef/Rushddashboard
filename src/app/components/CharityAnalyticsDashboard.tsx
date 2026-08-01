@@ -59,7 +59,7 @@ const COLORS = ['#10b981', '#f87171'];
 
 function ProgressBar({ value, color = 'bg-emerald-600' }: { value: number; color?: string }) {
   return (
-    <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+    <div className="h-2 bg-muted dark:bg-muted rounded-full overflow-hidden">
       <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${value}%` }} />
     </div>
   );
@@ -87,11 +87,11 @@ export function CharityAnalyticsDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">تحليلات الجمعيات</h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">نمو الجمعيات • التأهيل • التفاعل • الرضا</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white">تحليلات الجمعيات</h1>
+          <p className="text-muted-foreground dark:text-muted-foreground text-sm mt-1">نمو الجمعيات • التأهيل • التفاعل • الرضا</p>
         </div>
         <div className="flex items-center gap-2">
-          <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
+          <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-border dark:border-border rounded-xl px-3 py-2 bg-white dark:bg-muted text-foreground dark:text-white">
             <option value="3months">آخر 3 أشهر</option>
             <option value="6months">آخر 6 أشهر</option>
             <option value="1year">آخر سنة</option>
@@ -112,12 +112,12 @@ export function CharityAnalyticsDashboard() {
         ].map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className={`rounded-xl border border-gray-200 dark:border-gray-700 p-4 ${card.bg}`}>
+            <div key={i} className={`rounded-xl border border-border dark:border-border p-4 ${card.bg}`}>
               <div className={`p-2 rounded-xl bg-background/60 w-fit mb-2`}>
                 <Icon className={`w-5 h-5 ${card.color}`} />
               </div>
               <p className={`text-2xl ${card.color}`}>{card.value}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{card.label}</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">{card.label}</p>
             </div>
           );
         })}
@@ -126,7 +126,7 @@ export function CharityAnalyticsDashboard() {
       {/* Growth & Qualified vs Non-Qualified */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
-          <h2 className="text-gray-900 dark:text-white mb-4">نمو الجمعيات</h2>
+          <h2 className="text-foreground dark:text-white mb-4">نمو الجمعيات</h2>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={charityGrowthData}>
               <defs>
@@ -151,7 +151,7 @@ export function CharityAnalyticsDashboard() {
         </div>
 
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 flex flex-col items-center">
-          <h2 className="text-gray-900 dark:text-white mb-4 w-full">مؤهلة مقابل غير مؤهلة</h2>
+          <h2 className="text-foreground dark:text-white mb-4 w-full">مؤهلة مقابل غير مؤهلة</h2>
           <ResponsiveContainer width="100%" height={180}>
             <PieChart>
               <Pie data={qualifiedData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} dataKey="value" paddingAngle={3}>
@@ -166,8 +166,8 @@ export function CharityAnalyticsDashboard() {
             {qualifiedData.map((item, i) => (
               <div key={i} className="flex items-center gap-1.5 text-sm">
                 <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
-                <span className="text-gray-500 dark:text-gray-400">{item.name}</span>
-                <span className="text-gray-900 dark:text-white">{item.value}</span>
+                <span className="text-muted-foreground dark:text-muted-foreground">{item.name}</span>
+                <span className="text-foreground dark:text-white">{item.value}</span>
               </div>
             ))}
           </div>
@@ -177,7 +177,7 @@ export function CharityAnalyticsDashboard() {
       {/* Assessment & Development Plans */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
-          <h2 className="text-gray-900 dark:text-white mb-4">نتائج تقييم الجاهزية</h2>
+          <h2 className="text-foreground dark:text-white mb-4">نتائج تقييم الجاهزية</h2>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={assessmentResults} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
@@ -190,18 +190,18 @@ export function CharityAnalyticsDashboard() {
         </div>
 
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
-          <h2 className="text-gray-900 dark:text-white mb-4">تقدم خطط التطوير</h2>
+          <h2 className="text-foreground dark:text-white mb-4">تقدم خطط التطوير</h2>
           <div className="space-y-4">
             {developmentPlans.map((plan, i) => (
               <div key={i}>
                 <div className="flex items-center justify-between mb-1">
                   <span className={`text-xs px-2 py-0.5 rounded-full ${statusColor(plan.status)}`}>{plan.status}</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-900 dark:text-white">{plan.name}</span>
+                    <span className="text-sm text-foreground dark:text-white">{plan.name}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs text-gray-500 dark:text-gray-400 w-8">{plan.progress}%</span>
+                  <span className="text-xs text-muted-foreground dark:text-muted-foreground w-8">{plan.progress}%</span>
                   <div className="flex-1">
                     <ProgressBar value={plan.progress} color={progressColor(plan.progress)} />
                   </div>
@@ -215,7 +215,7 @@ export function CharityAnalyticsDashboard() {
       {/* Engagement & Satisfaction */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
-          <h2 className="text-gray-900 dark:text-white mb-4">مستويات تفاعل الجمعيات</h2>
+          <h2 className="text-foreground dark:text-white mb-4">مستويات تفاعل الجمعيات</h2>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={engagementData}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -231,18 +231,18 @@ export function CharityAnalyticsDashboard() {
         </div>
 
         <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
-          <h2 className="text-gray-900 dark:text-white mb-4">رضا الجمعيات</h2>
+          <h2 className="text-foreground dark:text-white mb-4">رضا الجمعيات</h2>
           <div className="space-y-4 mt-2">
             {satisfactionData.map((item, i) => (
               <div key={i}>
                 <div className="flex items-center justify-between mb-1">
                   <div className="flex items-center gap-1">
                     {[1, 2, 3, 4, 5].map(s => (
-                      <Star key={s} className={`w-3 h-3 ${s <= Math.round(item.score) ? 'text-amber-400 fill-amber-400' : 'text-gray-500 dark:text-gray-400'}`} />
+                      <Star key={s} className={`w-3 h-3 ${s <= Math.round(item.score) ? 'text-amber-400 fill-amber-400' : 'text-muted-foreground dark:text-muted-foreground'}`} />
                     ))}
-                    <span className="text-sm text-gray-500 dark:text-gray-400 mr-1">{item.score}</span>
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground mr-1">{item.score}</span>
                   </div>
-                  <span className="text-sm text-gray-900 dark:text-white">{item.category}</span>
+                  <span className="text-sm text-foreground dark:text-white">{item.category}</span>
                 </div>
                 <ProgressBar value={(item.score / 5) * 100} color="bg-amber-400" />
               </div>

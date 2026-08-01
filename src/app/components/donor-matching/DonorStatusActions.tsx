@@ -135,7 +135,7 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
 
       {showModal && modalData && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" dir="rtl">
-          <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-xl">
+          <div className="bg-card rounded-xl w-full max-w-md p-6 shadow-xl">
             <h3 className="text-lg font-bold mb-4">{modalData.action}</h3>
             <div className="space-y-4">
               <div>
@@ -152,9 +152,9 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
                     type="date"
                     value={dateValue}
                     onChange={(e) => setDateValue(e.target.value)}
-                    className="w-full border border-gray-300 rounded-lg pl-10 pr-3 py-2 text-sm cursor-pointer"
+                    className="w-full border border-border rounded-lg pl-10 pr-3 py-2 text-sm cursor-pointer"
                   />
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 </div>
               </div>
               <div>
@@ -163,7 +163,7 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
                   value={notesValue}
                   onChange={(e) => setNotesValue(e.target.value)}
                   rows={3}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                  className="w-full border border-border rounded-lg px-3 py-2 text-sm"
                   placeholder="أضف ملاحظات حول هذا الإجراء..."
                 />
               </div>
@@ -175,7 +175,7 @@ export function DonorStatusActions({ matchId, currentStatus, onStatusChange }: D
                   setDateValue('');
                   setNotesValue('');
                 }}
-                className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900"
+                className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
               >
                 إلغاء
               </button>

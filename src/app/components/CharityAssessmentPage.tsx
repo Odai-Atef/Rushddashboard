@@ -361,7 +361,7 @@ export function CharityAssessmentPage() {
 
           <div className="bg-card border border-border rounded-xl p-8 mb-6">
             <h2 className="text-2xl font-semibold mb-6">أبعاد التقييم</h2>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {dimensions.map((dim) => {
                 const Icon = dim.icon;
                 return (
@@ -592,7 +592,7 @@ export function CharityAssessmentPage() {
             </div>
 
             {/* Overall Score */}
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               <div className="bg-white/10 backdrop-blur rounded-xl p-6">
                 <p className="text-blue-100 mb-2">درجة الجاهزية الإجمالية</p>
                 <div className="flex items-end gap-3">
@@ -626,7 +626,7 @@ export function CharityAssessmentPage() {
 
         {/* Main Content */}
         <div className="max-w-7xl mx-auto p-8">
-          <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {/* Radar Chart */}
             <div className="col-span-2 bg-card border border-border rounded-xl p-6">
               <h2 className="text-xl font-semibold mb-6">نظرة شاملة على الأداء</h2>
@@ -737,7 +737,7 @@ export function CharityAssessmentPage() {
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-2">
                         <h3 className="font-medium">{gap.category}</h3>
-                        <span className={`px-2 py-0.5 rounded text-xs ${getSeverityColor(gap.severity)}`}>
+                        <span className={`px-2 py-0.5 rounded-lg text-xs ${getSeverityColor(gap.severity)}`}>
                           {gap.severity === 'critical' ? 'حرج' : gap.severity === 'high' ? 'عالي' : 'متوسط'}
                         </span>
                       </div>
@@ -809,7 +809,7 @@ export function CharityAssessmentPage() {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-muted/50 rounded-lg p-4">
                 <p className="text-sm text-muted-foreground mb-1">إجمالي المبادرات</p>
                 <p className="text-2xl font-bold">{roadmapItems.length}</p>
@@ -863,7 +863,7 @@ export function CharityAssessmentPage() {
                       <div>
                         <div className="flex items-center gap-2 mb-2">
                           <h3 className="text-lg font-semibold">{item.title}</h3>
-                          <span className={`px-2 py-0.5 rounded text-xs ${getPriorityColor(item.priority)}`}>
+                          <span className={`px-2 py-0.5 rounded-lg text-xs ${getPriorityColor(item.priority)}`}>
                             أولوية {getPriorityLabel(item.priority)}
                           </span>
                         </div>
@@ -878,7 +878,7 @@ export function CharityAssessmentPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                       <div className="bg-card/50 rounded-lg p-3">
                         <p className="text-xs text-muted-foreground mb-1">الجهد المطلوب</p>
                         <p className="font-medium">{item.effort}</p>

@@ -53,7 +53,7 @@ export function StatCard({
         // Light mode
         'bg-white rounded-2xl border border-gray-200/80 shadow-sm',
         // Dark mode - glass effect
-        'dark:bg-gray-900/60 dark:border-gray-700/50 dark:backdrop-blur-md',
+        'dark:bg-card/60 dark:border-border/50 dark:backdrop-blur-md',
         'p-6 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10',
         'transition-all duration-200 ease-out',
         onClick && 'cursor-pointer hover:border-gray-300 dark:hover:border-emerald-500/30',
@@ -65,14 +65,14 @@ export function StatCard({
         <div
           className={cn(
             'p-3 rounded-xl',
-            'bg-gray-100 dark:bg-gray-800/80',
+            'bg-gray-100 dark:bg-muted/80',
             iconBgColor
           )}
         >
           <Icon
             className={cn(
               'w-6 h-6',
-              'text-gray-700 dark:text-gray-200',
+              'text-gray-700 dark:text-muted-foreground',
               iconColor
             )}
           />

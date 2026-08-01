@@ -110,19 +110,19 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
     return (
       <div
         key={slot.id}
-        className="p-3 flex items-center justify-between hover:bg-gray-50 transition-colors"
+        className="p-3 flex items-center justify-between hover:bg-secondary transition-colors"
       >
         <div className="flex items-center gap-3">
-          <FileText className={`w-5 h-5 ${isPresent ? 'text-blue-600' : 'text-gray-400'}`} />
+          <FileText className={`w-5 h-5 ${isPresent ? 'text-blue-600' : 'text-muted-foreground'}`} />
           <div>
             <div className="font-medium text-base">{slot.label}</div>
             {doc && (
-              <div className="text-sm text-gray-600">
+              <div className="text-sm text-muted-foreground">
                 {doc.fileName || doc.originalName || getDocumentTypeLabel(doc.documentType)}
               </div>
             )}
             {doc && (
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-muted-foreground">
                 {formatFileSize(doc.fileSize || doc.size)} • {formatDate(doc.uploadedAt || doc.createdAt)}
               </div>
             )}
@@ -142,7 +142,7 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
           ) : (
             <span
               className={`inline-flex items-center gap-1.5 text-sm font-medium ${
-                slot.required ? 'text-red-600' : 'text-gray-500'
+                slot.required ? 'text-red-600' : 'text-muted-foreground'
               }`}
             >
               {slot.required ? <XCircle className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
@@ -162,15 +162,15 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
           <AlertTriangle className="w-4 h-4" />
           المستندات الإلزامية
         </h4>
-        <div className="border border-gray-200 rounded-lg divide-y divide-gray-200">
+        <div className="border border-border rounded-lg divide-y divide-gray-200">
           {requiredDocumentSlots.map(renderSlot)}
         </div>
       </div>
 
       {/* Optional documents */}
       <div>
-        <h4 className="text-sm font-semibold text-gray-700 mb-2">المستندات الاختيارية</h4>
-        <div className="border border-gray-200 rounded-lg divide-y divide-gray-200">
+        <h4 className="text-sm font-semibold text-foreground mb-2">المستندات الاختيارية</h4>
+        <div className="border border-border rounded-lg divide-y divide-gray-200">
           {optionalDocumentSlots.map(renderSlot)}
         </div>
       </div>
@@ -260,7 +260,7 @@ function SortableHeader({
   const isActive = sortBy === column;
   return (
     <TableHead
-      className="text-right cursor-pointer select-none hover:bg-gray-100 transition-colors"
+      className="text-right cursor-pointer select-none hover:bg-muted transition-colors"
       onClick={() => onSort(column)}
     >
       <div className="flex items-center justify-start gap-1 w-full">
@@ -503,13 +503,13 @@ export function UserActivationPage() {
   };
 
   const renderLoading = () => (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-12 flex items-center justify-center">
+    <div className="bg-white rounded-xl border border-border shadow-sm p-12 flex items-center justify-center">
       <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
     </div>
   );
 
   const renderError = () => (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-8 text-center">
+    <div className="bg-white rounded-xl border border-border shadow-sm p-8 text-center">
       <div className="text-red-600 mb-4">{error}</div>
       <Button onClick={() => refetch()} className="flex items-center gap-2 mx-auto">
         <RotateCcw className="w-4 h-4" />
@@ -519,8 +519,8 @@ export function UserActivationPage() {
   );
 
   const renderEmpty = () => (
-    <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-12 text-center">
-      <p className="text-gray-600 mb-4">لا يوجد جهات مطابقة للمعايير المحددة.</p>
+    <div className="bg-white rounded-xl border border-border shadow-sm p-12 text-center">
+      <p className="text-muted-foreground mb-4">لا يوجد جهات مطابقة للمعايير المحددة.</p>
       <div className="flex items-center justify-center gap-2">
         <Button variant="outline" onClick={() => clearSearch()}>
           مسح البحث
@@ -549,39 +549,39 @@ export function UserActivationPage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-6" dir="rtl">
-      <div className="space-y-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6" dir="rtl">
+      <div className="space-y-4 sm:space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
           <div>
-            <h1 className="text-3xl font-bold mb-2 flex items-center gap-3">
-              <Users className="w-8 h-8 text-blue-600" />
+            <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2 flex items-center gap-3">
+              <Users className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600" />
               إدارة تفعيل الجهات
             </h1>
-            <p className="text-gray-600">{pagination.total} جهة</p>
+            <p className="text-muted-foreground text-sm sm:text-base">{pagination.total} جهة</p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
-          <div className="flex flex-col sm:flex-row gap-4">
+        <div className="bg-white rounded-xl p-3 sm:p-4 border border-border shadow-sm">
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 type="text"
                 value={pendingSearch}
                 onChange={(e) => setSearch(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="بحث بالاسم أو البريد أو رقم الترخيص..."
-                className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <div className="relative min-w-[200px]">
-              <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <div className="relative w-full sm:min-w-[200px]">
+              <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <select
                 value={pendingStatus}
                 onChange={(e) => setStatus(e.target.value)}
-                className="w-full appearance-none pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                className="w-full appearance-none pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
               >
                 {USER_STATUS_OPTIONS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -590,10 +590,10 @@ export function UserActivationPage() {
                 ))}
               </select>
             </div>
-            <div className="flex gap-2">
-              <Button onClick={() => applySearch()}>بحث</Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              <Button onClick={() => applySearch()} className="w-full sm:w-auto py-3 min-h-[44px]">بحث</Button>
               {(pendingSearch || pendingStatus) && (
-                <Button variant="outline" onClick={() => { clearSearch(); clearStatus(); }}>
+                <Button variant="outline" onClick={() => { clearSearch(); clearStatus(); }} className="w-full sm:w-auto py-3 min-h-[44px]">
                   مسح
                 </Button>
               )}
@@ -609,8 +609,8 @@ export function UserActivationPage() {
         ) : users.length === 0 ? (
           renderEmpty()
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
+          <div className="bg-white rounded-xl border border-border shadow-sm overflow-hidden">
+            <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -634,7 +634,7 @@ export function UserActivationPage() {
                     <TableRow key={user.id}>
                       <TableCell className="font-medium">
                         <div>{user.fullName}</div>
-                        <div className="text-xs text-gray-500">{user.email}</div>
+                        <div className="text-xs text-muted-foreground">{user.email}</div>
                       </TableCell>
                       <TableCell>{user.organization?.name || '-'}</TableCell>
                       <TableCell>{getOrganizationTypeLabel(user.organization?.type)}</TableCell>
@@ -660,17 +660,17 @@ export function UserActivationPage() {
                             </span>
                           )
                         ) : (
-                          <span className="text-sm text-gray-400">-</span>
+                          <span className="text-sm text-muted-foreground">-</span>
                         )}
                       </TableCell>
                       <TableCell>{getStatusBadge(user.status)}</TableCell>
                       <TableCell>
                         <div>{formatDate(user.organization?.createdAt)}</div>
-                        <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.createdAt)}</div>
+                        <div className="text-xs text-muted-foreground">{formatRelativeTime(user.organization?.createdAt)}</div>
                       </TableCell>
                       <TableCell>
                         <div>{formatDate(user.organization?.updatedAt)}</div>
-                        <div className="text-xs text-gray-500">{formatRelativeTime(user.organization?.updatedAt)}</div>
+                        <div className="text-xs text-muted-foreground">{formatRelativeTime(user.organization?.updatedAt)}</div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -752,27 +752,27 @@ export function UserActivationPage() {
           {selectedUser && (
             <div className="space-y-6 py-4">
               {/* User Info */}
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                <h3 className="font-semibold text-gray-900">معلومات المستخدم</h3>
+              <div className="bg-secondary rounded-lg p-4 space-y-3">
+                <h3 className="font-semibold text-foreground">معلومات المستخدم</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">الاسم:</span>
+                    <Users className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">الاسم:</span>
                     <span className="font-medium">{selectedUser.fullName}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Mail className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">البريد:</span>
+                    <Mail className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">البريد:</span>
                     <span className="font-medium">{selectedUser.email}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">الهاتف:</span>
+                    <Phone className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">الهاتف:</span>
                     <span className="font-medium">{selectedUser.phone || '-'}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">تاريخ التسجيل:</span>
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">تاريخ التسجيل:</span>
                     <span className="font-medium">{formatDate(selectedUser.createdAt)}</span>
                   </div>
                   {selectedUser.actionRequired && (
@@ -788,32 +788,32 @@ export function UserActivationPage() {
               </div>
 
               {/* Organization Info */}
-              <div className="bg-gray-50 rounded-lg p-4 space-y-3">
-                <h3 className="font-semibold text-gray-900">معلومات الجهة</h3>
+              <div className="bg-secondary rounded-lg p-4 space-y-3">
+                <h3 className="font-semibold text-foreground">معلومات الجهة</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
                   <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">الاسم:</span>
+                    <Building2 className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">الاسم:</span>
                     <span className="font-medium">{selectedUser.organization?.name || '-'}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">رقم الترخيص:</span>
+                    <FileText className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">رقم الترخيص:</span>
                     <span className="font-medium">{selectedUser.organization?.licenseNumber || '-'}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">المدينة:</span>
+                    <MapPin className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">المدينة:</span>
                     <span className="font-medium">{selectedUser.organization?.city || '-'}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400" />
-                    <span className="text-gray-600">تاريخ التسجيل:</span>
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">تاريخ التسجيل:</span>
                     <span className="font-medium">{formatDate(selectedUser.organization?.registrationDate)}</span>
                   </div>
                   {selectedUser.organization?.website && (
                     <div className="sm:col-span-2 flex items-center gap-2">
-                      <span className="text-gray-600">الموقع الإلكتروني:</span>
+                      <span className="text-muted-foreground">الموقع الإلكتروني:</span>
                       <a
                         href={selectedUser.organization.website}
                         target="_blank"
@@ -829,14 +829,14 @@ export function UserActivationPage() {
 
               {/* Document Checklist */}
               <div className="space-y-3">
-                <h3 className="font-semibold text-gray-900">قائمة المستندات</h3>
+                <h3 className="font-semibold text-foreground">قائمة المستندات</h3>
                 <DocumentChecklist documents={selectedUser.documents || []} />
               </div>
 
               {/* Reject Comment */}
               {actionMode === 'reject' && (
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 flex items-center gap-2">
+                  <label className="text-sm font-medium text-foreground flex items-center gap-2">
                     <AlertTriangle className="w-4 h-4 text-red-500" />
                     سبب الرفض / التعليق المطلوب من الجهة
                   </label>
@@ -845,7 +845,7 @@ export function UserActivationPage() {
                     onChange={(e) => setRejectComment(e.target.value)}
                     placeholder="يرجى توضيح سبب الرفض أو المستندات/المعلومات المطلوبة..."
                     rows={4}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                    className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                   />
                 </div>
               )}
@@ -1007,7 +1007,7 @@ export function UserActivationPage() {
           {orgInfoLoading ? (
             <div className="py-12 flex items-center justify-center gap-2" dir="rtl">
               <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
-              <span className="text-gray-600">جاري تحميل بيانات الجهة...</span>
+              <span className="text-muted-foreground">جاري تحميل بيانات الجهة...</span>
             </div>
           ) : orgInfoError ? (
             <div className="py-8 text-center text-red-600" dir="rtl">
@@ -1016,7 +1016,7 @@ export function UserActivationPage() {
           ) : orgInfo ? (
             <OrganizationInformationDisplay data={orgInfo} />
           ) : (
-            <div className="py-8 text-center text-gray-600" dir="rtl">
+            <div className="py-8 text-center text-muted-foreground" dir="rtl">
               لا توجد بيانات مستخرجة لهذه الجهة بعد. اضغط "مزامنة" لاستخراج البيانات من المستندات.
             </div>
           )}

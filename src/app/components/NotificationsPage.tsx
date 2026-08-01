@@ -278,7 +278,7 @@ export function NotificationsPage() {
               onClick={() => setSelectedNotification(notification)}
               className={cn(
                 'group relative p-5 rounded-xl border transition-all cursor-pointer hover:shadow-md',
-                isUnread ? 'bg-white border-l-4 border-l-amber-500' : 'bg-muted/30 border-transparent'
+                isUnread ? 'bg-card border-l-4 border-l-amber-500' : 'bg-muted/30 border-transparent'
               )}
             >
               <div className="flex items-start gap-4">

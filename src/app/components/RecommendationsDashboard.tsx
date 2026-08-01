@@ -150,7 +150,7 @@ export function RecommendationsDashboard() {
       case 'high':
         return 'bg-red-500/20 text-red-600 dark:text-red-400 dark:text-red-400 border-red-500/30';
       default:
-        return 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground';
     }
   };
 
@@ -163,7 +163,7 @@ export function RecommendationsDashboard() {
       case 'medium':
         return 'bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400 border-blue-500/30';
       default:
-        return 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground';
     }
   };
 
@@ -199,10 +199,10 @@ export function RecommendationsDashboard() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h2 className="text-3xl mb-2">لوحة التوصيات</h2>
-          <p className="text-gray-500 dark:text-gray-400 text-lg">ماذا يجب أن يفعل المستثمر الآن؟</p>
+          <p className="text-muted-foreground dark:text-muted-foreground text-lg">ماذا يجب أن يفعل المستثمر الآن؟</p>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-border dark:border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
             <FileDown className="w-4 h-4" />
             <span>تصدير التقرير</span>
           </button>
@@ -220,22 +220,22 @@ export function RecommendationsDashboard() {
               <h3 className="text-xl">الملخص التنفيذي من الذكاء الاصطناعي</h3>
               <span className="px-2 py-1 bg-purple-500/20 text-violet-600 dark:text-violet-400 dark:text-purple-400 text-xs rounded-full">AI Executive</span>
             </div>
-            <p className="text-gray-900 dark:text-white leading-relaxed text-base mb-4">
+            <p className="text-foreground dark:text-white leading-relaxed text-base mb-4">
               بناءً على التحليل الشامل لجميع المؤشرات، تم تحديد <span className="font-bold text-violet-600 dark:text-violet-400 dark:text-purple-400">6 فرص استراتيجية</span> لتحسين الأداء.
               الأولوية القصوى هي <span className="font-bold">توسيع قناة B2B</span> التي تعد بزيادة الإيرادات بنسبة 32% مع مخاطر منخفضة.
               التركيز على <span className="font-bold">الاحتفاظ بالعملاء المميزين</span> و<span className="font-bold">تحسين الجودة التشغيلية</span> سيضمن نمواً مستداماً.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-white/50 dark:bg-muted/50 rounded-xl border border-border dark:border-border">
               <div className="text-center">
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">التأثير المتوقع</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">التأثير المتوقع</p>
                 <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">+2.8M ر.س</p>
               </div>
-              <div className="text-center border-x border-gray-200 dark:border-gray-700">
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">الاستثمار المطلوب</p>
+              <div className="text-center border-x border-border dark:border-border">
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">الاستثمار المطلوب</p>
                 <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">1.13M ر.س</p>
               </div>
               <div className="text-center">
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">العائد المتوقع</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">العائد المتوقع</p>
                 <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">+247%</p>
               </div>
             </div>
@@ -245,7 +245,7 @@ export function RecommendationsDashboard() {
 
       {/* Filters */}
       <div className="flex items-center gap-3 overflow-x-auto pb-2">
-        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 flex-shrink-0">
+        <div className="flex items-center gap-2 text-muted-foreground dark:text-muted-foreground flex-shrink-0">
           <Filter className="w-4 h-4" />
           <span className="text-sm">تصفية:</span>
         </div>
@@ -258,7 +258,7 @@ export function RecommendationsDashboard() {
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors flex-shrink-0 ${
                 activeFilter === filter.id
                   ? 'bg-emerald-600 text-white'
-                  : 'bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-800'
+                  : 'bg-white dark:bg-card/60 dark:backdrop-blur-md border border-border/80 dark:border-border/50 hover:bg-muted dark:hover:bg-muted'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -275,7 +275,7 @@ export function RecommendationsDashboard() {
           return (
             <div
               key={rec.id}
-              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all duration-200"
+              className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all duration-200"
             >
               <div className="p-6">
                 {/* Header */}
@@ -309,13 +309,13 @@ export function RecommendationsDashboard() {
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                     {/* Right Column */}
                     <div className="space-y-4">
-                      <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">السبب</p>
+                      <div className="p-4 bg-secondary dark:bg-muted/50 rounded-lg">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">السبب</p>
                         <p className="text-sm leading-relaxed">{rec.reason}</p>
                       </div>
 
                       <div className="p-4 bg-gradient-to-l from-green-500/10 to-transparent border border-green-500/20 rounded-lg">
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">التأثير المتوقع</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">التأثير المتوقع</p>
                         <div className="flex items-center gap-2">
                           <p className="text-sm">{rec.expectedImpact}</p>
                           <span className="flex items-center gap-1 text-lg font-bold text-emerald-600 dark:text-emerald-400">
@@ -328,13 +328,13 @@ export function RecommendationsDashboard() {
 
                     {/* Left Column */}
                     <div className="space-y-4">
-                      <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">الإجراء المقترح</p>
+                      <div className="p-4 bg-secondary dark:bg-muted/50 rounded-lg">
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">الإجراء المقترح</p>
                         <p className="text-sm leading-relaxed">{rec.suggestedAction}</p>
                       </div>
 
                       <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">اللوحة ذات الصلة</p>
+                        <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">اللوحة ذات الصلة</p>
                         <p className="text-sm font-medium text-blue-600 dark:text-blue-400 dark:text-blue-400">{rec.relatedDashboard}</p>
                       </div>
                     </div>
@@ -342,16 +342,16 @@ export function RecommendationsDashboard() {
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-border dark:border-border">
                   <button className="flex items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
                     <CheckCircle className="w-4 h-4" />
                     <span>اعتماد التوصية</span>
                   </button>
-                  <button className="flex items-center gap-2 px-6 py-2.5 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                  <button className="flex items-center gap-2 px-6 py-2.5 border border-border dark:border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
                     <Target className="w-4 h-4" />
                     <span>عرض خطة العمل</span>
                   </button>
-                  <button className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                  <button className="px-6 py-2.5 border border-border dark:border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
                     تأجيل
                   </button>
                 </div>
@@ -362,7 +362,7 @@ export function RecommendationsDashboard() {
       </div>
 
       {/* Action Plan Timeline */}
-      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+      <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
         <div className="flex items-center gap-2 mb-6">
           <Clock className="w-5 h-5 text-emerald-600" />
           <h3 className="text-lg">الجدول الزمني للتنفيذ</h3>
@@ -378,7 +378,7 @@ export function RecommendationsDashboard() {
               </div>
               <div className="flex-1 pb-4">
                 <p className="font-medium mb-1">{rec.title}</p>
-                <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-3 text-sm text-muted-foreground dark:text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     {rec.timeline}

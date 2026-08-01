@@ -350,7 +350,7 @@ export function AIAnalysisHistoryPage() {
                       {analysis.duration}
                     </div>
                     <span
-                      className={`px-2 py-0.5 rounded text-xs ${getCategoryBg(analysis.category)} ${getCategoryColor(
+                      className={`px-2 py-0.5 rounded-lg text-xs ${getCategoryBg(analysis.category)} ${getCategoryColor(
                         analysis.category
                       )}`}
                     >
@@ -525,7 +525,7 @@ export function AIAnalysisHistoryPage() {
                 </div>
 
                 {selectedAnalysis.status === 'completed' && (
-                  <div className="grid grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div className="bg-muted/50 rounded-lg p-4">
                       <p className="text-sm text-muted-foreground mb-1">المدة</p>
                       <p className="text-xl font-medium">{selectedAnalysis.duration}</p>

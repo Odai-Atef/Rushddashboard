@@ -180,10 +180,10 @@ export function ResultsPage() {
 
   if (isLoadingResults) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
         <div className="text-center">
           <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
-          <p className="text-gray-600">جاري تحميل النتائج...</p>
+          <p className="text-muted-foreground">جاري تحميل النتائج...</p>
         </div>
       </div>
     );
@@ -191,11 +191,11 @@ export function ResultsPage() {
 
   if (resultsError) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-red-200 p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">تعذر تحميل النتائج</h2>
-          <p className="text-gray-600 mb-6">{resultsError}</p>
+          <p className="text-muted-foreground mb-6">{resultsError}</p>
           <button
             onClick={async () => {
               if (!activeOrganizationId) return;
@@ -225,15 +225,15 @@ export function ResultsPage() {
 
   if ((localStatus ?? assessmentStatus) && (localStatus ?? assessmentStatus)?.status !== 'COMPLETED' && !isivResult) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
-        <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+        <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-border p-8 text-center">
           <Info className="w-12 h-12 text-blue-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-2">
             {(localStatus ?? assessmentStatus)?.status === 'IN_PROGRESS'
               ? 'التقييم قيد الإكمال'
               : 'لم يبدأ التقييم بعد'}
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             {(localStatus ?? assessmentStatus)?.status === 'IN_PROGRESS'
               ? ' أكمل إجاباتك لعرض النتائج التفصيلية.'
               : ' ابدأ التقييم لتحصل على تحليل شامل لمؤسستك.'}
@@ -256,7 +256,7 @@ export function ResultsPage() {
   }
 
   return (
-    <div ref={reportContainerRef} className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div ref={reportContainerRef} className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-4 sm:p-8 mb-6 text-white">
@@ -285,7 +285,7 @@ export function ResultsPage() {
         </div>
 
         {/* Qualification Status */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-4 sm:p-6 mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className={`w-16 h-16 rounded-full flex items-center justify-center bg-opacity-10 ${statusOption.bgClass.replace('bg-', 'bg-').replace('-400', '-50')}`}>
@@ -293,7 +293,7 @@ export function ResultsPage() {
               </div>
               <div>
                 <h2 className="text-2xl font-bold mb-1">{displayMessage}</h2>
-                <p className="text-gray-600">{isivResult?.diagnosis}</p>
+                <p className="text-muted-foreground">{isivResult?.diagnosis}</p>
               </div>
             </div>
             {isQualified && (
@@ -310,8 +310,8 @@ export function ResultsPage() {
 
         {/* Charts */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 items-stretch">
-          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 dark:border-gray-700/50 p-6 dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">التحليل الشامل</h3>
+          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-border/80 dark:border-border/50 p-6 dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10">
+            <h3 className="text-lg font-semibold text-foreground dark:text-white mb-4">التحليل الشامل</h3>
             {radarData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <RadarChart data={radarData}>
@@ -322,43 +322,43 @@ export function ResultsPage() {
                 </RadarChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-center py-12">لا توجد بيانات للرسم البياني</p>
+              <p className="text-muted-foreground dark:text-muted-foreground text-center py-12">لا توجد بيانات للرسم البياني</p>
             )}
           </div>
 
-          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 dark:border-gray-700/50 p-6 dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">الأبعاد التفصيلية</h3>
+          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-border/80 dark:border-border/50 p-6 dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10">
+            <h3 className="text-lg font-semibold text-foreground dark:text-white mb-4">الأبعاد التفصيلية</h3>
             {categoryScores.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
                 {categoryScores.map((cs) => (
-                  <div key={cs.categoryId} className="bg-gray-50 dark:bg-gray-800/60 rounded-xl border border-gray-200 dark:border-gray-700 p-4 flex flex-col justify-between h-full" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
+                  <div key={cs.categoryId} className="bg-secondary dark:bg-muted/60 rounded-xl border border-border dark:border-border p-4 flex flex-col justify-between h-full" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{cs.categoryName}</span>
+                      <span className="text-sm font-medium text-foreground dark:text-muted-foreground">{cs.categoryName}</span>
                       <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${cs.color}20`, color: cs.color }}>
                         {cs.score} / {cs.maxScore}
                       </span>
                     </div>
                     <div className="flex items-end justify-between">
                       <div className="text-3xl font-bold tracking-tight" style={{ color: cs.color }}>{cs.score}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">{cs.score}%</div>
+                      <div className="text-sm text-muted-foreground dark:text-muted-foreground">{cs.score}%</div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-center py-12">لا توجد بيانات للأبعاد</p>
+              <p className="text-muted-foreground dark:text-muted-foreground text-center py-12">لا توجد بيانات للأبعاد</p>
             )}
           </div>
         </div>
 
         {/* Diagnostic Feedback */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
-          <div className="lg:col-span-3 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="lg:col-span-3 bg-white rounded-xl shadow-sm border border-border p-6">
             <h3 className="text-lg font-semibold mb-3">التشخيص</h3>
-            <p className="text-gray-700 leading-relaxed">{isivResult?.diagnosis || 'لا يوجد تشخيص متاح.'}</p>
+            <p className="text-foreground leading-relaxed">{isivResult?.diagnosis || 'لا يوجد تشخيص متاح.'}</p>
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-border p-6">
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2 text-green-700">
               <CheckCircle2 className="w-5 h-5" />
               نقاط القوة
@@ -370,22 +370,22 @@ export function ResultsPage() {
                   const label = isObject ? (strength as StrengthItem).area : (strength as string);
                   const insight = isObject ? (strength as StrengthItem).insight : null;
                   return (
-                    <li key={idx} className="flex flex-col gap-1 text-gray-700">
+                    <li key={idx} className="flex flex-col gap-1 text-foreground">
                       <div className="flex items-start gap-2">
                         <Check className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
                         <span className="font-medium">{label}</span>
                       </div>
-                      {insight && <p className="text-sm text-gray-600 pr-6">{insight}</p>}
+                      {insight && <p className="text-sm text-muted-foreground pr-6">{insight}</p>}
                     </li>
                   );
                 })}
               </ul>
             ) : (
-              <p className="text-gray-500">لا توجد نقاط قوة مسجلة.</p>
+              <p className="text-muted-foreground">لا توجد نقاط قوة مسجلة.</p>
             )}
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-border p-6">
             <h3 className="text-lg font-semibold mb-3 flex items-center gap-2 text-red-700">
               <AlertCircle className="w-5 h-5" />
               مجالات التحسين
@@ -398,23 +398,23 @@ export function ResultsPage() {
                   const insight = isObject ? (weakness as WeaknessItem).insight : null;
                   const severity = isObject ? (weakness as WeaknessItem).severity : null;
                   return (
-                    <li key={idx} className="flex flex-col gap-1 text-gray-700">
+                    <li key={idx} className="flex flex-col gap-1 text-foreground">
                       <div className="flex items-start gap-2">
                         <X className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
                         <span className="font-medium">{label}</span>
                         {severity && <span className="text-xs px-2 py-0.5 rounded-full bg-red-100 text-red-700">{severity}</span>}
                       </div>
-                      {insight && <p className="text-sm text-gray-600 pr-6">{insight}</p>}
+                      {insight && <p className="text-sm text-muted-foreground pr-6">{insight}</p>}
                     </li>
                   );
                 })}
               </ul>
             ) : (
-              <p className="text-gray-500">لا توجد مجالات تحسين مسجلة.</p>
+              <p className="text-muted-foreground">لا توجد مجالات تحسين مسجلة.</p>
             )}
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <div className="bg-white rounded-xl shadow-sm border border-border p-6">
             <h3 className="text-lg font-semibold mb-4">المقارنة المعيارية</h3>
             <div className="space-y-4">
               <div>
@@ -422,17 +422,17 @@ export function ResultsPage() {
                   <span className="text-sm font-medium">مؤسستك</span>
                   <span className="text-sm font-bold text-blue-600">{benchmarks.yourScore}٪</span>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-3 bg-muted rounded-full overflow-hidden">
                   <div className="h-full bg-blue-600" style={{ width: `${benchmarks.yourScore}%` }}></div>
                 </div>
               </div>
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">متوسط القطاع</span>
-                  <span className="text-sm font-bold text-gray-600">{benchmarks.sectorAverage}٪</span>
+                  <span className="text-sm font-bold text-muted-foreground">{benchmarks.sectorAverage}٪</span>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-                  <div className="h-full bg-gray-400" style={{ width: `${benchmarks.sectorAverage}%` }}></div>
+                <div className="h-3 bg-muted rounded-full overflow-hidden">
+                  <div className="h-full bg-muted-foreground" style={{ width: `${benchmarks.sectorAverage}%` }}></div>
                 </div>
               </div>
               <div>
@@ -440,7 +440,7 @@ export function ResultsPage() {
                   <span className="text-sm font-medium">الجمعيات الرائدة</span>
                   <span className="text-sm font-bold text-green-600">{benchmarks.topPerformer}٪</span>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-3 bg-muted rounded-full overflow-hidden">
                   <div className="h-full bg-green-500" style={{ width: `${benchmarks.topPerformer}%` }}></div>
                 </div>
               </div>
@@ -459,7 +459,7 @@ export function ResultsPage() {
           <button
             onClick={handleDownloadReport}
             disabled={isDownloading}
-            className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isDownloading ? (
               <Loader2 className="w-5 h-5 animate-spin" />

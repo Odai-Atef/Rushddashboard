@@ -15,8 +15,8 @@ function Checkbox({
       data-slot="checkbox"
       className={cn(
         "peer size-5 shrink-0 rounded-[5px] border shadow-sm",
-        "bg-white dark:bg-gray-900/50",
-        "border-gray-300 dark:border-gray-600",
+        "bg-white dark:bg-card/50",
+        "border-gray-300 dark:border-border",
         "text-white",
         "transition-all duration-200 ease-in-out",
         "hover:border-gray-400 dark:hover:border-gray-500",

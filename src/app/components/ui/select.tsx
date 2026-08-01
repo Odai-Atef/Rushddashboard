@@ -42,9 +42,9 @@ function SelectTrigger({
       data-size={size}
       className={cn(
         "flex w-full items-center justify-between gap-2 rounded-lg border px-4 py-2.5 text-sm whitespace-nowrap shadow-sm",
-        "bg-white dark:bg-gray-900/50",
+        "bg-white dark:bg-card/50",
         "text-gray-900 dark:text-white",
-        "border-gray-200 dark:border-gray-700",
+        "border-gray-200 dark:border-border",
         "placeholder:text-gray-400 dark:placeholder:text-gray-500",
         "data-[placeholder]:text-gray-400 dark:data-[placeholder]:text-gray-500",
         "[&_svg:not([class*='text-'])]:text-gray-400 dark:[&_svg:not([class*='text-'])]:text-gray-500",
@@ -81,9 +81,9 @@ function SelectContent({
         data-slot="select-content"
         className={cn(
           "relative z-50 max-h-[var(--radix-select-content-available-height)] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-lg border shadow-lg",
-          "bg-white dark:bg-gray-900",
+          "bg-white dark:bg-card",
           "text-gray-900 dark:text-white",
-          "border-gray-200 dark:border-gray-700",
+          "border-gray-200 dark:border-border",
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
@@ -161,7 +161,7 @@ function SelectSeparator({
   return (
     <SelectPrimitive.Separator
       data-slot="select-separator"
-      className={cn("-mx-1 my-1 h-px bg-gray-200 dark:bg-gray-700", className)}
+      className={cn("-mx-1 my-1 h-px bg-gray-200 dark:bg-muted", className)}
       {...props}
     />
   );

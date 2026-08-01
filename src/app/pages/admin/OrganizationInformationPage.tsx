@@ -36,7 +36,7 @@ export function OrganizationInformationPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3" dir="rtl">
         <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
-        <p className="text-gray-600">جاري تحميل بيانات المنظمة...</p>
+        <p className="text-muted-foreground">جاري تحميل بيانات المنظمة...</p>
       </div>
     );
   }
@@ -72,10 +72,10 @@ export function OrganizationInformationPage() {
             العودة لإدارة الجهات
           </Button>
         </div>
-        <div className="p-8 bg-gray-50 border border-gray-200 rounded-xl text-center">
-          <Building2 className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-          <h2 className="text-lg font-semibold text-gray-900 mb-1">لا توجد بيانات مستخرجة</h2>
-          <p className="text-sm text-gray-600 mb-4">
+        <div className="p-8 bg-secondary border border-border rounded-xl text-center">
+          <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+          <h2 className="text-lg font-semibold text-foreground mb-1">لا توجد بيانات مستخرجة</h2>
+          <p className="text-sm text-muted-foreground mb-4">
             لم يتم استخراج المعلومات التنظيمية لهذه الجهة بعد. سيتم تشغيل الاستخراج تلقائياً عند
             رفع المستندات الرسمية.
           </p>
@@ -97,7 +97,7 @@ export function OrganizationInformationPage() {
             <ArrowRight className="w-4 h-4 ml-1" />
             العودة لإدارة الجهات
           </Button>
-          <h1 className="text-xl font-bold text-gray-900">بيانات الجهة المستخرجة</h1>
+          <h1 className="text-xl font-bold text-foreground">بيانات الجهة المستخرجة</h1>
         </div>
         <div className="flex items-center gap-2">
           <Badge className={statusMeta.className}>

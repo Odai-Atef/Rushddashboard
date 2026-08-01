@@ -21,8 +21,8 @@ export function LoadMoreButton({
       disabled={isDisabled}
       className={`w-full py-3 flex items-center justify-center gap-2 rounded-lg border transition-colors ${
         isDisabled
-          ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
-          : 'bg-white text-blue-600 border-blue-200 hover:bg-blue-50'
+          ? 'bg-muted text-muted-foreground border-border cursor-not-allowed'
+          : 'bg-card text-primary border-primary/20 hover:bg-primary/5'
       }`}
     >
       {isLoading ? (

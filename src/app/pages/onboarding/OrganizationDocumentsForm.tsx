@@ -471,11 +471,11 @@ export function OrganizationDocumentsForm() {
 
   if (!activeOrganizationId) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+      <div className="bg-white rounded-xl shadow-sm border border-border p-8">
         <div className="max-w-lg mx-auto text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">تعذر تحميل المستندات</h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             لم يتم العثور على معلومات المنظمة. يرجى العودة وإكمال التسجيل أولاً.
           </p>
         </div>
@@ -491,45 +491,45 @@ export function OrganizationDocumentsForm() {
         </div>
       )}
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+      <div className="bg-white rounded-xl shadow-sm border border-border p-8">
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-bold mb-2">المستندات المطلوبة</h1>
-          <p className="text-gray-600">يرجى رفع المستندات المطلوبة لإكمال التقييم</p>
+          <p className="text-muted-foreground">يرجى رفع المستندات المطلوبة لإكمال التقييم</p>
         </div>
 
         {/* Upload Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 items-stretch">
-          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
                 <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{completedRequiredCount}/{requiredSlots.length}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">مستندات مطلوبة</p>
+                <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{completedRequiredCount}/{requiredSlots.length}</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">مستندات مطلوبة</p>
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
                 <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{uploadedCount}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">تم الرفع</p>
+                <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{uploadedCount}</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">تم الرفع</p>
               </div>
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+          <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-yellow-50 dark:bg-yellow-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
                 <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div>
-                <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{pendingReviewCount}</p>
-                <p className="text-sm text-gray-500 dark:text-gray-400">قيد المراجعة</p>
+                <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{pendingReviewCount}</p>
+                <p className="text-sm text-muted-foreground dark:text-muted-foreground">قيد المراجعة</p>
               </div>
             </div>
           </div>
@@ -570,7 +570,7 @@ export function OrganizationDocumentsForm() {
         )}
 
         {/* Required Documents */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-red-500" />
             المستندات الإلزامية
@@ -595,7 +595,7 @@ export function OrganizationDocumentsForm() {
                       ? 'border-2 border-green-200 bg-green-50/50'
                       : isError
                       ? 'border-2 border-red-300 bg-red-50/50'
-                      : 'border-2 border-dashed border-gray-300 hover:border-blue-500 hover:bg-blue-50/50'
+                      : 'border-2 border-dashed border-border hover:border-blue-500 hover:bg-blue-50/50'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -604,7 +604,7 @@ export function OrganizationDocumentsForm() {
                     ) : (
                       <FileText
                         className={`w-5 h-5 flex-shrink-0 ${
-                          isError ? 'text-red-500' : 'text-gray-400'
+                          isError ? 'text-red-500' : 'text-muted-foreground'
                         }`}
                       />
                     )}
@@ -615,7 +615,7 @@ export function OrganizationDocumentsForm() {
                       >
                         {doc.label}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
                       </p>
                       {isCompleted && file?.name && (
@@ -628,7 +628,7 @@ export function OrganizationDocumentsForm() {
                       )}
                       {isUploading && (
                         <div className="w-32 mt-1">
-                          <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                             <div
                               className="h-full bg-blue-600 transition-all duration-300"
                               style={{ width: `${file.progress}%` }}
@@ -695,9 +695,9 @@ export function OrganizationDocumentsForm() {
         </div>
 
         {/* Optional Documents */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-6">
           <h2 className="text-xl font-semibold mb-4">المستندات الاختيارية</h2>
-          <p className="text-sm text-gray-600 mb-4">
+          <p className="text-sm text-muted-foreground mb-4">
             رفع هذه المستندات يساعد في تحسين دقة التقييم
           </p>
           <div className="space-y-3">
@@ -720,7 +720,7 @@ export function OrganizationDocumentsForm() {
                       ? 'border-2 border-green-200 bg-green-50/50'
                       : isError
                       ? 'border-2 border-red-300 bg-red-50/50'
-                      : 'border border-gray-200 hover:bg-gray-50'
+                      : 'border border-border hover:bg-secondary'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -729,7 +729,7 @@ export function OrganizationDocumentsForm() {
                     ) : (
                       <FileText
                         className={`w-5 h-5 flex-shrink-0 ${
-                          isError ? 'text-red-500' : 'text-gray-400'
+                          isError ? 'text-red-500' : 'text-muted-foreground'
                         }`}
                       />
                     )}
@@ -740,7 +740,7 @@ export function OrganizationDocumentsForm() {
                       >
                         {doc.label}
                       </p>
-                      <p className="text-xs text-gray-500">
+                      <p className="text-xs text-muted-foreground">
                         {SLOT_FILE_VALIDATION[doc.id]?.label || 'PDF'} - الحد الأقصى 10 ميجابايت
                       </p>
                       {doc.templateUrl && !isCompleted && (
@@ -764,7 +764,7 @@ export function OrganizationDocumentsForm() {
                       )}
                       {isUploading && (
                         <div className="w-32 mt-1">
-                          <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                          <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                             <div
                               className="h-full bg-blue-600 transition-all duration-300"
                               style={{ width: `${file.progress}%` }}
@@ -801,7 +801,7 @@ export function OrganizationDocumentsForm() {
                     <button
                       onClick={() => handleSelectFile(doc.id)}
                       disabled={hasPendingUploads}
-                      className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isUploading ? (
                         <>

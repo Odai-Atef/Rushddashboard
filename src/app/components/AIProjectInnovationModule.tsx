@@ -130,40 +130,40 @@ export function AIProjectInnovationModule() {
             <span className="text-sm font-medium">مدعوم بالذكاء الاصطناعي</span>
           </div>
           <h1 className="text-4xl font-bold mb-3">استوديو المشاريع الذكي</h1>
-          <p className="text-xl text-gray-600">حوّل أفكارك إلى مشاريع قابلة للتمويل باستخدام الذكاء الاصطناعي</p>
+          <p className="text-xl text-muted-foreground">حوّل أفكارك إلى مشاريع قابلة للتمويل باستخدام الذكاء الاصطناعي</p>
         </div>
 
         {/* Organization Context */}
         <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold text-gray-900">سياق الجهه</h2>
+            <h2 className="text-lg font-semibold text-foreground">سياق الجهه</h2>
             <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-600">درجة الجاهزية</span>
-              <div className="flex items-center gap-2 px-3 py-1 bg-white rounded-full">
+              <span className="text-sm text-muted-foreground">درجة الجاهزية</span>
+              <div className="flex items-center gap-2 px-3 py-1 bg-card rounded-full">
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="text-sm font-bold text-green-600">{organization.readinessScore}%</span>
               </div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="flex items-center gap-3 bg-white rounded-lg p-4">
+            <div className="flex items-center gap-3 bg-card rounded-lg p-4">
               <Building2 className="w-5 h-5 text-blue-600" />
               <div>
-                <p className="text-xs text-gray-600">الجهه</p>
+                <p className="text-xs text-muted-foreground">الجهه</p>
                 <p className="font-medium">{organization.name}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 bg-white rounded-lg p-4">
+            <div className="flex items-center gap-3 bg-card rounded-lg p-4">
               <Users className="w-5 h-5 text-blue-600" />
               <div>
-                <p className="text-xs text-gray-600">المستفيدون</p>
+                <p className="text-xs text-muted-foreground">المستفيدون</p>
                 <p className="font-medium">{organization.beneficiaries}</p>
               </div>
             </div>
-            <div className="flex items-center gap-3 bg-white rounded-lg p-4">
+            <div className="flex items-center gap-3 bg-card rounded-lg p-4">
               <MapPin className="w-5 h-5 text-blue-600" />
               <div>
-                <p className="text-xs text-gray-600">النطاق الجغرافي</p>
+                <p className="text-xs text-muted-foreground">النطاق الجغرافي</p>
                 <p className="font-medium">{organization.geographicArea}</p>
               </div>
             </div>
@@ -178,13 +178,13 @@ export function AIProjectInnovationModule() {
               setGenerationType('new');
               setCurrentView('wizard');
             }}
-            className="group relative bg-white rounded-xl p-8 border-2 border-gray-200 hover:border-blue-500 hover:shadow-xl transition-all text-right"
+            className="group relative bg-card rounded-xl p-8 border-2 border-border hover:border-primary hover:shadow-xl transition-all text-right"
           >
             <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <Plus className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-bold mb-2">إنشاء مشروع جديد</h3>
-            <p className="text-gray-600 mb-4">ابدأ من الصفر واستخدم الذكاء الاصطناعي لإنشاء مشروع كامل</p>
+            <p className="text-muted-foreground mb-4">ابدأ من الصفر واستخدم الذكاء الاصطناعي لإنشاء مشروع كامل</p>
             <div className="flex items-center gap-2 text-blue-600 font-medium">
               <span>ابدأ الآن</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -197,13 +197,13 @@ export function AIProjectInnovationModule() {
               setGenerationType('improve');
               setCurrentView('improvement');
             }}
-            className="group relative bg-white rounded-xl p-8 border-2 border-gray-200 hover:border-green-500 hover:shadow-xl transition-all text-right"
+            className="group relative bg-card rounded-xl p-8 border-2 border-border hover:border-green-500 hover:shadow-xl transition-all text-right"
           >
             <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <Zap className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-bold mb-2">تحسين مشروع موجود</h3>
-            <p className="text-gray-600 mb-4">ارفع جودة مشروعك وزد فرص التمويل بالذكاء الاصطناعي</p>
+            <p className="text-muted-foreground mb-4">ارفع جودة مشروعك وزد فرص التمويل بالذكاء الاصطناعي</p>
             <div className="flex items-center gap-2 text-green-600 font-medium">
               <span>حسّن الآن</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -216,13 +216,13 @@ export function AIProjectInnovationModule() {
               setGenerationType('prepare');
               setCurrentView('feasibility');
             }}
-            className="group relative bg-white rounded-xl p-8 border-2 border-gray-200 hover:border-purple-500 hover:shadow-xl transition-all text-right"
+            className="group relative bg-card rounded-xl p-8 border-2 border-border hover:border-purple-500 hover:shadow-xl transition-all text-right"
           >
             <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
               <Target className="w-8 h-8 text-white" />
             </div>
             <h3 className="text-xl font-bold mb-2">تجهيز للمانحين</h3>
-            <p className="text-gray-600 mb-4">حضّر مشروعك للعرض على المانحين بمعايير احترافية</p>
+            <p className="text-muted-foreground mb-4">حضّر مشروعك للعرض على المانحين بمعايير احترافية</p>
             <div className="flex items-center gap-2 text-purple-600 font-medium">
               <span>جهّز الآن</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -231,7 +231,7 @@ export function AIProjectInnovationModule() {
         </div>
 
         {/* AI Insights Panel */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+        <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
           <div className="flex items-center gap-2 mb-4">
             <Brain className="w-5 h-5 text-indigo-600" />
             <h3 className="text-lg font-semibold">رؤى ذكية</h3>
@@ -255,7 +255,7 @@ export function AIProjectInnovationModule() {
                   }`} />
                   <div className="flex-1">
                     <h4 className="font-semibold mb-1">{opp.title}</h4>
-                    <p className="text-sm text-gray-600">{opp.description}</p>
+                    <p className="text-sm text-muted-foreground">{opp.description}</p>
                   </div>
                   <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                     opp.priority === 'high' ? 'bg-red-100 text-red-700' :
@@ -272,33 +272,33 @@ export function AIProjectInnovationModule() {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center justify-between mb-2">
               <FileText className="w-8 h-8 text-blue-600" />
             </div>
-            <p className="text-3xl font-bold text-gray-900">{organization.previousProjects}</p>
-            <p className="text-sm text-gray-600 mt-1">مشاريع سابقة</p>
+            <p className="text-3xl font-bold text-foreground">{organization.previousProjects}</p>
+            <p className="text-sm text-muted-foreground mt-1">مشاريع سابقة</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center justify-between mb-2">
               <Sparkles className="w-8 h-8 text-purple-600" />
             </div>
-            <p className="text-3xl font-bold text-gray-900">24</p>
-            <p className="text-sm text-gray-600 mt-1">مشاريع مُنشأة بالذكاء الاصطناعي</p>
+            <p className="text-3xl font-bold text-foreground">24</p>
+            <p className="text-sm text-muted-foreground mt-1">مشاريع مُنشأة بالذكاء الاصطناعي</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center justify-between mb-2">
               <CheckCircle2 className="w-8 h-8 text-green-600" />
             </div>
-            <p className="text-3xl font-bold text-gray-900">18</p>
-            <p className="text-sm text-gray-600 mt-1">مشاريع معتمدة</p>
+            <p className="text-3xl font-bold text-foreground">18</p>
+            <p className="text-sm text-muted-foreground mt-1">مشاريع معتمدة</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center justify-between mb-2">
               <DollarSign className="w-8 h-8 text-emerald-600" />
             </div>
-            <p className="text-3xl font-bold text-gray-900">12</p>
-            <p className="text-sm text-gray-600 mt-1">مشاريع ممولة</p>
+            <p className="text-3xl font-bold text-foreground">12</p>
+            <p className="text-sm text-muted-foreground mt-1">مشاريع ممولة</p>
           </div>
         </div>
       </div>
@@ -339,16 +339,16 @@ export function AIProjectInnovationModule() {
             رجوع إلى الاستوديو
           </button>
           <h1 className="text-3xl font-bold mb-2">معالج إنشاء المشروع</h1>
-          <p className="text-gray-600">أجب على بعض الأسئلة ليقوم الذكاء الاصطناعي بإنشاء مشروعك</p>
+          <p className="text-muted-foreground">أجب على بعض الأسئلة ليقوم الذكاء الاصطناعي بإنشاء مشروعك</p>
         </div>
 
         {/* Progress */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">الخطوة {wizardStep} من {totalSteps}</span>
+            <span className="text-sm text-muted-foreground">الخطوة {wizardStep} من {totalSteps}</span>
             <span className="text-sm font-medium text-blue-600">{Math.round(progress)}%</span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300"
               style={{ width: `${progress}%` }}
@@ -357,12 +357,12 @@ export function AIProjectInnovationModule() {
         </div>
 
         {/* Wizard Content */}
-        <div className="bg-white rounded-xl p-8 border border-gray-200 shadow-sm">
+        <div className="bg-card rounded-xl p-8 border border-border shadow-sm">
           {wizardStep === 1 && (
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold mb-2">اختر تصنيف المشروع</h2>
-                <p className="text-gray-600">ما هو المجال الذي يندرج تحته مشروعك؟</p>
+                <p className="text-muted-foreground">ما هو المجال الذي يندرج تحته مشروعك؟</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {categories.map((cat) => {
@@ -374,7 +374,7 @@ export function AIProjectInnovationModule() {
                       className={`p-6 rounded-xl border-2 transition-all text-right ${
                         wizardData.category === cat.id
                           ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-blue-300'
+                          : 'border-border hover:border-blue-300'
                       }`}
                     >
                       <Icon className={`w-8 h-8 mb-3 text-${cat.color}-600`} />
@@ -390,13 +390,13 @@ export function AIProjectInnovationModule() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold mb-2">الفئة المستهدفة</h2>
-                <p className="text-gray-600">من هم المستفيدون من هذا المشروع؟</p>
+                <p className="text-muted-foreground">من هم المستفيدون من هذا المشروع؟</p>
               </div>
               <textarea
                 value={wizardData.beneficiaries}
                 onChange={(e) => setWizardData({ ...wizardData, beneficiaries: e.target.value })}
                 rows={4}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
                 placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن..."
               />
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
@@ -415,12 +415,12 @@ export function AIProjectInnovationModule() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold mb-2">النطاق الجغرافي</h2>
-                <p className="text-gray-600">أين سيتم تنفيذ المشروع؟</p>
+                <p className="text-muted-foreground">أين سيتم تنفيذ المشروع؟</p>
               </div>
               <select
                 value={wizardData.geographicScope}
                 onChange={(e) => setWizardData({ ...wizardData, geographicScope: e.target.value })}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
               >
                 <option value="">اختر النطاق</option>
                 <option value="local">محلي (مدينة واحدة)</option>
@@ -434,7 +434,7 @@ export function AIProjectInnovationModule() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold mb-2">نطاق الميزانية</h2>
-                <p className="text-gray-600">ما هي الميزانية التقديرية للمشروع؟</p>
+                <p className="text-muted-foreground">ما هي الميزانية التقديرية للمشروع؟</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
@@ -449,12 +449,12 @@ export function AIProjectInnovationModule() {
                     className={`p-6 rounded-xl border-2 transition-all text-right ${
                       wizardData.budgetRange === budget.value
                         ? 'border-blue-500 bg-blue-50'
-                        : 'border-gray-200 hover:border-blue-300'
+                        : 'border-border hover:border-blue-300'
                     }`}
                   >
                     <DollarSign className="w-8 h-8 mb-2 text-green-600" />
                     <p className="font-semibold mb-1">{budget.range}</p>
-                    <p className="text-sm text-gray-600">{budget.label}</p>
+                    <p className="text-sm text-muted-foreground">{budget.label}</p>
                   </button>
                 ))}
               </div>
@@ -465,7 +465,7 @@ export function AIProjectInnovationModule() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold mb-2">المدة المتوقعة</h2>
-                <p className="text-gray-600">كم ستستغرق مدة تنفيذ المشروع؟</p>
+                <p className="text-muted-foreground">كم ستستغرق مدة تنفيذ المشروع؟</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {[
@@ -481,7 +481,7 @@ export function AIProjectInnovationModule() {
                       className={`p-6 rounded-xl border-2 transition-all text-center ${
                         wizardData.duration === dur.value
                           ? 'border-blue-500 bg-blue-50'
-                          : 'border-gray-200 hover:border-blue-300'
+                          : 'border-border hover:border-blue-300'
                       }`}
                     >
                       <Icon className="w-8 h-8 mx-auto mb-2 text-blue-600" />
@@ -497,13 +497,13 @@ export function AIProjectInnovationModule() {
             <div className="space-y-6">
               <div>
                 <h2 className="text-2xl font-bold mb-2">متطلبات خاصة</h2>
-                <p className="text-gray-600">هل هناك أي متطلبات أو ملاحظات خاصة؟</p>
+                <p className="text-muted-foreground">هل هناك أي متطلبات أو ملاحظات خاصة؟</p>
               </div>
               <textarea
                 value={wizardData.specialRequirements}
                 onChange={(e) => setWizardData({ ...wizardData, specialRequirements: e.target.value })}
                 rows={6}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
                 placeholder="مثال: يجب أن يتضمن المشروع برامج تدريبية، يفضل الشراكة مع جهات حكومية..."
               />
             </div>
@@ -519,13 +519,13 @@ export function AIProjectInnovationModule() {
                   setCurrentView('studio');
                 }
               }}
-              className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2"
+              className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2"
             >
               <ChevronRight className="w-5 h-5" />
               رجوع
             </button>
             <div className="flex gap-3">
-              <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2">
+              <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
                 <Save className="w-5 h-5" />
                 حفظ المسودة
               </button>
@@ -568,8 +568,8 @@ export function AIProjectInnovationModule() {
                 <Brain className="w-8 h-8 text-white" />
               </div>
               <h3 className="text-xl font-bold mb-2">الذكاء الاصطناعي يعمل على مشروعك</h3>
-              <p className="text-gray-600 mb-6">يتم تحليل المعلومات وإنشاء مشروع احترافي كامل...</p>
-              <div className="space-y-2 text-sm text-gray-700">
+              <p className="text-muted-foreground mb-6">يتم تحليل المعلومات وإنشاء مشروع احترافي كامل...</p>
+              <div className="space-y-2 text-sm text-foreground">
                 <div className="flex items-center justify-center gap-2">
                   <CheckCircle2 className="w-4 h-4 text-green-600" />
                   <span>تحليل المتطلبات</span>
@@ -612,12 +612,12 @@ export function AIProjectInnovationModule() {
               رجوع إلى المعالج
             </button>
             <h1 className="text-3xl font-bold mb-2">مساحة عمل المشروع</h1>
-            <p className="text-gray-600">راجع وعدّل المشروع الذي أنشأه الذكاء الاصطناعي</p>
+            <p className="text-muted-foreground">راجع وعدّل المشروع الذي أنشأه الذكاء الاصطناعي</p>
           </div>
           <div className="flex gap-3">
             <button
               onClick={() => setCurrentView('readiness')}
-              className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
+              className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-2"
             >
               <BarChart3 className="w-5 h-5" />
               تقييم الجاهزية
@@ -648,7 +648,7 @@ export function AIProjectInnovationModule() {
         {/* Project Sections */}
         <div className="space-y-4">
           {projectSections.map((section) => (
-            <div key={section.id} className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+            <div key={section.id} className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="flex-1">
@@ -662,16 +662,16 @@ export function AIProjectInnovationModule() {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setEditingSection(section.id)}
-                      className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                      className="p-2 hover:bg-muted rounded-lg transition-colors"
                       title="تعديل"
                     >
-                      <Edit className="w-5 h-5 text-gray-600" />
+                      <Edit className="w-5 h-5 text-muted-foreground" />
                     </button>
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="إعادة إنشاء">
-                      <RefreshCw className="w-5 h-5 text-gray-600" />
+                    <button className="p-2 hover:bg-muted rounded-lg transition-colors" title="إعادة إنشاء">
+                      <RefreshCw className="w-5 h-5 text-muted-foreground" />
                     </button>
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors" title="إضافة تعليق">
-                      <MessageSquare className="w-5 h-5 text-gray-600" />
+                    <button className="p-2 hover:bg-muted rounded-lg transition-colors" title="إضافة تعليق">
+                      <MessageSquare className="w-5 h-5 text-muted-foreground" />
                     </button>
                   </div>
                 </div>
@@ -680,7 +680,7 @@ export function AIProjectInnovationModule() {
                     <textarea
                       defaultValue={section.content}
                       rows={4}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+                      className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
                     />
                     <div className="flex gap-2">
                       <button
@@ -691,14 +691,14 @@ export function AIProjectInnovationModule() {
                       </button>
                       <button
                         onClick={() => setEditingSection(null)}
-                        className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                        className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                       >
                         إلغاء
                       </button>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-gray-700 leading-relaxed">{section.content}</p>
+                  <p className="text-foreground leading-relaxed">{section.content}</p>
                 )}
               </div>
             </div>
@@ -706,22 +706,22 @@ export function AIProjectInnovationModule() {
         </div>
 
         {/* Quick Actions */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <h3 className="font-semibold mb-4">إجراءات إضافية</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-right flex items-center gap-3">
-              <Download className="w-5 h-5 text-gray-600" />
+            <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-3">
+              <Download className="w-5 h-5 text-muted-foreground" />
               <span>تصدير PDF</span>
             </button>
-            <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-right flex items-center gap-3">
-              <Copy className="w-5 h-5 text-gray-600" />
+            <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-3">
+              <Copy className="w-5 h-5 text-muted-foreground" />
               <span>نسخ المحتوى</span>
             </button>
             <button
               onClick={() => setCurrentView('versions')}
-              className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-right flex items-center gap-3"
+              className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-3"
             >
-              <GitBranch className="w-5 h-5 text-gray-600" />
+              <GitBranch className="w-5 h-5 text-muted-foreground" />
               <span>عرض الإصدارات</span>
             </button>
           </div>
@@ -743,14 +743,14 @@ export function AIProjectInnovationModule() {
             رجوع إلى الاستوديو
           </button>
           <h1 className="text-3xl font-bold mb-2">مركز تحسين المشاريع</h1>
-          <p className="text-gray-600">قارن بين النسخة الأصلية والنسخة المحسّنة بالذكاء الاصطناعي</p>
+          <p className="text-muted-foreground">قارن بين النسخة الأصلية والنسخة المحسّنة بالذكاء الاصطناعي</p>
         </div>
 
         {/* Upload Section */}
-        <div className="bg-white rounded-xl p-8 border-2 border-dashed border-gray-300 text-center">
-          <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+        <div className="bg-card rounded-xl p-8 border-2 border-dashed border-border text-center">
+          <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <h3 className="text-lg font-semibold mb-2">ارفع مشروعك الحالي</h3>
-          <p className="text-gray-600 mb-4">PDF, DOCX, أو الصق النص مباشرة</p>
+          <p className="text-muted-foreground mb-4">PDF, DOCX, أو الصق النص مباشرة</p>
           <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium">
             اختر ملف
           </button>
@@ -758,23 +758,23 @@ export function AIProjectInnovationModule() {
 
         {/* Comparison View */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center gap-2 mb-4">
-              <FileText className="w-5 h-5 text-gray-600" />
+              <FileText className="w-5 h-5 text-muted-foreground" />
               <h3 className="font-semibold">النسخة الأصلية</h3>
             </div>
-            <div className="prose prose-sm max-w-none text-gray-700">
+            <div className="prose prose-sm max-w-none text-foreground">
               <p>المحتوى الأصلي للمشروع...</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border-2 border-green-500">
+          <div className="bg-card rounded-xl p-6 border-2 border-green-500">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-green-600" />
               <h3 className="font-semibold text-green-900">النسخة المحسّنة</h3>
               <span className="text-xs px-2 py-1 bg-green-100 text-green-700 rounded-full">+45% تحسين</span>
             </div>
-            <div className="prose prose-sm max-w-none text-gray-700">
+            <div className="prose prose-sm max-w-none text-foreground">
               <p>المحتوى المحسّن...</p>
             </div>
           </div>
@@ -784,20 +784,20 @@ export function AIProjectInnovationModule() {
         <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-6 border border-green-200">
           <h3 className="font-semibold text-green-900 mb-4">ملخص التحسينات</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-white rounded-lg p-4">
+            <div className="bg-card rounded-lg p-4">
               <CheckCircle2 className="w-6 h-6 text-green-600 mb-2" />
               <p className="font-semibold mb-1">أهداف أوضح</p>
-              <p className="text-sm text-gray-600">تم تحسين صياغة الأهداف بنسبة 40%</p>
+              <p className="text-sm text-muted-foreground">تم تحسين صياغة الأهداف بنسبة 40%</p>
             </div>
-            <div className="bg-white rounded-lg p-4">
+            <div className="bg-card rounded-lg p-4">
               <CheckCircle2 className="w-6 h-6 text-green-600 mb-2" />
               <p className="font-semibold mb-1">مؤشرات أداء أفضل</p>
-              <p className="text-sm text-gray-600">إضافة 12 مؤشر قابل للقياس</p>
+              <p className="text-sm text-muted-foreground">إضافة 12 مؤشر قابل للقياس</p>
             </div>
-            <div className="bg-white rounded-lg p-4">
+            <div className="bg-card rounded-lg p-4">
               <CheckCircle2 className="w-6 h-6 text-green-600 mb-2" />
               <p className="font-semibold mb-1">جاهزية للتمويل</p>
-              <p className="text-sm text-gray-600">زيادة الجاهزية من 60% إلى 85%</p>
+              <p className="text-sm text-muted-foreground">زيادة الجاهزية من 60% إلى 85%</p>
             </div>
           </div>
         </div>
@@ -818,7 +818,7 @@ export function AIProjectInnovationModule() {
             رجوع إلى الاستوديو
           </button>
           <h1 className="text-3xl font-bold mb-2">دراسة الجدوى الأولية</h1>
-          <p className="text-gray-600">تم إنشاؤها بواسطة الذكاء الاصطناعي</p>
+          <p className="text-muted-foreground">تم إنشاؤها بواسطة الذكاء الاصطناعي</p>
         </div>
 
         {/* Feasibility Sections */}
@@ -833,27 +833,27 @@ export function AIProjectInnovationModule() {
           ].map((section, idx) => {
             const Icon = section.icon;
             return (
-              <div key={idx} className="bg-white rounded-xl p-6 border border-gray-200">
+              <div key={idx} className="bg-card rounded-xl p-6 border border-border">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                     <Icon className="w-5 h-5 text-blue-600" />
                   </div>
                   <h3 className="text-xl font-semibold">{section.title}</h3>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{section.content}</p>
+                <p className="text-foreground leading-relaxed">{section.content}</p>
               </div>
             );
           })}
         </div>
 
         {/* Actions */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <div className="flex gap-3">
             <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2">
               <Download className="w-5 h-5" />
               تصدير PDF
             </button>
-            <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2">
+            <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
               <Edit className="w-5 h-5" />
               تعديل
             </button>
@@ -883,7 +883,7 @@ export function AIProjectInnovationModule() {
             رجوع إلى مساحة العمل
           </button>
           <h1 className="text-3xl font-bold mb-2">المراجعة والاعتماد</h1>
-          <p className="text-gray-600">مراجعة بشرية لمخرجات الذكاء الاصطناعي</p>
+          <p className="text-muted-foreground">مراجعة بشرية لمخرجات الذكاء الاصطناعي</p>
         </div>
 
         {/* Review Status */}
@@ -899,39 +899,39 @@ export function AIProjectInnovationModule() {
 
         {/* Version Comparison */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="w-5 h-5 text-blue-600" />
               <h3 className="font-semibold">نسخة الذكاء الاصطناعي</h3>
             </div>
             <div className="prose prose-sm max-w-none">
-              <p className="text-gray-700">المحتوى الذي أنشأه الذكاء الاصطناعي...</p>
+              <p className="text-foreground">المحتوى الذي أنشأه الذكاء الاصطناعي...</p>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border-2 border-green-500">
+          <div className="bg-card rounded-xl p-6 border-2 border-green-500">
             <div className="flex items-center gap-2 mb-4">
               <CheckCircle2 className="w-5 h-5 text-green-600" />
               <h3 className="font-semibold text-green-900">النسخة المعدّلة</h3>
             </div>
             <div className="prose prose-sm max-w-none">
-              <p className="text-gray-700">المحتوى بعد المراجعة البشرية...</p>
+              <p className="text-foreground">المحتوى بعد المراجعة البشرية...</p>
             </div>
           </div>
         </div>
 
         {/* Reviewer Notes */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <h3 className="font-semibold mb-4">ملاحظات المراجع</h3>
           <textarea
             rows={4}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+            className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
             placeholder="أضف ملاحظاتك هنا..."
           />
         </div>
 
         {/* Actions */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <div className="flex gap-3">
             <button className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-medium flex items-center gap-2">
               <CheckCircle2 className="w-5 h-5" />
@@ -941,11 +941,11 @@ export function AIProjectInnovationModule() {
               <X className="w-5 h-5" />
               رفض
             </button>
-            <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2">
+            <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
               <Edit className="w-5 h-5" />
               طلب تعديلات
             </button>
-            <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2">
+            <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
               <RefreshCw className="w-5 h-5" />
               إعادة إنشاء
             </button>
@@ -974,7 +974,7 @@ export function AIProjectInnovationModule() {
             رجوع إلى مساحة العمل
           </button>
           <h1 className="text-3xl font-bold mb-2">سجل الإصدارات</h1>
-          <p className="text-gray-600">جميع إصدارات المشروع المنشأة بالذكاء الاصطناعي</p>
+          <p className="text-muted-foreground">جميع إصدارات المشروع المنشأة بالذكاء الاصطناعي</p>
         </div>
 
         {/* Current Version Badge */}
@@ -987,7 +987,7 @@ export function AIProjectInnovationModule() {
                 <p className="text-2xl font-bold">v3.0</p>
               </div>
             </div>
-            <button className="px-4 py-2 bg-white text-blue-600 rounded-lg hover:bg-blue-50 transition-colors font-medium">
+            <button className="px-4 py-2 bg-card text-primary rounded-lg hover:bg-primary/5 transition-colors font-medium">
               إنشاء إصدار جديد
             </button>
           </div>
@@ -996,8 +996,8 @@ export function AIProjectInnovationModule() {
         {/* Versions List */}
         <div className="space-y-4">
           {versions.map((version) => (
-            <div key={version.id} className={`bg-white rounded-xl border-2 p-6 ${
-              version.status === 'approved' ? 'border-green-500' : 'border-gray-200'
+            <div key={version.id} className={`bg-card rounded-xl border-2 p-6 ${
+              version.status === 'approved' ? 'border-green-500' : 'border-border'
             }`}>
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
@@ -1010,12 +1010,12 @@ export function AIProjectInnovationModule() {
                       <span className={`text-xs px-2 py-1 rounded-full font-medium ${
                         version.status === 'approved' ? 'bg-green-100 text-green-700' :
                         version.status === 'under-review' ? 'bg-yellow-100 text-yellow-700' :
-                        'bg-gray-100 text-gray-700'
+                        'bg-muted text-foreground'
                       }`}>
                         {version.status === 'approved' ? 'معتمد' : version.status === 'under-review' ? 'قيد المراجعة' : 'مسودة'}
                       </span>
                     </div>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <span className="flex items-center gap-1">
                         <Brain className="w-4 h-4" />
                         {version.aiModel}
@@ -1028,15 +1028,15 @@ export function AIProjectInnovationModule() {
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <Eye className="w-5 h-5 text-gray-600" />
+                  <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+                    <Eye className="w-5 h-5 text-muted-foreground" />
                   </button>
-                  <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                    <Download className="w-5 h-5 text-gray-600" />
+                  <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+                    <Download className="w-5 h-5 text-muted-foreground" />
                   </button>
                   {version.status !== 'approved' && (
-                    <button className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-                      <RefreshCw className="w-5 h-5 text-gray-600" />
+                    <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+                      <RefreshCw className="w-5 h-5 text-muted-foreground" />
                     </button>
                   )}
                 </div>
@@ -1072,7 +1072,7 @@ export function AIProjectInnovationModule() {
             رجوع إلى مساحة العمل
           </button>
           <h1 className="text-3xl font-bold mb-2">لوحة الجاهزية</h1>
-          <p className="text-gray-600">تقييم شامل لجاهزية المشروع</p>
+          <p className="text-muted-foreground">تقييم شامل لجاهزية المشروع</p>
         </div>
 
         {/* Overall Score */}
@@ -1087,7 +1087,7 @@ export function AIProjectInnovationModule() {
 
         {/* Scores Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <h3 className="text-lg font-semibold mb-4">التفصيل حسب المحور</h3>
             <div className="space-y-4">
               {readinessScores.map((item, idx) => (
@@ -1096,7 +1096,7 @@ export function AIProjectInnovationModule() {
                     <span className="text-sm font-medium">{item.category}</span>
                     <span className="text-sm font-bold text-blue-600">{item.score}%</span>
                   </div>
-                  <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                  <div className="h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className={`h-full transition-all ${
                         item.score >= 80 ? 'bg-green-500' :
@@ -1111,12 +1111,12 @@ export function AIProjectInnovationModule() {
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <h3 className="text-lg font-semibold mb-4">المخطط الشامل</h3>
             <ResponsiveContainer width="100%" height={300}>
               <RadarChart data={radarData}>
                 <PolarGrid stroke="#e5e7eb" />
-                <PolarAngleAxis dataKey="category" tick={{ fill: '#6b7280', fontSize: 12 }} />
+                <PolarAngleAxis dataKey="category" tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }} />
                 <PolarRadiusAxis angle={90} domain={[0, 100]} tick={{ fill: '#6b7280' }} />
                 <Radar name="النتيجة" dataKey="score" stroke="#3b82f6" fill="#3b82f6" fillOpacity={0.5} />
                 <Tooltip />
@@ -1141,7 +1141,7 @@ export function AIProjectInnovationModule() {
         </div>
 
         {/* Primary Actions */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <div className="flex gap-3">
             <button
               onClick={() => setCurrentView('review')}
@@ -1156,7 +1156,7 @@ export function AIProjectInnovationModule() {
             </button>
             <button
               onClick={() => setCurrentView('workspace')}
-              className="px-8 py-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-medium flex items-center gap-2"
+              className="px-8 py-4 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2"
             >
               <Edit className="w-5 h-5" />
               متابعة التعديل
@@ -1169,7 +1169,7 @@ export function AIProjectInnovationModule() {
 
   // Render views
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       {currentView === 'studio' && <StudioView />}
       {currentView === 'wizard' && <WizardView />}
       {currentView === 'workspace' && <WorkspaceView />}

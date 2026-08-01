@@ -107,9 +107,9 @@ export function CustomersDashboard() {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* Header */}
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">لوحة العملاء</h2>
-        <p className="text-gray-500 dark:text-gray-400 text-base">تحليل شامل لسلوك العملاء والولاء والرضا</p>
+      <div className="border-b border-border dark:border-border pb-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-2">لوحة العملاء</h2>
+        <p className="text-muted-foreground dark:text-muted-foreground text-base">تحليل شامل لسلوك العملاء والولاء والرضا</p>
       </div>
 
       {/* KPI Cards */}
@@ -117,7 +117,7 @@ export function CustomersDashboard() {
         {kpis.map((kpi, index) => {
           const Icon = kpi.icon;
           return (
-            <div key={index} className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all duration-200">
+            <div key={index} className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all duration-200">
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 ${kpi.bgColor} rounded-lg`}>
                   <Icon className={`w-5 h-5 ${kpi.color}`} />
@@ -127,8 +127,8 @@ export function CustomersDashboard() {
                   {kpi.change}
                 </div>
               </div>
-              <h3 className="text-gray-500 dark:text-gray-400 text-sm mb-2">{kpi.title}</h3>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{kpi.value}</p>
+              <h3 className="text-muted-foreground dark:text-muted-foreground text-sm mb-2">{kpi.title}</h3>
+              <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{kpi.value}</p>
             </div>
           );
         })}
@@ -145,10 +145,10 @@ export function CustomersDashboard() {
               <h3 className="text-lg">رؤية الذكاء الاصطناعي</h3>
               <span className="px-2 py-1 bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400 text-xs rounded-full">AI</span>
             </div>
-            <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
-              تحليل بيانات العملاء يُظهر أن <span className="text-gray-900 dark:text-white font-medium">معدل الاحتفاظ بالعملاء</span> تحسن بنسبة 7% في الأشهر الستة الماضية.
+            <p className="text-muted-foreground dark:text-muted-foreground leading-relaxed">
+              تحليل بيانات العملاء يُظهر أن <span className="text-foreground dark:text-white font-medium">معدل الاحتفاظ بالعملاء</span> تحسن بنسبة 7% في الأشهر الستة الماضية.
               العملاء المميزون يمثلون <span className="text-emerald-600 dark:text-emerald-400 font-medium">42% من إجمالي الإيرادات</span> رغم كونهم 16% فقط من القاعدة.
-              الشكاوى المتعلقة <span className="text-gray-900 dark:text-white font-medium">بجودة الخدمة</span> انخفضت بنسبة 28% بعد تطبيق البرنامج التدريبي الجديد.
+              الشكاوى المتعلقة <span className="text-foreground dark:text-white font-medium">بجودة الخدمة</span> انخفضت بنسبة 28% بعد تطبيق البرنامج التدريبي الجديد.
             </p>
           </div>
         </div>
@@ -157,10 +157,10 @@ export function CustomersDashboard() {
       {/* Charts Section */}
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Customer Segments */}
-        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+        <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg mb-1">شرائح العملاء</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">توزيع العملاء حسب مستوى النشاط</p>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">توزيع العملاء حسب مستوى النشاط</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -181,10 +181,10 @@ export function CustomersDashboard() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e5e7eb',
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
                   borderRadius: '0.5rem',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                  boxShadow: 'var(--shadow-md)'
                 }}
                 formatter={(value: number) => [`${value.toLocaleString()} عميل`, '']}
               />
@@ -194,17 +194,17 @@ export function CustomersDashboard() {
             {segmentsData.map((segment, index) => (
               <div key={index} className="flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: segment.color }}></div>
-                <span className="text-sm text-gray-500 dark:text-gray-400">{segment.name}</span>
+                <span className="text-sm text-muted-foreground dark:text-muted-foreground">{segment.name}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Complaints Breakdown */}
-        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+        <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg mb-1">تحليل الشكاوى</h3>
-            <p className="text-sm text-gray-500 dark:text-gray-400">توزيع الشكاوى حسب الفئة</p>
+            <p className="text-sm text-muted-foreground dark:text-muted-foreground">توزيع الشكاوى حسب الفئة</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={complaintsData} layout="horizontal">
@@ -223,10 +223,10 @@ export function CustomersDashboard() {
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e5e7eb',
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
                   borderRadius: '0.5rem',
-                  boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                  boxShadow: 'var(--shadow-md)'
                 }}
                 formatter={(value: number) => [`${value} شكوى`, '']}
               />
@@ -242,10 +242,10 @@ export function CustomersDashboard() {
       </div>
 
       {/* Loyalty Trend Chart */}
-      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+      <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
         <div className="mb-6">
           <h3 className="text-lg mb-1">اتجاه الولاء والاحتفاظ</h3>
-          <p className="text-sm text-gray-500 dark:text-gray-400">تطور درجة الولاء ومعدل الاحتفاظ بالعملاء</p>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground">تطور درجة الولاء ومعدل الاحتفاظ بالعملاء</p>
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={loyaltyData}>
@@ -262,10 +262,10 @@ export function CustomersDashboard() {
             />
             <Tooltip
               contentStyle={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e5e7eb',
+                backgroundColor: 'var(--card)',
+                border: '1px solid var(--border)',
                 borderRadius: '0.5rem',
-                boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                boxShadow: 'var(--shadow-md)'
               }}
               labelStyle={{ color: '#111827', fontWeight: 'bold' }}
             />
@@ -294,29 +294,29 @@ export function CustomersDashboard() {
       </div>
 
       {/* High-Value Customers Table */}
-      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
+        <div className="p-6 border-b border-border dark:border-border">
           <div className="flex items-center gap-2 mb-1">
             <Crown className="w-5 h-5 text-yellow-500" />
             <h3 className="text-lg">العملاء الأكثر قيمة</h3>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">أعلى 5 عملاء من حيث القيمة الإجمالية</p>
+          <p className="text-sm text-muted-foreground dark:text-muted-foreground">أعلى 5 عملاء من حيث القيمة الإجمالية</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-800/50">
+            <thead className="bg-secondary dark:bg-muted/50">
               <tr>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">#</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">اسم العميل</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">القيمة الإجمالية</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">عدد المعاملات</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">درجة الرضا</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">#</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">اسم العميل</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">القيمة الإجمالية</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">عدد المعاملات</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">درجة الرضا</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {highValueCustomers.map((customer) => (
-                <tr key={customer.id} className="hover:bg-gray-50 dark:bg-gray-800/50 transition-colors">
-                  <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{customer.id}</td>
+                <tr key={customer.id} className="hover:bg-secondary dark:bg-muted/50 transition-colors">
+                  <td className="px-6 py-4 text-sm text-muted-foreground dark:text-muted-foreground">{customer.id}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
                       {customer.id === 1 && <Crown className="w-4 h-4 text-yellow-500" />}
@@ -326,7 +326,7 @@ export function CustomersDashboard() {
                   <td className="px-6 py-4">
                     <p className="font-medium text-emerald-600 dark:text-emerald-400">{customer.value.toLocaleString()} ر.س</p>
                   </td>
-                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                  <td className="px-6 py-4 text-muted-foreground dark:text-muted-foreground">
                     {customer.transactions} معاملة
                   </td>
                   <td className="px-6 py-4">
@@ -353,19 +353,19 @@ export function CustomersDashboard() {
               <h3 className="text-lg">التوصية الإستراتيجية</h3>
               <span className="px-2 py-1 bg-green-500/20 text-emerald-600 dark:text-emerald-400 dark:text-green-400 text-xs rounded-full">موصى به</span>
             </div>
-            <p className="text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
-              نوصي بإطلاق <span className="text-gray-900 dark:text-white font-medium">برنامج ولاء متقدم</span> للعملاء المميزين لزيادة معدل الاحتفاظ إلى 95%.
-              كذلك يُنصح بالتركيز على <span className="text-gray-900 dark:text-white font-medium">تحسين جودة الخدمة</span> لتقليل الشكاوى بنسبة إضافية 35%.
+            <p className="text-muted-foreground dark:text-muted-foreground leading-relaxed mb-4">
+              نوصي بإطلاق <span className="text-foreground dark:text-white font-medium">برنامج ولاء متقدم</span> للعملاء المميزين لزيادة معدل الاحتفاظ إلى 95%.
+              كذلك يُنصح بالتركيز على <span className="text-foreground dark:text-white font-medium">تحسين جودة الخدمة</span> لتقليل الشكاوى بنسبة إضافية 35%.
               من المتوقع أن يؤدي ذلك إلى زيادة <span className="text-emerald-600 dark:text-emerald-400 font-medium">القيمة الدائمة للعميل</span> بنسبة 42% خلال 12 شهر.
             </p>
             <div className="flex flex-wrap gap-3">
               <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
                 تطبيق التوصية
               </button>
-              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+              <button className="px-4 py-2 border border-border dark:border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
                 عرض خطة العمل
               </button>
-              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+              <button className="px-4 py-2 border border-border dark:border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
                 تأجيل
               </button>
             </div>

@@ -52,9 +52,9 @@ function InputOTPSlot({
       data-active={isActive}
       className={cn(
         "relative flex h-10 w-10 items-center justify-center text-sm transition-all duration-200 ease-in-out",
-        "bg-white dark:bg-gray-900/50",
+        "bg-white dark:bg-card/50",
         "text-gray-900 dark:text-white",
-        "border-y border-r border-gray-200 dark:border-gray-700",
+        "border-y border-r border-gray-200 dark:border-border",
         "first:rounded-l-md first:border-l last:rounded-r-md",
         "focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none",
         "dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30",

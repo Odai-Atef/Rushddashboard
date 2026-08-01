@@ -55,7 +55,7 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
             <h2 className="text-xl mb-1">وجدنا 28 جهة مانحة مناسبة لمشروعك</h2>
             <p className="text-violet-200 text-sm">بناءً على تحليل 147 معياراً — أعلى نسبة تطابق: 94% مع صندوق الملك عبدالعزيز للأبحاث</p>
             <div className="flex gap-3 mt-4">
-              <button onClick={() => onNavigate('recommended')} className="flex items-center gap-2 px-4 py-2 bg-white text-indigo-700 rounded-lg text-sm hover:bg-violet-50 transition-colors">
+              <button onClick={() => onNavigate('recommended')} className="flex items-center gap-2 px-4 py-2 bg-card text-primary rounded-lg text-sm hover:bg-primary/5 transition-colors">
                 <Sparkles className="w-4 h-4" />
                 عرض التوصيات
               </button>
@@ -84,16 +84,16 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
         ].map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className={`bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
+            <div key={i} className={`bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
               <div className="flex items-start justify-between mb-4">
-                <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80">
+                <div className="p-2.5 rounded-xl bg-muted dark:bg-muted/80">
                   <Icon className={`w-6 h-6 ${card.color}`} />
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-gray-400 dark:text-gray-500" />
+                <ArrowUpRight className="w-4 h-4 text-muted-foreground dark:text-muted-foreground" />
               </div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{card.value}</p>
-              <p className="text-sm text-gray-900 dark:text-gray-200 mt-1">{card.label}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{card.sub}</p>
+              <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{card.value}</p>
+              <p className="text-sm text-foreground dark:text-muted-foreground mt-1">{card.label}</p>
+              <p className="text-xs text-muted-foreground dark:text-muted-foreground mt-1">{card.sub}</p>
             </div>
           );
         })}

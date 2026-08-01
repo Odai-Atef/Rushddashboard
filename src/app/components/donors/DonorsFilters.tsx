@@ -49,7 +49,7 @@ export function DonorsFilters({
           {searchQuery && (
             <button
               onClick={() => onSearchChange('')}
-              className="absolute left-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded transition-colors"
+              className="absolute left-3 top-1/2 -translate-y-1/2 p-1 hover:bg-muted rounded-lg transition-colors"
             >
               <X className="w-3 h-3 text-muted-foreground" />
             </button>

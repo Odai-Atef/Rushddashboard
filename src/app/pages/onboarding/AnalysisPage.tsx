@@ -95,7 +95,7 @@ export function AnalysisPage() {
         ];
 
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
@@ -107,7 +107,7 @@ export function AnalysisPage() {
             رجوع إلى النتائج
           </button>
           <h1 className="text-2xl sm:text-3xl font-bold mb-2">تحليل نقاط القوة والضعف</h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             تحليل تفصيلي لأداء مؤسستك عبر جميع المحاور
           </p>
         </div>
@@ -126,7 +126,7 @@ export function AnalysisPage() {
               return (
                 <div
                   key={idx}
-                  className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-green-200/80 dark:border-green-500/30 p-4 sm:p-6 dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-green-500/10"
+                  className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-green-200/80 dark:border-green-500/30 p-4 sm:p-6 dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-green-500/10"
                 >
                   <div className="flex items-start gap-4">
                     <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
@@ -134,15 +134,15 @@ export function AnalysisPage() {
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{item.area}</h3>
+                        <h3 className="text-lg font-semibold text-foreground dark:text-white">{item.area}</h3>
                         <div className="flex items-center gap-2">
                           <span className="text-3xl font-bold text-green-600 dark:text-green-400 tracking-tight">
                             {item.score}
                           </span>
-                          <span className="text-gray-500 dark:text-gray-400">/100</span>
+                          <span className="text-muted-foreground dark:text-muted-foreground">/100</span>
                         </div>
                       </div>
-                      <p className="text-gray-600 dark:text-gray-300">{item.insight}</p>
+                      <p className="text-muted-foreground dark:text-muted-foreground">{item.insight}</p>
                       <div className="flex items-center gap-2 mt-3">
                         <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
                         <span className="text-sm text-green-700 dark:text-green-400 font-medium">
@@ -188,7 +188,7 @@ export function AnalysisPage() {
               return (
                 <div
                   key={idx}
-                  className={`bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border-2 ${severityConfig.border.replace('200', '80')} dark:${severityConfig.border.replace('200', '500/30')} p-4 sm:p-6 dark:shadow-lg transition-all duration-200 hover:shadow-md`}
+                  className={`bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl shadow-sm border-2 ${severityConfig.border.replace('200', '80')} dark:${severityConfig.border.replace('200', '500/30')} p-4 sm:p-6 dark:shadow-lg transition-all duration-200 hover:shadow-md`}
                 >
                   <div className="flex items-start gap-4">
                     <div
@@ -199,7 +199,7 @@ export function AnalysisPage() {
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
-                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{item.area}</h3>
+                          <h3 className="text-lg font-semibold text-foreground dark:text-white">{item.area}</h3>
                           <span
                             className={`text-xs px-2 py-1 rounded-full font-medium ${severityConfig.badge}`}
                           >
@@ -210,10 +210,10 @@ export function AnalysisPage() {
                           <span className={`text-3xl font-bold tracking-tight ${severityConfig.text}`}>
                             {item.score}
                           </span>
-                          <span className="text-gray-500 dark:text-gray-400">/100</span>
+                          <span className="text-muted-foreground dark:text-muted-foreground">/100</span>
                         </div>
                       </div>
-                      <p className="text-gray-600 dark:text-gray-300 mb-3">{item.insight}</p>
+                      <p className="text-muted-foreground dark:text-muted-foreground mb-3">{item.insight}</p>
                       <div
                         className={`flex items-center gap-2 p-3 ${severityConfig.bg} dark:bg-opacity-20 rounded-lg`}
                       >
@@ -238,7 +238,7 @@ export function AnalysisPage() {
             </div>
             <div>
               <h3 className="text-lg font-semibold mb-2">توصيات الذكاء الاصطناعي</h3>
-              <p className="text-gray-700 mb-4">
+              <p className="text-foreground mb-4">
                 بناءً على التحليل الشامل، نوصي بالتركيز على تطوير الجاهزية التقنية
                 كأولوية قصوى. الاستثمار في البنية التحتية التقنية سيحسن كفاءة
                 العمليات وجودة البيانات، مما ينعكس إيجاباً على جميع المحاور الأخرى.

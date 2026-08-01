@@ -163,7 +163,7 @@ export function ProfilePage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       {isSaving && (
         <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
@@ -173,19 +173,19 @@ export function ProfilePage() {
         {/* Progress */}
         <div className="mb-8">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-sm text-gray-600">الخطوة ٢ من ٤</span>
+            <span className="text-sm text-muted-foreground">الخطوة ٢ من ٤</span>
             <span className="text-sm font-medium text-blue-600">٥٠٪</span>
           </div>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+          <div className="h-2 bg-muted rounded-full overflow-hidden">
             <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: '50%' }}></div>
           </div>
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-4 sm:p-8">
           <div className="mb-6">
             <h1 className="text-2xl sm:text-3xl font-bold mb-2">الملف التعريفي للجمعية</h1>
-            <p className="text-gray-600">معلومات تفصيلية عن نشاط الجمعية وبرامجها</p>
+            <p className="text-muted-foreground">معلومات تفصيلية عن نشاط الجمعية وبرامجها</p>
           </div>
 
           <form className="space-y-6">
@@ -202,14 +202,14 @@ export function ProfilePage() {
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
                   errors.overview
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300'
+                    : 'border-border'
                 }`}
                 placeholder="اكتب نبذة مختصرة عن رؤية ورسالة وأهداف الجمعية..."
               />
               {errors.overview ? (
                 <p className="mt-1 text-sm text-red-600">{errors.overview}</p>
               ) : (
-                <p className="text-xs text-gray-500 mt-1">٢٠٠ - ٥٠٠ كلمة</p>
+                <p className="text-xs text-muted-foreground mt-1">٢٠٠ - ٥٠٠ كلمة</p>
               )}
             </div>
 
@@ -217,7 +217,7 @@ export function ProfilePage() {
             <div>
               <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
               {fundingAreas.length === 0 && (
-                <p className="text-sm text-gray-500 mb-2">
+                <p className="text-sm text-muted-foreground mb-2">
                   لا توجد مجالات مشاريع متاحة حالياً. يرجى المحاولة لاحقاً.
                 </p>
               )}
@@ -254,7 +254,7 @@ export function ProfilePage() {
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                   errors.targetBeneficiaries
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300'
+                    : 'border-border'
                 }`}
                 placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن"
               />
@@ -275,7 +275,7 @@ export function ProfilePage() {
                 className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
                   errors.geographicCoverage
                     ? 'border-red-500 focus:ring-red-500'
-                    : 'border-gray-300'
+                    : 'border-border'
                 }`}
               >
                 <option value="">اختر النطاق الجغرافي</option>
@@ -294,46 +294,46 @@ export function ProfilePage() {
               <label className="block text-sm font-medium mb-4">حجم الفريق والمتطوعين</label>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-xs text-gray-600 mb-2">عدد الموظفين</label>
+                  <label className="block text-xs text-muted-foreground mb-2">عدد الموظفين</label>
                   <div className="relative">
-                    <Users className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Users className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="number"
                       value={profileData.employeeCount}
                       onChange={(e) =>
                         setProfileData((prev) => ({ ...prev, employeeCount: e.target.value }))
                       }
-                      className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="0"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-600 mb-2">عدد المتطوعين</label>
+                  <label className="block text-xs text-muted-foreground mb-2">عدد المتطوعين</label>
                   <div className="relative">
-                    <Heart className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Heart className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="number"
                       value={profileData.volunteerCount}
                       onChange={(e) =>
                         setProfileData((prev) => ({ ...prev, volunteerCount: e.target.value }))
                       }
-                      className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="0"
                     />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs text-gray-600 mb-2">المشاريع النشطة</label>
+                  <label className="block text-xs text-muted-foreground mb-2">المشاريع النشطة</label>
                   <div className="relative">
-                    <Briefcase className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Briefcase className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                     <input
                       type="number"
                       value={profileData.activeProjects}
                       onChange={(e) =>
                         setProfileData((prev) => ({ ...prev, activeProjects: e.target.value }))
                       }
-                      className="w-full pr-10 pl-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       placeholder="0"
                     />
                   </div>
@@ -346,7 +346,7 @@ export function ProfilePage() {
               <button
                 type="button"
                 onClick={() => goToStep('registration')}
-                className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+                className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
               >
                 <ChevronRight className="w-5 h-5" />
                 رجوع

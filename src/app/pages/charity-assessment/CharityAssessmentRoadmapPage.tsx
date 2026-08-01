@@ -33,7 +33,7 @@ const priorityConfig: Record<string, { bg: string; text: string; label: string }
 };
 
 const statusConfig: Record<string, { bg: string; text: string; label: string; icon: typeof Clock }> = {
-  'not-started': { bg: 'bg-gray-100', text: 'text-gray-700', label: 'لم يبدأ', icon: Clock },
+  'not-started': { bg: 'bg-muted', text: 'text-foreground', label: 'لم يبدأ', icon: Clock },
   'in-progress': { bg: 'bg-blue-100', text: 'text-blue-700', label: 'قيد التنفيذ', icon: Activity },
   completed: { bg: 'bg-green-100', text: 'text-green-700', label: 'مكتملة', icon: CheckCircle2 },
   delayed: { bg: 'bg-red-100', text: 'text-red-700', label: 'متأخرة', icon: AlertTriangle },
@@ -151,7 +151,7 @@ export function CharityAssessmentRoadmapPage() {
       container,
       fileName: `roadmap-report-${organizationId || 'organization'}.pdf`,
       setIsDownloading,
-      backgroundColor: '#f3f4f6',
+      backgroundColor: 'var(--secondary)',
     });
   };
 
@@ -263,19 +263,19 @@ export function CharityAssessmentRoadmapPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4 items-stretch">
-            <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
-              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 w-fit mb-4">
-                <Target className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
+            <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+              <div className="p-2.5 rounded-xl bg-muted dark:bg-muted/80 w-fit mb-4">
+                <Target className="w-6 h-6 text-muted-foreground dark:text-muted-foreground" />
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">إجمالي المبادرات</p>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{initiatives.length}</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">إجمالي المبادرات</p>
+              <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{initiatives.length}</p>
             </div>
-            <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-purple-200/80 dark:border-purple-500/30 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+            <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-purple-200/80 dark:border-purple-500/30 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
               <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-500/10 w-fit mb-4">
                 <Clock className="w-6 h-6 text-purple-600 dark:text-purple-400" />
               </div>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">المدة الإجمالية</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">المدة الإجمالية</p>
               <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 tracking-tight">{totalDurationMonths} شهر</p>
             </div>
           </div>

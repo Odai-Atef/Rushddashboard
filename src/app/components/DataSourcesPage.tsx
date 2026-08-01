@@ -128,7 +128,7 @@ export function DataSourcesPage() {
       case 'connected':
         return 'text-green-500';
       case 'disconnected':
-        return 'text-gray-400';
+        return 'text-muted-foreground';
       case 'error':
         return 'text-red-500';
       case 'syncing':
@@ -482,7 +482,7 @@ export function DataSourcesPage() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium mb-2">تكرار المزامنة</label>
                       <select className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">

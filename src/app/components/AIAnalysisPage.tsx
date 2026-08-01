@@ -346,7 +346,7 @@ export function AIAnalysisPage() {
       case 'FAILED':
         return 'bg-red-500/20 text-red-600 dark:text-red-400';
       case 'PENDING':
-        return 'bg-gray-500/10 text-gray-600 dark:text-gray-400';
+        return 'bg-secondary0/10 text-muted-foreground dark:text-muted-foreground';
       default:
         return 'bg-muted text-muted-foreground';
     }
@@ -373,7 +373,7 @@ export function AIAnalysisPage() {
       case 'عالي': return 'bg-orange-500/10 text-orange-600 border-orange-500/20';
       case 'متوسط': return 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20';
       case 'منخفض': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
-      default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
+      default: return 'bg-secondary0/10 text-muted-foreground border-gray-500/20';
     }
   };
 
@@ -382,7 +382,7 @@ export function AIAnalysisPage() {
       case 'بسيط': return 'bg-green-500/10 text-green-600 border-green-500/20';
       case 'متوسط': return 'bg-blue-500/10 text-blue-600 border-blue-500/20';
       case 'متقدم': return 'bg-purple-500/10 text-purple-600 border-purple-500/20';
-      default: return 'bg-gray-500/10 text-gray-600 border-gray-500/20';
+      default: return 'bg-secondary0/10 text-muted-foreground border-gray-500/20';
     }
   };
 
@@ -641,7 +641,7 @@ export function AIAnalysisPage() {
                       <p className="text-xs text-muted-foreground">{date}</p>
                     </div>
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button className="p-1 hover:bg-accent rounded">
+                      <button className="p-1 hover:bg-accent rounded-lg">
                         <MoreVertical className="w-4 h-4" />
                       </button>
                     </div>
@@ -791,10 +791,10 @@ export function AIAnalysisPage() {
               {streaming.status === 'connecting' && (
                 <div className="flex-1 flex items-center justify-center p-6">
                   <div className="w-full max-w-2xl space-y-4 animate-pulse">
-                    <div className="h-4 bg-muted rounded w-3/4"></div>
-                    <div className="h-4 bg-muted rounded w-full"></div>
-                    <div className="h-4 bg-muted rounded w-5/6"></div>
-                    <div className="h-4 bg-muted rounded w-2/3"></div>
+                    <div className="h-4 bg-muted rounded-lg w-3/4"></div>
+                    <div className="h-4 bg-muted rounded-lg w-full"></div>
+                    <div className="h-4 bg-muted rounded-lg w-5/6"></div>
+                    <div className="h-4 bg-muted rounded-lg w-2/3"></div>
                   </div>
                 </div>
               )}

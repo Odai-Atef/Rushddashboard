@@ -354,10 +354,10 @@ export function AssessmentPage() {
 
   if (isLoadingAssessment) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-          <p className="text-gray-600">جارٍ تحميل فئات التقييم...</p>
+          <p className="text-muted-foreground">جارٍ تحميل فئات التقييم...</p>
         </div>
       </div>
     );
@@ -365,11 +365,11 @@ export function AssessmentPage() {
 
   if (assessmentError) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-lg w-full text-center">
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-8 max-w-lg w-full text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">تعذر تحميل التقييم</h2>
-          <p className="text-gray-600 mb-6">{assessmentError}</p>
+          <p className="text-muted-foreground mb-6">{assessmentError}</p>
           <button
             onClick={() => goToStep('registration')}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
@@ -383,13 +383,13 @@ export function AssessmentPage() {
 
   if (assessmentCategories.length === 0) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 max-w-lg w-full text-center">
-          <Info className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-8 max-w-lg w-full text-center">
+          <Info className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">
             لا توجد فئات تقييم متاحة
           </h2>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             لم يتم العثور على فئات تقييم في الوقت الحالي. يرجى المحاولة لاحقاً.
           </p>
           <button
@@ -412,10 +412,10 @@ export function AssessmentPage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="max-w-4xl mx-auto">
           {/* Category Steps */}
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <div className="bg-white rounded-xl shadow-sm border border-border p-6 mb-6">
             <div className="flex items-stretch gap-2 overflow-x-auto pb-2">
               {assessmentCategories.map((cat, idx) => {
               const Icon = resolveApiIcon(cat.icon);
@@ -433,7 +433,7 @@ export function AssessmentPage() {
                       ? 'bg-blue-50 border-2 border-blue-500'
                       : catProgress.isComplete
                       ? 'bg-green-50 border border-green-200'
-                      : 'bg-gray-50 border border-gray-200'
+                      : 'bg-secondary border border-border'
                   }`}
                 >
                   <div className="flex items-center gap-2">
@@ -443,7 +443,7 @@ export function AssessmentPage() {
                           ? 'bg-blue-100'
                           : catProgress.isComplete
                           ? 'bg-green-100'
-                          : 'bg-gray-100'
+                          : 'bg-muted'
                       }`}
                     >
                       <Icon
@@ -452,7 +452,7 @@ export function AssessmentPage() {
                             ? 'text-blue-600'
                             : catProgress.isComplete
                             ? 'text-green-600'
-                            : 'text-gray-500'
+                            : 'text-muted-foreground'
                         }`}
                       />
                     </div>
@@ -462,7 +462,7 @@ export function AssessmentPage() {
                           ? 'text-blue-900'
                           : catProgress.isComplete
                           ? 'text-green-900'
-                          : 'text-gray-500'
+                          : 'text-muted-foreground'
                       }`}
                     >
                       {cat.name}
@@ -471,7 +471,7 @@ export function AssessmentPage() {
                       <CheckCircle2 className="w-4 h-4 text-green-600" />
                     )}
                   </div>
-                  <span className="text-xs text-gray-500">
+                  <span className="text-xs text-muted-foreground">
                     {catProgress.answered} / {catProgress.total}
                   </span>
                 </button>
@@ -481,7 +481,7 @@ export function AssessmentPage() {
         </div>
 
         {/* Form Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 sm:p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-border p-4 sm:p-8">
           {/* Category Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 sm:mb-8">
             <div
@@ -495,11 +495,11 @@ export function AssessmentPage() {
             </div>
             <div className="flex-1">
               <h2 className="text-xl sm:text-2xl font-bold">{currentCategory.name}</h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground">
                 تم الإجابة على {currentProgress.answered} من{' '}
                 {currentProgress.total} أسئلة
               </p>
-              <div className="h-1.5 bg-gray-200 rounded-full overflow-hidden mt-2">
+              <div className="h-1.5 bg-muted rounded-full overflow-hidden mt-2">
                 <div
                   className="h-full bg-blue-600 transition-all duration-300"
                   style={{
@@ -529,7 +529,7 @@ export function AssessmentPage() {
           {/* Dynamic Questions */}
           <div className="space-y-8">
             {currentCategory.questions.length === 0 && (
-              <div className="p-6 bg-gray-50 rounded-lg text-center text-gray-500">
+              <div className="p-6 bg-secondary rounded-lg text-center text-muted-foreground">
                 لا توجد أسئلة في هذا القسم
               </div>
             )}
@@ -544,7 +544,7 @@ export function AssessmentPage() {
                 !(Array.isArray(answer) && answer.length === 0);
               const showRequiredError =
                 q.isRequired && !isAnswered && touchedQuestionIds.has(q.id);
-              const questionWrapperClass = `p-6 bg-gray-50 rounded-lg transition-all ${
+              const questionWrapperClass = `p-6 bg-secondary rounded-lg transition-all ${
                 showRequiredError
                   ? 'border-2 border-red-500 bg-red-50'
                   : q.isRequired && !isAnswered
@@ -581,7 +581,7 @@ export function AssessmentPage() {
                         className={`flex-1 px-6 py-3 border-2 rounded-lg transition-colors font-medium ${
                           answer === 'yes'
                             ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+                            : 'border-border hover:border-blue-500 hover:bg-blue-50'
                         }`}
                       >
                         نعم
@@ -593,7 +593,7 @@ export function AssessmentPage() {
                         className={`flex-1 px-6 py-3 border-2 rounded-lg transition-colors font-medium ${
                           answer === 'no'
                             ? 'border-blue-500 bg-blue-50 text-blue-700'
-                            : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+                            : 'border-border hover:border-blue-500 hover:bg-blue-50'
                         }`}
                       >
                         لا
@@ -648,7 +648,7 @@ export function AssessmentPage() {
                       </p>
                     )}
                     <div className="space-y-3">
-                      <div className="flex items-center justify-between text-sm text-gray-600 mb-2">
+                      <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
                       </div>
                       <div className="flex gap-2">
                         {[1, 2, 3, 4, 5].map((num) => (
@@ -664,7 +664,7 @@ export function AssessmentPage() {
                             className={`flex-1 h-12 border-2 rounded-lg transition-colors font-medium ${
                               answer === num
                                 ? 'border-blue-500 bg-blue-50 text-blue-700'
-                                : 'border-gray-300 hover:border-blue-500 hover:bg-blue-50'
+                                : 'border-border hover:border-blue-500 hover:bg-blue-50'
                             }`}
                           >
                             {num}
@@ -673,7 +673,7 @@ export function AssessmentPage() {
                       </div>
                       <div className="min-h-[3.25rem] mt-2">
                         {scoreDescription && (
-                          <p className="text-sm text-gray-600 bg-blue-50 border border-blue-100 rounded-lg p-3 animate-in fade-in slide-in-from-top-1 duration-200">
+                          <p className="text-sm text-muted-foreground bg-blue-50 border border-blue-100 rounded-lg p-3 animate-in fade-in slide-in-from-top-1 duration-200">
                             {scoreDescription}
                           </p>
                         )}
@@ -707,7 +707,7 @@ export function AssessmentPage() {
                       </p>
                     )}
                     {choices.length === 0 ? (
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         لا توجد خيارات متاحة
                       </p>
                     ) : (
@@ -715,7 +715,7 @@ export function AssessmentPage() {
                         {choices.map((option) => (
                           <label
                             key={option}
-                            className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-white cursor-pointer"
+                            className="flex items-center gap-3 p-3 border border-border rounded-lg hover:bg-white cursor-pointer"
                           >
                             <input
                               type="checkbox"
@@ -734,7 +734,7 @@ export function AssessmentPage() {
                                   );
                                 }
                               }}
-                              className="w-5 h-5 text-blue-600 rounded"
+                              className="w-5 h-5 text-blue-600 rounded-lg"
                             />
                             <span>{option}</span>
                           </label>
@@ -812,7 +812,7 @@ export function AssessmentPage() {
                       <span className="text-red-500 mr-1">*</span>
                     )}
                   </label>
-                  <p className="text-sm text-gray-500">نوع السؤال غير مدعوم</p>
+                  <p className="text-sm text-muted-foreground">نوع السؤال غير مدعوم</p>
                 </div>
               );
             })}

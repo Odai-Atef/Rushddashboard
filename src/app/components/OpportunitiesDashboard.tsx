@@ -117,7 +117,7 @@ export function OpportunitiesDashboard() {
       case 'high':
         return 'bg-red-500/20 text-red-600 dark:text-red-400 dark:text-red-400 border-red-500/30';
       default:
-        return 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground';
     }
   };
 
@@ -128,7 +128,7 @@ export function OpportunitiesDashboard() {
       case 'medium':
         return 'bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400';
       default:
-        return 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
+        return 'bg-muted text-muted-foreground dark:bg-muted dark:text-muted-foreground';
     }
   };
 
@@ -148,9 +148,9 @@ export function OpportunitiesDashboard() {
   return (
     <div className="space-y-6 md:space-y-8">
       {/* Header */}
-      <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">لوحة الفرص</h2>
-        <p className="text-gray-500 dark:text-gray-400 text-base">اكتشاف فرص النمو والاستثمار والشراكات الاستراتيجية</p>
+      <div className="border-b border-border dark:border-border pb-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-2">لوحة الفرص</h2>
+        <p className="text-muted-foreground dark:text-muted-foreground text-base">اكتشاف فرص النمو والاستثمار والشراكات الاستراتيجية</p>
       </div>
 
       {/* AI Opportunity Recommendation */}
@@ -164,7 +164,7 @@ export function OpportunitiesDashboard() {
               <h3 className="text-xl">توصية الفرص</h3>
               <span className="px-2 py-1 bg-purple-500/20 text-violet-600 dark:text-violet-400 dark:text-purple-400 text-xs rounded-full">AI</span>
             </div>
-            <p className="text-gray-900 dark:text-white leading-relaxed mb-4">
+            <p className="text-foreground dark:text-white leading-relaxed mb-4">
               تم تحديد <span className="font-bold text-violet-600 dark:text-violet-400 dark:text-purple-400">6 فرص نمو استراتيجية</span> بإجمالي إيرادات متوقعة 15.9M ر.س.
               أعلى الفرص هي <span className="font-bold">التوسع في أسواق الخليج</span> بدرجة فرصة 92/100 وعائد متوقع 4.5M ر.س.
               <span className="font-bold text-emerald-600 dark:text-emerald-400"> 3 فرص منخفضة المخاطر</span> يمكن البدء بها فوراً باستثمار إجمالي 1.08M ر.س.
@@ -182,7 +182,7 @@ export function OpportunitiesDashboard() {
             return (
               <div
                 key={opp.id}
-                className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-6 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 hover:shadow-md dark:hover:shadow-purple-500/10 transition-all duration-200 flex flex-col justify-between h-full"
+                className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-6 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 hover:shadow-md dark:hover:shadow-purple-500/10 transition-all duration-200 flex flex-col justify-between h-full"
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-4">
@@ -190,18 +190,18 @@ export function OpportunitiesDashboard() {
                     <Icon className="w-6 h-6 text-violet-600 dark:text-violet-400 dark:text-purple-400" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">{opp.title}</h4>
-                    <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{opp.description}</p>
+                    <h4 className="text-lg font-medium text-foreground dark:text-white mb-2">{opp.title}</h4>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground leading-relaxed">{opp.description}</p>
                   </div>
                 </div>
 
                 {/* Opportunity Score */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">درجة الفرصة</span>
+                    <span className="text-sm text-muted-foreground dark:text-muted-foreground">درجة الفرصة</span>
                     <span className="text-3xl font-bold text-violet-600 dark:text-violet-400 dark:text-purple-400 tracking-tight">{opp.opportunityScore}/100</span>
                   </div>
-                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div className="h-2 bg-muted dark:bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-l from-purple-500 to-blue-600 rounded-full"
                       style={{ width: `${opp.opportunityScore}%` }}
@@ -222,18 +222,18 @@ export function OpportunitiesDashboard() {
                 </div>
 
                 {/* Metrics */}
-                <div className="grid grid-cols-3 gap-4 py-4 border-t border-gray-200 dark:border-gray-700">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-4 border-t border-border dark:border-border">
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">العائد المتوقع</p>
+                    <p className="text-xs text-muted-foreground dark:text-muted-foreground mb-1">العائد المتوقع</p>
                     <p className="font-medium text-emerald-600 dark:text-emerald-400 dark:text-green-400">{opp.expectedRevenue}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">الاستثمار</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{opp.investment}</p>
+                    <p className="text-xs text-muted-foreground dark:text-muted-foreground mb-1">الاستثمار</p>
+                    <p className="font-medium text-foreground dark:text-white">{opp.investment}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">المدة</p>
-                    <p className="font-medium text-gray-900 dark:text-white">{opp.timeline}</p>
+                    <p className="text-xs text-muted-foreground dark:text-muted-foreground mb-1">المدة</p>
+                    <p className="font-medium text-foreground dark:text-white">{opp.timeline}</p>
                   </div>
                 </div>
 
@@ -242,7 +242,7 @@ export function OpportunitiesDashboard() {
                   <button className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm">
                     دراسة الفرصة
                   </button>
-                  <button className="px-4 py-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm text-gray-700 dark:text-gray-300">
+                  <button className="px-4 py-2 border border-border dark:border-border hover:bg-secondary dark:hover:bg-muted rounded-lg transition-colors text-sm text-foreground dark:text-muted-foreground">
                     التفاصيل
                   </button>
                 </div>
@@ -253,22 +253,22 @@ export function OpportunitiesDashboard() {
       </div>
 
       {/* New Programs Section */}
-      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+      <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
         <div className="flex items-center gap-2 mb-6">
           <Package className="w-5 h-5 text-emerald-600" />
           <h3 className="text-lg">البرامج الجديدة قيد التطوير</h3>
         </div>
         <div className="space-y-4">
           {newPrograms.map((program) => (
-            <div key={program.id} className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+            <div key={program.id} className="p-4 bg-secondary dark:bg-muted/50 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <h4 className="font-medium">{program.name}</h4>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
+                <span className="text-sm text-muted-foreground dark:text-muted-foreground">
                   {program.status === 'planning' ? 'تخطيط' : program.status === 'research' ? 'بحث' : 'تصميم'}
                 </span>
               </div>
               <div className="flex items-center gap-3">
-                <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <div className="flex-1 h-2 bg-muted dark:bg-muted rounded-full overflow-hidden">
                   <div
                     className="h-full bg-emerald-600 rounded-full"
                     style={{ width: `${program.completion}%` }}
@@ -282,8 +282,8 @@ export function OpportunitiesDashboard() {
       </div>
 
       {/* Partnerships Table */}
-      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
-        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
+        <div className="p-6 border-b border-border dark:border-border">
           <div className="flex items-center gap-2">
             <Handshake className="w-5 h-5 text-emerald-600" />
             <h3 className="text-lg">الشراكات المحتملة</h3>
@@ -291,21 +291,21 @@ export function OpportunitiesDashboard() {
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-50 dark:bg-gray-800/50">
+            <thead className="bg-secondary dark:bg-muted/50">
               <tr>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الشريك</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">النوع</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الحالة</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الإمكانات</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">الشريك</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">النوع</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">الحالة</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground dark:text-muted-foreground">الإمكانات</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {partnerships.map((partner) => (
-                <tr key={partner.id} className="hover:bg-gray-50 dark:bg-gray-800/50 transition-colors">
+                <tr key={partner.id} className="hover:bg-secondary dark:bg-muted/50 transition-colors">
                   <td className="px-6 py-4">
                     <p className="font-medium">{partner.partner}</p>
                   </td>
-                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
+                  <td className="px-6 py-4 text-muted-foreground dark:text-muted-foreground">
                     {partner.type}
                   </td>
                   <td className="px-6 py-4">

@@ -384,10 +384,10 @@ export function ProjectCreatePage() {
 
   if (isEntityManager && isLoadingEligibility) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-          <p className="text-gray-600">جارٍ التحقق من إمكانية إنشاء المشاريع...</p>
+          <p className="text-muted-foreground">جارٍ التحقق من إمكانية إنشاء المشاريع...</p>
         </div>
       </div>
     );
@@ -395,10 +395,10 @@ export function ProjectCreatePage() {
 
   if (isProjectManager && isLoadingEligibleOrganizations) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
-          <p className="text-gray-600">جارٍ تحميل الجهات المؤهلة...</p>
+          <p className="text-muted-foreground">جارٍ تحميل الجهات المؤهلة...</p>
         </div>
       </div>
     );
@@ -408,7 +408,7 @@ export function ProjectCreatePage() {
     (isEntityManager ? eligibilityError : eligibleOrganizationsError) || error || null;
 
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto">
         <div className="mb-4 sm:mb-6">
           <button
@@ -419,10 +419,10 @@ export function ProjectCreatePage() {
             رجوع إلى قائمة المشاريع
           </button>
           <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">إنشاء مشروع جديد</h1>
-          <p className="text-gray-600 text-sm sm:text-base">املأ التفاصيل الأساسية للمشروع</p>
+          <p className="text-muted-foreground text-sm sm:text-base">املأ التفاصيل الأساسية للمشروع</p>
         </div>
 
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-4 sm:p-8">
+        <div className="bg-card rounded-xl border border-border shadow-sm p-4 sm:p-8">
           <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
             {eligibilityBannerMessage && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
@@ -448,7 +448,7 @@ export function ProjectCreatePage() {
                 <label className="block text-sm font-medium mb-2">الجهة *</label>
                 {organizationError && <p className="text-red-600 text-sm mb-1">{organizationError}</p>}
                 {isLoadingOrganization ? (
-                  <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                  <div className="w-full px-4 py-3 border border-border rounded-lg bg-secondary text-muted-foreground">
                     جاري تحميل الجهات...
                   </div>
                 ) : (
@@ -456,7 +456,7 @@ export function ProjectCreatePage() {
                     value={formData.organizationId}
                     onChange={(e) => updateField('organizationId', e.target.value)}
                     disabled={formDisabled || organizationOptions.length === 0}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                    className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
                   >
                     {organizationOptions.map((org) => (
                       <option key={org.id} value={org.id}>
@@ -479,7 +479,7 @@ export function ProjectCreatePage() {
                 value={formData.name}
                 onChange={(e) => updateField('name', e.target.value)}
                 disabled={formDisabled}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
                 placeholder="مثال: برنامج الأسر المنتجة"
               />
             </div>
@@ -488,11 +488,11 @@ export function ProjectCreatePage() {
               <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
               {getFieldError('fundingAreaIds') && <p className="text-red-600 text-sm mb-1">{getFieldError('fundingAreaIds')}</p>}
               {isLoadingFundingAreas ? (
-                <div className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-500">
+                <div className="w-full px-4 py-3 border border-border rounded-lg bg-secondary text-muted-foreground">
                   جاري تحميل مجالات المشاريع...
                 </div>
               ) : fundingAreas.length === 0 ? (
-                <p className="text-sm text-gray-500">لا توجد مجالات مشاريع متاحة حالياً.</p>
+                <p className="text-sm text-muted-foreground">لا توجد مجالات مشاريع متاحة حالياً.</p>
               ) : (
                 <MultiSelect
                   options={fundingAreas.map((area) => ({ value: area.id, label: area.name }))}
@@ -525,7 +525,7 @@ export function ProjectCreatePage() {
                 onChange={(e) => updateField('description', e.target.value)}
                 rows={4}
                 disabled={formDisabled}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
                 placeholder="اكتب وصفاً تفصيلياً للمشروع..."
               />
             </div>
@@ -539,7 +539,7 @@ export function ProjectCreatePage() {
                   value={formData.budget}
                   onChange={(e) => updateField('budget', e.target.value)}
                   disabled={formDisabled}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
                   placeholder="250000"
                 />
               </div>
@@ -551,7 +551,7 @@ export function ProjectCreatePage() {
                   value={formData.beneficiaries}
                   onChange={(e) => updateField('beneficiaries', e.target.value)}
                   disabled={formDisabled}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
                   placeholder="مثال: الأسر المحتاجة"
                 />
               </div>
@@ -568,7 +568,7 @@ export function ProjectCreatePage() {
                   value={formData.beneficiariesCount}
                   onChange={(e) => updateField('beneficiariesCount', e.target.value)}
                   disabled={formDisabled}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
                   placeholder="مثال: 500"
                 />
               </div>
@@ -580,7 +580,7 @@ export function ProjectCreatePage() {
                   value={formData.geographicScope}
                   onChange={(e) => updateField('geographicScope', e.target.value)}
                   disabled={formDisabled}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-gray-50 disabled:text-gray-500 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
                   placeholder="مثال: الرياض"
                 />
               </div>
@@ -591,34 +591,34 @@ export function ProjectCreatePage() {
               {(getFieldError('startDate') || getFieldError('endDate')) && (
                 <p className="text-red-600 text-sm mb-1">{getFieldError('startDate') || getFieldError('endDate')}</p>
               )}
-              <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-red-50' : 'border-gray-300 focus-within:ring-2 focus-within:ring-blue-500'}`}>
+              <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-red-50' : 'border-border focus-within:ring-2 focus-within:ring-blue-500'}`}>
                 <div
                   className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
                   onClick={() => startDateRef.current?.showPicker?.()}
                 >
-                  <span className="text-[10px] text-gray-400 mb-0.5">من</span>
+                  <span className="text-xs text-muted-foreground mb-0.5">من</span>
                   <input
                     ref={startDateRef}
                     type="date"
                     value={formData.startDate}
                     onChange={(e) => updateField('startDate', e.target.value)}
                     disabled={formDisabled}
-                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer disabled:cursor-not-allowed disabled:text-gray-500"
+                    className="w-full bg-transparent outline-none text-sm text-foreground cursor-pointer disabled:cursor-not-allowed disabled:text-muted-foreground"
                   />
                 </div>
-                <div className="w-px bg-gray-200 self-stretch my-2" />
+                <div className="w-px bg-muted self-stretch my-2" />
                 <div
                   className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
                   onClick={() => endDateRef.current?.showPicker?.()}
                 >
-                  <span className="text-[10px] text-gray-400 mb-0.5">إلى</span>
+                  <span className="text-xs text-muted-foreground mb-0.5">إلى</span>
                   <input
                     ref={endDateRef}
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => updateField('endDate', e.target.value)}
                     disabled={formDisabled}
-                    className="w-full bg-transparent outline-none text-sm text-gray-900 cursor-pointer disabled:cursor-not-allowed disabled:text-gray-500"
+                    className="w-full bg-transparent outline-none text-sm text-foreground cursor-pointer disabled:cursor-not-allowed disabled:text-muted-foreground"
                   />
                 </div>
               </div>
@@ -626,7 +626,7 @@ export function ProjectCreatePage() {
                 <p className="text-red-600 text-sm mt-1">{fieldErrors.startDate || fieldErrors.endDate}</p>
               )}
               {durationDays !== null && (
-                <p className="text-gray-500 text-xs mt-2">مدة المشروع: {durationDays} يوم</p>
+                <p className="text-muted-foreground text-xs mt-2">مدة المشروع: {durationDays} يوم</p>
               )}
             </div>
 
@@ -653,7 +653,7 @@ export function ProjectCreatePage() {
               <button
                 type="button"
                 onClick={() => navigate('/dashboard/project-management/list')}
-                className="px-6 py-3 text-gray-600 hover:text-gray-900 font-medium"
+                className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium"
               >
                 إلغاء
               </button>

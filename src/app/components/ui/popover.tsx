@@ -31,9 +31,9 @@ function PopoverContent({
         sideOffset={sideOffset}
         className={cn(
           "relative z-50 w-72 origin-[--radix-popover-content-transform-origin] rounded-xl border p-4 shadow-xl outline-none",
-          "bg-white dark:bg-gray-900",
+          "bg-white dark:bg-card",
           "text-gray-900 dark:text-white",
-          "border-gray-200 dark:border-gray-700",
+          "border-gray-200 dark:border-border",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",

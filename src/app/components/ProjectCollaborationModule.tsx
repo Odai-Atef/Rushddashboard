@@ -264,9 +264,9 @@ export function ProjectCollaborationModule() {
   const statusClass = (status: ConversationStatus) => {
     switch (status) {
       case 'ACTIVE': return 'bg-green-100 text-green-700';
-      case 'ARCHIVED': return 'bg-gray-100 text-gray-700';
+      case 'ARCHIVED': return 'bg-muted text-foreground';
       case 'MUTED': return 'bg-yellow-100 text-yellow-700';
-      default: return 'bg-gray-100 text-gray-700';
+      default: return 'bg-muted text-foreground';
     }
   };
 
@@ -344,58 +344,58 @@ export function ProjectCollaborationModule() {
         {/* Header */}
         <div>
           <h1 className="text-3xl font-bold mb-2">مركز الاتصالات</h1>
-          <p className="text-gray-600">لوحة التحكم المركزية لجميع تواصلات المشاريع</p>
+          <p className="text-muted-foreground">لوحة التحكم المركزية لجميع تواصلات المشاريع</p>
         </div>
 
         {/* KPI Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+          <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
             <div className="flex items-center justify-between mb-2">
-              <MessageSquare className="w-8 h-8 text-blue-600" />
+              <MessageSquare className="w-8 h-8 text-primary" />
             </div>
-            <p className="text-3xl font-bold text-gray-900">{stats.activeConversations}</p>
-            <p className="text-sm text-gray-600 mt-1">محادثات نشطة</p>
+            <p className="text-3xl font-bold text-foreground">{stats.activeConversations}</p>
+            <p className="text-sm text-muted-foreground mt-1">محادثات نشطة</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-blue-200 shadow-sm">
+          <div className="bg-card rounded-xl p-6 border border-primary/20 shadow-sm">
             <div className="flex items-center justify-between mb-2">
-              <Bell className="w-8 h-8 text-blue-600" />
+              <Bell className="w-8 h-8 text-primary" />
             </div>
-            <p className="text-3xl font-bold text-blue-600">{stats.unreadMessages}</p>
-            <p className="text-sm text-gray-600 mt-1">رسائل غير مقروءة</p>
+            <p className="text-3xl font-bold text-primary">{stats.unreadMessages}</p>
+            <p className="text-sm text-muted-foreground mt-1">رسائل غير مقروءة</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-yellow-200 shadow-sm">
+          <div className="bg-card rounded-xl p-6 border border-yellow-200 shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <Clock className="w-8 h-8 text-yellow-600" />
             </div>
             <p className="text-3xl font-bold text-yellow-600">{stats.pendingResponses}</p>
-            <p className="text-sm text-gray-600 mt-1">بانتظار رد</p>
+            <p className="text-sm text-muted-foreground mt-1">بانتظار رد</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-red-200 shadow-sm">
+          <div className="bg-card rounded-xl p-6 border border-red-200 shadow-sm">
             <div className="flex items-center justify-between mb-2">
               <AlertCircle className="w-8 h-8 text-red-600" />
             </div>
             <p className="text-3xl font-bold text-red-600">{stats.delayedResponses}</p>
-            <p className="text-sm text-gray-600 mt-1">ردود متأخرة</p>
+            <p className="text-sm text-muted-foreground mt-1">ردود متأخرة</p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
+        <div className="bg-card rounded-xl p-4 border border-border">
           <div className="flex flex-wrap gap-3">
             <div className="relative flex-1 min-w-64">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="بحث في المحادثات..."
-                className="w-full pr-10 pl-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+            <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
               <option>جميع المشاريع</option>
               <option>برنامج الأسر المنتجة</option>
               <option>مشروع كفالة الأيتام</option>
@@ -403,7 +403,7 @@ export function ProjectCollaborationModule() {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">جميع الحالات</option>
               <option value="active">نشطة</option>
@@ -414,17 +414,17 @@ export function ProjectCollaborationModule() {
         </div>
 
         {/* Conversations List */}
-        <div className="bg-white rounded-xl border border-gray-200 shadow-sm">
-          <div className="p-6 border-b border-gray-200 flex items-center justify-between">
+        <div className="bg-card rounded-xl border border-border shadow-sm">
+          <div className="p-6 border-b border-border flex items-center justify-between">
             <h2 className="text-lg font-semibold">المحادثات النشطة</h2>
-            {conversationsLoading && <Loader2 className="w-5 h-5 animate-spin text-blue-600" />}
+            {conversationsLoading && <Loader2 className="w-5 h-5 animate-spin text-primary" />}
           </div>
           {conversationsError && (
             <div className="p-6 text-center">
               <p className="text-red-600 mb-3">{conversationsError}</p>
               <button
                 onClick={() => refetchConversations()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
               >
                 <RefreshCw className="w-4 h-4" />
                 إعادة المحاولة
@@ -432,7 +432,7 @@ export function ProjectCollaborationModule() {
             </div>
           )}
           {!conversationsError && conversations.length === 0 && !conversationsLoading && (
-            <div className="p-6 text-center text-gray-500">لا توجد محادثات حالياً</div>
+            <div className="p-6 text-center text-muted-foreground">لا توجد محادثات حالياً</div>
           )}
           <div className="divide-y divide-gray-200">
             {conversations.map((conv) => (
@@ -440,26 +440,26 @@ export function ProjectCollaborationModule() {
                 to={projectId ? `/dashboard/collaboration/${projectId}/chat?conv=${conv.id}` : '/dashboard/collaboration/chat'}
                 key={conv.id}
                 onClick={() => selectConversation(conv.id)}
-                className="w-full p-6 hover:bg-gray-50 transition-colors text-right block"
+                className="w-full p-6 hover:bg-secondary transition-colors text-right block"
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-1">
                       <h3 className="font-semibold text-lg">{conv.title || 'محادثة'}</h3>
                       {(unreadOverrides[conv.id] ?? conv.unreadCount) > 0 && (
-                        <span className="px-2 py-0.5 bg-blue-600 text-white text-xs rounded-full font-medium">
+                        <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs rounded-full font-medium">
                           {unreadOverrides[conv.id] ?? conv.unreadCount}
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600 mb-2">{conv.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : conv.type === 'DIRECT_MESSAGE' ? 'رسالة مباشرة' : 'تنبيه'}</p>
-                    <p className="text-sm text-gray-700">{conv.lastMessageText || 'لا توجد رسائل'}</p>
+                    <p className="text-sm text-muted-foreground mb-2">{conv.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : conv.type === 'DIRECT_MESSAGE' ? 'رسالة مباشرة' : 'تنبيه'}</p>
+                    <p className="text-sm text-foreground">{conv.lastMessageText || 'لا توجد رسائل'}</p>
                   </div>
                   <div className="text-left">
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium mb-2 ${statusClass(conv.status)}`}>
                       {statusLabel(conv.status)}
                     </span>
-                    <p className="text-xs text-gray-500">{formatDateTime(conv.lastMessageAt)}</p>
+                    <p className="text-xs text-muted-foreground">{formatDateTime(conv.lastMessageAt)}</p>
                   </div>
                 </div>
               </Link>
@@ -468,23 +468,23 @@ export function ProjectCollaborationModule() {
         </div>
 
         {/* Recent Attachments */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+        <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">المرفقات الأخيرة</h3>
             <Link
               to="/dashboard/collaboration/attachments"
-              className="text-sm text-blue-600 hover:text-blue-700"
+              className="text-sm text-primary hover:text-primary/80"
             >
               عرض الكل
             </Link>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {attachments.slice(0, 3).map((att) => (
-              <div key={att.id} className="flex items-center gap-3 p-4 border border-gray-200 rounded-lg">
-                <Paperclip className="w-5 h-5 text-gray-400" />
+              <div key={att.id} className="flex items-center gap-3 p-4 border border-border rounded-lg">
+                <Paperclip className="w-5 h-5 text-muted-foreground" />
                 <div className="flex-1 min-w-0">
                   <p className="font-medium text-sm truncate">{att.name}</p>
-                  <p className="text-xs text-gray-500">{att.uploadedBy} • {att.uploadDate}</p>
+                  <p className="text-xs text-muted-foreground">{att.uploadedBy} • {att.uploadDate}</p>
                 </div>
               </div>
             ))}
@@ -495,30 +495,30 @@ export function ProjectCollaborationModule() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <Link
             to={projectId ? `/dashboard/collaboration/${projectId}/chat` : '/dashboard/collaboration/chat'}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
           >
-            <MessageSquare className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+            <MessageSquare className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
             <p className="font-medium text-sm">بدء محادثة</p>
           </Link>
           <Link
             to={projectId ? `/dashboard/collaboration/${projectId}/discussions` : '/dashboard/collaboration/discussions'}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
           >
-            <GitBranch className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+            <GitBranch className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
             <p className="font-medium text-sm">المناقشات</p>
           </Link>
           <Link
             to={projectId ? `/dashboard/collaboration/${projectId}/revisions` : '/dashboard/collaboration/revisions'}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
           >
-            <Edit className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+            <Edit className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
             <p className="font-medium text-sm">طلبات التعديل</p>
           </Link>
           <Link
             to={projectId ? `/dashboard/collaboration/${projectId}/sla` : '/dashboard/collaboration/sla'}
-            className="p-6 bg-white border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+            className="p-6 bg-card border-2 border-dashed border-border rounded-xl hover:border-primary hover:bg-primary/5 transition-colors text-center"
           >
-            <BarChart3 className="w-8 h-8 text-gray-400 mx-auto mb-3" />
+            <BarChart3 className="w-8 h-8 text-muted-foreground mx-auto mb-3" />
             <p className="font-medium text-sm">التحليلات</p>
           </Link>
         </div>
@@ -719,29 +719,29 @@ function ChatView({
       <div className="space-y-4">
         <button
           onClick={() => navigate('/dashboard/project-management/list')}
-          className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2"
+          className="text-primary hover:text-primary/80 font-medium flex items-center gap-2"
         >
           <ChevronRight className="w-5 h-5" />
           رجوع إلى قائمة المشاريع
         </button>
         <div className="h-[calc(100vh-240px)] flex gap-4 overflow-hidden">
         {/* Left Panel - Conversations */}
-        <div className="w-80 bg-white rounded-xl border border-gray-200 flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-gray-200">
+        <div className="w-80 bg-card rounded-xl border border-border flex flex-col overflow-hidden">
+          <div className="p-4 border-b border-border">
             <div className="relative mb-3">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="بحث..."
-                className="w-full pr-9 pl-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+                className="w-full pr-9 pl-3 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div className="flex items-center justify-between">
               <Link
                 to={projectId ? `/dashboard/collaboration/${projectId}/hub` : '/dashboard/collaboration/hub'}
-                className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                className="text-sm text-primary hover:text-primary/80 flex items-center gap-1"
               >
                 <ChevronRight className="w-4 h-4" />
                 رجوع للمركز
@@ -749,7 +749,7 @@ function ChatView({
               {!showNewConversation && conversations.length > 0 && (
                 <button
                   onClick={() => setShowNewConversation(true)}
-                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                  className="text-sm text-primary hover:text-primary/80 flex items-center gap-1"
                   title="إنشاء محادثة جديدة"
                 >
                   <Plus className="w-4 h-4" />
@@ -762,7 +762,7 @@ function ChatView({
             {conversationsLoading && conversations.length === 0 && (
               <div className="p-4 space-y-3">
                 {[1, 2, 3].map((n) => (
-                  <div key={n} className="h-16 bg-gray-100 rounded-lg animate-pulse" />
+                  <div key={n} className="h-16 bg-muted rounded-lg animate-pulse" />
                 ))}
               </div>
             )}
@@ -771,7 +771,7 @@ function ChatView({
                 <p className="text-red-600 text-sm mb-2">{conversationsError}</p>
                 <button
                   onClick={() => refetchConversations()}
-                  className="text-sm text-blue-600 hover:text-blue-700"
+                  className="text-sm text-primary hover:text-primary/80"
                 >
                   إعادة المحاولة
                 </button>
@@ -779,10 +779,10 @@ function ChatView({
             )}
             {!conversationsLoading && !conversationsError && conversations.length === 0 && !showNewConversation && (
               <div className="p-4 text-center">
-                <p className="text-gray-500 text-sm mb-3">لا توجد محادثات</p>
+                <p className="text-muted-foreground text-sm mb-3">لا توجد محادثات</p>
                 <button
                   onClick={() => setShowNewConversation(true)}
-                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 justify-center mx-auto"
+                  className="text-sm text-primary hover:text-primary/80 flex items-center gap-1 justify-center mx-auto"
                 >
                   <Plus className="w-4 h-4" />
                   إنشاء محادثة جديدة
@@ -790,7 +790,7 @@ function ChatView({
               </div>
             )}
             {showNewConversation && (
-              <div className="p-4 border-b border-gray-200 bg-blue-50">
+              <div className="p-4 border-b border-border bg-primary/10">
                 <label className="block text-sm font-medium mb-2">عنوان المحادثة</label>
                 <input
                   type="text"
@@ -798,19 +798,19 @@ function ChatView({
                   onChange={(e) => setNewConversationTitle(e.target.value)}
                   onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); createConversation(); } }}
                   placeholder="مثال: محادثة فريق المشروع"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 mb-3"
+                  className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 mb-3"
                 />
                 <div className="flex gap-2">
                   <button
                     onClick={createConversation}
                     disabled={isCreatingConversation || !newConversationTitle.trim()}
-                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700 disabled:opacity-50"
+                    className="flex-1 px-3 py-2 bg-primary text-primary-foreground rounded-lg text-sm hover:bg-primary/90 disabled:opacity-50"
                   >
                     {isCreatingConversation ? 'جاري الإنشاء...' : 'إنشاء'}
                   </button>
                   <button
                     onClick={() => { setShowNewConversation(false); setNewConversationTitle(''); }}
-                    className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200"
+                    className="flex-1 px-3 py-2 bg-muted text-foreground rounded-lg text-sm hover:bg-muted"
                   >
                     إلغاء
                   </button>
@@ -821,8 +821,8 @@ function ChatView({
               <button
                 key={conv.id}
                 onClick={() => selectConversation(conv.id)}
-                className={`relative w-full p-4 border-b border-gray-200 hover:bg-gray-50 text-right ${
-                  selectedConversation === conv.id ? 'bg-blue-50' : ''
+                className={`relative w-full p-4 border-b border-border hover:bg-secondary text-right ${
+                  selectedConversation === conv.id ? 'bg-primary/10' : ''
                 }`}
               >
                 {(unreadOverrides[conv.id] ?? conv.unreadCount) > 0 && (
@@ -833,29 +833,29 @@ function ChatView({
                 <div className="flex items-start justify-between mb-2">
                   <h4 className="font-semibold text-sm">{conv.title || 'محادثة'}</h4>
                 </div>
-                <p className="text-xs text-gray-500 truncate">{conv.lastMessageText || 'لا توجد رسائل'}</p>
-                <p className="text-xs text-gray-400 mt-1">{formatDateTime(conv.lastMessageAt)}</p>
+                <p className="text-xs text-muted-foreground truncate">{conv.lastMessageText || 'لا توجد رسائل'}</p>
+                <p className="text-xs text-muted-foreground mt-1">{formatDateTime(conv.lastMessageAt)}</p>
               </button>
             ))}
           </div>
         </div>
 
         {/* Center - Messages */}
-        <div className="flex-1 bg-white rounded-xl border border-gray-200 flex flex-col">
+        <div className="flex-1 bg-card rounded-xl border border-border flex flex-col">
           {/* Chat Header */}
-          <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+          <div className="p-4 border-b border-border flex items-center justify-between">
             <div>
               <h3 className="font-semibold">{currentConversation?.title || 'المحادثة'}</h3>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-muted-foreground">
                 {currentConversation?.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : 'رسالة مباشرة'}
               </p>
             </div>
             <div className="flex gap-2">
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <Search className="w-5 h-5 text-gray-600" />
+              <button className="p-2 hover:bg-muted rounded-lg">
+                <Search className="w-5 h-5 text-muted-foreground" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <MoreVertical className="w-5 h-5 text-gray-600" />
+              <button className="p-2 hover:bg-muted rounded-lg">
+                <MoreVertical className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>
           </div>
@@ -871,7 +871,7 @@ function ChatView({
                 <p className="text-red-600 mb-3">{messagesError}</p>
                 <button
                   onClick={() => { clearError(); loadMessages(true); }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+                  className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
                 >
                   <RefreshCw className="w-4 h-4" />
                   إعادة المحاولة
@@ -879,12 +879,12 @@ function ChatView({
               </div>
             )}
             {!selectedConversation && !messagesError && (
-              <div className="h-full flex items-center justify-center text-gray-500">
+              <div className="h-full flex items-center justify-center text-muted-foreground">
                 اختر محادثة لعرض الرسائل
               </div>
             )}
             {selectedConversation && !messagesLoading && messages.length === 0 && !messagesError && (
-              <div className="h-full flex items-center justify-center text-gray-500">
+              <div className="h-full flex items-center justify-center text-muted-foreground">
                 لا توجد رسائل في هذه المحادثة
               </div>
             )}
@@ -892,7 +892,7 @@ function ChatView({
               <div className="text-center">
                 <button
                   onClick={() => loadMessages()}
-                  className="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1 mx-auto"
+                  className="text-sm text-primary hover:text-primary/80 flex items-center gap-1 mx-auto"
                 >
                   <RefreshCw className="w-4 h-4" />
                   تحميل المزيد
@@ -903,10 +903,10 @@ function ChatView({
               <div className="space-y-4">
                 {[1, 2, 3].map((n) => (
                   <div key={n} className="flex gap-3">
-                    <div className="w-10 h-10 bg-gray-100 rounded-full animate-pulse" />
+                    <div className="w-10 h-10 bg-muted rounded-full animate-pulse" />
                     <div className="flex-1 space-y-2">
-                      <div className="h-3 w-24 bg-gray-100 rounded animate-pulse" />
-                      <div className="h-10 w-2/3 bg-gray-100 rounded animate-pulse" />
+                      <div className="h-3 w-24 bg-muted rounded-lg animate-pulse" />
+                      <div className="h-10 w-2/3 bg-muted rounded-lg animate-pulse" />
                     </div>
                   </div>
                 ))}
@@ -935,31 +935,31 @@ function ChatView({
           </div>
 
           {/* Message Input */}
-          <div className="p-4 border-t border-gray-200">
+          <div className="p-4 border-t border-border">
             {replyPreview && (
-              <div className="mb-2 p-2 bg-gray-50 border border-gray-200 rounded-lg flex items-center justify-between">
-                <div className="text-sm text-gray-600 truncate max-w-md">
-                  <span className="font-medium text-gray-700">رد على:</span>{' '}
+              <div className="mb-2 p-2 bg-secondary border border-border rounded-lg flex items-center justify-between">
+                <div className="text-sm text-muted-foreground truncate max-w-md">
+                  <span className="font-medium text-foreground">رد على:</span>{' '}
                   {replyPreview}
                 </div>
                 <button
                   onClick={cancelReply}
-                  className="p-1 hover:bg-gray-200 rounded"
+                  className="p-1 hover:bg-muted rounded-lg"
                   aria-label="إلغاء الرد"
                 >
-                  <X className="w-4 h-4 text-gray-500" />
+                  <X className="w-4 h-4 text-muted-foreground" />
                 </button>
               </div>
             )}
             <div className="flex gap-3">
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <Paperclip className="w-5 h-5 text-gray-600" />
+              <button className="p-2 hover:bg-muted rounded-lg">
+                <Paperclip className="w-5 h-5 text-muted-foreground" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <ImageIcon className="w-5 h-5 text-gray-600" />
+              <button className="p-2 hover:bg-muted rounded-lg">
+                <ImageIcon className="w-5 h-5 text-muted-foreground" />
               </button>
-              <button className="p-2 hover:bg-gray-100 rounded-lg">
-                <Mic className="w-5 h-5 text-gray-600" />
+              <button className="p-2 hover:bg-muted rounded-lg">
+                <Mic className="w-5 h-5 text-muted-foreground" />
               </button>
               <input
                 type="text"
@@ -967,12 +967,12 @@ function ChatView({
                 onChange={(e) => setMessageInput(e.target.value)}
                 onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); } }}
                 placeholder="اكتب رسالتك..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
               />
               <button
                 onClick={handleSend}
                 disabled={isSending || !messageInput.trim()}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 disabled:opacity-60"
+                className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 disabled:opacity-60"
               >
                 {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
                 إرسال
@@ -983,9 +983,9 @@ function ChatView({
           {/* Delete Confirmation */}
           {deleteTargetId && (
             <div className="absolute inset-0 bg-black/30 flex items-center justify-center z-50">
-              <div className="bg-white rounded-xl p-6 shadow-lg max-w-sm w-full mx-4">
+              <div className="bg-card rounded-xl p-6 shadow-lg max-w-sm w-full mx-4">
                 <h3 className="font-semibold mb-2">حذف الرسالة</h3>
-                <p className="text-sm text-gray-600 mb-4">هل أنت متأكد من حذف هذه الرسالة؟</p>
+                <p className="text-sm text-muted-foreground mb-4">هل أنت متأكد من حذف هذه الرسالة؟</p>
                 <div className="flex gap-3">
                   <button
                     onClick={confirmDelete}
@@ -995,7 +995,7 @@ function ChatView({
                   </button>
                   <button
                     onClick={() => setDeleteTargetId(null)}
-                    className="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                    className="flex-1 px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted"
                   >
                     إلغاء
                   </button>
@@ -1076,7 +1076,7 @@ function MessageBubble({
     if (mimeType.startsWith('video/')) return <Film className="w-5 h-5" />;
     if (mimeType.startsWith('audio/')) return <Mic className="w-5 h-5" />;
     if (mimeType.includes('pdf')) return <FileText className="w-5 h-5 !text-red-600" />;
-    if (mimeType.includes('word') || mimeType.includes('officedocument')) return <FileText className="w-5 h-5 !text-blue-600" />;
+    if (mimeType.includes('word') || mimeType.includes('officedocument')) return <FileText className="w-5 h-5 !text-primary" />;
     return <File className="w-5 h-5" />;
   };
 
@@ -1103,7 +1103,7 @@ function MessageBubble({
   if (msg.deletedAt) {
     return (
       <div className="flex justify-center my-2">
-        <span className="text-xs text-gray-400 italic">تم حذف هذه الرسالة</span>
+        <span className="text-xs text-muted-foreground italic">تم حذف هذه الرسالة</span>
       </div>
     );
   }
@@ -1120,19 +1120,19 @@ function MessageBubble({
               if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
               if (e.key === 'Escape') { onCancelEdit(); }
             }}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+            className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
             autoFocus
           />
           <div className={`flex gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
             <button
               onClick={() => onSubmitEdit(msg.id)}
-              className="text-xs px-2 py-1 bg-blue-600 text-white rounded"
+              className="text-xs px-2 py-1 bg-primary text-primary-foreground rounded-lg"
             >
               حفظ
             </button>
             <button
               onClick={onCancelEdit}
-              className="text-xs px-2 py-1 bg-gray-100 text-gray-700 rounded"
+              className="text-xs px-2 py-1 bg-muted text-foreground rounded-lg"
             >
               إلغاء
             </button>
@@ -1145,7 +1145,7 @@ function MessageBubble({
         )}
         {!isOwn && (
           <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-            <User className="w-5 h-5 text-blue-600" />
+            <User className="w-5 h-5 text-primary" />
           </div>
         )}
       </div>
@@ -1162,17 +1162,17 @@ function MessageBubble({
       <div className={`max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
         <div className="flex items-center gap-2 mb-1 justify-end">
           <span className="font-medium text-sm">{msg.senderUserId === messageCurrentUserId ? 'أنت' : (msg.sender?.fullName || msg.senderUserId.slice(0, 8))}</span>
-          {msg.editedAt && <span className="text-xs text-gray-400">(تم التعديل)</span>}
+          {msg.editedAt && <span className="text-xs text-muted-foreground">(تم التعديل)</span>}
         </div>
         {msg.replyToId && (
-          <div className="text-xs text-gray-500 mb-1">
+          <div className="text-xs text-muted-foreground mb-1">
             رد على رسالة
           </div>
         )}
-        <div className={`inline-block p-3 rounded-lg text-right ${isOwn ? 'bg-green-100 text-gray-900' : 'bg-gray-100 text-gray-900'}`}>
+        <div className={`inline-block p-3 rounded-lg text-right ${isOwn ? 'bg-green-100 text-foreground' : 'bg-muted text-foreground'}`}>
           <div
             dir="rtl"
-            className="text-sm prose prose-sm max-w-none break-words text-right [&>*]:text-right [&_a]:underline [&_pre]:p-2 [&_pre]:rounded [&_pre]:bg-gray-200 [&_code]:text-gray-800 [&_code]:bg-gray-200 [&_code]:px-1 [&_code]:rounded"
+            className="text-sm prose prose-sm max-w-none break-words text-right [&>*]:text-right [&_a]:underline [&_pre]:p-2 [&_pre]:rounded-lg [&_pre]:bg-muted [&_code]:text-foreground [&_code]:bg-muted [&_code]:px-1 [&_code]:rounded"
           >
             <Markdown remarkPlugins={[remarkGfm]}>{msg.content || '\u00A0'}</Markdown>
           </div>
@@ -1183,9 +1183,9 @@ function MessageBubble({
                   key={attachment.id}
                   onClick={() => handleDownloadAttachment(attachment)}
                   disabled={downloadingAttachmentId === attachment.id}
-                  className="w-full flex items-center gap-3 p-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition-colors text-right disabled:opacity-50"
+                  className="w-full flex items-center gap-3 p-2 rounded-lg bg-card border border-border hover:bg-secondary transition-colors text-right disabled:opacity-50"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center flex-shrink-0 text-blue-600">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary">
                     {downloadingAttachmentId === attachment.id ? (
                       <Loader2 className="w-5 h-5 animate-spin" />
                     ) : (
@@ -1193,32 +1193,32 @@ function MessageBubble({
                     )}
                   </div>
                   <div className="flex-1 min-w-0 text-right">
-                    <p className="text-sm font-medium truncate text-gray-900">
+                    <p className="text-sm font-medium truncate text-foreground">
                       {attachment.file?.originalName || attachment.fileName || 'ملف مرفق'}
                     </p>
                     {attachment.file?.size !== undefined && (
-                      <p className="text-xs text-gray-500">{formatBytes(attachment.file.size)}</p>
+                      <p className="text-xs text-muted-foreground">{formatBytes(attachment.file.size)}</p>
                     )}
                   </div>
-                  <Download className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                  <Download className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                 </button>
               ))}
             </div>
           )}
         </div>
         <div className={`flex items-center gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
-          <span className="text-xs text-gray-500">{formatDateTime(msg.createdAt)}</span>
-          {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-blue-600" />}
-          {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-gray-400" />}
-          {msg.status === 'SENT' && <Check className="w-4 h-4 text-gray-400" />}
-          {msg.status === 'SENDING' && <Loader2 className="w-4 h-4 text-gray-400 animate-spin" />}
+          <span className="text-xs text-muted-foreground">{formatDateTime(msg.createdAt)}</span>
+          {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-primary" />}
+          {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-muted-foreground" />}
+          {msg.status === 'SENT' && <Check className="w-4 h-4 text-muted-foreground" />}
+          {msg.status === 'SENDING' && <Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />}
           {msg.status === 'FAILED' && (
             <button onClick={() => onRetry(msg.id)} className="text-xs text-red-600 underline">
               فشل - إعادة
             </button>
           )}
           {!isOwn && (
-            <button onClick={() => onReply(msg)} className="text-xs text-gray-500 hover:text-blue-600">
+            <button onClick={() => onReply(msg)} className="text-xs text-muted-foreground hover:text-primary">
               رد
             </button>
           )}
@@ -1233,7 +1233,7 @@ function MessageBubble({
       )}
       {!isOwn && (
         <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-          <User className="w-5 h-5 text-blue-600" />
+          <User className="w-5 h-5 text-primary" />
         </div>
       )}
     </div>
@@ -1384,8 +1384,8 @@ const DiscussionsView = () => {
       switch (status) {
         case 'OPEN': return 'bg-blue-100 text-blue-700';
         case 'RESOLVED': return 'bg-green-100 text-green-700';
-        case 'CLOSED': return 'bg-gray-100 text-gray-700';
-        default: return 'bg-gray-100 text-gray-700';
+        case 'CLOSED': return 'bg-muted text-foreground';
+        default: return 'bg-muted text-foreground';
       }
     };
 
@@ -1402,11 +1402,11 @@ const DiscussionsView = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">المناقشات المترابطة</h1>
-            <p className="text-gray-600">نقاشات على أقسام المشروع</p>
+            <p className="text-muted-foreground">نقاشات على أقسام المشروع</p>
           </div>
           <button
             onClick={() => setShowNewDiscussion(!showNewDiscussion)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2"
           >
             <Plus className="w-5 h-5" />
             نقاش جديد
@@ -1421,8 +1421,8 @@ const DiscussionsView = () => {
               onClick={() => handleStatusFilter(option.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium ${
                 selectedStatus === option.value
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card text-foreground border border-border hover:bg-secondary'
               }`}
             >
               {option.label}
@@ -1438,8 +1438,8 @@ const DiscussionsView = () => {
               onClick={() => handleSectionFilter(section.value)}
               className={`px-4 py-2 rounded-lg text-sm font-medium ${
                 selectedSection === section.value
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card text-foreground border border-border hover:bg-secondary'
               }`}
             >
               {section.label}
@@ -1449,7 +1449,7 @@ const DiscussionsView = () => {
 
         {/* New Discussion Form */}
         {showNewDiscussion && (
-          <div className="bg-white rounded-xl p-6 border border-blue-200 shadow-lg">
+          <div className="bg-card rounded-xl p-6 border border-primary/20 shadow-lg">
             <h3 className="font-semibold mb-4">نقاش جديد</h3>
             <div className="space-y-4">
               <div>
@@ -1459,7 +1459,7 @@ const DiscussionsView = () => {
                   value={newDiscussionTitle}
                   onChange={(e) => setNewDiscussionTitle(e.target.value)}
                   placeholder="مثال: ملاحظات على توزيع الميزانية"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 {newDiscussionErrors.title && <p className="text-red-600 text-sm mt-1">{newDiscussionErrors.title}</p>}
               </div>
@@ -1468,7 +1468,7 @@ const DiscussionsView = () => {
                 <select
                   value={newDiscussionSection}
                   onChange={(e) => setNewDiscussionSection(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                 >
                   <option value="budget">الميزانية</option>
                   <option value="timeline">الجدول الزمني</option>
@@ -1483,7 +1483,7 @@ const DiscussionsView = () => {
                   value={newDiscussionContent}
                   onChange={(e) => setNewDiscussionContent(e.target.value)}
                   placeholder="اكتب تفاصيل النقاش..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
                 {newDiscussionErrors.content && <p className="text-red-600 text-sm mt-1">{newDiscussionErrors.content}</p>}
               </div>
@@ -1491,13 +1491,13 @@ const DiscussionsView = () => {
                 <button
                   onClick={handleCreateDiscussion}
                   disabled={detailMutating}
-                  className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                  className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50"
                 >
                   {detailMutating ? 'جاري النشر...' : 'نشر النقاش'}
                 </button>
                 <button
                   onClick={() => setShowNewDiscussion(false)}
-                  className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                  className="px-6 py-2 bg-muted text-foreground rounded-lg hover:bg-muted"
                 >
                   إلغاء
                 </button>
@@ -1510,16 +1510,16 @@ const DiscussionsView = () => {
         {discussionsLoading && discussions.length === 0 && (
           <div className="space-y-4">
             {[1, 2, 3].map((n) => (
-              <div key={n} className="h-32 bg-gray-100 rounded-lg animate-pulse" />
+              <div key={n} className="h-32 bg-muted rounded-lg animate-pulse" />
             ))}
           </div>
         )}
         {discussionsError && (
-          <div className="p-6 text-center bg-white rounded-xl border border-gray-200">
+          <div className="p-6 text-center bg-card rounded-xl border border-border">
             <p className="text-red-600 mb-3">{discussionsError}</p>
             <button
               onClick={() => refetchDiscussions()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
             >
               <RefreshCw className="w-4 h-4" />
               إعادة المحاولة
@@ -1527,28 +1527,28 @@ const DiscussionsView = () => {
           </div>
         )}
         {!discussionsLoading && !discussionsError && discussions.length === 0 && (
-          <div className="p-6 text-center text-gray-500 bg-white rounded-xl border border-gray-200">
+          <div className="p-6 text-center text-muted-foreground bg-card rounded-xl border border-border">
             لا توجد مناقشات حالياً. ابدأ أول نقاش.
           </div>
         )}
 
         {/* Pagination */}
         {discussionsPagination.totalPages > 1 && (
-          <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
+          <div className="flex items-center justify-between bg-card rounded-xl p-4 border border-border">
             <button
               onClick={() => handlePageChange(Math.max(1, discussionsPagination.page - 1))}
               disabled={discussionsPagination.page <= 1}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+              className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted disabled:opacity-50"
             >
               السابق
             </button>
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-foreground">
               صفحة {discussionsPagination.page} من {discussionsPagination.totalPages}
             </span>
             <button
               onClick={() => handlePageChange(Math.min(discussionsPagination.totalPages, discussionsPagination.page + 1))}
               disabled={discussionsPagination.page >= discussionsPagination.totalPages}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+              className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted disabled:opacity-50"
             >
               التالي
             </button>
@@ -1558,21 +1558,21 @@ const DiscussionsView = () => {
         {/* Discussions List */}
         <div className="space-y-4">
           {discussions.map((discussionItem) => (
-            <div key={discussionItem.id} className="bg-white rounded-xl border border-gray-200 shadow-sm">
+            <div key={discussionItem.id} className="bg-card rounded-xl border border-border shadow-sm">
               <div className="p-3 sm:p-6">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="font-semibold text-lg">{discussionItem.title}</h3>
-                      <span className="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded-full font-medium">
+                      <span className="px-3 py-1 bg-muted text-foreground text-xs rounded-full font-medium">
                         {discussionItem.section}
                       </span>
                       <span className={`px-3 py-1 text-xs rounded-full font-medium ${statusBadgeClass(discussionItem.status)}`}>
                         {statusBadgeLabel(discussionItem.status)}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{discussionItem.content}</p>
-                    <div className="flex items-center gap-4 text-sm text-gray-500">
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{discussionItem.content}</p>
+                    <div className="flex items-center gap-4 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <User className="w-4 h-4" />
                         <span>{discussionItem.authorUserId}</span>
@@ -1591,12 +1591,12 @@ const DiscussionsView = () => {
 
                 {/* Detail View for Selected Discussion */}
                 {selectedDiscussionId === discussionItem.id && (
-                  <div className="mt-6 border-t border-gray-200 pt-4">
+                  <div className="mt-6 border-t border-border pt-4">
                     {detailLoading && (
                       <div className="space-y-3">
-                        <div className="h-4 bg-gray-100 rounded animate-pulse w-1/3" />
-                        <div className="h-20 bg-gray-100 rounded animate-pulse" />
-                        {[1, 2].map((n) => <div key={n} className="h-16 bg-gray-100 rounded animate-pulse" />)}
+                        <div className="h-4 bg-muted rounded-lg animate-pulse w-1/3" />
+                        <div className="h-20 bg-muted rounded-lg animate-pulse" />
+                        {[1, 2].map((n) => <div key={n} className="h-16 bg-muted rounded-lg animate-pulse" />)}
                       </div>
                     )}
                     {detailError && (
@@ -1604,7 +1604,7 @@ const DiscussionsView = () => {
                         <p className="text-red-600 mb-2">{detailError}</p>
                         <button
                           onClick={() => reloadDiscussion()}
-                          className="text-sm text-blue-600 hover:text-blue-700"
+                          className="text-sm text-primary hover:text-primary/80"
                         >
                           إعادة المحاولة
                         </button>
@@ -1617,7 +1617,7 @@ const DiscussionsView = () => {
                             <span className={`px-3 py-1 text-xs rounded-full font-medium ${statusBadgeClass(discussion.status)}`}>
                               {statusBadgeLabel(discussion.status)}
                             </span>
-                            <span className="text-sm text-gray-500">{formatDateTime(discussion.createdAt)}</span>
+                            <span className="text-sm text-muted-foreground">{formatDateTime(discussion.createdAt)}</span>
                           </div>
                           <div className="flex items-center gap-2">
                             {(['OPEN', 'RESOLVED', 'CLOSED'] as DiscussionStatus[]).map((s) => (
@@ -1627,8 +1627,8 @@ const DiscussionsView = () => {
                                 disabled={detailMutating || discussion.status === s}
                                 className={`px-3 py-1 text-xs rounded-lg border ${
                                   discussion.status === s
-                                    ? 'bg-blue-600 text-white border-blue-600'
-                                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                                    ? 'bg-primary text-primary-foreground border-blue-600'
+                                    : 'bg-card text-foreground border-border hover:bg-secondary'
                                 } disabled:opacity-50`}
                               >
                                 {statusBadgeLabel(s)}
@@ -1643,7 +1643,7 @@ const DiscussionsView = () => {
                           </div>
                         </div>
 
-                        <div className="prose max-w-none text-sm text-gray-700">
+                        <div className="prose max-w-none text-sm text-foreground">
                           {discussion.content}
                         </div>
 
@@ -1654,17 +1654,17 @@ const DiscussionsView = () => {
                             return (
                               <div
                                 key={reply.id}
-                                className={`bg-gray-50 p-4 rounded-lg ${
-                                  reply.isAccepted ? 'border-2 border-green-400' : 'border border-gray-200'
+                                className={`bg-secondary p-4 rounded-lg ${
+                                  reply.isAccepted ? 'border-2 border-green-400' : 'border border-border'
                                 }`}
                               >
                                 <div className="flex items-center justify-between mb-2">
                                   <div className="flex items-center gap-2">
                                     <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
-                                      <User className="w-3 h-3 text-blue-600" />
+                                      <User className="w-3 h-3 text-primary" />
                                     </div>
                                     <span className="text-sm font-medium">{reply.authorUserId}</span>
-                                    <span className="text-xs text-gray-500">{formatDateTime(reply.createdAt)}</span>
+                                    <span className="text-xs text-muted-foreground">{formatDateTime(reply.createdAt)}</span>
                                   </div>
                                   <div className="flex items-center gap-2">
                                     {reply.isAccepted && (
@@ -1693,17 +1693,17 @@ const DiscussionsView = () => {
                                     )}
                                   </div>
                                 </div>
-                                <p className="text-sm text-gray-700">{reply.content}</p>
+                                <p className="text-sm text-foreground">{reply.content}</p>
                                 
                                 {isOptimistic && (reply as { pending: boolean; failed: boolean }).failed && (
                                   <div className="mt-2 flex items-center gap-2">
                                     <button
                                       onClick={() => handleReplyRetry(reply.id, (reply as { originalContent: string }).originalContent)}
-                                      className="px-3 py-1 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                                      className="px-3 py-1 text-xs bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
                                     >
                                       إعادة المحاولة
                                     </button>
-                                    <span className="text-xs text-gray-600">{(reply as { originalContent: string }).originalContent}</span>
+                                    <span className="text-xs text-muted-foreground">{(reply as { originalContent: string }).originalContent}</span>
                                   </div>
                                 )}
                               </div>
@@ -1720,12 +1720,12 @@ const DiscussionsView = () => {
                                 value={replyInputs[discussion.id] || ''}
                                 onChange={(e) => setReplyInputs((prev) => ({ ...prev, [discussion.id]: e.target.value }))}
                                 placeholder="أضف ردك..."
-                                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                                className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                               />
                               <button
                                 onClick={() => handleReplySubmit(discussion.id)}
                                 disabled={detailMutating}
-                                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                                className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50"
                               >
                                 رد
                               </button>
@@ -1741,7 +1741,7 @@ const DiscussionsView = () => {
                 <div className="mt-4 flex gap-3">
                   <button
                     onClick={() => setSelectedDiscussionId(selectedDiscussionId === discussionItem.id ? null : discussionItem.id)}
-                    className="px-4 py-2 text-sm text-blue-600 hover:text-blue-700 border border-blue-200 rounded-lg"
+                    className="px-4 py-2 text-sm text-primary hover:text-primary/80 border border-primary/20 rounded-lg"
                   >
                     {selectedDiscussionId === discussionItem.id ? 'إخفاء التفاصيل' : 'عرض التفاصيل والردود'}
                   </button>
@@ -1760,9 +1760,9 @@ const DiscussionsView = () => {
         {/* Delete Confirmation Modal */}
         {deleteConfirmId && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <div className="bg-card rounded-xl p-6 max-w-md w-full">
               <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
-              <p className="text-gray-600 mb-4">هل أنت متأكد أنك تريد حذف هذا النقاش؟ سيظهر كعنصر محذوف في القائمة.</p>
+              <p className="text-muted-foreground mb-4">هل أنت متأكد أنك تريد حذف هذا النقاش؟ سيظهر كعنصر محذوف في القائمة.</p>
               <div className="flex gap-3">
                 <button
                   onClick={confirmDeleteDiscussion}
@@ -1773,7 +1773,7 @@ const DiscussionsView = () => {
                 </button>
                 <button
                   onClick={() => setDeleteConfirmId(null)}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                  className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted"
                 >
                   إلغاء
                 </button>
@@ -1834,7 +1834,7 @@ const DiscussionsView = () => {
       if (mime.includes('spreadsheet') || mime.includes('excel') || mime.includes('csv')) {
         return <FileSpreadsheet className="w-8 h-8 text-green-600" />;
       }
-      return <File className="w-8 h-8 text-blue-600" />;
+      return <File className="w-8 h-8 text-primary" />;
     };
 
     const handleFileSelect = (file: File | null) => {
@@ -1881,12 +1881,12 @@ const DiscussionsView = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">مركز المرفقات</h1>
-            <p className="text-gray-600">جميع ملفات المشروع في مكان واحد</p>
+            <p className="text-muted-foreground">جميع ملفات المشروع في مكان واحد</p>
           </div>
           <button
             onClick={() => setShowUpload(!showUpload)}
             disabled={isUploading}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 disabled:opacity-50"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 disabled:opacity-50"
           >
             <Plus className="w-5 h-5" />
             رفع ملف
@@ -1895,25 +1895,25 @@ const DiscussionsView = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <File className="w-8 h-8 text-blue-600 mb-3" />
+          <div className="bg-card rounded-xl p-6 border border-border">
+            <File className="w-8 h-8 text-primary mb-3" />
             <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
-            <p className="text-sm text-gray-600">إجمالي الملفات</p>
+            <p className="text-sm text-muted-foreground">إجمالي الملفات</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <Paperclip className="w-8 h-8 text-green-600 mb-3" />
             <p className="text-2xl font-bold">{formatBytes(totalSize)}</p>
-            <p className="text-sm text-gray-600">حجم التخزين</p>
+            <p className="text-sm text-muted-foreground">حجم التخزين</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <Users className="w-8 h-8 text-purple-600 mb-3" />
             <p className="text-2xl font-bold">{new Set(attachments.map((a) => a.uploadedByUserId)).size}</p>
-            <p className="text-sm text-gray-600">المساهمون</p>
+            <p className="text-sm text-muted-foreground">المساهمون</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <Download className="w-8 h-8 text-gray-600 mb-3" />
+          <div className="bg-card rounded-xl p-6 border border-border">
+            <Download className="w-8 h-8 text-muted-foreground mb-3" />
             <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
-            <p className="text-sm text-gray-600">الملفات المتاحة</p>
+            <p className="text-sm text-muted-foreground">الملفات المتاحة</p>
           </div>
         </div>
 
@@ -1923,13 +1923,13 @@ const DiscussionsView = () => {
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
-            className={`bg-white rounded-xl p-6 border-2 border-dashed transition-colors ${
-              isDragging ? 'border-blue-500 bg-blue-50' : 'border-gray-300'
+            className={`bg-card rounded-xl p-6 border-2 border-dashed transition-colors ${
+              isDragging ? 'border-blue-500 bg-primary/10' : 'border-border'
             }`}
           >
             <div className="text-center mb-4">
-              <Upload className="w-10 h-10 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-700">اسحب ملفاً هنا أو انقر لاختيار ملف</p>
+              <Upload className="w-10 h-10 text-muted-foreground mx-auto mb-2" />
+              <p className="text-foreground">اسحب ملفاً هنا أو انقر لاختيار ملف</p>
               <input
                 type="file"
                 onChange={(e) => handleFileSelect(e.target.files?.[0] || null)}
@@ -1938,16 +1938,16 @@ const DiscussionsView = () => {
             </div>
             {selectedFile && (
               <div className="space-y-3">
-                <div className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                <div className="flex items-center justify-between bg-secondary p-3 rounded-lg">
                   <span className="text-sm font-medium">{selectedFile.name}</span>
-                  <span className="text-sm text-gray-500">{formatBytes(selectedFile.size)}</span>
+                  <span className="text-sm text-muted-foreground">{formatBytes(selectedFile.size)}</span>
                 </div>
                 <div>
                   <label className="block text-sm font-medium mb-2">المرحلة (اختياري)</label>
                   <select
                     value={uploadStage}
                     onChange={(e) => setUploadStage(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                   >
                     <option value="">بدون مرحلة</option>
                     <option value="planning">تخطيط</option>
@@ -1958,13 +1958,13 @@ const DiscussionsView = () => {
                 </div>
                 {isUploading && (
                   <div className="space-y-1">
-                    <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+                    <div className="h-2 bg-muted rounded-full overflow-hidden">
                       <div
                         className="h-full bg-blue-600 transition-all"
                         style={{ width: `${uploadProgress}%` }}
                       />
                     </div>
-                    <p className="text-sm text-gray-600">{uploadProgress}%</p>
+                    <p className="text-sm text-muted-foreground">{uploadProgress}%</p>
                   </div>
                 )}
                 {mutationError && <p className="text-red-600 text-sm">{mutationError}</p>}
@@ -1972,14 +1972,14 @@ const DiscussionsView = () => {
                   <button
                     onClick={handleUploadSubmit}
                     disabled={isUploading}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50"
+                    className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 disabled:opacity-50"
                   >
                     {isUploading ? 'جاري الرفع...' : 'رفع'}
                   </button>
                   <button
                     onClick={() => { setShowUpload(false); setSelectedFile(null); clearError(); }}
                     disabled={isUploading}
-                    className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+                    className="px-6 py-2 bg-muted text-foreground rounded-lg hover:bg-muted disabled:opacity-50"
                   >
                     إلغاء
                   </button>
@@ -1990,7 +1990,7 @@ const DiscussionsView = () => {
         )}
 
         {/* Filters and View Toggle */}
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
+        <div className="bg-card rounded-xl p-4 border border-border">
           <div className="flex items-center justify-between flex-wrap gap-3">
             <div className="flex gap-2 flex-wrap">
               {typeOptions.map((option) => (
@@ -1999,8 +1999,8 @@ const DiscussionsView = () => {
                   onClick={() => handleFilterType(option.value)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
                     filterType === option.value
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-foreground hover:bg-muted'
                   }`}
                 >
                   {option.label}
@@ -2010,13 +2010,13 @@ const DiscussionsView = () => {
             <div className="flex gap-2">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
+                className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}
               >
                 <LayoutDashboard className="w-5 h-5" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-100'}`}
+                className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}
               >
                 <FileText className="w-5 h-5" />
               </button>
@@ -2028,16 +2028,16 @@ const DiscussionsView = () => {
         {attachmentsLoading && attachments.length === 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {[1, 2, 3, 4].map((n) => (
-              <div key={n} className="h-48 bg-gray-100 rounded-lg animate-pulse" />
+              <div key={n} className="h-48 bg-muted rounded-lg animate-pulse" />
             ))}
           </div>
         )}
         {attachmentsError && (
-          <div className="p-6 text-center bg-white rounded-xl border border-gray-200">
+          <div className="p-6 text-center bg-card rounded-xl border border-border">
             <p className="text-red-600 mb-3">{attachmentsError}</p>
             <button
               onClick={() => refetchAttachments()}
-              className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2 mx-auto"
+              className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
             >
               <RefreshCw className="w-4 h-4" />
               إعادة المحاولة
@@ -2045,28 +2045,28 @@ const DiscussionsView = () => {
           </div>
         )}
         {!attachmentsLoading && !attachmentsError && attachments.length === 0 && (
-          <div className="p-6 text-center text-gray-500 bg-white rounded-xl border border-gray-200">
+          <div className="p-6 text-center text-muted-foreground bg-card rounded-xl border border-border">
             لا توجد مرفقات حالياً. ابدأ برفع أول ملف.
           </div>
         )}
 
         {/* Pagination */}
         {attachmentsPagination.totalPages > 1 && (
-          <div className="flex items-center justify-between bg-white rounded-xl p-4 border border-gray-200">
+          <div className="flex items-center justify-between bg-card rounded-xl p-4 border border-border">
             <button
               onClick={() => handlePageChange(Math.max(1, attachmentsPagination.page - 1))}
               disabled={attachmentsPagination.page <= 1}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+              className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted disabled:opacity-50"
             >
               السابق
             </button>
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-foreground">
               صفحة {attachmentsPagination.page} من {attachmentsPagination.totalPages}
             </span>
             <button
               onClick={() => handlePageChange(Math.min(attachmentsPagination.totalPages, attachmentsPagination.page + 1))}
               disabled={attachmentsPagination.page >= attachmentsPagination.totalPages}
-              className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+              className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted disabled:opacity-50"
             >
               التالي
             </button>
@@ -2090,13 +2090,13 @@ const DiscussionsView = () => {
         {viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {attachments.map((file) => (
-              <div key={file.id} className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+              <div key={file.id} className="bg-card rounded-xl p-6 border border-border hover:shadow-lg transition-shadow">
                 <div className="flex flex-col items-center text-center">
                   {getFileIcon(file)}
                   <h4 className="font-semibold mt-4 mb-2 truncate w-full">{file.fileName}</h4>
-                  <p className="text-sm text-gray-600 mb-1">{formatBytes(file.fileSize)}</p>
-                  <p className="text-xs text-gray-500 mb-1">{file.uploadedByUserId}</p>
-                  <p className="text-xs text-gray-500 mb-3">{formatDateTime(file.createdAt)}</p>
+                  <p className="text-sm text-muted-foreground mb-1">{formatBytes(file.fileSize)}</p>
+                  <p className="text-xs text-muted-foreground mb-1">{file.uploadedByUserId}</p>
+                  <p className="text-xs text-muted-foreground mb-3">{formatDateTime(file.createdAt)}</p>
                   {file.projectStage && (
                     <span className="px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full mb-4">
                       {file.projectStage}
@@ -2105,7 +2105,7 @@ const DiscussionsView = () => {
                   <div className="flex gap-2 w-full">
                     <button
                       onClick={() => handleDownload(file)}
-                      className="flex-1 p-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                      className="flex-1 p-2 bg-muted text-foreground rounded-lg hover:bg-muted"
                     >
                       <Download className="w-4 h-4 mx-auto" />
                     </button>
@@ -2122,9 +2122,9 @@ const DiscussionsView = () => {
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl border border-gray-200">
+          <div className="bg-card rounded-xl border border-border">
             <table className="w-full">
-              <thead className="border-b border-gray-200">
+              <thead className="border-b border-border">
                 <tr>
                   <th className="text-right p-4 font-semibold">اسم الملف</th>
                   <th className="text-right p-4 font-semibold">النوع</th>
@@ -2137,7 +2137,7 @@ const DiscussionsView = () => {
               </thead>
               <tbody>
                 {attachments.map((file) => (
-                  <tr key={file.id} className="border-b border-gray-200 hover:bg-gray-50">
+                  <tr key={file.id} className="border-b border-border hover:bg-secondary">
                     <td className="p-4 flex items-center gap-3">
                       {getFileIcon(file)}
                       <span className="font-medium">{file.fileName}</span>
@@ -2157,14 +2157,14 @@ const DiscussionsView = () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => handleDownload(file)}
-                          className="p-2 hover:bg-gray-100 rounded"
+                          className="p-2 hover:bg-muted rounded-lg"
                         >
-                          <Download className="w-4 h-4 text-gray-600" />
+                          <Download className="w-4 h-4 text-muted-foreground" />
                         </button>
                         <button
                           onClick={() => setDeleteTargetId(file.id)}
                           disabled={isDeleting}
-                          className="p-2 hover:bg-red-100 rounded disabled:opacity-50"
+                          className="p-2 hover:bg-red-500/10 rounded-lg disabled:opacity-50"
                         >
                           <Trash2 className="w-4 h-4 text-red-600" />
                         </button>
@@ -2180,9 +2180,9 @@ const DiscussionsView = () => {
         {/* Delete Confirmation Modal */}
         {deleteTargetId && (
           <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-            <div className="bg-white rounded-xl p-6 max-w-md w-full">
+            <div className="bg-card rounded-xl p-6 max-w-md w-full">
               <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
-              <p className="text-gray-600 mb-4">هل أنت متأكد أنك تريد حذف هذا الملف؟ لا يمكن التراجع عن هذا الإجراء.</p>
+              <p className="text-muted-foreground mb-4">هل أنت متأكد أنك تريد حذف هذا الملف؟ لا يمكن التراجع عن هذا الإجراء.</p>
               <div className="flex gap-3">
                 <button
                   onClick={handleDelete}
@@ -2194,7 +2194,7 @@ const DiscussionsView = () => {
                 <button
                   onClick={() => setDeleteTargetId(null)}
                   disabled={isDeleting}
-                  className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 disabled:opacity-50"
+                  className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted disabled:opacity-50"
                 >
                   إلغاء
                 </button>
@@ -2221,7 +2221,7 @@ const DiscussionsView = () => {
         case 'in-progress': return 'bg-yellow-100 text-yellow-700';
         case 'resolved': return 'bg-green-100 text-green-700';
         case 'rejected': return 'bg-red-100 text-red-700';
-        default: return 'bg-gray-100 text-gray-700';
+        default: return 'bg-muted text-foreground';
       }
     };
 
@@ -2230,7 +2230,7 @@ const DiscussionsView = () => {
         case 'high': return 'text-red-600';
         case 'medium': return 'text-yellow-600';
         case 'low': return 'text-green-600';
-        default: return 'text-gray-600';
+        default: return 'text-muted-foreground';
       }
     };
 
@@ -2239,11 +2239,11 @@ const DiscussionsView = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">طلبات التعديل</h1>
-            <p className="text-gray-600">تتبع جميع طلبات التغيير والتحسينات</p>
+            <p className="text-muted-foreground">تتبع جميع طلبات التغيير والتحسينات</p>
           </div>
           <button
             onClick={() => setShowNewRequest(!showNewRequest)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2"
           >
             <Plus className="w-5 h-5" />
             طلب تعديل جديد
@@ -2252,21 +2252,21 @@ const DiscussionsView = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-blue-200">
-            <p className="text-2xl font-bold text-blue-600">{revisions.filter(r => r.status === 'open').length}</p>
-            <p className="text-sm text-gray-600 mt-1">مفتوحة</p>
+          <div className="bg-card rounded-xl p-6 border border-primary/20">
+            <p className="text-2xl font-bold text-primary">{revisions.filter(r => r.status === 'open').length}</p>
+            <p className="text-sm text-muted-foreground mt-1">مفتوحة</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-yellow-200">
+          <div className="bg-card rounded-xl p-6 border border-yellow-500/30">
             <p className="text-2xl font-bold text-yellow-600">{revisions.filter(r => r.status === 'in-progress').length}</p>
-            <p className="text-sm text-gray-600 mt-1">قيد العمل</p>
+            <p className="text-sm text-muted-foreground mt-1">قيد العمل</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-green-200">
+          <div className="bg-card rounded-xl p-6 border border-emerald-500/30">
             <p className="text-2xl font-bold text-green-600">8</p>
-            <p className="text-sm text-gray-600 mt-1">محلولة</p>
+            <p className="text-sm text-muted-foreground mt-1">محلولة</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-red-200">
+          <div className="bg-card rounded-xl p-6 border border-red-500/30">
             <p className="text-2xl font-bold text-red-600">2</p>
-            <p className="text-sm text-gray-600 mt-1">مرفوضة</p>
+            <p className="text-sm text-muted-foreground mt-1">مرفوضة</p>
           </div>
         </div>
 
@@ -2278,8 +2278,8 @@ const DiscussionsView = () => {
               onClick={() => setFilterStatus(status)}
               className={`px-4 py-2 rounded-lg text-sm font-medium ${
                 filterStatus === status
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 border border-gray-300 hover:bg-gray-50'
+                  ? 'bg-primary text-primary-foreground'
+                  : 'bg-card text-foreground border border-border hover:bg-secondary'
               }`}
             >
               {status === 'all' ? 'الكل' : status === 'open' ? 'مفتوحة' : status === 'in-progress' ? 'قيد العمل' : status === 'resolved' ? 'محلولة' : 'مرفوضة'}
@@ -2289,7 +2289,7 @@ const DiscussionsView = () => {
 
         {/* New Request Form */}
         {showNewRequest && (
-          <div className="bg-white rounded-xl p-6 border border-blue-200 shadow-lg">
+          <div className="bg-card rounded-xl p-6 border border-primary/20 shadow-lg">
             <h3 className="font-semibold mb-4">طلب تعديل جديد</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -2297,12 +2297,12 @@ const DiscussionsView = () => {
                 <input
                   type="text"
                   placeholder="مثال: تعديل مؤشرات الأداء"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">تعيين إلى</label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
                   <option>فاطمة أحمد</option>
                   <option>محمد عبدالله</option>
                   <option>خالد سعيد</option>
@@ -2310,7 +2310,7 @@ const DiscussionsView = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">الأولوية</label>
-                <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                <select className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
                   <option value="high">عالية</option>
                   <option value="medium">متوسطة</option>
                   <option value="low">منخفضة</option>
@@ -2320,7 +2320,7 @@ const DiscussionsView = () => {
                 <label className="block text-sm font-medium mb-2">تاريخ الاستحقاق</label>
                 <input
                   type="date"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div className="md:col-span-2">
@@ -2328,17 +2328,17 @@ const DiscussionsView = () => {
                 <textarea
                   rows={4}
                   placeholder="تفاصيل الطلب..."
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             </div>
             <div className="flex gap-3 mt-4">
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
+              <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90">
                 إنشاء الطلب
               </button>
               <button
                 onClick={() => setShowNewRequest(false)}
-                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200"
+                className="px-6 py-2 bg-muted text-foreground rounded-lg hover:bg-muted"
               >
                 إلغاء
               </button>
@@ -2349,7 +2349,7 @@ const DiscussionsView = () => {
         {/* Requests List */}
         <div className="space-y-4">
           {filteredRevisions.map((request) => (
-            <div key={request.id} className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-shadow">
+            <div key={request.id} className="bg-card rounded-xl p-6 border border-border hover:shadow-lg transition-shadow">
               <div className="flex items-start justify-between mb-4">
                 <div className="flex-1">
                   <div className="flex items-center gap-3 mb-2">
@@ -2359,43 +2359,43 @@ const DiscussionsView = () => {
                     </span>
                     <Flag className={`w-4 h-4 ${getPriorityColor(request.priority)}`} />
                   </div>
-                  <p className="text-sm text-gray-700 mb-3">{request.description}</p>
+                  <p className="text-sm text-foreground mb-3">{request.description}</p>
                 </div>
               </div>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">طالب التعديل</p>
+                  <p className="text-xs text-muted-foreground mb-1">طالب التعديل</p>
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-400" />
+                    <User className="w-4 h-4 text-muted-foreground" />
                     <span className="text-sm font-medium">{request.requestor}</span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">معين إلى</p>
+                  <p className="text-xs text-muted-foreground mb-1">معين إلى</p>
                   <div className="flex items-center gap-2">
-                    <User className="w-4 h-4 text-gray-400" />
+                    <User className="w-4 h-4 text-muted-foreground" />
                     <span className="text-sm font-medium">{request.assignee}</span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">تاريخ الاستحقاق</p>
+                  <p className="text-xs text-muted-foreground mb-1">تاريخ الاستحقاق</p>
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-gray-400" />
+                    <Calendar className="w-4 h-4 text-muted-foreground" />
                     <span className="text-sm font-medium">{request.dueDate}</span>
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">الأولوية</p>
+                  <p className="text-xs text-muted-foreground mb-1">الأولوية</p>
                   <span className={`text-sm font-medium ${getPriorityColor(request.priority)}`}>
                     {request.priority === 'high' ? 'عالية' : request.priority === 'medium' ? 'متوسطة' : 'منخفضة'}
                   </span>
                 </div>
               </div>
 
-              <div className="flex gap-3 pt-3 border-t border-gray-200">
+              <div className="flex gap-3 pt-3 border-t border-border">
                 {request.status === 'open' && (
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                  <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm">
                     بدء العمل
                   </button>
                 )}
@@ -2404,10 +2404,10 @@ const DiscussionsView = () => {
                     وضع علامة كمحلول
                   </button>
                 )}
-                <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">
+                <button className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted text-sm">
                   إضافة تعليق
                 </button>
-                <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">
+                <button className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted text-sm">
                   عرض التفاصيل
                 </button>
               </div>
@@ -2431,13 +2431,13 @@ const DiscussionsView = () => {
 
     const getNotificationIcon = (type: string) => {
       switch (type) {
-        case 'message': return <MessageSquare className="w-5 h-5 text-blue-600" />;
+        case 'message': return <MessageSquare className="w-5 h-5 text-primary" />;
         case 'attachment': return <Paperclip className="w-5 h-5 text-green-600" />;
         case 'approval': return <CheckCircle2 className="w-5 h-5 text-purple-600" />;
         case 'revision': return <Edit className="w-5 h-5 text-yellow-600" />;
         case 'overdue': return <AlertCircle className="w-5 h-5 text-red-600" />;
-        case 'update': return <RefreshCw className="w-5 h-5 text-blue-600" />;
-        default: return <Bell className="w-5 h-5 text-gray-600" />;
+        case 'update': return <RefreshCw className="w-5 h-5 text-primary" />;
+        default: return <Bell className="w-5 h-5 text-muted-foreground" />;
       }
     };
 
@@ -2446,9 +2446,9 @@ const DiscussionsView = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold mb-2">مركز الإشعارات</h1>
-            <p className="text-gray-600">جميع التحديثات والتنبيهات</p>
+            <p className="text-muted-foreground">جميع التحديثات والتنبيهات</p>
           </div>
-          <button className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+          <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2">
             <CheckCheck className="w-5 h-5" />
             تعليم الكل كمقروء
           </button>
@@ -2456,25 +2456,25 @@ const DiscussionsView = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-blue-200">
-            <Bell className="w-8 h-8 text-blue-600 mb-3" />
-            <p className="text-2xl font-bold text-blue-600">{notifications.filter(n => !n.read).length}</p>
-            <p className="text-sm text-gray-600">إشعارات غير مقروءة</p>
+          <div className="bg-card rounded-xl p-6 border border-primary/20">
+            <Bell className="w-8 h-8 text-primary mb-3" />
+            <p className="text-2xl font-bold text-primary">{notifications.filter(n => !n.read).length}</p>
+            <p className="text-sm text-muted-foreground">إشعارات غير مقروءة</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-red-200">
+          <div className="bg-card rounded-xl p-6 border border-red-500/30">
             <AlertCircle className="w-8 h-8 text-red-600 mb-3" />
             <p className="text-2xl font-bold text-red-600">{notifications.filter(n => n.priority === 'high').length}</p>
-            <p className="text-sm text-gray-600">أولوية عالية</p>
+            <p className="text-sm text-muted-foreground">أولوية عالية</p>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <Activity className="w-8 h-8 text-gray-600 mb-3" />
+          <div className="bg-card rounded-xl p-6 border border-border">
+            <Activity className="w-8 h-8 text-muted-foreground mb-3" />
             <p className="text-2xl font-bold">{notifications.length}</p>
-            <p className="text-sm text-gray-600">إجمالي الإشعارات</p>
+            <p className="text-sm text-muted-foreground">إجمالي الإشعارات</p>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
+        <div className="bg-card rounded-xl p-4 border border-border">
           <div className="flex flex-wrap gap-3 items-center">
             <div className="flex gap-2 flex-1 flex-wrap">
               {(['all', 'message', 'revision', 'approval', 'overdue'] as const).map((type) => (
@@ -2483,8 +2483,8 @@ const DiscussionsView = () => {
                   onClick={() => setFilterType(type)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium ${
                     filterType === type
-                      ? 'bg-blue-600 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-foreground hover:bg-muted'
                   }`}
                 >
                   {type === 'all' ? 'الكل' : type === 'message' ? 'رسائل' : type === 'revision' ? 'تعديلات' : type === 'approval' ? 'موافقات' : 'متأخر'}
@@ -2508,54 +2508,54 @@ const DiscussionsView = () => {
           {filteredNotifications.map((notif) => (
             <div
               key={notif.id}
-              className={`bg-white rounded-xl p-6 border ${
-                !notif.read ? 'border-blue-200 shadow-md' : 'border-gray-200'
+              className={`bg-card rounded-xl p-6 border ${
+                !notif.read ? 'border-primary/20 shadow-md' : 'border-border'
               } hover:shadow-lg transition-shadow`}
             >
               <div className="flex items-start gap-4">
-                <div className={`p-3 rounded-full ${!notif.read ? 'bg-blue-50' : 'bg-gray-50'}`}>
+                <div className={`p-3 rounded-full ${!notif.read ? 'bg-primary/10' : 'bg-secondary'}`}>
                   {getNotificationIcon(notif.type)}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <h3 className="font-semibold mb-1">{notif.title}</h3>
-                      <p className="text-sm text-gray-600">{notif.content}</p>
+                      <p className="text-sm text-muted-foreground">{notif.content}</p>
                     </div>
                     {!notif.read && (
                       <div className="w-2 h-2 bg-blue-600 rounded-full"></div>
                     )}
                   </div>
                   <div className="flex items-center gap-4 mt-3">
-                    <span className="text-xs text-gray-500 flex items-center gap-1">
+                    <span className="text-xs text-muted-foreground flex items-center gap-1">
                       <Clock className="w-3 h-3" />
                       {notif.timestamp}
                     </span>
                     <span className={`px-2 py-1 text-xs rounded-full ${
                       notif.priority === 'high' ? 'bg-red-100 text-red-700' :
                       notif.priority === 'medium' ? 'bg-yellow-100 text-yellow-700' :
-                      'bg-gray-100 text-gray-700'
+                      'bg-muted text-foreground'
                     }`}>
                       {notif.priority === 'high' ? 'عالية' : notif.priority === 'medium' ? 'متوسطة' : 'منخفضة'}
                     </span>
                   </div>
                   <div className="flex gap-3 mt-4">
                     {notif.type === 'message' && (
-                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                      <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm">
                         عرض المحادثة
                       </button>
                     )}
                     {notif.type === 'revision' && (
-                      <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm">
+                      <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm">
                         عرض الطلب
                       </button>
                     )}
                     {!notif.read && (
-                      <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">
+                      <button className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted text-sm">
                         وضع علامة كمقروء
                       </button>
                     )}
-                    <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm">
+                    <button className="px-4 py-2 bg-muted text-foreground rounded-lg hover:bg-muted text-sm">
                       تجاهل
                     </button>
                   </div>
@@ -2591,48 +2591,48 @@ const DiscussionsView = () => {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-2">لوحة أوقات الاستجابة وSLA</h1>
-          <p className="text-gray-600">تحليلات شاملة لأوقات الرد والامتثال للمعايير</p>
+          <p className="text-muted-foreground">تحليلات شاملة لأوقات الرد والامتثال للمعايير</p>
         </div>
 
         {/* KPIs */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <Clock className="w-8 h-8 text-blue-600 mb-3" />
+          <div className="bg-card rounded-xl p-6 border border-border">
+            <Clock className="w-8 h-8 text-primary mb-3" />
             <p className="text-2xl font-bold">3.2 ساعة</p>
-            <p className="text-sm text-gray-600">متوسط وقت الرد</p>
+            <p className="text-sm text-muted-foreground">متوسط وقت الرد</p>
             <div className="flex items-center gap-1 mt-2">
               <TrendingDown className="w-4 h-4 text-green-600" />
               <span className="text-xs text-green-600">-15% من الأسبوع السابق</span>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-green-200">
+          <div className="bg-card rounded-xl p-6 border border-emerald-500/30">
             <CheckCircle2 className="w-8 h-8 text-green-600 mb-3" />
             <p className="text-2xl font-bold text-green-600">78%</p>
-            <p className="text-sm text-gray-600">نسبة الامتثال لـ SLA</p>
+            <p className="text-sm text-muted-foreground">نسبة الامتثال لـ SLA</p>
             <div className="flex items-center gap-1 mt-2">
               <TrendingUp className="w-4 h-4 text-green-600" />
               <span className="text-xs text-green-600">+5% من الأسبوع السابق</span>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-yellow-200">
+          <div className="bg-card rounded-xl p-6 border border-yellow-500/30">
             <AlertTriangle className="w-8 h-8 text-yellow-600 mb-3" />
             <p className="text-2xl font-bold text-yellow-600">3</p>
-            <p className="text-sm text-gray-600">طلبات تجاوزت SLA</p>
+            <p className="text-sm text-muted-foreground">طلبات تجاوزت SLA</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <Target className="w-8 h-8 text-purple-600 mb-3" />
             <p className="text-2xl font-bold">24 ساعة</p>
-            <p className="text-sm text-gray-600">هدف SLA</p>
+            <p className="text-sm text-muted-foreground">هدف SLA</p>
           </div>
         </div>
 
         {/* Charts Row */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:p-6">
           {/* Response Time Trend */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <h3 className="font-semibold mb-4">متوسط أوقات الاستجابة (ساعات)</h3>
             <ResponsiveContainer width="100%" height={300}>
               <LineChart data={responseTimeData}>
@@ -2647,7 +2647,7 @@ const DiscussionsView = () => {
           </div>
 
           {/* SLA Compliance */}
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <h3 className="font-semibold mb-4">نسبة الامتثال لـ SLA</h3>
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -2672,13 +2672,13 @@ const DiscussionsView = () => {
         </div>
 
         {/* Team Performance Table */}
-        <div className="bg-white rounded-xl border border-gray-200">
-          <div className="p-6 border-b border-gray-200">
+        <div className="bg-card rounded-xl border border-border">
+          <div className="p-6 border-b border-border">
             <h3 className="font-semibold">أداء فريق الحاضنة</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full">
-              <thead className="border-b border-gray-200">
+              <thead className="border-b border-border">
                 <tr>
                   <th className="text-right p-4 font-semibold">اسم الموظف</th>
                   <th className="text-right p-4 font-semibold">عدد الطلبات</th>
@@ -2693,13 +2693,13 @@ const DiscussionsView = () => {
                   { name: 'فاطمة أحمد', requests: 15, avgTime: '3.1 ساعة', sla: 87, rating: 'جيد جداً' },
                   { name: 'خالد سعيد', requests: 8, avgTime: '4.2 ساعة', sla: 75, rating: 'جيد' }
                 ].map((member, idx) => (
-                  <tr key={idx} className="border-b border-gray-200 hover:bg-gray-50">
+                  <tr key={idx} className="border-b border-border hover:bg-secondary">
                     <td className="p-4 font-medium">{member.name}</td>
                     <td className="p-4">{member.requests}</td>
                     <td className="p-4">{member.avgTime}</td>
                     <td className="p-4">
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden max-w-[100px]">
+                        <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden max-w-[100px]">
                           <div
                             className={`h-full ${member.sla >= 90 ? 'bg-green-600' : member.sla >= 80 ? 'bg-yellow-600' : 'bg-red-600'}`}
                             style={{ width: `${member.sla}%` }}
@@ -2725,7 +2725,7 @@ const DiscussionsView = () => {
         </div>
 
         {/* Overdue Requests */}
-        <div className="bg-white rounded-xl p-6 border border-red-200">
+        <div className="bg-card rounded-xl p-6 border border-red-500/30">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-red-600" />
@@ -2742,11 +2742,11 @@ const DiscussionsView = () => {
               <div key={idx} className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
                 <div>
                   <p className="font-medium">{item.project}</p>
-                  <p className="text-sm text-gray-600 mt-1">معين لـ: {item.assignee}</p>
+                  <p className="text-sm text-muted-foreground mt-1">معين لـ: {item.assignee}</p>
                 </div>
                 <div className="text-left">
                   <p className="text-sm font-medium text-red-600">تأخير: {item.overdue}</p>
-                  <button className="text-sm text-blue-600 hover:text-blue-700 mt-1">عرض التفاصيل</button>
+                  <button className="text-sm text-primary hover:text-primary/80 mt-1">عرض التفاصيل</button>
                 </div>
               </div>
             ))}
@@ -2782,7 +2782,7 @@ const DiscussionsView = () => {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-2">لوحة صحة التعاون</h1>
-          <p className="text-gray-600">مؤشرات الأداء والمشاركة في التعاون</p>
+          <p className="text-muted-foreground">مؤشرات الأداء والمشاركة في التعاون</p>
         </div>
 
         {/* Overall Health Score */}
@@ -2828,37 +2828,37 @@ const DiscussionsView = () => {
 
         {/* Metrics Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold">معدل المشاركة</h3>
               <Zap className="w-6 h-6 text-yellow-600" />
             </div>
             <p className="text-3xl font-bold mb-2">92%</p>
-            <p className="text-sm text-gray-600">من أعضاء الفريق نشطون</p>
-            <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <p className="text-sm text-muted-foreground">من أعضاء الفريق نشطون</p>
+            <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
               <div className="h-full bg-yellow-600" style={{ width: '92%' }}></div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold">جودة التواصل</h3>
               <MessageSquare className="w-6 h-6 text-green-600" />
             </div>
             <p className="text-3xl font-bold mb-2">4.5/5</p>
-            <p className="text-sm text-gray-600">تقييم متوسط للتفاعلات</p>
-            <div className="mt-3 h-2 bg-gray-200 rounded-full overflow-hidden">
+            <p className="text-sm text-muted-foreground">تقييم متوسط للتفاعلات</p>
+            <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
               <div className="h-full bg-green-600" style={{ width: '90%' }}></div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
+          <div className="bg-card rounded-xl p-6 border border-border">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold">سرعة الحل</h3>
-              <Target className="w-6 h-6 text-blue-600" />
+              <Target className="w-6 h-6 text-primary" />
             </div>
             <p className="text-3xl font-bold mb-2">2.1 يوم</p>
-            <p className="text-sm text-gray-600">متوسط وقت حل المسائل</p>
+            <p className="text-sm text-muted-foreground">متوسط وقت حل المسائل</p>
             <div className="flex items-center gap-1 mt-2">
               <TrendingDown className="w-4 h-4 text-green-600" />
               <span className="text-xs text-green-600">-18% من الشهر السابق</span>
@@ -2867,7 +2867,7 @@ const DiscussionsView = () => {
         </div>
 
         {/* Engagement Trend */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <h3 className="font-semibold mb-4">اتجاه المشاركة الأسبوعية</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={engagementData}>
@@ -2883,7 +2883,7 @@ const DiscussionsView = () => {
         </div>
 
         {/* Activity Heatmap */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <h3 className="font-semibold mb-4">خريطة النشاط الحرارية (حسب الوقت)</h3>
           <div className="overflow-x-auto">
             <table className="w-full">
@@ -2901,37 +2901,37 @@ const DiscussionsView = () => {
                   <tr key={idx}>
                     <td className="p-3 font-medium">{row.day}</td>
                     <td className="p-3">
-                      <div className={`h-12 rounded flex items-center justify-center font-medium ${
+                      <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
                         row['9-12'] > 10 ? 'bg-green-600 text-white' :
                         row['9-12'] > 6 ? 'bg-green-400 text-white' :
-                        'bg-green-100 text-gray-700'
+                        'bg-green-100 text-foreground'
                       }`}>
                         {row['9-12']}
                       </div>
                     </td>
                     <td className="p-3">
-                      <div className={`h-12 rounded flex items-center justify-center font-medium ${
+                      <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
                         row['12-3'] > 15 ? 'bg-green-600 text-white' :
                         row['12-3'] > 10 ? 'bg-green-400 text-white' :
-                        'bg-green-100 text-gray-700'
+                        'bg-green-100 text-foreground'
                       }`}>
                         {row['12-3']}
                       </div>
                     </td>
                     <td className="p-3">
-                      <div className={`h-12 rounded flex items-center justify-center font-medium ${
+                      <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
                         row['3-6'] > 15 ? 'bg-green-600 text-white' :
                         row['3-6'] > 10 ? 'bg-green-400 text-white' :
-                        'bg-green-100 text-gray-700'
+                        'bg-green-100 text-foreground'
                       }`}>
                         {row['3-6']}
                       </div>
                     </td>
                     <td className="p-3">
-                      <div className={`h-12 rounded flex items-center justify-center font-medium ${
+                      <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
                         row['6-9'] > 7 ? 'bg-green-600 text-white' :
                         row['6-9'] > 4 ? 'bg-green-400 text-white' :
-                        'bg-green-100 text-gray-700'
+                        'bg-green-100 text-foreground'
                       }`}>
                         {row['6-9']}
                       </div>
@@ -2944,7 +2944,7 @@ const DiscussionsView = () => {
         </div>
 
         {/* Team Member Engagement */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <h3 className="font-semibold mb-4">مشاركة أعضاء الفريق</h3>
           <div className="space-y-4">
             {[
@@ -2953,14 +2953,14 @@ const DiscussionsView = () => {
               { name: 'خالد سعيد', messages: 30, discussions: 8, files: 5, score: 78 },
               { name: 'سارة علي', messages: 38, discussions: 10, files: 7, score: 85 }
             ].map((member, idx) => (
-              <div key={idx} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+              <div key={idx} className="flex items-center justify-between p-4 bg-secondary rounded-lg">
                 <div className="flex items-center gap-4 flex-1">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                    <User className="w-6 h-6 text-blue-600" />
+                    <User className="w-6 h-6 text-primary" />
                   </div>
                   <div className="flex-1">
                     <h4 className="font-medium mb-2">{member.name}</h4>
-                    <div className="flex gap-4 text-sm text-gray-600">
+                    <div className="flex gap-4 text-sm text-muted-foreground">
                       <span>{member.messages} رسالة</span>
                       <span>{member.discussions} نقاش</span>
                       <span>{member.files} ملف</span>
@@ -2969,7 +2969,7 @@ const DiscussionsView = () => {
                 </div>
                 <div className="text-left">
                   <p className="text-2xl font-bold text-green-600">{member.score}%</p>
-                  <p className="text-xs text-gray-600">درجة المشاركة</p>
+                  <p className="text-xs text-muted-foreground">درجة المشاركة</p>
                 </div>
               </div>
             ))}
@@ -3061,12 +3061,12 @@ const DiscussionsView = () => {
 
     const getActivityIcon = (type: string) => {
       switch (type) {
-        case 'message': return <MessageSquare className="w-5 h-5 text-blue-600" />;
+        case 'message': return <MessageSquare className="w-5 h-5 text-primary" />;
         case 'file': return <Paperclip className="w-5 h-5 text-green-600" />;
         case 'discussion': return <GitBranch className="w-5 h-5 text-purple-600" />;
         case 'revision': return <Edit className="w-5 h-5 text-yellow-600" />;
         case 'approval': return <CheckCircle2 className="w-5 h-5 text-green-600" />;
-        default: return <Activity className="w-5 h-5 text-gray-600" />;
+        default: return <Activity className="w-5 h-5 text-muted-foreground" />;
       }
     };
 
@@ -3074,16 +3074,16 @@ const DiscussionsView = () => {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold mb-2">السجل الزمني للأنشطة</h1>
-          <p className="text-gray-600">تتبع تاريخي لجميع التفاعلات والأحداث</p>
+          <p className="text-muted-foreground">تتبع تاريخي لجميع التفاعلات والأحداث</p>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl p-4 border border-gray-200">
+        <div className="bg-card rounded-xl p-4 border border-border">
           <div className="flex flex-wrap gap-3">
             <select
               value={filterDate}
               onChange={(e) => setFilterDate(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">جميع الأوقات</option>
               <option value="today">اليوم</option>
@@ -3093,7 +3093,7 @@ const DiscussionsView = () => {
             <select
               value={filterActivity}
               onChange={(e) => setFilterActivity(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+              className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
             >
               <option value="all">جميع الأنشطة</option>
               <option value="message">رسائل</option>
@@ -3103,7 +3103,7 @@ const DiscussionsView = () => {
               <option value="approval">موافقات</option>
             </select>
             <div className="flex-1"></div>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+            <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2">
               <Download className="w-4 h-4" />
               تصدير السجل
             </button>
@@ -3112,45 +3112,45 @@ const DiscussionsView = () => {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
-            <MessageSquare className="w-6 h-6 text-blue-600 mx-auto mb-2" />
+          <div className="bg-card rounded-xl p-4 border border-border text-center">
+            <MessageSquare className="w-6 h-6 text-primary mx-auto mb-2" />
             <p className="text-xl font-bold">124</p>
-            <p className="text-xs text-gray-600">رسالة</p>
+            <p className="text-xs text-muted-foreground">رسالة</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
+          <div className="bg-card rounded-xl p-4 border border-border text-center">
             <Paperclip className="w-6 h-6 text-green-600 mx-auto mb-2" />
             <p className="text-xl font-bold">38</p>
-            <p className="text-xs text-gray-600">ملف</p>
+            <p className="text-xs text-muted-foreground">ملف</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
+          <div className="bg-card rounded-xl p-4 border border-border text-center">
             <GitBranch className="w-6 h-6 text-purple-600 mx-auto mb-2" />
             <p className="text-xl font-bold">22</p>
-            <p className="text-xs text-gray-600">نقاش</p>
+            <p className="text-xs text-muted-foreground">نقاش</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
+          <div className="bg-card rounded-xl p-4 border border-border text-center">
             <Edit className="w-6 h-6 text-yellow-600 mx-auto mb-2" />
             <p className="text-xl font-bold">15</p>
-            <p className="text-xs text-gray-600">تعديل</p>
+            <p className="text-xs text-muted-foreground">تعديل</p>
           </div>
-          <div className="bg-white rounded-xl p-4 border border-gray-200 text-center">
+          <div className="bg-card rounded-xl p-4 border border-border text-center">
             <CheckCircle2 className="w-6 h-6 text-green-600 mx-auto mb-2" />
             <p className="text-xl font-bold">31</p>
-            <p className="text-xs text-gray-600">موافقة</p>
+            <p className="text-xs text-muted-foreground">موافقة</p>
           </div>
         </div>
 
         {/* Timeline */}
-        <div className="bg-white rounded-xl p-6 border border-gray-200">
+        <div className="bg-card rounded-xl p-6 border border-border">
           <div className="space-y-6">
             {timelineActivities.map((activity, idx) => (
               <div key={activity.id} className="flex gap-4">
                 {/* Timeline Line */}
                 <div className="flex flex-col items-center">
-                  <div className="p-2 bg-gray-100 rounded-full">
+                  <div className="p-2 bg-muted rounded-full">
                     {getActivityIcon(activity.type)}
                   </div>
                   {idx < timelineActivities.length - 1 && (
-                    <div className="w-0.5 flex-1 bg-gray-200 my-2"></div>
+                    <div className="w-0.5 flex-1 bg-muted my-2"></div>
                   )}
                 </div>
 
@@ -3159,39 +3159,39 @@ const DiscussionsView = () => {
                   <div className="flex items-start justify-between mb-2">
                     <div>
                       <p className="font-medium">
-                        <span className="text-blue-600">{activity.user}</span>
+                        <span className="text-primary">{activity.user}</span>
                         {' '}{activity.action}{' '}
                         <span className="font-semibold">{activity.target}</span>
                       </p>
-                      <p className="text-sm text-gray-600 mt-1">{activity.details}</p>
+                      <p className="text-sm text-muted-foreground mt-1">{activity.details}</p>
                     </div>
-                    <span className="text-xs text-gray-500 whitespace-nowrap mr-4">{activity.timestamp}</span>
+                    <span className="text-xs text-muted-foreground whitespace-nowrap mr-4">{activity.timestamp}</span>
                   </div>
 
                   {/* Quick Actions */}
                   <div className="flex gap-2 mt-3">
                     {activity.type === 'message' && (
-                      <button className="text-xs px-3 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100">
+                      <button className="text-xs px-3 py-1 bg-primary/10 text-primary rounded-lg hover:bg-blue-100">
                         عرض المحادثة
                       </button>
                     )}
                     {activity.type === 'file' && (
                       <>
-                        <button className="text-xs px-3 py-1 bg-green-50 text-green-600 rounded hover:bg-green-100">
+                        <button className="text-xs px-3 py-1 bg-green-50 text-green-600 rounded-lg hover:bg-green-100">
                           تحميل
                         </button>
-                        <button className="text-xs px-3 py-1 bg-gray-50 text-gray-600 rounded hover:bg-gray-100">
+                        <button className="text-xs px-3 py-1 bg-secondary text-muted-foreground rounded-lg hover:bg-muted">
                           معاينة
                         </button>
                       </>
                     )}
                     {activity.type === 'discussion' && (
-                      <button className="text-xs px-3 py-1 bg-purple-50 text-purple-600 rounded hover:bg-purple-100">
+                      <button className="text-xs px-3 py-1 bg-purple-50 text-purple-600 rounded-lg hover:bg-purple-100">
                         عرض النقاش
                       </button>
                     )}
                     {activity.type === 'revision' && (
-                      <button className="text-xs px-3 py-1 bg-yellow-50 text-yellow-600 rounded hover:bg-yellow-100">
+                      <button className="text-xs px-3 py-1 bg-yellow-50 text-yellow-600 rounded-lg hover:bg-yellow-100">
                         عرض الطلب
                       </button>
                     )}
@@ -3202,8 +3202,8 @@ const DiscussionsView = () => {
           </div>
 
           {/* Load More */}
-          <div className="text-center pt-6 border-t border-gray-200">
-            <button className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 flex items-center gap-2 mx-auto">
+          <div className="text-center pt-6 border-t border-border">
+            <button className="px-6 py-2 bg-muted text-foreground rounded-lg hover:bg-muted flex items-center gap-2 mx-auto">
               <RefreshCw className="w-4 h-4" />
               تحميل المزيد
             </button>
@@ -3215,7 +3215,7 @@ const DiscussionsView = () => {
 
   // Render views
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       {currentView === 'hub' && <HubView />}
       {currentView === 'chat' && (
         <ChatView

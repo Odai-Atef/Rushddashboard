@@ -14,7 +14,7 @@ export function PanelError({
   return (
     <div className="flex flex-col items-center justify-center p-8 text-center">
       <AlertCircle className="w-8 h-8 text-red-500 mb-3" />
-      <p className="text-gray-700 mb-4 max-w-md">{message}</p>
+      <p className="text-foreground mb-4 max-w-md">{message}</p>
       {onRetry && (
         <button
           onClick={onRetry}

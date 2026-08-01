@@ -17,7 +17,7 @@ function Separator({
       decorative={decorative}
       orientation={orientation}
       className={cn(
-        "shrink-0 bg-gray-200 dark:bg-gray-700 transition-colors duration-200",
+        "shrink-0 bg-gray-200 dark:bg-muted transition-colors duration-200",
         "data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full",
         "data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",
         className,

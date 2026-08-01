@@ -71,10 +71,10 @@ export function DonorHistoryAccordion({ matchId }: DonorHistoryAccordionProps) {
   };
 
   return (
-    <div className="mt-3 border-t border-gray-100 pt-3">
+    <div className="mt-3 border-t border-border pt-3">
       <button
         onClick={handleToggle}
-        className="flex items-center gap-2 text-sm text-gray-500 hover:text-blue-600 transition-colors"
+        className="flex items-center gap-2 text-sm text-muted-foreground hover:text-blue-600 transition-colors"
       >
         {isLoading ? (
           <Loader2 className="w-4 h-4 animate-spin" />
@@ -87,22 +87,22 @@ export function DonorHistoryAccordion({ matchId }: DonorHistoryAccordionProps) {
       {isOpen && (
         <div className="mt-2 space-y-2">
           {history.length === 0 ? (
-            <p className="text-sm text-gray-400">لا يوجد سجل</p>
+            <p className="text-sm text-muted-foreground">لا يوجد سجل</p>
           ) : (
             history.map((item) => (
               <div key={item.id} className="flex items-start gap-2 text-sm">
-                <Clock className="w-4 h-4 text-gray-400 mt-0.5 shrink-0" />
+                <Clock className="w-4 h-4 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="font-medium text-gray-700">{ACTION_LABELS[item.action] || item.action}</span>
+                    <span className="font-medium text-foreground">{ACTION_LABELS[item.action] || item.action}</span>
                     {item.fromStatus && item.toStatus && (
-                      <span className="text-xs text-gray-500">
+                      <span className="text-xs text-muted-foreground">
                         من {STATUS_LABELS[item.fromStatus] || item.fromStatus} → إلى {STATUS_LABELS[item.toStatus] || item.toStatus}
                       </span>
                     )}
                   </div>
-                  {item.message && <p className="text-gray-500 mt-0.5">{item.message}</p>}
-                  <span className="text-xs text-gray-400">
+                  {item.message && <p className="text-muted-foreground mt-0.5">{item.message}</p>}
+                  <span className="text-xs text-muted-foreground">
                     {timeAgo(item.createdAt)} - {formatDate(item.createdAt)}
                   </span>
                 </div>

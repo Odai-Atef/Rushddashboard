@@ -200,7 +200,7 @@ export function SubmissionPreparation({ donorId, onNavigate }: SubmissionPrepara
                 <div className="flex items-center gap-2">
                   {doc.status === 'ready' && <span className="text-xs text-muted-foreground">{doc.size}</span>}
                   {doc.status !== 'ready' && (
-                    <button className="text-xs px-2 py-0.5 border border-border rounded text-muted-foreground hover:bg-muted transition-colors">
+                    <button className="text-xs px-2 py-0.5 border border-border rounded-lg text-muted-foreground hover:bg-muted transition-colors">
                       رفع
                     </button>
                   )}

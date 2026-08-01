@@ -151,7 +151,7 @@ export function CharityAssessmentResultsPage() {
     const originalWidth = root.offsetWidth;
     return toCanvas(root, {
       pixelRatio: 2,
-      backgroundColor: '#ffffff',
+      backgroundColor: 'var(--card)',
       cacheBust: true,
       style: {
         width: `${originalWidth || 1120}px`,
@@ -297,7 +297,7 @@ export function CharityAssessmentResultsPage() {
 
         const canvas = await toCanvas(section, {
           pixelRatio: 2,
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--card)',
           cacheBust: true,
           filter: filterExcluded,
           style: {
@@ -546,7 +546,7 @@ export function CharityAssessmentResultsPage() {
                   <PolarRadiusAxis
                     angle={90}
                     domain={[radarLowerBound, radarUpperBound]}
-                    tick={{ fontSize: 10, fill: '#6b7280' }}
+                    tick={{ fontSize: 10, fill: 'var(--muted-foreground)' }}
                     tickCount={5}
                   />
                   <Radar
@@ -575,7 +575,7 @@ export function CharityAssessmentResultsPage() {
               onClick={() => {
                 document.getElementById('strengths-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-yellow-500/10 cursor-pointer flex flex-col justify-between h-full"
+              className="bg-white dark:bg-card/60 dark:backdrop-blur-md border border-border/80 dark:border-border/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-yellow-500/10 cursor-pointer flex flex-col justify-between h-full"
             >
               <div className="flex items-center justify-between mb-5">
                 <div className="p-2.5 rounded-xl bg-yellow-50 dark:bg-yellow-500/10">
@@ -583,15 +583,15 @@ export function CharityAssessmentResultsPage() {
                 </div>
                 <Award className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1.5 tracking-tight">{strengths.length}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">نقاط قوة رئيسية</p>
+              <p className="text-3xl font-bold text-foreground dark:text-white mb-1.5 tracking-tight">{strengths.length}</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">نقاط قوة رئيسية</p>
             </button>
 
             <button
               onClick={() => {
                 document.getElementById('gaps-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-orange-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-orange-500/10 cursor-pointer flex flex-col justify-between h-full"
+              className="bg-white dark:bg-card/60 dark:backdrop-blur-md border border-border/80 dark:border-border/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-orange-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-orange-500/10 cursor-pointer flex flex-col justify-between h-full"
             >
               <div className="flex items-center justify-between mb-5">
                 <div className="p-2.5 rounded-xl bg-orange-50 dark:bg-orange-500/10">
@@ -599,8 +599,8 @@ export function CharityAssessmentResultsPage() {
                 </div>
                 <Target className="w-6 h-6 text-red-500" />
               </div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1.5 tracking-tight">{weaknesses.length}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">تحليل الفجوات</p>
+              <p className="text-3xl font-bold text-foreground dark:text-white mb-1.5 tracking-tight">{weaknesses.length}</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">تحليل الفجوات</p>
             </button>
 
             <button
@@ -609,7 +609,7 @@ export function CharityAssessmentResultsPage() {
                   navigate(`/dashboard/charity-assessment/roadmap/${organizationId}`);
                 }
               }}
-              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-purple-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-purple-500/10 cursor-pointer flex flex-col justify-between h-full"
+              className="bg-white dark:bg-card/60 dark:backdrop-blur-md border border-border/80 dark:border-border/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-purple-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-purple-500/10 cursor-pointer flex flex-col justify-between h-full"
             >
               <div className="flex items-center justify-between mb-5">
                 <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-500/10">
@@ -617,8 +617,8 @@ export function CharityAssessmentResultsPage() {
                 </div>
                 <Sparkles className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1.5 tracking-tight">{recommendations.length}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400">توصيات مخصصة</p>
+              <p className="text-3xl font-bold text-foreground dark:text-white mb-1.5 tracking-tight">{recommendations.length}</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground">توصيات مخصصة</p>
             </button>
           </div>
         </div>
@@ -705,7 +705,7 @@ export function CharityAssessmentResultsPage() {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-2">
                             <h3 className="font-medium">{gap.area}</h3>
-                            <span className={`px-2 py-0.5 rounded text-xs ${severityClasses.badge}`}>
+                            <span className={`px-2 py-0.5 rounded-lg text-xs ${severityClasses.badge}`}>
                               {severityClasses.label}
                             </span>
                           </div>

@@ -120,7 +120,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     <aside className={cn(
       "flex-col hidden lg:flex transition-all duration-300 relative",
       // Light mode: dark navy background, dark mode: deep navy
-      "bg-[#1a2744] dark:bg-[#0f172a]",
+      "bg-card dark:bg-card",
       // Border
       "border-l border-white/10 dark:border-white/5",
       // Glass effect in dark mode
@@ -191,7 +191,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                     <Icon
                       className={cn(
                         "w-5 h-5 transition-all duration-200",
-                        isActive && isDark && "drop-shadow-[0_0_6px_rgba(52,211,153,0.6)]",
+                        isActive && isDark && "drop-shadow-emerald-500/20",
                       )}
                       aria-hidden="true"
                     />
@@ -216,7 +216,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
           </p>
         ) : (
           <div className="flex justify-center">
-            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-[11px] text-white/60 font-medium">
+            <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/60 font-medium">
               ر
             </div>
           </div>

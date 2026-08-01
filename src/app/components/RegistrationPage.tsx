@@ -156,7 +156,7 @@ export function RegistrationPage() {
                   value={formData.fullName}
                   onChange={(e) => updateField('fullName', e.target.value)}
                   placeholder="أحمد محمد"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-2 focus-visible:ring-emerald-500/30 transition-all ${
                     errors.fullName ? 'border-red-500' : 'border-border'
                   }`}
                 />
@@ -177,7 +177,7 @@ export function RegistrationPage() {
                   value={formData.email}
                   onChange={(e) => updateField('email', e.target.value)}
                   placeholder="name@company.com"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-2 focus-visible:ring-emerald-500/30 transition-all ${
                     errors.email ? 'border-red-500' : 'border-border'
                   }`}
                 />
@@ -198,7 +198,7 @@ export function RegistrationPage() {
                   value={formData.phone}
                   onChange={(e) => updateField('phone', e.target.value)}
                   placeholder="+966 50 123 4567"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-2 focus-visible:ring-emerald-500/30 transition-all ${
                     errors.phone ? 'border-red-500' : 'border-border'
                   }`}
                 />
@@ -219,7 +219,7 @@ export function RegistrationPage() {
                   value={formData.companyName}
                   onChange={(e) => updateField('companyName', e.target.value)}
                   placeholder="شركة الرشد للاستثمار"
-                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  className={`w-full pr-11 pl-4 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-2 focus-visible:ring-emerald-500/30 transition-all ${
                     errors.companyName ? 'border-red-500' : 'border-border'
                   }`}
                 />
@@ -240,7 +240,7 @@ export function RegistrationPage() {
                   value={formData.password}
                   onChange={(e) => updateField('password', e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-2 focus-visible:ring-emerald-500/30 transition-all ${
                     errors.password ? 'border-red-500' : 'border-border'
                   }`}
                 />
@@ -268,7 +268,7 @@ export function RegistrationPage() {
                   value={formData.confirmPassword}
                   onChange={(e) => updateField('confirmPassword', e.target.value)}
                   placeholder="••••••••"
-                  className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-all ${
+                  className={`w-full pr-11 pl-11 py-3 bg-muted border rounded-lg focus:outline-none focus:ring-2 focus-visible:ring-2 focus-visible:ring-emerald-500/30 transition-all ${
                     errors.confirmPassword ? 'border-red-500' : 'border-border'
                   }`}
                 />
@@ -290,7 +290,7 @@ export function RegistrationPage() {
                   type="checkbox"
                   checked={formData.agreeToTerms}
                   onChange={(e) => updateField('agreeToTerms', e.target.checked)}
-                  className={`mt-0.5 w-4 h-4 rounded border text-primary focus:ring-2 focus:ring-primary ${
+                  className={`mt-0.5 w-4 h-4 rounded-lg border text-primary focus:ring-2 focus-visible:ring-2 focus-visible:ring-emerald-500/30 ${
                     errors.agreeToTerms ? 'border-red-500' : 'border-border'
                   }`}
                 />

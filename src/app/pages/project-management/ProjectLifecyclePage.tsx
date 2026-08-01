@@ -94,7 +94,7 @@ function getStepStatusColor(type: StepVisualStatus): { bg: string; border: strin
       return { bg: 'bg-red-500', border: 'border-red-500', text: 'text-red-600', line: 'bg-red-500' };
     case 'pending':
     default:
-      return { bg: 'bg-gray-300', border: 'border-gray-300', text: 'text-gray-400', line: 'bg-gray-300' };
+      return { bg: 'bg-muted', border: 'border-border', text: 'text-muted-foreground', line: 'bg-muted' };
   }
 }
 
@@ -106,13 +106,13 @@ function StatusCircle({ type, size = 'sm' }: { type: StepVisualStatus; size?: 's
   return (
     <div
       className={`flex-shrink-0 ${sizeClasses} rounded-full border-2 flex items-center justify-center ${colors.border} ${
-        type === 'completed' || type === 'current' || type === 'stopped' ? colors.bg : 'bg-white'
+        type === 'completed' || type === 'current' || type === 'stopped' ? colors.bg : 'bg-card'
       }`}
     >
       {type === 'completed' && <CheckCircle2 className={`${iconSize} text-white`} />}
       {type === 'current' && <div className={`${size === 'md' ? 'w-3 h-3' : 'w-2 h-2'} rounded-full bg-white`} />}
       {type === 'stopped' && <XCircle className={`${iconSize} text-white`} />}
-      {type === 'pending' && <Circle className={`${iconSize} text-gray-400`} />}
+      {type === 'pending' && <Circle className={`${iconSize} text-muted-foreground`} />}
     </div>
   );
 }
@@ -136,7 +136,7 @@ function StatusRow({
     <div className={`flex items-start gap-3 ${isBranch ? 'pr-0' : 'pr-2'}`}>
       <StatusCircle type={type} />
       <div className="flex-1 min-w-0">
-        <p className={`text-sm font-medium ${hasStep ? colors.text : 'text-gray-400'}`}>
+        <p className={`text-sm font-medium ${hasStep ? colors.text : 'text-muted-foreground'}`}>
           {getStatusLabel(statusKey)}
           {isBranch && branchType === 'approved' && (
             <span className="inline-block mr-1.5 px-2 py-0.5 bg-emerald-100 text-emerald-700 text-xs rounded-full font-medium">
@@ -150,7 +150,7 @@ function StatusRow({
           )}
         </p>
         {hasStep && step.enteredAt && (
-          <p className="text-xs text-gray-500 mt-0.5">
+          <p className="text-xs text-muted-foreground mt-0.5">
             <span className="inline-flex items-center gap-1">
               <Clock className="w-3 h-3" />
               {new Date(step.enteredAt).toLocaleDateString('ar-SA', {
@@ -172,7 +172,7 @@ function StatusRow({
             )}
           </p>
         )}
-        {hasStep && step.notes && <p className="text-xs text-gray-600 mt-1">{step.notes}</p>}
+        {hasStep && step.notes && <p className="text-xs text-muted-foreground mt-1">{step.notes}</p>}
       </div>
     </div>
   );
@@ -206,15 +206,15 @@ function DecisionFork({
         <div className={`absolute right-[11px] top-0 bottom-0 w-0.5 ${decisionColors.line} ${decisionType === 'pending' ? 'opacity-30' : ''}`} />
 
         {/* Horizontal split line */}
-        <div className="absolute right-[11px] top-4 w-16 h-0.5 bg-gray-300" />
+        <div className="absolute right-[11px] top-4 w-16 h-0.5 bg-muted" />
 
         {/* Branches */}
         <div className="flex gap-8">
           {/* Approved branch - left */}
           <div className="flex-1 relative">
             {/* Connecting line from split to branch */}
-            <div className={`absolute right-[-20px] top-4 w-5 h-0.5 ${approvedType === 'pending' ? 'bg-gray-300' : 'bg-emerald-500'}`} />
-            <div className={`absolute right-[-20px] top-4 w-0.5 h-full ${approvedType === 'pending' ? 'bg-gray-300' : 'bg-emerald-500'} ${approvedType === 'pending' ? 'opacity-40' : ''}`} />
+            <div className={`absolute right-[-20px] top-4 w-5 h-0.5 ${approvedType === 'pending' ? 'bg-muted' : 'bg-emerald-500'}`} />
+            <div className={`absolute right-[-20px] top-4 w-0.5 h-full ${approvedType === 'pending' ? 'bg-muted' : 'bg-emerald-500'} ${approvedType === 'pending' ? 'opacity-40' : ''}`} />
 
             <div className="bg-emerald-50/50 rounded-lg p-3 border border-emerald-100">
               <p className="text-xs font-semibold text-emerald-700 mb-2 flex items-center gap-1">
@@ -228,8 +228,8 @@ function DecisionFork({
           {/* Rejected branch - right */}
           <div className="flex-1 relative">
             {/* Connecting line from split to branch */}
-            <div className={`absolute right-[-20px] top-4 w-5 h-0.5 ${rejectedType === 'pending' ? 'bg-gray-300' : 'bg-red-400'} ${rejectedType === 'pending' ? 'border-dashed' : ''}`} style={rejectedType === 'pending' ? { borderTop: '2px dashed #d1d5db' } : undefined} />
-            <div className={`absolute right-[-20px] top-4 w-0.5 h-full ${rejectedType === 'pending' ? 'bg-gray-300' : 'bg-red-400'} ${rejectedType === 'pending' ? 'opacity-40' : ''}`} />
+            <div className={`absolute right-[-20px] top-4 w-5 h-0.5 ${rejectedType === 'pending' ? 'bg-muted' : 'bg-red-400'} ${rejectedType === 'pending' ? 'border-dashed' : ''}`} style={rejectedType === 'pending' ? { borderTop: '2px dashed var(--border)' } : undefined} />
+            <div className={`absolute right-[-20px] top-4 w-0.5 h-full ${rejectedType === 'pending' ? 'bg-muted' : 'bg-red-400'} ${rejectedType === 'pending' ? 'opacity-40' : ''}`} />
 
             <div className="bg-red-50/50 rounded-lg p-3 border border-red-100">
               <p className="text-xs font-semibold text-red-700 mb-2 flex items-center gap-1">
@@ -273,7 +273,7 @@ function getPhaseStatusColor(status: PhaseStatus): { bg: string; border: string;
       return { bg: 'bg-red-500', border: 'border-red-500', text: 'text-red-600' };
     case 'pending':
     default:
-      return { bg: 'bg-gray-300', border: 'border-gray-300', text: 'text-gray-400' };
+      return { bg: 'bg-muted', border: 'border-border', text: 'text-muted-foreground' };
   }
 }
 
@@ -298,7 +298,7 @@ export function ProjectLifecyclePage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -306,7 +306,7 @@ export function ProjectLifecyclePage() {
 
   if (error) {
     return (
-      <div className="min-h-full bg-gray-50 p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-full bg-secondary p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
         <div className="text-red-600 text-center">{error}</div>
         <button
           onClick={() => {
@@ -339,7 +339,7 @@ export function ProjectLifecyclePage() {
   }
 
   return (
-    <div className="min-h-full bg-gray-50 p-6">
+    <div className="min-h-full bg-secondary p-3 sm:p-6">
       <div className="space-y-6 max-w-5xl mx-auto">
         <button
           onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
@@ -350,29 +350,29 @@ export function ProjectLifecyclePage() {
         </button>
 
         <div className="text-center mb-8">
-          <h1 className={`text-3xl font-bold text-gray-900 ${isDraft ? 'opacity-50' : ''}`}>
+          <h1 className={`text-3xl font-bold text-foreground ${isDraft ? 'opacity-50' : ''}`}>
             مسار دورة حياة المشروع
           </h1>
-          <p className="text-gray-500 mt-2">يعرض جميع المراحل من البداية حتى الإغلاق مع مسارات القرارات</p>
+          <p className="text-muted-foreground mt-2">يعرض جميع المراحل من البداية حتى الإغلاق مع مسارات القرارات</p>
         </div>
 
-        <div className="bg-white rounded-xl p-8 border border-gray-200">
+        <div className="bg-card rounded-xl p-8 border border-border">
           <div className="flex items-center gap-3 mb-8">
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
               <GitBranch className="w-6 h-6 text-blue-600" />
             </div>
             <div>
-              <p className="text-sm text-gray-600">المشروع</p>
-              <p className={`text-xl font-bold text-gray-900 ${isDraft ? 'opacity-50' : ''}`}>{project.name}</p>
+              <p className="text-sm text-muted-foreground">المشروع</p>
+              <p className={`text-xl font-bold text-foreground ${isDraft ? 'opacity-50' : ''}`}>{project.name}</p>
             </div>
           </div>
 
           {steps.length === 0 ? (
-            <div className="text-center py-12 text-gray-500">لا توجد خطوات مسجلة لدورة حياة هذا المشروع</div>
+            <div className="text-center py-12 text-muted-foreground">لا توجد خطوات مسجلة لدورة حياة هذا المشروع</div>
           ) : (
             <div className="relative">
               {/* Vertical connector line */}
-              <div className="absolute right-[27px] top-4 bottom-4 w-0.5 bg-gray-200" />
+              <div className="absolute right-[27px] top-4 bottom-4 w-0.5 bg-muted" />
 
               <div className="space-y-10">
                 {PHASES.map((phase) => {
@@ -395,7 +395,7 @@ export function ProjectLifecyclePage() {
                       <div className="relative z-10 flex-shrink-0">
                         <div
                           className={`w-14 h-14 rounded-full border-2 flex items-center justify-center font-bold text-lg ${colors.border} ${
-                            phaseStatus === 'completed' || phaseStatus === 'current' ? colors.bg : 'bg-white'
+                            phaseStatus === 'completed' || phaseStatus === 'current' ? colors.bg : 'bg-card'
                           }`}
                         >
                           <span
@@ -446,23 +446,23 @@ export function ProjectLifecyclePage() {
           )}
 
           {/* Legend */}
-          <div className="mt-12 pt-6 border-t border-gray-200">
+          <div className="mt-12 pt-6 border-t border-border">
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-red-500" />
-                <span className="text-gray-600">متوقف مع إعادة المراجعة</span>
+                <span className="text-muted-foreground">متوقف مع إعادة المراجعة</span>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-4 h-4 rounded-full border-2 border-gray-300" />
-                <span className="text-gray-600">باقي</span>
+                <div className="w-4 h-4 rounded-full border-2 border-border" />
+                <span className="text-muted-foreground">باقي</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-blue-500" />
-                <span className="text-gray-600">الحالة الحالية</span>
+                <span className="text-muted-foreground">الحالة الحالية</span>
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-4 h-4 rounded-full bg-emerald-500" />
-                <span className="text-gray-600">مكتمل</span>
+                <span className="text-muted-foreground">مكتمل</span>
               </div>
             </div>
           </div>

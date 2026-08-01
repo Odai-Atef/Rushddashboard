@@ -720,7 +720,7 @@ export function PricingPage() {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" dir="rtl">
           <div className="bg-white rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
             {/* Header */}
-            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+            <div className="p-6 border-b border-border flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <ScrollText className="w-6 h-6 text-blue-600" />
                 <div>
@@ -730,7 +730,7 @@ export function PricingPage() {
               </div>
               <button
                 onClick={() => setSlaModalOpen(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
               >
                 <X className="w-5 h-5 text-slate-400" />
               </button>
@@ -869,7 +869,7 @@ export function PricingPage() {
                         type="checkbox"
                         checked={slaAccepted}
                         onChange={(e) => setSlaAccepted(e.target.checked)}
-                        className="w-5 h-5 mt-0.5 text-blue-600 rounded focus:ring-blue-500"
+                        className="w-5 h-5 mt-0.5 text-blue-600 rounded-lg focus:ring-blue-500"
                       />
                       <span className="text-sm text-slate-700 leading-relaxed">
                         قرأت ووافقت على اتفاقية مستوى الخدمة (SLA) وأقر بأنني فهمت جميع التزاماتي والتزامات المنصة الموضحة أعلاه.
@@ -884,9 +884,9 @@ export function PricingPage() {
 
             {/* Footer with Progress */}
             {!detailLoading && selectedPkg && (
-              <div className="p-6 border-t border-gray-100">
+              <div className="p-6 border-t border-border">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden">
+                  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                     <div
                       className="h-full bg-blue-600 transition-all duration-300"
                       style={{ width: `${slaScrollProgress}%` }}

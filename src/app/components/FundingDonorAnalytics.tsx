@@ -72,11 +72,11 @@ export function FundingDonorAnalytics() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl text-gray-900 dark:text-white">تحليلات التمويل والجهات المانحة</h1>
-          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">التمويل المُحقَّق • نمو المانحين • معدلات التحويل • التوزيع الجغرافي</p>
+          <h1 className="text-2xl text-foreground dark:text-white">تحليلات التمويل والجهات المانحة</h1>
+          <p className="text-muted-foreground dark:text-muted-foreground text-sm mt-1">التمويل المُحقَّق • نمو المانحين • معدلات التحويل • التوزيع الجغرافي</p>
         </div>
         <div className="flex items-center gap-2">
-          <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 bg-background text-gray-900 dark:text-white">
+          <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-border dark:border-border rounded-lg px-3 py-2 bg-background text-foreground dark:text-white">
             <option value="3months">آخر 3 أشهر</option>
             <option value="6months">آخر 6 أشهر</option>
             <option value="1year">آخر سنة</option>
@@ -97,12 +97,12 @@ export function FundingDonorAnalytics() {
         ].map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className={`bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
-              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 w-fit mb-4">
+            <div key={i} className={`bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl border border-border/80 dark:border-border/50 p-5 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
+              <div className="p-2.5 rounded-xl bg-muted dark:bg-muted/80 w-fit mb-4">
                 <Icon className={`w-6 h-6 ${card.color}`} />
               </div>
-              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{card.value}</p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">{card.label}</p>
+              <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{card.value}</p>
+              <p className="text-sm text-muted-foreground dark:text-muted-foreground mt-1.5">{card.label}</p>
             </div>
           );
         })}
@@ -110,8 +110,8 @@ export function FundingDonorAnalytics() {
 
       {/* Funding Secured vs Target */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 bg-card border border-gray-200 dark:border-gray-700 rounded-2xl p-5 md:p-6 shadow-sm">
-          <h2 className="text-gray-900 dark:text-white mb-4">التمويل المُحقَّق مقابل الهدف (ر.س)</h2>
+        <div className="lg:col-span-2 bg-card border border-border dark:border-border rounded-2xl p-5 md:p-6 shadow-sm">
+          <h2 className="text-foreground dark:text-white mb-4">التمويل المُحقَّق مقابل الهدف (ر.س)</h2>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={fundingSecuredData}>
               <defs>
@@ -132,8 +132,8 @@ export function FundingDonorAnalytics() {
         </div>
 
         {/* Conversion Rate */}
-        <div className="bg-card border border-gray-200 dark:border-gray-700 rounded-2xl p-5 md:p-6 shadow-sm">
-          <h2 className="text-gray-900 dark:text-white mb-4">معدل تحويل الفرص</h2>
+        <div className="bg-card border border-border dark:border-border rounded-2xl p-5 md:p-6 shadow-sm">
+          <h2 className="text-foreground dark:text-white mb-4">معدل تحويل الفرص</h2>
           <ResponsiveContainer width="100%" height={200}>
             <LineChart data={opportunityConversion}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -151,8 +151,8 @@ export function FundingDonorAnalytics() {
 
       {/* Donor Growth & Category Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-card border border-gray-200 dark:border-gray-700 rounded-2xl p-5 md:p-6 shadow-sm">
-          <h2 className="text-gray-900 dark:text-white mb-4">نمو المانحين</h2>
+        <div className="bg-card border border-border dark:border-border rounded-2xl p-5 md:p-6 shadow-sm">
+          <h2 className="text-foreground dark:text-white mb-4">نمو المانحين</h2>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={donorGrowthData}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -167,10 +167,10 @@ export function FundingDonorAnalytics() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-card border border-gray-200 dark:border-gray-700 rounded-2xl p-5 md:p-6 shadow-sm">
+        <div className="bg-card border border-border dark:border-border rounded-2xl p-5 md:p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
-            <Tag className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-            <h2 className="text-gray-900 dark:text-white">التمويل حسب القطاع</h2>
+            <Tag className="w-4 h-4 text-muted-foreground dark:text-muted-foreground" />
+            <h2 className="text-foreground dark:text-white">التمويل حسب القطاع</h2>
           </div>
           <div className="flex gap-4">
             <ResponsiveContainer width="50%" height={200}>
@@ -186,9 +186,9 @@ export function FundingDonorAnalytics() {
             <div className="flex-1 space-y-2 py-2">
               {fundingByCategory.map((item, i) => (
                 <div key={i} className="flex items-center justify-between text-sm">
-                  <span className="text-gray-900 dark:text-white">{fmt(item.value)}</span>
+                  <span className="text-foreground dark:text-white">{fmt(item.value)}</span>
                   <div className="flex items-center gap-1.5">
-                    <span className="text-gray-500 dark:text-gray-400">{item.name}</span>
+                    <span className="text-muted-foreground dark:text-muted-foreground">{item.name}</span>
                     <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
                   </div>
                 </div>
@@ -200,19 +200,19 @@ export function FundingDonorAnalytics() {
 
       {/* Regional & Top Donors */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-card border border-gray-200 dark:border-gray-700 rounded-2xl p-5 md:p-6 shadow-sm">
+        <div className="bg-card border border-border dark:border-border rounded-2xl p-5 md:p-6 shadow-sm">
           <div className="flex items-center gap-2 mb-4">
-            <MapPin className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-            <h2 className="text-gray-900 dark:text-white">التمويل حسب المنطقة</h2>
+            <MapPin className="w-4 h-4 text-muted-foreground dark:text-muted-foreground" />
+            <h2 className="text-foreground dark:text-white">التمويل حسب المنطقة</h2>
           </div>
           <div className="space-y-3">
             {fundingByRegion.map((region, i) => (
               <div key={i}>
                 <div className="flex items-center justify-between mb-1 text-sm">
-                  <span className="text-gray-500 dark:text-gray-400">{region.projects} مشروع</span>
+                  <span className="text-muted-foreground dark:text-muted-foreground">{region.projects} مشروع</span>
                   <div className="flex items-center gap-2">
-                    <span className="text-gray-900 dark:text-white">{fmt(region.amount)} ر.س</span>
-                    <span className="text-gray-500 dark:text-gray-400">{region.region}</span>
+                    <span className="text-foreground dark:text-white">{fmt(region.amount)} ر.س</span>
+                    <span className="text-muted-foreground dark:text-muted-foreground">{region.region}</span>
                   </div>
                 </div>
                 <div className="h-2 bg-muted rounded-full overflow-hidden">
@@ -223,18 +223,18 @@ export function FundingDonorAnalytics() {
           </div>
         </div>
 
-        <div className="bg-card border border-gray-200 dark:border-gray-700 rounded-2xl p-5 md:p-6 shadow-sm">
-          <h2 className="text-gray-900 dark:text-white mb-4">أبرز الجهات المانحة</h2>
+        <div className="bg-card border border-border dark:border-border rounded-2xl p-5 md:p-6 shadow-sm">
+          <h2 className="text-foreground dark:text-white mb-4">أبرز الجهات المانحة</h2>
           <div className="space-y-3">
             {topDonors.map((donor, i) => (
-              <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-muted/30 transition-colors">
+              <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border dark:border-border hover:bg-muted/30 transition-colors">
                 <div className="flex items-center gap-2">
                   <span className="text-emerald-600">{donor.amount}</span>
                   <span className="text-xs px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/40 text-blue-600">{donor.type}</span>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-900 dark:text-white">{donor.name}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">{donor.projects} مشاريع</p>
+                  <p className="text-sm text-foreground dark:text-white">{donor.name}</p>
+                  <p className="text-xs text-muted-foreground dark:text-muted-foreground">{donor.projects} مشاريع</p>
                 </div>
               </div>
             ))}

@@ -218,7 +218,7 @@ export function TopBar({
       className={cn(
         'flex items-center justify-between h-16 px-4 lg:px-6 transition-all duration-200',
         // Light mode
-        !isDark && 'bg-white text-gray-900 shadow-sm border-b border-gray-100',
+        !isDark && 'bg-background text-foreground shadow-sm border-b border-border',
         // Dark mode — glass
         isDark && 'bg-white/10 backdrop-blur-md text-white border-b border-white/10',
         className
@@ -235,7 +235,7 @@ export function TopBar({
             'lg:hidden p-2 rounded-lg transition-colors duration-200',
             isDark
               ? 'hover:bg-white/10 text-white'
-              : 'hover:bg-gray-100 text-gray-700'
+              : 'hover:bg-muted text-foreground'
           )}
           aria-label="القائمة"
         >
@@ -253,8 +253,8 @@ export function TopBar({
             <p className="font-bold text-sm tracking-tight">Rushd</p>
             <p
               className={cn(
-                'text-[11px] font-medium',
-                isDark ? 'text-white/60' : 'text-gray-500'
+                'text-xs font-medium',
+                isDark ? 'text-white/60' : 'text-muted-foreground'
               )}
             >
               Rushd Virtual Incubator
@@ -271,7 +271,7 @@ export function TopBar({
           <Search
             className={cn(
               'absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none',
-              isDark ? 'text-white/50' : 'text-gray-400'
+              isDark ? 'text-white/50' : 'text-muted-foreground'
             )}
           />
           <input
@@ -284,7 +284,7 @@ export function TopBar({
               'focus:outline-none focus:ring-2',
               isDark
                 ? 'bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:ring-emerald-400/40'
-                : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder:text-gray-400 focus:ring-emerald-500/30'
+                : 'bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:ring-emerald-500/30'
             )}
           />
           {searchQuery && (
@@ -292,7 +292,7 @@ export function TopBar({
               onClick={() => setSearchQuery('')}
               className={cn(
                 'absolute left-3 top-1/2 -translate-y-1/2',
-                isDark ? 'text-white/40 hover:text-white' : 'text-gray-400 hover:text-gray-600'
+                isDark ? 'text-white/40 hover:text-white' : 'text-muted-foreground hover:text-muted-foreground'
               )}
               aria-label="مسح البحث"
             >
@@ -311,7 +311,7 @@ export function TopBar({
               'p-2 rounded-lg transition-colors duration-200',
               isDark
                 ? 'hover:bg-white/10 text-white/70'
-                : 'hover:bg-gray-100 text-gray-500'
+                : 'hover:bg-muted text-muted-foreground'
             )}
             aria-label="بحث"
           >
@@ -322,7 +322,7 @@ export function TopBar({
             <Search
               className={cn(
                 'absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none',
-                isDark ? 'text-white/50' : 'text-gray-400'
+                isDark ? 'text-white/50' : 'text-muted-foreground'
               )}
             />
             <input
@@ -336,7 +336,7 @@ export function TopBar({
                 'focus:outline-none focus:ring-2',
                 isDark
                   ? 'bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:ring-emerald-400/40'
-                  : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder:text-gray-400 focus:ring-emerald-500/30'
+                  : 'bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:ring-emerald-500/30'
               )}
             />
             <button
@@ -346,7 +346,7 @@ export function TopBar({
               }}
               className={cn(
                 'absolute left-2 top-1/2 -translate-y-1/2',
-                isDark ? 'text-white/40 hover:text-white' : 'text-gray-400 hover:text-gray-600'
+                isDark ? 'text-white/40 hover:text-white' : 'text-muted-foreground hover:text-muted-foreground'
               )}
               aria-label="إغلاق البحث"
             >
@@ -368,13 +368,13 @@ export function TopBar({
                 'relative p-2 rounded-lg transition-all duration-200',
                 isDark
                   ? 'hover:bg-white/10 text-white/80'
-                  : 'hover:bg-gray-100 text-gray-600'
+                  : 'hover:bg-muted text-muted-foreground'
               )}
               aria-label="الإشعارات"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-red-500 rounded-full text-[10px] text-white flex items-center justify-center font-bold px-1 shadow-sm">
+                <span className="absolute top-1 right-1 min-w-4.5 h-4.5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center font-bold px-1 shadow-sm">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
@@ -385,8 +385,8 @@ export function TopBar({
               className={cn(
                 'border rounded-xl shadow-xl p-2 w-96 z-50 overflow-hidden',
                 isDark
-                  ? 'bg-[#1a2744]/95 backdrop-blur-md border-white/10'
-                  : 'bg-white border-gray-100'
+                  ? 'bg-card/95 backdrop-blur-md border-white/10'
+                  : 'bg-card border-border'
               )}
               sideOffset={8}
               align="end"
@@ -396,10 +396,10 @@ export function TopBar({
               <div
                 className={cn(
                   'p-3 flex items-center justify-between',
-                  isDark ? 'border-b border-white/10' : 'border-b border-gray-100'
+                  isDark ? 'border-b border-white/10' : 'border-b border-border'
                 )}
               >
-                <h3 className={cn('font-semibold', isDark ? 'text-white' : 'text-gray-900')}>
+                <h3 className={cn('font-semibold', isDark ? 'text-white' : 'text-foreground')}>
                   الإشعارات
                 </h3>
                 {unreadCount > 0 && (
@@ -423,7 +423,7 @@ export function TopBar({
                     <Loader2
                       className={cn(
                         'w-5 h-5 animate-spin',
-                        isDark ? 'text-white/40' : 'text-gray-400'
+                        isDark ? 'text-white/40' : 'text-muted-foreground'
                       )}
                     />
                   </div>
@@ -432,10 +432,10 @@ export function TopBar({
                     <Bell
                       className={cn(
                         'w-8 h-8 mx-auto mb-2 opacity-40',
-                        isDark ? 'text-white' : 'text-gray-400'
+                        isDark ? 'text-white' : 'text-muted-foreground'
                       )}
                     />
-                    <p className={cn('text-sm', isDark ? 'text-white/50' : 'text-gray-400')}>
+                    <p className={cn('text-sm', isDark ? 'text-white/50' : 'text-muted-foreground')}>
                       لا توجد إشعارات
                     </p>
                   </div>
@@ -453,7 +453,7 @@ export function TopBar({
                           'px-3 py-3 rounded-lg cursor-pointer transition-colors duration-150',
                           isDark
                             ? 'hover:bg-white/10'
-                            : 'hover:bg-gray-50',
+                            : 'hover:bg-secondary',
                           isUnread && (isDark ? 'bg-white/5' : 'bg-amber-50/50')
                         )}
                       >
@@ -472,10 +472,10 @@ export function TopBar({
                                   isUnread
                                     ? isDark
                                       ? 'text-white'
-                                      : 'text-gray-900'
+                                      : 'text-foreground'
                                     : isDark
                                     ? 'text-white/60'
-                                    : 'text-gray-500'
+                                    : 'text-muted-foreground'
                                 )}
                               >
                                 {notification.title}
@@ -487,15 +487,15 @@ export function TopBar({
                             <p
                               className={cn(
                                 'text-xs line-clamp-2 mb-1',
-                                isDark ? 'text-white/50' : 'text-gray-500'
+                                isDark ? 'text-white/50' : 'text-muted-foreground'
                               )}
                             >
                               {notification.body}
                             </p>
                             <span
                               className={cn(
-                                'text-[11px]',
-                                isDark ? 'text-white/40' : 'text-gray-400'
+                                'text-xs',
+                                isDark ? 'text-white/40' : 'text-muted-foreground'
                               )}
                             >
                               {formatRelativeTime(notification.createdAt)}
@@ -513,7 +513,7 @@ export function TopBar({
                 <div
                   className={cn(
                     'p-2',
-                    isDark ? 'border-t border-white/10' : 'border-t border-gray-100'
+                    isDark ? 'border-t border-white/10' : 'border-t border-border'
                   )}
                 >
                   <button
@@ -540,7 +540,7 @@ export function TopBar({
             'relative p-2 rounded-lg transition-all duration-200 hidden sm:flex',
             isDark
               ? 'hover:bg-white/10 text-white/80'
-              : 'hover:bg-gray-100 text-gray-600'
+              : 'hover:bg-muted text-muted-foreground'
           )}
           aria-label="الرسائل"
           onClick={() => navigate('/dashboard/collaboration')}
@@ -554,7 +554,7 @@ export function TopBar({
             'relative p-2 rounded-lg transition-all duration-200 hidden md:flex',
             isDark
               ? 'hover:bg-white/10 text-white/80'
-              : 'hover:bg-gray-100 text-gray-600'
+              : 'hover:bg-muted text-muted-foreground'
           )}
           aria-label="التنزيلات"
         >
@@ -569,7 +569,7 @@ export function TopBar({
             'relative p-2 rounded-lg transition-all duration-200',
             isDark
               ? 'hover:bg-white/10 text-white/80'
-              : 'hover:bg-gray-100 text-gray-600'
+              : 'hover:bg-muted text-muted-foreground'
           )}
           aria-label={`تبديل الوضع الحالي: ${themeLabel(theme)}`}
         >
@@ -584,7 +584,7 @@ export function TopBar({
                 'flex items-center gap-2 p-1 pr-2 rounded-xl transition-all duration-200',
                 isDark
                   ? 'hover:bg-white/10'
-                  : 'hover:bg-gray-100'
+                  : 'hover:bg-muted'
               )}
             >
               <Avatar.Root
@@ -592,7 +592,7 @@ export function TopBar({
                   'w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold',
                   isDark
                     ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white'
-                    : 'bg-gradient-to-br from-[#2C4A6E] to-[#5FB8A8] text-white'
+                    : 'bg-gradient-to-br from-primary to-accent text-white'
                 )}
               >
                 <Avatar.Fallback className="text-sm">
@@ -602,7 +602,7 @@ export function TopBar({
               <ChevronDown
                 className={cn(
                   'w-3.5 h-3.5 hidden sm:block',
-                  isDark ? 'text-white/50' : 'text-gray-400'
+                  isDark ? 'text-white/50' : 'text-muted-foreground'
                 )}
               />
             </button>
@@ -612,8 +612,8 @@ export function TopBar({
               className={cn(
                 'border rounded-xl shadow-xl p-2 w-56 z-50',
                 isDark
-                  ? 'bg-[#1a2744]/95 backdrop-blur-md border-white/10'
-                  : 'bg-white border-gray-100'
+                  ? 'bg-card/95 backdrop-blur-md border-white/10'
+                  : 'bg-card border-border'
               )}
               sideOffset={8}
               align="end"
@@ -623,13 +623,13 @@ export function TopBar({
               <div
                 className={cn(
                   'px-3 py-2 mb-2',
-                  isDark ? 'border-b border-white/10' : 'border-b border-gray-100'
+                  isDark ? 'border-b border-white/10' : 'border-b border-border'
                 )}
               >
                 <p
                   className={cn(
                     'font-semibold text-sm',
-                    isDark ? 'text-white' : 'text-gray-900'
+                    isDark ? 'text-white' : 'text-foreground'
                   )}
                 >
                   {displayName(user)}
@@ -637,7 +637,7 @@ export function TopBar({
                 <p
                   className={cn(
                     'text-sm truncate',
-                    isDark ? 'text-white/50' : 'text-gray-500'
+                    isDark ? 'text-white/50' : 'text-muted-foreground'
                   )}
                 >
                   {user?.email ?? ''}
@@ -651,7 +651,7 @@ export function TopBar({
                     'px-3 py-2 rounded-lg cursor-pointer outline-none transition-colors duration-150 text-sm',
                     isDark
                       ? 'hover:bg-white/10 text-white'
-                      : 'hover:bg-gray-50 text-gray-700'
+                      : 'hover:bg-secondary text-foreground'
                   )}
                   onSelect={() => navigate('/dashboard/onboarding/info?tab=info')}
                 >
@@ -662,7 +662,7 @@ export function TopBar({
               <DropdownMenu.Separator
                 className={cn(
                   'h-px my-2',
-                  isDark ? 'bg-white/10' : 'bg-gray-100'
+                  isDark ? 'bg-white/10' : 'bg-muted'
                 )}
               />
 

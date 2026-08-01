@@ -137,17 +137,17 @@ export function CouponsPage() {
   const needsExtraProjects = form.type === 'EXTRA_PROJECTS';
 
   return (
-    <div className="min-h-full bg-gray-50 p-6" dir="rtl">
+    <div className="min-h-full bg-secondary p-3 sm:p-6" dir="rtl">
       <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
           <div className="flex items-center gap-3">
             <Ticket className="w-7 h-7 text-blue-600" />
-            <h1 className="text-2xl font-bold text-gray-900">إدارة الكوبونات</h1>
+            <h1 className="text-xl sm:text-2xl font-bold text-foreground">إدارة الكوبونات</h1>
           </div>
           <button
             type="button"
             onClick={() => setShowAdd(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+            className="flex items-center justify-center sm:justify-start gap-2 px-4 py-3 min-h-[44px] bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors w-full sm:w-auto"
           >
             <Plus className="w-4 h-4" />
             إضافة كوبون
@@ -156,26 +156,26 @@ export function CouponsPage() {
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6">
           <div className="flex flex-col md:flex-row gap-4">
-            <div className="flex-1 min-w-[200px]">
-              <label className="block text-sm font-medium text-gray-700 mb-1">الكود</label>
+            <div className="flex-1 min-w-0">
+              <label className="block text-sm font-medium text-foreground mb-1">الكود</label>
               <div className="relative">
-                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <input
                   type="text"
                   value={filters.code}
                   onChange={(e) => setFilters((prev) => ({ ...prev, code: e.target.value }))}
                   placeholder="ابحث بكود الكوبون"
-                  className="w-full pr-9 pl-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full pr-9 pl-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
             </div>
 
-            <div className="w-48">
-              <label className="block text-sm font-medium text-gray-700 mb-1">الحالة</label>
+            <div className="w-full md:w-48">
+              <label className="block text-sm font-medium text-foreground mb-1">الحالة</label>
               <select
                 value={filters.status}
                 onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {statusOptions.map((option) => (
                   <option key={option.value} value={option.value}>{option.label}</option>
@@ -188,7 +188,7 @@ export function CouponsPage() {
                 <button
                   type="button"
                   onClick={() => setFilters({ status: '', code: '' })}
-                  className="flex items-center gap-1 px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                  className="flex items-center justify-center sm:justify-start gap-1 px-3 py-2.5 min-h-[44px] text-sm text-red-600 hover:bg-red-50 rounded-lg transition-colors w-full sm:w-auto"
                 >
                   <X className="w-4 h-4" />
                   مسح الفلاتر
@@ -200,51 +200,81 @@ export function CouponsPage() {
 
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
           {loading && coupons.length === 0 ? (
-            <div className="p-12 flex items-center justify-center gap-2 text-gray-500">
+            <div className="p-12 flex items-center justify-center gap-2 text-muted-foreground">
               <Loader2 className="w-5 h-5 animate-spin" />
               جاري تحميل الكوبونات...
             </div>
           ) : error ? (
             <div className="p-12 text-center text-red-600">{error}</div>
           ) : coupons.length === 0 ? (
-            <div className="p-12 text-center text-gray-500">لا توجد كوبونات</div>
+            <div className="p-12 text-center text-muted-foreground">لا توجد كوبونات</div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-gray-50 border-b border-gray-200">
+            <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
+              <div className="sm:hidden space-y-3 p-4">
+                {coupons.map((coupon) => (
+                  <div key={coupon.id} className="border border-gray-200 rounded-lg p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-medium text-foreground">{coupon.code}</span>
+                      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+                        coupon.status === 'ACTIVE'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-muted text-foreground'
+                      }`}>
+                        {coupon.status === 'ACTIVE' ? 'نشط' : 'معطل'}
+                      </span>
+                    </div>
+                    <div className="text-sm text-muted-foreground">{getTypeLabel(coupon.type)}</div>
+                    <div className="text-sm text-foreground">{formatValue(coupon)}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {coupon.maxUses !== undefined && coupon.maxUses !== null
+                        ? `${coupon.usedCount} / ${coupon.maxUses} استخدام`
+                        : `${coupon.usedCount} استخدام`}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      من {new Date(coupon.validFrom).toLocaleDateString('ar-SA')}
+                      {coupon.validUntil && ` إلى ${new Date(coupon.validUntil).toLocaleDateString('ar-SA')}`}
+                    </div>
+                    <div className="text-xs text-muted-foreground">
+                      {formatPackageNames(coupon.applicablePackageIds, packagesMap)}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <table className="w-full text-sm hidden sm:table">
+                <thead className="bg-secondary border-b border-gray-200">
                   <tr>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">الكود</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">النوع</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">القيمة</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">الاستخدامات</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">تاريخ البداية</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">تاريخ النهاية</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">الباقات المطبقة</th>
-                    <th className="px-4 py-3 text-right font-medium text-gray-700">الحالة</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">الكود</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">النوع</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">القيمة</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">الاستخدامات</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">تاريخ البداية</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">تاريخ النهاية</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">الباقات المطبقة</th>
+                    <th className="px-4 py-3 text-right font-medium text-foreground">الحالة</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {coupons.map((coupon) => (
-                    <tr key={coupon.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 font-medium text-gray-900">{coupon.code}</td>
-                      <td className="px-4 py-3 text-gray-700">{getTypeLabel(coupon.type)}</td>
-                      <td className="px-4 py-3 text-gray-700">
+                    <tr key={coupon.id} className="hover:bg-secondary">
+                      <td className="px-4 py-3 font-medium text-foreground">{coupon.code}</td>
+                      <td className="px-4 py-3 text-foreground">{getTypeLabel(coupon.type)}</td>
+                      <td className="px-4 py-3 text-foreground">
                         {formatValue(coupon)}
                       </td>
-                      <td className="px-4 py-3 text-gray-700">
+                      <td className="px-4 py-3 text-foreground">
                         {coupon.maxUses !== undefined && coupon.maxUses !== null
                           ? `${coupon.usedCount} / ${coupon.maxUses}`
                           : coupon.usedCount}
                       </td>
-                      <td className="px-4 py-3 text-gray-700">
+                      <td className="px-4 py-3 text-foreground">
                         {new Date(coupon.validFrom).toLocaleDateString('ar-SA')}
                       </td>
-                      <td className="px-4 py-3 text-gray-700">
+                      <td className="px-4 py-3 text-foreground">
                         {coupon.validUntil
                           ? new Date(coupon.validUntil).toLocaleDateString('ar-SA')
                           : '-'}
                       </td>
-                      <td className="px-4 py-3 text-gray-700">
+                      <td className="px-4 py-3 text-foreground">
                         {formatPackageNames(coupon.applicablePackageIds, packagesMap)}
                       </td>
                       <td className="px-4 py-3">
@@ -252,7 +282,7 @@ export function CouponsPage() {
                           className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
                             coupon.status === 'ACTIVE'
                               ? 'bg-green-100 text-green-800'
-                              : 'bg-gray-100 text-gray-800'
+                              : 'bg-muted text-foreground'
                           }`}
                         >
                           {coupon.status === 'ACTIVE' ? 'نشط' : 'معطل'}
@@ -271,37 +301,37 @@ export function CouponsPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/50">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-2">
             <div className="p-4 sm:p-6 border-b border-gray-200 flex items-center justify-between">
-              <h2 className="text-lg sm:text-xl font-bold text-gray-900">إضافة كوبون جديد</h2>
+              <h2 className="text-lg sm:text-xl font-bold text-foreground">إضافة كوبون جديد</h2>
               <button
                 type="button"
                 onClick={() => setShowAdd(false)}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 hover:bg-muted rounded-lg transition-colors"
               >
-                <X className="w-5 h-5 text-gray-500" />
+                <X className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">الكود *</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">الكود *</label>
                   <input
                     type="text"
                     required
                     value={form.code}
                     onChange={(e) => setForm((prev) => ({ ...prev, code: e.target.value }))}
                     placeholder="مثال: SUMMER20"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">النوع *</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">النوع *</label>
                   <select
                     required
                     value={form.type}
                     onChange={(e) => setForm((prev) => ({ ...prev, type: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   >
                     {typeOptions.map((option) => (
                       <option key={option.value} value={option.value}>{option.label}</option>
@@ -312,7 +342,7 @@ export function CouponsPage() {
                 {needsDiscount && (
                   <>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">قيمة الخصم *</label>
+                      <label className="block text-sm font-medium text-foreground mb-1">قيمة الخصم *</label>
                       <input
                         type="number"
                         min="0"
@@ -325,12 +355,12 @@ export function CouponsPage() {
                             discountValue: e.target.value ? Number(e.target.value) : undefined,
                           }))
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">حد أقصى للخصم</label>
+                      <label className="block text-sm font-medium text-foreground mb-1">حد أقصى للخصم</label>
                       <input
                         type="number"
                         min="0"
@@ -342,7 +372,7 @@ export function CouponsPage() {
                             maxDiscountAmount: e.target.value ? Number(e.target.value) : undefined,
                           }))
                         }
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>
                   </>
@@ -350,7 +380,7 @@ export function CouponsPage() {
 
                 {needsExtraMonths && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">عدد الأشهر الإضافية *</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">عدد الأشهر الإضافية *</label>
                     <input
                       type="number"
                       min="1"
@@ -362,14 +392,14 @@ export function CouponsPage() {
                           extraMonths: e.target.value ? Number(e.target.value) : undefined,
                         }))
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
                 )}
 
                 {needsExtraProjects && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">عدد المشاريع الإضافية *</label>
+                    <label className="block text-sm font-medium text-foreground mb-1">عدد المشاريع الإضافية *</label>
                     <input
                       type="number"
                       min="1"
@@ -381,23 +411,23 @@ export function CouponsPage() {
                           extraProjects: e.target.value ? Number(e.target.value) : undefined,
                         }))
                       }
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">العملة</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">العملة</label>
                   <input
                     type="text"
                     value={form.currency}
                     onChange={(e) => setForm((prev) => ({ ...prev, currency: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">حد أقصى للاستخدام</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">حد أقصى للاستخدام</label>
                   <input
                     type="number"
                     min="1"
@@ -408,34 +438,34 @@ export function CouponsPage() {
                         maxUses: e.target.value ? Number(e.target.value) : undefined,
                       }))
                     }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">تاريخ البداية *</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">تاريخ البداية *</label>
                   <input
                     type="datetime-local"
                     required
                     value={form.validFrom}
                     onChange={(e) => setForm((prev) => ({ ...prev, validFrom: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">تاريخ النهاية</label>
+                  <label className="block text-sm font-medium text-foreground mb-1">تاريخ النهاية</label>
                   <input
                     type="datetime-local"
                     value={form.validUntil}
                     onChange={(e) => setForm((prev) => ({ ...prev, validUntil: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    className="w-full px-3 py-2.5 min-h-[44px] border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">الباقات المطبقة</label>
+                <label className="block text-sm font-medium text-foreground mb-1">الباقات المطبقة</label>
                 <MultiSelect
                   options={packages.map((p) => ({ value: p.id, label: p.name }))}
                   selected={form.applicablePackageIds || []}
@@ -450,14 +480,14 @@ export function CouponsPage() {
                 <button
                   type="button"
                   onClick={() => setShowAdd(false)}
-                  className="w-full sm:w-auto px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                  className="w-full sm:w-auto px-4 py-3 min-h-[44px] text-foreground hover:bg-muted rounded-lg transition-colors"
                 >
                   إلغاء
                 </button>
                 <button
                   type="submit"
                   disabled={saving}
-                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
                   {saving ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

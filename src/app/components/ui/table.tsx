@@ -8,7 +8,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-gray-700"
+      className="relative w-full overflow-x-auto rounded-xl border border-gray-200 dark:border-border"
     >
       <table
         data-slot="table"
@@ -28,7 +28,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
     <thead
       data-slot="table-header"
       className={cn(
-        "bg-gray-50 dark:bg-gray-800/80",
+        "bg-gray-50 dark:bg-muted/80",
         "[&_tr]:border-b [&_tr]:border-gray-200 dark:[&_tr]:border-gray-700",
         className,
       )}
@@ -55,7 +55,7 @@ function TableFooter({ className, ...props }: React.ComponentProps<"tfoot">) {
     <tfoot
       data-slot="table-footer"
       className={cn(
-        "bg-gray-50 dark:bg-gray-800/80 border-t border-gray-200 dark:border-gray-700 font-semibold [&>tr]:last:border-b-0",
+        "bg-gray-50 dark:bg-muted/80 border-t border-gray-200 dark:border-border font-semibold [&>tr]:last:border-b-0",
         className,
       )}
       {...props}
@@ -68,8 +68,8 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
     <tr
       data-slot="table-row"
       className={cn(
-        "border-b border-gray-200 dark:border-gray-700 transition-colors duration-150",
-        "hover:bg-gray-50 dark:hover:bg-gray-800/60",
+        "border-b border-gray-200 dark:border-border transition-colors duration-150",
+        "hover:bg-gray-50 dark:hover:bg-muted/60",
         "data-[state=selected]:bg-emerald-50 dark:data-[state=selected]:bg-emerald-900/20",
         className,
       )}
@@ -83,7 +83,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
     <th
       data-slot="table-head"
       className={cn(
-        "h-11 px-4 align-middle font-semibold whitespace-nowrap text-gray-700 dark:text-gray-300 uppercase text-xs tracking-wider",
+        "h-11 px-4 align-middle font-semibold whitespace-nowrap text-gray-700 dark:text-muted-foreground uppercase text-xs tracking-wider",
         "[&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
         className,
       )}

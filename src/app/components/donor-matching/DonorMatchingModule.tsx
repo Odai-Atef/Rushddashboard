@@ -49,7 +49,7 @@ export function DonorMatchingModule() {
             </button>
             <div className="relative">
               <Bell className="w-5 h-5 text-muted-foreground" />
-              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 rounded-full text-[9px] text-white flex items-center justify-center">7</span>
+              <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center">7</span>
             </div>
           </div>
           <div className="flex items-center gap-3">
