@@ -114,7 +114,7 @@ export function PackagesPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
         {packages.map((pkg, idx) => {
           const Icon = accentIcons[idx % accentIcons.length];
           const accent = accentColors[idx % accentColors.length];
@@ -125,7 +125,7 @@ export function PackagesPage() {
           return (
             <div
               key={pkg.id}
-              className="bg-white rounded-2xl p-7 border relative transition-all hover:shadow-lg flex flex-col"
+              className="bg-white rounded-2xl p-7 border relative transition-all hover:shadow-lg flex flex-col h-full"
               style={{
                 borderColor: isRecommended ? accent : "#E2E8F0",
                 boxShadow: isRecommended
@@ -186,7 +186,7 @@ export function PackagesPage() {
                 عرض تفاصيل الباقة والـ SLA
               </Link>
 
-              <div className="space-y-3 pr-1 flex-1">
+              <div className="space-y-3 pr-1 flex-1 overflow-y-auto min-h-[200px]">
                 {featuresList.map((feature, i) => (
                   <div key={i} className="flex items-center gap-2.5">
                     <div
