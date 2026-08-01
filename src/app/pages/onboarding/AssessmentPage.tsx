@@ -123,7 +123,7 @@ export function AssessmentPage() {
  name: cat.categoryName,
  nameEn: cat.categoryName,
  icon: '',
- color: '#3B82F6',
+ color: 'var(--info)',
  sortOrder: 0,
  questions: cat.questions || [],
  }));

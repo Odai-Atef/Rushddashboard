@@ -328,7 +328,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Status and Health */}
- <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)] mb-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)] mb-4">
  <div className="bg-muted/50 rounded-lg p-[var(--spacing-card-padding)]">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <StatusIcon className={`w-4 h-4 ${getStatusColor(source.status)} ${source.status === 'syncing' ? 'animate-spin' : ''}`} />
@@ -359,7 +359,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Metrics */}
- <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)] pt-3 border-t border-border">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)] pt-3 border-t border-border">
  <div>
  <p className="text-xs text-muted-foreground">عدد السجلات</p>
  <p className="text-sm font-medium">{source.recordCount.toLocaleString()}</p>

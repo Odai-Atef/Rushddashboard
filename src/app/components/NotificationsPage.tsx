@@ -432,7 +432,7 @@ export function NotificationsPage() {
  <Activity className="w-4 h-4" />
  بيانات إضافية
  </h4>
- <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)]">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)]">
  {Object.entries(selectedNotification.payload).map(([key, value]) => (
  <div key={key} className="bg-background rounded-lg p-[var(--spacing-card-padding)]">
  <div className="text-xs text-muted-foreground mb-1">{key}</div>
@@ -443,7 +443,7 @@ export function NotificationsPage() {
  </div>
  )}
 
- <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2 border-t">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm text-muted-foreground pt-2 border-t">
  <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4" />
  تاريخ الإنشاء: {new Date(selectedNotification.createdAt).toLocaleDateString('ar-SA')}

@@ -258,7 +258,7 @@ export function SettingsPage() {
  <div className="space-y-4">
  <div>
  <label className="block text-sm font-medium mb-3">لغة الواجهة</label>
- <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)]">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)]">
  <button className="p-4 border-2 border-primary bg-primary/5 rounded-lg text-right">
  <div className="flex items-center justify-between">
  <div>
@@ -331,7 +331,7 @@ export function SettingsPage() {
  <div className="bg-card border border-border rounded-lg p-6 space-y-6">
  <div>
  <label className="block text-sm font-medium mb-3">وضع العرض</label>
- <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)]">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-[var(--spacing-small-gap)]">
  <button className="p-4 border-2 border-primary bg-primary/5 rounded-lg">
  <div className="w-full h-20 bg-gradient-to-br from-background to-muted dark:from-gray-800 dark:to-gray-900 rounded-lg mb-3 border border-border"></div>
  <p className="font-medium text-sm">فاتح</p>
@@ -352,7 +352,7 @@ export function SettingsPage() {
 
  <div>
  <label className="block text-sm font-medium mb-3">اللون الرئيسي</label>
- <div className="grid grid-cols-8 gap-[var(--spacing-small-gap)]">
+ <div className="grid grid-cols-4 sm:grid-cols-8 gap-[var(--spacing-small-gap)]">
  {[
  'bg-[var(--primary)]',
  'bg-purple-600',
@@ -775,7 +775,7 @@ export function SettingsPage() {
  5 مستخدمين
  </span>
  </div>
- <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
  <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  عرض جميع التقارير
@@ -801,7 +801,7 @@ export function SettingsPage() {
  12 مستخدم
  </span>
  </div>
- <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
  <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  عرض التقارير
@@ -827,7 +827,7 @@ export function SettingsPage() {
  8 مستخدمين
  </span>
  </div>
- <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
  <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  عرض اللوحات

@@ -749,7 +749,7 @@ export function PricingPage() {
  ) : selectedPkg ? (
  <>
  {/* SLA Summary Cards */}
- <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)] mb-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)] mb-6">
  {[
  { label: 'مستوى SLA', value: selectedPkg.sla.level },
  { label: 'وقت الاستجابة', value: selectedPkg.sla.responseTime },
@@ -910,8 +910,8 @@ export function PricingPage() {
  disabled={!slaAccepted}
  className="w-full py-3.5 rounded-xl text-[var(--primary-foreground)] font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
  style={{
- background: slaAccepted ? '#2563EB' : '#94A3B8',
- boxShadow: slaAccepted ? '0 4px 20px rgba(37,99,235,0.3)' : 'none',
+ background: slaAccepted ? 'var(--primary)' : 'var(--text-disabled)',
+ boxShadow: slaAccepted ? '0 4px 20px rgba(var(--primary-rgb),0.3)' : 'none',
  }}
  >
  {slaAccepted ? "متابعة للدفع" : "يرجى قبول الاتفاقية أولاً"}

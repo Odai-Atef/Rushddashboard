@@ -444,7 +444,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   <span
                     className="text-[11px] font-semibold uppercase tracking-wider"
                     style={{
-                      color: isDark ? '#7C95AA' : '#94A3B8',
+                      color: isDark ? 'var(--text-secondary)' : 'var(--text-secondary)',
                       letterSpacing: '0.05em',
                     }}
                   >

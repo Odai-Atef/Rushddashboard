@@ -190,7 +190,7 @@ export function CustomersDashboard() {
  />
  </PieChart>
  </ResponsiveContainer>
- <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)] mt-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)] mt-4">
  {segmentsData.map((segment, index) => (
  <div key={index} className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: segment.color }}></div>

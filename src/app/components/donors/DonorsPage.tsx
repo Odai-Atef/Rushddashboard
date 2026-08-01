@@ -255,7 +255,7 @@ export function DonorsPage() {
  <div className="bg-card border border-border rounded-xl overflow-hidden">
  <div className="p-6 border-b border-border">
  <div className="flex items-center gap-2">
- <Activity className="w-5 h-5 text-purple-600" />
+ <Activity className="w-5 h-5 text-[var(--info)]" />
  <h3 className="text-lg">آخر التحديثات</h3>
  </div>
  </div>
@@ -329,7 +329,7 @@ export function DonorsPage() {
  {currentView === 'table' && (
  <>
  {/* Back + Header */}
- <div className="flex items-center gap-4">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 min-w-0">
  <button
  onClick={goToDashboard}
  className="p-2 hover:bg-muted rounded-lg transition-colors"

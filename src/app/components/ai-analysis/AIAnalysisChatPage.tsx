@@ -671,7 +671,7 @@ export function AIAnalysisChatPage() {
  {/* Main Content Area */}
  <div className="flex-1 flex overflow-hidden">
  {/* Analysis History Sidebar */}
- <div className="w-80 border-l border-border bg-card flex flex-col overflow-hidden">
+ <div className="hidden md:flex w-80 border-l border-border bg-card flex-col overflow-hidden">
  <div className="p-4 border-b border-border">
  <div className="flex items-center justify-between mb-3">
  <h2 className="text-lg font-medium">سجل التحليلات</h2>
@@ -1024,7 +1024,7 @@ export function AIAnalysisChatPage() {
 
  {/* Right Sidebar - Insights & Recommendations */}
  {isAnalysisComplete && (
- <div className="w-96 border-r border-border bg-card flex flex-col overflow-hidden">
+ <div className="hidden lg:flex w-96 border-r border-border bg-card flex-col overflow-hidden">
  <div className="p-4 border-b border-border">
  <h3 className="font-semibold">الرؤى والتوصيات</h3>
  </div>
@@ -1131,7 +1131,7 @@ export function AIAnalysisChatPage() {
  {/* Confirmation Dialog for Switching from Active Stream */}
  {showConfirmDialog && (
  <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--text-primary)]/[0.5]">
- <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
+ <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl overflow-y-auto max-h-[90vh]">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <div className="p-[var(--spacing-small-gap)] bg-yellow-500/10 rounded-lg">
  <AlertTriangle className="w-5 h-5 text-[var(--warning)]" />

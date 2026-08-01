@@ -86,7 +86,7 @@ function getPriorityColor(priority: string): string {
       return '#CA8A04';
     case 'LOW':
     default:
-      return '#2563EB';
+      return 'var(--info)';
   }
 }
 
@@ -332,8 +332,8 @@ export function TopBar({
                 'w-full h-9 rounded-lg pr-9 pl-8 text-sm',
                 'focus:outline-none focus:ring-2',
                 isDark
-                  ? 'bg-[#102942] border border-white/[0.08] text-white placeholder:text-[#7C95AA] focus:ring-[#3B82F6]/40'
-                  : 'bg-white border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:ring-[#2563EB]/30'
+                  ? 'bg-[#102942] border border-white/[0.08] text-white placeholder:text-[#7C95AA] focus:ring-[var(--primary)]/40'
+                  : 'bg-white border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:ring-[var(--primary)]/30'
               )}
             />
             <button
@@ -464,7 +464,7 @@ export function TopBar({
                     onClick={() => navigate('/dashboard/notifications')}
                     className={cn(
                       'w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm rounded-xl transition-colors duration-200',
-                      isDark ? 'text-[#3B82F6] hover:bg-white/[0.08]' : 'text-[#2563EB] hover:bg-[#F1F5F9]'
+                      isDark ? 'text-[var(--primary)] hover:bg-white/[0.08]' : 'text-[var(--primary)] hover:bg-[#F1F5F9]'
                     )}
                   >
                     عرض الكل
@@ -488,7 +488,7 @@ export function TopBar({
               <Avatar.Root
                 className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold',
-                  'bg-gradient-to-br from-emerald-500 to-blue-500 text-white'
+                  'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
                 )}
               >
                 <Avatar.Fallback className="text-xs">
@@ -602,8 +602,8 @@ export function TopBar({
               'transition-all duration-200 ease-out',
               'focus:outline-none',
               isDark
-                ? 'bg-[#102942] border border-white/[0.08] text-white placeholder:text-[#7C95AA] focus:border-[#3B82F6] focus:shadow-[0_0_0_3px_rgba(59,130,246,0.15)]'
-                : 'bg-white border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:border-[#2563EB] focus:shadow-[0_0_0_3px_rgba(37,99,235,0.1)]'
+                ? 'bg-[#102942] border border-white/[0.08] text-white placeholder:text-[#7C95AA] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_rgba(var(--primary-rgb),0.15)]'
+                : 'bg-white border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_rgba(var(--primary-rgb),0.1)]'
             )}
           />
           {searchQuery && (
@@ -750,7 +750,7 @@ export function TopBar({
                     onClick={() => navigate('/dashboard/notifications')}
                     className={cn(
                       'w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm rounded-xl transition-colors duration-200',
-                      isDark ? 'text-[#3B82F6] hover:bg-white/[0.08]' : 'text-[#2563EB] hover:bg-[#F1F5F9]'
+                      isDark ? 'text-[var(--primary)] hover:bg-white/[0.08]' : 'text-[var(--primary)] hover:bg-[#F1F5F9]'
                     )}
                   >
                     عرض الكل
@@ -849,7 +849,7 @@ export function TopBar({
                 <Avatar.Root
                   className={cn(
                     'w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0',
-                    'bg-gradient-to-br from-emerald-500 to-blue-500 text-white'
+                    'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
                   )}
                 >
                   <Avatar.Fallback className="text-sm">

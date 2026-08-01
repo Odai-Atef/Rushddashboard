@@ -134,7 +134,7 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
 
  {/* Drawer */}
  <div
- className="fixed top-0 right-0 h-full w-[min(320px,85vw)] bg-[#0B2742] border-l border-[var(--primary-foreground)]/[0.08] z-50 flex flex-col lg:hidden shadow-2xl"
+ className="fixed top-0 right-0 h-full w-[min(320px,85vw)] bg-[var(--card)] border-l border-[var(--border)] z-50 flex flex-col lg:hidden shadow-2xl"
  role="dialog"
  aria-modal="true"
  aria-label="التنقل"

@@ -70,13 +70,13 @@ export function DonorsPagination({
  const endItem = Math.min(page * limit, total);
 
  return (
- <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t border-border">
+ <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-4 border-t border-border w-full">
  {/* Results info */}
  <div className="text-sm text-muted-foreground">
  عرض {startItem}–{endItem} من {total} جهة مانحة
  </div>
 
- <div className="flex items-center gap-4">
+ <div className="flex items-center gap-4 flex-wrap justify-center">
  {/* Page controls */}
  <div className="flex items-center gap-1">
  <button
