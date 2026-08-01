@@ -103,20 +103,20 @@ export function RoadmapPage() {
   const priorityConfig: Record<string, { bg: string; text: string; label: string }> = {
     high: { bg: 'bg-red-100', text: 'text-red-700', label: 'أولوية عالية' },
     medium: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'أولوية متوسطة' },
-    low: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'أولوية منخفضة' },
+    low: { bg: 'text-green-100', text: 'text-green-700', label: 'أولوية منخفضة' },
   };
 
   const statusConfig: Record<string, { bg: string; text: string; label: string; icon: typeof Clock }> = {
-    'in-progress': { bg: 'bg-blue-100', text: 'text-blue-700', label: 'قيد التنفيذ', icon: Activity },
+    'in-progress': { bg: 'text-green-100', text: 'text-green-700', label: 'قيد التنفيذ', icon: Activity },
     completed: { bg: 'bg-green-100', text: 'text-green-700', label: 'مكتملة', icon: CheckCircle2 },
     delayed: { bg: 'bg-red-100', text: 'text-red-700', label: 'متأخرة', icon: AlertTriangle },
   };
 
   if (isLoading) {
     return (
-      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-6 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
           <p className="text-muted-foreground">جارٍ تحميل خطة التطوير...</p>
         </div>
       </div>
@@ -125,14 +125,14 @@ export function RoadmapPage() {
 
   if (error) {
     return (
-      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-6 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-red-200 p-8 text-center">
           <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">تعذر تحميل الخطة</h2>
           <p className="text-muted-foreground mb-6">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
           >
             إعادة المحاولة
           </button>
@@ -155,13 +155,13 @@ export function RoadmapPage() {
   const isQualified = data?.qualificationStatus?.toUpperCase() === 'QUALIFIED';
 
   return (
-    <div ref={reportContainerRef} className="min-h-full bg-secondary p-3 sm:p-6">
+    <div ref={reportContainerRef} className="min-h-full bg-background p-3 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => goToStep('analysis')}
-            className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-4"
+            className="text-primary hover:text-green-700 font-medium flex items-center gap-2 mb-4"
           >
             <ChevronRight className="w-5 h-5" />
             رجوع إلى التحليل
@@ -199,13 +199,13 @@ export function RoadmapPage() {
               <div
                 className={`w-20 h-20 rounded-full flex items-center justify-center border-4 ${
                   isQualified
-                    ? 'bg-blue-50 border-blue-100'
+                    ? 'bg-primary/10 border-primary/20'
                     : 'bg-red-50 border-red-100'
                 }`}
               >
                 <span
                   className={`text-2xl font-bold ${
-                    isQualified ? 'text-blue-600' : 'text-red-600'
+                    isQualified ? 'text-primary' : 'text-red-600'
                   }`}
                 >
                   {Math.round(overallScore)}%
@@ -230,7 +230,7 @@ export function RoadmapPage() {
             <h3 className="text-lg font-semibold mb-4">الجدول الزمني للتنفيذ</h3>
             <div className="flex items-center gap-2 mb-2">
               <div className="text-sm text-muted-foreground">إجمالي المدة المتوقعة:</div>
-              <div className="text-lg font-bold text-blue-600">{totalDurationMonths} شهراً</div>
+              <div className="text-lg font-bold text-primary">{totalDurationMonths} شهراً</div>
             </div>
             <div className="h-2 bg-muted rounded-full overflow-hidden">
               <div
@@ -257,7 +257,7 @@ export function RoadmapPage() {
                   className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors"
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <span className="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
+                    <span className="w-6 h-6 rounded-full text-green-100 text-primary flex items-center justify-center text-xs font-bold">
                       {rec.priority}
                     </span>
                     <span className="text-sm font-medium text-muted-foreground">{rec.dimension}</span>

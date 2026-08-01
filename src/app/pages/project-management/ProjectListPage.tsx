@@ -596,7 +596,7 @@ export function ProjectListPage() {
   };
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       <div className="space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="w-full">

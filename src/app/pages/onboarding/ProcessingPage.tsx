@@ -72,7 +72,7 @@ export function ProcessingPage() {
   }, [activeOrganizationId, goToStep, setAssessmentResult, setAssessmentStatus]);
 
   return (
-    <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-3 sm:p-6 flex items-center justify-center">
+    <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
       <div className="max-w-2xl w-full">
         <div className="bg-white rounded-xl shadow-lg border border-border p-6 sm:p-12 text-center">
           <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
@@ -88,7 +88,7 @@ export function ProcessingPage() {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-foreground">التقدم</span>
-              <span className="text-sm font-medium text-blue-600">
+              <span className="text-sm font-medium text-primary">
                 {processingProgress}٪
               </span>
             </div>
@@ -117,7 +117,7 @@ export function ProcessingPage() {
                   {done ? (
                     <CheckCircle2 className="w-5 h-5 text-green-600" />
                   ) : (
-                    <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
                   )}
                   <span className={done ? 'text-green-900' : 'text-foreground'}>
                     {item.label}

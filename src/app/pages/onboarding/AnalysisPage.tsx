@@ -95,13 +95,13 @@ export function AnalysisPage() {
         ];
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="mb-6 sm:mb-8">
           <button
             onClick={() => goToStep('results')}
-            className="text-blue-600 hover:text-blue-700 font-medium flex items-center gap-2 mb-4"
+            className="text-primary hover:text-primary font-medium flex items-center gap-2 mb-4"
           >
             <ChevronRight className="w-5 h-5" />
             رجوع إلى النتائج
@@ -233,7 +233,7 @@ export function AnalysisPage() {
         {/* AI Recommendations */}
         <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6 border border-blue-200">
           <div className="flex items-start gap-4">
-            <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
+            <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
               <Brain className="w-6 h-6 text-white" />
             </div>
             <div>
@@ -245,7 +245,7 @@ export function AnalysisPage() {
               </p>
               <button
                 onClick={() => goToStep('roadmap')}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
               >
                 عرض خطة التطوير الكاملة
                 <ArrowRight className="w-5 h-5" />

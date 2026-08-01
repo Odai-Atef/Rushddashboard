@@ -5,7 +5,7 @@ export function ProjectReportingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       <div className="space-y-6">
         <button
           onClick={() => navigate('/dashboard/project-management')}

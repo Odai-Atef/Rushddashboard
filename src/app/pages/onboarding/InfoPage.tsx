@@ -36,7 +36,7 @@ export function InfoPage() {
   const showActionRequiredAlert = user?.status?.toUpperCase() === 'NEED_ACTION_FROM_ORG' && !!user?.actionRequired;
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       <div className="max-w-3xl mx-auto">
         {/* Action required alert */}
         {showActionRequiredAlert && (
@@ -65,7 +65,7 @@ export function InfoPage() {
                   className={cn(
                     'w-1/2 flex items-center justify-center gap-2 px-4 py-4 text-center font-medium transition-colors',
                     isActive
-                      ? 'bg-blue-50 text-blue-700 border-b-2 border-blue-600'
+                      ? 'bg-primary/10 text-primary border-b-2 border-primary'
                       : 'text-muted-foreground hover:bg-secondary hover:text-foreground border-b-2 border-transparent'
                   )}
                 >

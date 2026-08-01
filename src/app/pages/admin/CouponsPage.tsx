@@ -137,7 +137,7 @@ export function CouponsPage() {
   const needsExtraProjects = form.type === 'EXTRA_PROJECTS';
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6" dir="rtl">
+    <div className="min-h-full bg-background p-3 sm:p-6" dir="rtl">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
           <div className="flex items-center gap-3">

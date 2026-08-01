@@ -3215,7 +3215,7 @@ const DiscussionsView = () => {
 
   // Render views
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       {currentView === 'hub' && <HubView />}
       {currentView === 'chat' && (
         <ChatView

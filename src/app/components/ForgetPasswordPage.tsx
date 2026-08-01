@@ -156,7 +156,7 @@ export function ForgetPasswordPage() {
                 </p>
                 <p className="text-foreground font-medium mb-6">{email}</p>
 
-                <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg mb-6 text-right">
+                <div className="p-4 bg-primary/10 border border-primary/20 rounded-lg mb-6 text-right">
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     يرجى التحقق من صندوق الوارد الخاص بك. إذا لم تجد الرسالة، تحقق من مجلد البريد المزعج.
                     الرابط صالح لمدة 24 ساعة.

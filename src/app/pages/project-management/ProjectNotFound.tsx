@@ -5,7 +5,7 @@ export function ProjectNotFound() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
+    <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
       <div className="bg-white rounded-xl shadow-sm border border-red-200 p-8 max-w-md w-full text-center">
         <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
         <h1 className="text-xl font-bold mb-2">المشروع غير موجود</h1>

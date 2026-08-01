@@ -114,21 +114,21 @@ export function DecisionPage() {
             <h2 className="text-xl font-semibold mb-4 text-center">الخطوات القادمة</h2>
             <div className="space-y-3">
               <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
-                <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
                 <div>
                   <div className="font-medium">إنشاء حساب الجمعية</div>
                   <div className="text-sm text-muted-foreground">سجّل الدخول إلى منصة الحاضنة وأكمل ملفك التعريفي</div>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
-                <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
                 <div>
                   <div className="font-medium">الاجتماع التعريفي</div>
                   <div className="text-sm text-muted-foreground">سيتواصل معك فريق الحاضنة لتحديد موعد الاجتماع التعريفي</div>
                 </div>
               </div>
               <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
-                <div className="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
                 <div>
                   <div className="font-medium">بدء خطة التطوير</div>
                   <div className="text-sm text-muted-foreground">ابدأ العمل على خطة التحسين مع دعم فريق الخبراء</div>
@@ -138,9 +138,9 @@ export function DecisionPage() {
           </div>
 
           {/* Contact Info */}
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 mb-8">
+          <div className="bg-secondary border border-border rounded-xl p-6 mb-8">
             <h3 className="font-semibold mb-3 flex items-center gap-2">
-              <Mail className="w-5 h-5 text-blue-600" />
+              <Mail className="w-5 h-5 text-primary" />
               معلومات التواصل
             </h3>
             <div className="space-y-2 text-sm">

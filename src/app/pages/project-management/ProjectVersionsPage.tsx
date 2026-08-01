@@ -76,7 +76,7 @@ export function ProjectVersionsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -84,7 +84,7 @@ export function ProjectVersionsPage() {
 
   if (error) {
     return (
-      <div className="min-h-full bg-secondary p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-full bg-background p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
         <div className="text-red-600 text-center">{error}</div>
         <button
           onClick={() => {
@@ -105,7 +105,7 @@ export function ProjectVersionsPage() {
   }
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       <div className="space-y-6">
         <button
           onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}

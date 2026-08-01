@@ -487,7 +487,7 @@ export function OrganizationDocumentsForm() {
     <div className="space-y-6">
       {isLoadingDocuments && !uploadedFiles.length && (
         <div className="fixed inset-0 bg-white/80 z-50 flex items-center justify-center">
-          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+          <Loader2 className="w-8 h-8 text-primary animate-spin" />
         </div>
       )}
 
@@ -502,8 +502,8 @@ export function OrganizationDocumentsForm() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 items-stretch">
           <div className="bg-white dark:bg-card/60 dark:backdrop-blur-md rounded-2xl p-5 border border-border/80 dark:border-border/50 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
-                <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              <div className="w-12 h-12 bg-primary/10 dark:bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                <FileText className="w-6 h-6 text-primary dark:text-primary" />
               </div>
               <div>
                 <p className="text-3xl font-bold text-foreground dark:text-white tracking-tight">{completedRequiredCount}/{requiredSlots.length}</p>
@@ -553,9 +553,9 @@ export function OrganizationDocumentsForm() {
 
         {/* Redirect message from results page */}
         {redirectMessage && (
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 flex items-start gap-3">
-            <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
-            <span className="text-blue-700">{redirectMessage}</span>
+          <div className="bg-secondary border border-border rounded-xl p-4 mb-6 flex items-start gap-3">
+            <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+            <span className="text-primary">{redirectMessage}</span>
           </div>
         )}
 
@@ -590,12 +590,12 @@ export function OrganizationDocumentsForm() {
                   onDrop={(event) => handleRowDrop(event, doc.id)}
                   className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
                     isDragOver
-                      ? 'border-2 border-blue-500 bg-blue-50'
+                      ? 'border-2 border-primary bg-primary/10'
                       : isCompleted
                       ? 'border-2 border-green-200 bg-green-50/50'
                       : isError
                       ? 'border-2 border-red-300 bg-red-50/50'
-                      : 'border-2 border-dashed border-border hover:border-blue-500 hover:bg-blue-50/50'
+                      : 'border-2 border-dashed border-border hover:border-primary hover:bg-primary/10'
                   }`}
                 >
                   <div className="flex items-center gap-3 min-w-0">
@@ -630,7 +630,7 @@ export function OrganizationDocumentsForm() {
                         <div className="w-32 mt-1">
                           <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-blue-600 transition-all duration-300"
+                              className="h-full bg-primary transition-all duration-300"
                               style={{ width: `${file.progress}%` }}
                             ></div>
                           </div>
@@ -651,7 +651,7 @@ export function OrganizationDocumentsForm() {
                       <>
                         <button
                           onClick={() => handleDownloadFile(file.fileId)}
-                          className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
+                          className="px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm font-medium"
                           title="تحميل"
                         >
                           <Download className="w-4 h-4" />
@@ -668,7 +668,7 @@ export function OrganizationDocumentsForm() {
                     <button
                       onClick={() => handleSelectFile(doc.id)}
                       disabled={hasPendingUploads}
-                      className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isUploading ? (
                         <>
@@ -715,7 +715,7 @@ export function OrganizationDocumentsForm() {
                   onDrop={(event) => handleRowDrop(event, doc.id)}
                   className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
                     isDragOver
-                      ? 'border-2 border-blue-500 bg-blue-50'
+                      ? 'border-2 border-primary bg-primary/10'
                       : isCompleted
                       ? 'border-2 border-green-200 bg-green-50/50'
                       : isError
@@ -748,7 +748,7 @@ export function OrganizationDocumentsForm() {
                           onClick={() =>
                             handleDownloadTemplate(doc.templateUrl!, 'نموذج خطاب مقترح.pdf')
                           }
-                          className="text-xs text-blue-600 hover:text-blue-800 hover:underline mt-1 text-right"
+                          className="text-xs text-primary hover:text-primary hover:underline mt-1 text-right"
                           type="button"
                         >
                           نموذج خطاب مقترح
@@ -766,7 +766,7 @@ export function OrganizationDocumentsForm() {
                         <div className="w-32 mt-1">
                           <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-blue-600 transition-all duration-300"
+                              className="h-full bg-primary transition-all duration-300"
                               style={{ width: `${file.progress}%` }}
                             ></div>
                           </div>
@@ -784,7 +784,7 @@ export function OrganizationDocumentsForm() {
                       <>
                         <button
                           onClick={() => handleDownloadFile(file.fileId)}
-                          className="px-3 py-2 text-blue-600 hover:bg-blue-100 rounded-lg transition-colors text-sm font-medium"
+                          className="px-3 py-2 text-primary hover:bg-primary/10 rounded-lg transition-colors text-sm font-medium"
                           title="تحميل"
                         >
                           <Download className="w-4 h-4" />
@@ -833,7 +833,7 @@ export function OrganizationDocumentsForm() {
             type="button"
             onClick={handleSave}
             disabled={isSaving || hasPendingUploads}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSaving ? (
               <>

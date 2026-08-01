@@ -19,7 +19,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Executive Dashboard when executive view is active
   if (activeView === 'executive') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <ExecutiveDashboard />
       </div>
     );
@@ -28,7 +28,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render AI Analysis Page when ai-analysis view is active
   if (activeView === 'ai-analysis') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <AIAnalysisPage />
       </div>
     );
@@ -37,7 +37,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Sales Dashboard when sales view is active
   if (activeView === 'sales') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <SalesDashboard />
       </div>
     );
@@ -46,7 +46,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Customers Dashboard when customers view is active
   if (activeView === 'customers') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <CustomersDashboard />
       </div>
     );
@@ -55,7 +55,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Profitability Dashboard when profitability view is active
   if (activeView === 'profitability') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <ProfitabilityDashboard />
       </div>
     );
@@ -64,7 +64,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Operations Dashboard when operations view is active
   if (activeView === 'operations') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <OperationsDashboard />
       </div>
     );
@@ -73,7 +73,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render HR Dashboard when hr view is active
   if (activeView === 'hr') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <HRDashboard />
       </div>
     );
@@ -82,7 +82,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Marketing Dashboard when marketing view is active
   if (activeView === 'marketing') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <MarketingDashboard />
       </div>
     );
@@ -91,7 +91,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Recommendations Dashboard when recommendations view is active
   if (activeView === 'recommendations') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <RecommendationsDashboard />
       </div>
     );
@@ -100,7 +100,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   // Render Opportunities Dashboard when opportunities view is active
   if (activeView === 'opportunities') {
     return (
-      <div className="p-4 md:p-6 lg:p-8 bg-secondary dark:bg-gray-950">
+      <div className="p-4 md:p-6 lg:p-8 bg-background dark:bg-gray-950">
         <OpportunitiesDashboard />
       </div>
     );
@@ -133,7 +133,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
   };
 
   return (
-    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-secondary dark:bg-gray-950">
+    <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-background dark:bg-gray-950">
       {/* Header */}
       <div className="border-b border-border dark:border-border pb-6">
         <h2 className="text-3xl md:text-4xl font-bold text-foreground dark:text-white mb-2">{getViewTitle()}</h2>

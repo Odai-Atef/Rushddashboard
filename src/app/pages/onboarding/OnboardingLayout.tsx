@@ -15,7 +15,7 @@ export function OnboardingLayout() {
 
   return (
     <OnboardingProvider organizationId={organizationId}>
-      <div className="min-h-full">
+      <div className="min-h-full bg-background">
         <Outlet />
       </div>
     </OnboardingProvider>

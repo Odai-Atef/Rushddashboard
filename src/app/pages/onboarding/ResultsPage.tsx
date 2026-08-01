@@ -180,9 +180,9 @@ export function ResultsPage() {
 
   if (isLoadingResults) {
     return (
-      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-6 flex items-center justify-center">
         <div className="text-center">
-          <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto mb-4" />
+          <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
           <p className="text-muted-foreground">جاري تحميل النتائج...</p>
         </div>
       </div>
@@ -191,7 +191,7 @@ export function ResultsPage() {
 
   if (resultsError) {
     return (
-      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-6 flex items-center justify-center">
         <div className="max-w-md w-full bg-white rounded-xl shadow-sm border border-red-200 p-8 text-center">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold mb-2">تعذر تحميل النتائج</h2>
@@ -214,7 +214,7 @@ export function ResultsPage() {
               }
             }}
             disabled={isLoadingResults}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
           >
             إعادة المحاولة
           </button>
@@ -225,7 +225,7 @@ export function ResultsPage() {
 
   if ((localStatus ?? assessmentStatus) && (localStatus ?? assessmentStatus)?.status !== 'COMPLETED' && !isivResult) {
     return (
-      <div className="min-h-full bg-secondary p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-6 flex items-center justify-center">
         <div className="max-w-2xl w-full bg-white rounded-xl shadow-sm border border-border p-8 text-center">
           <Info className="w-12 h-12 text-blue-500 mx-auto mb-4" />
           <h2 className="text-2xl font-bold mb-2">
@@ -240,7 +240,7 @@ export function ResultsPage() {
           </p>
           <button
             onClick={() => goToStep('assessment')}
-            className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
           >
             {(localStatus ?? assessmentStatus)?.status === 'IN_PROGRESS'
               ? 'متابعة التقييم'
@@ -256,7 +256,7 @@ export function ResultsPage() {
   }
 
   return (
-    <div ref={reportContainerRef} className="min-h-full bg-secondary p-3 sm:p-6">
+    <div ref={reportContainerRef} className="min-h-full bg-background p-3 sm:p-6">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-4 sm:p-8 mb-6 text-white">
@@ -299,7 +299,7 @@ export function ResultsPage() {
             {isQualified && (
               <button
                 onClick={() => goToStep('roadmap')}
-                className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center gap-2"
+                className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
               >
                 عرض خطة التطوير
                 <ArrowRight className="w-5 h-5" />
@@ -331,7 +331,7 @@ export function ResultsPage() {
             {categoryScores.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
                 {categoryScores.map((cs) => (
-                  <div key={cs.categoryId} className="bg-secondary dark:bg-muted/60 rounded-xl border border-border dark:border-border p-4 flex flex-col justify-between h-full" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
+                  <div key={cs.categoryId} className="bg-card dark:bg-muted/60 rounded-xl border border-border dark:border-border p-4 flex flex-col justify-between h-full" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm font-medium text-foreground dark:text-muted-foreground">{cs.categoryName}</span>
                       <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${cs.color}20`, color: cs.color }}>
@@ -420,10 +420,10 @@ export function ResultsPage() {
               <div>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium">مؤسستك</span>
-                  <span className="text-sm font-bold text-blue-600">{benchmarks.yourScore}٪</span>
+                  <span className="text-sm font-bold text-primary">{benchmarks.yourScore}٪</span>
                 </div>
                 <div className="h-3 bg-muted rounded-full overflow-hidden">
-                  <div className="h-full bg-blue-600" style={{ width: `${benchmarks.yourScore}%` }}></div>
+                  <div className="h-full bg-primary" style={{ width: `${benchmarks.yourScore}%` }}></div>
                 </div>
               </div>
               <div>
@@ -452,7 +452,7 @@ export function ResultsPage() {
         <div className="report-exclude flex flex-col sm:flex-row gap-3 sm:gap-4">
           <button
             onClick={() => goToStep('analysis')}
-            className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+            className="flex-1 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
           >
             عرض التحليل التفصيلي
           </button>

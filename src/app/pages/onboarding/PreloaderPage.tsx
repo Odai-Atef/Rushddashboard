@@ -120,7 +120,7 @@ export function PreloaderPage() {
 
   if (cooldownInfo?.blocked) {
     return (
-      <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-6 flex items-center justify-center">
         <div className="max-w-xl w-full">
           <div className="bg-white rounded-xl shadow-lg border border-border p-10 text-center">
             <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -140,7 +140,7 @@ export function PreloaderPage() {
                   ? navigate(`/dashboard/charity-assessment/results/${activeOrganizationId}`)
                   : navigate('/dashboard/charity-assessment')
               }
-              className="mt-8 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+              className="mt-8 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
             >
               عرض نتيجة التقييم السابقة
             </button>
@@ -167,7 +167,7 @@ export function PreloaderPage() {
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-foreground">التقدم</span>
-              <span className="text-sm font-medium text-blue-600">
+              <span className="text-sm font-medium text-primary">
                 {processingProgress}٪
               </span>
             </div>
@@ -196,7 +196,7 @@ export function PreloaderPage() {
                   {done ? (
                     <CheckCircle2 className="w-5 h-5 text-green-600" />
                   ) : (
-                    <Loader2 className="w-5 h-5 text-blue-600 animate-spin" />
+                    <Loader2 className="w-5 h-5 text-primary animate-spin" />
                   )}
                   <span className={done ? 'text-green-900' : 'text-foreground'}>
                     {item.label}

@@ -688,7 +688,7 @@ export function ProjectDetailsPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -696,7 +696,7 @@ export function ProjectDetailsPage() {
 
   if (error) {
     return (
-      <div className="min-h-full bg-secondary p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-full bg-background p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
         <div className="text-red-600 text-center">{error}</div>
         <button
           onClick={() => refetch()}
@@ -740,7 +740,7 @@ export function ProjectDetailsPage() {
     packageStatusMap[project.packageId] === rawStatus;
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       <div className="space-y-6">
         <div className="mb-6">
           <button

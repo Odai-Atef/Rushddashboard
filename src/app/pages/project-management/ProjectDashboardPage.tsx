@@ -136,7 +136,7 @@ export function ProjectDashboardPage() {
 
   if (isLoading || isCheckingQualification || notificationsLoading) {
     return (
-      <div className="min-h-full bg-secondary dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+      <div className="min-h-full bg-background dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -166,7 +166,7 @@ export function ProjectDashboardPage() {
       : '/dashboard/charity-assessment';
 
     return (
-      <div className="min-h-full bg-secondary dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-full bg-background dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
         <div className="bg-card rounded-xl border border-red-200 shadow-sm p-6 sm:p-12 text-center max-w-lg mx-4">
           <AlertTriangle className="w-12 sm:w-16 h-12 sm:h-16 text-red-500 mx-auto mb-4 sm:mb-6" />
           <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-red-700">{title}</h2>
@@ -201,7 +201,7 @@ export function ProjectDashboardPage() {
     }
     if (!isProjectManager) {
       return (
-        <div className="min-h-full bg-secondary dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
+        <div className="min-h-full bg-background dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
           <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
         </div>
       );
@@ -219,7 +219,7 @@ export function ProjectDashboardPage() {
   };
 
   return (
-    <div className="min-h-full bg-secondary dark:bg-gray-950 p-4 sm:p-6 lg:p-8">
+    <div className="min-h-full bg-background dark:bg-gray-950 p-4 sm:p-6 lg:p-8">
       <div className="space-y-4 sm:space-y-6 md:space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">

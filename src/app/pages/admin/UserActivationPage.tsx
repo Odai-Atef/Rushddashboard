@@ -549,7 +549,7 @@ export function UserActivationPage() {
   };
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6" dir="rtl">
+    <div className="min-h-full bg-background p-3 sm:p-6" dir="rtl">
       <div className="space-y-4 sm:space-y-6">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">

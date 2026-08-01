@@ -384,7 +384,7 @@ export function ProjectCreatePage() {
 
   if (isEntityManager && isLoadingEligibility) {
     return (
-      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
           <p className="text-muted-foreground">جارٍ التحقق من إمكانية إنشاء المشاريع...</p>
@@ -395,7 +395,7 @@ export function ProjectCreatePage() {
 
   if (isProjectManager && isLoadingEligibleOrganizations) {
     return (
-      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
           <p className="text-muted-foreground">جارٍ تحميل الجهات المؤهلة...</p>
@@ -408,7 +408,7 @@ export function ProjectCreatePage() {
     (isEntityManager ? eligibilityError : eligibleOrganizationsError) || error || null;
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6">
+    <div className="min-h-full bg-background p-3 sm:p-6">
       <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto">
         <div className="mb-4 sm:mb-6">
           <button

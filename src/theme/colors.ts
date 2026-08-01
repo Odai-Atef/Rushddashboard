@@ -85,8 +85,8 @@ export const colors: SemanticColors = {
     dark: '#EF4444',
   },
   background: {
-    light: '#F5F7FB',
-    dark: '#071626',
+    light: '#F8FAFC',
+    dark: '#0F172A',
   },
   surface: {
     light: '#FFFFFF',

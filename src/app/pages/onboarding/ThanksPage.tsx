@@ -24,7 +24,7 @@ export function ThanksPage() {
 
   if (isNotQualified) {
     return (
-      <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
+      <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
         <div className="max-w-lg w-full bg-white rounded-2xl shadow-sm border border-border p-6 sm:p-8 text-center">
           <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <AlertCircle className="w-10 h-10 text-red-600" />
@@ -54,7 +54,7 @@ export function ThanksPage() {
   }
 
   return (
-    <div className="min-h-full bg-secondary p-3 sm:p-6 flex items-center justify-center">
+    <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
       <div className="max-w-lg w-full bg-white rounded-2xl shadow-sm border border-border p-6 sm:p-8 text-center">
         <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
           <CheckCircle2 className="w-10 h-10 text-green-600" />
@@ -63,15 +63,15 @@ export function ThanksPage() {
         <p className="text-muted-foreground mb-6">
           تم إنشاء/تحديث ملف الجهه بنجاح. يمكنك الآن بدء التقييم لتفعيل الجهه من إنشاء المشاريع.
         </p>
-        <div className="bg-blue-50 rounded-xl p-4 mb-6 flex items-start gap-3 text-left">
-          <Sparkles className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-          <p className="text-sm text-blue-700">
+        <div className="bg-secondary rounded-xl p-4 mb-6 flex items-start gap-3 text-left">
+          <Sparkles className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+          <p className="text-sm text-primary">
             يستغرق التقييم بضع دقائق. تأكد من الإجابة بدقة لتحصل على نتيجة دقيقة وخطة تطوير مخصصة.
           </p>
         </div>
         <button
           onClick={handleStartAssessment}
-          className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium flex items-center justify-center gap-2"
+          className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center justify-center gap-2"
         >
           <Play className="w-5 h-5" />
           بدء التقييم
