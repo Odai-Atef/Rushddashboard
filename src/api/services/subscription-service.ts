@@ -11,9 +11,9 @@ export interface Package {
   id: string;
   name: string;
   description?: string;
-  price: number;
+  priceMonthly: number;
+  priceAnnual: number;
   currency: string;
-  billingCycle: string;
   projectLimit: number;
   features: string[];
   sla?: string;
@@ -129,8 +129,8 @@ export class SubscriptionService {
    * Get list of active subscription packages
    * GET /api/v1/subscriptions/packages
    */
-  async getPackages(config?: RequestConfig): Promise<ApiResponse<Package[]>> {
-    return apiClient.get<Package[]>('/api/v1/subscriptions/packages', config);
+  async getPackages(config?: RequestConfig): Promise<ApiResponse<{ success: boolean; data: Package[] }>> {
+    return apiClient.get<{ success: boolean; data: Package[] }>('/api/v1/subscriptions/packages', config);
   }
 
   /**

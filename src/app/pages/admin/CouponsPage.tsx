@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Ticket, Plus, Search, Loader2, X, Check } from 'lucide-react';
 import { toast } from 'sonner';
-import { subscriptionService, Coupon, CreateCouponDto } from '@/api/services/subscription-service';
+import { subscriptionService, Coupon, CreateCouponDto, Package } from '@/api/services/subscription-service';
 import { MultiSelect } from '@/app/components/ui/multi-select';
 
 interface CouponFilters {
@@ -29,6 +29,7 @@ export function CouponsPage() {
   const [filters, setFilters] = useState<CouponFilters>({ status: '', code: '' });
   const [showAdd, setShowAdd] = useState(false);
   const [packages, setPackages] = useState<{ id: string; name: string }[]>([]);
+  const [packagesMap, setPackagesMap] = useState<Record<string, string>>({});
   const [form, setForm] = useState<CreateCouponDto>({
     code: '',
     type: 'PERCENTAGE',
@@ -68,8 +69,15 @@ export function CouponsPage() {
   const fetchPackages = useCallback(async () => {
     try {
       const response = await subscriptionService.getPackages();
-      if (response.success && response.data) {
-        setPackages(response.data.map((p) => ({ id: p.id, name: p.name })));
+      if (response.success && response.data?.data) {
+        const packagesData = response.data.data;
+        const list = packagesData.map((p: Package) => ({ id: p.id, name: p.name }));
+        const map: Record<string, string> = {};
+        packagesData.forEach((p: Package) => {
+          map[p.id] = p.name;
+        });
+        setPackages(list);
+        setPackagesMap(map);
       }
     } catch {
       // ignore package load errors
@@ -211,6 +219,7 @@ export function CouponsPage() {
                     <th className="px-4 py-3 text-right font-medium text-gray-700">الاستخدامات</th>
                     <th className="px-4 py-3 text-right font-medium text-gray-700">تاريخ البداية</th>
                     <th className="px-4 py-3 text-right font-medium text-gray-700">تاريخ النهاية</th>
+                    <th className="px-4 py-3 text-right font-medium text-gray-700">الباقات المطبقة</th>
                     <th className="px-4 py-3 text-right font-medium text-gray-700">الحالة</th>
                   </tr>
                 </thead>
@@ -234,6 +243,9 @@ export function CouponsPage() {
                         {coupon.validUntil
                           ? new Date(coupon.validUntil).toLocaleDateString('ar-SA')
                           : '-'}
+                      </td>
+                      <td className="px-4 py-3 text-gray-700">
+                        {formatPackageNames(coupon.applicablePackageIds, packagesMap)}
                       </td>
                       <td className="px-4 py-3">
                         <span
@@ -492,4 +504,9 @@ function formatValue(coupon: Coupon) {
     return coupon.extraProjects ? `${coupon.extraProjects} مشروع` : '-';
   }
   return '-';
+}
+
+function formatPackageNames(packageIds: string[] | undefined, packagesMap: Record<string, string>) {
+  if (!packageIds || packageIds.length === 0) return 'جميع الباقات';
+  return packageIds.map((id) => packagesMap[id] || id).join(', ');
 }
