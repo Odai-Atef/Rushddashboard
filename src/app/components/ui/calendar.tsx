@@ -21,41 +21,41 @@ function Calendar({
         months: "flex flex-col sm:flex-row gap-2",
         month: "flex flex-col gap-4",
         caption: "flex justify-center pt-1 relative items-center w-full",
-        caption_label: "text-sm font-medium text-gray-900 dark:text-white",
+        caption_label: "text-sm font-medium text-[var(--text-primary)] dark:text-white",
         nav: "flex items-center gap-1",
         nav_button: cn(
           buttonVariants({ variant: "outline" }),
-          "size-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-gray-100 dark:hover:bg-muted",
+          "size-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-[var(--hover)]",
         ),
         nav_button_previous: "absolute left-1",
         nav_button_next: "absolute right-1",
         table: "w-full border-collapse space-x-1",
         head_row: "flex",
         head_cell:
-          "text-gray-500 dark:text-gray-400 rounded-md w-8 font-normal text-[0.8rem]",
+          "text-[var(--text-muted)] dark:text-[var(--text-muted)] rounded-md w-8 font-normal text-[0.8rem]",
         row: "flex w-full mt-2",
         cell: cn(
-          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-emerald-50 dark:[&:has([aria-selected])]:bg-emerald-900/20 [&:has([aria-selected].day-range-end)]:rounded-r-md",
+          "relative p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-[var(--primary)]/[0.08] dark:[&:has([aria-selected])]:bg-[var(--primary)]/[0.15] [&:has([aria-selected].day-range-end)]:rounded-r-md",
           props.mode === "range"
             ? "[&:has(>.day-range-end)]:rounded-r-md [&:has(>.day-range-start)]:rounded-l-md first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md"
-            : "[&:has([aria-selected])]:rounded-md",
+            : "[&[role='button']]:rounded-[var(--radius-button)]",
         ),
         day: cn(
           buttonVariants({ variant: "ghost" }),
-          "size-8 p-0 font-normal text-gray-900 dark:text-white aria-selected:opacity-100 hover:bg-gray-100 dark:hover:bg-muted",
+          "size-8 p-0 font-normal text-[var(--text-primary)] dark:text-white aria-selected:opacity-100 hover:bg-[var(--hover)]",
         ),
         day_range_start:
-          "day-range-start aria-selected:bg-emerald-600 aria-selected:text-white dark:aria-selected:bg-emerald-500",
+          "day-range-start aria-selected:bg-[var(--primary)] aria-selected:text-white",
         day_range_end:
-          "day-range-end aria-selected:bg-emerald-600 aria-selected:text-white dark:aria-selected:bg-emerald-500",
+          "day-range-end aria-selected:bg-[var(--primary)] aria-selected:text-white",
         day_selected:
-          "bg-emerald-600 text-white hover:bg-emerald-700 hover:text-white focus:bg-emerald-600 focus:text-white dark:bg-emerald-500 dark:hover:bg-emerald-600",
-        day_today: "bg-gray-100 text-gray-900 dark:bg-muted dark:text-white",
+          "bg-[var(--primary)] text-white hover:bg-[var(--primary)]/90 focus:bg-[var(--primary)] focus:text-white dark:bg-[var(--primary)] dark:hover:bg-[var(--primary)]/90",
+        day_today: "bg-[var(--hover)] text-[var(--text-primary)] dark:bg-[var(--muted)] dark:text-white",
         day_outside:
-          "day-outside text-gray-400 dark:text-gray-500 aria-selected:text-gray-400 dark:aria-selected:text-gray-500",
-        day_disabled: "text-gray-400 dark:text-gray-500 opacity-50",
+          "day-outside text-[var(--text-muted)] aria-selected:text-[var(--text-muted)]",
+        day_disabled: "text-[var(--text-muted)] opacity-50",
         day_range_middle:
-          "aria-selected:bg-emerald-100 aria-selected:text-emerald-900 dark:aria-selected:bg-emerald-900/30 dark:aria-selected:text-emerald-100",
+          "aria-selected:bg-[var(--primary)]/[0.12] aria-selected:text-[var(--primary)] dark:aria-selected:bg-[var(--primary)]/[0.25] dark:aria-selected:text-[var(--primary)]",
         day_hidden: "invisible",
         ...classNames,
       }}

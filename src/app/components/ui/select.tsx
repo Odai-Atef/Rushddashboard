@@ -41,29 +41,28 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex w-full items-center justify-between gap-2 rounded-lg border px-4 py-2.5 text-sm whitespace-nowrap shadow-sm",
-        "bg-white dark:bg-card/50",
-        "text-gray-900 dark:text-white",
-        "border-gray-200 dark:border-border",
-        "placeholder:text-gray-400 dark:placeholder:text-gray-500",
-        "data-[placeholder]:text-gray-400 dark:data-[placeholder]:text-gray-500",
-        "[&_svg:not([class*='text-'])]:text-gray-400 dark:[&_svg:not([class*='text-'])]:text-gray-500",
-        "transition-colors duration-200 ease-in-out",
-        "focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none",
-        "dark:focus:border-emerald-400 dark:focus:ring-emerald-400/30",
-        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-100 dark:disabled:bg-gray-800",
-        "aria-invalid:border-red-500 aria-invalid:ring-red-500/20 dark:aria-invalid:border-red-400 dark:aria-invalid:ring-red-400/20",
+        "flex w-full items-center justify-between gap-2 rounded-[var(--radius-input)] border px-4 py-2.5 text-sm whitespace-nowrap shadow-sm",
+        "bg-[var(--card)] dark:bg-[var(--card)]/50",
+        "text-[var(--text-primary)] dark:text-white",
+        "border-[var(--border)]",
+        "placeholder:text-[var(--text-muted)]",
+        "data-[placeholder]:text-[var(--text-muted)]",
+        "[&_svg:not([class*='text-'])]:text-[var(--text-muted)]",
+        "transition-all duration-[var(--transition-duration)] ease-in-out",
+        "focus:border-[var(--primary)] focus:ring-2 focus:ring-[var(--primary)]/30 focus:outline-none",
+        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--muted)]",
+        "aria-invalid:border-[var(--destructive)] aria-invalid:ring-[var(--destructive)]/20",
         "data-[size=default]:h-11 data-[size=sm]:h-9",
         "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        "hover:border-gray-300 dark:hover:border-gray-600",
+        "hover:border-[var(--text-muted)]",
         className,
       )}
       {...props}
     >
       {children}
       <SelectPrimitive.Icon asChild>
-        <ChevronDownIcon className="size-4 opacity-50 transition-transform duration-200" />
+        <ChevronDownIcon className="size-4 opacity-50 transition-transform duration-[var(--transition-duration)]" />
       </SelectPrimitive.Icon>
     </SelectPrimitive.Trigger>
   );
@@ -80,10 +79,10 @@ function SelectContent({
       <SelectPrimitive.Content
         data-slot="select-content"
         className={cn(
-          "relative z-50 max-h-[var(--radix-select-content-available-height)] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-lg border shadow-lg",
-          "bg-white dark:bg-card",
-          "text-gray-900 dark:text-white",
-          "border-gray-200 dark:border-border",
+          "relative z-50 max-h-[var(--radix-select-content-available-height)] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-[var(--radius-card)] border shadow-[var(--shadow-lg)]",
+          "bg-[var(--card)]",
+          "text-[var(--text-primary)] dark:text-white",
+          "border-[var(--border)]",
           "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
           position === "popper" &&
             "data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
@@ -117,7 +116,7 @@ function SelectLabel({
       data-slot="select-label"
       className={cn(
         "px-3 py-1.5 text-xs font-semibold",
-        "text-gray-500 dark:text-gray-400",
+        "text-[var(--text-muted)]",
         className,
       )}
       {...props}
@@ -134,19 +133,19 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-2 rounded-md py-2 pr-8 pl-3 text-sm outline-none select-none",
-        "text-gray-900 dark:text-white",
-        "focus:bg-emerald-50 focus:text-emerald-900 dark:focus:bg-emerald-900/30 dark:focus:text-emerald-100",
+        "relative flex w-full cursor-default items-center gap-2 rounded-[var(--radius-button)] py-2 pr-8 pl-3 text-sm outline-none select-none",
+        "text-[var(--text-primary)] dark:text-white",
+        "focus:bg-[var(--primary)]/[0.08] focus:text-[var(--primary)]",
         "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
-        "transition-colors duration-150",
+        "transition-colors duration-[var(--transition-duration)]",
         className,
       )}
       {...props}
     >
       <span className="absolute right-2 flex size-3.5 items-center justify-center">
         <SelectPrimitive.ItemIndicator>
-          <CheckIcon className="size-4 text-emerald-600 dark:text-emerald-400" />
+          <CheckIcon className="size-4 text-[var(--primary)]" />
         </SelectPrimitive.ItemIndicator>
       </span>
       <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
@@ -161,7 +160,7 @@ function SelectSeparator({
   return (
     <SelectPrimitive.Separator
       data-slot="select-separator"
-      className={cn("-mx-1 my-1 h-px bg-gray-200 dark:bg-muted", className)}
+      className={cn("-mx-1 my-1 h-px bg-[var(--border)]", className)}
       {...props}
     />
   );
@@ -180,7 +179,7 @@ function SelectScrollUpButton({
       )}
       {...props}
     >
-      <ChevronUpIcon className="size-4 text-gray-400 dark:text-gray-500" />
+      <ChevronUpIcon className="size-4 text-[var(--text-muted)]" />
     </SelectPrimitive.ScrollUpButton>
   );
 }
@@ -198,7 +197,7 @@ function SelectScrollDownButton({
       )}
       {...props}
     >
-      <ChevronDownIcon className="size-4 text-gray-400 dark:text-gray-500" />
+      <ChevronDownIcon className="size-4 text-[var(--text-muted)]" />
     </SelectPrimitive.ScrollDownButton>
   );
 }

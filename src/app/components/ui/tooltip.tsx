@@ -46,8 +46,8 @@ function TooltipContent({
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(
-          "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-lg px-3 py-1.5 text-xs text-balance shadow-lg transition-all duration-150",
-          "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900",
+          "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-[var(--radius-button)] px-3 py-1.5 text-xs text-balance shadow-[var(--shadow-lg)] transition-all duration-[var(--transition-duration)]",
+          "bg-[var(--text-primary)] text-white dark:bg-white dark:text-[var(--text-primary)]",
           "animate-in fade-in-0 zoom-in-95",
           "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
           "data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2",
@@ -58,7 +58,7 @@ function TooltipContent({
       >
         {children}
         <TooltipPrimitive.Arrow
-          className="bg-gray-900 dark:bg-gray-100 fill-gray-900 dark:fill-gray-100 z-50 size-2 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]"
+          className="bg-[var(--text-primary)] dark:bg-white fill-[var(--text-primary)] dark:fill-white z-50 size-2 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px]"
         />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>

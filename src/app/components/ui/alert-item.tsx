@@ -18,7 +18,7 @@ export interface AlertItemProps {
  * AlertItem Component
  *
  * A reusable alert/notification card with color-coded severity levels.
- * 
+ *
  * @example
  * ```tsx
  * <AlertItem
@@ -39,10 +39,10 @@ export function AlertItem({
   className,
 }: AlertItemProps) {
   const alertStyles: Record<AlertType, string> = {
-    urgent: 'border-l-4 border-l-red-500 bg-red-50 dark:bg-red-900/20 hover:bg-red-100 dark:hover:bg-red-900/30',
-    warning: 'border-l-4 border-l-amber-500 bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/30',
-    info: 'border-l-4 border-l-blue-500 bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30',
-    success: 'border-l-4 border-l-emerald-500 bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/30',
+    urgent: 'border-l-4 border-l-[var(--danger)] bg-[var(--danger)]/[0.06] dark:bg-[var(--danger)]/[0.12] hover:bg-[var(--danger)]/[0.1] dark:hover:bg-[var(--danger)]/[0.18]',
+    warning: 'border-l-4 border-l-[var(--warning)] bg-[var(--warning)]/[0.06] dark:bg-[var(--warning)]/[0.12] hover:bg-[var(--warning)]/[0.1] dark:hover:bg-[var(--warning)]/[0.18]',
+    info: 'border-l-4 border-l-[var(--secondary)] bg-[var(--secondary)]/[0.06] dark:bg-[var(--secondary)]/[0.12] hover:bg-[var(--secondary)]/[0.1] dark:hover:bg-[var(--secondary)]/[0.18]',
+    success: 'border-l-4 border-l-[var(--primary)] bg-[var(--primary)]/[0.06] dark:bg-[var(--primary)]/[0.12] hover:bg-[var(--primary)]/[0.1] dark:hover:bg-[var(--primary)]/[0.18]',
   };
 
   const priorityLabels: Record<AlertPriority, string> = {
@@ -53,16 +53,16 @@ export function AlertItem({
   };
 
   const priorityStyles: Record<AlertPriority, string> = {
-    critical: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300',
+    critical: 'bg-[var(--danger)]/10 text-[var(--danger)] dark:bg-[var(--danger)]/30 dark:text-[var(--destructive)]',
     high: 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
-    medium: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300',
-    low: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
+    medium: 'bg-[var(--warning)]/10 text-[var(--warning)] dark:bg-[var(--warning)]/30 dark:text-[var(--warning)]',
+    low: 'bg-[var(--secondary)]/10 text-[var(--secondary)] dark:bg-[var(--secondary)]/30 dark:text-[var(--secondary)]',
   };
 
   return (
     <div
       className={cn(
-        'p-4 rounded-xl cursor-pointer transition-all duration-200',
+        'p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] cursor-pointer transition-all duration-[var(--transition-duration)] hover:translate-y-[-1px] hover:shadow-[var(--shadow-sm)]',
         alertStyles[type],
         className
       )}
@@ -76,17 +76,17 @@ export function AlertItem({
       }}
     >
       <div className="flex items-start justify-between gap-2 mb-2">
-        <h4 className="font-semibold text-gray-900 dark:text-gray-100">{title}</h4>
+        <h4 className="font-bold text-[var(--text-primary)] dark:text-white text-base">{title}</h4>
         <span
           className={cn(
-            'px-2 py-0.5 text-xs font-medium rounded-full flex-shrink-0',
+            'px-2 py-0.5 text-xs font-medium rounded-[var(--radius-badge)] flex-shrink-0',
             priorityStyles[priority]
           )}
         >
           {priorityLabels[priority]}
         </span>
       </div>
-      <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{description}</p>
+      <p className="text-sm text-[var(--text-secondary)] dark:text-[var(--text-muted)] leading-relaxed">{description}</p>
     </div>
   );
 }

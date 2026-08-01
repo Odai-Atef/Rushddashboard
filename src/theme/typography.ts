@@ -1,21 +1,27 @@
 /**
  * Typography tokens for Rushd theming system.
+ * Updated with new design system — Modern Arabic + English.
  */
 
-export type FontSizeToken = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+export type FontSizeToken = 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | 'pageTitle' | 'sectionTitle' | 'cardNumber' | 'cardLabel' | 'caption';
 export type FontWeightToken = 'normal' | 'medium' | 'semibold' | 'bold';
 export type LineHeightToken = 'none' | 'tight' | 'snug' | 'normal' | 'relaxed' | 'loose';
 export type LetterSpacingToken = 'tighter' | 'tight' | 'normal' | 'wide' | 'wider' | 'widest';
 
 export const fontSizes: Record<FontSizeToken, string> = {
-  xs: '0.75rem',    // 12px
-  sm: '0.875rem',   // 14px
-  base: '1rem',     // 16px
-  lg: '1.125rem',   // 18px
-  xl: '1.25rem',    // 20px
-  '2xl': '1.5rem',  // 24px
-  '3xl': '1.875rem',// 30px
-  '4xl': '2.25rem', // 36px
+  xs: '0.75rem',         // 12px
+  sm: '0.8125rem',       // 13px (Caption)
+  base: '1rem',          // 16px (Normal Text)
+  lg: '1.125rem',        // 18px
+  xl: '1.25rem',         // 20px
+  '2xl': '1.5rem',       // 24px (Section Title)
+  '3xl': '1.875rem',     // 30px (Card Number)
+  '4xl': '2rem',         // 32px (Page Title)
+  pageTitle: '2rem',     // 32px Bold
+  sectionTitle: '1.5rem',// 24px Bold
+  cardNumber: '1.875rem',// 30px Bold
+  cardLabel: '0.875rem', // 14px Normal
+  caption: '0.8125rem',  // 13px Normal
 };
 
 export const fontWeights: Record<FontWeightToken, number> = {

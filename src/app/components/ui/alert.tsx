@@ -5,19 +5,20 @@ import { CheckCircle, AlertTriangle, XCircle, Info, X } from "lucide-react";
 import { cn } from "./utils";
 
 const alertVariants = cva(
-  "relative w-full rounded-xl border px-4 py-4 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*5)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start transition-all duration-300 ease-in-out",
+  "relative w-full rounded-[var(--radius-card)] border px-[var(--spacing-card-padding)] py-4 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*5)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start transition-all duration-[var(--transition-duration)] ease-in-out",
   {
     variants: {
       variant: {
-        default: "bg-white dark:bg-muted border-gray-200 dark:border-border text-gray-900 dark:text-gray-100",
+        default:
+          "bg-[var(--card)] dark:bg-[var(--muted)] border-[var(--border)] text-[var(--text-primary)] dark:text-white",
         success:
-          "bg-emerald-50 dark:bg-emerald-900/30 border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200",
+          "bg-[var(--primary)]/10 dark:bg-[var(--primary)]/20 border-[var(--primary)]/20 dark:border-[var(--primary)]/30 text-[var(--primary)] dark:text-[var(--primary)]",
         warning:
-          "bg-amber-50 dark:bg-amber-900/30 border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200",
+          "bg-[var(--warning)]/10 dark:bg-[var(--warning)]/20 border-[var(--warning)]/20 dark:border-[var(--warning)]/30 text-[var(--warning)] dark:text-[var(--warning)]",
         danger:
-          "bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800 text-red-800 dark:text-red-200",
+          "bg-[var(--destructive)]/10 dark:bg-[var(--destructive)]/20 border-[var(--destructive)]/20 dark:border-[var(--destructive)]/30 text-[var(--destructive)] dark:text-[var(--destructive)]",
         info:
-          "bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800 text-blue-800 dark:text-blue-200",
+          "bg-[var(--secondary)]/10 dark:bg-[var(--secondary)]/20 border-[var(--secondary)]/20 dark:border-[var(--secondary)]/30 text-[var(--secondary)] dark:text-[var(--secondary)]",
       },
     },
     defaultVariants: {
@@ -73,11 +74,11 @@ function Alert({
       <Icon
         className={cn(
           "size-5 translate-y-0.5",
-          variant === "default" && "text-gray-500 dark:text-gray-400",
-          variant === "success" && "text-emerald-600 dark:text-emerald-300",
-          variant === "warning" && "text-amber-600 dark:text-amber-300",
-          variant === "danger" && "text-red-600 dark:text-red-300",
-          variant === "info" && "text-blue-600 dark:text-blue-300",
+          variant === "default" && "text-[var(--text-muted)] dark:text-white/60",
+          variant === "success" && "text-[var(--primary)]",
+          variant === "warning" && "text-[var(--warning)]",
+          variant === "danger" && "text-[var(--destructive)]",
+          variant === "info" && "text-[var(--secondary)]",
         )}
       />
       <div className="flex flex-col gap-1">
@@ -88,8 +89,8 @@ function Alert({
           type="button"
           onClick={handleDismiss}
           className={cn(
-            "absolute top-3 right-3 rounded-md p-1 opacity-60 transition-opacity duration-200 hover:opacity-100 hover:bg-current/10",
-            "focus:outline-none focus:ring-2 focus:ring-emerald-500/30",
+            "absolute top-3 right-3 rounded-[var(--radius-button)] p-1 opacity-60 transition-opacity duration-[var(--transition-duration)] hover:opacity-100 hover:bg-current/10",
+            "focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30",
           )}
           aria-label="Dismiss alert"
         >
@@ -105,7 +106,7 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="alert-title"
       className={cn(
-        "col-start-2 line-clamp-1 min-h-4 font-semibold tracking-tight",
+        "col-start-2 line-clamp-1 min-h-4 font-bold tracking-tight text-[var(--text-primary)]",
         className,
       )}
       {...props}
@@ -118,7 +119,7 @@ function AlertDescription({ className, ...props }: React.ComponentProps<"div">) 
     <div
       data-slot="alert-description"
       className={cn(
-        "col-start-2 grid justify-items-start gap-1 text-sm leading-relaxed opacity-90",
+        "col-start-2 grid justify-items-start gap-1 text-sm leading-relaxed text-[var(--text-muted)]",
         className,
       )}
       {...props}

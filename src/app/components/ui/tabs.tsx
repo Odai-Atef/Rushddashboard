@@ -26,9 +26,9 @@ function TabsList({
     <TabsPrimitive.List
       data-slot="tabs-list"
       className={cn(
-        "inline-flex h-10 w-fit items-center justify-center rounded-xl p-1 flex",
-        "bg-gray-100 dark:bg-muted",
-        "border border-gray-200 dark:border-border",
+        "inline-flex h-10 w-fit items-center justify-center rounded-[var(--radius-card)] p-1 flex",
+        "bg-[var(--hover)] dark:bg-[var(--muted)]",
+        "border border-[var(--border)]",
         className,
       )}
       {...props}
@@ -44,12 +44,12 @@ function TabsTrigger({
     <TabsPrimitive.Trigger
       data-slot="tabs-trigger"
       className={cn(
-        "inline-flex h-[calc(100%-2px)] flex-1 items-center justify-center gap-1.5 rounded-lg border border-transparent px-3 py-1 text-sm font-medium whitespace-nowrap transition-all duration-200 outline-none",
-        "text-gray-600 dark:text-gray-400",
-        "hover:text-gray-900 dark:hover:text-gray-200",
-        "data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm",
-        "dark:data-[state=active]:bg-gray-700 dark:data-[state=active]:text-white",
-        "focus-visible:ring-2 focus-visible:ring-emerald-500/30",
+        "inline-flex h-[calc(100%-2px)] flex-1 items-center justify-center gap-1.5 rounded-[var(--radius-button)] border border-transparent px-3 py-1 text-sm font-medium whitespace-nowrap transition-all duration-[var(--transition-duration)] outline-none",
+        "text-[var(--text-secondary)] dark:text-[var(--text-muted)]",
+        "hover:text-[var(--text-primary)] dark:hover:text-white",
+        "data-[state=active]:bg-[var(--card)] data-[state=active]:text-[var(--text-primary)] data-[state=active]:shadow-[var(--shadow-sm)]",
+        "dark:data-[state=active]:bg-[var(--card)] dark:data-[state=active]:text-white",
+        "focus-visible:ring-2 focus-visible:ring-[var(--primary)]/30",
         "disabled:pointer-events-none disabled:opacity-50",
         "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
         className,
@@ -67,7 +67,7 @@ function TabsContent({
     <TabsPrimitive.Content
       data-slot="tabs-content"
       className={cn(
-        "flex-1 outline-none animate-in fade-in slide-in-from-bottom-2 duration-200",
+        "flex-1 outline-none animate-in fade-in slide-in-from-bottom-2 duration-[var(--transition-duration)]",
         className,
       )}
       {...props}

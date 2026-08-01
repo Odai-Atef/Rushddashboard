@@ -15,17 +15,16 @@ function Checkbox({
       data-slot="checkbox"
       className={cn(
         "peer size-5 shrink-0 rounded-[5px] border shadow-sm",
-        "bg-white dark:bg-card/50",
-        "border-gray-300 dark:border-border",
+        "bg-[var(--card)] dark:bg-[var(--card)]/50",
+        "border-[var(--border)]",
         "text-white",
-        "transition-all duration-200 ease-in-out",
-        "hover:border-gray-400 dark:hover:border-gray-500",
-        "focus-visible:border-emerald-500 focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:outline-none",
-        "dark:focus-visible:border-emerald-400 dark:focus-visible:ring-emerald-400/30",
+        "transition-all duration-[var(--transition-duration)] ease-in-out",
+        "hover:border-[var(--text-muted)]",
+        "focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/30 focus-visible:outline-none",
         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
-        "data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600 dark:data-[state=checked]:bg-emerald-500 dark:data-[state=checked]:border-emerald-500",
-        "data-[state=indeterminate]:bg-emerald-600 data-[state=indeterminate]:border-emerald-600 dark:data-[state=indeterminate]:bg-emerald-500 dark:data-[state=indeterminate]:border-emerald-500",
-        "aria-invalid:border-red-500 aria-invalid:ring-red-500/20 dark:aria-invalid:border-red-400 dark:aria-invalid:ring-red-400/20",
+        "data-[state=checked]:bg-[var(--primary)] data-[state=checked]:border-[var(--primary)]",
+        "data-[state=indeterminate]:bg-[var(--primary)] data-[state=indeterminate]:border-[var(--primary)]",
+        "aria-invalid:border-[var(--destructive)] aria-invalid:ring-[var(--destructive)]/20",
         className,
       )}
       {...props}

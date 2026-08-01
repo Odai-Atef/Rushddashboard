@@ -30,8 +30,8 @@ export interface StatCardProps {
  *   change="+12.5%"
  *   isPositive={true}
  *   icon={TrendingUp}
- *   iconColor="text-emerald-600"
- *   iconBgColor="bg-emerald-500/10"
+ *   iconColor="text-[var(--primary)]"
+ *   iconBgColor="bg-[var(--primary)]/10"
  * />
  * ```
  */
@@ -41,8 +41,8 @@ export function StatCard({
   change,
   isPositive = true,
   icon: Icon,
-  iconColor = 'text-primary',
-  iconBgColor = 'bg-primary/10',
+  iconColor = 'text-[var(--primary)]',
+  iconBgColor = 'bg-[var(--primary)]/10',
   className,
   onClick,
   description,
@@ -50,13 +50,16 @@ export function StatCard({
   return (
     <div
       className={cn(
-        // Light mode
-        'bg-white rounded-2xl border border-gray-200/80 shadow-sm',
-        // Dark mode - glass effect
-        'dark:bg-card/60 dark:border-border/50 dark:backdrop-blur-md',
-        'p-6 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10',
-        'transition-all duration-200 ease-out',
-        onClick && 'cursor-pointer hover:border-gray-300 dark:hover:border-emerald-500/30',
+        // Light mode — exact card color #FFFFFF
+        'bg-[#FFFFFF] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)]',
+        // Dark mode — exact card color #102942 with glass effect
+        'dark:bg-[#102942]/80 dark:border-white/[0.08] dark:backdrop-blur-md',
+        'p-[var(--spacing-card-padding)]',
+        // Hover lift + glow in dark mode
+        'hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px]',
+        'dark:hover:shadow-[var(--shadow-card)] dark:hover:shadow-[var(--shadow-glow)]',
+        'transition-all duration-[var(--transition-duration)] ease-out',
+        onClick && 'cursor-pointer hover:border-[var(--primary)]/30 dark:hover:border-[var(--primary)]/30',
         className
       )}
       onClick={onClick}
@@ -64,15 +67,15 @@ export function StatCard({
       <div className="flex items-start justify-between mb-5">
         <div
           className={cn(
-            'p-3 rounded-xl',
-            'bg-gray-100 dark:bg-muted/80',
+            'p-3 rounded-[var(--radius-card)]',
+            'bg-[var(--hover)] dark:bg-white/[0.08]',
             iconBgColor
           )}
         >
           <Icon
             className={cn(
               'w-6 h-6',
-              'text-gray-700 dark:text-muted-foreground',
+              'text-[var(--text-secondary)] dark:text-[var(--text-muted)]',
               iconColor
             )}
           />
@@ -80,10 +83,10 @@ export function StatCard({
         {change && (
           <div
             className={cn(
-              'flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full',
+              'flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-[var(--radius-badge)]',
               isPositive
-                ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-500/20'
-                : 'text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-500/20'
+                ? 'text-[var(--primary)] bg-[var(--primary)]/[0.12] dark:bg-[var(--primary)]/[0.2]'
+                : 'text-[var(--destructive)] bg-[var(--destructive)]/[0.12] dark:bg-[var(--destructive)]/[0.2]'
             )}
           >
             {isPositive ? (
@@ -97,15 +100,15 @@ export function StatCard({
       </div>
 
       {description && (
-        <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">
+        <p className="text-xs text-[var(--text-muted)] mb-2">
           {description}
         </p>
       )}
 
-      <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5">
+      <h3 className="text-sm font-medium text-[var(--text-muted)] mb-1.5">
         {title}
       </h3>
-      <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
+      <p className="text-[var(--text-card-number)] font-bold text-[var(--text-primary)] dark:text-white tracking-tight">
         {value}
       </p>
     </div>

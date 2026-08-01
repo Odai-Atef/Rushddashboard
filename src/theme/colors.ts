@@ -1,6 +1,6 @@
 /**
  * Semantic color tokens for Rushd theming system.
- * Each token exposes light and dark values.
+ * Updated with new design system — exact hex values.
  */
 
 export type ThemeMode = 'light' | 'dark';
@@ -13,7 +13,7 @@ export interface ColorToken {
 export interface SemanticColors {
   /** Primary brand color */
   primary: ColorToken;
-  /** Secondary / subtle accent */
+  /** Secondary accent */
   secondary: ColorToken;
   /** Accent for highlights, badges, pills */
   accent: ColorToken;
@@ -29,10 +29,14 @@ export interface SemanticColors {
   card: ColorToken;
   /** Borders and dividers */
   border: ColorToken;
+  /** Hover background */
+  hover: ColorToken;
   /** Primary text color */
   textPrimary: ColorToken;
   /** Secondary / muted text color */
   textSecondary: ColorToken;
+  /** Tertiary / very muted text color */
+  textMuted: ColorToken;
   /** Success / positive state */
   success: ColorToken;
   /** Warning / caution state */
@@ -45,6 +49,10 @@ export interface SemanticColors {
   sidebar: ColorToken;
   /** Topbar background */
   topbar: ColorToken;
+  /** Shadow color token */
+  shadow: ColorToken;
+  /** Glow effect (dark mode only) */
+  glow: ColorToken;
   /** Chart colors */
   chart: {
     1: ColorToken;
@@ -57,93 +65,109 @@ export interface SemanticColors {
 
 export const colors: SemanticColors = {
   primary: {
-    light: '#030213',
-    dark: 'oklch(0.985 0 0)',
+    light: '#1FA97A',
+    dark: '#1FC7A6',
   },
   secondary: {
-    light: 'oklch(0.95 0.0058 264.53)',
-    dark: 'oklch(0.269 0 0)',
+    light: '#2563EB',
+    dark: '#3B82F6',
   },
   accent: {
-    light: '#e9ebef',
-    dark: 'oklch(0.269 0 0)',
+    light: '#1FA97A',
+    dark: '#1FC7A6',
   },
   muted: {
-    light: '#ececf0',
-    dark: 'oklch(0.269 0 0)',
+    light: '#F1F5F9',
+    dark: '#0C2238',
   },
   destructive: {
-    light: '#d4183d',
-    dark: 'oklch(0.396 0.141 25.723)',
+    light: '#DC2626',
+    dark: '#EF4444',
   },
   background: {
-    light: '#ffffff',
-    dark: 'oklch(0.145 0 0)',
+    light: '#F5F7FB',
+    dark: '#071626',
   },
   surface: {
-    light: '#ffffff',
-    dark: 'oklch(0.205 0 0)',
+    light: '#FFFFFF',
+    dark: '#0C2238',
   },
   card: {
-    light: '#ffffff',
-    dark: 'oklch(0.145 0 0)',
+    light: '#FFFFFF',
+    dark: '#102942',
   },
   border: {
-    light: 'rgba(0, 0, 0, 0.1)',
-    dark: 'oklch(0.269 0 0)',
+    light: '#E2E8F0',
+    dark: 'rgba(255, 255, 255, 0.08)',
+  },
+  hover: {
+    light: '#F1F5F9',
+    dark: 'rgba(31, 199, 166, 0.08)',
   },
   textPrimary: {
-    light: 'oklch(0.145 0 0)',
-    dark: 'oklch(0.985 0 0)',
+    light: '#1E293B',
+    dark: '#FFFFFF',
   },
   textSecondary: {
-    light: '#717182',
-    dark: 'oklch(0.708 0 0)',
+    light: '#64748B',
+    dark: '#B7C7D8',
+  },
+  textMuted: {
+    light: '#94A3B8',
+    dark: '#7C95AA',
   },
   success: {
-    light: '#22c55e',
-    dark: '#4ade80',
+    light: '#16A34A',
+    dark: '#22C55E',
   },
   warning: {
-    light: '#f59e0b',
-    dark: '#fbbf24',
+    light: '#F59E0B',
+    dark: '#F59E0B',
   },
   danger: {
-    light: '#ef4444',
-    dark: '#f87171',
+    light: '#DC2626',
+    dark: '#EF4444',
   },
   info: {
-    light: '#3b82f6',
-    dark: '#60a5fa',
+    light: '#0284C7',
+    dark: '#38BDF8',
   },
   sidebar: {
-    light: 'oklch(0.985 0 0)',
-    dark: 'oklch(0.205 0 0)',
+    light: '#0B2742',
+    dark: '#081A2E',
   },
   topbar: {
-    light: '#ffffff',
-    dark: 'oklch(0.145 0 0)',
+    light: '#FFFFFF',
+    dark: '#081A2E',
+  },
+  shadow: {
+    light: '0 6px 18px rgba(15, 23, 42, 0.08)',
+    dark: '0 12px 30px rgba(0, 0, 0, 0.35)',
+  },
+  glow: {
+    light: 'none',
+    dark: '0 0 20px rgba(31, 199, 166, 0.12)',
   },
   chart: {
     1: {
-      light: 'oklch(0.646 0.222 41.116)',
-      dark: 'oklch(0.488 0.243 264.376)',
+      light: '#1FA97A',
+      dark: '#1FC7A6',
     },
     2: {
-      light: 'oklch(0.6 0.118 184.704)',
-      dark: 'oklch(0.696 0.17 162.48)',
+      light: '#2563EB',
+      dark: '#3B82F6',
     },
     3: {
-      light: 'oklch(0.398 0.07 227.392)',
-      dark: 'oklch(0.769 0.188 70.08)',
+      light: '#0284C7',
+      dark: '#38BDF8',
     },
     4: {
-      light: 'oklch(0.828 0.189 84.429)',
-      dark: 'oklch(0.627 0.265 303.9)',
+      light: '#F59E0B',
+      dark: '#F59E0B',
     },
     5: {
-      light: 'oklch(0.769 0.188 70.08)',
-      dark: 'oklch(0.645 0.246 16.439)',
+      light: '#DC2626',
+      dark: '#EF4444',
     },
   },
 };

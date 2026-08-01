@@ -117,25 +117,28 @@ export function Sidebar({ activeView, className }: SidebarProps) {
   const isDark = resolvedTheme === 'dark';
 
   return (
-    <aside className={cn(
-      "flex-col hidden lg:flex transition-all duration-300 relative",
-      // Light mode: dark navy background, dark mode: deep navy
-      "bg-card dark:bg-card",
-      // Border
-      "border-l border-white/10 dark:border-white/5",
-      // Glass effect in dark mode
-      isDark && "backdrop-blur-md bg-opacity-95",
-      isCollapsed ? "w-[80px]" : "w-[280px]",
-      className
-    )}>
+    <aside
+      className={cn(
+        'flex-col hidden lg:flex relative theme-fade',
+        'transition-all duration-[var(--transition-duration)] ease-in-out',
+        // Exact sidebar colors: #0B2742 (light), #081A2E (dark)
+        'bg-[#0B2742] dark:bg-[#081A2E]',
+        // Border
+        'border-l border-white/10',
+        // Glass effect in dark mode
+        isDark && 'backdrop-blur-md',
+        isCollapsed ? 'w-[80px]' : 'w-[280px]',
+        className
+      )}
+    >
       {/* Logo */}
-      <div className="p-4 border-b border-white/10 dark:border-white/10 text-center relative">
+      <div className="p-4 border-b border-white/10 text-center relative">
         <img
           src="/logo.png"
           alt="منصة رشد"
           className={cn(
-            "object-contain mx-auto transition-all duration-300 drop-shadow-lg",
-            isCollapsed ? "w-[48px] h-[48px]" : "w-[80px] h-[80px]"
+            'object-contain mx-auto transition-all duration-[var(--transition-duration)] drop-shadow-lg',
+            isCollapsed ? 'w-[48px] h-[48px]' : 'w-[80px] h-[80px]'
           )}
         />
         {!isCollapsed && (
@@ -145,13 +148,13 @@ export function Sidebar({ activeView, className }: SidebarProps) {
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className={cn(
-            "absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-lg transition-all duration-200",
-            "text-white/50 hover:text-white hover:bg-white/10",
-            "focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:ring-offset-0"
+            'absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
+            'text-white/50 hover:text-white hover:bg-white/10',
+            'focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 focus:ring-offset-0'
           )}
           aria-label={isCollapsed ? 'توسيع القائمة' : 'طي القائمة'}
         >
-          <Menu className={cn("w-4 h-4 transition-transform duration-300", isCollapsed ? "rotate-180" : "")} />
+          <Menu className={cn('w-4 h-4 transition-transform duration-300', isCollapsed ? 'rotate-180' : '')} />
         </button>
       </div>
 
@@ -168,30 +171,29 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   to={item.linkTo ?? item.path}
                   title={item.label}
                   className={cn(
-                    "group w-full flex items-center gap-3 rounded-xl transition-all duration-200",
-                    "text-right focus:outline-none focus:ring-2 focus:ring-emerald-400/50 focus:ring-offset-0",
-                    isCollapsed ? "justify-center px-2 py-3" : "px-4 py-3",
+                    'group w-full flex items-center gap-3 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
+                    'text-right focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 focus:ring-offset-0',
+                    isCollapsed ? 'justify-center px-2 py-3' : 'px-4 py-3',
                     isActive
                       ? [
-                          // Active state — green background, white text
-                          "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25",
-                          "dark:bg-gradient-to-r dark:from-emerald-500 dark:to-teal-500",
-                          "dark:shadow-emerald-500/20",
+                          // Active state — primary color background, white text
+                          'bg-[var(--primary)] text-white',
+                          'shadow-[var(--shadow-md)]',
+                          'dark:bg-gradient-to-r dark:from-[var(--primary)] dark:to-[var(--secondary)]',
+                          'dark:shadow-[var(--shadow-glow)]',
                         ]
                       : [
                           // Inactive — white text with subtle hover
-                          "text-white/80 hover:text-white hover:bg-white/10",
+                          'text-white/80 hover:text-white hover:bg-white/10',
+                          'transition-all duration-[var(--transition-duration)]',
                         ]
                   )}
                 >
-                  <span className={cn(
-                    "flex items-center justify-center flex-shrink-0",
-                    isCollapsed ? "w-6 h-6" : "w-5 h-5"
-                  )}>
+                  <span className={cn('flex items-center justify-center flex-shrink-0', isCollapsed ? 'w-6 h-6' : 'w-5 h-5')}>
                     <Icon
                       className={cn(
-                        "w-5 h-5 transition-all duration-200",
-                        isActive && isDark && "drop-shadow-emerald-500/20",
+                        'w-5 h-5 transition-all duration-[var(--transition-duration)]',
+                        isActive && isDark && 'drop-shadow-[0_0_6px_rgba(31,199,166,0.4)]'
                       )}
                       aria-hidden="true"
                     />
@@ -209,11 +211,9 @@ export function Sidebar({ activeView, className }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="p-4 border-t border-white/10 dark:border-white/10">
+      <div className="p-4 border-t border-white/10">
         {!isCollapsed ? (
-          <p className="text-white/40 text-xs text-center">
-            © 2026 منصة رشد
-          </p>
+          <p className="text-white/40 text-xs text-center">© 2026 منصة رشد</p>
         ) : (
           <div className="flex justify-center">
             <div className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center text-xs text-white/60 font-medium">

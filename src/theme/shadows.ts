@@ -1,5 +1,6 @@
 /**
  * Shadow tokens for Rushd theming system.
+ * Updated with new design system — exact shadow values.
  */
 
 export interface ShadowToken {
@@ -20,32 +21,38 @@ export interface ShadowTokens {
   focusRing: ShadowToken;
   /** Card shadow */
   card: ShadowToken;
+  /** Glow effect (dark mode) */
+  glow: ShadowToken;
 }
 
 export const shadows: ShadowTokens = {
   sm: {
-    light: '0 1px 2px 0 rgb(0 0 0 / 0.05)',
-    dark: '0 1px 2px 0 rgb(0 0 0 / 0.25)',
+    light: '0 1px 3px rgba(15, 23, 42, 0.05)',
+    dark: '0 1px 3px rgba(0, 0, 0, 0.25)',
   },
   md: {
-    light: '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
-    dark: '0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3)',
+    light: '0 4px 12px rgba(15, 23, 42, 0.06)',
+    dark: '0 4px 12px rgba(0, 0, 0, 0.3)',
   },
   lg: {
-    light: '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
-    dark: '0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3)',
+    light: '0 6px 18px rgba(15, 23, 42, 0.08)',
+    dark: '0 12px 30px rgba(0, 0, 0, 0.35)',
   },
   xl: {
-    light: '0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1)',
-    dark: '0 20px 25px -5px rgb(0 0 0 / 0.35), 0 8px 10px -6px rgb(0 0 0 / 0.35)',
+    light: '0 12px 30px rgba(15, 23, 42, 0.12)',
+    dark: '0 20px 40px rgba(0, 0, 0, 0.45)',
   },
   focusRing: {
-    light: '0 0 0 2px var(--ring, oklch(0.708 0 0))',
-    dark: '0 0 0 2px var(--ring, oklch(0.439 0 0))',
+    light: '0 0 0 2px rgba(31, 169, 122, 0.3)',
+    dark: '0 0 0 2px rgba(31, 199, 166, 0.3)',
   },
   card: {
-    light: '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)',
-    dark: '0 1px 3px 0 rgb(0 0 0 / 0.3), 0 1px 2px -1px rgb(0 0 0 / 0.3)',
+    light: '0 6px 18px rgba(15, 23, 42, 0.08)',
+    dark: '0 12px 30px rgba(0, 0, 0, 0.35)',
+  },
+  glow: {
+    light: 'none',
+    dark: '0 0 20px rgba(31, 199, 166, 0.12)',
   },
 };
 

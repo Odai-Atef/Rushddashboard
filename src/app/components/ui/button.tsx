@@ -5,27 +5,27 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "./utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold transition-all duration-200 ease-in-out disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-semibold transition-all duration-[var(--transition-duration)] ease-in-out disabled:pointer-events-none disabled:opacity-50 disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.98]",
   {
     variants: {
       variant: {
         default:
-          "bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800 shadow-sm hover:shadow-md dark:bg-emerald-600 dark:hover:bg-emerald-500 dark:active:bg-emerald-700",
+          "bg-[var(--primary)] text-white hover:bg-[var(--primary)]/90 hover:scale-[1.02] shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] dark:hover:shadow-[var(--shadow-glow)]",
         secondary:
-          "bg-slate-600 text-white hover:bg-slate-700 active:bg-slate-800 shadow-sm dark:bg-slate-600 dark:hover:bg-slate-500 dark:active:bg-slate-700",
+          "bg-[var(--secondary)] text-white hover:bg-[var(--secondary)]/90 hover:scale-[1.02] shadow-[var(--shadow-sm)]",
         destructive:
-          "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 shadow-sm dark:bg-red-600 dark:hover:bg-red-500 dark:active:bg-red-700",
+          "bg-[var(--destructive)] text-white hover:bg-[var(--destructive)]/90 hover:scale-[1.02] shadow-[var(--shadow-sm)]",
         outline:
-          "border border-gray-300 dark:border-border bg-transparent text-gray-700 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted active:bg-gray-200 dark:active:bg-gray-700",
+          "border border-[var(--border)] bg-transparent text-[var(--text-primary)] hover:bg-[var(--hover)] active:bg-[var(--muted)]",
         ghost:
-          "bg-transparent text-gray-700 dark:text-muted-foreground hover:bg-gray-100 dark:hover:bg-muted active:bg-gray-200 dark:active:bg-gray-700",
-        link: "text-emerald-600 dark:text-emerald-400 underline-offset-4 hover:underline bg-transparent",
+          "bg-transparent text-[var(--text-primary)] hover:bg-[var(--hover)] active:bg-[var(--muted)]",
+        link: "text-[var(--primary)] underline-offset-4 hover:underline bg-transparent",
       },
       size: {
-        default: "h-10 px-4 py-2 rounded-lg has-[>svg]:px-3",
-        sm: "h-8 rounded-lg gap-1.5 px-3 py-1.5 text-sm has-[>svg]:px-2.5",
-        lg: "h-12 rounded-xl px-6 py-3 text-lg has-[>svg]:px-4",
-        icon: "size-10 rounded-lg",
+        default: "h-10 px-4 py-2 rounded-[var(--radius-button)] has-[>svg]:px-3",
+        sm: "h-8 rounded-[var(--radius-button)] gap-1.5 px-3 py-1.5 text-sm has-[>svg]:px-2.5",
+        lg: "h-12 rounded-[var(--radius-button)] px-6 py-3 text-lg has-[>svg]:px-4",
+        icon: "size-10 rounded-[var(--radius-button)]",
       },
     },
     defaultVariants: {

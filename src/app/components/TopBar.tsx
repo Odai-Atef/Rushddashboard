@@ -78,14 +78,14 @@ function getPriorityIcon(priority: string) {
 function getPriorityColor(priority: string): string {
   switch (priority) {
     case 'URGENT':
-      return '#dc2626';
+      return '#DC2626';
     case 'HIGH':
-      return '#ea580c';
+      return '#EA580C';
     case 'MEDIUM':
-      return '#ca8a04';
+      return '#CA8A04';
     case 'LOW':
     default:
-      return '#2563eb';
+      return '#2563EB';
   }
 }
 
@@ -216,11 +216,14 @@ export function TopBar({
   return (
     <header
       className={cn(
-        'flex items-center justify-between h-16 px-4 lg:px-6 transition-all duration-200',
-        // Light mode
-        !isDark && 'bg-background text-foreground shadow-sm border-b border-border',
-        // Dark mode — glass
-        isDark && 'bg-white/10 backdrop-blur-md text-white border-b border-white/10',
+        'flex items-center justify-between h-16 px-[var(--spacing-page-padding)] transition-all duration-[var(--transition-duration)] theme-fade',
+        // Exact topbar colors: #FFFFFF (light), #081A2E (dark)
+        'bg-[#FFFFFF] dark:bg-[#081A2E]',
+        // Text colors
+        'text-[#1E293B] dark:text-white',
+        // Border & shadow
+        'border-b border-[var(--border)] dark:border-white/10',
+        'shadow-[var(--shadow-sm)]',
         className
       )}
     >
@@ -232,10 +235,10 @@ export function TopBar({
         <button
           onClick={onMenuClick}
           className={cn(
-            'lg:hidden p-2 rounded-lg transition-colors duration-200',
+            'lg:hidden p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
             isDark
               ? 'hover:bg-white/10 text-white'
-              : 'hover:bg-muted text-foreground'
+              : 'hover:bg-[var(--hover)] text-[var(--text-primary)]'
           )}
           aria-label="القائمة"
         >
@@ -250,13 +253,10 @@ export function TopBar({
             className="w-9 h-9 object-contain drop-shadow-sm"
           />
           <div className="hidden sm:block leading-tight">
-            <p className="font-bold text-sm tracking-tight">Rushd</p>
-            <p
-              className={cn(
-                'text-xs font-medium',
-                isDark ? 'text-white/60' : 'text-muted-foreground'
-              )}
-            >
+            <p className="font-bold text-sm tracking-tight text-[var(--text-primary)] dark:text-white">
+              Rushd
+            </p>
+            <p className="text-xs font-medium text-[var(--text-muted)] dark:text-white/60">
               Rushd Virtual Incubator
             </p>
           </div>
@@ -271,7 +271,7 @@ export function TopBar({
           <Search
             className={cn(
               'absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none',
-              isDark ? 'text-white/50' : 'text-muted-foreground'
+              isDark ? 'text-white/50' : 'text-[var(--text-muted)]'
             )}
           />
           <input
@@ -280,11 +280,11 @@ export function TopBar({
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="ابحث..."
             className={cn(
-              'w-full rounded-xl pr-10 pl-4 py-2 text-sm transition-all duration-200',
+              'w-full rounded-[var(--radius-input)] pr-10 pl-4 py-2 text-sm transition-all duration-[var(--transition-duration)]',
               'focus:outline-none focus:ring-2',
               isDark
-                ? 'bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:ring-emerald-400/40'
-                : 'bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:ring-emerald-500/30'
+                ? 'bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:ring-[var(--primary)]/40'
+                : 'bg-[var(--input-background)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:ring-[var(--primary)]/30'
             )}
           />
           {searchQuery && (
@@ -292,7 +292,7 @@ export function TopBar({
               onClick={() => setSearchQuery('')}
               className={cn(
                 'absolute left-3 top-1/2 -translate-y-1/2',
-                isDark ? 'text-white/40 hover:text-white' : 'text-muted-foreground hover:text-muted-foreground'
+                isDark ? 'text-white/40 hover:text-white' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               )}
               aria-label="مسح البحث"
             >
@@ -302,16 +302,16 @@ export function TopBar({
         </div>
       </div>
 
-      {/* Mobile search icon (opens inline below or could expand) */}
+      {/* Mobile search icon */}
       <div className="flex md:hidden flex-1 justify-center">
         {!searchOpen ? (
           <button
             onClick={() => setSearchOpen(true)}
             className={cn(
-              'p-2 rounded-lg transition-colors duration-200',
+              'p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
               isDark
                 ? 'hover:bg-white/10 text-white/70'
-                : 'hover:bg-muted text-muted-foreground'
+                : 'hover:bg-[var(--hover)] text-[var(--text-muted)]'
             )}
             aria-label="بحث"
           >
@@ -322,7 +322,7 @@ export function TopBar({
             <Search
               className={cn(
                 'absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none',
-                isDark ? 'text-white/50' : 'text-muted-foreground'
+                isDark ? 'text-white/50' : 'text-[var(--text-muted)]'
               )}
             />
             <input
@@ -332,11 +332,11 @@ export function TopBar({
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="ابحث..."
               className={cn(
-                'w-full rounded-lg pr-8 pl-7 py-1.5 text-sm',
+                'w-full rounded-[var(--radius-input)] pr-8 pl-7 py-1.5 text-sm',
                 'focus:outline-none focus:ring-2',
                 isDark
-                  ? 'bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:ring-emerald-400/40'
-                  : 'bg-secondary border border-border text-foreground placeholder:text-muted-foreground focus:ring-emerald-500/30'
+                  ? 'bg-white/10 border border-white/10 text-white placeholder:text-white/40 focus:ring-[var(--primary)]/40'
+                  : 'bg-[var(--input-background)] border border-[var(--border)] text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:ring-[var(--primary)]/30'
               )}
             />
             <button
@@ -346,7 +346,7 @@ export function TopBar({
               }}
               className={cn(
                 'absolute left-2 top-1/2 -translate-y-1/2',
-                isDark ? 'text-white/40 hover:text-white' : 'text-muted-foreground hover:text-muted-foreground'
+                isDark ? 'text-white/40 hover:text-white' : 'text-[var(--text-muted)] hover:text-[var(--text-primary)]'
               )}
               aria-label="إغلاق البحث"
             >
@@ -365,16 +365,16 @@ export function TopBar({
           <DropdownMenu.Trigger asChild>
             <button
               className={cn(
-                'relative p-2 rounded-lg transition-all duration-200',
+                'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] btn-scale',
                 isDark
                   ? 'hover:bg-white/10 text-white/80'
-                  : 'hover:bg-muted text-muted-foreground'
+                  : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
               )}
               aria-label="الإشعارات"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute top-1 right-1 min-w-4.5 h-4.5 bg-red-500 rounded-full text-xs text-white flex items-center justify-center font-bold px-1 shadow-sm">
+                <span className="absolute top-1 right-1 min-w-[18px] h-[18px] bg-[var(--danger)] rounded-[var(--radius-badge)] text-xs text-white flex items-center justify-center font-bold px-1 shadow-sm">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
@@ -383,10 +383,10 @@ export function TopBar({
           <DropdownMenu.Portal>
             <DropdownMenu.Content
               className={cn(
-                'border rounded-xl shadow-xl p-2 w-96 z-50 overflow-hidden',
+                'border rounded-[var(--radius-dialog)] shadow-[var(--shadow-xl)] p-2 w-96 z-50 overflow-hidden',
                 isDark
-                  ? 'bg-card/95 backdrop-blur-md border-white/10'
-                  : 'bg-card border-border'
+                  ? 'bg-[var(--card)]/95 backdrop-blur-md border-white/10'
+                  : 'bg-[var(--card)] border-[var(--border)]'
               )}
               sideOffset={8}
               align="end"
@@ -396,19 +396,19 @@ export function TopBar({
               <div
                 className={cn(
                   'p-3 flex items-center justify-between',
-                  isDark ? 'border-b border-white/10' : 'border-b border-border'
+                  isDark ? 'border-b border-white/10' : 'border-b border-[var(--border)]'
                 )}
               >
-                <h3 className={cn('font-semibold', isDark ? 'text-white' : 'text-foreground')}>
+                <h3 className={cn('font-semibold text-[var(--text-primary)] dark:text-white')}>
                   الإشعارات
                 </h3>
                 {unreadCount > 0 && (
                   <span
                     className={cn(
-                      'text-xs px-2 py-0.5 rounded-full font-semibold',
+                      'text-xs px-2 py-0.5 rounded-[var(--radius-badge)] font-semibold',
                       isDark
-                        ? 'bg-red-500/20 text-red-300'
-                        : 'bg-red-50 text-red-600'
+                        ? 'bg-[var(--danger)]/20 text-red-300'
+                        : 'bg-red-50 text-[var(--danger)]'
                     )}
                   >
                     {unreadCount} غير مقروء
@@ -423,7 +423,7 @@ export function TopBar({
                     <Loader2
                       className={cn(
                         'w-5 h-5 animate-spin',
-                        isDark ? 'text-white/40' : 'text-muted-foreground'
+                        isDark ? 'text-white/40' : 'text-[var(--text-muted)]'
                       )}
                     />
                   </div>
@@ -432,10 +432,10 @@ export function TopBar({
                     <Bell
                       className={cn(
                         'w-8 h-8 mx-auto mb-2 opacity-40',
-                        isDark ? 'text-white' : 'text-muted-foreground'
+                        isDark ? 'text-white' : 'text-[var(--text-muted)]'
                       )}
                     />
-                    <p className={cn('text-sm', isDark ? 'text-white/50' : 'text-muted-foreground')}>
+                    <p className={cn('text-sm', isDark ? 'text-white/50' : 'text-[var(--text-muted)]')}>
                       لا توجد إشعارات
                     </p>
                   </div>
@@ -450,10 +450,10 @@ export function TopBar({
                         key={notification.id}
                         onClick={() => handleNotificationClick(notification)}
                         className={cn(
-                          'px-3 py-3 rounded-lg cursor-pointer transition-colors duration-150',
+                          'px-3 py-3 rounded-[var(--radius-card)] cursor-pointer transition-colors duration-[var(--transition-duration)]',
                           isDark
                             ? 'hover:bg-white/10'
-                            : 'hover:bg-secondary',
+                            : 'hover:bg-[var(--hover)]',
                           isUnread && (isDark ? 'bg-white/5' : 'bg-amber-50/50')
                         )}
                       >
@@ -470,24 +470,20 @@ export function TopBar({
                                 className={cn(
                                   'font-medium text-sm truncate',
                                   isUnread
-                                    ? isDark
-                                      ? 'text-white'
-                                      : 'text-foreground'
-                                    : isDark
-                                    ? 'text-white/60'
-                                    : 'text-muted-foreground'
+                                    ? 'text-[var(--text-primary)] dark:text-white'
+                                    : 'text-[var(--text-muted)] dark:text-white/60'
                                 )}
                               >
                                 {notification.title}
                               </p>
                               {isUnread && (
-                                <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                                <span className="w-2 h-2 rounded-full bg-[var(--warning)] shrink-0" />
                               )}
                             </div>
                             <p
                               className={cn(
                                 'text-xs line-clamp-2 mb-1',
-                                isDark ? 'text-white/50' : 'text-muted-foreground'
+                                isDark ? 'text-white/50' : 'text-[var(--text-muted)]'
                               )}
                             >
                               {notification.body}
@@ -495,7 +491,7 @@ export function TopBar({
                             <span
                               className={cn(
                                 'text-xs',
-                                isDark ? 'text-white/40' : 'text-muted-foreground'
+                                isDark ? 'text-white/40' : 'text-[var(--text-muted)]'
                               )}
                             >
                               {formatRelativeTime(notification.createdAt)}
@@ -513,16 +509,16 @@ export function TopBar({
                 <div
                   className={cn(
                     'p-2',
-                    isDark ? 'border-t border-white/10' : 'border-t border-border'
+                    isDark ? 'border-t border-white/10' : 'border-t border-[var(--border)]'
                   )}
                 >
                   <button
                     onClick={() => navigate('/dashboard/notifications')}
                     className={cn(
-                      'w-full flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors duration-150',
+                      'w-full flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-[var(--radius-button)] transition-colors duration-[var(--transition-duration)]',
                       isDark
-                        ? 'text-emerald-400 hover:bg-white/10'
-                        : 'text-emerald-600 hover:bg-emerald-50'
+                        ? 'text-[var(--primary)] hover:bg-white/10'
+                        : 'text-[var(--primary)] hover:bg-[var(--hover-primary)]'
                     )}
                   >
                     عرض الكل
@@ -534,13 +530,13 @@ export function TopBar({
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
 
-        {/* Messages icon (decorative — no real count hook yet) */}
+        {/* Messages icon */}
         <button
           className={cn(
-            'relative p-2 rounded-lg transition-all duration-200 hidden sm:flex',
+            'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] hidden sm:flex btn-scale',
             isDark
               ? 'hover:bg-white/10 text-white/80'
-              : 'hover:bg-muted text-muted-foreground'
+              : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
           )}
           aria-label="الرسائل"
           onClick={() => navigate('/dashboard/collaboration')}
@@ -548,13 +544,13 @@ export function TopBar({
           <MessageSquare className="w-5 h-5" />
         </button>
 
-        {/* Downloads icon (decorative) */}
+        {/* Downloads icon */}
         <button
           className={cn(
-            'relative p-2 rounded-lg transition-all duration-200 hidden md:flex',
+            'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] hidden md:flex btn-scale',
             isDark
               ? 'hover:bg-white/10 text-white/80'
-              : 'hover:bg-muted text-muted-foreground'
+              : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
           )}
           aria-label="التنزيلات"
         >
@@ -566,10 +562,10 @@ export function TopBar({
           onClick={handleThemeToggle}
           title={themeLabel(theme)}
           className={cn(
-            'relative p-2 rounded-lg transition-all duration-200',
+            'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] btn-scale',
             isDark
               ? 'hover:bg-white/10 text-white/80'
-              : 'hover:bg-muted text-muted-foreground'
+              : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
           )}
           aria-label={`تبديل الوضع الحالي: ${themeLabel(theme)}`}
         >
@@ -581,18 +577,16 @@ export function TopBar({
           <DropdownMenu.Trigger asChild>
             <button
               className={cn(
-                'flex items-center gap-2 p-1 pr-2 rounded-xl transition-all duration-200',
+                'flex items-center gap-2 p-1 pr-2 rounded-[var(--radius-card)] transition-all duration-[var(--transition-duration)]',
                 isDark
                   ? 'hover:bg-white/10'
-                  : 'hover:bg-muted'
+                  : 'hover:bg-[var(--hover)]'
               )}
             >
               <Avatar.Root
                 className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold',
-                  isDark
-                    ? 'bg-gradient-to-br from-emerald-500 to-teal-600 text-white'
-                    : 'bg-gradient-to-br from-primary to-accent text-white'
+                  'bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] text-white'
                 )}
               >
                 <Avatar.Fallback className="text-sm">
@@ -602,7 +596,7 @@ export function TopBar({
               <ChevronDown
                 className={cn(
                   'w-3.5 h-3.5 hidden sm:block',
-                  isDark ? 'text-white/50' : 'text-muted-foreground'
+                  isDark ? 'text-white/50' : 'text-[var(--text-muted)]'
                 )}
               />
             </button>
@@ -610,10 +604,10 @@ export function TopBar({
           <DropdownMenu.Portal>
             <DropdownMenu.Content
               className={cn(
-                'border rounded-xl shadow-xl p-2 w-56 z-50',
+                'border rounded-[var(--radius-dialog)] shadow-[var(--shadow-xl)] p-2 w-56 z-50',
                 isDark
-                  ? 'bg-card/95 backdrop-blur-md border-white/10'
-                  : 'bg-card border-border'
+                  ? 'bg-[var(--card)]/95 backdrop-blur-md border-white/10'
+                  : 'bg-[var(--card)] border-[var(--border)]'
               )}
               sideOffset={8}
               align="end"
@@ -623,23 +617,13 @@ export function TopBar({
               <div
                 className={cn(
                   'px-3 py-2 mb-2',
-                  isDark ? 'border-b border-white/10' : 'border-b border-border'
+                  isDark ? 'border-b border-white/10' : 'border-b border-[var(--border)]'
                 )}
               >
-                <p
-                  className={cn(
-                    'font-semibold text-sm',
-                    isDark ? 'text-white' : 'text-foreground'
-                  )}
-                >
+                <p className="font-semibold text-sm text-[var(--text-primary)] dark:text-white">
                   {displayName(user)}
                 </p>
-                <p
-                  className={cn(
-                    'text-sm truncate',
-                    isDark ? 'text-white/50' : 'text-muted-foreground'
-                  )}
-                >
+                <p className="text-sm truncate text-[var(--text-muted)] dark:text-white/50">
                   {user?.email ?? ''}
                 </p>
               </div>
@@ -648,10 +632,10 @@ export function TopBar({
               {!isProjectManager && (
                 <DropdownMenu.Item
                   className={cn(
-                    'px-3 py-2 rounded-lg cursor-pointer outline-none transition-colors duration-150 text-sm',
+                    'px-3 py-2 rounded-[var(--radius-button)] cursor-pointer outline-none transition-colors duration-[var(--transition-duration)] text-sm',
                     isDark
                       ? 'hover:bg-white/10 text-white'
-                      : 'hover:bg-secondary text-foreground'
+                      : 'hover:bg-[var(--hover)] text-[var(--text-primary)]'
                   )}
                   onSelect={() => navigate('/dashboard/onboarding/info?tab=info')}
                 >
@@ -662,17 +646,17 @@ export function TopBar({
               <DropdownMenu.Separator
                 className={cn(
                   'h-px my-2',
-                  isDark ? 'bg-white/10' : 'bg-muted'
+                  isDark ? 'bg-white/10' : 'bg-[var(--border)]'
                 )}
               />
 
               {/* Logout */}
               <DropdownMenu.Item
                 className={cn(
-                  'px-3 py-2 rounded-lg cursor-pointer outline-none transition-colors duration-150 flex items-center gap-2 text-sm',
+                  'px-3 py-2 rounded-[var(--radius-button)] cursor-pointer outline-none transition-colors duration-[var(--transition-duration)] flex items-center gap-2 text-sm',
                   isDark
-                    ? 'hover:bg-red-500/10 text-red-400'
-                    : 'hover:bg-red-50 text-red-600'
+                    ? 'hover:bg-[var(--danger)]/10 text-[var(--danger)]'
+                    : 'hover:bg-red-50 text-[var(--danger)]'
                 )}
                 onSelect={handleLogout}
               >

@@ -37,7 +37,7 @@ function SheetOverlay({
       data-slot="sheet-overlay"
       className={cn(
         "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50",
-        "bg-black/50 dark:bg-white/10 backdrop-blur-sm transition-all duration-300",
+        "bg-black/50 dark:bg-white/10 backdrop-blur-sm transition-all duration-[var(--transition-duration)]",
         className,
       )}
       {...props}
@@ -59,16 +59,16 @@ function SheetContent({
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-xl transition-all duration-300",
-          "bg-white dark:bg-card text-gray-900 dark:text-white",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-[var(--shadow-xl)] transition-all duration-[var(--transition-duration)]",
+          "bg-[var(--card)] text-[var(--text-primary)] dark:text-white",
           side === "right" &&
-            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l border-gray-200 dark:border-border sm:max-w-sm rounded-l-xl",
+            "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l border-[var(--border)] sm:max-w-sm rounded-l-[var(--radius-dialog)]",
           side === "left" &&
-            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r border-gray-200 dark:border-border sm:max-w-sm rounded-r-xl",
+            "data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 h-full w-3/4 border-r border-[var(--border)] sm:max-w-sm rounded-r-[var(--radius-dialog)]",
           side === "top" &&
-            "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b border-gray-200 dark:border-border rounded-b-xl",
+            "data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 h-auto border-b border-[var(--border)] rounded-b-[var(--radius-dialog)]",
           side === "bottom" &&
-            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t border-gray-200 dark:border-border rounded-t-xl",
+            "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 h-auto border-t border-[var(--border)] rounded-t-[var(--radius-dialog)]",
           className,
         )}
         {...props}
@@ -76,14 +76,14 @@ function SheetContent({
         {children}
         <SheetPrimitive.Close
           className={cn(
-            "absolute top-4 right-4 rounded-lg p-1.5 opacity-70 transition-all duration-200",
-            "hover:opacity-100 hover:bg-gray-100 dark:hover:bg-muted",
-            "focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:ring-offset-2 focus:ring-offset-background",
+            "absolute top-4 right-4 rounded-[var(--radius-button)] p-1.5 opacity-70 transition-all duration-[var(--transition-duration)]",
+            "hover:opacity-100 hover:bg-[var(--hover)]",
+            "focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30 focus:ring-offset-2 focus:ring-offset-background",
             "disabled:pointer-events-none",
           )}
           aria-label="Close sheet"
         >
-          <XIcon className="size-4 text-gray-500 dark:text-gray-400" />
+          <XIcon className="size-4 text-[var(--text-muted)]" />
           <span className="sr-only">Close</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
@@ -95,7 +95,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
       data-slot="sheet-header"
-      className={cn("flex flex-col gap-1.5 p-6", className)}
+      className={cn("flex flex-col gap-1.5 p-[var(--spacing-card-padding)]", className)}
       {...props}
     />
   );
@@ -106,7 +106,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
     <div
       data-slot="sheet-footer"
       className={cn(
-        "mt-auto flex flex-col gap-2 p-6 border-t border-gray-200 dark:border-border",
+        "mt-auto flex flex-col gap-2 p-[var(--spacing-card-padding)] border-t border-[var(--border)]",
         className,
       )}
       {...props}
@@ -122,7 +122,7 @@ function SheetTitle({
     <SheetPrimitive.Title
       data-slot="sheet-title"
       className={cn(
-        "text-lg font-semibold text-gray-900 dark:text-white",
+        "text-lg font-bold text-[var(--text-primary)] dark:text-white",
         className,
       )}
       {...props}
@@ -137,7 +137,7 @@ function SheetDescription({
   return (
     <SheetPrimitive.Description
       data-slot="sheet-description"
-      className={cn("text-sm text-gray-500 dark:text-gray-400", className)}
+      className={cn("text-sm text-[var(--text-muted)]", className)}
       {...props}
     />
   );
