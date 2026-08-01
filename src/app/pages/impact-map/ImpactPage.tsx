@@ -3,7 +3,6 @@
  *
  * Executive dashboard page "خارطة الأثر" accessible only to project-manager role.
  * Foundation: routing, permissions, layout, and reusable page structure.
- * Charts and interactive map will be implemented in future iterations.
  */
 
 import { useState, useCallback } from 'react';
@@ -40,6 +39,16 @@ import {
   projectsBySector,
   fundingGrowthData,
   regionalImpactData,
+  /* ─── Analytics Mock Data ─── */
+  mockImpactSummaryMetrics,
+  mockBeneficiaryCategories,
+  mockRegionalSummary,
+  mockLatestProjects,
+  mockRecentActivity,
+  mockQuickStatistics,
+  mockLatestSupportedProjects,
+  mockTopPerformingRegions,
+  mockBottomKpiMetrics,
 } from './mock';
 import { cn } from '@/app/utils/cn';
 import { useAuth } from '@/app/layouts/RootLayout';
@@ -82,6 +91,10 @@ export function ImpactPage() {
 
   const handleViewAllProjects = useCallback(() => {
     navigate('/dashboard/project-management/list');
+  }, [navigate]);
+
+  const handleViewProject = useCallback((project: { id: string; nameAr: string }) => {
+    navigate(`/dashboard/project-management/${project.id}`);
   }, [navigate]);
 
   // If user manually navigates here without permission, RoleRouteGuard will redirect them.
@@ -162,14 +175,32 @@ export function ImpactPage() {
           {/* Right Analytics Panel */}
           <div className="lg:col-span-1">
             <ImpactSidebar
-              regions={mockRegions}
+              summaryMetrics={mockImpactSummaryMetrics}
+              beneficiaryCategories={mockBeneficiaryCategories}
+              regionalSummary={mockRegionalSummary}
+              latestProjects={mockLatestProjects}
+              recentActivity={mockRecentActivity}
+              quickStatistics={mockQuickStatistics}
               isLoading={isLoading}
               isError={isError}
               onRetry={handleRetry}
-              selectedRegionId={selectedRegionId}
+              onViewProject={handleViewProject}
             />
           </div>
         </div>
+      </section>
+
+      {/* Bottom Analytics Section */}
+      <section aria-label="التحليلات السفلية">
+        <ImpactProjectsSection
+          latestSupportedProjects={mockLatestSupportedProjects}
+          topPerformingRegions={mockTopPerformingRegions}
+          bottomKpiMetrics={mockBottomKpiMetrics}
+          isLoading={isLoading}
+          isError={isError}
+          onRetry={handleRetry}
+          onViewProject={handleViewProject}
+        />
       </section>
 
       {/* Beneficiaries Distribution & SROI Trend */}

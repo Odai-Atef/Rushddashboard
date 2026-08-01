@@ -194,9 +194,20 @@ export type {
   RegionalData,
 } from './charts';
 
-/* ──────────────────────────────────────────────────────────────── */
-/*  UI State                                                        */
-/* ──────────────────────────────────────────────────────────────── */
+/** Impact Map Dashboard — Analytics Types */
+export type {
+  ProjectExecutionStatus,
+  LatestProject,
+  TimelineActivityType,
+  TimelineActivityStatus,
+  TimelineItem,
+  QuickStatistic,
+  RegionRanking,
+  SummaryMetric,
+  BeneficiaryCategory,
+  RegionalSummaryRow,
+  BottomKpiMetric,
+} from './analytics';
 
 export interface ImpactUIState {
   isLoading: boolean;

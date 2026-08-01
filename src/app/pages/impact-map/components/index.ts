@@ -1,3 +1,7 @@
+/**
+ * Impact Map Dashboard — Component Exports
+ */
+
 export { ImpactCard } from './ImpactCard';
 export { SectionHeader } from './SectionHeader';
 export { StatisticCard } from './StatisticCard';
@@ -11,6 +15,11 @@ export { ImpactSidebar } from './ImpactSidebar';
 export { ImpactSROISection } from './ImpactSROISection';
 export { ImpactSectorSection } from './ImpactSectorSection';
 export { ImpactProjectsSection } from './ImpactProjectsSection';
+
+/* ──────────────────────────────────────────────────────────────── */
+/*  Existing sections (kept for backward compatibility)             */
+/* ──────────────────────────────────────────────────────────────── */
+
 export { ImpactBeneficiariesSection } from './ImpactBeneficiariesSection';
 export { ImpactFundingSection } from './ImpactFundingSection';
 export { ImpactRegionalSection } from './ImpactRegionalSection';
@@ -22,20 +31,36 @@ export { ImpactRegionalSection } from './ImpactRegionalSection';
 export { KpiCard, KpiIcon, KpiValue, TrendBadge, KpiGrid } from './kpi';
 
 /* ──────────────────────────────────────────────────────────────── */
-/*  Chart Components                                                  */
+/*  Right Panel Components                                          */
 /* ──────────────────────────────────────────────────────────────── */
 
 export {
-  ExecutiveChartCard,
-  ChartHeader,
-  ChartLegend,
-  ChartTooltip,
-  ChartSkeleton,
-  EmptyChartState,
-  ErrorChartState,
-  DonutChartCard,
-  LineChartCard,
-  BarChartCard,
-  AreaChartCard,
-  RegionalBarChartCard,
-} from './charts';
+  ImpactSummaryCard,
+  BeneficiaryCategories,
+  RegionalSummary,
+  LatestProjects,
+  RecentActivity,
+  QuickStatistics,
+} from './panel';
+
+/* ──────────────────────────────────────────────────────────────── */
+/*  Bottom Section Components                                       */
+/* ──────────────────────────────────────────────────────────────── */
+
+export {
+  LatestProjectsTable,
+  TopPerformingRegions,
+  BottomKPIStrip,
+} from './bottom';
+
+/* ──────────────────────────────────────────────────────────────── */
+/*  Shared Widgets                                                  */
+/* ──────────────────────────────────────────────────────────────── */
+
+export {
+  WidgetCard,
+  StatusBadge,
+  ProgressBar,
+  TimelineItem,
+  RankingCard,
+} from './widgets';
