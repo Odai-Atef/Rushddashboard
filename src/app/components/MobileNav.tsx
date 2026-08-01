@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
+import { ENV } from '@/lib/env';
 import { filterMenuItemsByRole } from '@/config/menuAccess';
 import { useEffect } from 'react';
 
@@ -43,6 +44,9 @@ interface MobileNavProps {
 
 export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
   const { user } = useAuth();
+  const allowedUserIds = ENV.RESTRICTED_MENU_USER_IDS;
+  const currentUserId = user?.id;
+  const canSeeRestricted = Boolean(currentUserId && allowedUserIds.includes(currentUserId));
   const roleSlug = user?.roleSlug ?? null;
 
   const commonNavItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = [
@@ -92,7 +96,8 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
         ...commonNavItems,
       ];
 
-  const visibleItems = filterMenuItemsByRole(navItems, roleSlug);
+  const roleAllowedItems = filterMenuItemsByRole(navItems, roleSlug);
+  const visibleItems = roleAllowedItems.filter((item) => !item.restricted || canSeeRestricted);
 
   // Close on Escape key
   useEffect(() => {
