@@ -374,7 +374,7 @@ export function TopBar({
         <Avatar.Root
           className={cn(
             'w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0',
-            'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
+            'bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] text-[var(--primary-foreground)]'
           )}
         >
           <Avatar.Fallback className="text-sm">
@@ -552,7 +552,7 @@ export function TopBar({
               <Avatar.Root
                 className={cn(
                   'w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold',
-                  'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
+                  'bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] text-[var(--primary-foreground)]'
                 )}
               >
                 <Avatar.Fallback className="text-xs">
@@ -717,7 +717,7 @@ export function TopBar({
               <Avatar.Root
                 className={cn(
                   'w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold',
-                  'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
+                  'bg-gradient-to-br from-[var(--primary)] to-[var(--secondary)] text-[var(--primary-foreground)]'
                 )}
               >
                 <Avatar.Fallback className="text-sm">

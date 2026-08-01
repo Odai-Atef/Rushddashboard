@@ -515,7 +515,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                                 : 'var(--sidebar-foreground)',
                             filter:
                               isActive && isDark
-                                ? 'drop-shadow(0 0 4px rgba(255,255,255,0.4))'
+                                ? 'var(--sidebar-glow)'
                                 : undefined,
                           }}
                           aria-hidden="true"
