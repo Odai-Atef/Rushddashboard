@@ -367,41 +367,6 @@ export function Sidebar({ activeView, className }: SidebarProps) {
             />
           </button>
 
-          {/* Logo + Text */}
-          <div
-            className={cn(
-              'flex flex-col items-center gap-0 transition-all duration-300',
-              isCollapsed && 'mt-6'
-            )}
-          >
-            <img
-              src="/logo.png"
-              alt="منصة رشد"
-              className={cn(
-                'object-contain transition-all duration-300 drop-shadow-lg',
-                isCollapsed ? 'w-10 h-10' : 'w-14 h-14'
-              )}
-            />
-            {!isCollapsed && (
-              <div className="flex flex-col items-center gap-0.5 mt-2">
-                <h1
-                  className="font-bold tracking-wide leading-tight text-[var(--sidebar-foreground)]"
-                  style={{ fontSize: '20px', fontWeight: 700 }}
-                >
-                  منصة رشد
-                </h1>
-                <p
-                  className="leading-tight text-[var(--sidebar-foreground)]/60"
-                  style={{
-                    fontSize: '13px',
-                    fontWeight: 400,
-                  }}
-                >
-                  حاضنة رشد الافتراضية
-                </p>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
