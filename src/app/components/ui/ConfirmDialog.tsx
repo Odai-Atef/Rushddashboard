@@ -50,7 +50,7 @@ export function ConfirmDialog({
             onClick={onConfirm}
             className={
               variant === "destructive"
-                ? "bg-destructive text-white hover:bg-destructive/90"
+                ? "bg-red-600 text-white hover:bg-red-700 dark:bg-red-600 dark:hover:bg-red-500"
                 : undefined
             }
           >

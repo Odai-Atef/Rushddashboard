@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
+import { XIcon } from "lucide-react";
 
 import { cn } from "./utils";
 import { buttonVariants } from "./button";
@@ -36,7 +37,8 @@ function AlertDialogOverlay({
     <AlertDialogPrimitive.Overlay
       data-slot="alert-dialog-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50",
+        "bg-black/50 dark:bg-white/10 backdrop-blur-sm transition-all duration-300",
         className,
       )}
       {...props}
@@ -46,19 +48,44 @@ function AlertDialogOverlay({
 
 function AlertDialogContent({
   className,
+  children,
   ...props
-}: React.ComponentProps<typeof AlertDialogPrimitive.Content>) {
+}: React.ComponentProps<typeof AlertDialogPrimitive.Content> & {
+  children: React.ReactNode;
+}) {
   return (
     <AlertDialogPortal>
       <AlertDialogOverlay />
       <AlertDialogPrimitive.Content
         data-slot="alert-dialog-content"
         className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 rounded-lg border p-6 shadow-lg duration-200 sm:max-w-lg",
+          "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-6 shadow-xl duration-300 sm:max-w-lg",
+          "rounded-2xl border",
+          "bg-white dark:bg-gray-900",
+          "text-gray-900 dark:text-white",
+          "border-gray-200 dark:border-gray-700",
+          "data-[state=open]:animate-in data-[state=closed]:animate-out",
+          "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+          "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+          "data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%]",
+          "data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%]",
           className,
         )}
         {...props}
-      />
+      >
+        {children}
+        <AlertDialogPrimitive.Cancel
+          className={cn(
+            "absolute top-4 right-4 rounded-lg p-1.5 opacity-70 transition-all duration-200",
+            "hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-800",
+            "focus:outline-none focus:ring-2 focus:ring-emerald-500/30 focus:ring-offset-2 focus:ring-offset-background",
+          )}
+          aria-label="Close dialog"
+        >
+          <XIcon className="size-5 text-gray-500 dark:text-gray-400" />
+          <span className="sr-only">Close</span>
+        </AlertDialogPrimitive.Cancel>
+      </AlertDialogPrimitive.Content>
     </AlertDialogPortal>
   );
 }
@@ -84,7 +111,7 @@ function AlertDialogFooter({
     <div
       data-slot="alert-dialog-footer"
       className={cn(
-        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end",
+        "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end pt-2",
         className,
       )}
       {...props}
@@ -99,7 +126,7 @@ function AlertDialogTitle({
   return (
     <AlertDialogPrimitive.Title
       data-slot="alert-dialog-title"
-      className={cn("text-lg font-semibold", className)}
+      className={cn("text-lg font-semibold tracking-tight", className)}
       {...props}
     />
   );
@@ -112,7 +139,7 @@ function AlertDialogDescription({
   return (
     <AlertDialogPrimitive.Description
       data-slot="alert-dialog-description"
-      className={cn("text-muted-foreground text-sm", className)}
+      className={cn("text-sm text-gray-500 dark:text-gray-400 leading-relaxed", className)}
       {...props}
     />
   );
