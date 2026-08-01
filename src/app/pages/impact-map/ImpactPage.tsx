@@ -35,6 +35,7 @@ import {
 } from './mock';
 import { cn } from '@/app/utils/cn';
 import { useAuth } from '@/app/layouts/RootLayout';
+import './styles/impact-theme.css';
 
 export function ImpactPage() {
   const navigate = useNavigate();

@@ -384,7 +384,731 @@
 }
 
 /* ============================================================
- Animation Utilities
+ Impact Map Dashboard Theme
+ ============================================================
+ Premium executive dashboard visual system for "خارطة الأثر".
+ Light and dark theme tokens, gradients, cards, elevation,
+ typography, spacing, buttons, icons, animations, and
+ responsive/RTL/accessibility utilities.
+ ============================================================ */
+
+/* ────────────────────────────────────────────────────────────────
+ 1. COLOR PALETTE — Light Theme Tokens
+ ──────────────────────────────────────────────────────────────── */
+:root {
+ /* Impact — Page backgrounds */
+ --impact-page-bg: #F8FAFC;
+ --impact-section-bg: #F1F5F9;
+ --impact-surface: #FFFFFF;
+ --impact-surface-secondary: #F8FAFC;
+ --impact-elevated: #FFFFFF;
+
+ /* Impact — Text colors */
+ --impact-text-primary: #0F172A;
+ --impact-text-secondary: #475569;
+ --impact-text-muted: #64748B;
+
+ /* Impact — Borders & dividers */
+ --impact-border: #E2E8F0;
+ --impact-divider: #E5E7EB;
+
+ /* Impact — Semantic colors */
+ --impact-primary: #2563EB;
+ --impact-primary-hover: #1D4ED8;
+ --impact-primary-active: #1E40AF;
+ --impact-success: #22C55E;
+ --impact-warning: #F59E0B;
+ --impact-danger: #EF4444;
+ --impact-info: #06B6D4;
+
+ /* Impact — Card system */
+ --impact-card-radius: 16px;
+ --impact-card-padding: 24px;
+
+ /* Impact — Elevation shadows */
+ --impact-shadow-0: none;
+ --impact-shadow-1: 0 2px 8px rgba(15, 23, 42, 0.06);
+ --impact-shadow-2: 0 8px 24px rgba(15, 23, 42, 0.08);
+ --impact-shadow-3: 0 18px 48px rgba(15, 23, 42, 0.12);
+
+ /* Impact — Border radius tokens */
+ --impact-radius-button: 12px;
+ --impact-radius-card: 16px;
+ --impact-radius-chart: 16px;
+ --impact-radius-dialog: 20px;
+ --impact-radius-map-panel: 20px;
+ --impact-radius-search: 9999px;
+
+ /* Impact — Animation durations */
+ --impact-transition-hover: 150ms;
+ --impact-transition-card: 200ms;
+ --impact-transition-page: 250ms;
+ --impact-transition-counter: 600ms;
+ --impact-transition-chart: 700ms;
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 2. COLOR PALETTE — Dark Theme Tokens
+ ──────────────────────────────────────────────────────────────── */
+.dark {
+ /* Impact — Page backgrounds (dark) */
+ --impact-page-bg: #020617;
+ --impact-main-surface: #0F172A;
+ --impact-surface-secondary: #1E293B;
+ --impact-elevated: #334155;
+
+ /* Impact — Text colors (dark) */
+ --impact-text-primary: #F8FAFC;
+ --impact-text-secondary: #CBD5E1;
+ --impact-text-muted: #94A3B8;
+
+ /* Impact — Borders & dividers (dark) */
+ --impact-border: #334155;
+ --impact-divider: #475569;
+
+ /* Impact — Semantic colors (dark) */
+ --impact-primary: #3B82F6;
+ --impact-primary-hover: #60A5FA;
+ --impact-primary-active: #2563EB;
+ --impact-success: #22C55E;
+ --impact-warning: #F59E0B;
+ --impact-danger: #EF4444;
+ --impact-info: #38BDF8;
+
+ /* Impact — Elevation shadows (dark) */
+ --impact-shadow-0: none;
+ --impact-shadow-1: 0 2px 8px rgba(0, 0, 0, 0.25);
+ --impact-shadow-2: 0 8px 24px rgba(0, 0, 0, 0.30);
+ --impact-shadow-3: 0 18px 48px rgba(0, 0, 0, 0.40);
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 3. GRADIENT SYSTEM
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ /* Background Gradients */
+ .impact-gradient-bg-light {
+ background: linear-gradient(180deg, #F8FAFC 0%, #EEF4FF 100%);
+ }
+ .impact-gradient-bg-dark {
+ background: linear-gradient(180deg, #020617 0%, #0F172A 100%);
+ }
+
+ /* Primary Button Gradients */
+ .impact-gradient-primary-light {
+ background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+ }
+ .impact-gradient-primary-dark {
+ background: linear-gradient(135deg, #2563EB 0%, #60A5FA 100%);
+ }
+
+ /* Executive Card Gradients */
+ .impact-gradient-card-light {
+ background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+ }
+ .impact-gradient-card-dark {
+ background: linear-gradient(180deg, #0F172A 0%, #16253D 100%);
+ }
+
+ /* Highlight Gradient */
+ .impact-gradient-highlight {
+ background: linear-gradient(135deg, #0EA5E9 0%, #2563EB 100%);
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 4. CARD STYLES
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-card {
+ border-radius: var(--impact-card-radius);
+ border: 1px solid var(--impact-border);
+ box-shadow: var(--impact-shadow-1);
+ padding: var(--impact-card-padding);
+ background: var(--impact-surface);
+ transition: box-shadow var(--impact-transition-card) ease-in-out,
+ transform var(--impact-transition-card) ease-in-out,
+ border-color var(--impact-transition-card) ease-in-out;
+ }
+
+ .impact-card:hover {
+ box-shadow: var(--impact-shadow-2);
+ transform: translateY(-2px);
+ }
+
+ .dark .impact-card {
+ background: var(--impact-main-surface);
+ border-color: var(--impact-border);
+ }
+
+ .dark .impact-card:hover {
+ box-shadow: var(--impact-shadow-2);
+ }
+
+ .impact-card-header {
+ padding-bottom: 16px;
+ margin-bottom: 16px;
+ border-bottom: 1px solid var(--impact-divider);
+ display: flex;
+ align-items: flex-start;
+ justify-content: space-between;
+ gap: 12px;
+ }
+
+ .impact-card-body {
+ flex: 1;
+ min-height: 0;
+ }
+
+ .impact-card-footer {
+ padding-top: 16px;
+ margin-top: 16px;
+ border-top: 1px solid var(--impact-divider);
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ gap: 12px;
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 5. ELEVATION SYSTEM
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-elevation-0 {
+ box-shadow: var(--impact-shadow-0);
+ }
+ .impact-elevation-1 {
+ box-shadow: var(--impact-shadow-1);
+ }
+ .impact-elevation-2 {
+ box-shadow: var(--impact-shadow-2);
+ }
+ .impact-elevation-3 {
+ box-shadow: var(--impact-shadow-3);
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 6. TYPOGRAPHY UTILITIES
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-text-page-title {
+ font-size: 40px;
+ font-weight: 700;
+ line-height: 1.2;
+ color: var(--impact-text-primary);
+ letter-spacing: -0.02em;
+ }
+
+ .impact-text-section-title {
+ font-size: 24px;
+ font-weight: 700;
+ line-height: 1.3;
+ color: var(--impact-text-primary);
+ }
+
+ .impact-text-card-title {
+ font-size: 18px;
+ font-weight: 600;
+ line-height: 1.4;
+ color: var(--impact-text-primary);
+ }
+
+ .impact-text-kpi-number {
+ font-size: 40px;
+ font-weight: 700;
+ line-height: 1.1;
+ color: var(--impact-text-primary);
+ letter-spacing: -0.02em;
+ }
+
+ .impact-text-body {
+ font-size: 16px;
+ font-weight: 400;
+ line-height: 1.6;
+ color: var(--impact-text-secondary);
+ }
+
+ .impact-text-caption {
+ font-size: 13px;
+ font-weight: 500;
+ line-height: 1.5;
+ color: var(--impact-text-muted);
+ }
+
+ .impact-text-small-label {
+ font-size: 12px;
+ font-weight: 500;
+ line-height: 1.5;
+ color: var(--impact-text-muted);
+ text-transform: uppercase;
+ letter-spacing: 0.04em;
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 7. SPACING SYSTEM
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-spacing-4 { margin: 4px; }
+ .impact-spacing-8 { margin: 8px; }
+ .impact-spacing-12 { margin: 12px; }
+ .impact-spacing-16 { margin: 16px; }
+ .impact-spacing-20 { margin: 20px; }
+ .impact-spacing-24 { margin: 24px; }
+ .impact-spacing-32 { margin: 32px; }
+ .impact-spacing-40 { margin: 40px; }
+ .impact-spacing-48 { margin: 48px; }
+ .impact-spacing-64 { margin: 64px; }
+
+ /* Padding variants */
+ .impact-p-4 { padding: 4px; }
+ .impact-p-8 { padding: 8px; }
+ .impact-p-12 { padding: 12px; }
+ .impact-p-16 { padding: 16px; }
+ .impact-p-20 { padding: 20px; }
+ .impact-p-24 { padding: 24px; }
+ .impact-p-32 { padding: 32px; }
+ .impact-p-40 { padding: 40px; }
+ .impact-p-48 { padding: 48px; }
+ .impact-p-64 { padding: 64px; }
+
+ /* Gap variants */
+ .impact-gap-4 { gap: 4px; }
+ .impact-gap-8 { gap: 8px; }
+ .impact-gap-12 { gap: 12px; }
+ .impact-gap-16 { gap: 16px; }
+ .impact-gap-20 { gap: 20px; }
+ .impact-gap-24 { gap: 24px; }
+ .impact-gap-32 { gap: 32px; }
+ .impact-gap-40 { gap: 40px; }
+ .impact-gap-48 { gap: 48px; }
+ .impact-gap-64 { gap: 64px; }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 8. BORDER RADIUS UTILITIES
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-radius-button {
+ border-radius: var(--impact-radius-button);
+ }
+ .impact-radius-card {
+ border-radius: var(--impact-radius-card);
+ }
+ .impact-radius-chart {
+ border-radius: var(--impact-radius-chart);
+ }
+ .impact-radius-dialog {
+ border-radius: var(--impact-radius-dialog);
+ }
+ .impact-radius-map-panel {
+ border-radius: var(--impact-radius-map-panel);
+ }
+ .impact-radius-search {
+ border-radius: var(--impact-radius-search);
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 9. BUTTON STYLES
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-btn-primary {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 8px;
+ padding: 12px 24px;
+ border-radius: var(--impact-radius-button);
+ font-size: 14px;
+ font-weight: 600;
+ color: #FFFFFF;
+ background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+ border: none;
+ cursor: pointer;
+ transition: box-shadow var(--impact-transition-hover) ease-in-out,
+ transform var(--impact-transition-hover) ease-in-out,
+ filter var(--impact-transition-hover) ease-in-out;
+ min-height: 44px;
+ }
+
+ .impact-btn-primary:hover {
+ box-shadow: 0 4px 16px rgba(37, 99, 235, 0.30);
+ transform: translateY(-1px);
+ filter: brightness(1.05);
+ }
+
+ .impact-btn-primary:active {
+ transform: translateY(0) scale(0.98);
+ filter: brightness(0.95);
+ }
+
+ .impact-btn-secondary {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 8px;
+ padding: 12px 24px;
+ border-radius: var(--impact-radius-button);
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--impact-primary);
+ background: var(--impact-surface);
+ border: 1px solid var(--impact-border);
+ cursor: pointer;
+ transition: background-color var(--impact-transition-hover) ease-in-out,
+ border-color var(--impact-transition-hover) ease-in-out,
+ box-shadow var(--impact-transition-hover) ease-in-out;
+ min-height: 44px;
+ }
+
+ .impact-btn-secondary:hover {
+ background: var(--impact-surface-secondary);
+ border-color: var(--impact-primary);
+ box-shadow: 0 2px 8px rgba(37, 99, 235, 0.10);
+ }
+
+ .impact-btn-ghost {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 8px;
+ padding: 12px 24px;
+ border-radius: var(--impact-radius-button);
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--impact-text-secondary);
+ background: transparent;
+ border: 1px solid transparent;
+ cursor: pointer;
+ transition: background-color var(--impact-transition-hover) ease-in-out,
+ color var(--impact-transition-hover) ease-in-out;
+ min-height: 44px;
+ }
+
+ .impact-btn-ghost:hover {
+ background: var(--impact-surface-secondary);
+ color: var(--impact-text-primary);
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 10. ICON STYLES
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-icon-size-sm {
+ width: 20px;
+ height: 20px;
+ min-width: 20px;
+ min-height: 20px;
+ }
+
+ .impact-icon-size-md {
+ width: 24px;
+ height: 24px;
+ min-width: 24px;
+ min-height: 24px;
+ }
+
+ .impact-icon-size-lg {
+ width: 32px;
+ height: 32px;
+ min-width: 32px;
+ min-height: 32px;
+ }
+
+ .impact-icon-kpi {
+ width: 48px;
+ height: 48px;
+ min-width: 48px;
+ min-height: 48px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border-radius: 50%;
+ background: linear-gradient(135deg, var(--impact-primary) 0%, #3B82F6 100%);
+ color: #FFFFFF;
+ }
+
+ .impact-icon-inactive {
+ color: var(--impact-text-secondary);
+ }
+
+ .impact-icon-active {
+ color: var(--impact-primary);
+ }
+
+ .impact-icon-success {
+ color: var(--impact-success);
+ }
+
+ .impact-icon-danger {
+ color: var(--impact-danger);
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 11. ANIMATION STYLES
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-transition-hover {
+ transition-duration: var(--impact-transition-hover);
+ transition-timing-function: ease-in-out;
+ }
+
+ .impact-transition-card {
+ transition-duration: var(--impact-transition-card);
+ transition-timing-function: ease-in-out;
+ }
+
+ .impact-transition-page {
+ transition-duration: var(--impact-transition-page);
+ transition-timing-function: ease-in-out;
+ }
+
+ .impact-transition-counter {
+ transition-duration: var(--impact-transition-counter);
+ transition-timing-function: ease-out;
+ }
+
+ .impact-transition-chart {
+ transition-duration: var(--impact-transition-chart);
+ transition-timing-function: ease-out;
+ }
+
+ /* Subtle map marker pulse */
+ @keyframes impact-marker-pulse {
+ 0%, 100% {
+ opacity: 1;
+ transform: scale(1);
+ }
+ 50% {
+ opacity: 0.6;
+ transform: scale(1.15);
+ }
+ }
+
+ .impact-transition-map-marker {
+ animation: impact-marker-pulse 2.5s ease-in-out infinite;
+ }
+
+ /* Fade in sections */
+ @keyframes impact-fade-in-up {
+ from {
+ opacity: 0;
+ transform: translateY(16px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .impact-animate-fade-in {
+ animation: impact-fade-in-up 0.4s ease-out forwards;
+ }
+
+ /* Staggered children fade in */
+ .impact-animate-stagger > * {
+ opacity: 0;
+ animation: impact-fade-in-up 0.4s ease-out forwards;
+ }
+
+ .impact-animate-stagger > *:nth-child(1) { animation-delay: 0ms; }
+ .impact-animate-stagger > *:nth-child(2) { animation-delay: 60ms; }
+ .impact-animate-stagger > *:nth-child(3) { animation-delay: 120ms; }
+ .impact-animate-stagger > *:nth-child(4) { animation-delay: 180ms; }
+ .impact-animate-stagger > *:nth-child(5) { animation-delay: 240ms; }
+ .impact-animate-stagger > *:nth-child(6) { animation-delay: 300ms; }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 12. SECTION STRUCTURE
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ .impact-section {
+ padding: var(--impact-card-padding);
+ margin-bottom: var(--spacing-section-gap);
+ }
+
+ .impact-section-header {
+ display: flex;
+ align-items: flex-start;
+ justify-content: space-between;
+ gap: 16px;
+ margin-bottom: 20px;
+ }
+
+ .impact-section-actions {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ flex-shrink: 0;
+ }
+
+ .impact-section-content {
+ display: flex;
+ flex-direction: column;
+ gap: var(--spacing-grid-gap);
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 13. RESPONSIVE UTILITIES
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ /* Desktop: large executive dashboard layout */
+ @media (min-width: 1280px) {
+ .impact-responsive-desktop {
+ --impact-content-max-width: 1440px;
+ }
+ }
+
+ /* Laptop: adaptive layout */
+ @media (min-width: 1024px) and (max-width: 1279px) {
+ .impact-responsive-laptop {
+ --impact-content-max-width: 1200px;
+ }
+ }
+
+ /* Tablet: stack cards */
+ @media (min-width: 768px) and (max-width: 1023px) {
+ .impact-responsive-tablet {
+ --impact-content-max-width: 100%;
+ }
+ .impact-responsive-tablet .impact-grid-stack {
+ grid-template-columns: 1fr !important;
+ }
+ }
+
+ /* Mobile: single column, no overflow */
+ @media (max-width: 767px) {
+ .impact-responsive-mobile {
+ --impact-content-max-width: 100%;
+ }
+ .impact-responsive-mobile .impact-grid-stack {
+ grid-template-columns: 1fr !important;
+ }
+ .impact-responsive-mobile .impact-text-page-title {
+ font-size: 28px;
+ }
+ .impact-responsive-mobile .impact-text-kpi-number {
+ font-size: 28px;
+ }
+ .impact-responsive-mobile .impact-text-section-title {
+ font-size: 20px;
+ }
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 14. RTL SUPPORT
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ /* Logical properties for RTL support */
+ .impact-margin-start {
+ margin-inline-start: var(--impact-margin-start, 0);
+ }
+ .impact-margin-end {
+ margin-inline-end: var(--impact-margin-end, 0);
+ }
+ .impact-padding-start {
+ padding-inline-start: var(--impact-padding-start, 0);
+ }
+ .impact-padding-end {
+ padding-inline-end: var(--impact-padding-end, 0);
+ }
+ .impact-border-start {
+ border-inline-start: var(--impact-border-start, none);
+ }
+ .impact-border-end {
+ border-inline-end: var(--impact-border-end, none);
+ }
+
+ /* RTL-aware text alignment */
+ .impact-text-align-start {
+ text-align: start;
+ }
+ .impact-text-align-end {
+ text-align: end;
+ }
+
+ /* RTL-aware flex directions */
+ .impact-flex-row {
+ display: flex;
+ flex-direction: row;
+ }
+ [dir="rtl"] .impact-flex-row {
+ flex-direction: row-reverse;
+ }
+
+ /* Icon flip for RTL when needed */
+ [dir="rtl"] .impact-icon-flip {
+ transform: scaleX(-1);
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ 15. ACCESSIBILITY
+ ──────────────────────────────────────────────────────────────── */
+@layer utilities {
+ /* Visible focus states */
+ .impact-focus-visible:focus-visible {
+ outline: 2px solid var(--impact-primary);
+ outline-offset: 2px;
+ border-radius: var(--impact-radius-button);
+ }
+
+ /* Keyboard navigation support */
+ .impact-keyboard-nav:focus {
+ outline: 2px solid var(--impact-primary);
+ outline-offset: 2px;
+ }
+
+ .impact-keyboard-nav:focus:not(:focus-visible) {
+ outline: none;
+ }
+
+ /* Minimum touch targets (44px) */
+ .impact-touch-target {
+ min-width: 44px;
+ min-height: 44px;
+ }
+
+ .impact-touch-target-sm {
+ min-width: 36px;
+ min-height: 36px;
+ }
+
+ /* Reduced motion preference */
+ @media (prefers-reduced-motion: reduce) {
+ .impact-transition-hover,
+ .impact-transition-card,
+ .impact-transition-page,
+ .impact-transition-counter,
+ .impact-transition-chart,
+ .impact-card,
+ .impact-btn-primary,
+ .impact-btn-secondary,
+ .impact-btn-ghost {
+ transition: none !important;
+ animation: none !important;
+ }
+
+ .impact-animate-fade-in,
+ .impact-animate-stagger > *,
+ .impact-transition-map-marker {
+ animation: none !important;
+ opacity: 1 !important;
+ transform: none !important;
+ }
+ }
+}
+
+/* ============================================================
+ Animation Utilities — Existing (kept intact)
  ============================================================ */
 @layer utilities {
  /* Card hover lift effect */

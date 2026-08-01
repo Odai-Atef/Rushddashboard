@@ -1,0 +1,361 @@
+/* ============================================================
+ Impact Map Dashboard — Impact-Specific Styles
+ ============================================================
+ Optional additional styles specific to the Impact Map page.
+ Most styles should live in theme.css; this file is for
+ page-specific overrides and complex selectors only.
+
+ NOTE: theme.css is imported globally via src/styles/index.css,
+ so all --impact-* CSS variables and utilities are available.
+ ============================================================ */
+
+/* ────────────────────────────────────────────────────────────────
+ Impact Page Background
+ ──────────────────────────────────────────────────────────────── */
+.impact-page-wrapper {
+ background-color: var(--impact-page-bg);
+ min-height: 100vh;
+ transition: background-color var(--impact-transition-page) ease-in-out;
+}
+
+.dark .impact-page-wrapper {
+ background-color: var(--impact-page-bg);
+}
+
+/* ────────────────────────────────────────────────────────────────
+ KPI Grid Layout
+ ──────────────────────────────────────────────────────────────── */
+.impact-kpi-grid {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: var(--spacing-grid-gap);
+}
+
+@media (max-width: 1279px) {
+ .impact-kpi-grid {
+ grid-template-columns: repeat(2, 1fr);
+ }
+}
+
+@media (max-width: 767px) {
+ .impact-kpi-grid {
+ grid-template-columns: 1fr;
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Map Layout
+ ──────────────────────────────────────────────────────────────── */
+.impact-map-layout {
+ display: grid;
+ grid-template-columns: 2fr 1fr;
+ gap: var(--spacing-grid-gap);
+}
+
+@media (max-width: 1023px) {
+ .impact-map-layout {
+ grid-template-columns: 1fr;
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Analytics Layout
+ ──────────────────────────────────────────────────────────────── */
+.impact-analytics-layout {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: var(--spacing-grid-gap);
+}
+
+@media (max-width: 1023px) {
+ .impact-analytics-layout {
+ grid-template-columns: 1fr;
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Filter Bar
+ ──────────────────────────────────────────────────────────────── */
+.impact-filter-bar {
+ display: flex;
+ flex-wrap: wrap;
+ align-items: center;
+ gap: 12px;
+ padding: 16px var(--impact-card-padding);
+ background: var(--impact-surface);
+ border: 1px solid var(--impact-border);
+ border-radius: var(--impact-radius-card);
+ box-shadow: var(--impact-shadow-1);
+}
+
+.dark .impact-filter-bar {
+ background: var(--impact-main-surface);
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Map Container
+ ──────────────────────────────────────────────────────────────── */
+.impact-map-container {
+ position: relative;
+ border-radius: var(--impact-radius-map-panel);
+ overflow: hidden;
+ background: var(--impact-surface);
+ border: 1px solid var(--impact-border);
+ box-shadow: var(--impact-shadow-1);
+ min-height: 480px;
+}
+
+.dark .impact-map-container {
+ background: var(--impact-main-surface);
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Sidebar Panel
+ ──────────────────────────────────────────────────────────────── */
+.impact-sidebar-panel {
+ background: var(--impact-surface);
+ border: 1px solid var(--impact-border);
+ border-radius: var(--impact-radius-map-panel);
+ box-shadow: var(--impact-shadow-1);
+ padding: var(--impact-card-padding);
+}
+
+.dark .impact-sidebar-panel {
+ background: var(--impact-main-surface);
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Chart Placeholder
+ ──────────────────────────────────────────────────────────────── */
+.impact-chart-placeholder {
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ min-height: 200px;
+ background: var(--impact-surface-secondary);
+ border: 2px dashed var(--impact-border);
+ border-radius: var(--impact-radius-chart);
+ color: var(--impact-text-muted);
+ font-size: 14px;
+ font-weight: 500;
+}
+
+.dark .impact-chart-placeholder {
+ background: var(--impact-surface-secondary);
+ border-color: var(--impact-border);
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Executive Header
+ ──────────────────────────────────────────────────────────────── */
+.impact-executive-header {
+ padding: var(--impact-card-padding) 0;
+ margin-bottom: var(--spacing-section-gap);
+}
+
+.impact-executive-header__title {
+ font-size: 32px;
+ font-weight: 700;
+ color: var(--impact-text-primary);
+ line-height: 1.2;
+ margin-bottom: 8px;
+}
+
+.impact-executive-header__subtitle {
+ font-size: 16px;
+ color: var(--impact-text-secondary);
+ line-height: 1.5;
+ max-width: 640px;
+}
+
+.dark .impact-executive-header__title {
+ color: var(--impact-text-primary);
+}
+
+.dark .impact-executive-header__subtitle {
+ color: var(--impact-text-secondary);
+}
+
+@media (max-width: 767px) {
+ .impact-executive-header__title {
+ font-size: 24px;
+ }
+ .impact-executive-header__subtitle {
+ font-size: 14px;
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Loading Skeleton Overrides
+ ──────────────────────────────────────────────────────────────── */
+.impact-skeleton {
+ background: linear-gradient(
+ 90deg,
+ var(--impact-surface-secondary) 25%,
+ var(--impact-section-bg) 50%,
+ var(--impact-surface-secondary) 75%
+ );
+ background-size: 200% 100%;
+ animation: impact-skeleton-shimmer 1.5s ease-in-out infinite;
+ border-radius: var(--impact-radius-button);
+}
+
+.dark .impact-skeleton {
+ background: linear-gradient(
+ 90deg,
+ var(--impact-surface-secondary) 25%,
+ var(--impact-elevated) 50%,
+ var(--impact-surface-secondary) 75%
+ );
+ background-size: 200% 100%;
+}
+
+@keyframes impact-skeleton-shimmer {
+ 0% {
+ background-position: 200% 0;
+ }
+ 100% {
+ background-position: -200% 0;
+ }
+}
+
+/* ────────────────────────────────────────────────────────────────
+ Status Indicators
+ ──────────────────────────────────────────────────────────────── */
+.impact-status-dot {
+ width: 8px;
+ height: 8px;
+ border-radius: 50%;
+ display: inline-block;
+ }
+
+.impact-status-dot--success {
+ background: var(--impact-success);
+ }
+
+.impact-status-dot--warning {
+ background: var(--impact-warning);
+ }
+
+.impact-status-dot--danger {
+ background: var(--impact-danger);
+ }
+
+.impact-status-dot--info {
+ background: var(--impact-info);
+ }
+
+/* ────────────────────────────────────────────────────────────────
+ Data Table Styles (for future use)
+ ──────────────────────────────────────────────────────────────── */
+.impact-data-table {
+ width: 100%;
+ border-collapse: separate;
+ border-spacing: 0;
+ }
+
+.impact-data-table th,
+.impact-data-table td {
+ padding: 12px 16px;
+ text-align: start;
+ border-bottom: 1px solid var(--impact-divider);
+ }
+
+.impact-data-table th {
+ font-size: 12px;
+ font-weight: 600;
+ text-transform: uppercase;
+ letter-spacing: 0.04em;
+ color: var(--impact-text-muted);
+ background: var(--impact-surface-secondary);
+ }
+
+.impact-data-table td {
+ font-size: 14px;
+ color: var(--impact-text-secondary);
+ }
+
+.impact-data-table tr:hover td {
+ background: var(--impact-surface-secondary);
+ }
+
+/* ────────────────────────────────────────────────────────────────
+ Scrollbar Styling
+ ──────────────────────────────────────────────────────────────── */
+.impact-scrollbar::-webkit-scrollbar {
+ width: 6px;
+ height: 6px;
+ }
+
+.impact-scrollbar::-webkit-scrollbar-track {
+ background: transparent;
+ }
+
+.impact-scrollbar::-webkit-scrollbar-thumb {
+ background: var(--impact-border);
+ border-radius: 3px;
+ }
+
+.impact-scrollbar::-webkit-scrollbar-thumb:hover {
+ background: var(--impact-text-muted);
+ }
+
+/* ────────────────────────────────────────────────────────────────
+ Divider
+ ──────────────────────────────────────────────────────────────── */
+.impact-divider {
+ height: 1px;
+ background: var(--impact-divider);
+ margin: 16px 0;
+ border: none;
+ }
+
+/* ────────────────────────────────────────────────────────────────
+ Badge Styles
+ ──────────────────────────────────────────────────────────────── */
+.impact-badge {
+ display: inline-flex;
+ align-items: center;
+ gap: 4px;
+ padding: 4px 10px;
+ border-radius: var(--impact-radius-badge);
+ font-size: 12px;
+ font-weight: 600;
+ line-height: 1;
+ }
+
+.impact-badge--primary {
+ background: rgba(37, 99, 235, 0.10);
+ color: var(--impact-primary);
+ }
+
+.impact-badge--success {
+ background: rgba(34, 197, 94, 0.10);
+ color: var(--impact-success);
+ }
+
+.impact-badge--warning {
+ background: rgba(245, 158, 11, 0.10);
+ color: var(--impact-warning);
+ }
+
+.impact-badge--danger {
+ background: rgba(239, 68, 68, 0.10);
+ color: var(--impact-danger);
+ }
+
+.dark .impact-badge--primary {
+ background: rgba(59, 130, 246, 0.15);
+ }
+
+.dark .impact-badge--success {
+ background: rgba(34, 197, 94, 0.15);
+ }
+
+.dark .impact-badge--warning {
+ background: rgba(245, 158, 11, 0.15);
+ }
+
+.dark .impact-badge--danger {
+ background: rgba(239, 68, 68, 0.15);
+ }
