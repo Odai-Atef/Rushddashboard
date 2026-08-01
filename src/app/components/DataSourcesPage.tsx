@@ -281,7 +281,7 @@ export function DataSourcesPage() {
  onClick={() => setActiveTab(tab.id as typeof activeTab)}
  className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-colors whitespace-nowrap ${
  activeTab === tab.id
- ? 'border-blue-500 text-[var(--secondary)]'
+ ? 'border-ring text-[var(--secondary)]'
  : 'border-transparent text-muted-foreground hover:text-foreground'
  }`}
  >
@@ -303,7 +303,7 @@ export function DataSourcesPage() {
  return (
  <div
  key={source.id}
- className="bg-card border border-border rounded-lg p-5 hover:border-blue-500/50 transition-all cursor-pointer"
+ className="bg-card border border-border rounded-lg p-5 hover:border-ring/50 transition-all cursor-pointer"
  onClick={() => setSelectedSource(source)}
  >
  {/* Header */}
@@ -433,7 +433,7 @@ export function DataSourcesPage() {
  return (
  <button
  key={item.type}
- className="flex flex-col items-center gap-2 p-4 border border-border rounded-lg hover:border-blue-500 hover:bg-[var(--primary)]/5 transition-all"
+ className="flex flex-col items-center gap-2 p-4 border border-border rounded-lg hover:border-ring hover:bg-[var(--primary)]/5 transition-all"
  >
  <Icon className="w-8 h-8 text-[var(--secondary)]" />
  <span className="text-sm">{item.label}</span>
@@ -444,7 +444,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Excel Upload Section */}
- <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-blue-500 transition-colors cursor-pointer">
+ <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-ring transition-colors cursor-pointer">
  <Upload className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
  <p className="font-medium mb-1">رفع ملف Excel</p>
  <p className="text-sm text-muted-foreground mb-3">اسحب وأفلت الملف هنا أو انقر للاختيار</p>
@@ -460,7 +460,7 @@ export function DataSourcesPage() {
  <input
  type="text"
  placeholder="مثال: نظام المبيعات الرئيسي"
- className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
  />
  </div>
 
@@ -469,7 +469,7 @@ export function DataSourcesPage() {
  <input
  type="url"
  placeholder="https://api.example.com/v1"
- className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
  />
  </div>
 
@@ -478,14 +478,14 @@ export function DataSourcesPage() {
  <input
  type="password"
  placeholder="••••••••••••••••"
- className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
  />
  </div>
 
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
  <div>
  <label className="block text-sm font-medium mb-2">تكرار المزامنة</label>
- <select className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+ <select className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring">
  <option>Real-time</option>
  <option>كل 15 دقيقة</option>
  <option>كل 30 دقيقة</option>
@@ -498,7 +498,7 @@ export function DataSourcesPage() {
 
  <div>
  <label className="block text-sm font-medium mb-2">نوع المصادقة</label>
- <select className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+ <select className="w-full px-3 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring">
  <option>API Key</option>
  <option>OAuth 2.0</option>
  <option>Basic Auth</option>

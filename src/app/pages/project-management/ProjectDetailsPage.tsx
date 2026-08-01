@@ -689,7 +689,7 @@ export function ProjectDetailsPage() {
  if (isLoading) {
  return (
  <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+ <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
  }
@@ -1001,7 +1001,7 @@ export function ProjectDetailsPage() {
  {project.llmResponseText && (
  <button
  onClick={() => setActiveDocTab('study')}
- className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'study' ? 'border-blue-600 text-[var(--secondary)]' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
+ className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'study' ? 'border-ring text-[var(--secondary)]' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
  >
  دراسة المشروع
  </button>
@@ -1009,7 +1009,7 @@ export function ProjectDetailsPage() {
  {project.presentationResponseText && (
  <button
  onClick={() => setActiveDocTab('presentation')}
- className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'presentation' ? 'border-blue-600 text-[var(--secondary)]' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
+ className={`pb-2 px-2 text-sm font-medium border-b-2 transition-colors ${activeDocTab === 'presentation' ? 'border-ring text-[var(--secondary)]' : 'border-transparent text-muted-foreground hover:text-foreground'}`}
  >
  تصميم العرض
  </button>
@@ -1281,7 +1281,7 @@ export function ProjectDetailsPage() {
  onChange={(e) => setReviewNotes(e.target.value)}
  placeholder="اكتب ملاحظاتك هنا..."
  rows={8}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
  </div>
  )}
@@ -1390,7 +1390,7 @@ export function ProjectDetailsPage() {
  onChange={(e) => setDesignNotes(e.target.value)}
  placeholder="اكتب ملاحظات التعديلات هنا..."
  rows={6}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
  <div className="space-y-2">
  <label className="text-sm font-medium text-foreground">ملاحظات داخلية (اختياري)</label>
@@ -1399,7 +1399,7 @@ export function ProjectDetailsPage() {
  onChange={(e) => setDesignInternalNotes(e.target.value)}
  placeholder="ملاحظات داخلية غير مرسلة للجهة..."
  rows={4}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
  </div>
  </div>
@@ -1542,7 +1542,7 @@ export function ProjectDetailsPage() {
  onChange={(e) => setOfferInternalNotes(e.target.value)}
  placeholder="ملاحظات داخلية غير مرسلة للجهة..."
  rows={4}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
  </div>
  </div>
@@ -1557,7 +1557,7 @@ export function ProjectDetailsPage() {
  onChange={(e) => setOfferRejectReason(e.target.value)}
  placeholder="اكتب سبب الرفض هنا..."
  rows={8}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
  </div>
  )}
@@ -1700,7 +1700,7 @@ export function ProjectDetailsPage() {
  onChange={(e) => setSendDesignNotes(e.target.value.slice(0, 2000))}
  placeholder="اكتب الملاحظات التي ستُرسل مع التصميم..."
  rows={4}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
  <p className="text-xs text-muted-foreground text-left">{sendDesignNotes.length}/2000</p>
  </div>
@@ -1712,7 +1712,7 @@ export function ProjectDetailsPage() {
  onChange={(e) => setSendDesignInternalNotes(e.target.value.slice(0, 2000))}
  placeholder="ملاحظات داخلية غير مرسلة للجهة..."
  rows={3}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-right resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
  <p className="text-xs text-muted-foreground text-left">{sendDesignInternalNotes.length}/2000</p>
  </div>

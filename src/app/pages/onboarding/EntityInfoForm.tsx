@@ -174,14 +174,14 @@ export function EntityInfoForm() {
  const isPrivateCompanySelected = registrationData.orgType === 'private_company';
 
  const getInputClassName = (field: keyof RegistrationData) =>
- `w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+ `w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent ${
  errors[field]
  ? 'border-red-500 focus:ring-red-500'
  : 'border-border'
  }`;
 
  const getIconInputClassName = (field: keyof RegistrationData) =>
- `w-full pr-10 pl-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+ `w-full pr-10 pl-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent ${
  errors[field]
  ? 'border-red-500 focus:ring-red-500'
  : 'border-border'

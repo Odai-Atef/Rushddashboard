@@ -67,7 +67,7 @@ export function CharityAssessmentStartPage() {
 
  if (isLoading) {
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
  <div className="flex flex-col items-center gap-4">
  <Loader2 className="w-10 h-10 animate-spin text-[var(--secondary)]" />
  <p className="text-muted-foreground">جاري تحميل بيانات الجهه...</p>
@@ -78,7 +78,7 @@ export function CharityAssessmentStartPage() {
 
  if (error) {
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
  <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
  <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
  <h2 className="text-xl font-semibold mb-2">تعذر تحميل الجهه</h2>
@@ -97,7 +97,7 @@ export function CharityAssessmentStartPage() {
  }
 
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
  <div className="max-w-4xl w-full">
  <div className="text-center mb-6 sm:mb-8">
  <h1 className="text-3xl sm:text-4xl font-bold mb-4">تقييم ISIV</h1>

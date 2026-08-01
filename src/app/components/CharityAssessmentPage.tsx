@@ -344,7 +344,7 @@ export function CharityAssessmentPage() {
  // Start Screen
  if (currentView === 'start') {
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800 flex items-center justify-center p-6">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
  <div className="max-w-4xl w-full">
  <div className="text-center mb-8">
  <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6">
@@ -481,7 +481,7 @@ export function CharityAssessmentPage() {
 
  {q.type === 'yesno' && (
  <div className="flex gap-3">
- <button className="flex-1 px-4 py-3 border-2 border-green-500 text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1] transition-colors">
+ <button className="flex-1 px-4 py-3 border-2 border-[var(--primary)] text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1] transition-colors">
  نعم
  </button>
  <button className="flex-1 px-4 py-3 border-2 border-border rounded-lg hover:bg-muted transition-colors">

@@ -69,7 +69,7 @@ export function CharityAssessmentWizardPage() {
 
  {q.type === 'yesno' && (
  <div className="flex gap-3">
- <button className="flex-1 px-4 py-3 border-2 border-green-500 text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1] transition-colors">
+ <button className="flex-1 px-4 py-3 border-2 border-[var(--primary)] text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1] transition-colors">
  نعم
  </button>
  <button className="flex-1 px-4 py-3 border-2 border-border rounded-lg hover:bg-muted transition-colors">

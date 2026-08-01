@@ -210,7 +210,7 @@ export function PaymentCallbackPage() {
  <div className="text-center px-6 max-w-md">
  <div className="flex justify-center">{getIcon()}</div>
 
- <h1 className="text-2xl font-bold text-slate-900 mb-3">
+ <h1 className="text-2xl font-bold text-foreground mb-3">
  {result === 'success'
  ? 'تم الدفع بنجاح'
  : result === 'failed'
@@ -222,7 +222,7 @@ export function PaymentCallbackPage() {
  : 'جاري التحقق...'}
  </h1>
 
- <p className="text-slate-600 mb-8 leading-relaxed">{message}</p>
+ <p className="text-secondary mb-8 leading-relaxed">{message}</p>
 
  {result === 'verifying' && (
  <div className="flex items-center justify-center gap-2 text-sm text-[var(--text-muted)]">
@@ -242,7 +242,7 @@ export function PaymentCallbackPage() {
  </button>
  <button
  onClick={handleGoHome}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-slate-200 transition-colors"
+ className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-muted transition-colors"
  >
  العودة للرئيسية
  </button>
@@ -267,7 +267,7 @@ export function PaymentCallbackPage() {
  </button>
  <button
  onClick={handleGoHome}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-slate-200 transition-colors"
+ className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-muted transition-colors"
  >
  العودة للرئيسية
  </button>
@@ -282,7 +282,7 @@ export function PaymentCallbackPage() {
  <div className="flex items-center justify-center gap-3">
  <a
  href="tel:+966556534433"
- className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--card)] border border-blue-300 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
+ className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
  >
  <Phone className="w-4 h-4" />
  اتصل بنا

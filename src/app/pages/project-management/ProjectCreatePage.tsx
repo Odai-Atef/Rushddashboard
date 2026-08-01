@@ -456,7 +456,7 @@ export function ProjectCreatePage() {
  value={formData.organizationId}
  onChange={(e) => updateField('organizationId', e.target.value)}
  disabled={formDisabled || organizationOptions.length === 0}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
  >
  {organizationOptions.map((org) => (
  <option key={org.id} value={org.id}>
@@ -479,7 +479,7 @@ export function ProjectCreatePage() {
  value={formData.name}
  onChange={(e) => updateField('name', e.target.value)}
  disabled={formDisabled}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
  placeholder="مثال: برنامج الأسر المنتجة"
  />
  </div>
@@ -525,7 +525,7 @@ export function ProjectCreatePage() {
  onChange={(e) => updateField('description', e.target.value)}
  rows={4}
  disabled={formDisabled}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent resize-none disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
  placeholder="اكتب وصفاً تفصيلياً للمشروع..."
  />
  </div>
@@ -539,7 +539,7 @@ export function ProjectCreatePage() {
  value={formData.budget}
  onChange={(e) => updateField('budget', e.target.value)}
  disabled={formDisabled}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
  placeholder="250000"
  />
  </div>
@@ -551,7 +551,7 @@ export function ProjectCreatePage() {
  value={formData.beneficiaries}
  onChange={(e) => updateField('beneficiaries', e.target.value)}
  disabled={formDisabled}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
  placeholder="مثال: الأسر المحتاجة"
  />
  </div>
@@ -568,7 +568,7 @@ export function ProjectCreatePage() {
  value={formData.beneficiariesCount}
  onChange={(e) => updateField('beneficiariesCount', e.target.value)}
  disabled={formDisabled}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
  placeholder="مثال: 500"
  />
  </div>
@@ -580,7 +580,7 @@ export function ProjectCreatePage() {
  value={formData.geographicScope}
  onChange={(e) => updateField('geographicScope', e.target.value)}
  disabled={formDisabled}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent disabled:bg-secondary disabled:text-muted-foreground disabled:cursor-not-allowed"
  placeholder="مثال: الرياض"
  />
  </div>
@@ -591,7 +591,7 @@ export function ProjectCreatePage() {
  {(getFieldError('startDate') || getFieldError('endDate')) && (
  <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('startDate') || getFieldError('endDate')}</p>
  )}
- <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-[var(--destructive)]/[0.08]' : 'border-border focus-within:ring-2 focus-within:ring-blue-500'}`}>
+ <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-[var(--destructive)]/[0.08]' : 'border-border focus-within:ring-2 focus-within:ring-ring'}`}>
  <div
  className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
  onClick={() => startDateRef.current?.showPicker?.()}

@@ -82,7 +82,7 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
  type="text"
  value={name}
  onChange={(e) => setName(e.target.value)}
- className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="مثال: جمعية الوليد للإنسانية"
  required
  />
@@ -94,7 +94,7 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
  value={description}
  onChange={(e) => setDescription(e.target.value)}
  rows={3}
- className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="وصف موجز للجهة المانحة..."
  />
  </div>
@@ -105,7 +105,7 @@ export function AddManualDonorModal({ resultId, isOpen, onClose, onSuccess }: Ad
  type="url"
  value={website}
  onChange={(e) => setWebsite(e.target.value)}
- className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full border border-border rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="https://example.com"
  />
  </div>

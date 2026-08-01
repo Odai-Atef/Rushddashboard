@@ -199,7 +199,7 @@ export function ProfilePage() {
  clearFieldError('overview');
  }}
  rows={4}
- className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none ${
+ className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent resize-none ${
  errors.overview
  ? 'border-red-500 focus:ring-red-500'
  : 'border-border'
@@ -251,7 +251,7 @@ export function ProfilePage() {
  setProfileData((prev) => ({ ...prev, targetBeneficiaries: e.target.value }));
  clearFieldError('targetBeneficiaries');
  }}
- className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+ className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent ${
  errors.targetBeneficiaries
  ? 'border-red-500 focus:ring-red-500'
  : 'border-border'
@@ -272,7 +272,7 @@ export function ProfilePage() {
  setProfileData((prev) => ({ ...prev, geographicCoverage: e.target.value }));
  clearFieldError('geographicCoverage');
  }}
- className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+ className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent ${
  errors.geographicCoverage
  ? 'border-red-500 focus:ring-red-500'
  : 'border-border'
@@ -303,7 +303,7 @@ export function ProfilePage() {
  onChange={(e) =>
  setProfileData((prev) => ({ ...prev, employeeCount: e.target.value }))
  }
- className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="0"
  />
  </div>
@@ -318,7 +318,7 @@ export function ProfilePage() {
  onChange={(e) =>
  setProfileData((prev) => ({ ...prev, volunteerCount: e.target.value }))
  }
- className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="0"
  />
  </div>
@@ -333,7 +333,7 @@ export function ProfilePage() {
  onChange={(e) =>
  setProfileData((prev) => ({ ...prev, activeProjects: e.target.value }))
  }
- className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full pr-10 pl-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="0"
  />
  </div>

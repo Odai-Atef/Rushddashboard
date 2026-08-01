@@ -619,10 +619,10 @@ export function DonorDatabaseModule() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="بحث عن جهة مانحة..."
- className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  </div>
- <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>جميع الأنواع</option>
  <option>دولية</option>
  <option>محلية</option>
@@ -630,7 +630,7 @@ export function DonorDatabaseModule() {
  <option>خاصة</option>
  <option>جهه</option>
  </select>
- <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>جميع المجالات</option>
  <option>التعليم</option>
  <option>الصحة</option>
@@ -1123,16 +1123,16 @@ export function DonorDatabaseModule() {
  <input
  type="text"
  placeholder="بحث عن فرصة..."
- className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  </div>
- <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>جميع الحالات</option>
  <option>مفتوحة</option>
  <option>تغلق قريباً</option>
  <option>مغلقة</option>
  </select>
- <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>جميع المجالات</option>
  <option>التعليم</option>
  <option>الصحة</option>
@@ -1513,7 +1513,7 @@ export function DonorDatabaseModule() {
  هذه الفرصة مناسبة جداً لبرنامج الأسر المنتجة - يُنصح بالتقديم فوراً
  </p>
  </div>
- <button className="w-full px-4 py-2 border-2 border-dashed border-border rounded-lg hover:border-blue-500 hover:bg-[var(--secondary)]/[0.08] text-muted-foreground hover:text-primary transition-colors">
+ <button className="w-full px-4 py-2 border-2 border-dashed border-border rounded-lg hover:border-ring hover:bg-[var(--secondary)]/[0.08] text-muted-foreground hover:text-primary transition-colors">
  + إضافة ملاحظة جديدة
  </button>
  </div>
@@ -1706,14 +1706,14 @@ export function DonorDatabaseModule() {
  {/* Filters */}
  <div className="bg-card rounded-xl p-4 border border-border">
  <div className="flex flex-wrap gap-3">
- <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>جميع الأنواع</option>
  <option>فرص جديدة</option>
  <option>تغلق قريباً</option>
  <option>تطابق مشاريع</option>
  <option>تحديثات البيانات</option>
  </select>
- <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>جميع الأولويات</option>
  <option>عالية</option>
  <option>متوسطة</option>

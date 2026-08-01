@@ -89,7 +89,7 @@ function getStepStatusColor(type: StepVisualStatus): { bg: string; border: strin
  case 'completed':
  return { bg: 'bg-[var(--primary)]/[0.08]0', border: 'border-emerald-500', text: 'text-[var(--primary)]', line: 'bg-[var(--primary)]/[0.08]0' };
  case 'current':
- return { bg: 'bg-[var(--primary)]', border: 'border-blue-500', text: 'text-[var(--secondary)]', line: 'bg-[var(--primary)]' };
+ return { bg: 'bg-[var(--primary)]', border: 'border-ring', text: 'text-[var(--secondary)]', line: 'bg-[var(--primary)]' };
  case 'stopped':
  return { bg: 'bg-[var(--destructive)]', border: 'border-red-500', text: 'text-[var(--destructive)]', line: 'bg-[var(--destructive)]' };
  case 'pending':
@@ -268,7 +268,7 @@ function getPhaseStatusColor(status: PhaseStatus): { bg: string; border: string;
  case 'completed':
  return { bg: 'bg-[var(--primary)]/[0.08]0', border: 'border-emerald-500', text: 'text-[var(--primary)]' };
  case 'current':
- return { bg: 'bg-[var(--primary)]', border: 'border-blue-500', text: 'text-[var(--secondary)]' };
+ return { bg: 'bg-[var(--primary)]', border: 'border-ring', text: 'text-[var(--secondary)]' };
  case 'stopped':
  return { bg: 'bg-[var(--destructive)]', border: 'border-red-500', text: 'text-[var(--destructive)]' };
  case 'pending':
@@ -299,7 +299,7 @@ export function ProjectLifecyclePage() {
  if (isLoading) {
  return (
  <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+ <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
  }

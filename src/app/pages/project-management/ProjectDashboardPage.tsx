@@ -137,7 +137,7 @@ export function ProjectDashboardPage() {
  if (isLoading || isCheckingQualification || notificationsLoading) {
  return (
  <div className="min-h-full bg-background p-4 sm:p-6 lg:p-8 flex items-center justify-center">
- <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+ <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
  }
@@ -282,7 +282,7 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Active Projects */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-[var(--secondary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md dark:hover:shadow-blue-500/10 flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-[var(--secondary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md dark:hover:shadow-ring/10 flex flex-col justify-between h-full">
  <div>
  <div className="p-2.5 rounded-xl bg-[var(--secondary)]/[0.08]/10 w-fit mb-4">
  <Activity className="w-6 h-6 text-[var(--secondary)]" />

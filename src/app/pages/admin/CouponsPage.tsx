@@ -165,7 +165,7 @@ export function CouponsPage() {
  value={filters.code}
  onChange={(e) => setFilters((prev) => ({ ...prev, code: e.target.value }))}
  placeholder="ابحث بكود الكوبون"
- className="w-full pr-9 pl-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full pr-9 pl-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
  </div>
@@ -175,7 +175,7 @@ export function CouponsPage() {
  <select
  value={filters.status}
  onChange={(e) => setFilters((prev) => ({ ...prev, status: e.target.value }))}
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  >
  {statusOptions.map((option) => (
  <option key={option.value} value={option.value}>{option.label}</option>
@@ -321,7 +321,7 @@ export function CouponsPage() {
  value={form.code}
  onChange={(e) => setForm((prev) => ({ ...prev, code: e.target.value }))}
  placeholder="مثال: SUMMER20"
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
 
@@ -331,7 +331,7 @@ export function CouponsPage() {
  required
  value={form.type}
  onChange={(e) => setForm((prev) => ({ ...prev, type: e.target.value }))}
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  >
  {typeOptions.map((option) => (
  <option key={option.value} value={option.value}>{option.label}</option>
@@ -355,7 +355,7 @@ export function CouponsPage() {
  discountValue: e.target.value ? Number(e.target.value) : undefined,
  }))
  }
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
 
@@ -372,7 +372,7 @@ export function CouponsPage() {
  maxDiscountAmount: e.target.value ? Number(e.target.value) : undefined,
  }))
  }
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
  </>
@@ -392,7 +392,7 @@ export function CouponsPage() {
  extraMonths: e.target.value ? Number(e.target.value) : undefined,
  }))
  }
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
  )}
@@ -411,7 +411,7 @@ export function CouponsPage() {
  extraProjects: e.target.value ? Number(e.target.value) : undefined,
  }))
  }
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
  )}
@@ -422,7 +422,7 @@ export function CouponsPage() {
  type="text"
  value={form.currency}
  onChange={(e) => setForm((prev) => ({ ...prev, currency: e.target.value }))}
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
 
@@ -438,7 +438,7 @@ export function CouponsPage() {
  maxUses: e.target.value ? Number(e.target.value) : undefined,
  }))
  }
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
 
@@ -449,7 +449,7 @@ export function CouponsPage() {
  required
  value={form.validFrom}
  onChange={(e) => setForm((prev) => ({ ...prev, validFrom: e.target.value }))}
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
 
@@ -459,7 +459,7 @@ export function CouponsPage() {
  type="datetime-local"
  value={form.validUntil}
  onChange={(e) => setForm((prev) => ({ ...prev, validUntil: e.target.value }))}
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
  </div>

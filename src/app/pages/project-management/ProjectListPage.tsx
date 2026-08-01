@@ -192,7 +192,7 @@ export function ProjectListPage() {
 
  const renderLoading = () => (
  <div className="bg-card rounded-xl border border-border shadow-sm p-12 flex items-center justify-center">
- <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+ <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
 
@@ -230,7 +230,7 @@ export function ProjectListPage() {
  <select
  value={pagination.limit}
  onChange={(e) => setLimit(Number(e.target.value))}
- className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  {PAGE_SIZE_OPTIONS.map((size) => (
  <option key={size} value={size}>{size} لكل صفحة</option>
@@ -632,7 +632,7 @@ export function ProjectListPage() {
  onChange={(e) => updateFilter('search', e.target.value)}
  onKeyDown={handleSearchKeyDown}
  placeholder="بحث في المشاريع..."
- className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm sm:text-base"
+ className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent text-sm sm:text-base"
  />
  </div>
 
@@ -659,7 +659,7 @@ export function ProjectListPage() {
 
  <button
  onClick={() => setShowFilters(!showFilters)}
- className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0 ${showFilters ? 'border-blue-600 text-[var(--secondary)] bg-[var(--secondary)]/[0.08]' : 'border-border hover:bg-secondary'}`}
+ className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0 ${showFilters ? 'border-ring text-[var(--secondary)] bg-[var(--secondary)]/[0.08]' : 'border-border hover:bg-secondary'}`}
  >
  <Filter className="w-5 h-5" />
  تصفية
@@ -674,7 +674,7 @@ export function ProjectListPage() {
  <select
  value={pendingFilters.status || 'all'}
  onChange={(e) => updateStatusFilter(e.target.value)}
- className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  {STATUS_OPTIONS.map((option) => (
  <option key={option.value} value={option.value}>{option.label}</option>
@@ -693,7 +693,7 @@ export function ProjectListPage() {
  void applyFilters({ organizationId: orgId });
  }}
  disabled={organizationsLoading}
- className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
+ className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring disabled:opacity-50"
  >
  <option value="all">جميع الجهات</option>
  {organizations.map((org) => (

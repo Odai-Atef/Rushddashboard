@@ -123,7 +123,7 @@ export function ExecutiveDashboard() {
  case 'warning':
  return 'border-r-4 border-yellow-500 bg-yellow-500/10';
  case 'info':
- return 'border-r-4 border-blue-500 bg-[var(--primary)]/10';
+ return 'border-r-4 border-ring bg-[var(--primary)]/10';
  default:
  return 'border-r-4 border-muted';
  }

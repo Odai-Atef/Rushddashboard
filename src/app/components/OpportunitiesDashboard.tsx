@@ -111,7 +111,7 @@ export function OpportunitiesDashboard() {
  const getRiskColor = (risk: string) => {
  switch (risk) {
  case 'low':
- return 'bg-[var(--primary)]/[0.2] text-[var(--primary)] border-green-500/30';
+ return 'bg-[var(--primary)]/[0.2] text-[var(--primary)] border-[var(--primary)]/30';
  case 'medium':
  return 'bg-[var(--warning)]/[0.2] text-[var(--warning)] border-[var(--warning)]/[0.3]';
  case 'high':

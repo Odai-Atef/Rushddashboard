@@ -573,7 +573,7 @@ export function UserActivationPage() {
  onChange={(e) => setSearch(e.target.value)}
  onKeyDown={handleSearchKeyDown}
  placeholder="بحث بالاسم أو البريد أو رقم الترخيص..."
- className="w-full pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
  <div className="relative w-full sm:min-w-[200px]">
@@ -581,7 +581,7 @@ export function UserActivationPage() {
  <select
  value={pendingStatus}
  onChange={(e) => setStatus(e.target.value)}
- className="w-full appearance-none pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-[var(--card)]"
+ className="w-full appearance-none pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-[var(--card)]"
  >
  {USER_STATUS_OPTIONS.map((option) => (
  <option key={option.value} value={option.value}>
@@ -845,7 +845,7 @@ export function UserActivationPage() {
  onChange={(e) => setRejectComment(e.target.value)}
  placeholder="يرجى توضيح سبب الرفض أو المستندات/المعلومات المطلوبة..."
  rows={4}
- className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+ className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent text-sm"
  />
  </div>
  )}
@@ -856,7 +856,7 @@ export function UserActivationPage() {
  <div className="flex items-start gap-3">
  <CheckCircle className="w-5 h-5 text-[var(--secondary)] shrink-0 mt-0.5" />
  <div>
- <h4 className="font-bold text-slate-900">تأكيد تفعيل الجهة</h4>
+ <h4 className="font-bold text-foreground">تأكيد تفعيل الجهة</h4>
  <p className="text-sm text-[var(--text-secondary)] mt-1">
  سيتم تفعيل {selectedUser.fullName} / {selectedUser.organization?.name || 'الجهة'}. لا يمكن التراجع عن هذا الإجراء.
  </p>
@@ -891,7 +891,7 @@ export function UserActivationPage() {
  <div className="flex items-start gap-3">
  <AlertTriangle className="w-5 h-5 text-[var(--destructive)] shrink-0 mt-0.5" />
  <div>
- <h4 className="font-bold text-slate-900">تأكيد طلب الإجراء</h4>
+ <h4 className="font-bold text-foreground">تأكيد طلب الإجراء</h4>
  <p className="text-sm text-[var(--text-secondary)] mt-1">
  سيتم إرسال طلب إجراء إلى {selectedUser.fullName} / {selectedUser.organization?.name || 'الجهة'}.
  </p>

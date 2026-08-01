@@ -103,7 +103,7 @@ export function InventoryDashboard() {
  icon: AlertCircle,
  color: 'from-blue-500 to-cyan-600',
  bgColor: 'bg-[var(--primary)]/10',
- borderColor: 'border-blue-500'
+ borderColor: 'border-ring'
  },
  ];
 

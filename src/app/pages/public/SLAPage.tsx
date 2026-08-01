@@ -268,8 +268,8 @@ export function SLAPage() {
  </div>
 
  <div className="bg-[var(--card)] rounded-2xl border border-slate-200 p-8 mb-8 shadow-sm">
- <h1 className="text-2xl font-bold text-slate-900 mb-2">{pkg.name}</h1>
- <p className="text-slate-500 mb-6">{pkg.description}</p>
+ <h1 className="text-2xl font-bold text-foreground mb-2">{pkg.name}</h1>
+ <p className="text-muted-foreground mb-6">{pkg.description}</p>
 
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
  {[
@@ -278,9 +278,9 @@ export function SLAPage() {
  { label: "عدد المشاريع", value: `${pkg.projectLimit} مشروع` },
  { label: "مستوى SLA", value: pkg.sla.level },
  ].map((item, i) => (
- <div key={i} className="bg-slate-50 rounded-xl p-4 text-center">
- <div className="text-xs text-slate-500 mb-1">{item.label}</div>
- <div className="text-sm font-bold text-slate-800">{item.value}</div>
+ <div key={i} className="bg-muted rounded-xl p-4 text-center">
+ <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
+ <div className="text-sm font-bold text-foreground">{item.value}</div>
  </div>
  ))}
  </div>
@@ -305,22 +305,22 @@ export function SLAPage() {
  { label: "ساعات الدعم", value: pkg.sla.supportHours },
  { label: "ساعات استشارية", value: `${pkg.consultingHours} ساعة` },
  ].map((item, i) => (
- <div key={i} className="bg-slate-50 rounded-xl p-3">
- <div className="text-xs text-slate-500 mb-1">{item.label}</div>
- <div className="text-sm font-bold text-slate-800">{item.value}</div>
+ <div key={i} className="bg-muted rounded-xl p-3">
+ <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
+ <div className="text-sm font-bold text-foreground">{item.value}</div>
  </div>
  ))}
  </div>
 
  {/* Package Features */}
  <div className="bg-[var(--card)] rounded-2xl border border-slate-200 p-8 mb-8 shadow-sm">
- <h2 className="text-xl font-bold text-slate-900 mb-6">تفاصيل الباقة</h2>
+ <h2 className="text-xl font-bold text-foreground mb-6">تفاصيل الباقة</h2>
 
  <div className="space-y-8">
  {/* Benefits */}
  {feat.benefits && feat.benefits.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">المزايا الرئيسية</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">المزايا الرئيسية</h4>
  <ul className="space-y-2">
  {feat.benefits.map((b, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -335,7 +335,7 @@ export function SLAPage() {
  {/* Services */}
  {feat.services && feat.services.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">الخدمات المتضمنة</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">الخدمات المتضمنة</h4>
  <ul className="space-y-2">
  {feat.services.map((s, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -356,7 +356,7 @@ export function SLAPage() {
  {/* Goals */}
  {feat.goals && feat.goals.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">الأهداف المرتقبة</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">الأهداف المرتقبة</h4>
  <ul className="space-y-2">
  {feat.goals.map((g, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -371,7 +371,7 @@ export function SLAPage() {
  {/* Outcomes */}
  {feat.outcomes && feat.outcomes.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">النتائج المتوقعة</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">النتائج المتوقعة</h4>
  <ul className="space-y-2">
  {feat.outcomes.map((o, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -386,10 +386,10 @@ export function SLAPage() {
  {/* Exclusions */}
  {feat.exclusions && feat.exclusions.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">الاستثناءات</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">الاستثناءات</h4>
  <ul className="space-y-2">
  {feat.exclusions.map((e, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-slate-500">
+ <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
  <XCircle size={14} className="mt-1 text-red-400 shrink-0" />
  <span>{e}</span>
  </li>
@@ -401,7 +401,7 @@ export function SLAPage() {
  {/* Suitable For */}
  {feat.suitableFor && feat.suitableFor.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">مناسب لـ</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">مناسب لـ</h4>
  <ul className="space-y-2">
  {feat.suitableFor.map((s, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -417,7 +417,7 @@ export function SLAPage() {
 
  {/* SLA Agreement */}
  <div className="bg-[var(--card)] rounded-2xl border border-slate-200 p-8 shadow-sm">
- <h2 className="text-xl font-bold text-slate-900 mb-6 flex items-center gap-2">
+ <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
  <Shield size={22} className="text-[var(--secondary)]" />
  اتفاقية مستوى الخدمة (SLA)
  </h2>

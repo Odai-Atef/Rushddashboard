@@ -124,7 +124,7 @@ export function SubscriptionsListPage() {
  value={filters.organizationName}
  onChange={(e) => updateFilter('organizationName', e.target.value)}
  placeholder="ابحث باسم الجهة"
- className="w-full pr-9 pl-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full pr-9 pl-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
  </div>
@@ -136,7 +136,7 @@ export function SubscriptionsListPage() {
  value={filters.organizationId}
  onChange={(e) => updateFilter('organizationId', e.target.value)}
  placeholder="UUID الجهة"
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
 
@@ -147,7 +147,7 @@ export function SubscriptionsListPage() {
  value={filters.packageId}
  onChange={(e) => updateFilter('packageId', e.target.value)}
  placeholder="UUID الباقة"
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  />
  </div>
 
@@ -156,7 +156,7 @@ export function SubscriptionsListPage() {
  <select
  value={filters.status}
  onChange={(e) => updateFilter('status', e.target.value)}
- className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  >
  {statusOptions.map((option) => (
  <option key={option.value} value={option.value}>

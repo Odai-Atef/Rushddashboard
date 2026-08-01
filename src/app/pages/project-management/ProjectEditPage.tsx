@@ -295,7 +295,7 @@ export function ProjectEditPage() {
  if (!isProjectManager) {
  return (
  <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+ <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
  }
@@ -303,7 +303,7 @@ export function ProjectEditPage() {
  if (isLoadingProject) {
  return (
  <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+ <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
  }
@@ -357,7 +357,7 @@ export function ProjectEditPage() {
  type="text"
  value={formData.name}
  onChange={(e) => updateField('name', e.target.value)}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="مثال: برنامج الأسر المنتجة"
  />
  </div>
@@ -400,7 +400,7 @@ export function ProjectEditPage() {
  value={formData.description}
  onChange={(e) => updateField('description', e.target.value)}
  rows={4}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent resize-none"
  placeholder="اكتب وصفاً تفصيلياً للمشروع..."
  />
  </div>
@@ -413,7 +413,7 @@ export function ProjectEditPage() {
  type="number"
  value={formData.budget}
  onChange={(e) => updateField('budget', e.target.value)}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  placeholder="250000"
  />
  </div>
@@ -424,7 +424,7 @@ export function ProjectEditPage() {
  type="text"
  value={formData.beneficiaries}
  onChange={(e) => updateField('beneficiaries', e.target.value)}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="مثال: الأسر المحتاجة"
  />
  </div>
@@ -440,7 +440,7 @@ export function ProjectEditPage() {
  step="1"
  value={formData.beneficiariesCount}
  onChange={(e) => updateField('beneficiariesCount', e.target.value)}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  placeholder="مثال: 500"
  />
  </div>
@@ -451,7 +451,7 @@ export function ProjectEditPage() {
  type="text"
  value={formData.geographicScope}
  onChange={(e) => updateField('geographicScope', e.target.value)}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
  placeholder="مثال: الرياض"
  />
  </div>
@@ -466,7 +466,7 @@ export function ProjectEditPage() {
  <select
  value={formData.status}
  onChange={(e) => updateField('status', e.target.value)}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  <option value="">اختر الحالة</option>
  {STATUS_OPTIONS.map((status) => (
@@ -483,7 +483,7 @@ export function ProjectEditPage() {
  {(getFieldError('startDate') || getFieldError('endDate')) && (
  <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('startDate') || getFieldError('endDate')}</p>
  )}
- <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-[var(--destructive)]/[0.08]' : 'border-border focus-within:ring-2 focus-within:ring-blue-500'}`}>
+ <div className={`flex items-stretch border rounded-lg overflow-hidden ${(getFieldError('startDate') || getFieldError('endDate')) ? 'border-red-500 bg-[var(--destructive)]/[0.08]' : 'border-border focus-within:ring-2 focus-within:ring-ring'}`}>
  <div
  className="flex-1 flex flex-col px-4 py-2 cursor-pointer"
  onClick={() => startDateRef.current?.showPicker?.()}

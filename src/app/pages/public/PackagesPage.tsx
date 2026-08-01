@@ -101,8 +101,8 @@ export function PackagesPage() {
  return (
  <div className="max-w-6xl mx-auto px-6 py-12" dir="rtl">
  <div className="text-center mb-12">
- <h1 className="text-3xl font-bold text-slate-900 mb-4">باقات رشد</h1>
- <p className="text-slate-500 text-lg">
+ <h1 className="text-3xl font-bold text-foreground mb-4">باقات رشد</h1>
+ <p className="text-muted-foreground text-lg">
  باقات مصممة خصيصاً للمنظمات غير الربحية السعودية
  </p>
  </div>
@@ -151,14 +151,14 @@ export function PackagesPage() {
  <Icon size={24} color="#fff" />
  </div>
 
- <h3 className="text-xl font-bold text-slate-900 mb-1">{pkg.name}</h3>
- <p className="text-sm text-slate-500 mb-5">{pkg.description}</p>
+ <h3 className="text-xl font-bold text-foreground mb-1">{pkg.name}</h3>
+ <p className="text-sm text-muted-foreground mb-5">{pkg.description}</p>
 
  <div className="mb-6">
  <span className="text-4xl font-extrabold" style={{ color: accent }}>
  {pkg.priceAnnual.toLocaleString("ar-SA")}
  </span>
- <span className="text-base text-slate-500 mr-2">ريال/سنة</span>
+ <span className="text-base text-muted-foreground mr-2">ريال/سنة</span>
  <p className="text-sm text-[var(--text-muted)] mt-1">{pkg.projectLimit} مشاريع</p>
  </div>
 
@@ -172,7 +172,7 @@ export function PackagesPage() {
  <div className="text-xs font-semibold text-[var(--text-secondary)]">
  اتفاقية مستوى الخدمة
  </div>
- <div className="text-xs text-slate-500">
+ <div className="text-xs text-muted-foreground">
  {pkg.sla || "مستوى أساسي"}
  </div>
  </div>
@@ -195,7 +195,7 @@ export function PackagesPage() {
  >
  <Check size={12} color={accent} strokeWidth={2.5} />
  </div>
- <span className="text-sm text-slate-600">{feature}</span>
+ <span className="text-sm text-secondary">{feature}</span>
  </div>
  ))}
  </div>
@@ -206,7 +206,7 @@ export function PackagesPage() {
 
  {packages.length === 0 && !loading && (
  <div className="text-center py-20">
- <p className="text-slate-500">لا توجد باقات متاحة حالياً</p>
+ <p className="text-muted-foreground">لا توجد باقات متاحة حالياً</p>
  </div>
  )}
  </div>

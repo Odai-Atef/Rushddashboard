@@ -77,7 +77,7 @@ export function ProjectVersionsPage() {
  if (isLoading) {
  return (
  <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+ <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
  }
@@ -153,7 +153,7 @@ export function ProjectVersionsPage() {
  return (
  <div
  key={doc.id}
- className="flex items-center gap-4 p-4 bg-secondary rounded-xl border border-border hover:border-blue-300 transition-colors"
+ className="flex items-center gap-4 p-4 bg-secondary rounded-xl border border-border hover:border-ring/50 transition-colors"
  >
  <div className="flex-shrink-0">
  {getDocumentIcon(file.mimeType)}

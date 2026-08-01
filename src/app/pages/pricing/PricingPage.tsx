@@ -455,8 +455,8 @@ export function PricingPage() {
  return (
  <div className="max-w-6xl mx-auto px-6 py-8" dir="rtl">
  <div className="text-center mb-12">
- <h1 className="text-3xl font-bold text-slate-900 mb-4">{activeSubscription ? 'باقات منصة رشد' : 'اختر الباقة المناسبة'}</h1>
- <p className="text-slate-500 text-lg">
+ <h1 className="text-3xl font-bold text-foreground mb-4">{activeSubscription ? 'باقات منصة رشد' : 'اختر الباقة المناسبة'}</h1>
+ <p className="text-muted-foreground text-lg">
  {activeSubscription
  ? 'لديك اشتراك نشط حالياً. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.'
  : 'باقات مصممة خصيصاً للمنظمات غير الربحية السعودية'}
@@ -471,7 +471,7 @@ export function PricingPage() {
  <div className="flex items-center justify-center gap-3">
  <a
  href="tel:+966556534433"
- className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--card)] border border-blue-300 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
+ className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
  >
  <Phone className="w-4 h-4" />
  اتصل بنا
@@ -600,14 +600,14 @@ export function PricingPage() {
  <Icon size={24} color="#fff" />
  </div>
 
- <h3 className="text-xl font-bold text-slate-900 mb-1">{pkg.name}</h3>
- <p className="text-sm text-slate-500 mb-5">{pkg.description}</p>
+ <h3 className="text-xl font-bold text-foreground mb-1">{pkg.name}</h3>
+ <p className="text-sm text-muted-foreground mb-5">{pkg.description}</p>
 
  <div className="mb-6">
  <span className="text-4xl font-extrabold" style={{ color: accent }}>
  {pkg.priceMonthly.toLocaleString("ar-SA")}
  </span>
- <span className="text-base text-slate-500 mr-2">ريال/شهر</span>
+ <span className="text-base text-muted-foreground mr-2">ريال/شهر</span>
  <p className="text-sm text-[var(--text-muted)] mt-1">{pkg.projectLimit} مشاريع</p>
  </div>
 
@@ -620,7 +620,7 @@ export function PricingPage() {
  <Shield size={16} color={accent} />
  <div className="flex-1">
  <div className="text-xs font-semibold text-[var(--text-secondary)]">اتفاقية مستوى الخدمة</div>
- <div className="text-xs text-slate-500">{pkg.sla || 'مستوى أساسي'}</div>
+ <div className="text-xs text-muted-foreground">{pkg.sla || 'مستوى أساسي'}</div>
  </div>
  </div>
 
@@ -645,7 +645,7 @@ export function PricingPage() {
  {/* Alternative: checkout via website (new tab) */}
  <button
  onClick={() => window.open(`/pricing/checkout/${pkg.id}`, '_blank')}
- className="w-full py-2 text-sm text-slate-500 hover:text-[var(--text-secondary)] transition-colors mb-6"
+ className="w-full py-2 text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors mb-6"
  >
  أو اشترك عبر الموقع ↗
  </button>
@@ -672,7 +672,7 @@ export function PricingPage() {
  >
  <Check size={12} color={accent} strokeWidth={2.5} />
  </div>
- <span className="text-sm text-slate-600">{benefit}</span>
+ <span className="text-sm text-secondary">{benefit}</span>
  </div>
  ))}
  </div>
@@ -686,8 +686,8 @@ export function PricingPage() {
  if (notes.length === 0) return null;
  return (
  <>
- <Separator className="my-4 bg-slate-200" />
- <h4 className="text-sm font-bold text-slate-900 mb-2">ملاحظات</h4>
+ <Separator className="my-4 bg-muted" />
+ <h4 className="text-sm font-bold text-foreground mb-2">ملاحظات</h4>
  <div className="space-y-2 pr-1">
  {notes.map((note, i) => (
  <div key={i} className="flex items-start gap-2.5">
@@ -697,7 +697,7 @@ export function PricingPage() {
  >
  <AlertTriangle size={12} color={accent} strokeWidth={2.5} />
  </div>
- <span className="text-sm text-slate-600">{note}</span>
+ <span className="text-sm text-secondary">{note}</span>
  </div>
  ))}
  </div>
@@ -711,7 +711,7 @@ export function PricingPage() {
 
  {packages.length === 0 && !loading && (
  <div className="text-center py-20">
- <p className="text-slate-500">لا توجد باقات متاحة حالياً</p>
+ <p className="text-muted-foreground">لا توجد باقات متاحة حالياً</p>
  </div>
  )}
 
@@ -724,8 +724,8 @@ export function PricingPage() {
  <div className="flex items-center gap-3">
  <ScrollText className="w-6 h-6 text-[var(--secondary)]" />
  <div>
- <h3 className="text-lg font-bold text-slate-900">اتفاقية مستوى الخدمة</h3>
- <p className="text-sm text-slate-500">{selectedPkg?.name || 'جاري التحميل...'}</p>
+ <h3 className="text-lg font-bold text-foreground">اتفاقية مستوى الخدمة</h3>
+ <p className="text-sm text-muted-foreground">{selectedPkg?.name || 'جاري التحميل...'}</p>
  </div>
  </div>
  <button
@@ -758,9 +758,9 @@ export function PricingPage() {
  { label: 'ساعات الدعم', value: selectedPkg.sla.supportHours },
  { label: 'عدد المشاريع', value: `${selectedPkg.projectLimit} مشروع/سنة` },
  ].map((item, i) => (
- <div key={i} className="bg-slate-50 rounded-xl p-3">
- <div className="text-xs text-slate-500 mb-1">{item.label}</div>
- <div className="text-sm font-bold text-slate-800">{item.value}</div>
+ <div key={i} className="bg-muted rounded-xl p-3">
+ <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
+ <div className="text-sm font-bold text-foreground">{item.value}</div>
  </div>
  ))}
  </div>
@@ -770,7 +770,7 @@ export function PricingPage() {
  {/* Benefits */}
  {selectedPkg.features.benefits && selectedPkg.features.benefits.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">المزايا الرئيسية</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">المزايا الرئيسية</h4>
  <ul className="space-y-2">
  {selectedPkg.features.benefits.map((b, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -785,7 +785,7 @@ export function PricingPage() {
  {/* Services */}
  {selectedPkg.features.services && selectedPkg.features.services.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">الخدمات المتضمنة</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">الخدمات المتضمنة</h4>
  <ul className="space-y-2">
  {selectedPkg.features.services.map((s, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -804,7 +804,7 @@ export function PricingPage() {
  {/* Goals */}
  {selectedPkg.features.goals && selectedPkg.features.goals.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">الأهداف المرتقبة</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">الأهداف المرتقبة</h4>
  <ul className="space-y-2">
  {selectedPkg.features.goals.map((g, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -819,7 +819,7 @@ export function PricingPage() {
  {/* Outcomes */}
  {selectedPkg.features.outcomes && selectedPkg.features.outcomes.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">النتائج المتوقعة</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">النتائج المتوقعة</h4>
  <ul className="space-y-2">
  {selectedPkg.features.outcomes.map((o, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -834,10 +834,10 @@ export function PricingPage() {
  {/* Exclusions */}
  {selectedPkg.features.exclusions && selectedPkg.features.exclusions.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">الاستثناءات</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">الاستثناءات</h4>
  <ul className="space-y-2">
  {selectedPkg.features.exclusions.map((e, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-slate-500">
+ <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
  <XCircle size={14} className="mt-1 text-red-400 shrink-0" />
  <span>{e}</span>
  </li>
@@ -849,7 +849,7 @@ export function PricingPage() {
  {/* Suitable For */}
  {selectedPkg.features.suitableFor && selectedPkg.features.suitableFor.length > 0 && (
  <div>
- <h4 className="text-base font-bold text-slate-900 mb-3">مناسب لـ</h4>
+ <h4 className="text-base font-bold text-foreground mb-3">مناسب لـ</h4>
  <ul className="space-y-2">
  {selectedPkg.features.suitableFor.map((s, i) => (
  <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
@@ -869,7 +869,7 @@ export function PricingPage() {
  type="checkbox"
  checked={slaAccepted}
  onChange={(e) => setSlaAccepted(e.target.checked)}
- className="w-5 h-5 mt-0.5 text-[var(--secondary)] rounded-lg focus:ring-blue-500"
+ className="w-5 h-5 mt-0.5 text-[var(--secondary)] rounded-lg focus:ring-ring"
  />
  <span className="text-sm text-[var(--text-secondary)] leading-relaxed">
  قرأت ووافقت على اتفاقية مستوى الخدمة (SLA) وأقر بأنني فهمت جميع التزاماتي والتزامات المنصة الموضحة أعلاه.
@@ -878,7 +878,7 @@ export function PricingPage() {
  </div>
  </>
  ) : (
- <div className="text-center py-12 text-slate-500">تعذر تحميل تفاصيل الباقة</div>
+ <div className="text-center py-12 text-muted-foreground">تعذر تحميل تفاصيل الباقة</div>
  )}
  </div>
 
@@ -892,7 +892,7 @@ export function PricingPage() {
  style={{ width: `${slaScrollProgress}%` }}
  />
  </div>
- <span className="text-xs font-semibold text-slate-500 w-10 text-left">
+ <span className="text-xs font-semibold text-muted-foreground w-10 text-left">
  {slaScrollProgress}%
  </span>
  </div>
@@ -901,7 +901,7 @@ export function PricingPage() {
  هذه باقتك الحالية
  </div>
  ) : activeSubscription ? (
- <div className="w-full py-3.5 rounded-xl text-slate-600 bg-[var(--hover)] font-bold text-base text-center">
+ <div className="w-full py-3.5 rounded-xl text-secondary bg-[var(--hover)] font-bold text-base text-center">
  لديك اشتراك نشط. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
  </div>
  ) : (

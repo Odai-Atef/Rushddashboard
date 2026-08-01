@@ -551,7 +551,7 @@ export function ComplianceRiskPage() {
  ].map((action, index) => (
  <div
  key={index}
- className={`p-3 rounded-lg border cursor-pointer hover:border-blue-500 transition-all ${
+ className={`p-3 rounded-lg border cursor-pointer hover:border-ring transition-all ${
  action.priority === 'urgent' ? 'bg-[var(--destructive)]/5 border-red-500/20' :
  action.priority === 'high' ? 'bg-orange-500/5 border-orange-500/20' :
  action.priority === 'medium' ? 'bg-yellow-500/5 border-yellow-500/20' :
@@ -605,7 +605,7 @@ export function ComplianceRiskPage() {
  <div
  key={risk.id}
  onClick={() => setSelectedRisk(risk)}
- className={`border rounded-lg p-4 cursor-pointer hover:border-blue-500 transition-all ${getSeverityBg(risk.severity)}`}
+ className={`border rounded-lg p-4 cursor-pointer hover:border-ring transition-all ${getSeverityBg(risk.severity)}`}
  >
  <div className="flex items-start justify-between gap-4">
  <div className="flex-1">

@@ -298,7 +298,7 @@ export function AnalysisHistoryPage() {
  placeholder="البحث في التحليلات..."
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
- className="w-full pr-10 pl-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="w-full pr-10 pl-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
  />
  </div>
 
@@ -306,7 +306,7 @@ export function AnalysisHistoryPage() {
  <select
  value={statusFilter}
  onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
- className="px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
  >
  <option value="all">جميع الحالات</option>
  <option value="completed">مكتمل</option>
@@ -318,7 +318,7 @@ export function AnalysisHistoryPage() {
  <select
  value={categoryFilter}
  onChange={(e) => setCategoryFilter(e.target.value as typeof categoryFilter)}
- className="px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+ className="px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-ring"
  >
  <option value="all">جميع الفئات</option>
  <option value="sales">المبيعات</option>
@@ -347,7 +347,7 @@ export function AnalysisHistoryPage() {
  return (
  <div
  key={analysis.id}
- className="bg-card border border-border rounded-lg p-5 hover:border-blue-500/50 transition-all cursor-pointer group"
+ className="bg-card border border-border rounded-lg p-5 hover:border-ring/50 transition-all cursor-pointer group"
  onClick={() => setSelectedAnalysis(analysis)}
  >
  <div className="flex items-start gap-4">

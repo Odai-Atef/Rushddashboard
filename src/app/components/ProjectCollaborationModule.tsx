@@ -392,10 +392,10 @@ export function ProjectCollaborationModule() {
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="بحث في المحادثات..."
- className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  </div>
- <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>جميع المشاريع</option>
  <option>برنامج الأسر المنتجة</option>
  <option>مشروع كفالة الأيتام</option>
@@ -403,7 +403,7 @@ export function ProjectCollaborationModule() {
  <select
  value={filterStatus}
  onChange={(e) => setFilterStatus(e.target.value)}
- className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  <option value="all">جميع الحالات</option>
  <option value="active">نشطة</option>
@@ -735,7 +735,7 @@ function ChatView({
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="بحث..."
- className="w-full pr-9 pl-3 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-blue-500"
+ className="w-full pr-9 pl-3 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-ring"
  />
  </div>
  <div className="flex items-center justify-between">
@@ -798,7 +798,7 @@ function ChatView({
  onChange={(e) => setNewConversationTitle(e.target.value)}
  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); createConversation(); } }}
  placeholder="مثال: محادثة فريق المشروع"
- className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-blue-500 mb-3"
+ className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-ring mb-3"
  />
  <div className="flex gap-2">
  <button
@@ -967,7 +967,7 @@ function ChatView({
  onChange={(e) => setMessageInput(e.target.value)}
  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); } }}
  placeholder="اكتب رسالتك..."
- className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  <button
  onClick={handleSend}
@@ -1120,7 +1120,7 @@ function MessageBubble({
  if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
  if (e.key === 'Escape') { onCancelEdit(); }
  }}
- className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 text-sm"
+ className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring text-sm"
  autoFocus
  />
  <div className={`flex gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
@@ -1459,7 +1459,7 @@ const DiscussionsView = () => {
  value={newDiscussionTitle}
  onChange={(e) => setNewDiscussionTitle(e.target.value)}
  placeholder="مثال: ملاحظات على توزيع الميزانية"
- className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  {newDiscussionErrors.title && <p className="text-[var(--destructive)] text-sm mt-1">{newDiscussionErrors.title}</p>}
  </div>
@@ -1468,7 +1468,7 @@ const DiscussionsView = () => {
  <select
  value={newDiscussionSection}
  onChange={(e) => setNewDiscussionSection(e.target.value)}
- className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  <option value="budget">الميزانية</option>
  <option value="timeline">الجدول الزمني</option>
@@ -1483,7 +1483,7 @@ const DiscussionsView = () => {
  value={newDiscussionContent}
  onChange={(e) => setNewDiscussionContent(e.target.value)}
  placeholder="اكتب تفاصيل النقاش..."
- className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  {newDiscussionErrors.content && <p className="text-[var(--destructive)] text-sm mt-1">{newDiscussionErrors.content}</p>}
  </div>
@@ -1627,7 +1627,7 @@ const DiscussionsView = () => {
  disabled={detailMutating || discussion.status === s}
  className={`px-3 py-1 text-xs rounded-lg border ${
  discussion.status === s
- ? 'bg-primary text-primary-foreground border-blue-600'
+ ? 'bg-primary text-primary-foreground border-ring'
  : 'bg-card text-foreground border-border hover:bg-secondary'
  } disabled:opacity-50`}
  >
@@ -1720,7 +1720,7 @@ const DiscussionsView = () => {
  value={replyInputs[discussion.id] || ''}
  onChange={(e) => setReplyInputs((prev) => ({ ...prev, [discussion.id]: e.target.value }))}
  placeholder="أضف ردك..."
- className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  <button
  onClick={() => handleReplySubmit(discussion.id)}
@@ -1924,7 +1924,7 @@ const DiscussionsView = () => {
  onDragLeave={() => setIsDragging(false)}
  onDrop={handleDrop}
  className={`bg-card rounded-xl p-6 border-2 border-dashed transition-colors ${
- isDragging ? 'border-blue-500 bg-primary/10' : 'border-border'
+ isDragging ? 'border-ring bg-primary/10' : 'border-border'
  }`}
  >
  <div className="text-center mb-4">
@@ -1947,7 +1947,7 @@ const DiscussionsView = () => {
  <select
  value={uploadStage}
  onChange={(e) => setUploadStage(e.target.value)}
- className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  <option value="">بدون مرحلة</option>
  <option value="planning">تخطيط</option>
@@ -2297,12 +2297,12 @@ const DiscussionsView = () => {
  <input
  type="text"
  placeholder="مثال: تعديل مؤشرات الأداء"
- className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  </div>
  <div>
  <label className="block text-sm font-medium mb-2">تعيين إلى</label>
- <select className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option>فاطمة أحمد</option>
  <option>محمد عبدالله</option>
  <option>خالد سعيد</option>
@@ -2310,7 +2310,7 @@ const DiscussionsView = () => {
  </div>
  <div>
  <label className="block text-sm font-medium mb-2">الأولوية</label>
- <select className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500">
+ <select className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring">
  <option value="high">عالية</option>
  <option value="medium">متوسطة</option>
  <option value="low">منخفضة</option>
@@ -2320,7 +2320,7 @@ const DiscussionsView = () => {
  <label className="block text-sm font-medium mb-2">تاريخ الاستحقاق</label>
  <input
  type="date"
- className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  </div>
  <div className="md:col-span-2">
@@ -2328,7 +2328,7 @@ const DiscussionsView = () => {
  <textarea
  rows={4}
  placeholder="تفاصيل الطلب..."
- className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  />
  </div>
  </div>
@@ -3083,7 +3083,7 @@ const DiscussionsView = () => {
  <select
  value={filterDate}
  onChange={(e) => setFilterDate(e.target.value)}
- className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  <option value="all">جميع الأوقات</option>
  <option value="today">اليوم</option>
@@ -3093,7 +3093,7 @@ const DiscussionsView = () => {
  <select
  value={filterActivity}
  onChange={(e) => setFilterActivity(e.target.value)}
- className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  <option value="all">جميع الأنشطة</option>
  <option value="message">رسائل</option>

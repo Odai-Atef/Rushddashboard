@@ -197,7 +197,7 @@ export function AIProjectInnovationModule() {
  setGenerationType('improve');
  setCurrentView('improvement');
  }}
- className="group relative bg-card rounded-xl p-8 border-2 border-border hover:border-green-500 hover:shadow-xl transition-all text-right"
+ className="group relative bg-card rounded-xl p-8 border-2 border-border hover:border-[var(--primary)] hover:shadow-xl transition-all text-right"
  >
  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
  <Zap className="w-8 h-8 text-[var(--primary-foreground)]" />
@@ -373,8 +373,8 @@ export function AIProjectInnovationModule() {
  onClick={() => setWizardData({ ...wizardData, category: cat.id })}
  className={`p-6 rounded-xl border-2 transition-all text-right ${
  wizardData.category === cat.id
- ? 'border-blue-500 bg-[var(--secondary)]/[0.08]'
- : 'border-border hover:border-blue-300'
+ ? 'border-ring bg-[var(--secondary)]/[0.08]'
+ : 'border-border hover:border-ring/50'
  }`}
  >
  <Icon className={`w-8 h-8 mb-3 text-${cat.color}-600`} />
@@ -396,7 +396,7 @@ export function AIProjectInnovationModule() {
  value={wizardData.beneficiaries}
  onChange={(e) => setWizardData({ ...wizardData, beneficiaries: e.target.value })}
  rows={4}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring resize-none"
  placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن..."
  />
  <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg p-4">
@@ -420,7 +420,7 @@ export function AIProjectInnovationModule() {
  <select
  value={wizardData.geographicScope}
  onChange={(e) => setWizardData({ ...wizardData, geographicScope: e.target.value })}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring"
  >
  <option value="">اختر النطاق</option>
  <option value="local">محلي (مدينة واحدة)</option>
@@ -448,8 +448,8 @@ export function AIProjectInnovationModule() {
  onClick={() => setWizardData({ ...wizardData, budgetRange: budget.value })}
  className={`p-6 rounded-xl border-2 transition-all text-right ${
  wizardData.budgetRange === budget.value
- ? 'border-blue-500 bg-[var(--secondary)]/[0.08]'
- : 'border-border hover:border-blue-300'
+ ? 'border-ring bg-[var(--secondary)]/[0.08]'
+ : 'border-border hover:border-ring/50'
  }`}
  >
  <DollarSign className="w-8 h-8 mb-2 text-[var(--primary)]" />
@@ -480,8 +480,8 @@ export function AIProjectInnovationModule() {
  onClick={() => setWizardData({ ...wizardData, duration: dur.value })}
  className={`p-6 rounded-xl border-2 transition-all text-center ${
  wizardData.duration === dur.value
- ? 'border-blue-500 bg-[var(--secondary)]/[0.08]'
- : 'border-border hover:border-blue-300'
+ ? 'border-ring bg-[var(--secondary)]/[0.08]'
+ : 'border-border hover:border-ring/50'
  }`}
  >
  <Icon className="w-8 h-8 mx-auto mb-2 text-[var(--secondary)]" />
@@ -503,7 +503,7 @@ export function AIProjectInnovationModule() {
  value={wizardData.specialRequirements}
  onChange={(e) => setWizardData({ ...wizardData, specialRequirements: e.target.value })}
  rows={6}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring resize-none"
  placeholder="مثال: يجب أن يتضمن المشروع برامج تدريبية، يفضل الشراكة مع جهات حكومية..."
  />
  </div>
@@ -680,7 +680,7 @@ export function AIProjectInnovationModule() {
  <textarea
  defaultValue={section.content}
  rows={4}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring resize-none"
  />
  <div className="flex gap-2">
  <button
@@ -768,7 +768,7 @@ export function AIProjectInnovationModule() {
  </div>
  </div>
 
- <div className="bg-card rounded-xl p-6 border-2 border-green-500">
+ <div className="bg-card rounded-xl p-6 border-2 border-[var(--primary)]">
  <div className="flex items-center gap-2 mb-4">
  <Sparkles className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="font-semibold text-[var(--primary)]/[0.9]">النسخة المحسّنة</h3>
@@ -859,7 +859,7 @@ export function AIProjectInnovationModule() {
  </button>
  <button
  onClick={() => setCurrentView('review')}
- className="px-6 py-3 border border-blue-600 text-[var(--secondary)] rounded-lg hover:bg-[var(--secondary)]/[0.08] transition-colors font-medium flex items-center gap-2"
+ className="px-6 py-3 border border-ring text-[var(--secondary)] rounded-lg hover:bg-[var(--secondary)]/[0.08] transition-colors font-medium flex items-center gap-2"
  >
  <Send className="w-5 h-5" />
  إرسال للاعتماد
@@ -909,7 +909,7 @@ export function AIProjectInnovationModule() {
  </div>
  </div>
 
- <div className="bg-card rounded-xl p-6 border-2 border-green-500">
+ <div className="bg-card rounded-xl p-6 border-2 border-[var(--primary)]">
  <div className="flex items-center gap-2 mb-4">
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="font-semibold text-[var(--primary)]/[0.9]">النسخة المعدّلة</h3>
@@ -925,7 +925,7 @@ export function AIProjectInnovationModule() {
  <h3 className="font-semibold mb-4">ملاحظات المراجع</h3>
  <textarea
  rows={4}
- className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-blue-500 resize-none"
+ className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring resize-none"
  placeholder="أضف ملاحظاتك هنا..."
  />
  </div>
@@ -997,7 +997,7 @@ export function AIProjectInnovationModule() {
  <div className="space-y-4">
  {versions.map((version) => (
  <div key={version.id} className={`bg-card rounded-xl border-2 p-6 ${
- version.status === 'approved' ? 'border-green-500' : 'border-border'
+ version.status === 'approved' ? 'border-[var(--primary)]' : 'border-border'
  }`}>
  <div className="flex items-start justify-between mb-4">
  <div className="flex items-center gap-4">

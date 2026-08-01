@@ -143,7 +143,7 @@ export function ProfitabilityDashboard() {
  case 'medium':
  return 'border-r-4 border-yellow-500 bg-yellow-500/10';
  default:
- return 'border-r-4 border-blue-500 bg-[var(--primary)]/10';
+ return 'border-r-4 border-ring bg-[var(--primary)]/10';
  }
  };
 
