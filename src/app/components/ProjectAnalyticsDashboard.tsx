@@ -64,20 +64,20 @@ export function ProjectAnalyticsDashboard() {
   const [dateRange, setDateRange] = useState('6months');
 
   return (
-    <div className="p-6 space-y-6 text-right" dir="rtl">
+    <div className="p-6 space-y-6 md:space-y-8 text-right" dir="rtl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl text-foreground">تحليلات المشاريع</h1>
-          <p className="text-muted-foreground text-sm mt-1">مسار المشاريع • نقاط الاختناق • مقاييس الذكاء الاصطناعي</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">تحليلات المشاريع</h1>
+          <p className="text-gray-500 dark:text-gray-400 text-sm mt-1">مسار المشاريع • نقاط الاختناق • مقاييس الذكاء الاصطناعي</p>
         </div>
         <div className="flex items-center gap-2">
-          <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-border rounded-lg px-3 py-2 bg-background text-foreground">
+          <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white">
             <option value="3months">آخر 3 أشهر</option>
             <option value="6months">آخر 6 أشهر</option>
             <option value="1year">آخر سنة</option>
           </select>
-          <button className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:opacity-90">
+          <button className="flex items-center gap-2 px-3 py-2 text-sm bg-emerald-600 text-white rounded-xl hover:opacity-90">
             <Download className="w-4 h-4" /> تصدير
           </button>
         </div>
@@ -93,12 +93,12 @@ export function ProjectAnalyticsDashboard() {
         ].map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className={`rounded-xl border border-border p-4 ${card.bg}`}>
-              <div className="p-2 rounded-lg bg-background/60 w-fit mb-2">
+            <div key={i} className={`rounded-xl border border-gray-200 dark:border-gray-700 p-4 ${card.bg}`}>
+              <div className="p-2 rounded-xl bg-background/60 w-fit mb-2">
                 <Icon className={`w-5 h-5 ${card.color}`} />
               </div>
               <p className={`text-2xl ${card.color}`}>{card.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{card.label}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{card.label}</p>
             </div>
           );
         })}
@@ -107,16 +107,16 @@ export function ProjectAnalyticsDashboard() {
       {/* Status & Pipeline */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Projects by Status */}
-        <div className="bg-card border border-border rounded-xl p-5">
-          <h2 className="text-foreground mb-4">المشاريع حسب الحالة</h2>
+        <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+          <h2 className="text-gray-900 dark:text-white mb-4">المشاريع حسب الحالة</h2>
           <div className="space-y-3">
             {statusData.map((item, i) => (
               <div key={i}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm text-foreground">{item.value}</span>
-                  <span className="text-sm text-muted-foreground">{item.name}</span>
+                  <span className="text-sm text-gray-900 dark:text-white">{item.value}</span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">{item.name}</span>
                 </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div className="h-full rounded-full" style={{ width: `${(item.value / 1240) * 100}%`, backgroundColor: item.color }} />
                 </div>
               </div>
@@ -125,8 +125,8 @@ export function ProjectAnalyticsDashboard() {
         </div>
 
         {/* Pipeline Monthly */}
-        <div className="lg:col-span-2 bg-card border border-border rounded-xl p-5">
-          <h2 className="text-foreground mb-4">مسار المشاريع الشهري</h2>
+        <div className="lg:col-span-2 u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+          <h2 className="text-gray-900 dark:text-white mb-4">مسار المشاريع الشهري</h2>
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={pipelineMonthly}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -144,36 +144,36 @@ export function ProjectAnalyticsDashboard() {
       </div>
 
       {/* Bottlenecks */}
-      <div className="bg-card border border-border rounded-xl p-5">
+      <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-foreground">نقاط الاختناق في الاعتماد</h2>
-          <span className="text-xs text-muted-foreground">الهدف vs الفعلي (بالأيام)</span>
+          <h2 className="text-gray-900 dark:text-white">نقاط الاختناق في الاعتماد</h2>
+          <span className="text-xs text-gray-500 dark:text-gray-400">الهدف vs الفعلي (بالأيام)</span>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-right py-2 text-muted-foreground">المرحلة</th>
-                <th className="text-center py-2 text-muted-foreground">الهدف</th>
-                <th className="text-center py-2 text-muted-foreground">الفعلي</th>
-                <th className="text-center py-2 text-muted-foreground">متأخر</th>
-                <th className="text-right py-2 text-muted-foreground">الأداء</th>
+              <tr className="border-b border-gray-200 dark:border-gray-700">
+                <th className="text-right py-2 text-gray-500 dark:text-gray-400">المرحلة</th>
+                <th className="text-center py-2 text-gray-500 dark:text-gray-400">الهدف</th>
+                <th className="text-center py-2 text-gray-500 dark:text-gray-400">الفعلي</th>
+                <th className="text-center py-2 text-gray-500 dark:text-gray-400">متأخر</th>
+                <th className="text-right py-2 text-gray-500 dark:text-gray-400">الأداء</th>
               </tr>
             </thead>
             <tbody>
               {bottlenecks.map((b, i) => {
                 const isOver = b.avgDays > b.target;
                 return (
-                  <tr key={i} className="border-b border-border/50 hover:bg-muted/30">
-                    <td className="py-3 text-foreground">{b.stage}</td>
-                    <td className="py-3 text-center text-muted-foreground">{b.target} أيام</td>
+                  <tr key={i} className="border-b border-gray-200 dark:border-gray-700/50 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                    <td className="py-3 text-gray-900 dark:text-white">{b.stage}</td>
+                    <td className="py-3 text-center text-gray-500 dark:text-gray-400">{b.target} أيام</td>
                     <td className={`py-3 text-center ${isOver ? 'text-red-500' : 'text-emerald-600'}`}>{b.avgDays} أيام</td>
                     <td className="py-3 text-center">
-                      <span className={`px-2 py-0.5 rounded-full text-xs ${b.overdue > 20 ? 'bg-red-100 text-red-600 dark:bg-red-950/40' : 'bg-amber-100 text-amber-600 dark:bg-amber-950/40'}`}>{b.overdue}</span>
+                      <span className={`px-2 py-0.5 rounded-full text-xs ${b.overdue > 20 ? 'bg-red-100 text-red-600 dark:text-red-400 dark:bg-red-950/40' : 'bg-amber-100 text-amber-600 dark:bg-amber-950/40'}`}>{b.overdue}</span>
                     </td>
                     <td className="py-3">
                       <div className="flex items-center gap-2 justify-end">
-                        <div className="w-20 h-1.5 bg-muted rounded-full overflow-hidden">
+                        <div className="w-20 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div className={`h-full rounded-full ${isOver ? 'bg-red-400' : 'bg-emerald-500'}`} style={{ width: `${Math.min((b.target / b.avgDays) * 100, 100)}%` }} />
                         </div>
                         {isOver ? <AlertTriangle className="w-3.5 h-3.5 text-red-500" /> : <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />}
@@ -188,9 +188,9 @@ export function ProjectAnalyticsDashboard() {
       </div>
 
       {/* Completion Trends & AI Metrics */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-card border border-border rounded-xl p-5">
-          <h2 className="text-foreground mb-4">اتجاهات اكتمال المشاريع</h2>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+        <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+          <h2 className="text-gray-900 dark:text-white mb-4">اتجاهات اكتمال المشاريع</h2>
           <ResponsiveContainer width="100%" height={220}>
             <BarChart data={completionTrends}>
               <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -204,10 +204,10 @@ export function ProjectAnalyticsDashboard() {
           </ResponsiveContainer>
         </div>
 
-        <div className="bg-card border border-border rounded-xl p-5">
+        <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center gap-2 mb-4">
             <Sparkles className="w-5 h-5 text-violet-500" />
-            <h2 className="text-foreground">مقاييس مشاريع الذكاء الاصطناعي</h2>
+            <h2 className="text-gray-900 dark:text-white">مقاييس مشاريع الذكاء الاصطناعي</h2>
           </div>
           <ResponsiveContainer width="100%" height={220}>
             <LineChart data={aiMetrics}>
@@ -225,16 +225,16 @@ export function ProjectAnalyticsDashboard() {
       </div>
 
       {/* Sector Breakdown */}
-      <div className="bg-card border border-border rounded-xl p-5">
-        <h2 className="text-foreground mb-4">المشاريع حسب القطاع</h2>
+      <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+        <h2 className="text-gray-900 dark:text-white mb-4">المشاريع حسب القطاع</h2>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {sectorBreakdown.map((sector, i) => (
-            <div key={i} className="text-center p-4 rounded-xl border border-border bg-muted/30 hover:bg-muted/60 transition-colors">
+            <div key={i} className="text-center p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors">
               <div className="w-10 h-10 rounded-full mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: `${sector.color}20` }}>
                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: sector.color }} />
               </div>
-              <p className="text-xl text-foreground">{sector.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{sector.name}</p>
+              <p className="text-xl text-gray-900 dark:text-white">{sector.value}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{sector.name}</p>
             </div>
           ))}
         </div>

@@ -11,7 +11,7 @@ import {
 } from 'recharts';
 
 const kpis = [
-  { title: 'الجمعيات المسجلة', value: '247', change: '+18', isPositive: true, icon: Building2, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-950/40', border: 'border-blue-100 dark:border-blue-900' },
+  { title: 'الجمعيات المسجلة', value: '247', change: '+18', isPositive: true, icon: Building2, color: 'text-blue-600 dark:text-blue-400', bg: 'bg-blue-50 dark:bg-blue-950/40', border: 'border-blue-100 dark:border-blue-900' },
   { title: 'الجمعيات المؤهلة', value: '183', change: '+12', isPositive: true, icon: CheckCircle, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-950/40', border: 'border-emerald-100 dark:border-emerald-900' },
   { title: 'غير المؤهلة', value: '64', change: '-4', isPositive: false, icon: XCircle, color: 'text-red-500', bg: 'bg-red-50 dark:bg-red-950/40', border: 'border-red-100 dark:border-red-900' },
   { title: 'مشاريع الذكاء الاصطناعي', value: '1,240', change: '+89', isPositive: true, icon: Sparkles, color: 'text-violet-600', bg: 'bg-violet-50 dark:bg-violet-950/40', border: 'border-violet-100 dark:border-violet-900' },
@@ -19,9 +19,9 @@ const kpis = [
   { title: 'المشاريع المعتمدة', value: '412', change: '+34', isPositive: true, icon: ThumbsUp, color: 'text-teal-600', bg: 'bg-teal-50 dark:bg-teal-950/40', border: 'border-teal-100 dark:border-teal-900' },
   { title: 'جاهزة للتمويل', value: '198', change: '+21', isPositive: true, icon: Wallet, color: 'text-amber-600', bg: 'bg-amber-50 dark:bg-amber-950/40', border: 'border-amber-100 dark:border-amber-900' },
   { title: 'مشاريع مُقدَّمة', value: '156', change: '+18', isPositive: true, icon: Send, color: 'text-indigo-600', bg: 'bg-indigo-50 dark:bg-indigo-950/40', border: 'border-indigo-100 dark:border-indigo-900' },
-  { title: 'مشاريع ممولة', value: '89', change: '+11', isPositive: true, icon: Handshake, color: 'text-green-600', bg: 'bg-green-50 dark:bg-green-950/40', border: 'border-green-100 dark:border-green-900' },
+  { title: 'مشاريع ممولة', value: '89', change: '+11', isPositive: true, icon: Handshake, color: 'text-emerald-600 dark:text-emerald-400', bg: 'bg-green-50 dark:bg-green-950/40', border: 'border-green-100 dark:border-green-900' },
   { title: 'إجمالي المانحين', value: '3,847', change: '+234', isPositive: true, icon: Users, color: 'text-pink-600', bg: 'bg-pink-50 dark:bg-pink-950/40', border: 'border-pink-100 dark:border-pink-900' },
-  { title: 'فرص التمويل المفتوحة', value: '67', change: '+8', isPositive: true, icon: Target, color: 'text-orange-600', bg: 'bg-orange-50 dark:bg-orange-950/40', border: 'border-orange-100 dark:border-orange-900' },
+  { title: 'فرص التمويل المفتوحة', value: '67', change: '+8', isPositive: true, icon: Target, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-orange-50 dark:bg-orange-950/40', border: 'border-orange-100 dark:border-orange-900' },
   { title: 'الفرص الفائتة', value: '23', change: '+3', isPositive: false, icon: AlertCircle, color: 'text-rose-500', bg: 'bg-rose-50 dark:bg-rose-950/40', border: 'border-rose-100 dark:border-rose-900' },
   { title: 'إجمالي التمويل المُحقَّق', value: '12.4M ر.س', change: '+18.7%', isPositive: true, icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-950/40', border: 'border-emerald-100 dark:border-emerald-900' },
   { title: 'نسبة تحقيق الهدف', value: '74.3%', change: '+5.2%', isPositive: true, icon: Percent, color: 'text-cyan-600', bg: 'bg-cyan-50 dark:bg-cyan-950/40', border: 'border-cyan-100 dark:border-cyan-900' },
@@ -75,29 +75,29 @@ export function IncubatorOverviewDashboard() {
   };
 
   return (
-    <div className="p-6 space-y-6 text-right" dir="rtl">
+    <div className="p-6 space-y-6 md:space-y-8 text-right" dir="rtl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl text-foreground">لوحة القيادة التنفيذية الشاملة</h1>
-          <p className="text-muted-foreground mt-1 text-sm">نظرة 360° على أداء الحاضنة • آخر تحديث: الآن</p>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white">لوحة القيادة التنفيذية الشاملة</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1 text-sm">نظرة 360° على أداء الحاضنة • آخر تحديث: الآن</p>
         </div>
         <div className="flex items-center gap-2 flex-wrap">
           <select
             value={dateRange}
             onChange={e => setDateRange(e.target.value)}
-            className="text-sm border border-border rounded-lg px-3 py-2 bg-background text-foreground"
+            className="text-sm border border-gray-200 dark:border-gray-700 rounded-xl px-3 py-2 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
           >
             <option value="1month">آخر شهر</option>
             <option value="3months">آخر 3 أشهر</option>
             <option value="6months">آخر 6 أشهر</option>
             <option value="1year">آخر سنة</option>
           </select>
-          <button onClick={() => handleExport('excel')} className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-lg bg-background hover:bg-accent text-foreground transition-colors">
+          <button onClick={() => handleExport('excel')} className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-xl bg-background hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-900 dark:text-white transition-colors">
             <Download className="w-4 h-4" />
             Excel
           </button>
-          <button onClick={() => handleExport('pdf')} className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:opacity-90 transition-opacity">
+          <button onClick={() => handleExport('pdf')} className="flex items-center gap-2 px-3 py-2 text-sm bg-emerald-600 text-white rounded-xl hover:opacity-90 transition-opacity">
             <Download className="w-4 h-4" />
             PDF
           </button>
@@ -111,7 +111,7 @@ export function IncubatorOverviewDashboard() {
           return (
             <div key={i} className={`rounded-xl border p-4 ${kpi.bg} ${kpi.border} transition-shadow hover:shadow-md`}>
               <div className="flex items-start justify-between mb-2">
-                <div className={`p-2 rounded-lg bg-background/60`}>
+                <div className={`p-2 rounded-xl bg-background/60`}>
                   <Icon className={`w-4 h-4 ${kpi.color}`} />
                 </div>
                 <span className={`flex items-center gap-0.5 text-xs ${kpi.isPositive ? 'text-emerald-600' : 'text-red-500'}`}>
@@ -120,7 +120,7 @@ export function IncubatorOverviewDashboard() {
                 </span>
               </div>
               <p className={`text-xl ${kpi.color}`}>{kpi.value}</p>
-              <p className="text-xs text-muted-foreground mt-1 leading-tight">{kpi.title}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-tight">{kpi.title}</p>
             </div>
           );
         })}
@@ -129,10 +129,10 @@ export function IncubatorOverviewDashboard() {
       {/* Charts Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Trend Chart */}
-        <div className="lg:col-span-2 bg-card border border-border rounded-xl p-5">
+        <div className="lg:col-span-2 u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-foreground">اتجاهات النمو</h2>
-            <span className="text-xs text-muted-foreground">آخر 6 أشهر</span>
+            <h2 className="text-gray-900 dark:text-white">اتجاهات النمو</h2>
+            <span className="text-xs text-gray-500 dark:text-gray-400">آخر 6 أشهر</span>
           </div>
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={trendData}>
@@ -158,16 +158,16 @@ export function IncubatorOverviewDashboard() {
         </div>
 
         {/* Pipeline Funnel */}
-        <div className="bg-card border border-border rounded-xl p-5">
-          <h2 className="text-foreground mb-4">مسار المؤسسات</h2>
+        <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
+          <h2 className="text-gray-900 dark:text-white mb-4">مسار المؤسسات</h2>
           <div className="space-y-3">
             {pipelineData.map((item, i) => (
               <div key={i}>
                 <div className="flex justify-between text-sm mb-1">
-                  <span className="text-muted-foreground">{item.name}</span>
-                  <span className="text-foreground">{item.value}</span>
+                  <span className="text-gray-500 dark:text-gray-400">{item.name}</span>
+                  <span className="text-gray-900 dark:text-white">{item.value}</span>
                 </div>
-                <div className="h-2 bg-muted rounded-full overflow-hidden">
+                <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{ width: `${(item.value / 247) * 100}%`, backgroundColor: item.color }}
@@ -176,7 +176,7 @@ export function IncubatorOverviewDashboard() {
               </div>
             ))}
           </div>
-          <div className="mt-4 p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-lg border border-emerald-100 dark:border-emerald-900">
+          <div className="mt-4 p-3 bg-emerald-50 dark:bg-emerald-950/30 rounded-xl border border-emerald-100 dark:border-emerald-900">
             <p className="text-xs text-emerald-700 dark:text-emerald-400">معدل التحويل الكلي: <span className="font-semibold">36%</span></p>
           </div>
         </div>
@@ -185,10 +185,10 @@ export function IncubatorOverviewDashboard() {
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activity */}
-        <div className="bg-card border border-border rounded-xl p-5">
+        <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-foreground">النشاط الأخير</h2>
-            <button className="text-xs text-primary hover:underline flex items-center gap-1">
+            <h2 className="text-gray-900 dark:text-white">النشاط الأخير</h2>
+            <button className="text-xs text-emerald-600 hover:underline flex items-center gap-1">
               عرض الكل <ChevronRight className="w-3 h-3" />
             </button>
           </div>
@@ -197,12 +197,12 @@ export function IncubatorOverviewDashboard() {
               const Icon = item.icon;
               return (
                 <div key={item.id} className="flex items-start gap-3">
-                  <div className="p-1.5 rounded-lg bg-muted flex-shrink-0">
+                  <div className="p-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 flex-shrink-0">
                     <Icon className={`w-3.5 h-3.5 ${item.color}`} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm text-foreground leading-snug">{item.text}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+                    <p className="text-sm text-gray-900 dark:text-white leading-snug">{item.text}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 flex items-center gap-1">
                       <Clock className="w-3 h-3" />{item.time}
                     </p>
                   </div>
@@ -213,32 +213,32 @@ export function IncubatorOverviewDashboard() {
         </div>
 
         {/* Alerts */}
-        <div className="bg-card border border-border rounded-xl p-5">
+        <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-foreground">التنبيهات</h2>
-            <Bell className="w-4 h-4 text-muted-foreground" />
+            <h2 className="text-gray-900 dark:text-white">التنبيهات</h2>
+            <Bell className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </div>
           <div className="space-y-3">
             {alerts.map(alert => (
-              <div key={alert.id} className={`p-3 rounded-lg border ${alert.color}`}>
-                <p className="text-sm text-foreground">{alert.title}</p>
-                <p className="text-xs text-muted-foreground mt-1">{alert.desc}</p>
+              <div key={alert.id} className={`p-3 rounded-xl border ${alert.color}`}>
+                <p className="text-sm text-gray-900 dark:text-white">{alert.title}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{alert.desc}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Quick Insights */}
-        <div className="bg-card border border-border rounded-xl p-5">
+        <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-foreground">رؤى سريعة</h2>
+            <h2 className="text-gray-900 dark:text-white">رؤى سريعة</h2>
             <Zap className="w-4 h-4 text-amber-500" />
           </div>
           <div className="space-y-3">
             {insights.map((insight, i) => (
-              <div key={i} className="flex items-start gap-2 p-3 rounded-lg bg-muted/50">
+              <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-gray-50 dark:bg-gray-800/50">
                 <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${insight.positive === true ? 'bg-emerald-500' : insight.positive === false ? 'bg-red-500' : 'bg-blue-500'}`} />
-                <p className="text-sm text-foreground leading-snug">{insight.text}</p>
+                <p className="text-sm text-gray-900 dark:text-white leading-snug">{insight.text}</p>
               </div>
             ))}
           </div>

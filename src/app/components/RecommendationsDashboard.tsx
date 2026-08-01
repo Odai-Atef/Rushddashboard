@@ -144,26 +144,26 @@ export function RecommendationsDashboard() {
   const getRiskColor = (risk: string) => {
     switch (risk) {
       case 'low':
-        return 'bg-green-500/20 text-green-600 dark:text-green-400 border-green-500/30';
+        return 'bg-green-500/20 text-emerald-600 dark:text-emerald-400 dark:text-green-400 border-green-500/30';
       case 'medium':
         return 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border-yellow-500/30';
       case 'high':
-        return 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/30';
+        return 'bg-red-500/20 text-red-600 dark:text-red-400 dark:text-red-400 border-red-500/30';
       default:
-        return 'bg-muted text-muted-foreground';
+        return 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case 'urgent':
-        return 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/30';
+        return 'bg-red-500/20 text-red-600 dark:text-red-400 dark:text-red-400 border-red-500/30';
       case 'high':
-        return 'bg-orange-500/20 text-orange-600 dark:text-orange-400 border-orange-500/30';
+        return 'bg-orange-500/20 text-amber-600 dark:text-amber-400 dark:text-orange-400 border-orange-500/30';
       case 'medium':
-        return 'bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-500/30';
+        return 'bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400 border-blue-500/30';
       default:
-        return 'bg-muted text-muted-foreground';
+        return 'bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400';
     }
   };
 
@@ -194,15 +194,15 @@ export function RecommendationsDashboard() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 md:space-y-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h2 className="text-3xl mb-2">لوحة التوصيات</h2>
-          <p className="text-muted-foreground text-lg">ماذا يجب أن يفعل المستثمر الآن؟</p>
+          <p className="text-gray-500 dark:text-gray-400 text-lg">ماذا يجب أن يفعل المستثمر الآن؟</p>
         </div>
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors">
+          <button className="flex items-center gap-2 px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
             <FileDown className="w-4 h-4" />
             <span>تصدير التقرير</span>
           </button>
@@ -218,25 +218,25 @@ export function RecommendationsDashboard() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
               <h3 className="text-xl">الملخص التنفيذي من الذكاء الاصطناعي</h3>
-              <span className="px-2 py-1 bg-purple-500/20 text-purple-600 dark:text-purple-400 text-xs rounded-full">AI Executive</span>
+              <span className="px-2 py-1 bg-purple-500/20 text-violet-600 dark:text-violet-400 dark:text-purple-400 text-xs rounded-full">AI Executive</span>
             </div>
-            <p className="text-foreground leading-relaxed text-base mb-4">
-              بناءً على التحليل الشامل لجميع المؤشرات، تم تحديد <span className="font-bold text-purple-600 dark:text-purple-400">6 فرص استراتيجية</span> لتحسين الأداء.
+            <p className="text-gray-900 dark:text-white leading-relaxed text-base mb-4">
+              بناءً على التحليل الشامل لجميع المؤشرات، تم تحديد <span className="font-bold text-violet-600 dark:text-violet-400 dark:text-purple-400">6 فرص استراتيجية</span> لتحسين الأداء.
               الأولوية القصوى هي <span className="font-bold">توسيع قناة B2B</span> التي تعد بزيادة الإيرادات بنسبة 32% مع مخاطر منخفضة.
               التركيز على <span className="font-bold">الاحتفاظ بالعملاء المميزين</span> و<span className="font-bold">تحسين الجودة التشغيلية</span> سيضمن نمواً مستداماً.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-card/50 rounded-lg border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
               <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-1">التأثير المتوقع</p>
-                <p className="text-2xl font-bold text-green-600">+2.8M ر.س</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">التأثير المتوقع</p>
+                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">+2.8M ر.س</p>
               </div>
-              <div className="text-center border-x border-border">
-                <p className="text-sm text-muted-foreground mb-1">الاستثمار المطلوب</p>
-                <p className="text-2xl font-bold text-blue-600">1.13M ر.س</p>
+              <div className="text-center border-x border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">الاستثمار المطلوب</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">1.13M ر.س</p>
               </div>
               <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-1">العائد المتوقع</p>
-                <p className="text-2xl font-bold text-purple-600">+247%</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">العائد المتوقع</p>
+                <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">+247%</p>
               </div>
             </div>
           </div>
@@ -245,7 +245,7 @@ export function RecommendationsDashboard() {
 
       {/* Filters */}
       <div className="flex items-center gap-3 overflow-x-auto pb-2">
-        <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
+        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 flex-shrink-0">
           <Filter className="w-4 h-4" />
           <span className="text-sm">تصفية:</span>
         </div>
@@ -257,8 +257,8 @@ export function RecommendationsDashboard() {
               onClick={() => setActiveFilter(filter.id)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors flex-shrink-0 ${
                 activeFilter === filter.id
-                  ? 'bg-primary text-primary-foreground'
-                  : 'bg-card border border-border hover:bg-accent'
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-800'
               }`}
             >
               <Icon className="w-4 h-4" />
@@ -275,14 +275,14 @@ export function RecommendationsDashboard() {
           return (
             <div
               key={rec.id}
-              className="bg-card border border-border rounded-xl overflow-hidden hover:shadow-xl transition-shadow"
+              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all duration-200"
             >
               <div className="p-6">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-4">
                   <div className="flex items-start gap-3 flex-1">
-                    <div className="p-3 bg-primary/10 rounded-lg">
-                      <Icon className="w-6 h-6 text-primary" />
+                    <div className="p-3 bg-emerald-500/10 rounded-lg">
+                      <Icon className="w-6 h-6 text-emerald-600" />
                     </div>
                     <div className="flex-1">
                       <h3 className="text-xl mb-2">{rec.title}</h3>
@@ -295,7 +295,7 @@ export function RecommendationsDashboard() {
                           {rec.riskLevel === 'high' ? <AlertTriangle className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
                           {getRiskLabel(rec.riskLevel)}
                         </span>
-                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/30">
+                        <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400 border border-blue-500/30">
                           <Clock className="w-3 h-3" />
                           {rec.timeline}
                         </span>
@@ -306,19 +306,19 @@ export function RecommendationsDashboard() {
 
                 {/* Content */}
                 <div className="space-y-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                     {/* Right Column */}
                     <div className="space-y-4">
-                      <div className="p-4 bg-muted/30 rounded-lg">
-                        <p className="text-sm text-muted-foreground mb-1">السبب</p>
+                      <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">السبب</p>
                         <p className="text-sm leading-relaxed">{rec.reason}</p>
                       </div>
 
                       <div className="p-4 bg-gradient-to-l from-green-500/10 to-transparent border border-green-500/20 rounded-lg">
-                        <p className="text-sm text-muted-foreground mb-1">التأثير المتوقع</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">التأثير المتوقع</p>
                         <div className="flex items-center gap-2">
                           <p className="text-sm">{rec.expectedImpact}</p>
-                          <span className="flex items-center gap-1 text-lg font-bold text-green-600">
+                          <span className="flex items-center gap-1 text-lg font-bold text-emerald-600 dark:text-emerald-400">
                             <ArrowUpRight className="w-5 h-5" />
                             {rec.impactValue}
                           </span>
@@ -328,30 +328,30 @@ export function RecommendationsDashboard() {
 
                     {/* Left Column */}
                     <div className="space-y-4">
-                      <div className="p-4 bg-muted/30 rounded-lg">
-                        <p className="text-sm text-muted-foreground mb-1">الإجراء المقترح</p>
+                      <div className="p-4 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">الإجراء المقترح</p>
                         <p className="text-sm leading-relaxed">{rec.suggestedAction}</p>
                       </div>
 
                       <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
-                        <p className="text-sm text-muted-foreground mb-1">اللوحة ذات الصلة</p>
-                        <p className="text-sm font-medium text-blue-600 dark:text-blue-400">{rec.relatedDashboard}</p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">اللوحة ذات الصلة</p>
+                        <p className="text-sm font-medium text-blue-600 dark:text-blue-400 dark:text-blue-400">{rec.relatedDashboard}</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-border">
-                  <button className="flex items-center gap-2 px-6 py-2.5 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+                <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                  <button className="flex items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
                     <CheckCircle className="w-4 h-4" />
                     <span>اعتماد التوصية</span>
                   </button>
-                  <button className="flex items-center gap-2 px-6 py-2.5 border border-border hover:bg-accent rounded-lg transition-colors">
+                  <button className="flex items-center gap-2 px-6 py-2.5 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
                     <Target className="w-4 h-4" />
                     <span>عرض خطة العمل</span>
                   </button>
-                  <button className="px-6 py-2.5 border border-border hover:bg-accent rounded-lg transition-colors">
+                  <button className="px-6 py-2.5 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
                     تأجيل
                   </button>
                 </div>
@@ -362,23 +362,23 @@ export function RecommendationsDashboard() {
       </div>
 
       {/* Action Plan Timeline */}
-      <div className="bg-card border border-border rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
         <div className="flex items-center gap-2 mb-6">
-          <Clock className="w-5 h-5 text-primary" />
+          <Clock className="w-5 h-5 text-emerald-600" />
           <h3 className="text-lg">الجدول الزمني للتنفيذ</h3>
         </div>
         <div className="space-y-4">
           {filteredRecommendations.slice(0, 4).map((rec, index) => (
             <div key={rec.id} className="flex items-start gap-4">
               <div className="flex flex-col items-center">
-                <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium">
+                <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-sm font-medium">
                   {index + 1}
                 </div>
                 {index < 3 && <div className="w-0.5 h-12 bg-border mt-2"></div>}
               </div>
               <div className="flex-1 pb-4">
                 <p className="font-medium mb-1">{rec.title}</p>
-                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                <div className="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
                   <span className="flex items-center gap-1">
                     <Clock className="w-3 h-3" />
                     {rec.timeline}

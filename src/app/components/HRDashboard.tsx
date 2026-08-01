@@ -74,8 +74,8 @@ export function HRDashboard() {
       change: '+3.8%',
       isPositive: true,
       icon: Calendar,
-      color: 'text-chart-1',
-      bgColor: 'bg-chart-1/10'
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50 dark:bg-blue-500/10'
     },
     {
       title: 'متوسط أداء الموظفين',
@@ -83,8 +83,8 @@ export function HRDashboard() {
       change: '+5.2',
       isPositive: true,
       icon: Award,
-      color: 'text-chart-2',
-      bgColor: 'bg-chart-2/10'
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50 dark:bg-emerald-500/10'
     },
     {
       title: 'معدل الاستقالات',
@@ -92,8 +92,8 @@ export function HRDashboard() {
       change: '-2.1%',
       isPositive: true,
       icon: UserMinus,
-      color: 'text-chart-3',
-      bgColor: 'bg-chart-3/10'
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-50 dark:bg-amber-500/10'
     },
     {
       title: 'إتمام التدريب',
@@ -101,45 +101,45 @@ export function HRDashboard() {
       change: '+12.5%',
       isPositive: true,
       icon: GraduationCap,
-      color: 'text-chart-4',
-      bgColor: 'bg-chart-4/10'
+      color: 'text-violet-600',
+      bgColor: 'bg-violet-50 dark:bg-violet-500/10'
     },
   ];
 
   const totalResignations = resignationReasonsData.reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 md:space-y-8">
       {/* Header */}
-      <div>
-        <h2 className="text-3xl mb-2">لوحة الموارد البشرية</h2>
-        <p className="text-muted-foreground">إدارة شاملة لرأس المال البشري والأداء والتطوير</p>
+      <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">لوحة الموارد البشرية</h2>
+        <p className="text-gray-500 dark:text-gray-400 text-base">إدارة شاملة لرأس المال البشري والأداء والتطوير</p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
         {kpis.map((kpi, index) => {
           const Icon = kpi.icon;
           return (
-            <div key={index} className="bg-card border border-border rounded-xl p-6 hover:shadow-lg transition-shadow">
+            <div key={index} className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 hover:shadow-md dark:hover:shadow-lg dark:hover:shadow-emerald-500/10 transition-all duration-200">
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 ${kpi.bgColor} rounded-lg`}>
                   <Icon className={`w-5 h-5 ${kpi.color}`} />
                 </div>
-                <div className={`flex items-center gap-1 text-sm ${kpi.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`flex items-center gap-1 text-sm ${kpi.isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
                   {kpi.isPositive ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                   {kpi.change}
                 </div>
               </div>
-              <h3 className="text-muted-foreground text-sm mb-2">{kpi.title}</h3>
-              <p className="text-2xl">{kpi.value}</p>
+              <h3 className="text-gray-500 dark:text-gray-400 text-sm mb-2">{kpi.title}</h3>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{kpi.value}</p>
             </div>
           );
         })}
       </div>
 
       {/* AI Insight Card */}
-      <div className="bg-gradient-to-l from-blue-500/10 via-purple-500/10 to-transparent border border-blue-500/20 rounded-xl p-6">
+      <div className="bg-gradient-to-l from-blue-500/5 via-violet-500/5 to-transparent border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
             <Sparkles className="w-6 h-6 text-white" />
@@ -147,46 +147,46 @@ export function HRDashboard() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <h3 className="text-lg">رؤية الذكاء الاصطناعي</h3>
-              <span className="px-2 py-1 bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs rounded-full">AI</span>
+              <span className="px-2 py-1 bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400 text-xs rounded-full">AI</span>
             </div>
-            <p className="text-muted-foreground leading-relaxed">
-              التحليل يُظهر تحسناً في <span className="text-foreground font-medium">معدل الحضور</span> بنسبة 5% بعد تطبيق نظام الحضور المرن.
-              <span className="text-foreground font-medium"> 23% من الموظفين</span> حصلوا على تقييم ممتاز مما يعكس ثقافة أداء قوية.
-              <span className="text-orange-600 dark:text-orange-400 font-medium"> الفرص الوظيفية الأفضل</span> تمثل 42% من أسباب الاستقالات وتحتاج استراتيجية احتفاظ.
+            <p className="text-gray-500 dark:text-gray-400 leading-relaxed">
+              التحليل يُظهر تحسناً في <span className="text-gray-900 dark:text-white font-medium">معدل الحضور</span> بنسبة 5% بعد تطبيق نظام الحضور المرن.
+              <span className="text-gray-900 dark:text-white font-medium"> 23% من الموظفين</span> حصلوا على تقييم ممتاز مما يعكس ثقافة أداء قوية.
+              <span className="text-amber-600 dark:text-amber-400 dark:text-orange-400 font-medium"> الفرص الوظيفية الأفضل</span> تمثل 42% من أسباب الاستقالات وتحتاج استراتيجية احتفاظ.
             </p>
           </div>
         </div>
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Attendance Trend */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg mb-1">اتجاه الحضور</h3>
-            <p className="text-sm text-muted-foreground">معدل الحضور الشهري مقارنة بالمستهدف</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">معدل الحضور الشهري مقارنة بالمستهدف</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={attendanceData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
               <XAxis
                 dataKey="month"
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
               />
               <YAxis
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
                 domain={[85, 100]}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
                   borderRadius: '0.5rem',
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                 }}
-                labelStyle={{ color: 'var(--color-foreground)', fontWeight: 'bold' }}
+                labelStyle={{ color: '#111827', fontWeight: 'bold' }}
                 formatter={(value: number, name: string) => {
                   const label = name === 'rate' ? 'معدل الحضور' : 'المستهدف';
                   return [`${value}%`, label];
@@ -199,7 +199,7 @@ export function HRDashboard() {
               <Line
                 type="monotone"
                 dataKey="rate"
-                stroke="var(--color-chart-1)"
+                stroke="#3b82f6"
                 strokeWidth={3}
                 dot={{ fill: 'var(--color-chart-1)', r: 5 }}
                 activeDot={{ r: 7 }}
@@ -207,37 +207,37 @@ export function HRDashboard() {
               <Line
                 type="monotone"
                 dataKey="target"
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 strokeWidth={2}
                 strokeDasharray="5 5"
-                dot={{ fill: 'var(--color-muted-foreground)', r: 4 }}
+                dot={{ fill: '#9ca3af', r: 4 }}
               />
             </LineChart>
           </ResponsiveContainer>
         </div>
 
         {/* Employee Performance Distribution */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg mb-1">توزيع أداء الموظفين</h3>
-            <p className="text-sm text-muted-foreground">عدد الموظفين حسب التقييم</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">عدد الموظفين حسب التقييم</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={performanceDistribution}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
               <XAxis
                 dataKey="rating"
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
               />
               <YAxis
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
                   borderRadius: '0.5rem',
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                 }}
@@ -245,7 +245,7 @@ export function HRDashboard() {
               />
               <Bar
                 dataKey="count"
-                fill="var(--color-chart-2)"
+                fill="#10b981"
                 radius={[8, 8, 0, 0]}
               />
             </BarChart>
@@ -254,12 +254,12 @@ export function HRDashboard() {
       </div>
 
       {/* Resignation Reasons Chart */}
-      <div className="bg-card border border-border rounded-xl p-6">
+      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
         <div className="mb-6">
           <h3 className="text-lg mb-1">أسباب الاستقالات</h3>
-          <p className="text-sm text-muted-foreground">تحليل الأسباب الرئيسية لترك الموظفين</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">تحليل الأسباب الرئيسية لترك الموظفين</p>
         </div>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
           <ResponsiveContainer width="100%" height={280}>
             <PieChart>
               <Pie
@@ -278,8 +278,8 @@ export function HRDashboard() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
                   borderRadius: '0.5rem',
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                 }}
@@ -290,13 +290,13 @@ export function HRDashboard() {
 
           <div className="flex flex-col justify-center space-y-3">
             {resignationReasonsData.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-muted/30 rounded-lg">
+              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800/50 rounded-lg">
                 <div className="flex items-center gap-3">
                   <div className="w-4 h-4 rounded-full" style={{ backgroundColor: item.color }}></div>
                   <span className="font-medium">{item.name}</span>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-muted-foreground text-sm">
+                  <span className="text-gray-500 dark:text-gray-400 text-sm">
                     {item.value} حالة
                   </span>
                   <span className="font-medium text-sm">
@@ -310,48 +310,48 @@ export function HRDashboard() {
       </div>
 
       {/* Training Progress Table */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-border">
+      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2 mb-1">
-            <GraduationCap className="w-5 h-5 text-chart-4" />
+            <GraduationCap className="w-5 h-5 text-violet-600" />
             <h3 className="text-lg">البرامج التدريبية</h3>
           </div>
-          <p className="text-sm text-muted-foreground">تقدم الموظفين في البرامج التدريبية</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">تقدم الموظفين في البرامج التدريبية</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-muted/50">
+            <thead className="bg-gray-50 dark:bg-gray-800/50">
               <tr>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">#</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">البرنامج التدريبي</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">المسجلون</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">المكتملون</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">قيد التنفيذ</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">نسبة الإنجاز</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">#</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">البرنامج التدريبي</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">المسجلون</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">المكتملون</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">قيد التنفيذ</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">نسبة الإنجاز</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {trainingProgress.map((program) => (
-                <tr key={program.id} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-6 py-4 text-sm text-muted-foreground">{program.id}</td>
+                <tr key={program.id} className="hover:bg-gray-50 dark:bg-gray-800/50 transition-colors">
+                  <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{program.id}</td>
                   <td className="px-6 py-4">
                     <p className="font-medium">{program.program}</p>
                   </td>
-                  <td className="px-6 py-4 text-muted-foreground">
+                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                     {program.enrolled} موظف
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <span className="text-green-600 font-medium">{program.completed}</span>
+                      <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+                      <span className="text-emerald-600 dark:text-emerald-400 font-medium">{program.completed}</span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-muted-foreground">
+                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                     {program.inProgress} موظف
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex-1 bg-muted rounded-full h-2 overflow-hidden min-w-[100px]">
+                      <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden min-w-[100px]">
                         <div
                           className={`h-full rounded-full ${
                             program.completion >= 80
@@ -374,7 +374,7 @@ export function HRDashboard() {
       </div>
 
       {/* Recommendation Card */}
-      <div className="bg-gradient-to-l from-green-500/10 via-emerald-500/10 to-transparent border border-green-500/20 rounded-xl p-6">
+      <div className="bg-gradient-to-l from-emerald-500/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/30 rounded-2xl p-6">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl">
             <Target className="w-6 h-6 text-white" />
@@ -382,21 +382,21 @@ export function HRDashboard() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-2">
               <h3 className="text-lg">التوصية الإستراتيجية</h3>
-              <span className="px-2 py-1 bg-green-500/20 text-green-600 dark:text-green-400 text-xs rounded-full">أولوية عالية</span>
+              <span className="px-2 py-1 bg-green-500/20 text-emerald-600 dark:text-emerald-400 dark:text-green-400 text-xs rounded-full">أولوية عالية</span>
             </div>
-            <p className="text-muted-foreground leading-relaxed mb-4">
-              نوصي بتطوير <span className="text-foreground font-medium">برنامج مسارات وظيفية واضحة</span> لتقليل الاستقالات بسبب الفرص الأفضل بنسبة 35%.
-              إطلاق <span className="text-foreground font-medium">برنامج حوافز أداء</span> للموظفين ذوي التقييم الممتاز سيرفع متوسط الأداء إلى 85/100.
-              تكثيف البرامج التدريبية في <span className="text-green-600 font-medium">الذكاء الاصطناعي</span> سيعزز القدرات التنافسية للجهه.
+            <p className="text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
+              نوصي بتطوير <span className="text-gray-900 dark:text-white font-medium">برنامج مسارات وظيفية واضحة</span> لتقليل الاستقالات بسبب الفرص الأفضل بنسبة 35%.
+              إطلاق <span className="text-gray-900 dark:text-white font-medium">برنامج حوافز أداء</span> للموظفين ذوي التقييم الممتاز سيرفع متوسط الأداء إلى 85/100.
+              تكثيف البرامج التدريبية في <span className="text-emerald-600 dark:text-emerald-400 font-medium">الذكاء الاصطناعي</span> سيعزز القدرات التنافسية للجهه.
             </p>
             <div className="flex flex-wrap gap-3">
-              <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+              <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors">
                 تطبيق التوصية
               </button>
-              <button className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors">
+              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
                 عرض خطة الاحتفاظ
               </button>
-              <button className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors">
+              <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
                 تأجيل
               </button>
             </div>

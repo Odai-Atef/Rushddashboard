@@ -42,7 +42,7 @@ const topMatches = [
 
 export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardProps) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 md:space-y-8">
       {/* AI Insight Banner */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-l from-violet-600 to-indigo-700 p-6 text-white">
         <div className="absolute inset-0 opacity-10" style={{ backgroundImage: 'radial-gradient(circle at 20% 50%, white 1px, transparent 1px), radial-gradient(circle at 80% 20%, white 1px, transparent 1px)', backgroundSize: '40px 40px' }} />

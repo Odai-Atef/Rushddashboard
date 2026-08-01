@@ -136,7 +136,7 @@ export function ProjectDashboardPage() {
 
   if (isLoading || isCheckingQualification || notificationsLoading) {
     return (
-      <div className="min-h-full bg-gray-50 p-3 sm:p-6 flex items-center justify-center">
+      <div className="min-h-full bg-gray-50 dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex items-center justify-center">
         <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
       </div>
     );
@@ -166,13 +166,13 @@ export function ProjectDashboardPage() {
       : '/dashboard/charity-assessment';
 
     return (
-      <div className="min-h-full bg-gray-50 p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+      <div className="min-h-full bg-gray-50 dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
         <div className="bg-white rounded-xl border border-red-200 shadow-sm p-6 sm:p-12 text-center max-w-lg mx-4">
           <AlertTriangle className="w-12 sm:w-16 h-12 sm:h-16 text-red-500 mx-auto mb-4 sm:mb-6" />
           <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-red-700">{title}</h2>
-          <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">{subtitle}</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">{subtitle}</p>
           {assessmentMissing && hasOrg && (
-            <p className="text-gray-600 mb-4 sm:mb-6 text-sm sm:text-base">
+            <p className="text-gray-500 dark:text-gray-400 mb-4 sm:mb-6 text-sm sm:text-base">
               يمكنك بدء التقييم الآن{" "}
               <button
                 onClick={() => navigate('/dashboard/charity-assessment')}
@@ -201,7 +201,7 @@ export function ProjectDashboardPage() {
     }
     if (!isProjectManager) {
       return (
-        <div className="min-h-full bg-gray-50 p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+        <div className="min-h-full bg-gray-50 dark:bg-gray-950 p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
           <div className="text-red-600 text-center">{error || 'لا توجد بيانات'}</div>
         </div>
       );
@@ -219,13 +219,13 @@ export function ProjectDashboardPage() {
   };
 
   return (
-    <div className="min-h-full bg-gray-50 p-3 sm:p-6">
-      <div className="space-y-4 sm:space-y-6">
+    <div className="min-h-full bg-gray-50 dark:bg-gray-950 p-4 sm:p-6 lg:p-8">
+      <div className="space-y-4 sm:space-y-6 md:space-y-8">
         {/* Header */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
           <div className="w-full">
-            <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">لوحة المشاريع</h1>
-            <p className="text-gray-600 text-sm sm:text-base">نظرة شاملة على جميع المشاريع والأنشطة</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">لوحة المشاريع</h1>
+            <p className="text-gray-500 dark:text-gray-400 text-sm sm:text-base">نظرة شاملة على جميع المشاريع والأنشطة</p>
           </div>
           {(roleSlug === 'entity-managers' || roleSlug === 'project-managers') && (
             <button
@@ -240,36 +240,36 @@ export function ProjectDashboardPage() {
 
         {/* Quick Actions */}
         <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
-          <h3 className="text-base sm:text-lg font-semibold mb-4">إجراءات سريعة</h3>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">إجراءات سريعة</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
             <button
               onClick={() => navigate('/dashboard/project-management/list')}
-              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors text-center"
             >
-              <List className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 mx-auto mb-2" />
+              <List className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
               <p className="font-medium text-sm">عرض جميع المشاريع</p>
             </button>
             {(roleSlug === 'entity-managers' || roleSlug === 'project-managers') && (
               <button
                 onClick={() => navigate('/dashboard/project-management/create')}
-                className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+                className="p-3 sm:p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors text-center"
               >
-                <Plus className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 mx-auto mb-2" />
+                <Plus className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
                 <p className="font-medium text-sm">إنشاء مشروع جديد</p>
               </button>
             )}
             <button
               onClick={() => navigate('/dashboard/project-management/reporting')}
-              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-colors text-center"
+              className="p-3 sm:p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10 transition-colors text-center"
             >
-              <BarChart3 className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 mx-auto mb-2" />
+              <BarChart3 className="w-5 sm:w-6 h-5 sm:h-6 text-gray-400 dark:text-gray-500 mx-auto mb-2" />
               <p className="font-medium text-sm">التقارير الإدارية</p>
             </button>
           </div>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4 items-stretch">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4 md:gap-6 items-stretch">
           {/* Total Projects */}
           <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10 flex flex-col justify-between h-full">
             <div>
@@ -381,7 +381,7 @@ export function ProjectDashboardPage() {
         {/* Status Distribution Chart */}
         {isProjectManager && (
           <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-base sm:text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">توزيع حالات المشاريع</h3>
             <div className="overflow-x-auto">
               {statusDistribution.length > 0 ? (
                 <ResponsiveContainer width="100%" height={300} minWidth={300}>
@@ -404,7 +404,7 @@ export function ProjectDashboardPage() {
 
         {!isProjectManager && statusDistribution.length > 0 && (
           <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
-            <h3 className="text-base sm:text-lg font-semibold mb-4">توزيع حالات المشاريع</h3>
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">توزيع حالات المشاريع</h3>
             <div className="overflow-x-auto">
               <ResponsiveContainer width="100%" height={300} minWidth={300}>
                 <BarChart data={statusDistribution} margin={{ top: 10, right: 10, left: 0, bottom: 60 }}>
@@ -426,7 +426,7 @@ export function ProjectDashboardPage() {
               <h3 className="text-base sm:text-lg font-semibold">النشاط الأخير</h3>
               <button
                 onClick={() => navigate('/dashboard/project-management/activity')}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300"
               >
                 عرض الكل
               </button>
@@ -438,8 +438,8 @@ export function ProjectDashboardPage() {
                     key={idx}
                     className="flex items-start gap-3 p-2 sm:p-3 hover:bg-gray-50 rounded-lg transition-colors"
                   >
-                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                      <User className="w-4 h-4 text-blue-600" />
+                    <div className="w-8 h-8 bg-blue-100 dark:bg-blue-500/20 rounded-full flex items-center justify-center flex-shrink-0">
+                      <User className="w-4 h-4 text-blue-600 dark:text-blue-400 dark:text-blue-400" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm">
@@ -447,12 +447,12 @@ export function ProjectDashboardPage() {
                         <span className="text-gray-600">{activity.action}</span>{' '}
                         <span className="font-medium text-blue-600">{activity.projectName}</span>
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{timeAgo(activity.timestamp)}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{timeAgo(activity.timestamp)}</p>
                     </div>
                   </div>
                 ))
               ) : (
-                <div className="text-gray-500 text-center py-4">لا يوجد نشاط حديث</div>
+                <div className="text-gray-500 dark:text-gray-400 text-center py-4">لا يوجد نشاط حديث</div>
               )}
             </div>
           </div>
@@ -471,12 +471,12 @@ export function ProjectDashboardPage() {
                 </h3>
                 <button
                   onClick={() => navigate('/dashboard/notifications')}
-                  className="text-sm text-blue-600 hover:text-blue-700"
+                  className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300"
                 >
                   عرض الكل
                 </button>
               </div>
-              <div className="space-y-3">
+              <div className="space-y-3 sm:space-y-4">
                 {notifications.filter((n) => n.status !== 'READ').length > 0 ? (
                   notifications
                     .filter((n) => n.status !== 'READ')
@@ -485,20 +485,20 @@ export function ProjectDashboardPage() {
                       <div
                         key={notification.id}
                         onClick={() => navigate('/dashboard/notifications')}
-                        className="flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer border-r-4 border-r-amber-500"
+                        className="flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-colors cursor-pointer border-r-4 border-r-amber-500"
                       >
-                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-amber-100">
-                          <AlertTriangle className="w-4 h-4 text-amber-600" />
+                        <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-amber-100 dark:bg-amber-500/20">
+                          <AlertTriangle className="w-4 h-4 text-amber-600 dark:text-amber-400" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-medium">{notification.title}</p>
-                          <p className="text-xs text-gray-500 line-clamp-2">{notification.body}</p>
-                          <p className="text-xs text-gray-400 mt-1">{timeAgo(notification.createdAt)}</p>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{notification.body}</p>
+                          <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{timeAgo(notification.createdAt)}</p>
                         </div>
                       </div>
                     ))
                 ) : (
-                  <div className="text-gray-500 text-center py-4">لا توجد إشعارات تتطلب إجراء</div>
+                  <div className="text-gray-500 dark:text-gray-400 text-center py-4">لا توجد إشعارات تتطلب إجراء</div>
                 )}
               </div>
             </div>
@@ -515,12 +515,12 @@ export function ProjectDashboardPage() {
               </h3>
               <button
                 onClick={() => navigate('/dashboard/notifications')}
-                className="text-sm text-blue-600 hover:text-blue-700"
+                className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300"
               >
                 عرض الكل
               </button>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 sm:space-y-4">
               {notifications.length > 0 ? (
                 notifications.slice(0, 5).map((notification) => {
                   const isUnread = notification.status !== 'READ';
@@ -528,25 +528,25 @@ export function ProjectDashboardPage() {
                     <div
                       key={notification.id}
                       onClick={() => navigate('/dashboard/notifications')}
-                      className={`flex items-start gap-3 p-3 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer ${
+                      className={`flex items-start gap-3 p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl transition-colors cursor-pointer ${
                         isUnread ? 'bg-amber-50/50 border-r-4 border-r-amber-500' : ''
                       }`}
                     >
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100">
-                        <Info className="w-4 h-4 text-blue-600" />
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100 dark:bg-blue-500/20">
+                        <Info className="w-4 h-4 text-blue-600 dark:text-blue-400 dark:text-blue-400" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className={`text-sm ${isUnread ? 'font-medium' : 'text-gray-600'}`}>
                           {notification.title}
                         </p>
-                        <p className="text-xs text-gray-500 line-clamp-2">{notification.body}</p>
-                        <p className="text-xs text-gray-400 mt-1">{timeAgo(notification.createdAt)}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">{notification.body}</p>
+                        <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{timeAgo(notification.createdAt)}</p>
                       </div>
                     </div>
                   );
                 })
               ) : (
-                <div className="text-gray-500 text-center py-4">لا توجد إشعارات</div>
+                <div className="text-gray-500 dark:text-gray-400 text-center py-4">لا توجد إشعارات</div>
               )}
             </div>
           </div>

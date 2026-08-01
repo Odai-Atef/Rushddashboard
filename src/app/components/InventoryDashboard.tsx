@@ -115,7 +115,7 @@ export function InventoryDashboard() {
       change: '+9.7%',
       isPositive: true,
       icon: RefreshCw,
-      color: 'text-chart-1',
+      color: 'text-blue-600',
       bgColor: 'bg-chart-1/10'
     },
     {
@@ -124,7 +124,7 @@ export function InventoryDashboard() {
       change: '+3',
       isPositive: false,
       icon: AlertTriangle,
-      color: 'text-red-600',
+      color: 'text-red-600 dark:text-red-400',
       bgColor: 'bg-red-500/10'
     },
     {
@@ -133,7 +133,7 @@ export function InventoryDashboard() {
       change: '-5',
       isPositive: true,
       icon: Clock,
-      color: 'text-orange-600',
+      color: 'text-amber-600 dark:text-amber-400',
       bgColor: 'bg-orange-500/10'
     },
     {
@@ -150,11 +150,11 @@ export function InventoryDashboard() {
   const getStockStatusColor = (status: string) => {
     switch (status) {
       case 'critical':
-        return 'bg-red-500/20 text-red-600 dark:text-red-400';
+        return 'bg-red-500/20 text-red-600 dark:text-red-400 dark:text-red-400';
       case 'warning':
         return 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400';
       default:
-        return 'bg-green-500/20 text-green-600 dark:text-green-400';
+        return 'bg-green-500/20 text-emerald-600 dark:text-emerald-400 dark:text-green-400';
     }
   };
 
@@ -170,11 +170,11 @@ export function InventoryDashboard() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 md:space-y-8 p-6">
       {/* Header */}
       <div>
         <h2 className="text-3xl mb-2">لوحة المخزون</h2>
-        <p className="text-muted-foreground">تحليل المخاطر التشغيلية وأداء إدارة المخزون</p>
+        <p className="text-gray-500 dark:text-gray-400">تحليل المخاطر التشغيلية وأداء إدارة المخزون</p>
       </div>
 
       {/* KPI Cards */}
@@ -208,26 +208,26 @@ export function InventoryDashboard() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
               <h3 className="text-xl font-medium">تحليل المخاطر التشغيلية</h3>
-              <span className="px-2 py-1 bg-orange-500/20 text-orange-600 dark:text-orange-400 text-xs rounded-full">AI Alert</span>
+              <span className="px-2 py-1 bg-orange-500/20 text-amber-600 dark:text-amber-400 dark:text-orange-400 text-xs rounded-full">AI Alert</span>
             </div>
-            <p className="text-foreground leading-relaxed mb-4">
-              تم رصد <span className="font-bold text-red-600 dark:text-red-400">15 تنبيه مخزون منخفض حرج</span> يحتاج إجراء فوري.
-              <span className="font-bold text-orange-600 dark:text-orange-400"> 23 منتج راكد</span> بقيمة 380K ر.س يؤثر على السيولة المالية.
-              معدل الدوران تحسن إلى <span className="font-bold text-green-600">6.8</span> مما يدل على تحسن الكفاءة التشغيلية.
-              <span className="font-bold text-foreground"> 4 منتجات</span> متوقع نفاذها خلال أقل من 3 أيام.
+            <p className="text-gray-900 dark:text-white leading-relaxed mb-4">
+              تم رصد <span className="font-bold text-red-600 dark:text-red-400 dark:text-red-400">15 تنبيه مخزون منخفض حرج</span> يحتاج إجراء فوري.
+              <span className="font-bold text-amber-600 dark:text-amber-400 dark:text-orange-400"> 23 منتج راكد</span> بقيمة 380K ر.س يؤثر على السيولة المالية.
+              معدل الدوران تحسن إلى <span className="font-bold text-emerald-600 dark:text-emerald-400">6.8</span> مما يدل على تحسن الكفاءة التشغيلية.
+              <span className="font-bold text-gray-900 dark:text-white"> 4 منتجات</span> متوقع نفاذها خلال أقل من 3 أيام.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-white/70 dark:bg-gray-800/60 rounded-xl border border-border/50 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-white/70 dark:bg-gray-800/60 rounded-xl border border-gray-200 dark:border-gray-700/50 items-stretch">
               <div className="bg-white dark:bg-gray-900/60 rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg dark:shadow-red-500/5 transition-all duration-200 hover:shadow-md text-center flex flex-col justify-between h-full">
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">القيمة المعرضة للخطر</p>
-                <p className="text-3xl font-bold text-red-600 dark:text-red-400 tracking-tight">475K ر.س</p>
+                <p className="text-3xl font-bold text-red-600 dark:text-red-400 dark:text-red-400 tracking-tight">475K ر.س</p>
               </div>
               <div className="bg-white dark:bg-gray-900/60 rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md text-center flex flex-col justify-between h-full">
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">معدل الدوران</p>
-                <p className="text-3xl font-bold text-green-600 dark:text-green-400 tracking-tight">6.8</p>
+                <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 dark:text-green-400 tracking-tight">6.8</p>
               </div>
               <div className="bg-white dark:bg-gray-900/60 rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md text-center flex flex-col justify-between h-full">
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">الكفاءة التشغيلية</p>
-                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 tracking-tight">85%</p>
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 dark:text-blue-400 tracking-tight">85%</p>
               </div>
             </div>
           </div>
@@ -270,12 +270,12 @@ export function InventoryDashboard() {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Inventory Movement Chart */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="u003cREPLACEu003e rounded-xl p-6">
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-1">حركة المخزون</h3>
-            <p className="text-sm text-muted-foreground">الوارد والصادر ومعدل الدوران</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">الوارد والصادر ومعدل الدوران</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={movementData}>
@@ -312,21 +312,21 @@ export function InventoryDashboard() {
               <Line
                 type="monotone"
                 dataKey="inflow"
-                stroke="var(--color-chart-1)"
+                stroke="#3b82f6"
                 strokeWidth={3}
                 dot={{ fill: 'var(--color-chart-1)', r: 4 }}
               />
               <Line
                 type="monotone"
                 dataKey="outflow"
-                stroke="var(--color-chart-2)"
+                stroke="#10b981"
                 strokeWidth={3}
                 dot={{ fill: 'var(--color-chart-2)', r: 4 }}
               />
               <Line
                 type="monotone"
                 dataKey="turnover"
-                stroke="var(--color-chart-3)"
+                stroke="#f59e0b"
                 strokeWidth={3}
                 dot={{ fill: 'var(--color-chart-3)', r: 4 }}
               />
@@ -335,10 +335,10 @@ export function InventoryDashboard() {
         </div>
 
         {/* Warehouse Performance */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="u003cREPLACEu003e rounded-xl p-6">
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-1">أداء المستودعات</h3>
-            <p className="text-sm text-muted-foreground">معدل الدوران والمنتجات الراكدة</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">معدل الدوران والمنتجات الراكدة</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={warehouseData}>
@@ -374,55 +374,55 @@ export function InventoryDashboard() {
                   return labels[value] || value;
                 }}
               />
-              <Bar dataKey="turnover" fill="var(--color-chart-1)" radius={[8, 8, 0, 0]} />
-              <Bar dataKey="stagnant" fill="var(--color-chart-2)" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="turnover" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+              <Bar dataKey="stagnant" fill="#10b981" radius={[8, 8, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </div>
 
       {/* Low Stock Alerts Table */}
-      <div className="bg-card border-2 border-red-500/30 rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-border bg-red-500/5">
+      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border-2 border-red-500/30 rounded-2xl overflow-hidden shadow-sm dark:shadow-lg">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700 bg-red-500/5">
           <div className="flex items-center gap-2 mb-1">
-            <AlertTriangle className="w-5 h-5 text-red-600" />
+            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
             <h3 className="text-lg font-medium">تنبيهات المخزون المنخفض</h3>
-            <span className="px-2 py-1 bg-red-500/20 text-red-600 dark:text-red-400 text-xs rounded-full">
+            <span className="px-2 py-1 bg-red-500/20 text-red-600 dark:text-red-400 dark:text-red-400 text-xs rounded-full">
               عاجل
             </span>
           </div>
-          <p className="text-sm text-muted-foreground">منتجات تحتاج طلب شراء فوري</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">منتجات تحتاج طلب شراء فوري</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-muted/50">
+            <thead className="bg-gray-50 dark:bg-gray-800/50">
               <tr>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">المنتج</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">المخزون الحالي</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الحد الأدنى</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الأيام المتبقية</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الحالة</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الإجراء</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">المنتج</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">المخزون الحالي</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الحد الأدنى</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الأيام المتبقية</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الحالة</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الإجراء</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {lowStockAlerts.map((alert) => (
-                <tr key={alert.id} className="hover:bg-muted/30 transition-colors">
+                <tr key={alert.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
                   <td className="px-6 py-4">
                     <p className="font-medium">{alert.product}</p>
                   </td>
                   <td className="px-6 py-4">
-                    <p className={`font-medium ${alert.status === 'critical' ? 'text-red-600' : 'text-yellow-600'}`}>
+                    <p className={`font-medium ${alert.status === 'critical' ? 'text-red-600 dark:text-red-400' : 'text-yellow-600'}`}>
                       {alert.currentStock} وحدة
                     </p>
                   </td>
-                  <td className="px-6 py-4 text-muted-foreground">
+                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                     {alert.minRequired} وحدة
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1">
-                      <Clock className={`w-4 h-4 ${alert.status === 'critical' ? 'text-red-600' : 'text-yellow-600'}`} />
-                      <span className={alert.status === 'critical' ? 'text-red-600 font-medium' : 'text-yellow-600'}>
+                      <Clock className={`w-4 h-4 ${alert.status === 'critical' ? 'text-red-600 dark:text-red-400' : 'text-yellow-600'}`} />
+                      <span className={alert.status === 'critical' ? 'text-red-600 dark:text-red-400 font-medium' : 'text-yellow-600'}>
                         {alert.daysLeft} أيام
                       </span>
                     </div>
@@ -433,7 +433,7 @@ export function InventoryDashboard() {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                    <button className="px-4 py-2 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors text-sm">
                       طلب شراء
                     </button>
                   </td>
@@ -453,44 +453,44 @@ export function InventoryDashboard() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
               <h3 className="text-lg font-medium">التوصيات الذكية</h3>
-              <span className="px-2 py-1 bg-green-500/20 text-green-600 dark:text-green-400 text-xs rounded-full">
+              <span className="px-2 py-1 bg-green-500/20 text-emerald-600 dark:text-emerald-400 dark:text-green-400 text-xs rounded-full">
                 AI Powered
               </span>
             </div>
             <div className="space-y-3">
               <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                 <p className="text-sm leading-relaxed">
-                  <span className="font-medium text-red-600">طلب شراء عاجل</span> لـ 4 منتجات حرجة قبل نفاذها خلال 3 أيام
+                  <span className="font-medium text-red-600 dark:text-red-400">طلب شراء عاجل</span> لـ 4 منتجات حرجة قبل نفاذها خلال 3 أيام
                 </p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                 <p className="text-sm leading-relaxed">
-                  تخفيض أسعار <span className="font-medium text-foreground">23 منتج راكد</span> بقيمة 380K ر.س لتحرير السيولة
+                  تخفيض أسعار <span className="font-medium text-gray-900 dark:text-white">23 منتج راكد</span> بقيمة 380K ر.س لتحرير السيولة
                 </p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                 <p className="text-sm leading-relaxed">
-                  تطبيق نظام <span className="font-medium text-foreground">Just-In-Time</span> لتقليل المخزون الراكد بنسبة 40%
+                  تطبيق نظام <span className="font-medium text-gray-900 dark:text-white">Just-In-Time</span> لتقليل المخزون الراكد بنسبة 40%
                 </p>
               </div>
               <div className="flex items-start gap-2">
-                <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                 <p className="text-sm leading-relaxed">
-                  معالجة <span className="font-medium text-foreground">8 منتجات تالفة</span> وتحسين إجراءات الفحص الدوري
+                  معالجة <span className="font-medium text-gray-900 dark:text-white">8 منتجات تالفة</span> وتحسين إجراءات الفحص الدوري
                 </p>
               </div>
             </div>
             <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-green-500/20">
-              <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm">
+              <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-xl transition-colors text-sm">
                 تطبيق جميع التوصيات
               </button>
-              <button className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors text-sm">
+              <button className="px-4 py-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors text-sm">
                 إنشاء طلبات شراء
               </button>
-              <button className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors text-sm">
+              <button className="px-4 py-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-xl transition-colors text-sm">
                 عرض التفاصيل
               </button>
             </div>

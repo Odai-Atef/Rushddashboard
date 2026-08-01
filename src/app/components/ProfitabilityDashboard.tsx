@@ -102,8 +102,8 @@ export function ProfitabilityDashboard() {
       change: '+3.8%',
       isPositive: true,
       icon: Target,
-      color: 'text-chart-1',
-      bgColor: 'bg-chart-1/10'
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50 dark:bg-blue-500/10'
     },
     {
       title: 'صافي الربح',
@@ -111,8 +111,8 @@ export function ProfitabilityDashboard() {
       change: '+22.4%',
       isPositive: true,
       icon: PiggyBank,
-      color: 'text-chart-2',
-      bgColor: 'bg-chart-2/10'
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50 dark:bg-emerald-500/10'
     },
     {
       title: 'التكاليف التشغيلية',
@@ -120,8 +120,8 @@ export function ProfitabilityDashboard() {
       change: '+8.5%',
       isPositive: false,
       icon: DollarSign,
-      color: 'text-chart-3',
-      bgColor: 'bg-chart-3/10'
+      color: 'text-amber-600',
+      bgColor: 'bg-amber-50 dark:bg-amber-500/10'
     },
     {
       title: 'أعلى فرع ربحية',
@@ -129,8 +129,8 @@ export function ProfitabilityDashboard() {
       change: '42% هامش',
       isPositive: true,
       icon: MapPin,
-      color: 'text-chart-4',
-      bgColor: 'bg-chart-4/10'
+      color: 'text-violet-600',
+      bgColor: 'bg-violet-50 dark:bg-violet-500/10'
     },
   ];
 
@@ -148,29 +148,29 @@ export function ProfitabilityDashboard() {
   };
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 md:space-y-8">
       {/* Header */}
-      <div>
-        <h2 className="text-3xl mb-2">لوحة الربحية</h2>
-        <p className="text-muted-foreground">تحليل تنفيذي شامل للأداء المالي والربحية</p>
+      <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">لوحة الربحية</h2>
+        <p className="text-gray-500 dark:text-gray-400 text-base">تحليل تنفيذي شامل للأداء المالي والربحية</p>
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
         {kpis.map((kpi, index) => {
           const Icon = kpi.icon;
           return (
-            <div key={index} className="bg-card border border-border rounded-xl p-6 hover:shadow-xl transition-all duration-300">
+            <div key={index} className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 hover:shadow-xl transition-all duration-300">
               <div className="flex items-center justify-between mb-4">
                 <div className={`p-3 ${kpi.bgColor} rounded-lg`}>
                   <Icon className={`w-5 h-5 ${kpi.color}`} />
                 </div>
-                <div className={`flex items-center gap-1 text-sm font-medium ${kpi.isPositive ? 'text-green-600' : 'text-red-600'}`}>
+                <div className={`flex items-center gap-1 text-sm font-medium ${kpi.isPositive ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
                   {kpi.isPositive ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
                   {kpi.change}
                 </div>
               </div>
-              <h3 className="text-muted-foreground text-sm mb-2">{kpi.title}</h3>
+              <h3 className="text-gray-500 dark:text-gray-400 text-sm mb-2">{kpi.title}</h3>
               <p className="text-2xl font-bold">{kpi.value}</p>
             </div>
           );
@@ -178,7 +178,7 @@ export function ProfitabilityDashboard() {
       </div>
 
       {/* AI Financial Insights Panel */}
-      <div className="bg-gradient-to-l from-blue-500/10 via-purple-500/10 to-transparent border border-blue-500/20 rounded-xl p-6">
+      <div className="bg-gradient-to-l from-blue-500/5 via-violet-500/5 to-transparent border border-blue-500/20 dark:border-blue-500/30 rounded-2xl p-6">
         <div className="flex items-start gap-4">
           <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
             <Sparkles className="w-7 h-7 text-white" />
@@ -186,25 +186,25 @@ export function ProfitabilityDashboard() {
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-3">
               <h3 className="text-xl font-medium">التحليل المالي الذكي</h3>
-              <span className="px-2 py-1 bg-blue-500/20 text-blue-600 dark:text-blue-400 text-xs rounded-full">AI Executive</span>
+              <span className="px-2 py-1 bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400 text-xs rounded-full">AI Executive</span>
             </div>
-            <p className="text-foreground leading-relaxed mb-4">
-              الأداء المالي <span className="font-bold text-green-600">إيجابي بقوة</span> مع نمو 22.4% في صافي الربح وتحسن هامش الربح إلى 36.5%.
-              <span className="font-bold text-primary"> فرع الرياض</span> يحقق أعلى ربحية بهامش 42% ويجب التركيز على نقل أفضل الممارسات للفروع الأخرى.
-              <span className="font-bold text-foreground"> الخدمات الاستشارية</span> تحقق هامش ربح استثنائي 50.6% وتمثل فرصة نمو كبيرة.
+            <p className="text-gray-900 dark:text-white leading-relaxed mb-4">
+              الأداء المالي <span className="font-bold text-emerald-600 dark:text-emerald-400">إيجابي بقوة</span> مع نمو 22.4% في صافي الربح وتحسن هامش الربح إلى 36.5%.
+              <span className="font-bold text-emerald-600"> فرع الرياض</span> يحقق أعلى ربحية بهامش 42% ويجب التركيز على نقل أفضل الممارسات للفروع الأخرى.
+              <span className="font-bold text-gray-900 dark:text-white"> الخدمات الاستشارية</span> تحقق هامش ربح استثنائي 50.6% وتمثل فرصة نمو كبيرة.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-card/50 rounded-lg border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-white/50 dark:bg-gray-800/50 rounded-xl border border-gray-200 dark:border-gray-700">
               <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-1">العائد على الاستثمار</p>
-                <p className="text-2xl font-bold text-green-600">57.5%</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">العائد على الاستثمار</p>
+                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">57.5%</p>
               </div>
-              <div className="text-center border-x border-border">
-                <p className="text-sm text-muted-foreground mb-1">نمو الربح الشهري</p>
-                <p className="text-2xl font-bold text-blue-600">+17.3%</p>
+              <div className="text-center border-x border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">نمو الربح الشهري</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">+17.3%</p>
               </div>
               <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-1">الكفاءة التشغيلية</p>
-                <p className="text-2xl font-bold text-purple-600">92/100</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">الكفاءة التشغيلية</p>
+                <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">92/100</p>
               </div>
             </div>
           </div>
@@ -212,34 +212,34 @@ export function ProfitabilityDashboard() {
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Profit Trend Chart */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-1">الاتجاه المالي</h3>
-            <p className="text-sm text-muted-foreground">تطور الأرباح والإيرادات والتكاليف</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">تطور الأرباح والإيرادات والتكاليف</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={profitTrendData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
               <XAxis
                 dataKey="month"
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
               />
               <YAxis
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
                 tickFormatter={(value) => `${value / 1000000}M`}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
                   borderRadius: '0.75rem',
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                 }}
-                labelStyle={{ color: 'var(--color-foreground)', fontWeight: 'bold', marginBottom: '8px' }}
+                labelStyle={{ color: '#111827', fontWeight: 'bold', marginBottom: '8px' }}
                 formatter={(value: number, name: string) => {
                   const labels: Record<string, string> = {
                     profit: 'الربح',
@@ -263,7 +263,7 @@ export function ProfitabilityDashboard() {
               <Line
                 type="monotone"
                 dataKey="revenue"
-                stroke="var(--color-chart-1)"
+                stroke="#3b82f6"
                 strokeWidth={3}
                 dot={{ fill: 'var(--color-chart-1)', r: 4 }}
                 activeDot={{ r: 6 }}
@@ -271,7 +271,7 @@ export function ProfitabilityDashboard() {
               <Line
                 type="monotone"
                 dataKey="cost"
-                stroke="var(--color-chart-2)"
+                stroke="#10b981"
                 strokeWidth={3}
                 dot={{ fill: 'var(--color-chart-2)', r: 4 }}
                 activeDot={{ r: 6 }}
@@ -279,7 +279,7 @@ export function ProfitabilityDashboard() {
               <Line
                 type="monotone"
                 dataKey="profit"
-                stroke="var(--color-chart-3)"
+                stroke="#f59e0b"
                 strokeWidth={3}
                 dot={{ fill: 'var(--color-chart-3)', r: 4 }}
                 activeDot={{ r: 6 }}
@@ -289,10 +289,10 @@ export function ProfitabilityDashboard() {
         </div>
 
         {/* Cost Breakdown */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-1">هيكل التكاليف</h3>
-            <p className="text-sm text-muted-foreground">توزيع التكاليف التشغيلية</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">توزيع التكاليف التشغيلية</p>
           </div>
           <ResponsiveContainer width="100%" height={240}>
             <PieChart>
@@ -312,8 +312,8 @@ export function ProfitabilityDashboard() {
               </Pie>
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
                   borderRadius: '0.75rem',
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                 }}
@@ -323,14 +323,14 @@ export function ProfitabilityDashboard() {
           </ResponsiveContainer>
           <div className="grid grid-cols-1 gap-2 mt-4">
             {costBreakdownData.map((item, index) => (
-              <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-muted/30 transition-colors">
+              <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50 dark:bg-gray-800/50 transition-colors">
                 <div className="flex items-center gap-2">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
                   <span className="text-sm">{item.name}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-sm font-medium">{item.value.toLocaleString()} ر.س</span>
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">
                     {((item.value / totalCosts) * 100).toFixed(1)}%
                   </span>
                 </div>
@@ -341,33 +341,33 @@ export function ProfitabilityDashboard() {
       </div>
 
       {/* Branch & Channel Profitability */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Branch Profitability */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-1">ربحية الفروع</h3>
-            <p className="text-sm text-muted-foreground">مقارنة الأرباح والهوامش حسب الفرع</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">مقارنة الأرباح والهوامش حسب الفرع</p>
           </div>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={branchProfitability} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" opacity={0.3} />
               <XAxis
                 type="number"
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
                 tickFormatter={(value) => `${value / 1000}K`}
               />
               <YAxis
                 type="category"
                 dataKey="branch"
-                stroke="var(--color-muted-foreground)"
+                stroke="#9ca3af"
                 style={{ fontSize: '12px' }}
                 width={80}
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'var(--color-card)',
-                  border: '1px solid var(--color-border)',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e5e7eb',
                   borderRadius: '0.75rem',
                   boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
                 }}
@@ -378,16 +378,16 @@ export function ProfitabilityDashboard() {
                   return [`${value}%`, 'الهامش'];
                 }}
               />
-              <Bar dataKey="profit" fill="var(--color-chart-1)" radius={[0, 8, 8, 0]} />
+              <Bar dataKey="profit" fill="#3b82f6" radius={[0, 8, 8, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
 
         {/* Channel Profitability */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="mb-6">
             <h3 className="text-lg font-medium mb-1">القنوات الأعلى ربحية</h3>
-            <p className="text-sm text-muted-foreground">الأرباح والهوامش حسب قناة البيع</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">الأرباح والهوامش حسب قناة البيع</p>
           </div>
           <div className="space-y-4">
             {channelData.map((channel, index) => (
@@ -395,11 +395,11 @@ export function ProfitabilityDashboard() {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">{channel.channel}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm text-muted-foreground">{channel.profit.toLocaleString()} ر.س</span>
-                    <span className="text-sm font-bold text-green-600">{channel.margin}%</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{channel.profit.toLocaleString()} ر.س</span>
+                    <span className="text-sm font-bold text-emerald-600 dark:text-emerald-400">{channel.margin}%</span>
                   </div>
                 </div>
-                <div className="relative h-3 bg-muted rounded-full overflow-hidden">
+                <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                   <div
                     className="absolute inset-y-0 right-0 bg-gradient-to-l from-green-500 to-emerald-600 rounded-full"
                     style={{ width: `${(channel.margin / 50) * 100}%` }}
@@ -412,48 +412,48 @@ export function ProfitabilityDashboard() {
       </div>
 
       {/* Top Profitable Services Table */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        <div className="p-6 border-b border-border">
+      <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 overflow-hidden">
+        <div className="p-6 border-b border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2 mb-1">
-            <Layers className="w-5 h-5 text-green-600" />
+            <Layers className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
             <h3 className="text-lg font-medium">الخدمات الأعلى ربحية</h3>
           </div>
-          <p className="text-sm text-muted-foreground">تحليل الربحية حسب الخدمة أو المنتج</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">تحليل الربحية حسب الخدمة أو المنتج</p>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-muted/50">
+            <thead className="bg-gray-50 dark:bg-gray-800/50">
               <tr>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">#</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الخدمة</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الإيرادات</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">التكاليف</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الربح</th>
-                <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الهامش</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">#</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الخدمة</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الإيرادات</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">التكاليف</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الربح</th>
+                <th className="px-6 py-4 text-right text-sm font-medium text-gray-500 dark:text-gray-400">الهامش</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {topServices.map((service) => (
-                <tr key={service.id} className="hover:bg-muted/30 transition-colors">
-                  <td className="px-6 py-4 text-sm text-muted-foreground">{service.id}</td>
+                <tr key={service.id} className="hover:bg-gray-50 dark:bg-gray-800/50 transition-colors">
+                  <td className="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">{service.id}</td>
                   <td className="px-6 py-4">
                     <p className="font-medium">{service.service}</p>
                   </td>
-                  <td className="px-6 py-4 text-muted-foreground">
+                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                     {service.revenue.toLocaleString()} ر.س
                   </td>
-                  <td className="px-6 py-4 text-muted-foreground">
+                  <td className="px-6 py-4 text-gray-500 dark:text-gray-400">
                     {service.cost.toLocaleString()} ر.س
                   </td>
                   <td className="px-6 py-4">
-                    <p className="font-medium text-green-600">{service.profit.toLocaleString()} ر.س</p>
+                    <p className="font-medium text-emerald-600 dark:text-emerald-400">{service.profit.toLocaleString()} ر.س</p>
                   </td>
                   <td className="px-6 py-4">
                     <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${
                       service.margin >= 45
-                        ? 'bg-green-500/20 text-green-600 dark:text-green-400'
+                        ? 'bg-green-500/20 text-emerald-600 dark:text-emerald-400 dark:text-green-400'
                         : service.margin >= 38
-                        ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400'
+                        ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400 dark:text-blue-400'
                         : 'bg-yellow-500/20 text-yellow-600 dark:text-yellow-400'
                     }`}>
                       {service.margin}%
@@ -467,26 +467,26 @@ export function ProfitabilityDashboard() {
       </div>
 
       {/* Risk Alerts & Recommendations */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
         {/* Risk Alerts */}
-        <div className="bg-card border border-border rounded-xl p-6">
+        <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 md:p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5">
           <div className="flex items-center gap-2 mb-6">
-            <Shield className="w-5 h-5 text-orange-600" />
+            <Shield className="w-5 h-5 text-amber-600 dark:text-amber-400" />
             <h3 className="text-lg font-medium">تنبيهات المخاطر المالية</h3>
           </div>
           <div className="space-y-3">
             {riskAlerts.map((alert) => (
               <div key={alert.id} className={`p-4 rounded-lg ${getRiskColor(alert.type)}`}>
                 <h4 className="text-sm font-medium mb-2">{alert.title}</h4>
-                <p className="text-sm text-muted-foreground mb-2">{alert.description}</p>
-                <p className="text-xs text-muted-foreground">{alert.impact}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">{alert.description}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">{alert.impact}</p>
               </div>
             ))}
           </div>
         </div>
 
         {/* Recommendations */}
-        <div className="bg-gradient-to-l from-green-500/10 via-emerald-500/10 to-transparent border border-green-500/20 rounded-xl p-6">
+        <div className="bg-gradient-to-l from-emerald-500/5 to-transparent border border-emerald-500/20 dark:border-emerald-500/30 rounded-2xl p-6">
           <div className="flex items-start gap-4">
             <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl">
               <Target className="w-6 h-6 text-white" />
@@ -494,35 +494,35 @@ export function ProfitabilityDashboard() {
             <div className="flex-1">
               <div className="flex items-center gap-2 mb-3">
                 <h3 className="text-lg font-medium">التوصيات الإستراتيجية</h3>
-                <span className="px-2 py-1 bg-green-500/20 text-green-600 dark:text-green-400 text-xs rounded-full">
+                <span className="px-2 py-1 bg-green-500/20 text-emerald-600 dark:text-emerald-400 dark:text-green-400 text-xs rounded-full">
                   أولوية عالية
                 </span>
               </div>
               <div className="space-y-3">
                 <div className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                   <p className="text-sm leading-relaxed">
-                    التركيز على <span className="font-medium text-foreground">الخدمات الاستشارية</span> ذات هامش الـ 50.6% لزيادة الربحية بنسبة 28%
+                    التركيز على <span className="font-medium text-gray-900 dark:text-white">الخدمات الاستشارية</span> ذات هامش الـ 50.6% لزيادة الربحية بنسبة 28%
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                   <p className="text-sm leading-relaxed">
-                    نقل أفضل الممارسات من <span className="font-medium text-foreground">فرع الرياض</span> للفروع الأخرى لرفع الهوامش بمعدل 8%
+                    نقل أفضل الممارسات من <span className="font-medium text-gray-900 dark:text-white">فرع الرياض</span> للفروع الأخرى لرفع الهوامش بمعدل 8%
                   </p>
                 </div>
                 <div className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-green-600 flex-shrink-0 mt-0.5" />
+                  <CheckCircle className="w-4 h-4 text-emerald-600 dark:text-emerald-400 flex-shrink-0 mt-0.5" />
                   <p className="text-sm leading-relaxed">
-                    مراجعة <span className="font-medium text-foreground">التكاليف التشغيلية</span> وتطبيق الأتمتة لتوفير 180K ر.س سنوياً
+                    مراجعة <span className="font-medium text-gray-900 dark:text-white">التكاليف التشغيلية</span> وتطبيق الأتمتة لتوفير 180K ر.س سنوياً
                   </p>
                 </div>
               </div>
               <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-green-500/20">
-                <button className="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm">
+                <button className="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg transition-colors text-sm">
                   تطبيق التوصيات
                 </button>
-                <button className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors text-sm">
+                <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm">
                   عرض التفاصيل
                 </button>
               </div>
