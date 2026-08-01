@@ -36,11 +36,11 @@ export function InfoPage() {
  const showActionRequiredAlert = user?.status?.toUpperCase() === 'NEED_ACTION_FROM_ORG' && !!user?.actionRequired;
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div className="max-w-3xl mx-auto">
  {/* Action required alert */}
  {showActionRequiredAlert && (
- <div className="mb-6 p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex items-start gap-3">
+ <div className="mb-6 p-[var(--spacing-card-padding)] bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex items-start gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--destructive)] mt-0.5 flex-shrink-0" />
  <div>
  <p className="text-[var(--destructive)] text-sm font-semibold">
@@ -63,7 +63,7 @@ export function InfoPage() {
  type="button"
  onClick={() => handleTabChange(tab.id)}
  className={cn(
- 'w-1/2 flex items-center justify-center gap-2 px-4 py-4 text-center font-medium transition-colors',
+ 'w-1/2 flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-4 text-center font-medium transition-colors',
  isActive
  ? 'bg-primary/10 text-primary border-b-2 border-primary'
  : 'text-muted-foreground hover:bg-secondary hover:text-foreground border-b-2 border-transparent'

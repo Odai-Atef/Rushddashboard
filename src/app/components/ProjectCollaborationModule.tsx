@@ -343,7 +343,7 @@ export function ProjectCollaborationModule() {
  <div className="space-y-6">
  {/* Header */}
  <div>
- <h1 className="text-3xl font-bold mb-2">مركز الاتصالات</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">مركز الاتصالات</h1>
  <p className="text-muted-foreground">لوحة التحكم المركزية لجميع تواصلات المشاريع</p>
  </div>
 
@@ -353,7 +353,7 @@ export function ProjectCollaborationModule() {
  <div className="flex items-center justify-between mb-2">
  <MessageSquare className="w-8 h-8 text-primary" />
  </div>
- <p className="text-3xl font-bold text-foreground">{stats.activeConversations}</p>
+ <p className="text-[var(--text-card-number)] font-bold text-foreground">{stats.activeConversations}</p>
  <p className="text-sm text-muted-foreground mt-1">محادثات نشطة</p>
  </div>
 
@@ -361,7 +361,7 @@ export function ProjectCollaborationModule() {
  <div className="flex items-center justify-between mb-2">
  <Bell className="w-8 h-8 text-primary" />
  </div>
- <p className="text-3xl font-bold text-primary">{stats.unreadMessages}</p>
+ <p className="text-[var(--text-card-number)] font-bold text-primary">{stats.unreadMessages}</p>
  <p className="text-sm text-muted-foreground mt-1">رسائل غير مقروءة</p>
  </div>
 
@@ -369,7 +369,7 @@ export function ProjectCollaborationModule() {
  <div className="flex items-center justify-between mb-2">
  <Clock className="w-8 h-8 text-[var(--warning)]" />
  </div>
- <p className="text-3xl font-bold text-[var(--warning)]">{stats.pendingResponses}</p>
+ <p className="text-[var(--text-card-number)] font-bold text-[var(--warning)]">{stats.pendingResponses}</p>
  <p className="text-sm text-muted-foreground mt-1">بانتظار رد</p>
  </div>
 
@@ -377,14 +377,14 @@ export function ProjectCollaborationModule() {
  <div className="flex items-center justify-between mb-2">
  <AlertCircle className="w-8 h-8 text-[var(--destructive)]" />
  </div>
- <p className="text-3xl font-bold text-[var(--destructive)]">{stats.delayedResponses}</p>
+ <p className="text-[var(--text-card-number)] font-bold text-[var(--destructive)]">{stats.delayedResponses}</p>
  <p className="text-sm text-muted-foreground mt-1">ردود متأخرة</p>
  </div>
  </div>
 
  {/* Filters */}
  <div className="bg-card rounded-xl p-4 border border-border">
- <div className="flex flex-wrap gap-3">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
  <div className="relative flex-1 min-w-64">
  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
  <input
@@ -424,7 +424,7 @@ export function ProjectCollaborationModule() {
  <p className="text-[var(--destructive)] mb-3">{conversationsError}</p>
  <button
  onClick={() => refetchConversations()}
- className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة المحاولة
@@ -444,7 +444,7 @@ export function ProjectCollaborationModule() {
  >
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1">
- <div className="flex items-center gap-3 mb-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <h3 className="font-semibold text-lg">{conv.title || 'محادثة'}</h3>
  {(unreadOverrides[conv.id] ?? conv.unreadCount) > 0 && (
  <span className="px-2 py-0.5 bg-primary text-primary-foreground text-xs rounded-full font-medium">
@@ -480,7 +480,7 @@ export function ProjectCollaborationModule() {
  </div>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
  {attachments.slice(0, 3).map((att) => (
- <div key={att.id} className="flex items-center gap-3 p-4 border border-border rounded-lg">
+ <div key={att.id} className="flex items-center gap-[var(--spacing-small-gap)] p-4 border border-border rounded-lg">
  <Paperclip className="w-5 h-5 text-muted-foreground" />
  <div className="flex-1 min-w-0">
  <p className="font-medium text-sm truncate">{att.name}</p>
@@ -719,7 +719,7 @@ function ChatView({
  <div className="space-y-4">
  <button
  onClick={() => navigate('/dashboard/project-management/list')}
- className="text-primary hover:text-primary/80 font-medium flex items-center gap-2"
+ className="text-primary hover:text-primary/80 font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى قائمة المشاريع
@@ -741,7 +741,7 @@ function ChatView({
  <div className="flex items-center justify-between">
  <Link
  to={projectId ? `/dashboard/collaboration/${projectId}/hub` : '/dashboard/collaboration/hub'}
- className="text-sm text-primary hover:text-primary/80 flex items-center gap-1"
+ className="text-sm text-primary hover:text-primary/80 flex items-center gap-[var(--spacing-small-gap)]"
  >
  <ChevronRight className="w-4 h-4" />
  رجوع للمركز
@@ -749,7 +749,7 @@ function ChatView({
  {!showNewConversation && conversations.length > 0 && (
  <button
  onClick={() => setShowNewConversation(true)}
- className="text-sm text-primary hover:text-primary/80 flex items-center gap-1"
+ className="text-sm text-primary hover:text-primary/80 flex items-center gap-[var(--spacing-small-gap)]"
  title="إنشاء محادثة جديدة"
  >
  <Plus className="w-4 h-4" />
@@ -760,7 +760,7 @@ function ChatView({
  </div>
  <div className="flex-1 overflow-y-auto">
  {conversationsLoading && conversations.length === 0 && (
- <div className="p-4 space-y-3">
+ <div className="p-4 space-y-[var(--spacing-small-gap)]">
  {[1, 2, 3].map((n) => (
  <div key={n} className="h-16 bg-muted rounded-lg animate-pulse" />
  ))}
@@ -782,7 +782,7 @@ function ChatView({
  <p className="text-muted-foreground text-sm mb-3">لا توجد محادثات</p>
  <button
  onClick={() => setShowNewConversation(true)}
- className="text-sm text-primary hover:text-primary/80 flex items-center gap-1 justify-center mx-auto"
+ className="text-sm text-primary hover:text-primary/80 flex items-center gap-[var(--spacing-small-gap)] justify-center mx-auto"
  >
  <Plus className="w-4 h-4" />
  إنشاء محادثة جديدة
@@ -800,7 +800,7 @@ function ChatView({
  placeholder="مثال: محادثة فريق المشروع"
  className="w-full px-3 py-2 border border-border rounded-lg text-sm focus:ring-2 focus:ring-ring mb-3"
  />
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={createConversation}
  disabled={isCreatingConversation || !newConversationTitle.trim()}
@@ -850,11 +850,11 @@ function ChatView({
  {currentConversation?.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : 'رسالة مباشرة'}
  </p>
  </div>
- <div className="flex gap-2">
- <button className="p-2 hover:bg-muted rounded-lg">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
  <Search className="w-5 h-5 text-muted-foreground" />
  </button>
- <button className="p-2 hover:bg-muted rounded-lg">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
  <MoreVertical className="w-5 h-5 text-muted-foreground" />
  </button>
  </div>
@@ -871,7 +871,7 @@ function ChatView({
  <p className="text-[var(--destructive)] mb-3">{messagesError}</p>
  <button
  onClick={() => { clearError(); loadMessages(true); }}
- className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة المحاولة
@@ -892,7 +892,7 @@ function ChatView({
  <div className="text-center">
  <button
  onClick={() => loadMessages()}
- className="text-sm text-primary hover:text-primary/80 flex items-center gap-1 mx-auto"
+ className="text-sm text-primary hover:text-primary/80 flex items-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <RefreshCw className="w-4 h-4" />
  تحميل المزيد
@@ -902,9 +902,9 @@ function ChatView({
  {messagesLoading && messages.length === 0 && (
  <div className="space-y-4">
  {[1, 2, 3].map((n) => (
- <div key={n} className="flex gap-3">
+ <div key={n} className="flex gap-[var(--spacing-small-gap)]">
  <div className="w-10 h-10 bg-muted rounded-full animate-pulse" />
- <div className="flex-1 space-y-2">
+ <div className="flex-1 space-y-[var(--spacing-small-gap)]">
  <div className="h-3 w-24 bg-muted rounded-lg animate-pulse" />
  <div className="h-10 w-2/3 bg-muted rounded-lg animate-pulse" />
  </div>
@@ -937,28 +937,28 @@ function ChatView({
  {/* Message Input */}
  <div className="p-4 border-t border-border">
  {replyPreview && (
- <div className="mb-2 p-2 bg-secondary border border-border rounded-lg flex items-center justify-between">
+ <div className="mb-2 p-[var(--spacing-small-gap)] bg-secondary border border-border rounded-lg flex items-center justify-between">
  <div className="text-sm text-muted-foreground truncate max-w-md">
  <span className="font-medium text-foreground">رد على:</span>{' '}
  {replyPreview}
  </div>
  <button
  onClick={cancelReply}
- className="p-1 hover:bg-muted rounded-lg"
+ className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg"
  aria-label="إلغاء الرد"
  >
  <X className="w-4 h-4 text-muted-foreground" />
  </button>
  </div>
  )}
- <div className="flex gap-3">
- <button className="p-2 hover:bg-muted rounded-lg">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
  <Paperclip className="w-5 h-5 text-muted-foreground" />
  </button>
- <button className="p-2 hover:bg-muted rounded-lg">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
  <ImageIcon className="w-5 h-5 text-muted-foreground" />
  </button>
- <button className="p-2 hover:bg-muted rounded-lg">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
  <Mic className="w-5 h-5 text-muted-foreground" />
  </button>
  <input
@@ -972,7 +972,7 @@ function ChatView({
  <button
  onClick={handleSend}
  disabled={isSending || !messageInput.trim()}
- className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 disabled:opacity-60"
+ className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-60"
  >
  {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
  إرسال
@@ -986,7 +986,7 @@ function ChatView({
  <div className="bg-card rounded-xl p-6 shadow-lg max-w-sm w-full mx-4">
  <h3 className="font-semibold mb-2">حذف الرسالة</h3>
  <p className="text-sm text-muted-foreground mb-4">هل أنت متأكد من حذف هذه الرسالة؟</p>
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={confirmDelete}
  className="flex-1 px-4 py-2 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90"
@@ -1110,7 +1110,7 @@ function MessageBubble({
 
  if (editingMessageId === msg.id) {
  return (
- <div className={`flex gap-3 ${isOwn ? 'justify-start' : 'justify-end'}`}>
+ <div className={`flex gap-[var(--spacing-small-gap)] ${isOwn ? 'justify-start' : 'justify-end'}`}>
  <div className={`max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
  <input
  type="text"
@@ -1123,7 +1123,7 @@ function MessageBubble({
  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring text-sm"
  autoFocus
  />
- <div className={`flex gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+ <div className={`flex gap-[var(--spacing-small-gap)] mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
  <button
  onClick={() => onSubmitEdit(msg.id)}
  className="text-xs px-2 py-1 bg-primary text-primary-foreground rounded-lg"
@@ -1156,11 +1156,11 @@ function MessageBubble({
  <div
  ref={bubbleRef}
  data-message-id={msg.id}
- className={`flex gap-3 ${isOwn ? 'justify-start' : 'justify-end'}`}
+ className={`flex gap-[var(--spacing-small-gap)] ${isOwn ? 'justify-start' : 'justify-end'}`}
  >
  {/* Content first so in RTL own messages sit at the right edge */}
  <div className={`max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
- <div className="flex items-center gap-2 mb-1 justify-end">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1 justify-end">
  <span className="font-medium text-sm">{msg.senderUserId === messageCurrentUserId ? 'أنت' : (msg.sender?.fullName || msg.senderUserId.slice(0, 8))}</span>
  {msg.editedAt && <span className="text-xs text-muted-foreground">(تم التعديل)</span>}
  </div>
@@ -1169,21 +1169,21 @@ function MessageBubble({
  رد على رسالة
  </div>
  )}
- <div className={`inline-block p-3 rounded-lg text-right ${isOwn ? 'bg-[var(--primary)]/[0.1] text-foreground' : 'bg-muted text-foreground'}`}>
+ <div className={`inline-block p-[var(--spacing-card-padding)] rounded-lg text-right ${isOwn ? 'bg-[var(--primary)]/[0.1] text-foreground' : 'bg-muted text-foreground'}`}>
  <div
  dir="rtl"
- className="text-sm prose prose-sm max-w-none break-words text-right [&>*]:text-right [&_a]:underline [&_pre]:p-2 [&_pre]:rounded-lg [&_pre]:bg-muted [&_code]:text-foreground [&_code]:bg-muted [&_code]:px-1 [&_code]:rounded"
+ className="text-sm prose prose-sm max-w-none break-words text-right [&>*]:text-right [&_a]:underline [&_pre]:p-[var(--spacing-small-gap)] [&_pre]:rounded-lg [&_pre]:bg-muted [&_code]:text-foreground [&_code]:bg-muted [&_code]:px-1 [&_code]:rounded"
  >
  <Markdown remarkPlugins={[remarkGfm]}>{msg.content || '\u00A0'}</Markdown>
  </div>
  {msg.attachments && msg.attachments.length > 0 && (
- <div className="mt-3 space-y-2">
+ <div className="mt-3 space-y-[var(--spacing-small-gap)]">
  {msg.attachments.map((attachment) => (
  <button
  key={attachment.id}
  onClick={() => handleDownloadAttachment(attachment)}
  disabled={downloadingAttachmentId === attachment.id}
- className="w-full flex items-center gap-3 p-2 rounded-lg bg-card border border-border hover:bg-secondary transition-colors text-right disabled:opacity-50"
+ className="w-full flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-small-gap)] rounded-lg bg-card border border-border hover:bg-secondary transition-colors text-right disabled:opacity-50"
  >
  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary">
  {downloadingAttachmentId === attachment.id ? (
@@ -1206,7 +1206,7 @@ function MessageBubble({
  </div>
  )}
  </div>
- <div className={`flex items-center gap-2 mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
  <span className="text-xs text-muted-foreground">{formatDateTime(msg.createdAt)}</span>
  {msg.status === 'READ' && <CheckCheck className="w-4 h-4 text-primary" />}
  {msg.status === 'DELIVERED' && <CheckCheck className="w-4 h-4 text-muted-foreground" />}
@@ -1401,12 +1401,12 @@ const DiscussionsView = () => {
  <div className="space-y-6">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-3xl font-bold mb-2">المناقشات المترابطة</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">المناقشات المترابطة</h1>
  <p className="text-muted-foreground">نقاشات على أقسام المشروع</p>
  </div>
  <button
  onClick={() => setShowNewDiscussion(!showNewDiscussion)}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Plus className="w-5 h-5" />
  نقاش جديد
@@ -1414,7 +1414,7 @@ const DiscussionsView = () => {
  </div>
 
  {/* Status Filter */}
- <div className="flex gap-2 flex-wrap">
+ <div className="flex gap-[var(--spacing-small-gap)] flex-wrap">
  {statusOptions.map((option) => (
  <button
  key={option.value}
@@ -1431,7 +1431,7 @@ const DiscussionsView = () => {
  </div>
 
  {/* Section Filter */}
- <div className="flex gap-2 flex-wrap">
+ <div className="flex gap-[var(--spacing-small-gap)] flex-wrap">
  {sectionOptions.map((section) => (
  <button
  key={section.value}
@@ -1487,7 +1487,7 @@ const DiscussionsView = () => {
  />
  {newDiscussionErrors.content && <p className="text-[var(--destructive)] text-sm mt-1">{newDiscussionErrors.content}</p>}
  </div>
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={handleCreateDiscussion}
  disabled={detailMutating}
@@ -1519,7 +1519,7 @@ const DiscussionsView = () => {
  <p className="text-[var(--destructive)] mb-3">{discussionsError}</p>
  <button
  onClick={() => refetchDiscussions()}
- className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة المحاولة
@@ -1559,10 +1559,10 @@ const DiscussionsView = () => {
  <div className="space-y-4">
  {discussions.map((discussionItem) => (
  <div key={discussionItem.id} className="bg-card rounded-xl border border-border shadow-sm">
- <div className="p-3 sm:p-6">
+ <div className="p-[var(--spacing-card-padding)] sm:p-6">
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1">
- <div className="flex items-center gap-3 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="font-semibold text-lg">{discussionItem.title}</h3>
  <span className="px-3 py-1 bg-muted text-foreground text-xs rounded-full font-medium">
  {discussionItem.section}
@@ -1573,15 +1573,15 @@ const DiscussionsView = () => {
  </div>
  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{discussionItem.content}</p>
  <div className="flex items-center gap-4 text-sm text-muted-foreground">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <User className="w-4 h-4" />
  <span>{discussionItem.authorUserId}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-4 h-4" />
  <span>{formatDateTime(discussionItem.lastReplyAt || discussionItem.updatedAt)}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <ReplyIcon className="w-4 h-4" />
  <span>{discussionItem.replyCount} رد</span>
  </div>
@@ -1593,7 +1593,7 @@ const DiscussionsView = () => {
  {selectedDiscussionId === discussionItem.id && (
  <div className="mt-6 border-t border-border pt-4">
  {detailLoading && (
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <div className="h-4 bg-muted rounded-lg animate-pulse w-1/3" />
  <div className="h-20 bg-muted rounded-lg animate-pulse" />
  {[1, 2].map((n) => <div key={n} className="h-16 bg-muted rounded-lg animate-pulse" />)}
@@ -1613,13 +1613,13 @@ const DiscussionsView = () => {
  {discussion && !detailLoading && !detailError && (
  <div className="space-y-4">
  <div className="flex items-center justify-between">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className={`px-3 py-1 text-xs rounded-full font-medium ${statusBadgeClass(discussion.status)}`}>
  {statusBadgeLabel(discussion.status)}
  </span>
  <span className="text-sm text-muted-foreground">{formatDateTime(discussion.createdAt)}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {(['OPEN', 'RESOLVED', 'CLOSED'] as DiscussionStatus[]).map((s) => (
  <button
  key={s}
@@ -1648,7 +1648,7 @@ const DiscussionsView = () => {
  </div>
 
  {/* Replies */}
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {replies.map((reply) => {
  const isOptimistic = 'pending' in reply;
  return (
@@ -1659,14 +1659,14 @@ const DiscussionsView = () => {
  }`}
  >
  <div className="flex items-center justify-between mb-2">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-6 h-6 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center">
  <User className="w-3 h-3 text-primary" />
  </div>
  <span className="text-sm font-medium">{reply.authorUserId}</span>
  <span className="text-xs text-muted-foreground">{formatDateTime(reply.createdAt)}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {reply.isAccepted && (
  <span className="px-2 py-1 bg-[var(--primary)]/[0.1] text-[var(--primary)] text-xs rounded-full">
  الحل المقبول
@@ -1696,7 +1696,7 @@ const DiscussionsView = () => {
  <p className="text-sm text-foreground">{reply.content}</p>
  
  {isOptimistic && (reply as { pending: boolean; failed: boolean }).failed && (
- <div className="mt-2 flex items-center gap-2">
+ <div className="mt-2 flex items-center gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => handleReplyRetry(reply.id, (reply as { originalContent: string }).originalContent)}
  className="px-3 py-1 text-xs bg-primary text-primary-foreground rounded-lg hover:bg-primary/90"
@@ -1713,8 +1713,8 @@ const DiscussionsView = () => {
 
  {/* Reply Input */}
  {discussion.status !== 'CLOSED' && (
- <div className="mt-4 flex flex-col gap-2">
- <div className="flex gap-3">
+ <div className="mt-4 flex flex-col gap-[var(--spacing-small-gap)]">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <input
  type="text"
  value={replyInputs[discussion.id] || ''}
@@ -1738,7 +1738,7 @@ const DiscussionsView = () => {
  </div>
  )}
 
- <div className="mt-4 flex gap-3">
+ <div className="mt-4 flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setSelectedDiscussionId(selectedDiscussionId === discussionItem.id ? null : discussionItem.id)}
  className="px-4 py-2 text-sm text-primary hover:text-primary/80 border border-primary/20 rounded-lg"
@@ -1763,7 +1763,7 @@ const DiscussionsView = () => {
  <div className="bg-card rounded-xl p-6 max-w-md w-full">
  <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
  <p className="text-muted-foreground mb-4">هل أنت متأكد أنك تريد حذف هذا النقاش؟ سيظهر كعنصر محذوف في القائمة.</p>
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={confirmDeleteDiscussion}
  disabled={detailMutating}
@@ -1880,13 +1880,13 @@ const DiscussionsView = () => {
  <div className="space-y-6">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-3xl font-bold mb-2">مركز المرفقات</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">مركز المرفقات</h1>
  <p className="text-muted-foreground">جميع ملفات المشروع في مكان واحد</p>
  </div>
  <button
  onClick={() => setShowUpload(!showUpload)}
  disabled={isUploading}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 disabled:opacity-50"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50"
  >
  <Plus className="w-5 h-5" />
  رفع ملف
@@ -1897,22 +1897,22 @@ const DiscussionsView = () => {
  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
  <div className="bg-card rounded-xl p-6 border border-border">
  <File className="w-8 h-8 text-primary mb-3" />
- <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
+ <p className="text-[var(--text-section-title)] font-bold">{attachmentsPagination.total}</p>
  <p className="text-sm text-muted-foreground">إجمالي الملفات</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-border">
  <Paperclip className="w-8 h-8 text-[var(--primary)] mb-3" />
- <p className="text-2xl font-bold">{formatBytes(totalSize)}</p>
+ <p className="text-[var(--text-section-title)] font-bold">{formatBytes(totalSize)}</p>
  <p className="text-sm text-muted-foreground">حجم التخزين</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-border">
  <Users className="w-8 h-8 text-purple-600 mb-3" />
- <p className="text-2xl font-bold">{new Set(attachments.map((a) => a.uploadedByUserId)).size}</p>
+ <p className="text-[var(--text-section-title)] font-bold">{new Set(attachments.map((a) => a.uploadedByUserId)).size}</p>
  <p className="text-sm text-muted-foreground">المساهمون</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-border">
  <Download className="w-8 h-8 text-muted-foreground mb-3" />
- <p className="text-2xl font-bold">{attachmentsPagination.total}</p>
+ <p className="text-[var(--text-section-title)] font-bold">{attachmentsPagination.total}</p>
  <p className="text-sm text-muted-foreground">الملفات المتاحة</p>
  </div>
  </div>
@@ -1937,8 +1937,8 @@ const DiscussionsView = () => {
  />
  </div>
  {selectedFile && (
- <div className="space-y-3">
- <div className="flex items-center justify-between bg-secondary p-3 rounded-lg">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-center justify-between bg-secondary p-[var(--spacing-card-padding)] rounded-lg">
  <span className="text-sm font-medium">{selectedFile.name}</span>
  <span className="text-sm text-muted-foreground">{formatBytes(selectedFile.size)}</span>
  </div>
@@ -1957,7 +1957,7 @@ const DiscussionsView = () => {
  </select>
  </div>
  {isUploading && (
- <div className="space-y-1">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <div className="h-2 bg-muted rounded-full overflow-hidden">
  <div
  className="h-full bg-[var(--primary)] transition-all"
@@ -1968,7 +1968,7 @@ const DiscussionsView = () => {
  </div>
  )}
  {mutationError && <p className="text-[var(--destructive)] text-sm">{mutationError}</p>}
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={handleUploadSubmit}
  disabled={isUploading}
@@ -1991,8 +1991,8 @@ const DiscussionsView = () => {
 
  {/* Filters and View Toggle */}
  <div className="bg-card rounded-xl p-4 border border-border">
- <div className="flex items-center justify-between flex-wrap gap-3">
- <div className="flex gap-2 flex-wrap">
+ <div className="flex items-center justify-between flex-wrap gap-[var(--spacing-small-gap)]">
+ <div className="flex gap-[var(--spacing-small-gap)] flex-wrap">
  {typeOptions.map((option) => (
  <button
  key={option.value}
@@ -2007,16 +2007,16 @@ const DiscussionsView = () => {
  </button>
  ))}
  </div>
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setViewMode('grid')}
- className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}
+ className={`p-[var(--spacing-small-gap)] rounded-lg ${viewMode === 'grid' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}
  >
  <LayoutDashboard className="w-5 h-5" />
  </button>
  <button
  onClick={() => setViewMode('list')}
- className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}
+ className={`p-[var(--spacing-small-gap)] rounded-lg ${viewMode === 'list' ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}
  >
  <FileText className="w-5 h-5" />
  </button>
@@ -2037,7 +2037,7 @@ const DiscussionsView = () => {
  <p className="text-[var(--destructive)] mb-3">{attachmentsError}</p>
  <button
  onClick={() => refetchAttachments()}
- className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2 mx-auto"
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة المحاولة
@@ -2090,7 +2090,7 @@ const DiscussionsView = () => {
  {viewMode === 'grid' ? (
  <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
  {attachments.map((file) => (
- <div key={file.id} className="bg-card rounded-xl p-6 border border-border hover:shadow-lg transition-shadow">
+ <div key={file.id} className="bg-card rounded-xl p-6 border border-border hover:shadow-[var(--shadow-lg)] transition-shadow">
  <div className="flex flex-col items-center text-center">
  {getFileIcon(file)}
  <h4 className="font-semibold mt-4 mb-2 truncate w-full">{file.fileName}</h4>
@@ -2102,17 +2102,17 @@ const DiscussionsView = () => {
  {file.projectStage}
  </span>
  )}
- <div className="flex gap-2 w-full">
+ <div className="flex gap-[var(--spacing-small-gap)] w-full">
  <button
  onClick={() => handleDownload(file)}
- className="flex-1 p-2 bg-muted text-foreground rounded-lg hover:bg-muted"
+ className="flex-1 p-[var(--spacing-small-gap)] bg-muted text-foreground rounded-lg hover:bg-muted"
  >
  <Download className="w-4 h-4 mx-auto" />
  </button>
  <button
  onClick={() => setDeleteTargetId(file.id)}
  disabled={isDeleting}
- className="flex-1 p-2 bg-[var(--destructive)]/[0.1] text-[var(--destructive)] rounded-lg hover:bg-red-200 disabled:opacity-50"
+ className="flex-1 p-[var(--spacing-small-gap)] bg-[var(--destructive)]/[0.1] text-[var(--destructive)] rounded-lg hover:bg-red-200 disabled:opacity-50"
  >
  <Trash2 className="w-4 h-4 mx-auto" />
  </button>
@@ -2138,7 +2138,7 @@ const DiscussionsView = () => {
  <tbody>
  {attachments.map((file) => (
  <tr key={file.id} className="border-b border-border hover:bg-secondary">
- <td className="p-4 flex items-center gap-3">
+ <td className="p-4 flex items-center gap-[var(--spacing-small-gap)]">
  {getFileIcon(file)}
  <span className="font-medium">{file.fileName}</span>
  </td>
@@ -2154,17 +2154,17 @@ const DiscussionsView = () => {
  )}
  </td>
  <td className="p-4">
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => handleDownload(file)}
- className="p-2 hover:bg-muted rounded-lg"
+ className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg"
  >
  <Download className="w-4 h-4 text-muted-foreground" />
  </button>
  <button
  onClick={() => setDeleteTargetId(file.id)}
  disabled={isDeleting}
- className="p-2 hover:bg-[var(--destructive)]/10 rounded-lg disabled:opacity-50"
+ className="p-[var(--spacing-small-gap)] hover:bg-[var(--destructive)]/10 rounded-lg disabled:opacity-50"
  >
  <Trash2 className="w-4 h-4 text-[var(--destructive)]" />
  </button>
@@ -2183,7 +2183,7 @@ const DiscussionsView = () => {
  <div className="bg-card rounded-xl p-6 max-w-md w-full">
  <h3 className="font-semibold text-lg mb-2">تأكيد الحذف</h3>
  <p className="text-muted-foreground mb-4">هل أنت متأكد أنك تريد حذف هذا الملف؟ لا يمكن التراجع عن هذا الإجراء.</p>
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={handleDelete}
  disabled={isDeleting}
@@ -2238,12 +2238,12 @@ const DiscussionsView = () => {
  <div className="space-y-6">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-3xl font-bold mb-2">طلبات التعديل</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">طلبات التعديل</h1>
  <p className="text-muted-foreground">تتبع جميع طلبات التغيير والتحسينات</p>
  </div>
  <button
  onClick={() => setShowNewRequest(!showNewRequest)}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Plus className="w-5 h-5" />
  طلب تعديل جديد
@@ -2253,25 +2253,25 @@ const DiscussionsView = () => {
  {/* Stats */}
  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
  <div className="bg-card rounded-xl p-6 border border-primary/20">
- <p className="text-2xl font-bold text-primary">{revisions.filter(r => r.status === 'open').length}</p>
+ <p className="text-[var(--text-section-title)] font-bold text-primary">{revisions.filter(r => r.status === 'open').length}</p>
  <p className="text-sm text-muted-foreground mt-1">مفتوحة</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-[var(--warning)]/[0.3]">
- <p className="text-2xl font-bold text-[var(--warning)]">{revisions.filter(r => r.status === 'in-progress').length}</p>
+ <p className="text-[var(--text-section-title)] font-bold text-[var(--warning)]">{revisions.filter(r => r.status === 'in-progress').length}</p>
  <p className="text-sm text-muted-foreground mt-1">قيد العمل</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-[var(--primary)]/[0.3]">
- <p className="text-2xl font-bold text-[var(--primary)]">8</p>
+ <p className="text-[var(--text-section-title)] font-bold text-[var(--primary)]">8</p>
  <p className="text-sm text-muted-foreground mt-1">محلولة</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-red-500/30">
- <p className="text-2xl font-bold text-[var(--destructive)]">2</p>
+ <p className="text-[var(--text-section-title)] font-bold text-[var(--destructive)]">2</p>
  <p className="text-sm text-muted-foreground mt-1">مرفوضة</p>
  </div>
  </div>
 
  {/* Status Filter */}
- <div className="flex gap-2 flex-wrap">
+ <div className="flex gap-[var(--spacing-small-gap)] flex-wrap">
  {(['all', 'open', 'in-progress', 'resolved', 'rejected'] as const).map((status) => (
  <button
  key={status}
@@ -2332,7 +2332,7 @@ const DiscussionsView = () => {
  />
  </div>
  </div>
- <div className="flex gap-3 mt-4">
+ <div className="flex gap-[var(--spacing-small-gap)] mt-4">
  <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90">
  إنشاء الطلب
  </button>
@@ -2349,10 +2349,10 @@ const DiscussionsView = () => {
  {/* Requests List */}
  <div className="space-y-4">
  {filteredRevisions.map((request) => (
- <div key={request.id} className="bg-card rounded-xl p-6 border border-border hover:shadow-lg transition-shadow">
+ <div key={request.id} className="bg-card rounded-xl p-6 border border-border hover:shadow-[var(--shadow-lg)] transition-shadow">
  <div className="flex items-start justify-between mb-4">
  <div className="flex-1">
- <div className="flex items-center gap-3 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="font-semibold text-lg">{request.title}</h3>
  <span className={`px-3 py-1 text-xs rounded-full font-medium ${getStatusColor(request.status)}`}>
  {request.status === 'open' ? 'مفتوح' : request.status === 'in-progress' ? 'قيد العمل' : request.status === 'resolved' ? 'محلول' : 'مرفوض'}
@@ -2366,21 +2366,21 @@ const DiscussionsView = () => {
  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
  <div>
  <p className="text-xs text-muted-foreground mb-1">طالب التعديل</p>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <User className="w-4 h-4 text-muted-foreground" />
  <span className="text-sm font-medium">{request.requestor}</span>
  </div>
  </div>
  <div>
  <p className="text-xs text-muted-foreground mb-1">معين إلى</p>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <User className="w-4 h-4 text-muted-foreground" />
  <span className="text-sm font-medium">{request.assignee}</span>
  </div>
  </div>
  <div>
  <p className="text-xs text-muted-foreground mb-1">تاريخ الاستحقاق</p>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4 text-muted-foreground" />
  <span className="text-sm font-medium">{request.dueDate}</span>
  </div>
@@ -2393,7 +2393,7 @@ const DiscussionsView = () => {
  </div>
  </div>
 
- <div className="flex gap-3 pt-3 border-t border-border">
+ <div className="flex gap-[var(--spacing-small-gap)] pt-3 border-t border-border">
  {request.status === 'open' && (
  <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm">
  بدء العمل
@@ -2445,10 +2445,10 @@ const DiscussionsView = () => {
  <div className="space-y-6">
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-3xl font-bold mb-2">مركز الإشعارات</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">مركز الإشعارات</h1>
  <p className="text-muted-foreground">جميع التحديثات والتنبيهات</p>
  </div>
- <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2">
+ <button className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)]">
  <CheckCheck className="w-5 h-5" />
  تعليم الكل كمقروء
  </button>
@@ -2458,25 +2458,25 @@ const DiscussionsView = () => {
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
  <div className="bg-card rounded-xl p-6 border border-primary/20">
  <Bell className="w-8 h-8 text-primary mb-3" />
- <p className="text-2xl font-bold text-primary">{notifications.filter(n => !n.read).length}</p>
+ <p className="text-[var(--text-section-title)] font-bold text-primary">{notifications.filter(n => !n.read).length}</p>
  <p className="text-sm text-muted-foreground">إشعارات غير مقروءة</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-red-500/30">
  <AlertCircle className="w-8 h-8 text-[var(--destructive)] mb-3" />
- <p className="text-2xl font-bold text-[var(--destructive)]">{notifications.filter(n => n.priority === 'high').length}</p>
+ <p className="text-[var(--text-section-title)] font-bold text-[var(--destructive)]">{notifications.filter(n => n.priority === 'high').length}</p>
  <p className="text-sm text-muted-foreground">أولوية عالية</p>
  </div>
  <div className="bg-card rounded-xl p-6 border border-border">
  <Activity className="w-8 h-8 text-muted-foreground mb-3" />
- <p className="text-2xl font-bold">{notifications.length}</p>
+ <p className="text-[var(--text-section-title)] font-bold">{notifications.length}</p>
  <p className="text-sm text-muted-foreground">إجمالي الإشعارات</p>
  </div>
  </div>
 
  {/* Filters */}
  <div className="bg-card rounded-xl p-4 border border-border">
- <div className="flex flex-wrap gap-3 items-center">
- <div className="flex gap-2 flex-1 flex-wrap">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)] items-center">
+ <div className="flex gap-[var(--spacing-small-gap)] flex-1 flex-wrap">
  {(['all', 'message', 'revision', 'approval', 'overdue'] as const).map((type) => (
  <button
  key={type}
@@ -2491,7 +2491,7 @@ const DiscussionsView = () => {
  </button>
  ))}
  </div>
- <label className="flex items-center gap-2 cursor-pointer">
+ <label className="flex items-center gap-[var(--spacing-small-gap)] cursor-pointer">
  <input
  type="checkbox"
  checked={showUnreadOnly}
@@ -2504,16 +2504,16 @@ const DiscussionsView = () => {
  </div>
 
  {/* Notifications List */}
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {filteredNotifications.map((notif) => (
  <div
  key={notif.id}
  className={`bg-card rounded-xl p-6 border ${
  !notif.read ? 'border-primary/20 shadow-md' : 'border-border'
- } hover:shadow-lg transition-shadow`}
+ } hover:shadow-[var(--shadow-lg)] transition-shadow`}
  >
  <div className="flex items-start gap-4">
- <div className={`p-3 rounded-full ${!notif.read ? 'bg-primary/10' : 'bg-secondary'}`}>
+ <div className={`p-[var(--spacing-card-padding)] rounded-full ${!notif.read ? 'bg-primary/10' : 'bg-secondary'}`}>
  {getNotificationIcon(notif.type)}
  </div>
  <div className="flex-1">
@@ -2527,7 +2527,7 @@ const DiscussionsView = () => {
  )}
  </div>
  <div className="flex items-center gap-4 mt-3">
- <span className="text-xs text-muted-foreground flex items-center gap-1">
+ <span className="text-xs text-muted-foreground flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-3 h-3" />
  {notif.timestamp}
  </span>
@@ -2539,7 +2539,7 @@ const DiscussionsView = () => {
  {notif.priority === 'high' ? 'عالية' : notif.priority === 'medium' ? 'متوسطة' : 'منخفضة'}
  </span>
  </div>
- <div className="flex gap-3 mt-4">
+ <div className="flex gap-[var(--spacing-small-gap)] mt-4">
  {notif.type === 'message' && (
  <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 text-sm">
  عرض المحادثة
@@ -2590,7 +2590,7 @@ const DiscussionsView = () => {
  return (
  <div className="space-y-6">
  <div>
- <h1 className="text-3xl font-bold mb-2">لوحة أوقات الاستجابة وSLA</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">لوحة أوقات الاستجابة وSLA</h1>
  <p className="text-muted-foreground">تحليلات شاملة لأوقات الرد والامتثال للمعايير</p>
  </div>
 
@@ -2598,9 +2598,9 @@ const DiscussionsView = () => {
  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
  <div className="bg-card rounded-xl p-6 border border-border">
  <Clock className="w-8 h-8 text-primary mb-3" />
- <p className="text-2xl font-bold">3.2 ساعة</p>
+ <p className="text-[var(--text-section-title)] font-bold">3.2 ساعة</p>
  <p className="text-sm text-muted-foreground">متوسط وقت الرد</p>
- <div className="flex items-center gap-1 mt-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mt-2">
  <TrendingDown className="w-4 h-4 text-[var(--primary)]" />
  <span className="text-xs text-[var(--primary)]">-15% من الأسبوع السابق</span>
  </div>
@@ -2608,9 +2608,9 @@ const DiscussionsView = () => {
 
  <div className="bg-card rounded-xl p-6 border border-[var(--primary)]/[0.3]">
  <CheckCircle2 className="w-8 h-8 text-[var(--primary)] mb-3" />
- <p className="text-2xl font-bold text-[var(--primary)]">78%</p>
+ <p className="text-[var(--text-section-title)] font-bold text-[var(--primary)]">78%</p>
  <p className="text-sm text-muted-foreground">نسبة الامتثال لـ SLA</p>
- <div className="flex items-center gap-1 mt-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mt-2">
  <TrendingUp className="w-4 h-4 text-[var(--primary)]" />
  <span className="text-xs text-[var(--primary)]">+5% من الأسبوع السابق</span>
  </div>
@@ -2618,19 +2618,19 @@ const DiscussionsView = () => {
 
  <div className="bg-card rounded-xl p-6 border border-[var(--warning)]/[0.3]">
  <AlertTriangle className="w-8 h-8 text-[var(--warning)] mb-3" />
- <p className="text-2xl font-bold text-[var(--warning)]">3</p>
+ <p className="text-[var(--text-section-title)] font-bold text-[var(--warning)]">3</p>
  <p className="text-sm text-muted-foreground">طلبات تجاوزت SLA</p>
  </div>
 
  <div className="bg-card rounded-xl p-6 border border-border">
  <Target className="w-8 h-8 text-purple-600 mb-3" />
- <p className="text-2xl font-bold">24 ساعة</p>
+ <p className="text-[var(--text-section-title)] font-bold">24 ساعة</p>
  <p className="text-sm text-muted-foreground">هدف SLA</p>
  </div>
  </div>
 
  {/* Charts Row */}
- <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:p-6">
+ <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-small-gap)] sm:p-6">
  {/* Response Time Trend */}
  <div className="bg-card rounded-xl p-6 border border-border">
  <h3 className="font-semibold mb-4">متوسط أوقات الاستجابة (ساعات)</h3>
@@ -2698,7 +2698,7 @@ const DiscussionsView = () => {
  <td className="p-4">{member.requests}</td>
  <td className="p-4">{member.avgTime}</td>
  <td className="p-4">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden max-w-[100px]">
  <div
  className={`h-full ${member.sla >= 90 ? 'bg-[var(--primary)]' : member.sla >= 80 ? 'bg-yellow-600' : 'bg-[var(--destructive)]'}`}
@@ -2727,13 +2727,13 @@ const DiscussionsView = () => {
  {/* Overdue Requests */}
  <div className="bg-card rounded-xl p-6 border border-red-500/30">
  <div className="flex items-center justify-between mb-4">
- <h3 className="font-semibold flex items-center gap-2">
+ <h3 className="font-semibold flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5 text-[var(--destructive)]" />
  طلبات تجاوزت SLA
  </h3>
  <span className="text-sm text-[var(--destructive)]">3 طلبات</span>
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {[
  { project: 'برنامج التدريب المهني', overdue: '3 أيام', assignee: 'محمد عبدالله' },
  { project: 'مشروع كفالة الأيتام', overdue: '2 يوم', assignee: 'سارة علي' },
@@ -2781,15 +2781,15 @@ const DiscussionsView = () => {
  return (
  <div className="space-y-6">
  <div>
- <h1 className="text-3xl font-bold mb-2">لوحة صحة التعاون</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">لوحة صحة التعاون</h1>
  <p className="text-muted-foreground">مؤشرات الأداء والمشاركة في التعاون</p>
  </div>
 
  {/* Overall Health Score */}
- <div className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl p-8 text-[var(--primary-foreground)]">
+ <div className="bg-gradient-to-br from-[var(--secondary)] to-purple-600 rounded-xl p-8 text-[var(--primary-foreground)]">
  <div className="flex items-center justify-between">
  <div>
- <h2 className="text-2xl font-bold mb-2">درجة صحة التعاون الإجمالية</h2>
+ <h2 className="text-[var(--text-section-title)] font-bold mb-2">درجة صحة التعاون الإجمالية</h2>
  <p className="text-[var(--secondary)]/[0.4]">تقييم شامل لجودة التواصل والمشاركة</p>
  </div>
  <div className="text-center">
@@ -2818,7 +2818,7 @@ const DiscussionsView = () => {
  />
  </svg>
  <div className="absolute inset-0 flex items-center justify-center">
- <span className="text-4xl font-bold">85%</span>
+ <span className="text-[var(--text-page-title)] font-bold">85%</span>
  </div>
  </div>
  <p className="text-sm mt-2">ممتاز</p>
@@ -2833,7 +2833,7 @@ const DiscussionsView = () => {
  <h3 className="font-semibold">معدل المشاركة</h3>
  <Zap className="w-6 h-6 text-[var(--warning)]" />
  </div>
- <p className="text-3xl font-bold mb-2">92%</p>
+ <p className="text-[var(--text-card-number)] font-bold mb-2">92%</p>
  <p className="text-sm text-muted-foreground">من أعضاء الفريق نشطون</p>
  <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
  <div className="h-full bg-yellow-600" style={{ width: '92%' }}></div>
@@ -2845,7 +2845,7 @@ const DiscussionsView = () => {
  <h3 className="font-semibold">جودة التواصل</h3>
  <MessageSquare className="w-6 h-6 text-[var(--primary)]" />
  </div>
- <p className="text-3xl font-bold mb-2">4.5/5</p>
+ <p className="text-[var(--text-card-number)] font-bold mb-2">4.5/5</p>
  <p className="text-sm text-muted-foreground">تقييم متوسط للتفاعلات</p>
  <div className="mt-3 h-2 bg-muted rounded-full overflow-hidden">
  <div className="h-full bg-[var(--primary)]" style={{ width: '90%' }}></div>
@@ -2857,9 +2857,9 @@ const DiscussionsView = () => {
  <h3 className="font-semibold">سرعة الحل</h3>
  <Target className="w-6 h-6 text-primary" />
  </div>
- <p className="text-3xl font-bold mb-2">2.1 يوم</p>
+ <p className="text-[var(--text-card-number)] font-bold mb-2">2.1 يوم</p>
  <p className="text-sm text-muted-foreground">متوسط وقت حل المسائل</p>
- <div className="flex items-center gap-1 mt-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mt-2">
  <TrendingDown className="w-4 h-4 text-[var(--primary)]" />
  <span className="text-xs text-[var(--primary)]">-18% من الشهر السابق</span>
  </div>
@@ -2889,18 +2889,18 @@ const DiscussionsView = () => {
  <table className="w-full">
  <thead>
  <tr>
- <th className="text-right p-3 font-semibold">اليوم</th>
- <th className="text-center p-3 font-semibold">9-12 ص</th>
- <th className="text-center p-3 font-semibold">12-3 م</th>
- <th className="text-center p-3 font-semibold">3-6 م</th>
- <th className="text-center p-3 font-semibold">6-9 م</th>
+ <th className="text-right p-[var(--spacing-card-padding)] font-semibold">اليوم</th>
+ <th className="text-center p-[var(--spacing-card-padding)] font-semibold">9-12 ص</th>
+ <th className="text-center p-[var(--spacing-card-padding)] font-semibold">12-3 م</th>
+ <th className="text-center p-[var(--spacing-card-padding)] font-semibold">3-6 م</th>
+ <th className="text-center p-[var(--spacing-card-padding)] font-semibold">6-9 م</th>
  </tr>
  </thead>
  <tbody>
  {activityHeatmap.map((row, idx) => (
  <tr key={idx}>
- <td className="p-3 font-medium">{row.day}</td>
- <td className="p-3">
+ <td className="p-[var(--spacing-card-padding)] font-medium">{row.day}</td>
+ <td className="p-[var(--spacing-card-padding)]">
  <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
  row['9-12'] > 10 ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' :
  row['9-12'] > 6 ? 'bg-[var(--primary)]/[0.7] text-[var(--primary-foreground)]' :
@@ -2909,7 +2909,7 @@ const DiscussionsView = () => {
  {row['9-12']}
  </div>
  </td>
- <td className="p-3">
+ <td className="p-[var(--spacing-card-padding)]">
  <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
  row['12-3'] > 15 ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' :
  row['12-3'] > 10 ? 'bg-[var(--primary)]/[0.7] text-[var(--primary-foreground)]' :
@@ -2918,7 +2918,7 @@ const DiscussionsView = () => {
  {row['12-3']}
  </div>
  </td>
- <td className="p-3">
+ <td className="p-[var(--spacing-card-padding)]">
  <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
  row['3-6'] > 15 ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' :
  row['3-6'] > 10 ? 'bg-[var(--primary)]/[0.7] text-[var(--primary-foreground)]' :
@@ -2927,7 +2927,7 @@ const DiscussionsView = () => {
  {row['3-6']}
  </div>
  </td>
- <td className="p-3">
+ <td className="p-[var(--spacing-card-padding)]">
  <div className={`h-12 rounded-lg flex items-center justify-center font-medium ${
  row['6-9'] > 7 ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' :
  row['6-9'] > 4 ? 'bg-[var(--primary)]/[0.7] text-[var(--primary-foreground)]' :
@@ -2968,7 +2968,7 @@ const DiscussionsView = () => {
  </div>
  </div>
  <div className="text-left">
- <p className="text-2xl font-bold text-[var(--primary)]">{member.score}%</p>
+ <p className="text-[var(--text-section-title)] font-bold text-[var(--primary)]">{member.score}%</p>
  <p className="text-xs text-muted-foreground">درجة المشاركة</p>
  </div>
  </div>
@@ -3073,13 +3073,13 @@ const DiscussionsView = () => {
  return (
  <div className="space-y-6">
  <div>
- <h1 className="text-3xl font-bold mb-2">السجل الزمني للأنشطة</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">السجل الزمني للأنشطة</h1>
  <p className="text-muted-foreground">تتبع تاريخي لجميع التفاعلات والأحداث</p>
  </div>
 
  {/* Filters */}
  <div className="bg-card rounded-xl p-4 border border-border">
- <div className="flex flex-wrap gap-3">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
  <select
  value={filterDate}
  onChange={(e) => setFilterDate(e.target.value)}
@@ -3103,7 +3103,7 @@ const DiscussionsView = () => {
  <option value="approval">موافقات</option>
  </select>
  <div className="flex-1"></div>
- <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-2">
+ <button className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)]">
  <Download className="w-4 h-4" />
  تصدير السجل
  </button>
@@ -3146,7 +3146,7 @@ const DiscussionsView = () => {
  <div key={activity.id} className="flex gap-4">
  {/* Timeline Line */}
  <div className="flex flex-col items-center">
- <div className="p-2 bg-muted rounded-full">
+ <div className="p-[var(--spacing-small-gap)] bg-muted rounded-full">
  {getActivityIcon(activity.type)}
  </div>
  {idx < timelineActivities.length - 1 && (
@@ -3169,7 +3169,7 @@ const DiscussionsView = () => {
  </div>
 
  {/* Quick Actions */}
- <div className="flex gap-2 mt-3">
+ <div className="flex gap-[var(--spacing-small-gap)] mt-3">
  {activity.type === 'message' && (
  <button className="text-xs px-3 py-1 bg-primary/10 text-primary rounded-lg hover:bg-[var(--secondary)]/[0.1]">
  عرض المحادثة
@@ -3203,7 +3203,7 @@ const DiscussionsView = () => {
 
  {/* Load More */}
  <div className="text-center pt-6 border-t border-border">
- <button className="px-6 py-2 bg-muted text-foreground rounded-lg hover:bg-muted flex items-center gap-2 mx-auto">
+ <button className="px-6 py-2 bg-muted text-foreground rounded-lg hover:bg-muted flex items-center gap-[var(--spacing-small-gap)] mx-auto">
  <RefreshCw className="w-4 h-4" />
  تحميل المزيد
  </button>
@@ -3215,7 +3215,7 @@ const DiscussionsView = () => {
 
  // Render views
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-6">
  {currentView === 'hub' && <HubView />}
  {currentView === 'chat' && (
  <ChatView

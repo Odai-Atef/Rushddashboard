@@ -72,7 +72,7 @@ export function DecisionPage() {
  };
 
  return (
- <div ref={reportContainerRef} className="min-h-full bg-gradient-to-br from-green-50 to-emerald-50 p-6 flex items-center justify-center">
+ <div ref={reportContainerRef} className="min-h-full bg-gradient-to-br from-green-50 to-emerald-50 p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="max-w-3xl w-full">
  <div className="bg-[var(--card)] rounded-2xl shadow-xl border border-border p-12">
  {/* Success Icon */}
@@ -99,8 +99,8 @@ export function DecisionPage() {
  </div>
 
  {/* Status Badge */}
- <div className={`border-2 rounded-xl p-6 mb-8 ${statusOption.bgClass.replace('bg-', 'bg-').replace('-400', '-50')} ${statusOption.textClass.replace('900', '700').replace('600', '700')}`}>
- <div className="flex items-center justify-center gap-3 mb-4">
+ <div className={`border-2 rounded-xl p-[var(--spacing-card-padding)] mb-8 ${statusOption.bgClass.replace('bg-', 'bg-').replace('-400', '-50')} ${statusOption.textClass.replace('900', '700').replace('600', '700')}`}>
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)] mb-4">
  <Award className="w-8 h-8" />
  <div className="text-2xl font-bold">{displayMessage}</div>
  </div>
@@ -112,22 +112,22 @@ export function DecisionPage() {
  {/* Next Steps */}
  <div className="mb-8">
  <h2 className="text-xl font-semibold mb-4 text-center">الخطوات القادمة</h2>
- <div className="space-y-3">
- <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
  <div>
  <div className="font-medium">إنشاء حساب الجمعية</div>
  <div className="text-sm text-muted-foreground">سجّل الدخول إلى منصة الحاضنة وأكمل ملفك التعريفي</div>
  </div>
  </div>
- <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
  <div>
  <div className="font-medium">الاجتماع التعريفي</div>
  <div className="text-sm text-muted-foreground">سيتواصل معك فريق الحاضنة لتحديد موعد الاجتماع التعريفي</div>
  </div>
  </div>
- <div className="flex items-start gap-3 p-4 bg-secondary rounded-lg">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
  <div>
  <div className="font-medium">بدء خطة التطوير</div>
@@ -138,21 +138,21 @@ export function DecisionPage() {
  </div>
 
  {/* Contact Info */}
- <div className="bg-secondary border border-border rounded-xl p-6 mb-8">
- <h3 className="font-semibold mb-3 flex items-center gap-2">
+ <div className="bg-secondary border border-border rounded-xl p-[var(--spacing-card-padding)] mb-8">
+ <h3 className="font-semibold mb-3 flex items-center gap-[var(--spacing-small-gap)]">
  <Mail className="w-5 h-5 text-primary" />
  معلومات التواصل
  </h3>
- <div className="space-y-2 text-sm">
- <div className="flex items-center gap-2">
+ <div className="space-y-[var(--spacing-small-gap)] text-sm">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-muted-foreground">البريد الإلكتروني:</span>
  <span className="font-medium">incubator@rushd.sa</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-muted-foreground">الهاتف:</span>
  <span className="font-medium" dir="ltr">+966 11 XXX XXXX</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-muted-foreground">ساعات العمل:</span>
  <span className="font-medium">الأحد - الخميس، ٩ص - ٥م</span>
  </div>
@@ -160,11 +160,11 @@ export function DecisionPage() {
  </div>
 
  {/* Action Buttons */}
- {/* <div className="report-exclude flex flex-col sm:flex-row gap-4">
+ {/* <div className="report-exclude flex flex-col sm:flex-row gap-[var(--spacing-grid-gap)]">
  <button
  onClick={handleDownloadReport}
  disabled={isDownloading}
- className="flex-1 px-6 py-4 border-2 border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="flex-1 px-6 py-4 border-2 border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isDownloading ? (
  <Loader2 className="w-5 h-5 animate-spin" />

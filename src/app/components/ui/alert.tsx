@@ -81,7 +81,7 @@ function Alert({
  variant === "info" && "text-[var(--secondary)]",
  )}
  />
- <div className="flex flex-col gap-1">
+ <div className="flex flex-col gap-[var(--spacing-small-gap)]">
  {props.children}
  </div>
  {dismissible && (
@@ -89,7 +89,7 @@ function Alert({
  type="button"
  onClick={handleDismiss}
  className={cn(
- "absolute top-3 right-3 rounded-[var(--radius-button)] p-1 opacity-60 transition-opacity duration-[var(--transition-duration)] hover:opacity-100 hover:bg-current/10",
+ "absolute top-3 right-3 rounded-[var(--radius-button)] p-[var(--spacing-small-gap)] opacity-60 transition-opacity duration-[var(--transition-duration)] hover:opacity-100 hover:bg-current/10",
  "focus:outline-none focus:ring-2 focus:ring-[var(--ring)]/30",
  )}
  aria-label="Dismiss alert"
@@ -119,7 +119,7 @@ function AlertDescription({ className, ...props }: React.ComponentProps<"div">) 
  <div
  data-slot="alert-description"
  className={cn(
- "col-start-2 grid justify-items-start gap-1 text-sm leading-relaxed text-[var(--text-muted)]",
+ "col-start-2 grid justify-items-start gap-[var(--spacing-small-gap)] text-sm leading-relaxed text-[var(--text-muted)]",
  className,
  )}
  {...props}

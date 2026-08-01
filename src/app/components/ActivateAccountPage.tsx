@@ -109,8 +109,8 @@ export function ActivateAccountPage() {
  <div className="w-full max-w-md text-center">
  {/* Logo */}
  <div className="mb-8">
- <div className="flex items-center justify-center gap-3 mb-2">
- <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)] mb-2">
+ <div className="p-[var(--spacing-small-gap)] bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-lg">
  <Sparkles className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <h1 className="text-2xl font-bold">منصة رشد</h1>
@@ -147,7 +147,7 @@ export function ActivateAccountPage() {
  `/auth/login?activated=${status}&message=${encodeURIComponent(message)}`
  )
  }
- className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)]"
  >
  <span>الذهاب إلى تسجيل الدخول</span>
  <ArrowRight className="w-5 h-5" />
@@ -158,7 +158,7 @@ export function ActivateAccountPage() {
  </div>
 
  {/* Right Side - Branding */}
- <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
+ <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-[var(--secondary)] to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
  <div className="absolute top-20 right-20 w-64 h-64 bg-[var(--card)]/10 rounded-full blur-3xl" />
  <div className="absolute bottom-20 left-20 w-96 h-96 bg-[var(--card)]/10 rounded-full blur-3xl" />
 

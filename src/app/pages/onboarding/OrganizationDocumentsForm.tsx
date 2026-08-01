@@ -484,7 +484,7 @@ export function OrganizationDocumentsForm() {
  }
 
  return (
- <div className="space-y-6">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {isLoadingDocuments && !uploadedFiles.length && (
  <div className="fixed inset-0 bg-[var(--card)]/80 z-50 flex items-center justify-center">
  <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -499,9 +499,9 @@ export function OrganizationDocumentsForm() {
  </div>
 
  {/* Upload Stats */}
- <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 items-stretch">
- <div className="bg-[var(--card)] rounded-2xl p-5 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
- <div className="flex items-center gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-grid-gap)] mb-8 items-stretch">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)]">
  <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center flex-shrink-0">
  <FileText className="w-6 h-6 text-primary" />
  </div>
@@ -511,8 +511,8 @@ export function OrganizationDocumentsForm() {
  </div>
  </div>
  </div>
- <div className="bg-[var(--card)] rounded-2xl p-5 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
- <div className="flex items-center gap-4">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)]">
  <div className="w-12 h-12 bg-[var(--primary)]/[0.08] rounded-xl flex items-center justify-center flex-shrink-0">
  <CheckCircle2 className="w-6 h-6 text-[var(--primary)]" />
  </div>
@@ -522,8 +522,8 @@ export function OrganizationDocumentsForm() {
  </div>
  </div>
  </div>
- <div className="bg-[var(--card)] rounded-2xl p-5 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
- <div className="flex items-center gap-4">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)]">
  <div className="w-12 h-12 bg-[var(--warning)]/[0.1] rounded-xl flex items-center justify-center flex-shrink-0">
  <Clock className="w-6 h-6 text-[var(--warning)]" />
  </div>
@@ -537,8 +537,8 @@ export function OrganizationDocumentsForm() {
 
  {/* Load error */}
  {documentsLoadError && (
- <div className="bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl p-4 mb-6 flex items-center justify-between">
- <div className="flex items-center gap-3">
+ <div className="bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-center justify-between">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--destructive)]" />
  <span className="text-[var(--destructive)]">{documentsLoadError}</span>
  </div>
@@ -553,7 +553,7 @@ export function OrganizationDocumentsForm() {
 
  {/* Redirect message from results page */}
  {redirectMessage && (
- <div className="bg-secondary border border-border rounded-xl p-4 mb-6 flex items-start gap-3">
+ <div className="bg-secondary border border-border rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-start gap-[var(--spacing-small-gap)]">
  <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
  <span className="text-primary">{redirectMessage}</span>
  </div>
@@ -561,7 +561,7 @@ export function OrganizationDocumentsForm() {
 
  {/* Required warning */}
  {!isDocumentsComplete && !hasPendingUploads && (
- <div className="bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.3] rounded-xl p-4 mb-6 flex items-center gap-3">
+ <div className="bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.3] rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5 text-[var(--warning)]" />
  <span className="text-yellow-700">
  يرجى رفع جميع المستندات الإلزامية قبل المتابعة.
@@ -570,12 +570,12 @@ export function OrganizationDocumentsForm() {
  )}
 
  {/* Required Documents */}
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6 mb-6">
- <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] mb-6">
+ <h2 className="text-xl font-semibold mb-4 flex items-center gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-red-500" />
  المستندات الإلزامية
  </h2>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {requiredSlots.map((doc) => {
  const file = uploadedFiles.find((f) => f.id === doc.id);
  const isUploading = file?.status === 'uploading';
@@ -588,7 +588,7 @@ export function OrganizationDocumentsForm() {
  onDragOver={(event) => handleRowDragOver(event, doc.id)}
  onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
  onDrop={(event) => handleRowDrop(event, doc.id)}
- className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
+ className={`flex items-center justify-between p-[var(--spacing-card-padding)] rounded-lg transition-colors ${
  isDragOver
  ? 'border-2 border-primary bg-primary/10'
  : isCompleted
@@ -598,7 +598,7 @@ export function OrganizationDocumentsForm() {
  : 'border-2 border-dashed border-border hover:border-primary hover:bg-primary/10'
  }`}
  >
- <div className="flex items-center gap-3 min-w-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] min-w-0">
  {isCompleted ? (
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)] flex-shrink-0" />
  ) : (
@@ -646,7 +646,7 @@ export function OrganizationDocumentsForm() {
  )}
  </div>
  </div>
- <div className="flex items-center gap-2 flex-shrink-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-shrink-0">
  {isCompleted && file?.fileId && (
  <>
  <button
@@ -668,7 +668,7 @@ export function OrganizationDocumentsForm() {
  <button
  onClick={() => handleSelectFile(doc.id)}
  disabled={hasPendingUploads}
- className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isUploading ? (
  <>
@@ -695,12 +695,12 @@ export function OrganizationDocumentsForm() {
  </div>
 
  {/* Optional Documents */}
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6 mb-6">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] mb-6">
  <h2 className="text-xl font-semibold mb-4">المستندات الاختيارية</h2>
  <p className="text-sm text-muted-foreground mb-4">
  رفع هذه المستندات يساعد في تحسين دقة التقييم
  </p>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {optionalSlots.map((doc) => {
  const file = uploadedFiles.find((f) => f.id === doc.id);
  const isUploading = file?.status === 'uploading';
@@ -713,7 +713,7 @@ export function OrganizationDocumentsForm() {
  onDragOver={(event) => handleRowDragOver(event, doc.id)}
  onDragLeave={(event) => handleRowDragLeave(event, doc.id)}
  onDrop={(event) => handleRowDrop(event, doc.id)}
- className={`flex items-center justify-between p-4 rounded-lg transition-colors ${
+ className={`flex items-center justify-between p-[var(--spacing-card-padding)] rounded-lg transition-colors ${
  isDragOver
  ? 'border-2 border-primary bg-primary/10'
  : isCompleted
@@ -723,7 +723,7 @@ export function OrganizationDocumentsForm() {
  : 'border border-border hover:bg-secondary'
  }`}
  >
- <div className="flex items-center gap-3 min-w-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] min-w-0">
  {isCompleted ? (
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)] flex-shrink-0" />
  ) : (
@@ -779,7 +779,7 @@ export function OrganizationDocumentsForm() {
  )}
  </div>
  </div>
- <div className="flex items-center gap-2 flex-shrink-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-shrink-0">
  {isCompleted && file?.fileId && (
  <>
  <button
@@ -801,7 +801,7 @@ export function OrganizationDocumentsForm() {
  <button
  onClick={() => handleSelectFile(doc.id)}
  disabled={hasPendingUploads}
- className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isUploading ? (
  <>
@@ -833,7 +833,7 @@ export function OrganizationDocumentsForm() {
  type="button"
  onClick={handleSave}
  disabled={isSaving || hasPendingUploads}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isSaving ? (
  <>

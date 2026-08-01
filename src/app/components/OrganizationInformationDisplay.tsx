@@ -71,8 +71,8 @@ interface ReadOnlyFieldProps {
 
 export function ReadOnlyField({ label, value, icon: Icon }: ReadOnlyFieldProps) {
  return (
- <div className="space-y-1">
- <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)].5 text-xs text-muted-foreground">
  {Icon && <Icon className="w-3.5 h-3.5" />}
  <span>{label}</span>
  </div>
@@ -92,8 +92,8 @@ interface ReadOnlyListFieldProps {
 export function ReadOnlyListField({ label, items, icon: Icon }: ReadOnlyListFieldProps) {
  const hasItems = items && items.length > 0;
  return (
- <div className="space-y-1">
- <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)].5 text-xs text-muted-foreground">
  {Icon && <Icon className="w-3.5 h-3.5" />}
  <span>{label}</span>
  </div>
@@ -122,7 +122,7 @@ export function SectionCard({ title, icon: Icon, children }: SectionCardProps) {
  return (
  <Card>
  <CardHeader className="pb-3">
- <CardTitle className="text-base font-semibold flex items-center gap-2 text-foreground">
+ <CardTitle className="text-base font-semibold flex items-center gap-[var(--spacing-small-gap)] text-foreground">
  {Icon && <Icon className="w-5 h-5 text-[var(--secondary)]" />}
  {title}
  </CardTitle>
@@ -144,7 +144,7 @@ export function OrganizationInformationDisplay({ data }: OrganizationInformation
  return (
  <div className="space-y-6" dir="rtl">
  {data.extractionError && (
- <div className="p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex items-start gap-3">
+ <div className="p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex items-start gap-[var(--spacing-small-gap)]">
  <XCircle className="w-5 h-5 text-[var(--destructive)] shrink-0 mt-0.5" />
  <div>
  <h3 className="font-semibold text-red-900 text-sm">خطأ أثناء الاستخراج</h3>

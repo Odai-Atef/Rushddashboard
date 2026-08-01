@@ -117,7 +117,7 @@ export function OpportunitiesDashboard() {
  case 'high':
  return 'bg-[var(--destructive)]/20 text-[var(--destructive)] border-red-500/30';
  default:
- return 'bg-muted text-muted-foreground';
+ return 'bg-muted text-[var(--text-muted)]';
  }
  };
 
@@ -128,7 +128,7 @@ export function OpportunitiesDashboard() {
  case 'medium':
  return 'bg-[var(--primary)]/20 text-[var(--secondary)]';
  default:
- return 'bg-muted text-muted-foreground';
+ return 'bg-muted text-[var(--text-muted)]';
  }
  };
 
@@ -148,23 +148,23 @@ export function OpportunitiesDashboard() {
  return (
  <div className="space-y-6 md:space-y-8">
  {/* Header */}
- <div className="border-b border-border pb-6">
- <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">لوحة الفرص</h2>
- <p className="text-muted-foreground text-base">اكتشاف فرص النمو والاستثمار والشراكات الاستراتيجية</p>
+ <div className="border-b border-[var(--border)] pb-6">
+ <h2 className="text-3xl md:text-[var(--text-page-title)] font-bold text-[var(--text-primary)] mb-2">لوحة الفرص</h2>
+ <p className="text-[var(--text-muted)] text-base">اكتشاف فرص النمو والاستثمار والشراكات الاستراتيجية</p>
  </div>
 
  {/* AI Opportunity Recommendation */}
- <div className="bg-gradient-to-l from-purple-500/10 via-blue-500/10 to-transparent border border-purple-500/20 rounded-xl p-6">
+ <div className="bg-gradient-to-l from-purple-500/10 via-[var(--secondary)]/10 to-transparent border border-purple-500/20 rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-[var(--radius-card)]">
  <Sparkles className="w-7 h-7 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <h3 className="text-xl">توصية الفرص</h3>
  <span className="px-2 py-1 bg-[var(--secondary)]/[0.2] text-[var(--secondary)] text-xs rounded-full">AI</span>
  </div>
- <p className="text-foreground leading-relaxed mb-4">
+ <p className="text-[var(--text-primary)] leading-relaxed mb-[var(--spacing-section-gap)]">
  تم تحديد <span className="font-bold text-[var(--secondary)]">6 فرص نمو استراتيجية</span> بإجمالي إيرادات متوقعة 15.9M ر.س.
  أعلى الفرص هي <span className="font-bold">التوسع في أسواق الخليج</span> بدرجة فرصة 92/100 وعائد متوقع 4.5M ر.س.
  <span className="font-bold text-[var(--primary)]"> 3 فرص منخفضة المخاطر</span> يمكن البدء بها فوراً باستثمار إجمالي 1.08M ر.س.
@@ -175,74 +175,74 @@ export function OpportunitiesDashboard() {
 
  {/* Opportunity Cards Grid */}
  <div>
- <h3 className="text-lg mb-4">بطاقات الفرص</h3>
- <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+ <h3 className="text-lg mb-[var(--spacing-section-gap)]">بطاقات الفرص</h3>
+ <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {opportunities.map((opp) => {
  const Icon = opp.icon;
  return (
  <div
  key={opp.id}
- className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full"
+ className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-6 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] transition-all duration-200 flex flex-col justify-between h-full"
  >
  {/* Header */}
- <div className="flex items-start gap-3 mb-4">
- <div className="p-3 bg-[var(--secondary)]/[0.08] rounded-xl">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] mb-[var(--spacing-section-gap)]">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-[var(--radius-card)]">
  <Icon className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  <div className="flex-1">
- <h4 className="text-lg font-medium text-foreground mb-2">{opp.title}</h4>
- <p className="text-sm text-muted-foreground leading-relaxed">{opp.description}</p>
+ <h4 className="text-lg font-medium text-[var(--text-primary)] mb-2">{opp.title}</h4>
+ <p className="text-sm text-[var(--text-muted)] leading-relaxed">{opp.description}</p>
  </div>
  </div>
 
  {/* Opportunity Score */}
- <div className="mb-4">
+ <div className="mb-[var(--spacing-section-gap)]">
  <div className="flex items-center justify-between mb-2">
- <span className="text-sm text-muted-foreground">درجة الفرصة</span>
- <span className="text-3xl font-bold text-[var(--secondary)] tracking-tight">{opp.opportunityScore}/100</span>
+ <span className="text-sm text-[var(--text-muted)]">درجة الفرصة</span>
+ <span className="text-[var(--text-card-number)] font-bold text-[var(--secondary)] tracking-tight">{opp.opportunityScore}/100</span>
  </div>
  <div className="h-2 bg-muted rounded-full overflow-hidden">
  <div
- className="h-full bg-gradient-to-l from-purple-500 to-blue-600 rounded-full"
+ className="h-full bg-gradient-to-l from-purple-500 to-[var(--secondary)] rounded-full"
  style={{ width: `${opp.opportunityScore}%` }}
  ></div>
  </div>
  </div>
 
  {/* Badges */}
- <div className="flex flex-wrap gap-2 mb-4">
- <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(opp.riskLevel)}`}>
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)] mb-[var(--spacing-section-gap)]">
+ <span className={`inline-flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(opp.riskLevel)}`}>
  {opp.riskLevel === 'high' ? <AlertTriangle className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
  {getRiskLabel(opp.riskLevel)}
  </span>
- <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium ${getImpactColor(opp.impact)}`}>
+ <span className={`inline-flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 rounded-full text-xs font-medium ${getImpactColor(opp.impact)}`}>
  <TrendingUp className="w-3 h-3" />
  تأثير {opp.impact === 'high' ? 'عالي' : 'متوسط'}
  </span>
  </div>
 
  {/* Metrics */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-4 border-t border-border">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 py-4 border-t border-[var(--border)]">
  <div>
- <p className="text-xs text-muted-foreground mb-1">العائد المتوقع</p>
+ <p className="text-xs text-[var(--text-muted)] mb-1">العائد المتوقع</p>
  <p className="font-medium text-[var(--primary)]">{opp.expectedRevenue}</p>
  </div>
  <div>
- <p className="text-xs text-muted-foreground mb-1">الاستثمار</p>
- <p className="font-medium text-foreground">{opp.investment}</p>
+ <p className="text-xs text-[var(--text-muted)] mb-1">الاستثمار</p>
+ <p className="font-medium text-[var(--text-primary)]">{opp.investment}</p>
  </div>
  <div>
- <p className="text-xs text-muted-foreground mb-1">المدة</p>
- <p className="font-medium text-foreground">{opp.timeline}</p>
+ <p className="text-xs text-[var(--text-muted)] mb-1">المدة</p>
+ <p className="font-medium text-[var(--text-primary)]">{opp.timeline}</p>
  </div>
  </div>
 
  {/* Actions */}
- <div className="flex gap-2 mt-4">
- <button className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-[var(--primary-foreground)] rounded-lg transition-colors text-sm">
+ <div className="flex gap-[var(--spacing-small-gap)] mt-4">
+ <button className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors text-sm">
  دراسة الفرصة
  </button>
- <button className="px-4 py-2 border border-border hover:bg-secondary dark:hover:bg-muted rounded-lg transition-colors text-sm text-foreground">
+ <button className="px-4 py-2 border border-[var(--border)] hover:bg-secondary dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors text-sm text-[var(--text-primary)]">
  التفاصيل
  </button>
  </div>
@@ -253,21 +253,21 @@ export function OpportunitiesDashboard() {
  </div>
 
  {/* New Programs Section */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-6">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Package className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="text-lg">البرامج الجديدة قيد التطوير</h3>
  </div>
  <div className="space-y-4">
  {newPrograms.map((program) => (
- <div key={program.id} className="p-4 bg-secondary/50 rounded-lg">
+ <div key={program.id} className="p-4 bg-secondary/50 rounded-[var(--radius-button)]">
  <div className="flex items-center justify-between mb-2">
  <h4 className="font-medium">{program.name}</h4>
- <span className="text-sm text-muted-foreground">
+ <span className="text-sm text-[var(--text-muted)]">
  {program.status === 'planning' ? 'تخطيط' : program.status === 'research' ? 'بحث' : 'تصميم'}
  </span>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
  <div
  className="h-full bg-[var(--primary)] rounded-full"
@@ -282,9 +282,9 @@ export function OpportunitiesDashboard() {
  </div>
 
  {/* Partnerships Table */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 shadow-sm overflow-hidden">
- <div className="p-6 border-b border-border">
- <div className="flex items-center gap-2">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
+ <div className="p-6 border-b border-[var(--border)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Handshake className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="text-lg">الشراكات المحتملة</h3>
  </div>
@@ -293,10 +293,10 @@ export function OpportunitiesDashboard() {
  <table className="w-full">
  <thead className="bg-secondary/50">
  <tr>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الشريك</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">النوع</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الحالة</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الإمكانات</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الشريك</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">النوع</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الحالة</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الإمكانات</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -305,7 +305,7 @@ export function OpportunitiesDashboard() {
  <td className="px-6 py-4">
  <p className="font-medium">{partner.partner}</p>
  </td>
- <td className="px-6 py-4 text-muted-foreground">
+ <td className="px-6 py-4 text-[var(--text-muted)]">
  {partner.type}
  </td>
  <td className="px-6 py-4">

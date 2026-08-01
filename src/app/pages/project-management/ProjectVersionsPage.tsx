@@ -76,7 +76,7 @@ export function ProjectVersionsPage() {
 
  if (isLoading) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
@@ -84,14 +84,14 @@ export function ProjectVersionsPage() {
 
  if (error) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex flex-col items-center justify-center gap-[var(--spacing-grid-gap)]">
  <div className="text-[var(--destructive)] text-center">{error}</div>
  <button
  onClick={() => {
  refetchProject();
  refetchDocuments();
  }}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <RotateCcw className="w-4 h-4" />
  إعادة المحاولة
@@ -105,18 +105,18 @@ export function ProjectVersionsPage() {
  }
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
- <div className="space-y-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
+ <div className="space-y-[var(--spacing-section-gap)]">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى تفاصيل المشروع
  </button>
  <h1 className="text-3xl font-bold mb-4">سجل الإصدارات والمستندات</h1>
  <div className="bg-card rounded-xl p-8 border border-border">
- <div className="flex items-center gap-3 mb-8">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-8">
  <div className="w-12 h-12 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
  <History className="w-6 h-6 text-[var(--secondary)]" />
  </div>
@@ -129,21 +129,21 @@ export function ProjectVersionsPage() {
  {documents.length === 0 ? (
  <div className="text-center py-12 text-muted-foreground">لا توجد مستندات مسجلة لهذا المشروع</div>
  ) : (
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {documents.map((doc) => {
  const file = doc.file;
  if (!file) {
  return (
  <div
  key={doc.id}
- className="flex items-center gap-4 p-4 bg-secondary rounded-xl border border-border"
+ className="flex items-center gap-[var(--spacing-grid-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-xl border border-border"
  >
  <div className="flex-shrink-0">
  <File className="w-8 h-8 text-muted-foreground" />
  </div>
  <div className="flex-1 min-w-0">
  <p className="font-medium text-foreground truncate">{getDocumentTypeLabel(doc.documentType)}</p>
- <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-xs text-muted-foreground mt-1 flex-wrap">
  <span>الملف غير متوفر</span>
  </div>
  </div>
@@ -153,7 +153,7 @@ export function ProjectVersionsPage() {
  return (
  <div
  key={doc.id}
- className="flex items-center gap-4 p-4 bg-secondary rounded-xl border border-border hover:border-ring/50 transition-colors"
+ className="flex items-center gap-[var(--spacing-grid-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-xl border border-border hover:border-ring/50 transition-colors"
  >
  <div className="flex-shrink-0">
  {getDocumentIcon(file.mimeType)}
@@ -161,7 +161,7 @@ export function ProjectVersionsPage() {
 
  <div className="flex-1 min-w-0">
  <p className="font-medium text-foreground truncate">{file.originalName}</p>
- <div className="flex items-center gap-3 text-xs text-muted-foreground mt-1 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-xs text-muted-foreground mt-1 flex-wrap">
  <span>{getDocumentTypeLabel(doc.documentType)}</span>
  <span>•</span>
  <span>{formatBytes(file.size)}</span>
@@ -175,7 +175,7 @@ export function ProjectVersionsPage() {
  <button
  onClick={() => handleDownload(doc.fileId, file.originalName)}
  disabled={downloadingId === doc.fileId}
- className="flex-shrink-0 inline-flex items-center gap-1.5 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+ className="flex-shrink-0 inline-flex items-center gap-[var(--spacing-small-gap)].5 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {downloadingId === doc.fileId ? (
  <Loader2 className="w-4 h-4 animate-spin" />

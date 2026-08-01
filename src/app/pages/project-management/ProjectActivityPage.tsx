@@ -56,7 +56,7 @@ export function ProjectActivityPage() {
 
  if (isLoading) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
@@ -64,14 +64,14 @@ export function ProjectActivityPage() {
 
  if (error) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex flex-col items-center justify-center gap-[var(--spacing-grid-gap)]">
  <div className="text-[var(--destructive)] text-center">{error}</div>
  <button
  onClick={() => {
  refetchProject();
  refetchLifecycle();
  }}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <RotateCcw className="w-4 h-4" />
  إعادة المحاولة
@@ -85,18 +85,18 @@ export function ProjectActivityPage() {
  }
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
- <div className="space-y-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
+ <div className="space-y-[var(--spacing-section-gap)]">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى تفاصيل المشروع
  </button>
  <h1 className="text-3xl font-bold mb-4">سجل النشاط</h1>
  <div className="bg-card rounded-xl p-8 border border-border">
- <div className="flex items-center gap-3 mb-8">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-8">
  <div className="w-12 h-12 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
  <Activity className="w-6 h-6 text-[var(--secondary)]" />
  </div>
@@ -111,13 +111,13 @@ export function ProjectActivityPage() {
  ) : (
  <div className="relative">
  <div className="absolute right-6 top-0 bottom-0 w-0.5 bg-muted" />
- <div className="space-y-6">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {steps.map((step, index) => {
  const style = getStatusStyle(step.status);
  const isLast = index === steps.length - 1;
  const isCurrent = step.exitedAt === null;
  return (
- <div key={step.id} className="relative flex gap-4 pr-3">
+ <div key={step.id} className="relative flex gap-[var(--spacing-grid-gap)] pr-3">
  <div className="relative z-10 flex-shrink-0 w-6 h-6 mt-1">
  {isCurrent ? (
  <div className="w-6 h-6 rounded-full border-2 border-primary bg-card flex items-center justify-center">
@@ -130,9 +130,9 @@ export function ProjectActivityPage() {
  )}
  </div>
 
- <div className="flex-1 bg-secondary rounded-xl p-5 border border-border">
- <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-3 mb-3">
- <div className="flex items-center gap-3">
+ <div className="flex-1 bg-secondary rounded-xl p-[var(--spacing-card-padding)] border border-border">
+ <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-[var(--spacing-small-gap)] mb-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span
  className="inline-block px-3 py-1 rounded-full text-xs font-medium"
  style={{ backgroundColor: style.bg, color: style.color }}
@@ -143,19 +143,19 @@ export function ProjectActivityPage() {
  <span className="text-xs font-medium text-[var(--secondary)]">الحالة الحالية</span>
  )}
  </div>
- <div className="flex items-center gap-4 text-xs text-muted-foreground">
- <span className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)] text-xs text-muted-foreground">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-3.5 h-3.5" />
  {formatDuration(step.durationMs)}
  </span>
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <User className="w-3.5 h-3.5" />
  {step.changedByUser?.email || step.changedBy}
  </span>
  </div>
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground mb-3">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)] text-sm text-muted-foreground mb-3">
  <div>
  <p className="text-xs text-muted-foreground mb-1">تاريخ الدخول</p>
  <p>{new Date(step.enteredAt).toLocaleString('ar-SA')} ({formatDateTime(step.enteredAt)})</p>
@@ -167,8 +167,8 @@ export function ProjectActivityPage() {
  </div>
 
  {step.notes && (
- <div className="bg-card rounded-lg p-3 border border-border">
- <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
+ <div className="bg-card rounded-lg p-[var(--spacing-card-padding)] border border-border">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-xs text-muted-foreground mb-2">
  <FileText className="w-3.5 h-3.5" />
  ملاحظات
  </div>
@@ -177,7 +177,7 @@ export function ProjectActivityPage() {
  )}
 
  {!isLast && steps[index + 1] && (
- <div className="hidden md:flex items-center gap-2 mt-3 text-xs text-muted-foreground">
+ <div className="hidden md:flex items-center gap-[var(--spacing-small-gap)] mt-3 text-xs text-muted-foreground">
  <ArrowRight className="w-3.5 h-3.5 rotate-90" />
  <span>انتقل إلى {getStatusLabel(steps[index + 1].status)}</span>
  </div>

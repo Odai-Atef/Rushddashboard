@@ -62,7 +62,7 @@ function CommandInput({
  return (
  <div
  data-slot="command-input-wrapper"
- className="flex h-11 items-center gap-2 border-b border-[var(--border)] px-3"
+ className="flex h-11 items-center gap-[var(--spacing-small-gap)] border-b border-[var(--border)] px-3"
  >
  <SearchIcon className="size-4 shrink-0 text-[var(--text-muted)]" />
  <CommandPrimitive.Input
@@ -116,7 +116,7 @@ function CommandGroup({
  <CommandPrimitive.Group
  data-slot="command-group"
  className={cn(
- "overflow-hidden p-1 text-[var(--text-primary)]",
+ "overflow-hidden p-[var(--spacing-small-gap)] text-[var(--text-primary)]",
  "[&_[cmdk-group-heading]]:px-2 [&_[cmdk-group-heading]]:py-1.5",
  "[&_[cmdk-group-heading]]:text-xs [&_[cmdk-group-heading]]:font-medium",
  "[&_[cmdk-group-heading]]:text-[var(--text-muted)]",
@@ -148,7 +148,7 @@ function CommandItem({
  <CommandPrimitive.Item
  data-slot="command-item"
  className={cn(
- "relative flex cursor-default items-center gap-2 rounded-md px-2 py-1.5 text-sm outline-none select-none",
+ "relative flex cursor-default items-center gap-[var(--spacing-small-gap)] rounded-md px-2 py-1.5 text-sm outline-none select-none",
  "text-[var(--text-primary)]",
  "data-[selected=true]:bg-[var(--primary)]/[0.08] data-[selected=true]:text-[var(--primary)]",
  "data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",

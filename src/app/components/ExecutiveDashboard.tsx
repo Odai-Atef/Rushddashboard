@@ -143,9 +143,9 @@ export function ExecutiveDashboard() {
  return (
  <div className="space-y-6 md:space-y-8">
  {/* Header */}
- <div className="border-b border-border pb-6">
- <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">لوحة القيادة التنفيذية</h2>
- <p className="text-muted-foreground text-base">نظرة عامة سريعة عن الوضع العام للمنصة</p>
+ <div className="border-b border-[var(--border)] pb-6">
+ <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">لوحة القيادة التنفيذية</h2>
+ <p className="text-[var(--text-muted)] text-base">نظرة عامة سريعة عن الوضع العام للمنصة</p>
  </div>
 
  {/* KPI Cards */}
@@ -153,37 +153,37 @@ export function ExecutiveDashboard() {
  {kpis.map((kpi, index) => {
  const Icon = kpi.icon;
  return (
- <div key={index} className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full">
+ <div key={index} className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] transition-all duration-200 flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-5">
- <div className={`p-3 rounded-xl ${kpi.bgColor}`}>
+ <div className={`p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] ${kpi.bgColor}`}>
  <Icon className={`w-6 h-6 ${kpi.color}`} />
  </div>
- <div className={`flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full ${kpi.isPositive ? 'text-[var(--primary)] bg-[var(--primary)]/[0.1]' : 'text-[var(--destructive)] bg-[var(--destructive)]/[0.2]'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium px-2 py-1 rounded-full ${kpi.isPositive ? 'text-[var(--primary)] bg-[var(--primary)]/[0.1]' : 'text-[var(--destructive)] bg-[var(--destructive)]/[0.2]'}`}>
  {kpi.isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
  {kpi.change}
  </div>
  </div>
- <h3 className="text-sm font-medium text-muted-foreground mb-1.5">{kpi.title}</h3>
- <p className="text-3xl font-bold text-foreground tracking-tight">{kpi.value}</p>
+ <h3 className="text-sm font-medium text-[var(--text-muted)] mb-1.5">{kpi.title}</h3>
+ <p className="text-3xl font-bold text-[var(--text-primary)] tracking-tight">{kpi.value}</p>
  </div>
  );
  })}
  </div>
 
  {/* AI Executive Summary */}
- <div className="bg-gradient-to-l from-violet-500/5 via-blue-500/5 to-transparent border border-[var(--secondary)]/[0.2] rounded-2xl p-6">
+ <div className="bg-gradient-to-l from-violet-500/5 via-[var(--secondary)]/5 to-transparent border border-[var(--secondary)]/[0.2] rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-violet-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-violet-600 rounded-[var(--radius-card)]">
  <Sparkles className="w-7 h-7 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-3">
- <h3 className="text-xl font-semibold text-foreground">الملخص التنفيذي</h3>
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
+ <h3 className="text-xl font-semibold text-[var(--text-primary)]">الملخص التنفيذي</h3>
  <span className="px-2 py-1 bg-violet-500/20 text-[var(--secondary)] text-xs rounded-full">AI Executive</span>
  </div>
- <p className="text-muted-foreground leading-relaxed mb-4">
+ <p className="text-[var(--text-muted)] leading-relaxed mb-4">
  الأداء العام للمنصة <span className="font-bold text-[var(--primary)]">إيجابي ومستقر</span> مع نمو 18.7% في الإيرادات و12.3% في قاعدة العملاء.
- القناة B2B تُظهر <span className="font-bold text-foreground">إمكانات نمو استثنائية</span> بهامش ربح 45%.
+ القناة B2B تُظهر <span className="font-bold text-[var(--text-primary)]">إمكانات نمو استثنائية</span> بهامش ربح 45%.
  يوجد <span className="font-bold text-[var(--warning)]">12 تنبيه نشط</span> يحتاج اهتماماً فورياً، أبرزها انخفاض معدل التحويل وارتفاع الشكاوى.
  </p>
  </div>
@@ -193,10 +193,10 @@ export function ExecutiveDashboard() {
  {/* Charts */}
  <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
  {/* Revenue Trend */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
- <h3 className="text-lg font-semibold text-foreground mb-1">اتجاه الإيرادات</h3>
- <p className="text-sm text-muted-foreground">الإيرادات الشهرية خلال آخر 6 أشهر</p>
+ <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">اتجاه الإيرادات</h3>
+ <p className="text-sm text-[var(--text-muted)]">الإيرادات الشهرية خلال آخر 6 أشهر</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <LineChart data={revenueData}>
@@ -234,10 +234,10 @@ export function ExecutiveDashboard() {
  </div>
 
  {/* Customer Growth */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
- <h3 className="text-lg font-semibold text-foreground mb-1">نمو العملاء</h3>
- <p className="text-sm text-muted-foreground">عدد العملاء النشطين خلال آخر 6 أشهر</p>
+ <h3 className="text-lg font-semibold text-[var(--text-primary)] mb-1">نمو العملاء</h3>
+ <p className="text-sm text-[var(--text-muted)]">عدد العملاء النشطين خلال آخر 6 أشهر</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <BarChart data={customerGrowthData}>
@@ -274,54 +274,54 @@ export function ExecutiveDashboard() {
  {/* Alerts and Recommendations */}
  <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
  {/* Alerts Panel */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 shadow-sm overflow-hidden">
- <div className="p-6 border-b border-border">
- <div className="flex items-center gap-2">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
+ <div className="p-6 border-b border-[var(--border)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5 text-[var(--warning)]" />
- <h3 className="text-lg font-semibold text-foreground">التنبيهات</h3>
+ <h3 className="text-lg font-semibold text-[var(--text-primary)]">التنبيهات</h3>
  </div>
  </div>
- <div className="p-4 space-y-3">
+ <div className="p-4 space-y-[var(--spacing-small-gap)]">
  {alerts.map((alert) => (
- <div key={alert.id} className={`p-4 rounded-lg ${getAlertColor(alert.type)}`}>
- <div className="flex items-start justify-between gap-2 mb-2">
+ <div key={alert.id} className={`p-4 rounded-[var(--radius-button)] ${getAlertColor(alert.type)}`}>
+ <div className="flex items-start justify-between gap-[var(--spacing-small-gap)] mb-2">
  <h4 className="font-medium">{alert.title}</h4>
  <span className={`px-2 py-1 text-xs rounded-full ${getPriorityBadge(alert.priority)}`}>
  {alert.priority === 'high' ? 'عالية' : alert.priority === 'medium' ? 'متوسطة' : 'منخفضة'}
  </span>
  </div>
- <p className="text-sm text-muted-foreground">{alert.description}</p>
+ <p className="text-sm text-[var(--text-muted)]">{alert.description}</p>
  </div>
  ))}
  </div>
  </div>
 
  {/* Top 3 Recommendations */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 shadow-sm overflow-hidden">
- <div className="p-6 border-b border-border">
- <div className="flex items-center gap-2">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
+ <div className="p-6 border-b border-[var(--border)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Target className="w-5 h-5 text-[var(--primary)]" />
- <h3 className="text-lg font-semibold text-foreground">أهم 3 توصيات</h3>
+ <h3 className="text-lg font-semibold text-[var(--text-primary)]">أهم 3 توصيات</h3>
  </div>
  </div>
- <div className="p-4 space-y-3">
+ <div className="p-4 space-y-[var(--spacing-small-gap)]">
  {topRecommendations.map((rec, index) => (
- <div key={rec.id} className="p-4 bg-secondary/50 rounded-xl hover:bg-muted dark:hover:bg-muted/50 transition-colors">
- <div className="flex items-start gap-3">
+ <div key={rec.id} className="p-4 bg-secondary/50 rounded-[var(--radius-card)] hover:bg-muted dark:hover:bg-muted/50 transition-colors">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <div className="w-8 h-8 rounded-full bg-[var(--primary)] text-[var(--primary-foreground)] flex items-center justify-center text-sm font-medium flex-shrink-0">
  {index + 1}
  </div>
  <div className="flex-1">
- <h4 className="font-medium text-foreground mb-1">{rec.title}</h4>
- <div className="flex items-center gap-2 text-sm">
+ <h4 className="font-medium text-[var(--text-primary)] mb-1">{rec.title}</h4>
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm">
  <span className="text-[var(--primary)] font-medium">{rec.impact}</span>
- <span className="text-muted-foreground">•</span>
+ <span className="text-[var(--text-muted)]">•</span>
  <span className={`px-2 py-0.5 rounded-full text-xs ${getPriorityBadge(rec.priority)}`}>
  {rec.priority === 'urgent' ? 'عاجل' : 'أولوية عالية'}
  </span>
  </div>
  </div>
- <CheckCircle className="w-5 h-5 text-muted-foreground cursor-pointer hover:text-[var(--primary)] transition-colors" />
+ <CheckCircle className="w-5 h-5 text-[var(--text-muted)] cursor-pointer hover:text-[var(--primary)] transition-colors" />
  </div>
  </div>
  ))}

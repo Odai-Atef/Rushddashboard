@@ -13,7 +13,7 @@ function RadioGroup({
  return (
  <RadioGroupPrimitive.Root
  data-slot="radio-group"
- className={cn("grid gap-3", className)}
+ className={cn("grid gap-[var(--spacing-small-gap)]", className)}
  {...props}
  />
  );
@@ -27,7 +27,7 @@ function RadioGroupItem({
  <RadioGroupPrimitive.Item
  data-slot="radio-group-item"
  className={cn(
- "aspect-square size-5 shrink-0 rounded-full border shadow-sm",
+ "aspect-square size-5 shrink-0 rounded-full border shadow-[var(--shadow-sm)]",
  "bg-[var(--card)]",
  "border-[var(--border)]",
  "text-[var(--primary)]",

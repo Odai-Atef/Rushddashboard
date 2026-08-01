@@ -61,13 +61,13 @@ export function RecommendationItem({
  return (
  <div
  className={cn(
- 'p-4 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors',
+ 'p-[var(--spacing-card-padding)] bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors',
  (onApply || onDismiss) && 'cursor-pointer',
  className
  )}
  onClick={onApply}
  >
- <div className="flex items-start gap-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  {index !== undefined && (
  <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-sm font-medium flex-shrink-0">
  {index}
@@ -78,7 +78,7 @@ export function RecommendationItem({
  {description && (
  <p className="text-sm text-muted-foreground mb-2">{description}</p>
  )}
- <div className="flex items-center gap-2 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-wrap">
  <span className="text-[var(--primary)] font-medium text-sm">{impact}</span>
  <span className="text-muted-foreground">•</span>
  <span

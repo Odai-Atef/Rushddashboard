@@ -46,7 +46,7 @@ function TooltipContent({
  data-slot="tooltip-content"
  sideOffset={sideOffset}
  className={cn(
- "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-[var(--radius-button)] px-3 py-1.5 text-xs text-balance shadow-[var(--shadow-lg)] transition-all duration-[var(--transition-duration)]",
+ "z-50 w-fit origin-(--radix-tooltip-content-transform-origin) rounded-[var(--radius-button)] px-3 py-1.5 text-xs text-balance shadow-[var(--shadow-[var(--shadow-lg)])] transition-all duration-[var(--transition-duration)]",
  "bg-[var(--text-primary)] text-[var(--primary-foreground)]",
  "animate-in fade-in-0 zoom-in-95",
  "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",

@@ -31,13 +31,13 @@ export function ChartCard({
 }: ChartCardProps) {
  return (
  <div className={cn('bg-card border border-border rounded-xl overflow-hidden', className)}>
- <div className={cn('p-6 border-b border-border', headerClassName)}>
+ <div className={cn('p-[var(--spacing-card-padding)] border-b border-border', headerClassName)}>
  <h3 className="text-lg mb-1">{title}</h3>
  {description && (
  <p className="text-sm text-muted-foreground">{description}</p>
  )}
  </div>
- <div className={cn('p-6', bodyClassName)}>{children}</div>
+ <div className={cn('p-[var(--spacing-card-padding)]', bodyClassName)}>{children}</div>
  </div>
  );
 }

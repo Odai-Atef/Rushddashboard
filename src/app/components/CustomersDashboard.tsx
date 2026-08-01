@@ -107,60 +107,60 @@ export function CustomersDashboard() {
  return (
  <div className="space-y-6 md:space-y-8">
  {/* Header */}
- <div className="border-b border-border pb-6">
- <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">لوحة العملاء</h2>
- <p className="text-muted-foreground text-base">تحليل شامل لسلوك العملاء والولاء والرضا</p>
+ <div className="border-b border-[var(--border)] pb-6">
+ <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">لوحة العملاء</h2>
+ <p className="text-[var(--text-muted)] text-base">تحليل شامل لسلوك العملاء والولاء والرضا</p>
  </div>
 
  {/* KPI Cards */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-grid-gap)] items-stretch">
  {kpis.map((kpi, index) => {
  const Icon = kpi.icon;
  return (
- <div key={index} className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-200">
- <div className="flex items-center justify-between mb-4">
- <div className={`p-3 ${kpi.bgColor} rounded-lg`}>
+ <div key={index} className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] dark:hover:shadow-[var(--shadow-lg)] transition-all duration-200">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <div className={`p-[var(--spacing-card-padding)] ${kpi.bgColor} rounded-[var(--radius-button)]`}>
  <Icon className={`w-5 h-5 ${kpi.color}`} />
  </div>
- <div className={`flex items-center gap-1 text-sm ${kpi.isPositive ? 'text-[var(--primary)]' : 'text-[var(--destructive)]'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] text-sm ${kpi.isPositive ? 'text-[var(--primary)]' : 'text-[var(--destructive)]'}`}>
  {kpi.isPositive ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
  {kpi.change}
  </div>
  </div>
- <h3 className="text-muted-foreground text-sm mb-2">{kpi.title}</h3>
- <p className="text-3xl font-bold text-foreground tracking-tight">{kpi.value}</p>
+ <h3 className="text-[var(--text-muted)] text-sm mb-2">{kpi.title}</h3>
+ <p className="text-3xl font-bold text-[var(--text-primary)] tracking-tight">{kpi.value}</p>
  </div>
  );
  })}
  </div>
 
  {/* AI Insight Card */}
- <div className="bg-gradient-to-l from-[var(--secondary)]/[0.05] via-[var(--secondary)]/[0.05] to-transparent border border-[var(--secondary)]/[0.2] rounded-2xl p-6">
+ <div className="bg-gradient-to-l from-[var(--secondary)]/[0.05] via-[var(--secondary)]/[0.05] to-transparent border border-[var(--secondary)]/[0.2] rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-[var(--secondary)] to-purple-600 rounded-[var(--radius-card)]">
  <Sparkles className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="text-lg">رؤية الذكاء الاصطناعي</h3>
  <span className="px-2 py-1 bg-[var(--primary)]/20 text-[var(--secondary)] text-xs rounded-full">AI</span>
  </div>
- <p className="text-muted-foreground leading-relaxed">
- تحليل بيانات العملاء يُظهر أن <span className="text-foreground font-medium">معدل الاحتفاظ بالعملاء</span> تحسن بنسبة 7% في الأشهر الستة الماضية.
+ <p className="text-[var(--text-muted)] leading-relaxed">
+ تحليل بيانات العملاء يُظهر أن <span className="text-[var(--text-primary)] font-medium">معدل الاحتفاظ بالعملاء</span> تحسن بنسبة 7% في الأشهر الستة الماضية.
  العملاء المميزون يمثلون <span className="text-[var(--primary)] font-medium">42% من إجمالي الإيرادات</span> رغم كونهم 16% فقط من القاعدة.
- الشكاوى المتعلقة <span className="text-foreground font-medium">بجودة الخدمة</span> انخفضت بنسبة 28% بعد تطبيق البرنامج التدريبي الجديد.
+ الشكاوى المتعلقة <span className="text-[var(--text-primary)] font-medium">بجودة الخدمة</span> انخفضت بنسبة 28% بعد تطبيق البرنامج التدريبي الجديد.
  </p>
  </div>
  </div>
  </div>
 
  {/* Charts Section */}
- <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+ <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {/* Customer Segments */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg mb-1">شرائح العملاء</h3>
- <p className="text-sm text-muted-foreground">توزيع العملاء حسب مستوى النشاط</p>
+ <p className="text-sm text-[var(--text-muted)]">توزيع العملاء حسب مستوى النشاط</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <PieChart>
@@ -190,21 +190,21 @@ export function CustomersDashboard() {
  />
  </PieChart>
  </ResponsiveContainer>
- <div className="grid grid-cols-2 gap-3 mt-4">
+ <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)] mt-4">
  {segmentsData.map((segment, index) => (
- <div key={index} className="flex items-center gap-2">
+ <div key={index} className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: segment.color }}></div>
- <span className="text-sm text-muted-foreground">{segment.name}</span>
+ <span className="text-sm text-[var(--text-muted)]">{segment.name}</span>
  </div>
  ))}
  </div>
  </div>
 
  {/* Complaints Breakdown */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg mb-1">تحليل الشكاوى</h3>
- <p className="text-sm text-muted-foreground">توزيع الشكاوى حسب الفئة</p>
+ <p className="text-sm text-[var(--text-muted)]">توزيع الشكاوى حسب الفئة</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <BarChart data={complaintsData} layout="horizontal">
@@ -242,10 +242,10 @@ export function CustomersDashboard() {
  </div>
 
  {/* Loyalty Trend Chart */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg mb-1">اتجاه الولاء والاحتفاظ</h3>
- <p className="text-sm text-muted-foreground">تطور درجة الولاء ومعدل الاحتفاظ بالعملاء</p>
+ <p className="text-sm text-[var(--text-muted)]">تطور درجة الولاء ومعدل الاحتفاظ بالعملاء</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <LineChart data={loyaltyData}>
@@ -294,31 +294,31 @@ export function CustomersDashboard() {
  </div>
 
  {/* High-Value Customers Table */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 shadow-sm overflow-hidden">
- <div className="p-6 border-b border-border">
- <div className="flex items-center gap-2 mb-1">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
+ <div className="p-6 border-b border-[var(--border)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <Crown className="w-5 h-5 text-yellow-500" />
  <h3 className="text-lg">العملاء الأكثر قيمة</h3>
  </div>
- <p className="text-sm text-muted-foreground">أعلى 5 عملاء من حيث القيمة الإجمالية</p>
+ <p className="text-sm text-[var(--text-muted)]">أعلى 5 عملاء من حيث القيمة الإجمالية</p>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead className="bg-secondary/50">
  <tr>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">#</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">اسم العميل</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">القيمة الإجمالية</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">عدد المعاملات</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">درجة الرضا</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">#</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">اسم العميل</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">القيمة الإجمالية</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">عدد المعاملات</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">درجة الرضا</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
  {highValueCustomers.map((customer) => (
  <tr key={customer.id} className="hover:bg-secondary/50 transition-colors">
- <td className="px-6 py-4 text-sm text-muted-foreground">{customer.id}</td>
+ <td className="px-6 py-4 text-sm text-[var(--text-muted)]">{customer.id}</td>
  <td className="px-6 py-4">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {customer.id === 1 && <Crown className="w-4 h-4 text-yellow-500" />}
  <p className="font-medium">{customer.name}</p>
  </div>
@@ -326,11 +326,11 @@ export function CustomersDashboard() {
  <td className="px-6 py-4">
  <p className="font-medium text-[var(--primary)]">{customer.value.toLocaleString()} ر.س</p>
  </td>
- <td className="px-6 py-4 text-muted-foreground">
+ <td className="px-6 py-4 text-[var(--text-muted)]">
  {customer.transactions} معاملة
  </td>
  <td className="px-6 py-4">
- <div className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
  <span className="font-medium">{customer.satisfaction}</span>
  </div>
@@ -343,29 +343,29 @@ export function CustomersDashboard() {
  </div>
 
  {/* Recommendation Card */}
- <div className="bg-gradient-to-l from-[var(--primary)]/[0.05] to-transparent border border-[var(--primary)]/[0.2] rounded-2xl p-6">
+ <div className="bg-gradient-to-l from-[var(--primary)]/[0.05] to-transparent border border-[var(--primary)]/[0.2] rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-green-500 to-emerald-600 rounded-[var(--radius-card)]">
  <Target className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="text-lg">التوصية الإستراتيجية</h3>
  <span className="px-2 py-1 bg-[var(--primary)]/[0.2] text-[var(--primary)] text-xs rounded-full">موصى به</span>
  </div>
- <p className="text-muted-foreground leading-relaxed mb-4">
- نوصي بإطلاق <span className="text-foreground font-medium">برنامج ولاء متقدم</span> للعملاء المميزين لزيادة معدل الاحتفاظ إلى 95%.
- كذلك يُنصح بالتركيز على <span className="text-foreground font-medium">تحسين جودة الخدمة</span> لتقليل الشكاوى بنسبة إضافية 35%.
+ <p className="text-[var(--text-muted)] leading-relaxed mb-[var(--spacing-section-gap)]">
+ نوصي بإطلاق <span className="text-[var(--text-primary)] font-medium">برنامج ولاء متقدم</span> للعملاء المميزين لزيادة معدل الاحتفاظ إلى 95%.
+ كذلك يُنصح بالتركيز على <span className="text-[var(--text-primary)] font-medium">تحسين جودة الخدمة</span> لتقليل الشكاوى بنسبة إضافية 35%.
  من المتوقع أن يؤدي ذلك إلى زيادة <span className="text-[var(--primary)] font-medium">القيمة الدائمة للعميل</span> بنسبة 42% خلال 12 شهر.
  </p>
- <div className="flex flex-wrap gap-3">
- <button className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-lg transition-colors">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
+ <button className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors">
  تطبيق التوصية
  </button>
- <button className="px-4 py-2 border border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
+ <button className="px-4 py-2 border border-[var(--border)] hover:bg-muted dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors">
  عرض خطة العمل
  </button>
- <button className="px-4 py-2 border border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
+ <button className="px-4 py-2 border border-[var(--border)] hover:bg-muted dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors">
  تأجيل
  </button>
  </div>

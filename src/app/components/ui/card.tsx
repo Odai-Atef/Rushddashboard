@@ -9,7 +9,7 @@ function Card({ className, ...props }: React.ComponentProps<"div">) {
  className={cn(
  "rounded-[var(--radius-card)] border bg-[var(--card)] text-[var(--card-foreground)] shadow-[var(--shadow-card)] transition-all duration-[var(--transition-duration)]",
  "border-[var(--border)]",
- "hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px]",
+ "hover:shadow-[var(--shadow-[var(--shadow-lg)])] hover:translate-y-[-2px]",
  className,
  )}
  {...props}
@@ -22,7 +22,7 @@ function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
  <div
  data-slot="card-header"
  className={cn(
- "flex flex-col gap-1.5 px-[var(--spacing-card-padding)] py-5",
+ "flex flex-col gap-[var(--spacing-small-gap)].5 px-[var(--spacing-card-padding)] py-5",
  className,
  )}
  {...props}
@@ -71,7 +71,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
  <div
  data-slot="card-footer"
  className={cn(
- "flex items-center justify-between px-[var(--spacing-card-padding)] py-4 gap-2",
+ "flex items-center justify-between px-[var(--spacing-card-padding)] py-4 gap-[var(--spacing-small-gap)]",
  className,
  )}
  {...props}

@@ -289,7 +289,7 @@ export function AIAnalysisChatPage() {
  complexity: 'متوسط',
  impact: 'متوسط',
  icon: Brain,
- color: 'from-purple-500 to-blue-600',
+ color: 'from-purple-500 to-[var(--secondary)]',
  };
  startCardAnalysis(genericCard);
  }
@@ -438,7 +438,7 @@ export function AIAnalysisChatPage() {
  complexity: 'متوسط',
  impact: 'متوسط',
  icon: Brain,
- color: 'from-purple-500 to-blue-600',
+ color: 'from-purple-500 to-[var(--secondary)]',
  };
  startCardAnalysis(card);
  };
@@ -532,7 +532,7 @@ export function AIAnalysisChatPage() {
  case 'عالي': return 'bg-orange-500/10 text-[var(--warning)] border-orange-500/20';
  case 'متوسط': return 'bg-yellow-500/10 text-[var(--warning)] border-yellow-500/20';
  case 'منخفض': return 'bg-[var(--primary)]/10 text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
- default: return 'bg-secondary0/10 text-muted-foreground border-gray-500/20';
+ default: return 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
  }
  };
 
@@ -565,16 +565,16 @@ export function AIAnalysisChatPage() {
  const renderEmptyState = () => (
  <div className="flex-1 flex flex-col items-center justify-center p-12 text-center bg-gradient-to-br from-background to-muted/20">
  <div className="max-w-md">
- <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-blue-600 rounded-2xl mb-6 shadow-xl">
+ <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-2xl mb-6 shadow-xl">
  <Sparkles className="w-10 h-10 text-[var(--primary-foreground)]" />
  </div>
- <h2 className="text-2xl font-bold mb-3">ابدأ تحليلاً ذكياً</h2>
+ <h2 className="text-[var(--text-section-title)] font-bold mb-3">ابدأ تحليلاً ذكياً</h2>
  <p className="text-muted-foreground mb-6 leading-relaxed">
  اختر تحليلاً من مكتبة التحليلات للبدء
  </p>
  <button
  onClick={() => setShowAnalysisLibrary(true)}
- className="px-8 py-3 bg-gradient-to-r from-purple-500 to-blue-600 text-[var(--primary-foreground)] rounded-lg hover:from-purple-600 hover:to-blue-700 transition-all flex items-center gap-2 mx-auto shadow-lg"
+ className="px-8 py-3 bg-gradient-to-r from-purple-500 to-[var(--secondary)] text-[var(--primary-foreground)] rounded-lg hover:from-purple-600 hover:to-[var(--secondary)]/90 transition-all flex items-center gap-[var(--spacing-small-gap)] mx-auto shadow-lg"
  >
  <Plus className="w-5 h-5" />
  <span>فتح مكتبة التحليلات</span>
@@ -591,8 +591,8 @@ export function AIAnalysisChatPage() {
  return (
  <div key={message.id || index} className="flex justify-start w-full">
  <div className="max-w-4xl w-full">
- <div className="flex items-center gap-2 mb-2">
- <div className="p-1.5 bg-muted rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
+ <div className="p-[var(--spacing-small-gap)].5 bg-muted rounded-lg">
  <Users className="w-4 h-4" />
  </div>
  <span className="text-sm font-medium">أنت</span>
@@ -608,9 +608,9 @@ export function AIAnalysisChatPage() {
  return (
  <div key={message.id || index} className="flex justify-end w-full">
  <div className="max-w-5xl w-full">
- <div className="flex items-center gap-2 mb-2 justify-end">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2 justify-end">
  <span className="text-sm font-medium">المحلل الذكي</span>
- <div className="p-1.5 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+ <div className="p-[var(--spacing-small-gap)].5 bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-lg">
  <Sparkles className="w-4 h-4 text-[var(--primary-foreground)]" />
  </div>
  </div>
@@ -622,7 +622,7 @@ export function AIAnalysisChatPage() {
  </div>
 
  {!message.isStreaming && index === streaming.messages.length - 1 && message.role === 'assistant' && (
- <div className="flex items-center gap-2 mt-3 justify-end">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mt-3 justify-end">
  <button
  onClick={() => {
  if (messageContent) {
@@ -631,7 +631,7 @@ export function AIAnalysisChatPage() {
  });
  }
  }}
- className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-1"
+ className="px-3 py-1.5 text-xs border border-border hover:bg-accent rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Copy className="w-3 h-3" />
  نسخ
@@ -649,8 +649,8 @@ export function AIAnalysisChatPage() {
  {/* Page Header */}
  <div className="p-6 border-b border-border bg-card">
  <div className="flex items-center justify-between">
- <div className="flex items-center gap-4">
- <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)]">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-xl">
  <Sparkles className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <div>
@@ -660,7 +660,7 @@ export function AIAnalysisChatPage() {
  </div>
  <button
  onClick={() => setShowAnalysisLibrary(true)}
- className="px-6 py-3 bg-gradient-to-r from-purple-500 to-blue-600 text-[var(--primary-foreground)] rounded-lg hover:from-purple-600 hover:to-blue-700 transition-all flex items-center gap-2 shadow-lg"
+ className="px-6 py-3 bg-gradient-to-r from-purple-500 to-[var(--secondary)] text-[var(--primary-foreground)] rounded-lg hover:from-purple-600 hover:to-[var(--secondary)]/90 transition-all flex items-center gap-[var(--spacing-small-gap)] shadow-lg"
  >
  <Plus className="w-5 h-5" />
  <span>تحليل جديد</span>
@@ -677,7 +677,7 @@ export function AIAnalysisChatPage() {
  <h2 className="text-lg font-medium">سجل التحليلات</h2>
  <button
  onClick={() => setShowAnalysisLibrary(true)}
- className="p-2 hover:bg-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
  >
  <Plus className="w-4 h-4" />
  </button>
@@ -692,9 +692,9 @@ export function AIAnalysisChatPage() {
  </div>
  </div>
 
- <div className="flex-1 overflow-y-auto p-2" ref={historyListRef}>
+ <div className="flex-1 overflow-y-auto p-[var(--spacing-small-gap)]" ref={historyListRef}>
  {history.isLoading && history.entries.length === 0 && (
- <div className="flex flex-col items-center justify-center py-8 space-y-3">
+ <div className="flex flex-col items-center justify-center py-8 space-y-[var(--spacing-small-gap)]">
  <Loader2 className="w-6 h-6 text-primary animate-spin" />
  <p className="text-sm text-muted-foreground">جاري تحميل سجل التحليلات...</p>
  </div>
@@ -702,14 +702,14 @@ export function AIAnalysisChatPage() {
 
  {history.error && history.entries.length === 0 && (
  <div className="p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-lg text-[var(--destructive)] text-sm">
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <AlertTriangle className="w-4 h-4" />
  <span className="font-medium">فشل في تحميل السجل</span>
  </div>
  <p className="mb-3">{history.error}</p>
  <button
  onClick={() => history.retry()}
- className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-red-200 rounded-lg transition-colors flex items-center gap-1"
+ className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-red-200 rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <RefreshCw className="w-3 h-3" />
  إعادة المحاولة
@@ -719,7 +719,7 @@ export function AIAnalysisChatPage() {
 
  {!history.isLoading && !history.error && history.entries.length === 0 && (
  <div className="flex flex-col items-center justify-center py-8 text-center">
- <div className="p-3 bg-muted rounded-xl mb-3">
+ <div className="p-[var(--spacing-card-padding)] bg-muted rounded-xl mb-3">
  <Clock className="w-6 h-6 text-muted-foreground" />
  </div>
  <p className="text-sm text-muted-foreground">
@@ -744,7 +744,7 @@ export function AIAnalysisChatPage() {
  key={item.id}
  data-history-id={item.id}
  onClick={() => handleHistoryItemClick(item.id)}
- className={`group p-3 rounded-lg mb-2 cursor-pointer transition-all ${
+ className={`group p-[var(--spacing-card-padding)] rounded-lg mb-2 cursor-pointer transition-all ${
  (selectedAnalysis ?? chatId) === item.id
  ? 'bg-primary/10 border-2 border-primary'
  : 'hover:bg-muted/50 border-2 border-transparent'
@@ -756,7 +756,7 @@ export function AIAnalysisChatPage() {
  <p className="text-xs text-muted-foreground">{date}</p>
  </div>
  <div className="opacity-0 group-hover:opacity-100 transition-opacity">
- <button className="p-1 hover:bg-accent rounded-lg">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg">
  <MoreVertical className="w-4 h-4" />
  </button>
  </div>
@@ -769,7 +769,7 @@ export function AIAnalysisChatPage() {
  )}
 
  <div className="flex items-center justify-between">
- <div className="flex items-center gap-2 text-xs text-muted-foreground">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-xs text-muted-foreground">
  <Clock className="w-3 h-3" />
  <span>{time}</span>
  </div>
@@ -817,13 +817,13 @@ export function AIAnalysisChatPage() {
  {/* Analysis Header */}
  <div className="p-4 border-b border-border bg-card">
  <div className="flex items-center justify-between">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {activeAnalysis ? (
- <div className={cn('p-2 rounded-lg bg-gradient-to-br', activeAnalysis.color)}>
+ <div className={cn('p-[var(--spacing-small-gap)] rounded-lg bg-gradient-to-br', activeAnalysis.color)}>
  <activeAnalysis.icon className="w-5 h-5 text-[var(--primary-foreground)]" />
  </div>
  ) : (
- <div className="p-2 rounded-lg bg-gradient-to-br from-gray-500 to-gray-600">
+ <div className="p-[var(--spacing-small-gap)] rounded-lg bg-gradient-to-br from-gray-500 to-gray-600">
  <Clock className="w-5 h-5 text-[var(--primary-foreground)]" />
  </div>
  )}
@@ -838,13 +838,13 @@ export function AIAnalysisChatPage() {
  </p>
  </div>
  </div>
- <div className="flex items-center gap-2">
- <button className="p-2 hover:bg-accent rounded-lg transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors">
  <FileDown className="w-4 h-4" />
  </button>
  <button
  onClick={handleCloseAnalysis}
- className="p-2 hover:bg-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
  >
  <X className="w-4 h-4" />
  </button>
@@ -854,15 +854,15 @@ export function AIAnalysisChatPage() {
 
  {/* Progress Steps */}
  <div className="p-4 border-b border-border bg-muted/30">
- <div className="flex items-center justify-between gap-2">
+ <div className="flex items-center justify-between gap-[var(--spacing-small-gap)]">
  {progressSteps.map((step, index) => {
  const Icon = step.icon;
  return (
  <div key={step.id} className="flex items-center flex-1">
- <div className="flex items-center gap-2 flex-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-1">
  <div
  className={cn(
- 'p-2 rounded-lg transition-all',
+ 'p-[var(--spacing-small-gap)] rounded-lg transition-all',
  step.status === 'completed' && 'bg-[var(--primary)]/[0.2]',
  step.status === 'active' && 'bg-primary/20 animate-pulse',
  step.status === 'pending' && 'bg-muted'
@@ -923,7 +923,7 @@ export function AIAnalysisChatPage() {
 
  {streaming.status === 'streaming' && !streaming.messages.some(m => m.role === 'assistant' && m.content.length > 0) && (
  <div className="flex items-center justify-center p-8">
- <div className="flex flex-col items-center gap-3 text-muted-foreground">
+ <div className="flex flex-col items-center gap-[var(--spacing-small-gap)] text-muted-foreground">
  <Loader2 className="w-8 h-8 animate-spin" />
  <p>جاري تحميل التحليل...</p>
  </div>
@@ -932,7 +932,7 @@ export function AIAnalysisChatPage() {
 
  {streaming.status === 'complete' && !streaming.messages.some(m => m.role === 'assistant' && m.content.length > 0) && (
  <div className="flex items-center justify-center p-8">
- <div className="flex flex-col items-center gap-3 text-[var(--warning)]">
+ <div className="flex flex-col items-center gap-[var(--spacing-small-gap)] text-[var(--warning)]">
  <AlertTriangle className="w-8 h-8" />
  <p>لم يتم استلام نتيجة التحليل. يمكنك إعادة المحاولة.</p>
  {activeAnalysis && (
@@ -951,7 +951,7 @@ export function AIAnalysisChatPage() {
  <div className="flex justify-center">
  <button
  onClick={handleStop}
- className="px-4 py-2 bg-[var(--destructive)]/10 text-[var(--destructive)] border border-red-500/20 rounded-lg hover:bg-[var(--destructive)]/20 transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--destructive)]/10 text-[var(--destructive)] border border-red-500/20 rounded-lg hover:bg-[var(--destructive)]/20 transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <StopCircle className="w-4 h-4" />
  إيقاف التوليد
@@ -967,7 +967,7 @@ export function AIAnalysisChatPage() {
  {(hasError || isEmptyComplete) && (
  <div className="p-4 border-t border-border bg-card">
  <div className={`p-4 border rounded-lg text-sm ${hasError ? 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.3] text-[var(--destructive)]' : 'bg-[var(--warning)]/[0.1] border-[var(--warning)]/[0.3] text-yellow-800'}`}>
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <AlertTriangle className="w-4 h-4" />
  <span className="font-medium">{hasError ? 'حدث خطأ' : 'لم يتم استلام نتيجة التحليل'}</span>
  </div>
@@ -976,7 +976,7 @@ export function AIAnalysisChatPage() {
  <button
  onClick={() => startCardAnalysis(activeAnalysis)}
  disabled={streaming.isLoading}
- className="px-3 py-1.5 text-xs bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-3 py-1.5 text-xs bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <RefreshCw className="w-3 h-3" />
  إعادة تشغيل التحليل
@@ -986,7 +986,7 @@ export function AIAnalysisChatPage() {
  <button
  onClick={handleRetryFollowUp}
  disabled={streaming.isLoading}
- className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-red-200 rounded-lg transition-colors flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-3 py-1.5 text-xs bg-[var(--destructive)]/[0.1] hover:bg-red-200 rounded-lg transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <RefreshCw className="w-3 h-3" />
  إعادة المحاولة
@@ -999,7 +999,7 @@ export function AIAnalysisChatPage() {
  {/* Chat Input */}
  {isChatEnabled && (
  <div className="p-4 border-t border-border bg-card">
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <input
  type="text"
  value={chatInput}
@@ -1012,7 +1012,7 @@ export function AIAnalysisChatPage() {
  <button
  onClick={handleSendMessage}
  disabled={!chatInput.trim() || streaming.isLoading}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Send className="w-4 h-4" />
  <span>إرسال</span>
@@ -1031,8 +1031,8 @@ export function AIAnalysisChatPage() {
 
  <div className="flex-1 overflow-y-auto p-4 space-y-4">
  {/* Executive Summary */}
- <div className="p-4 bg-gradient-to-br from-purple-50 to-blue-50 border border-[var(--secondary)]/[0.2] rounded-lg">
- <div className="flex items-center gap-2 mb-3">
+ <div className="p-4 bg-gradient-to-br from-purple-50 to-[var(--secondary)]/10 border border-[var(--secondary)]/[0.2] rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <Brain className="w-4 h-4 text-purple-600" />
  <h4 className="font-medium text-sm">ملخص تنفيذي</h4>
  </div>
@@ -1047,11 +1047,11 @@ export function AIAnalysisChatPage() {
 
  {/* Recommendations */}
  <div>
- <h4 className="font-medium text-sm mb-3 flex items-center gap-2">
+ <h4 className="font-medium text-sm mb-3 flex items-center gap-[var(--spacing-small-gap)]">
  <Lightbulb className="w-4 h-4" />
  التوصيات التنفيذية
  </h4>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {history.isLoadingDetail && (
  <div className="flex items-center justify-center py-4">
  <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
@@ -1059,7 +1059,7 @@ export function AIAnalysisChatPage() {
  )}
 
  {!history.isLoadingDetail && history.detailError && (
- <div className="p-3 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-lg text-[var(--destructive)] text-xs">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-lg text-[var(--destructive)] text-xs">
  {history.detailError}
  </div>
  )}
@@ -1076,12 +1076,12 @@ export function AIAnalysisChatPage() {
  return (
  <div
  key={insight.id}
- className="p-4 bg-muted/50 border border-border rounded-lg hover:shadow-md transition-all"
+ className="p-4 bg-muted/50 border border-border rounded-lg hover:shadow-[var(--shadow-lg)] transition-all"
  >
- <div className="flex items-start gap-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <div
  className={cn(
- 'p-2 rounded-lg',
+ 'p-[var(--spacing-small-gap)] rounded-lg',
  isUrgent && 'bg-[var(--destructive)]/10',
  isOpportunity && 'bg-[var(--primary)]/[0.1]',
  !isUrgent && !isOpportunity && 'bg-[var(--primary)]/10'
@@ -1132,8 +1132,8 @@ export function AIAnalysisChatPage() {
  {showConfirmDialog && (
  <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--text-primary)]/[0.5]">
  <div className="bg-card border border-border rounded-xl p-6 max-w-md w-full mx-4 shadow-2xl">
- <div className="flex items-center gap-3 mb-4">
- <div className="p-2 bg-yellow-500/10 rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
+ <div className="p-[var(--spacing-small-gap)] bg-yellow-500/10 rounded-lg">
  <AlertTriangle className="w-5 h-5 text-[var(--warning)]" />
  </div>
  <h3 className="font-semibold text-lg">تحليل قيد التشغيل</h3>
@@ -1141,7 +1141,7 @@ export function AIAnalysisChatPage() {
  <p className="text-muted-foreground mb-6 leading-relaxed">
  هل تريد الانتقال إلى التحليل المحدد؟ سيؤدي ذلك إلى إيقاف التحليل الحالي وفقدان البيانات غير المحفوظة.
  </p>
- <div className="flex gap-3 justify-end">
+ <div className="flex gap-[var(--spacing-small-gap)] justify-end">
  <button
  onClick={handleCancelSwitch}
  className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors"

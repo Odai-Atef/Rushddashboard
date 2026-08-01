@@ -225,24 +225,24 @@ export function PaymentCallbackPage() {
  <p className="text-secondary mb-8 leading-relaxed">{message}</p>
 
  {result === 'verifying' && (
- <div className="flex items-center justify-center gap-2 text-sm text-[var(--text-muted)]">
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm text-[var(--text-muted)]">
  <Loader2 className="w-4 h-4 animate-spin" />
  <span>المحاولة {pollCount + 1} من 12</span>
  </div>
  )}
 
  {(result === 'failed' || result === 'error') && (
- <div className="flex flex-col sm:flex-row gap-3 justify-center">
+ <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)] justify-center">
  <button
  onClick={() => window.location.reload()}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold hover:bg-[var(--primary)]/90 transition-colors"
+ className="inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold hover:bg-[var(--primary)]/90 transition-colors"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة المحاولة
  </button>
  <button
  onClick={handleGoHome}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-muted transition-colors"
+ className="inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-muted transition-colors"
  >
  العودة للرئيسية
  </button>
@@ -250,24 +250,24 @@ export function PaymentCallbackPage() {
  )}
 
  {result === 'timeout' && (
- <div className="flex flex-col gap-3 justify-center">
+ <div className="flex flex-col gap-[var(--spacing-small-gap)] justify-center">
  <button
  onClick={handleManualSync}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold hover:bg-[var(--primary)]/[0.9] transition-colors"
+ className="inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold hover:bg-[var(--primary)]/[0.9] transition-colors"
  >
  <RefreshCw className="w-4 h-4" />
  تفعيل الاشتراك يدوياً
  </button>
  <button
  onClick={() => window.location.reload()}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold hover:bg-[var(--primary)]/90 transition-colors"
+ className="inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 rounded-xl bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold hover:bg-[var(--primary)]/90 transition-colors"
  >
  <RefreshCw className="w-4 h-4" />
  تحديث الصفحة
  </button>
  <button
  onClick={handleGoHome}
- className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-muted transition-colors"
+ className="inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 rounded-xl bg-[var(--hover)] text-[var(--text-secondary)] font-semibold hover:bg-muted transition-colors"
  >
  العودة للرئيسية
  </button>
@@ -275,14 +275,14 @@ export function PaymentCallbackPage() {
  )}
 
  {result !== 'success' && result !== 'verifying' && (
- <div className="mt-6 p-4 bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right">
+ <div className="mt-6 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right">
  <p className="text-sm text-[var(--secondary)]/[0.8] mb-3 font-medium">
  واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
  </p>
- <div className="flex items-center justify-center gap-3">
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
  <a
  href="tel:+966556534433"
- className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
  >
  <Phone className="w-4 h-4" />
  اتصل بنا
@@ -291,7 +291,7 @@ export function PaymentCallbackPage() {
  href="https://wa.me/+966556534433"
  target="_blank"
  rel="noopener noreferrer"
- className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
  >
  <MessageCircle className="w-4 h-4" />
  واتساب

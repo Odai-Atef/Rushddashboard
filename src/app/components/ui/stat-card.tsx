@@ -56,7 +56,7 @@ export function StatCard({
  '',
  'p-[var(--spacing-card-padding)]',
  // Hover lift + glow in dark mode
- 'hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px]',
+ 'hover:shadow-[var(--shadow-[var(--shadow-lg)])] hover:translate-y-[-2px]',
  'dark:hover:shadow-[var(--shadow-card)] dark:hover:shadow-[var(--shadow-glow)]',
  'transition-all duration-[var(--transition-duration)] ease-out',
  onClick && 'cursor-pointer hover:border-[var(--primary)]/30 dark:hover:border-[var(--primary)]/30',
@@ -67,7 +67,7 @@ export function StatCard({
  <div className="flex items-start justify-between mb-5">
  <div
  className={cn(
- 'p-3 rounded-[var(--radius-card)]',
+ 'p-[var(--spacing-card-padding)] rounded-[var(--radius-card)]',
  'bg-[var(--hover)]',
  iconBgColor
  )}
@@ -83,7 +83,7 @@ export function StatCard({
  {change && (
  <div
  className={cn(
- 'flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-[var(--radius-badge)]',
+ 'flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium px-2 py-1 rounded-[var(--radius-badge)]',
  isPositive
  ? 'text-[var(--primary)] bg-[var(--primary)]/[0.12]/[0.2]'
  : 'text-[var(--destructive)] bg-[var(--destructive)]/[0.12]/[0.2]'

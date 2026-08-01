@@ -384,8 +384,8 @@ export function ProjectCreatePage() {
 
  if (isEntityManager && isLoadingEligibility) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="flex flex-col items-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
+ <div className="flex flex-col items-center gap-[var(--spacing-grid-gap)]">
  <Loader2 className="w-8 h-8 text-[var(--secondary)] animate-spin" />
  <p className="text-muted-foreground">جارٍ التحقق من إمكانية إنشاء المشاريع...</p>
  </div>
@@ -395,8 +395,8 @@ export function ProjectCreatePage() {
 
  if (isProjectManager && isLoadingEligibleOrganizations) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="flex flex-col items-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
+ <div className="flex flex-col items-center gap-[var(--spacing-grid-gap)]">
  <Loader2 className="w-8 h-8 text-[var(--secondary)] animate-spin" />
  <p className="text-muted-foreground">جارٍ تحميل الجهات المؤهلة...</p>
  </div>
@@ -408,12 +408,12 @@ export function ProjectCreatePage() {
  (isEntityManager ? eligibilityError : eligibleOrganizationsError) || error || null;
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
- <div className="space-y-4 sm:space-y-6 max-w-4xl mx-auto">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
+ <div className="space-y-[var(--spacing-section-gap)] sm:space-y-[var(--spacing-section-gap)] max-w-4xl mx-auto">
  <div className="mb-4 sm:mb-6">
  <button
  onClick={() => navigate('/dashboard/project-management/list')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-3 sm:mb-4 text-sm sm:text-base"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-3 sm:mb-4 text-sm sm:text-base"
  >
  <ChevronRight className="w-4 sm:w-5 h-4 sm:h-5" />
  رجوع إلى قائمة المشاريع
@@ -422,8 +422,8 @@ export function ProjectCreatePage() {
  <p className="text-muted-foreground text-sm sm:text-base">املأ التفاصيل الأساسية للمشروع</p>
  </div>
 
- <div className="bg-card rounded-xl border border-border shadow-sm p-4 sm:p-8">
- <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+ <div className="bg-card rounded-xl border border-border shadow-sm p-[var(--spacing-card-padding)] sm:p-8">
+ <form className="space-y-[var(--spacing-section-gap)]" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
  {eligibilityBannerMessage && (
  <div className="bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] text-[var(--destructive)] px-4 py-3 rounded-lg">
  {eligibilityBannerMessage}
@@ -530,7 +530,7 @@ export function ProjectCreatePage() {
  />
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium mb-2">الميزانية التقديرية (ر.س) *</label>
  {getFieldError('budget') && <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('budget')}</p>}
@@ -557,7 +557,7 @@ export function ProjectCreatePage() {
  </div>
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium mb-2">عدد المستفيدين *</label>
  {getFieldError('beneficiariesCount') && <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('beneficiariesCount')}</p>}

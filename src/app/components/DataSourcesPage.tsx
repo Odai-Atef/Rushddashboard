@@ -213,7 +213,7 @@ export function DataSourcesPage() {
  </div>
  <button
  onClick={() => setShowAddModal(true)}
- className="flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
  >
  <Plus className="w-5 h-5" />
  إضافة مصدر جديد
@@ -264,7 +264,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Filter Tabs */}
- <div className="flex gap-2 border-b border-border overflow-x-auto">
+ <div className="flex gap-[var(--spacing-small-gap)] border-b border-border overflow-x-auto">
  {[
  { id: 'all', label: 'الكل', icon: Database },
  { id: 'excel', label: 'Excel', icon: FileSpreadsheet },
@@ -279,7 +279,7 @@ export function DataSourcesPage() {
  <button
  key={tab.id}
  onClick={() => setActiveTab(tab.id as typeof activeTab)}
- className={`flex items-center gap-2 px-4 py-3 border-b-2 transition-colors whitespace-nowrap ${
+ className={`flex items-center gap-[var(--spacing-small-gap)] px-4 py-3 border-b-2 transition-colors whitespace-nowrap ${
  activeTab === tab.id
  ? 'border-ring text-[var(--secondary)]'
  : 'border-transparent text-muted-foreground hover:text-foreground'
@@ -308,8 +308,8 @@ export function DataSourcesPage() {
  >
  {/* Header */}
  <div className="flex items-start justify-between mb-4">
- <div className="flex items-center gap-3">
- <div className="p-3 bg-[var(--primary)]/10 rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--primary)]/10 rounded-lg">
  <Icon className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  <div>
@@ -317,28 +317,28 @@ export function DataSourcesPage() {
  <p className="text-sm text-muted-foreground">{getTypeLabel(source.type)}</p>
  </div>
  </div>
- <div className="flex items-center gap-2">
- <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors">
  <Settings className="w-4 h-4" />
  </button>
- <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors">
  <Trash2 className="w-4 h-4 text-red-500" />
  </button>
  </div>
  </div>
 
  {/* Status and Health */}
- <div className="grid grid-cols-2 gap-3 mb-4">
- <div className="bg-muted/50 rounded-lg p-3">
- <div className="flex items-center gap-2 mb-1">
+ <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)] mb-4">
+ <div className="bg-muted/50 rounded-lg p-[var(--spacing-card-padding)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <StatusIcon className={`w-4 h-4 ${getStatusColor(source.status)} ${source.status === 'syncing' ? 'animate-spin' : ''}`} />
  <span className="text-sm text-muted-foreground">الحالة</span>
  </div>
  <p className="text-sm font-medium">{getStatusLabel(source.status)}</p>
  </div>
 
- <div className="bg-muted/50 rounded-lg p-3">
- <div className="flex items-center gap-2 mb-1">
+ <div className="bg-muted/50 rounded-lg p-[var(--spacing-card-padding)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <div className={`w-2 h-2 rounded-full ${getHealthColor(source.health)}`} />
  <span className="text-sm text-muted-foreground">الصحة</span>
  </div>
@@ -347,7 +347,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Sync Info */}
- <div className="space-y-2 mb-4">
+ <div className="space-y-[var(--spacing-small-gap)] mb-4">
  <div className="flex items-center justify-between text-sm">
  <span className="text-muted-foreground">آخر مزامنة</span>
  <span className="font-medium">{source.lastSync}</span>
@@ -359,7 +359,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Metrics */}
- <div className="grid grid-cols-2 gap-2 pt-3 border-t border-border">
+ <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)] pt-3 border-t border-border">
  <div>
  <p className="text-xs text-muted-foreground">عدد السجلات</p>
  <p className="text-sm font-medium">{source.recordCount.toLocaleString()}</p>
@@ -371,12 +371,12 @@ export function DataSourcesPage() {
  </div>
 
  {/* Actions */}
- <div className="flex gap-2 mt-4">
+ <div className="flex gap-[var(--spacing-small-gap)] mt-4">
  <button
  onClick={(e) => {
  e.stopPropagation();
  }}
- className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-[var(--primary)]/10 text-[var(--secondary)] rounded-lg hover:bg-[var(--primary)]/20 transition-colors text-sm"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-3 py-2 bg-[var(--primary)]/10 text-[var(--secondary)] rounded-lg hover:bg-[var(--primary)]/20 transition-colors text-sm"
  >
  <RefreshCw className="w-4 h-4" />
  مزامنة الآن
@@ -385,7 +385,7 @@ export function DataSourcesPage() {
  onClick={(e) => {
  e.stopPropagation();
  }}
- className="flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-3 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
  >
  <Eye className="w-4 h-4" />
  </button>
@@ -393,7 +393,7 @@ export function DataSourcesPage() {
  onClick={(e) => {
  e.stopPropagation();
  }}
- className="flex items-center justify-center gap-2 px-3 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-3 py-2 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
  >
  <Download className="w-4 h-4" />
  </button>
@@ -420,7 +420,7 @@ export function DataSourcesPage() {
  {/* Source Type Selection */}
  <div>
  <label className="block text-sm font-medium mb-3">نوع المصدر</label>
- <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+ <div className="grid grid-cols-2 md:grid-cols-3 gap-[var(--spacing-small-gap)]">
  {[
  { type: 'excel', label: 'Excel', icon: FileSpreadsheet },
  { type: 'erp', label: 'نظام ERP', icon: Database },
@@ -433,7 +433,7 @@ export function DataSourcesPage() {
  return (
  <button
  key={item.type}
- className="flex flex-col items-center gap-2 p-4 border border-border rounded-lg hover:border-ring hover:bg-[var(--primary)]/5 transition-all"
+ className="flex flex-col items-center gap-[var(--spacing-small-gap)] p-4 border border-border rounded-lg hover:border-ring hover:bg-[var(--primary)]/5 transition-all"
  >
  <Icon className="w-8 h-8 text-[var(--secondary)]" />
  <span className="text-sm">{item.label}</span>
@@ -507,7 +507,7 @@ export function DataSourcesPage() {
  </div>
  </div>
 
- <div className="flex items-center gap-2 p-3 bg-[var(--primary)]/10 border border-[var(--secondary)]/[0.2] rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-[var(--primary)]/10 border border-[var(--secondary)]/[0.2] rounded-lg">
  <Activity className="w-5 h-5 text-[var(--secondary)] flex-shrink-0" />
  <p className="text-sm text-[var(--secondary)]">سيتم اختبار الاتصال تلقائياً بعد الحفظ</p>
  </div>
@@ -515,7 +515,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Modal Actions */}
- <div className="p-6 border-t border-border flex gap-3 justify-end">
+ <div className="p-6 border-t border-border flex gap-[var(--spacing-small-gap)] justify-end">
  <button
  onClick={() => setShowAddModal(false)}
  className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
@@ -542,7 +542,7 @@ export function DataSourcesPage() {
  <div className="bg-card border border-border rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
  {/* Modal Header */}
  <div className="p-6 border-b border-border">
- <div className="flex items-center gap-3 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  {(() => {
  const Icon = getSourceIcon(selectedSource.type);
  return <Icon className="w-8 h-8 text-[var(--secondary)]" />;
@@ -579,15 +579,15 @@ export function DataSourcesPage() {
  {/* Sync History */}
  <div>
  <h3 className="font-medium mb-3">سجل المزامنة</h3>
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {[
  { time: '2026-05-11 11:20', status: 'success', records: 1250, duration: '2.3s' },
  { time: '2026-05-11 10:20', status: 'success', records: 1245, duration: '2.1s' },
  { time: '2026-05-11 09:20', status: 'success', records: 1238, duration: '2.4s' },
  { time: '2026-05-11 08:20', status: 'warning', records: 1230, duration: '3.8s' }
  ].map((sync, index) => (
- <div key={index} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
- <div className="flex items-center gap-3">
+ <div key={index} className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-muted/50 rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {sync.status === 'success' ? (
  <CheckCircle2 className="w-4 h-4 text-[var(--primary)]" />
  ) : (
@@ -607,16 +607,16 @@ export function DataSourcesPage() {
  {/* Connection Details */}
  <div>
  <h3 className="font-medium mb-3">تفاصيل الاتصال</h3>
- <div className="space-y-3">
- <div className="flex justify-between p-3 bg-muted/50 rounded-lg">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <div className="flex justify-between p-[var(--spacing-card-padding)] bg-muted/50 rounded-lg">
  <span className="text-muted-foreground">تكرار المزامنة</span>
  <span className="font-medium">{selectedSource.syncFrequency}</span>
  </div>
- <div className="flex justify-between p-3 bg-muted/50 rounded-lg">
+ <div className="flex justify-between p-[var(--spacing-card-padding)] bg-muted/50 rounded-lg">
  <span className="text-muted-foreground">آخر مزامنة</span>
  <span className="font-medium">{selectedSource.lastSync}</span>
  </div>
- <div className="flex justify-between p-3 bg-muted/50 rounded-lg">
+ <div className="flex justify-between p-[var(--spacing-card-padding)] bg-muted/50 rounded-lg">
  <span className="text-muted-foreground">المزامنة التالية</span>
  <span className="font-medium">2026-05-11 12:20</span>
  </div>
@@ -625,7 +625,7 @@ export function DataSourcesPage() {
  </div>
 
  {/* Modal Actions */}
- <div className="p-6 border-t border-border flex gap-3 justify-end">
+ <div className="p-6 border-t border-border flex gap-[var(--spacing-small-gap)] justify-end">
  <button
  onClick={() => setSelectedSource(null)}
  className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"

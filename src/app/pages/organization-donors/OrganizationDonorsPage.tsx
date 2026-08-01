@@ -89,7 +89,7 @@ export function OrganizationDonorsPage() {
  <div className="space-y-5" dir="rtl">
  {/* Header */}
  <div className="flex items-center justify-between">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-[var(--primary-foreground)]">
  <Building2 className="w-5 h-5" />
  </div>
@@ -117,7 +117,7 @@ export function OrganizationDonorsPage() {
 
  {/* Error */}
  {error && (
- <div className="p-4 rounded-xl bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] text-[var(--destructive)] text-sm text-right">
+ <div className="p-[var(--spacing-card-padding)] rounded-xl bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] text-[var(--destructive)] text-sm text-right">
  {error}
  <button
  onClick={refetch}

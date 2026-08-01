@@ -59,7 +59,7 @@ function AlertDialogContent({
  <AlertDialogPrimitive.Content
  data-slot="alert-dialog-content"
  className={cn(
- "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-4 p-[var(--spacing-card-padding)] shadow-[var(--shadow-xl)] duration-[var(--transition-duration)] sm:max-w-lg",
+ "fixed top-[50%] left-[50%] z-50 grid w-full max-w-[calc(100%-2rem)] translate-x-[-50%] translate-y-[-50%] gap-[var(--spacing-grid-gap)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-xl)] duration-[var(--transition-duration)] sm:max-w-lg",
  "rounded-[var(--radius-dialog)] border",
  "bg-[var(--card)] text-[var(--text-primary)]",
  "border-[var(--border)]",
@@ -75,7 +75,7 @@ function AlertDialogContent({
  {children}
  <AlertDialogPrimitive.Cancel
  className={cn(
- "absolute top-4 right-4 rounded-[var(--radius-button)] p-1.5 opacity-70 transition-all duration-[var(--transition-duration)]",
+ "absolute top-4 right-4 rounded-[var(--radius-button)] p-[var(--spacing-small-gap)].5 opacity-70 transition-all duration-[var(--transition-duration)]",
  "hover:opacity-100 hover:bg-[var(--hover)]",
  "focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/30 focus:ring-offset-2 focus:ring-offset-background",
  )}
@@ -96,7 +96,7 @@ function AlertDialogHeader({
  return (
  <div
  data-slot="alert-dialog-header"
- className={cn("flex flex-col gap-2 text-center sm:text-left", className)}
+ className={cn("flex flex-col gap-[var(--spacing-small-gap)] text-center sm:text-left", className)}
  {...props}
  />
  );
@@ -110,7 +110,7 @@ function AlertDialogFooter({
  <div
  data-slot="alert-dialog-footer"
  className={cn(
- "flex flex-col-reverse gap-2 sm:flex-row sm:justify-end pt-2",
+ "flex flex-col-reverse gap-[var(--spacing-small-gap)] sm:flex-row sm:justify-end pt-2",
  className,
  )}
  {...props}

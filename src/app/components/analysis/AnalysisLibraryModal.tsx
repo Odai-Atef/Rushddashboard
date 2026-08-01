@@ -44,7 +44,7 @@ const getComplexityColor = (complexity: string) => {
  case 'متقدم':
  return 'bg-purple-500/10 text-purple-600 border-purple-500/20';
  default:
- return 'bg-secondary0/10 text-muted-foreground border-gray-500/20';
+ return 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
  }
 };
 
@@ -59,7 +59,7 @@ const getImpactColor = (impact: string) => {
  case 'منخفض':
  return 'bg-[var(--primary)]/10 text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
  default:
- return 'bg-secondary0/10 text-muted-foreground border-gray-500/20';
+ return 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
  }
 };
 
@@ -68,7 +68,7 @@ const getImpactColor = (impact: string) => {
  */
 function BadgeChip({ label }: { label: string }) {
  let icon = null;
- let colorClass = 'bg-secondary0/10 text-muted-foreground border-gray-500/20';
+ let colorClass = 'bg-secondary0/10 text-muted-foreground border-[var(--border)]';
 
  if (label === 'موصى به' || label.includes('موصى')) {
  icon = <Star className="w-3 h-3 fill-yellow-600" />;
@@ -136,7 +136,7 @@ export function AnalysisLibraryModal({
  <div className="p-6 border-b border-border">
  <div className="flex items-center justify-between mb-4">
  <div className="flex items-center gap-3">
- <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+ <div className="p-2 bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-lg">
  <Brain className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <div>
@@ -329,7 +329,7 @@ export function AnalysisLibraryModal({
 
  <button
  onClick={() => onSelectAnalysis(item)}
- className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 group-hover:shadow-lg"
+ className="w-full py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 group-hover:shadow-[var(--shadow-lg)]"
  >
  <Play className="w-4 h-4" />
  <span>بدء التحليل</span>

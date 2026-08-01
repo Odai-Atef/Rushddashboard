@@ -84,7 +84,7 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
  ].map((card, i) => {
  const Icon = card.icon;
  return (
- <div key={i} className={`bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
+ <div key={i} className={`bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 shadow-sm transition-all duration-200 hover:shadow-[var(--shadow-lg)] flex flex-col justify-between h-full`}>
  <div className="flex items-start justify-between mb-4">
  <div className="p-2.5 rounded-xl bg-muted/80">
  <Icon className={`w-6 h-6 ${card.color}`} />

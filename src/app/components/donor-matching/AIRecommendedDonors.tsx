@@ -231,7 +231,7 @@ export function AIRecommendedDonors({
  return (
  <div
  key={donor.id || idx}
- className="bg-card border border-border rounded-xl p-5 hover:border-primary/30 hover:shadow-md transition-all"
+ className="bg-card border border-border rounded-xl p-5 hover:border-primary/30 hover:shadow-[var(--shadow-lg)] transition-all"
  >
  <div className="flex items-start gap-4">
  {/* Logo */}

@@ -201,7 +201,7 @@ export function ProjectListPage() {
  <div className="text-[var(--destructive)] mb-4">{error}</div>
  <button
  onClick={() => refetch()}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2 mx-auto"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <RotateCcw className="w-4 h-4" />
  إعادة المحاولة
@@ -225,8 +225,8 @@ export function ProjectListPage() {
  if (pagination.totalPages <= 1) return null;
 
  return (
- <div className="flex items-center justify-between bg-card rounded-xl border border-border shadow-sm p-4">
- <div className="flex items-center gap-2">
+ <div className="flex items-center justify-between bg-card rounded-xl border border-border shadow-sm p-[var(--spacing-card-padding)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <select
  value={pagination.limit}
  onChange={(e) => setLimit(Number(e.target.value))}
@@ -241,18 +241,18 @@ export function ProjectListPage() {
  </span>
  </div>
 
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setPage(pagination.page - 1)}
  disabled={pagination.page <= 1}
- className="p-2 border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+ className="p-[var(--spacing-small-gap)] border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <ChevronRight className="w-5 h-5" />
  </button>
  <button
  onClick={() => setPage(pagination.page + 1)}
  disabled={pagination.page >= pagination.totalPages}
- className="p-2 border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+ className="p-[var(--spacing-small-gap)] border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <ChevronLeft className="w-5 h-5" />
  </button>
@@ -400,7 +400,7 @@ export function ProjectListPage() {
  {typeof project.modificationsCount === 'number' ? project.modificationsCount.toLocaleString('ar-SA') : '0'}
  </td>
  <td className="px-6 py-4">
- <div className="flex items-center gap-2 min-w-[140px]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] min-w-[140px]">
  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
  <div
  className="h-full bg-[var(--primary)] transition-all"
@@ -411,7 +411,7 @@ export function ProjectListPage() {
  </div>
  </td>
  <td className="px-6 py-4">
- <div className="flex items-center justify-end gap-2 flex-wrap">
+ <div className="flex items-center justify-end gap-[var(--spacing-small-gap)] flex-wrap">
  {shouldShowPinIcon(project) && (
  <div className="relative flex items-center justify-center w-6 h-6">
  <span className="absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 animate-ping" />
@@ -420,14 +420,14 @@ export function ProjectListPage() {
  )}
  <a
  href={`/dashboard/project-management/details/${project.id}`}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
  >
  <Eye className="w-3.5 h-3.5" />
  عرض
  </a>
  <Link
  to={`/dashboard/collaboration/${project.id}/chat`}
- className="relative inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
+ className="relative inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
  >
  <MessageSquare className="w-3.5 h-3.5" />
  متابعة تحديثات المشروع - شات
@@ -440,7 +440,7 @@ export function ProjectListPage() {
  {isProjectManager && (
  <a
  href={`/dashboard/project-management/edit/${project.id}`}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
  >
  <Pencil className="w-3.5 h-3.5" />
  تعديل
@@ -458,7 +458,7 @@ export function ProjectListPage() {
  );
 
  const renderKanban = () => (
- <div className="flex gap-4 overflow-x-auto pb-4">
+ <div className="flex gap-[var(--spacing-grid-gap)] overflow-x-auto pb-4">
  {['draft', 'charity-review', 'pm-approval', 'funded', 'execution', 'project-suspended', 'completed'].map((status) => {
  const statusProjects = projects.filter((p) => getDisplayStatus(p.status) === status);
  const config = statusConfig[status as ProjectStatus];
@@ -466,18 +466,18 @@ export function ProjectListPage() {
  return (
  <div key={status} className="flex-shrink-0 w-80">
  <div className="bg-[var(--card)] rounded-xl border border-border shadow-sm">
- <div className="p-4 border-b border-border">
+ <div className="p-[var(--spacing-card-padding)] border-b border-border">
  <div className="flex items-center justify-between">
  <h3 className="font-semibold">{config.label}</h3>
  <span className="text-xs px-2 py-1 bg-muted text-muted-foreground rounded-full">{statusProjects.length}</span>
  </div>
  </div>
- <div className="p-4 space-y-3 max-h-[600px] overflow-y-auto">
+ <div className="p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)] max-h-[600px] overflow-y-auto">
  {statusProjects.map((project) => (
  <div
  key={project.id}
  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
- className="p-4 border border-border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
+ className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:shadow-md transition-shadow cursor-pointer"
  >
  <h4 className="font-medium mb-2">{project.name}</h4>
  <p className="text-xs text-muted-foreground mb-1">{getProjectOrganization(project)}</p>
@@ -505,10 +505,10 @@ export function ProjectListPage() {
  );
 
  const renderTimeline = () => (
- <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
- <div className="space-y-4">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border shadow-sm">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {projects.map((project, idx) => (
- <div key={project.id} className="flex items-center gap-4">
+ <div key={project.id} className="flex items-center gap-[var(--spacing-grid-gap)]">
  <div className="w-48 flex-shrink-0">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
@@ -572,7 +572,7 @@ export function ProjectListPage() {
  : '/dashboard/onboarding/info?tab=info'
  )
  }
- className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2 mx-auto"
+ className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <RefreshCw className="w-5 h-5" />
  {hasOrg ? 'إعادة التقييم مرة أخرى' : 'إنشاء حساب الجهة'}
@@ -596,14 +596,14 @@ export function ProjectListPage() {
  };
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
- <div className="space-y-4 sm:space-y-6">
- <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
+ <div className="space-y-[var(--spacing-section-gap)] sm:space-y-[var(--spacing-section-gap)]">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-[var(--spacing-small-gap)]">
  <div className="w-full">
  <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">إدارة المشاريع</h1>
  <p className="text-muted-foreground text-sm sm:text-base">{pagination.total} مشروع</p>
  </div>
- <div className="flex gap-3 w-full sm:w-auto">
+ <div className="flex gap-[var(--spacing-small-gap)] w-full sm:w-auto">
  <button
  onClick={() => navigate('/dashboard/project-management')}
  className="flex-1 sm:flex-none px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors font-medium text-sm sm:text-base"
@@ -613,7 +613,7 @@ export function ProjectListPage() {
  {(user?.roleSlug === 'entity-managers' || user?.roleSlug === 'project-managers') && (
  <button
  onClick={() => navigate('/dashboard/project-management/create')}
- className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base"
+ className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm sm:text-base"
  >
  <Plus className="w-4 sm:w-5 h-4 sm:h-5" />
  مشروع جديد
@@ -622,8 +622,8 @@ export function ProjectListPage() {
  </div>
  </div>
 
- <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
- <div className="flex flex-col sm:flex-row gap-4">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
+ <div className="flex flex-col sm:flex-row gap-[var(--spacing-grid-gap)]">
  <div className="flex-1 relative">
  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
  <input
@@ -636,22 +636,22 @@ export function ProjectListPage() {
  />
  </div>
 
- <div className="flex gap-2 border border-border rounded-lg p-1 shrink-0">
+ <div className="flex gap-[var(--spacing-small-gap)] border border-border rounded-lg p-[var(--spacing-small-gap)] shrink-0">
  <button
  onClick={() => setListViewMode('list')}
- className={`p-2 rounded-lg ${listViewMode === 'list' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
+ className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'list' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
  >
  <List className="w-5 h-5" />
  </button>
  <button
  onClick={() => setListViewMode('kanban')}
- className={`p-2 rounded-lg ${listViewMode === 'kanban' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
+ className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'kanban' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
  >
  <LayoutGrid className="w-5 h-5" />
  </button>
  <button
  onClick={() => setListViewMode('timeline')}
- className={`p-2 rounded-lg ${listViewMode === 'timeline' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
+ className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'timeline' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
  >
  <GanttChart className="w-5 h-5" />
  </button>
@@ -659,7 +659,7 @@ export function ProjectListPage() {
 
  <button
  onClick={() => setShowFilters(!showFilters)}
- className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-2 text-sm sm:text-base shrink-0 ${showFilters ? 'border-ring text-[var(--secondary)] bg-[var(--secondary)]/[0.08]' : 'border-border hover:bg-secondary'}`}
+ className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm sm:text-base shrink-0 ${showFilters ? 'border-ring text-[var(--secondary)] bg-[var(--secondary)]/[0.08]' : 'border-border hover:bg-secondary'}`}
  >
  <Filter className="w-5 h-5" />
  تصفية
@@ -668,7 +668,7 @@ export function ProjectListPage() {
 
  {showFilters && (
  <div className="mt-4 pt-4 border-t border-border">
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium mb-2">الحالة</label>
  <select
@@ -704,10 +704,10 @@ export function ProjectListPage() {
  )}
  </div>
 
- <div className="flex justify-end gap-3 mt-4">
+ <div className="flex justify-end gap-[var(--spacing-small-gap)] mt-4">
  <button
  onClick={() => clearFilters()}
- className="px-4 py-2 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2"
+ className="px-4 py-2 text-muted-foreground hover:text-foreground font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <X className="w-4 h-4" />
  مسح

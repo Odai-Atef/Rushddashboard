@@ -72,9 +72,9 @@ export function ProcessingPage() {
  }, [activeOrganizationId, goToStep, setAssessmentResult, setAssessmentStatus]);
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="max-w-2xl w-full">
- <div className="bg-[var(--card)] rounded-xl shadow-lg border border-border p-6 sm:p-12 text-center">
+ <div className="bg-[var(--card)] rounded-xl shadow-lg border border-border p-[var(--spacing-card-padding)] sm:p-12 text-center">
  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
  <Brain className="w-12 h-12 text-[var(--primary-foreground)]" />
  </div>
@@ -100,7 +100,7 @@ export function ProcessingPage() {
  </div>
  </div>
 
- <div className="space-y-3 text-right">
+ <div className="space-y-[var(--spacing-small-gap)] text-right">
  {[
  { threshold: 20, label: 'تحليل الإجابات' },
  { threshold: 50, label: 'مراجعة المستندات' },
@@ -110,7 +110,7 @@ export function ProcessingPage() {
  return (
  <div
  key={item.label}
- className={`flex items-center gap-3 p-3 rounded-lg ${
+ className={`flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] rounded-lg ${
  done ? 'bg-[var(--primary)]/[0.08]' : 'bg-secondary'
  }`}
  >

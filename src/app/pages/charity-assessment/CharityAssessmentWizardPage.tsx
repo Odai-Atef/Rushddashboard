@@ -27,7 +27,7 @@ export function CharityAssessmentWizardPage() {
  <div className="min-h-full bg-background">
  {/* Progress Header */}
  <div className="bg-card border-b border-border sticky top-0 z-10">
- <div className="max-w-4xl mx-auto p-3 sm:p-4 sm:p-6">
+ <div className="max-w-4xl mx-auto p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div className="flex items-center justify-between mb-4">
  <div>
  <h2 className="text-xl font-semibold">{currentCategory.name}</h2>
@@ -35,7 +35,7 @@ export function CharityAssessmentWizardPage() {
  القسم {currentStep + 1} من {categories.length}
  </p>
  </div>
- <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
  <Save className="w-4 h-4" />
  حفظ ومتابعة لاحقاً
  </button>
@@ -50,9 +50,9 @@ export function CharityAssessmentWizardPage() {
  </div>
 
  {/* Questions */}
- <div className="max-w-4xl mx-auto p-3 sm:p-4 sm:p-6">
- <div className="bg-card border border-border rounded-xl p-4 sm:p-8 mb-6">
- <div className="flex items-center gap-3 mb-6">
+ <div className="max-w-4xl mx-auto p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-8 mb-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  {(() => {
  const Icon = currentCategory.icon;
  return <Icon className="w-6 h-6 text-[var(--secondary)]" />;
@@ -60,15 +60,15 @@ export function CharityAssessmentWizardPage() {
  <h3 className="text-lg font-medium">الأسئلة</h3>
  </div>
 
- <div className="space-y-6">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {currentCategory.questions.map((q, index) => (
- <div key={q.id} className="border border-border rounded-lg p-3 sm:p-4 sm:p-6">
+ <div key={q.id} className="border border-border rounded-lg p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <p className="font-medium mb-4">
  {index + 1}. {q.question}
  </p>
 
  {q.type === 'yesno' && (
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button className="flex-1 px-4 py-3 border-2 border-[var(--primary)] text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1] transition-colors">
  نعم
  </button>
@@ -101,8 +101,8 @@ export function CharityAssessmentWizardPage() {
 
  {/* AI Insights */}
  {showAIInsights && (
- <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-6 mb-6">
- <div className="flex items-start gap-3">
+ <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-[var(--spacing-card-padding)] mb-6">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Brain className="w-6 h-6 text-purple-500 flex-shrink-0" />
  <div>
  <h4 className="font-medium mb-2">ملاحظة من الذكاء الاصطناعي</h4>
@@ -119,11 +119,11 @@ export function CharityAssessmentWizardPage() {
  )}
 
  {/* Navigation */}
- <div className="flex gap-4">
+ <div className="flex gap-[var(--spacing-grid-gap)]">
  {currentStep > 0 && (
  <button
  onClick={() => setCurrentStep(currentStep - 1)}
- className="flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors"
  >
  <ArrowRight className="w-5 h-5" />
  السابق
@@ -137,7 +137,7 @@ export function CharityAssessmentWizardPage() {
  navigate(`/dashboard/charity-assessment/results/${organizationId}`);
  }
  }}
- className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
  >
  {currentStep < categories.length - 1 ? 'التالي' : 'إنهاء التقييم'}
  <ArrowLeft className="w-5 h-5" />

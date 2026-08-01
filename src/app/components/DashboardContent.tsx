@@ -133,92 +133,92 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  };
 
  return (
- <div className="p-4 md:p-6 lg:p-8 space-y-6 bg-background">
+ <div className="p-[var(--spacing-page-padding)] space-y-[var(--spacing-section-gap)] bg-[var(--background)]">
  {/* Header */}
- <div className="border-b border-border pb-6">
- <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">{getViewTitle()}</h2>
- <p className="text-muted-foreground text-base">نظرة شاملة على الأداء والمؤشرات الرئيسية</p>
+ <div className="border-b border-[var(--border)] pb-[var(--spacing-card-padding)]">
+ <h2 className="text-[var(--text-page-title)] font-bold text-[var(--text-primary)] mb-2">{getViewTitle()}</h2>
+ <p className="text-[var(--text-muted)] text-base">نظرة شاملة على الأداء والمؤشرات الرئيسية</p>
  </div>
 
  {/* Stats Cards */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-grid-gap)] items-stretch">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px] transition-all duration-[var(--transition-duration)] flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-5">
- <div className="p-3 rounded-xl bg-[var(--primary)]/[0.08]/[0.08]0/10">
+ <div className="p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-[var(--primary)]/[0.08]">
  <TrendingUp className="w-6 h-6 text-[var(--primary)]" />
  </div>
- <div className="flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full text-[var(--primary)] bg-[var(--primary)]/[0.1]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium px-2.5 py-1 rounded-[var(--radius-badge)] text-[var(--primary)] bg-[var(--primary)]/[0.12]">
  <ArrowUpRight className="w-3.5 h-3.5" />
  +12.5%
  </div>
  </div>
- <h3 className="text-sm font-medium text-muted-foreground mb-1.5">إجمالي المبيعات</h3>
- <p className="text-3xl font-bold text-foreground tracking-tight">245,000 ر.س</p>
+ <h3 className="text-sm font-medium text-[var(--text-muted)] mb-1.5">إجمالي المبيعات</h3>
+ <p className="text-[var(--text-card-number)] font-bold text-[var(--text-primary)] tracking-tight">245,000 ر.س</p>
  </div>
 
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px] transition-all duration-[var(--transition-duration)] flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-5">
- <div className="p-3 rounded-xl bg-[var(--secondary)]/[0.08]/10">
+ <div className="p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-[var(--secondary)]/[0.08]">
  <Users className="w-6 h-6 text-[var(--secondary)]" />
  </div>
- <div className="flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full text-[var(--primary)] bg-[var(--primary)]/[0.1]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium px-2.5 py-1 rounded-[var(--radius-badge)] text-[var(--primary)] bg-[var(--primary)]/[0.12]">
  <ArrowUpRight className="w-3.5 h-3.5" />
  +8.2%
  </div>
  </div>
- <h3 className="text-sm font-medium text-muted-foreground mb-1.5">العملاء النشطون</h3>
- <p className="text-3xl font-bold text-foreground tracking-tight">1,234</p>
+ <h3 className="text-sm font-medium text-[var(--text-muted)] mb-1.5">العملاء النشطون</h3>
+ <p className="text-[var(--text-card-number)] font-bold text-[var(--text-primary)] tracking-tight">1,234</p>
  </div>
 
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px] transition-all duration-[var(--transition-duration)] flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-5">
- <div className="p-3 rounded-xl bg-[var(--warning)]/[0.08]">
+ <div className="p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-[var(--warning)]/[0.08]">
  <DollarSign className="w-6 h-6 text-[var(--warning)]" />
  </div>
- <div className="flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full text-[var(--primary)] bg-[var(--primary)]/[0.1]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium px-2.5 py-1 rounded-[var(--radius-badge)] text-[var(--primary)] bg-[var(--primary)]/[0.12]">
  <ArrowUpRight className="w-3.5 h-3.5" />
  +15.3%
  </div>
  </div>
- <h3 className="text-sm font-medium text-muted-foreground mb-1.5">الربح الصافي</h3>
- <p className="text-3xl font-bold text-foreground tracking-tight">89,500 ر.س</p>
+ <h3 className="text-sm font-medium text-[var(--text-muted)] mb-1.5">الربح الصافي</h3>
+ <p className="text-[var(--text-card-number)] font-bold text-[var(--text-primary)] tracking-tight">89,500 ر.س</p>
  </div>
 
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px] transition-all duration-[var(--transition-duration)] flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-5">
- <div className="p-3 rounded-xl bg-[var(--destructive)]/[0.08]/10">
+ <div className="p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-[var(--destructive)]/[0.08]">
  <Activity className="w-6 h-6 text-[var(--destructive)]" />
  </div>
- <div className="flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full text-[var(--destructive)] bg-[var(--destructive)]/[0.2]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium px-2.5 py-1 rounded-[var(--radius-badge)] text-[var(--destructive)] bg-[var(--destructive)]/[0.12]">
  <ArrowDownRight className="w-3.5 h-3.5" />
  -3.1%
  </div>
  </div>
- <h3 className="text-sm font-medium text-muted-foreground mb-1.5">معدل التحويل</h3>
- <p className="text-3xl font-bold text-foreground tracking-tight">23.4%</p>
+ <h3 className="text-sm font-medium text-[var(--text-muted)] mb-1.5">معدل التحويل</h3>
+ <p className="text-[var(--text-card-number)] font-bold text-[var(--text-primary)] tracking-tight">23.4%</p>
  </div>
  </div>
 
  {/* Charts */}
- <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
- <h3 className="text-lg font-semibold text-foreground mb-1">اتجاه المبيعات الشهرية</h3>
- <p className="text-sm text-muted-foreground">تطور الإيرادات خلال الأشهر الستة الأخيرة</p>
+ <h3 className="text-[var(--text-section-title)] font-bold text-[var(--text-primary)] mb-1">اتجاه المبيعات الشهرية</h3>
+ <p className="text-sm text-[var(--text-muted)]">تطور الإيرادات خلال الأشهر الستة الأخيرة</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <LineChart data={salesData}>
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} />
- <XAxis dataKey="month" stroke="var(--muted-foreground)" tick={{ fontSize: 12 }} />
- <YAxis stroke="var(--muted-foreground)" tick={{ fontSize: 12 }} />
+ <XAxis dataKey="month" stroke="var(--text-muted)" tick={{ fontSize: 12 }} />
+ <YAxis stroke="var(--text-muted)" tick={{ fontSize: 12 }} />
  <Tooltip
  contentStyle={{
  backgroundColor: 'var(--card)',
  border: '1px solid var(--border)',
- borderRadius: '0.75rem',
+ borderRadius: 'var(--radius-card)',
  boxShadow: 'var(--shadow-md)'
  }}
- labelStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+ labelStyle={{ color: 'var(--text-primary)', fontWeight: 'bold' }}
  />
  <Line
  type="monotone"
@@ -232,24 +232,24 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  </ResponsiveContainer>
  </div>
 
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
- <h3 className="text-lg font-semibold text-foreground mb-1">مقارنة الأداء</h3>
- <p className="text-sm text-muted-foreground">المبيعات الشهرية مقارنة بالمستهدف</p>
+ <h3 className="text-[var(--text-section-title)] font-bold text-[var(--text-primary)] mb-1">مقارنة الأداء</h3>
+ <p className="text-sm text-[var(--text-muted)]">المبيعات الشهرية مقارنة بالمستهدف</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <BarChart data={salesData}>
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" opacity={0.3} />
- <XAxis dataKey="month" stroke="var(--muted-foreground)" tick={{ fontSize: 12 }} />
- <YAxis stroke="var(--muted-foreground)" tick={{ fontSize: 12 }} />
+ <XAxis dataKey="month" stroke="var(--text-muted)" tick={{ fontSize: 12 }} />
+ <YAxis stroke="var(--text-muted)" tick={{ fontSize: 12 }} />
  <Tooltip
  contentStyle={{
  backgroundColor: 'var(--card)',
  border: '1px solid var(--border)',
- borderRadius: '0.75rem',
+ borderRadius: 'var(--radius-card)',
  boxShadow: 'var(--shadow-md)'
  }}
- labelStyle={{ color: 'var(--foreground)', fontWeight: 'bold' }}
+ labelStyle={{ color: 'var(--text-primary)', fontWeight: 'bold' }}
  />
  <Bar dataKey="value" fill="var(--chart-1)" radius={[8, 8, 0, 0]} />
  </BarChart>
@@ -258,25 +258,25 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
  </div>
 
  {/* AI Recommendations */}
- <div className="bg-gradient-to-l from-[var(--primary)]/[0.05] to-transparent border border-[var(--primary)]/[0.2] rounded-2xl p-6">
+ <div className="bg-gradient-to-l from-[var(--primary)]/[0.05] to-transparent border border-[var(--primary)]/[0.2] rounded-[var(--radius-card)] p-[var(--spacing-card-padding)]">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-[var(--primary)] rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--primary)] rounded-[var(--radius-card)]">
  <TrendingUp className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-3">
- <h3 className="text-lg font-semibold text-foreground">توصية الذكاء الاصطناعي</h3>
- <span className="px-2 py-1 bg-[var(--primary)]/[0.08]0/20 text-[var(--primary)] text-xs rounded-full">AI</span>
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
+ <h3 className="text-[var(--text-section-title)] font-bold text-[var(--text-primary)]">توصية الذكاء الاصطناعي</h3>
+ <span className="px-2.5 py-1 bg-[var(--primary)]/[0.12] text-[var(--primary)] text-xs rounded-[var(--radius-badge)] font-semibold">AI</span>
  </div>
- <p className="text-muted-foreground leading-relaxed mb-4">
+ <p className="text-[var(--text-muted)] leading-relaxed mb-4">
  بناءً على تحليل البيانات الحالية، نوصي بزيادة الاستثمار في قطاع المنتجات الأكثر مبيعاً بنسبة 15%
  لتحقيق نمو إضافي متوقع بنسبة 24% في الربع القادم.
  </p>
- <div className="flex flex-wrap gap-3">
- <button className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-lg transition-colors text-sm font-medium">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
+ <button className="px-5 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] text-sm font-medium shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)]">
  عرض التفاصيل
  </button>
- <button className="px-4 py-2 border border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors text-sm text-foreground">
+ <button className="px-5 py-2.5 border border-[var(--border)] hover:bg-[var(--hover)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] text-sm text-[var(--text-primary)]">
  تجاهل
  </button>
  </div>

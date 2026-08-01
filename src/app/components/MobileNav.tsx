@@ -134,29 +134,32 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
 
  {/* Drawer */}
  <div
- className="fixed top-0 right-0 h-full w-[min(320px,85vw)] bg-sidebar border-l border-sidebar-border z-50 flex flex-col lg:hidden shadow-2xl"
+ className="fixed top-0 right-0 h-full w-[min(320px,85vw)] bg-[#0B2742] border-l border-[var(--primary-foreground)]/[0.08] z-50 flex flex-col lg:hidden shadow-2xl"
  role="dialog"
  aria-modal="true"
  aria-label="التنقل"
  >
  {/* Header */}
- <div className="p-6 border-b border-sidebar-border flex items-center justify-between">
+ <div className="p-5 border-b border-[var(--primary-foreground)]/[0.08] flex items-center justify-between">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <img src="/logo.png" alt="منصة رشد" className="w-10 h-10 object-contain" />
  <div>
- <h1 className="text-sidebar-foreground text-xl">منصة رشد</h1>
- <p className="text-muted-foreground text-sm mt-1">منصة رشد</p>
+ <h1 className="text-[var(--primary-foreground)] text-base font-bold">منصة رشد</h1>
+ <p className="text-[var(--primary-foreground)]/50 text-xs mt-0.5">Rushd Virtual Incubator</p>
+ </div>
  </div>
  <button
  onClick={onClose}
- className="p-2 hover:bg-sidebar-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)].5 rounded-[var(--radius-button)] hover:bg-[var(--card)]/10 transition-colors text-[var(--primary-foreground)]/70 hover:text-[var(--primary-foreground)]"
  aria-label="إغلاق"
  >
- <X className="w-5 h-5" />
+ <X className="w-6 h-6" />
  </button>
  </div>
 
  {/* Navigation */}
- <nav className="flex-1 p-4 overflow-y-auto">
- <ul className="space-y-2">
+ <nav className="flex-1 p-[var(--spacing-card-padding)] overflow-y-auto">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {visibleItems.map((item) => {
  const Icon = item.icon;
  const isActive = activeView === item.id;
@@ -167,14 +170,16 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
  to={item.linkTo ?? item.path}
  onClick={onClose}
  className={cn(
- "w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors text-right",
+ "w-full flex items-center gap-[var(--spacing-small-gap)] px-4 py-3.5 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] text-right",
  isActive
- ? "bg-sidebar-accent text-sidebar-accent-foreground"
- : "text-sidebar-foreground hover:bg-sidebar-accent/50"
+ ? "bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold shadow-[var(--shadow-md)]"
+ : "text-[var(--primary-foreground)]/70 hover:text-[var(--primary-foreground)] hover:bg-[var(--card)]/10"
  )}
  >
- <Icon className="w-5 h-5 flex-shrink-0" />
- <span>{item.label}</span>
+ <span className="flex items-center justify-center w-6 h-6 flex-shrink-0">
+ <Icon className="w-5 h-5" />
+ </span>
+ <span className="font-medium">{item.label}</span>
  </NavLink>
  </li>
  );
@@ -183,8 +188,8 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
  </nav>
 
  {/* Footer */}
- <div className="p-4 border-t border-sidebar-border">
- <p className="text-muted-foreground text-xs text-center">
+ <div className="p-4 border-t border-[var(--primary-foreground)]/[0.08]">
+ <p className="text-[var(--primary-foreground)]/40 text-xs text-center">
  © 2026 منصة رشد
  </p>
  </div>

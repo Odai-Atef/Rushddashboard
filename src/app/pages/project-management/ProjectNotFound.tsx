@@ -5,7 +5,7 @@ export function ProjectNotFound() {
  const navigate = useNavigate();
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-[var(--destructive)]/[0.3] p-8 max-w-md w-full text-center">
  <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
  <h1 className="text-xl font-bold mb-2">المشروع غير موجود</h1>
@@ -14,7 +14,7 @@ export function ProjectNotFound() {
  </p>
  <button
  onClick={() => navigate('/dashboard/project-management/list')}
- className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-2 mx-auto"
+ className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  <span>العودة إلى قائمة المشاريع</span>
  <ArrowRight className="w-5 h-5" />

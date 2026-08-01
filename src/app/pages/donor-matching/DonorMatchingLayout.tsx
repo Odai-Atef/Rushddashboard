@@ -8,7 +8,7 @@ export function DonorMatchingLayout() {
  <div className="flex flex-col h-full" dir="rtl">
  {/* Module Header */}
  <div className="bg-card border-b border-border px-6 py-4">
- <div className="flex items-center justify-start gap-3">
+ <div className="flex items-center justify-start gap-[var(--spacing-small-gap)]">
  <div className="text-right">
  <h1 className="text-foreground">وحدة التطابق الذكي مع الجهات المانحة</h1>
  <p className="text-xs text-muted-foreground mt-0.5">مدعوم بالذكاء الاصطناعي • تحليل 147 معياراً</p>
@@ -21,7 +21,7 @@ export function DonorMatchingLayout() {
 
  {/* Breadcrumb for deep views */}
  {(location.pathname.includes('/analysis') || location.pathname.includes('/submission')) && (
- <div className="px-6 py-2 bg-muted/30 border-b border-border flex items-center gap-1.5 text-xs text-muted-foreground">
+ <div className="px-6 py-2 bg-muted/30 border-b border-border flex items-center gap-[var(--spacing-small-gap)].5 text-xs text-muted-foreground">
  <button onClick={() => window.history.back()} className="hover:text-foreground transition-colors">
  المانحون المقترحون
  </button>
@@ -35,7 +35,7 @@ export function DonorMatchingLayout() {
  )}
 
  {/* Content */}
- <div className="flex-1 overflow-y-auto p-6">
+ <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)]">
  <Outlet />
  </div>
  </div>

@@ -150,7 +150,7 @@ export function RecommendationsDashboard() {
  case 'high':
  return 'bg-[var(--destructive)]/20 text-[var(--destructive)] border-red-500/30';
  default:
- return 'bg-muted text-muted-foreground';
+ return 'bg-muted text-[var(--text-muted)]';
  }
  };
 
@@ -163,7 +163,7 @@ export function RecommendationsDashboard() {
  case 'medium':
  return 'bg-[var(--primary)]/20 text-[var(--secondary)] border-[var(--secondary)]/[0.3]';
  default:
- return 'bg-muted text-muted-foreground';
+ return 'bg-muted text-[var(--text-muted)]';
  }
  };
 
@@ -199,10 +199,10 @@ export function RecommendationsDashboard() {
  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
  <div>
  <h2 className="text-3xl mb-2">لوحة التوصيات</h2>
- <p className="text-muted-foreground text-lg">ماذا يجب أن يفعل المستثمر الآن؟</p>
+ <p className="text-[var(--text-muted)] text-lg">ماذا يجب أن يفعل المستثمر الآن؟</p>
  </div>
- <div className="flex gap-3">
- <button className="flex items-center gap-2 px-4 py-2 border border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-[var(--border)] hover:bg-muted dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors">
  <FileDown className="w-4 h-4" />
  <span>تصدير التقرير</span>
  </button>
@@ -210,32 +210,32 @@ export function RecommendationsDashboard() {
  </div>
 
  {/* AI Executive Summary */}
- <div className="bg-gradient-to-l from-purple-500/10 via-blue-500/10 to-transparent border border-purple-500/20 rounded-xl p-6">
+ <div className="bg-gradient-to-l from-purple-500/10 via-[var(--secondary)]/10 to-transparent border border-purple-500/20 rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-gradient-to-br from-purple-500 to-blue-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-[var(--radius-card)]">
  <Sparkles className="w-7 h-7 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <h3 className="text-xl">الملخص التنفيذي من الذكاء الاصطناعي</h3>
  <span className="px-2 py-1 bg-[var(--secondary)]/[0.2] text-[var(--secondary)] text-xs rounded-full">AI Executive</span>
  </div>
- <p className="text-foreground leading-relaxed text-base mb-4">
+ <p className="text-[var(--text-primary)] leading-relaxed text-base mb-[var(--spacing-section-gap)]">
  بناءً على التحليل الشامل لجميع المؤشرات، تم تحديد <span className="font-bold text-[var(--secondary)]">6 فرص استراتيجية</span> لتحسين الأداء.
  الأولوية القصوى هي <span className="font-bold">توسيع قناة B2B</span> التي تعد بزيادة الإيرادات بنسبة 32% مع مخاطر منخفضة.
  التركيز على <span className="font-bold">الاحتفاظ بالعملاء المميزين</span> و<span className="font-bold">تحسين الجودة التشغيلية</span> سيضمن نمواً مستداماً.
  </p>
- <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-[var(--card)]/50/50 rounded-xl border border-border">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-[var(--card)]/50/50 rounded-[var(--radius-card)] border border-[var(--border)]">
  <div className="text-center">
- <p className="text-sm text-muted-foreground mb-1">التأثير المتوقع</p>
+ <p className="text-sm text-[var(--text-muted)] mb-1">التأثير المتوقع</p>
  <p className="text-2xl font-bold text-[var(--primary)]">+2.8M ر.س</p>
  </div>
- <div className="text-center border-x border-border">
- <p className="text-sm text-muted-foreground mb-1">الاستثمار المطلوب</p>
+ <div className="text-center border-x border-[var(--border)]">
+ <p className="text-sm text-[var(--text-muted)] mb-1">الاستثمار المطلوب</p>
  <p className="text-2xl font-bold text-[var(--secondary)]">1.13M ر.س</p>
  </div>
  <div className="text-center">
- <p className="text-sm text-muted-foreground mb-1">العائد المتوقع</p>
+ <p className="text-sm text-[var(--text-muted)] mb-1">العائد المتوقع</p>
  <p className="text-2xl font-bold text-[var(--secondary)]">+247%</p>
  </div>
  </div>
@@ -244,8 +244,8 @@ export function RecommendationsDashboard() {
  </div>
 
  {/* Filters */}
- <div className="flex items-center gap-3 overflow-x-auto pb-2">
- <div className="flex items-center gap-2 text-muted-foreground flex-shrink-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] overflow-x-auto pb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-[var(--text-muted)] flex-shrink-0">
  <Filter className="w-4 h-4" />
  <span className="text-sm">تصفية:</span>
  </div>
@@ -255,10 +255,10 @@ export function RecommendationsDashboard() {
  <button
  key={filter.id}
  onClick={() => setActiveFilter(filter.id)}
- className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors flex-shrink-0 ${
+ className={`flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 rounded-[var(--radius-button)] transition-colors flex-shrink-0 ${
  activeFilter === filter.id
  ? 'bg-[var(--primary)] text-[var(--primary-foreground)]'
- : 'bg-[var(--card)] border border-border/80/50 hover:bg-muted dark:hover:bg-muted'
+ : 'bg-[var(--card)] border border-[var(--border)] hover:bg-muted dark:hover:bg-muted'
  }`}
  >
  <Icon className="w-4 h-4" />
@@ -275,27 +275,27 @@ export function RecommendationsDashboard() {
  return (
  <div
  key={rec.id}
- className="bg-[var(--card)] rounded-2xl border border-border/80/50 shadow-sm overflow-hidden hover:shadow-md dark:hover:shadow-lg transition-all duration-200"
+ className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden hover:shadow-[var(--shadow-lg)] dark:hover:shadow-lg transition-all duration-200"
  >
  <div className="p-6">
  {/* Header */}
- <div className="flex items-start justify-between gap-4 mb-4">
- <div className="flex items-start gap-3 flex-1">
- <div className="p-3 bg-[var(--primary)]/[0.08]0/10 rounded-lg">
+ <div className="flex items-start justify-between gap-4 mb-[var(--spacing-section-gap)]">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] flex-1">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--primary)]/[0.08]0/10 rounded-[var(--radius-button)]">
  <Icon className="w-6 h-6 text-[var(--primary)]" />
  </div>
  <div className="flex-1">
  <h3 className="text-xl mb-2">{rec.title}</h3>
- <div className="flex flex-wrap gap-2">
- <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getPriorityColor(rec.priority)}`}>
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
+ <span className={`inline-flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 rounded-full text-xs font-medium border ${getPriorityColor(rec.priority)}`}>
  {rec.priority === 'urgent' && <Zap className="w-3 h-3" />}
  {getPriorityLabel(rec.priority)}
  </span>
- <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(rec.riskLevel)}`}>
+ <span className={`inline-flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 rounded-full text-xs font-medium border ${getRiskColor(rec.riskLevel)}`}>
  {rec.riskLevel === 'high' ? <AlertTriangle className="w-3 h-3" /> : <Shield className="w-3 h-3" />}
  {getRiskLabel(rec.riskLevel)}
  </span>
- <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium bg-[var(--primary)]/20 text-[var(--secondary)] border border-[var(--secondary)]/[0.3]">
+ <span className="inline-flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 rounded-full text-xs font-medium bg-[var(--primary)]/20 text-[var(--secondary)] border border-[var(--secondary)]/[0.3]">
  <Clock className="w-3 h-3" />
  {rec.timeline}
  </span>
@@ -306,19 +306,19 @@ export function RecommendationsDashboard() {
 
  {/* Content */}
  <div className="space-y-4">
- <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
+ <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {/* Right Column */}
  <div className="space-y-4">
- <div className="p-4 bg-secondary/50 rounded-lg">
- <p className="text-sm text-muted-foreground mb-1">السبب</p>
+ <div className="p-4 bg-secondary/50 rounded-[var(--radius-button)]">
+ <p className="text-sm text-[var(--text-muted)] mb-1">السبب</p>
  <p className="text-sm leading-relaxed">{rec.reason}</p>
  </div>
 
- <div className="p-4 bg-gradient-to-l from-green-500/10 to-transparent border border-[var(--primary)]/[0.2] rounded-lg">
- <p className="text-sm text-muted-foreground mb-1">التأثير المتوقع</p>
- <div className="flex items-center gap-2">
+ <div className="p-4 bg-gradient-to-l from-green-500/10 to-transparent border border-[var(--primary)]/[0.2] rounded-[var(--radius-button)]">
+ <p className="text-sm text-[var(--text-muted)] mb-1">التأثير المتوقع</p>
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <p className="text-sm">{rec.expectedImpact}</p>
- <span className="flex items-center gap-1 text-lg font-bold text-[var(--primary)]">
+ <span className="flex items-center gap-[var(--spacing-small-gap)] text-lg font-bold text-[var(--primary)]">
  <ArrowUpRight className="w-5 h-5" />
  {rec.impactValue}
  </span>
@@ -328,13 +328,13 @@ export function RecommendationsDashboard() {
 
  {/* Left Column */}
  <div className="space-y-4">
- <div className="p-4 bg-secondary/50 rounded-lg">
- <p className="text-sm text-muted-foreground mb-1">الإجراء المقترح</p>
+ <div className="p-4 bg-secondary/50 rounded-[var(--radius-button)]">
+ <p className="text-sm text-[var(--text-muted)] mb-1">الإجراء المقترح</p>
  <p className="text-sm leading-relaxed">{rec.suggestedAction}</p>
  </div>
 
- <div className="p-4 bg-[var(--primary)]/10 border border-[var(--secondary)]/[0.2] rounded-lg">
- <p className="text-sm text-muted-foreground mb-1">اللوحة ذات الصلة</p>
+ <div className="p-4 bg-[var(--primary)]/10 border border-[var(--secondary)]/[0.2] rounded-[var(--radius-button)]">
+ <p className="text-sm text-[var(--text-muted)] mb-1">اللوحة ذات الصلة</p>
  <p className="text-sm font-medium text-[var(--secondary)]">{rec.relatedDashboard}</p>
  </div>
  </div>
@@ -342,16 +342,16 @@ export function RecommendationsDashboard() {
  </div>
 
  {/* Actions */}
- <div className="flex flex-wrap gap-3 mt-6 pt-6 border-t border-border">
- <button className="flex items-center gap-2 px-6 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-lg transition-colors">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)] mt-6 pt-6 border-t border-[var(--border)]">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-6 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors">
  <CheckCircle className="w-4 h-4" />
  <span>اعتماد التوصية</span>
  </button>
- <button className="flex items-center gap-2 px-6 py-2.5 border border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-6 py-2.5 border border-[var(--border)] hover:bg-muted dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors">
  <Target className="w-4 h-4" />
  <span>عرض خطة العمل</span>
  </button>
- <button className="px-6 py-2.5 border border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors">
+ <button className="px-6 py-2.5 border border-[var(--border)] hover:bg-muted dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors">
  تأجيل
  </button>
  </div>
@@ -362,8 +362,8 @@ export function RecommendationsDashboard() {
  </div>
 
  {/* Action Plan Timeline */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-6">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Clock className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="text-lg">الجدول الزمني للتنفيذ</h3>
  </div>
@@ -378,8 +378,8 @@ export function RecommendationsDashboard() {
  </div>
  <div className="flex-1 pb-4">
  <p className="font-medium mb-1">{rec.title}</p>
- <div className="flex items-center gap-3 text-sm text-muted-foreground">
- <span className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-[var(--text-muted)]">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-3 h-3" />
  {rec.timeline}
  </span>

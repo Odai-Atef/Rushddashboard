@@ -137,25 +137,25 @@ export function CouponsPage() {
  const needsExtraProjects = form.type === 'EXTRA_PROJECTS';
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6" dir="rtl">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]" dir="rtl">
  <div className="max-w-7xl mx-auto">
- <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
- <div className="flex items-center gap-3">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-[var(--spacing-small-gap)] mb-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Ticket className="w-7 h-7 text-[var(--secondary)]" />
  <h1 className="text-xl sm:text-2xl font-bold text-foreground">إدارة الكوبونات</h1>
  </div>
  <button
  type="button"
  onClick={() => setShowAdd(true)}
- className="flex items-center justify-center sm:justify-start gap-2 px-4 py-3 min-h-[44px] bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors w-full sm:w-auto"
+ className="flex items-center justify-center sm:justify-start gap-[var(--spacing-small-gap)] px-4 py-3 min-h-[44px] bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors w-full sm:w-auto"
  >
  <Plus className="w-4 h-4" />
  إضافة كوبون
  </button>
  </div>
 
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-[var(--border)] p-4 mb-6">
- <div className="flex flex-col md:flex-row gap-4">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-[var(--border)] p-[var(--spacing-card-padding)] mb-6">
+ <div className="flex flex-col md:flex-row gap-[var(--spacing-grid-gap)]">
  <div className="flex-1 min-w-0">
  <label className="block text-sm font-medium text-foreground mb-1">الكود</label>
  <div className="relative">
@@ -188,7 +188,7 @@ export function CouponsPage() {
  <button
  type="button"
  onClick={() => setFilters({ status: '', code: '' })}
- className="flex items-center justify-center sm:justify-start gap-1 px-3 py-2.5 min-h-[44px] text-sm text-[var(--destructive)] hover:bg-[var(--destructive)]/[0.08] rounded-lg transition-colors w-full sm:w-auto"
+ className="flex items-center justify-center sm:justify-start gap-[var(--spacing-small-gap)] px-3 py-2.5 min-h-[44px] text-sm text-[var(--destructive)] hover:bg-[var(--destructive)]/[0.08] rounded-lg transition-colors w-full sm:w-auto"
  >
  <X className="w-4 h-4" />
  مسح الفلاتر
@@ -200,7 +200,7 @@ export function CouponsPage() {
 
  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-[var(--border)] overflow-hidden">
  {loading && coupons.length === 0 ? (
- <div className="p-12 flex items-center justify-center gap-2 text-muted-foreground">
+ <div className="p-12 flex items-center justify-center gap-[var(--spacing-small-gap)] text-muted-foreground">
  <Loader2 className="w-5 h-5 animate-spin" />
  جاري تحميل الكوبونات...
  </div>
@@ -210,9 +210,9 @@ export function CouponsPage() {
  <div className="p-12 text-center text-muted-foreground">لا توجد كوبونات</div>
  ) : (
  <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
- <div className="sm:hidden space-y-3 p-4">
+ <div className="sm:hidden space-y-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)]">
  {coupons.map((coupon) => (
- <div key={coupon.id} className="border border-[var(--border)] rounded-lg p-4 space-y-2">
+ <div key={coupon.id} className="border border-[var(--border)] rounded-lg p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)]">
  <div className="flex items-center justify-between">
  <span className="font-medium text-foreground">{coupon.code}</span>
  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
@@ -298,21 +298,21 @@ export function CouponsPage() {
  </div>
 
  {showAdd && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-[var(--text-primary)]/[0.5]">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-[var(--spacing-small-gap)] sm:p-[var(--spacing-card-padding)] bg-[var(--text-primary)]/[0.5]">
  <div className="bg-[var(--card)] rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto mx-2">
- <div className="p-4 sm:p-6 border-b border-[var(--border)] flex items-center justify-between">
+ <div className="p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border-b border-[var(--border)] flex items-center justify-between">
  <h2 className="text-lg sm:text-xl font-bold text-foreground">إضافة كوبون جديد</h2>
  <button
  type="button"
  onClick={() => setShowAdd(false)}
- className="p-2 hover:bg-muted rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors"
  >
  <X className="w-5 h-5 text-muted-foreground" />
  </button>
  </div>
 
- <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4">
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+ <form onSubmit={handleSubmit} className="p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] space-y-[var(--spacing-section-gap)]">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium text-foreground mb-1">الكود *</label>
  <input
@@ -476,7 +476,7 @@ export function CouponsPage() {
  />
  </div>
 
- <div className="flex flex-col sm:flex-row justify-end gap-3 pt-4 border-t border-[var(--border)]">
+ <div className="flex flex-col sm:flex-row justify-end gap-[var(--spacing-small-gap)] pt-4 border-t border-[var(--border)]">
  <button
  type="button"
  onClick={() => setShowAdd(false)}
@@ -487,7 +487,7 @@ export function CouponsPage() {
  <button
  type="submit"
  disabled={saving}
- className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-3 min-h-[44px] bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors disabled:opacity-50"
+ className="w-full sm:w-auto flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-3 min-h-[44px] bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors disabled:opacity-50"
  >
  {saving ? (
  <Loader2 className="w-4 h-4 animate-spin" />

@@ -39,13 +39,13 @@ export function DashboardSection({
  };
 
  const gapSizes = {
- sm: 'gap-2',
- md: 'gap-4',
- lg: 'gap-6',
+ sm: 'gap-[var(--spacing-small-gap)]',
+ md: 'gap-[var(--spacing-grid-gap)]',
+ lg: 'gap-[var(--spacing-grid-gap)]',
  };
 
  return (
- <div className={cn('space-y-4', className)}>
+ <div className={cn('space-y-[var(--spacing-section-gap)]', className)}>
  {(title || description) && (
  <div>
  {title && (

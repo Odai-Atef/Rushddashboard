@@ -34,8 +34,8 @@ export function OrganizationDonorsFilters({
  const hasFilters = statusFilter || projectFilter || searchQuery;
 
  return (
- <div className="bg-card border border-border rounded-xl p-4 space-y-4" dir="rtl">
- <div className="flex flex-wrap items-center gap-3">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] space-y-[var(--spacing-section-gap)]" dir="rtl">
+ <div className="flex flex-wrap items-center gap-[var(--spacing-small-gap)]">
  {/* Search */}
  <div className="relative flex-1 min-w-[200px]">
  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -75,7 +75,7 @@ export function OrganizationDonorsFilters({
  {hasFilters && (
  <button
  onClick={onClear}
- className="inline-flex items-center gap-1.5 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-2.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
  >
  <FilterX className="w-4 h-4" />
  مسح الفلاتر
@@ -84,7 +84,7 @@ export function OrganizationDonorsFilters({
  </div>
 
  {isLoading && (
- <div className="flex items-center gap-2 text-sm text-muted-foreground">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-muted-foreground">
  <Loader2 className="w-4 h-4 animate-spin" />
  جارٍ التحميل...
  </div>

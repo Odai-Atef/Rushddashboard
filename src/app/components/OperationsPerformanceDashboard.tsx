@@ -69,9 +69,9 @@ const weeklyActivity = [
 
 function GaugeCard({ label, value, unit, color }: { label: string; value: number; unit: string; color: string }) {
  return (
- <div className="u003cREPLACEu003e rounded-2xl p-4 md:p-5 shadow-sm text-center">
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-4 md:p-5 shadow-[var(--shadow-card)] text-center">
  <div className={`text-3xl ${color}`}>{value}{unit}</div>
- <p className="text-xs text-muted-foreground mt-1">{label}</p>
+ <p className="text-xs text-[var(--text-muted)] mt-1">{label}</p>
  <div className="mt-2 h-1.5 bg-muted rounded-full overflow-hidden">
  <div className={`h-full rounded-full ${color.replace('text-', 'bg-')}`} style={{ width: `${Math.min(value, 100)}%` }} />
  </div>
@@ -87,16 +87,16 @@ export function OperationsPerformanceDashboard() {
  {/* Header */}
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div>
- <h1 className="text-3xl md:text-4xl font-bold text-foreground">تحليلات التشغيل والأداء</h1>
- <p className="text-muted-foreground text-sm mt-1">أوقات الاستجابة • امتثال SLA • دورات المراجعة • صحة التعاون</p>
+ <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">تحليلات التشغيل والأداء</h1>
+ <p className="text-[var(--text-muted)] text-sm mt-1">أوقات الاستجابة • امتثال SLA • دورات المراجعة • صحة التعاون</p>
  </div>
- <div className="flex items-center gap-2">
- <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-border rounded-xl px-3 py-2 bg-[var(--card)] text-foreground">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-[var(--border)] rounded-[var(--radius-card)] px-3 py-2 bg-[var(--card)] text-[var(--text-primary)]">
  <option value="1month">آخر شهر</option>
  <option value="3months">آخر 3 أشهر</option>
  <option value="6months">آخر 6 أشهر</option>
  </select>
- <button className="flex items-center gap-2 px-3 py-2 text-sm bg-[var(--primary)] text-[var(--primary-foreground)] rounded-xl hover:opacity-90">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-2 text-sm bg-[var(--primary)] text-[var(--primary-foreground)] rounded-[var(--radius-card)] hover:opacity-90">
  <Download className="w-4 h-4" /> تصدير
  </button>
  </div>
@@ -113,12 +113,12 @@ export function OperationsPerformanceDashboard() {
  ].map((card, i) => {
  const Icon = card.icon;
  return (
- <div key={i} className={`rounded-xl border border-border p-4 ${card.bg}`}>
- <div className="p-2 rounded-xl bg-background/60 w-fit mb-2">
+ <div key={i} className={`rounded-[var(--radius-card)] border border-[var(--border)] p-4 ${card.bg}`}>
+ <div className="p-[var(--spacing-small-gap)] rounded-[var(--radius-card)] bg-[var(--background)]/60 w-fit mb-2">
  <Icon className={`w-5 h-5 ${card.color}`} />
  </div>
  <p className={`text-xl ${card.color}`}>{card.value}<span className="text-sm">{card.unit}</span></p>
- <p className="text-xs text-muted-foreground mt-1">{card.label}</p>
+ <p className="text-xs text-[var(--text-muted)] mt-1">{card.label}</p>
  </div>
  );
  })}
@@ -126,8 +126,8 @@ export function OperationsPerformanceDashboard() {
 
  {/* Response Times & SLA */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
- <div className="lg:col-span-2 u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">أوقات الاستجابة (ساعات)</h2>
+ <div className="lg:col-span-2 u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">أوقات الاستجابة (ساعات)</h2>
  <ResponsiveContainer width="100%" height={230}>
  <LineChart data={responseTimeData}>
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -141,8 +141,8 @@ export function OperationsPerformanceDashboard() {
  </ResponsiveContainer>
  </div>
 
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">امتثال SLA</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">امتثال SLA</h2>
  <ResponsiveContainer width="100%" height={200}>
  <AreaChart data={slaData}>
  <defs>
@@ -158,33 +158,33 @@ export function OperationsPerformanceDashboard() {
  <Area type="monotone" dataKey="compliance" name="الامتثال" stroke="#10b981" fill="url(#slaGrad)" strokeWidth={2} />
  </AreaChart>
  </ResponsiveContainer>
- <div className="mt-2 p-2 bg-[var(--primary)]/[0.08] rounded-xl border border-[var(--primary)]/[0.2]">
+ <div className="mt-2 p-[var(--spacing-small-gap)] bg-[var(--primary)]/[0.08] rounded-[var(--radius-card)] border border-[var(--primary)]/[0.2]">
  <p className="text-xs text-[var(--primary)]">تحسّن +15% منذ يناير</p>
  </div>
  </div>
  </div>
 
  {/* SLA by Category */}
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <h2 className="text-foreground">امتثال SLA حسب الفئة</h2>
- <span className="text-xs text-muted-foreground">الوقت بالساعات</span>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <h2 className="text-[var(--text-primary)]">امتثال SLA حسب الفئة</h2>
+ <span className="text-xs text-[var(--text-muted)]">الوقت بالساعات</span>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full text-sm">
  <thead>
- <tr className="border-b border-border">
- <th className="text-right py-2 text-muted-foreground">الفئة</th>
- <th className="text-center py-2 text-muted-foreground">SLA المتفق</th>
- <th className="text-center py-2 text-muted-foreground">الفعلي</th>
- <th className="text-right py-2 text-muted-foreground">الحالة</th>
+ <tr className="border-b border-[var(--border)]">
+ <th className="text-right py-2 text-[var(--text-muted)]">الفئة</th>
+ <th className="text-center py-2 text-[var(--text-muted)]">SLA المتفق</th>
+ <th className="text-center py-2 text-[var(--text-muted)]">الفعلي</th>
+ <th className="text-right py-2 text-[var(--text-muted)]">الحالة</th>
  </tr>
  </thead>
  <tbody>
  {slaByCategory.map((row, i) => (
- <tr key={i} className="border-b border-border/50 hover:bg-secondary dark:hover:bg-muted/50">
- <td className="py-3 text-foreground">{row.name}</td>
- <td className="py-3 text-center text-muted-foreground">{row.sla} ساعة</td>
+ <tr key={i} className="border-b border-[var(--border)]/50 hover:bg-secondary dark:hover:bg-muted/50">
+ <td className="py-3 text-[var(--text-primary)]">{row.name}</td>
+ <td className="py-3 text-center text-[var(--text-muted)]">{row.sla} ساعة</td>
  <td className={`py-3 text-center ${row.status === 'breach' ? 'text-red-500' : 'text-[var(--primary)]'}`}>{row.actual} ساعة</td>
  <td className="py-3">
  <span className={`px-2 py-0.5 rounded-full text-xs ${row.status === 'breach' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : 'bg-emerald-100 text-[var(--primary)]'}`}>
@@ -200,10 +200,10 @@ export function OperationsPerformanceDashboard() {
 
  {/* Revision Cycles, Collaboration Health, Weekly */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-4">
- <RefreshCw className="w-4 h-4 text-muted-foreground" />
- <h2 className="text-foreground">دورات المراجعة</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-[var(--spacing-section-gap)]">
+ <RefreshCw className="w-4 h-4 text-[var(--text-muted)]" />
+ <h2 className="text-[var(--text-primary)]">دورات المراجعة</h2>
  </div>
  <ResponsiveContainer width="100%" height={200}>
  <LineChart data={revisionCycles}>
@@ -218,10 +218,10 @@ export function OperationsPerformanceDashboard() {
  </ResponsiveContainer>
  </div>
 
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-4">
- <Activity className="w-4 h-4 text-muted-foreground" />
- <h2 className="text-foreground">درجة صحة التعاون</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-[var(--spacing-section-gap)]">
+ <Activity className="w-4 h-4 text-[var(--text-muted)]" />
+ <h2 className="text-[var(--text-primary)]">درجة صحة التعاون</h2>
  </div>
  <ResponsiveContainer width="100%" height={200}>
  <RadarChart data={collaborationHealth}>
@@ -233,8 +233,8 @@ export function OperationsPerformanceDashboard() {
  </ResponsiveContainer>
  </div>
 
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">النشاط الأسبوعي</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">النشاط الأسبوعي</h2>
  <ResponsiveContainer width="100%" height={200}>
  <BarChart data={weeklyActivity}>
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -249,10 +249,10 @@ export function OperationsPerformanceDashboard() {
  </div>
 
  {/* Efficiency Metrics */}
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-5">
- <Gauge className="w-4 h-4 text-muted-foreground" />
- <h2 className="text-foreground">مقاييس الكفاءة التشغيلية</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-[var(--spacing-card-padding)]">
+ <Gauge className="w-4 h-4 text-[var(--text-muted)]" />
+ <h2 className="text-[var(--text-primary)]">مقاييس الكفاءة التشغيلية</h2>
  </div>
  <div className="space-y-4">
  {efficiencyMetrics.map((m, i) => {
@@ -261,22 +261,22 @@ export function OperationsPerformanceDashboard() {
  const isGood = m.current >= m.target * 0.95;
  return (
  <div key={i} className="flex items-center gap-4">
- <div className="w-32 text-sm text-foreground text-right flex-shrink-0">{m.metric}</div>
+ <div className="w-32 text-sm text-[var(--text-primary)] text-right flex-shrink-0">{m.metric}</div>
  <div className="flex-1 relative">
  <div className="h-3 bg-muted rounded-full overflow-hidden">
  <div className={`h-full rounded-full ${isGood ? 'bg-[var(--primary)]/[0.08]0' : 'bg-amber-400'}`} style={{ width: `${pct}%` }} />
  </div>
  <div className="absolute top-0 h-3 w-0.5 bg-foreground/30" style={{ left: `${targetPct}%` }} />
  </div>
- <div className="flex items-center gap-1 text-sm flex-shrink-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm flex-shrink-0">
  <span className={isGood ? 'text-[var(--primary)]' : 'text-[var(--warning)]'}>{m.current}{m.unit}</span>
- <span className="text-muted-foreground text-xs">/ {m.target}{m.unit}</span>
+ <span className="text-[var(--text-muted)] text-xs">/ {m.target}{m.unit}</span>
  </div>
  </div>
  );
  })}
  </div>
- <p className="text-xs text-muted-foreground mt-3">الخط الرأسي يمثل الهدف المستهدف</p>
+ <p className="text-xs text-[var(--text-muted)] mt-3">الخط الرأسي يمثل الهدف المستهدف</p>
  </div>
  </div>
  );

@@ -67,8 +67,8 @@ export function CharityAssessmentStartPage() {
 
  if (isLoading) {
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
- <div className="flex flex-col items-center gap-4">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-[var(--spacing-card-padding)]">
+ <div className="flex flex-col items-center gap-[var(--spacing-grid-gap)]">
  <Loader2 className="w-10 h-10 animate-spin text-[var(--secondary)]" />
  <p className="text-muted-foreground">جاري تحميل بيانات الجهه...</p>
  </div>
@@ -78,15 +78,15 @@ export function CharityAssessmentStartPage() {
 
  if (error) {
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-[var(--spacing-card-padding)]">
  <div className="bg-card border border-border rounded-xl p-8 text-center max-w-md">
  <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
  <h2 className="text-xl font-semibold mb-2">تعذر تحميل الجهه</h2>
  <p className="text-muted-foreground mb-6">{error}</p>
- <div className="flex gap-3 justify-center">
+ <div className="flex gap-[var(--spacing-small-gap)] justify-center">
  <button
  onClick={() => navigate('/dashboard/onboarding/info?tab=info')}
- className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
  >
  إنشاء جهه
  </button>
@@ -97,7 +97,7 @@ export function CharityAssessmentStartPage() {
  }
 
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-[var(--spacing-card-padding)]">
  <div className="max-w-4xl w-full">
  <div className="text-center mb-6 sm:mb-8">
  <h1 className="text-3xl sm:text-4xl font-bold mb-4">تقييم ISIV</h1>
@@ -109,13 +109,13 @@ export function CharityAssessmentStartPage() {
  </p>
  </div>
 
- <div className="bg-card border border-border rounded-xl p-4 sm:p-8 mb-6">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-8 mb-6">
  <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">أبعاد التقييم</h2>
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)]">
  {isivDimensions.map((dim) => {
  const Icon = dim.icon;
  return (
- <div key={dim.id} className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+ <div key={dim.id} className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted/50 rounded-lg">
  <Icon className="w-5 h-5 text-[var(--secondary)]" />
  <div>
  <span className="font-medium">{dim.name}</span>
@@ -125,7 +125,7 @@ export function CharityAssessmentStartPage() {
  );
  })}
  </div>
- <div className="mt-4 p-4 bg-[var(--secondary)]/[0.08] rounded-lg">
+ <div className="mt-4 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-lg">
  <p className="text-sm text-muted-foreground">
  <strong>ISIV</strong> = <strong>I</strong>nstitutional Building + <strong>S</strong>ustainability + <strong>I</strong>ntelligence + <strong>V</strong>alue
  </p>
@@ -135,9 +135,9 @@ export function CharityAssessmentStartPage() {
  </div>
  </div>
 
- <div className="bg-card border border-border rounded-xl p-4 sm:p-8 mb-6">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-8 mb-6">
  <h3 className="font-semibold mb-4">ما الذي ستحصل عليه:</h3>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {[
  'تقييم شامل عبر 4 أبعاد استراتيجية (ISIV)',
  'درجة إجمالية من 120 نقطة مع حالة التأهيل',
@@ -146,7 +146,7 @@ export function CharityAssessmentStartPage() {
  'توصيات مدعومة بالذكاء الاصطناعي',
  'مقارنة مع معايير القطاع'
  ].map((item, index) => (
- <div key={index} className="flex items-start gap-3">
+ <div key={index} className="flex items-start gap-[var(--spacing-small-gap)]">
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)] flex-shrink-0 mt-0.5" />
  <span>{item}</span>
  </div>
@@ -154,14 +154,14 @@ export function CharityAssessmentStartPage() {
  </div>
  </div>
 
- <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+ <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)]">
  <button
  disabled={!organizationId}
  onClick={() =>
  organizationId &&
  navigate(`/dashboard/onboarding/assessment?organizationId=${organizationId}`)
  }
- className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all text-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <Play className="w-5 h-5" />
  بدء التقييم

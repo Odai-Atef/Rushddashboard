@@ -34,14 +34,14 @@ export function FAQSection({ items, title = 'الأسئلة الشائعة', cla
  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
  return (
- <div className={cn('bg-card border border-border rounded-xl p-6', className)}>
+ <div className={cn('bg-card border border-border rounded-xl p-[var(--spacing-card-padding)]', className)}>
  <h3 className="text-xl mb-4">{title}</h3>
  
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {items.map((item, index) => (
  <div key={index} className="border border-border rounded-lg overflow-hidden">
  <button
- className="w-full flex items-center justify-between p-4 hover:bg-muted/50 transition-colors"
+ className="w-full flex items-center justify-between p-[var(--spacing-card-padding)] hover:bg-muted/50 transition-colors"
  onClick={() => setOpenIndex(openIndex === index ? null : index)}
  >
  <span className="font-medium text-right">{item.question}</span>
@@ -53,7 +53,7 @@ export function FAQSection({ items, title = 'الأسئلة الشائعة', cla
  />
  </button>
  {openIndex === index && (
- <div className="p-4 pt-0 text-muted-foreground">
+ <div className="p-[var(--spacing-card-padding)] pt-0 text-muted-foreground">
  {item.answer}
  </div>
  )}

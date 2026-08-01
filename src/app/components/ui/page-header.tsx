@@ -29,15 +29,15 @@ export function PageHeader({
  className,
 }: PageHeaderProps) {
  return (
- <div className={cn('space-y-2', className)}>
+ <div className={cn('space-y-[var(--spacing-small-gap)]', className)}>
  <div className="flex items-center justify-between">
  <div>
- <h2 className="text-3xl mb-1">{title}</h2>
+ <h2 className="text-[var(--text-page-title)] mb-1">{title}</h2>
  {description && (
  <p className="text-muted-foreground">{description}</p>
  )}
  </div>
- {children && <div className="flex items-center gap-2">{children}</div>}
+ {children && <div className="flex items-center gap-[var(--spacing-small-gap)]">{children}</div>}
  </div>
  </div>
  );

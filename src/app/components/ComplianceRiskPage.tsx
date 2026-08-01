@@ -188,7 +188,7 @@ export function ComplianceRiskPage() {
  case 'low':
  return 'bg-[var(--primary)]/10 border-[var(--secondary)]/[0.2]';
  default:
- return 'bg-secondary0/10 border-gray-500/20';
+ return 'bg-secondary0/10 border-[var(--border)]';
  }
  };
 
@@ -257,13 +257,13 @@ export function ComplianceRiskPage() {
  {/* Header */}
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-3xl flex items-center gap-3">
+ <h1 className="text-3xl flex items-center gap-[var(--spacing-small-gap)]">
  <ShieldAlert className="w-8 h-8 text-red-500" />
  لوحة الامتثال والمخاطر
  </h1>
  <p className="text-muted-foreground mt-1">مراقبة الامتثال والمخاطر التشغيلية والتهديدات</p>
  </div>
- <button className="px-4 py-2 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors flex items-center gap-2">
+ <button className="px-4 py-2 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5" />
  إنشاء تقرير مخاطر
  </button>
@@ -274,7 +274,7 @@ export function ComplianceRiskPage() {
  <div className="bg-card border border-border rounded-lg p-6">
  <div className="flex items-center justify-between mb-4">
  <ShieldCheck className="w-8 h-8 text-[var(--primary)]" />
- <div className={`flex items-center gap-1 text-sm ${kpiData.complianceChange >= 0 ? 'text-[var(--primary)]' : 'text-red-500'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] text-sm ${kpiData.complianceChange >= 0 ? 'text-[var(--primary)]' : 'text-red-500'}`}>
  {kpiData.complianceChange >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
  {Math.abs(kpiData.complianceChange)}%
  </div>
@@ -286,7 +286,7 @@ export function ComplianceRiskPage() {
  <div className="bg-card border border-border rounded-lg p-6">
  <div className="flex items-center justify-between mb-4">
  <AlertTriangle className="w-8 h-8 text-orange-500" />
- <div className={`flex items-center gap-1 text-sm ${kpiData.risksChange <= 0 ? 'text-[var(--primary)]' : 'text-red-500'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] text-sm ${kpiData.risksChange <= 0 ? 'text-[var(--primary)]' : 'text-red-500'}`}>
  {kpiData.risksChange <= 0 ? <TrendingDown className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
  {Math.abs(kpiData.risksChange)}
  </div>
@@ -298,7 +298,7 @@ export function ComplianceRiskPage() {
  <div className="bg-card border border-border rounded-lg p-6">
  <div className="flex items-center justify-between mb-4">
  <AlertCircle className="w-8 h-8 text-red-500" />
- <div className={`flex items-center gap-1 text-sm ${kpiData.alertsChange >= 0 ? 'text-red-500' : 'text-[var(--primary)]'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] text-sm ${kpiData.alertsChange >= 0 ? 'text-red-500' : 'text-[var(--primary)]'}`}>
  {kpiData.alertsChange >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
  {Math.abs(kpiData.alertsChange)}
  </div>
@@ -324,7 +324,7 @@ export function ComplianceRiskPage() {
  {/* Risk Matrix */}
  <div className="bg-card border border-border rounded-lg p-6">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl flex items-center gap-2">
+ <h2 className="text-xl flex items-center gap-[var(--spacing-small-gap)]">
  <Target className="w-5 h-5 text-red-500" />
  مصفوفة المخاطر
  </h2>
@@ -340,7 +340,7 @@ export function ComplianceRiskPage() {
  if (active && payload && payload.length) {
  const data = payload[0].payload;
  return (
- <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+ <div className="bg-card border border-border rounded-lg p-[var(--spacing-card-padding)] shadow-lg">
  <p className="font-medium">{data.label}</p>
  <p className="text-sm text-muted-foreground">الاحتمالية: {data.probability}%</p>
  <p className="text-sm text-muted-foreground">التأثير: {data.impact}%</p>
@@ -368,19 +368,19 @@ export function ComplianceRiskPage() {
  </ScatterChart>
  </ResponsiveContainer>
  <div className="flex items-center justify-center gap-6 mt-4 text-sm">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full bg-[var(--destructive)]" />
  <span>حرج</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full bg-orange-500" />
  <span>عالي</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full bg-yellow-500" />
  <span>متوسط</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full bg-[var(--primary)]" />
  <span>منخفض</span>
  </div>
@@ -389,7 +389,7 @@ export function ComplianceRiskPage() {
 
  {/* Compliance Trend */}
  <div className="bg-card border border-border rounded-lg p-6">
- <h2 className="text-xl mb-6 flex items-center gap-2">
+ <h2 className="text-xl mb-6 flex items-center gap-[var(--spacing-small-gap)]">
  <TrendingUp className="w-5 h-5 text-[var(--primary)]" />
  اتجاه الامتثال
  </h2>
@@ -406,7 +406,7 @@ export function ComplianceRiskPage() {
 
  {/* Compliance Areas */}
  <div className="bg-card border border-border rounded-lg p-6">
- <h2 className="text-xl mb-6 flex items-center gap-2">
+ <h2 className="text-xl mb-6 flex items-center gap-[var(--spacing-small-gap)]">
  <FileText className="w-5 h-5 text-[var(--secondary)]" />
  مجالات الامتثال
  </h2>
@@ -414,7 +414,7 @@ export function ComplianceRiskPage() {
  {complianceAreas.map((area, index) => (
  <div key={index} className="border border-border rounded-lg p-4">
  <div className="flex items-center justify-between mb-3">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {area.status === 'compliant' ? (
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />
  ) : area.status === 'partial' ? (
@@ -456,7 +456,7 @@ export function ComplianceRiskPage() {
  <div className="space-y-6">
  {/* Risk Distribution */}
  <div className="bg-card border border-border rounded-lg p-6">
- <h2 className="text-xl mb-6 flex items-center gap-2">
+ <h2 className="text-xl mb-6 flex items-center gap-[var(--spacing-small-gap)]">
  <BarChart3 className="w-5 h-5 text-purple-500" />
  توزيع المخاطر
  </h2>
@@ -478,10 +478,10 @@ export function ComplianceRiskPage() {
  <Tooltip />
  </PieChart>
  </ResponsiveContainer>
- <div className="space-y-2 mt-4">
+ <div className="space-y-[var(--spacing-small-gap)] mt-4">
  {riskDistributionData.map((item, index) => (
  <div key={index} className="flex items-center justify-between">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
  <span className="text-sm">{item.name}</span>
  </div>
@@ -492,14 +492,14 @@ export function ComplianceRiskPage() {
  </div>
 
  {/* AI Risk Analysis */}
- <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-lg p-6">
- <div className="flex items-center gap-2 mb-4">
+ <div className="bg-gradient-to-br from-purple-500/10 to-[var(--secondary)]/10 border border-purple-500/20 rounded-lg p-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <Brain className="w-6 h-6 text-purple-500" />
  <h2 className="text-xl">تحليل الذكاء الاصطناعي</h2>
  </div>
  <div className="space-y-4">
  <div className="bg-card/50 rounded-lg p-4">
- <div className="flex items-start gap-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5 text-red-500 flex-shrink-0 mt-1" />
  <div>
  <p className="font-medium mb-1">تحذير: مخاطر امتثال عالية</p>
@@ -511,7 +511,7 @@ export function ComplianceRiskPage() {
  </div>
 
  <div className="bg-card/50 rounded-lg p-4">
- <div className="flex items-start gap-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-1" />
  <div>
  <p className="font-medium mb-1">فرصة للتحسين</p>
@@ -523,7 +523,7 @@ export function ComplianceRiskPage() {
  </div>
 
  <div className="bg-card/50 rounded-lg p-4">
- <div className="flex items-start gap-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <TrendingUp className="w-5 h-5 text-[var(--primary)] flex-shrink-0 mt-1" />
  <div>
  <p className="font-medium mb-1">اتجاه إيجابي</p>
@@ -538,11 +538,11 @@ export function ComplianceRiskPage() {
 
  {/* Recommended Actions */}
  <div className="bg-card border border-border rounded-lg p-6">
- <h2 className="text-xl mb-4 flex items-center gap-2">
+ <h2 className="text-xl mb-4 flex items-center gap-[var(--spacing-small-gap)]">
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />
  الإجراءات الموصى بها
  </h2>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {[
  { priority: 'urgent', text: 'مراجعة عقود العمل الحالية', time: 'خلال 3 أيام' },
  { priority: 'high', text: 'تحديث سياسات أمن المعلومات', time: 'خلال أسبوع' },
@@ -551,14 +551,14 @@ export function ComplianceRiskPage() {
  ].map((action, index) => (
  <div
  key={index}
- className={`p-3 rounded-lg border cursor-pointer hover:border-ring transition-all ${
+ className={`p-[var(--spacing-card-padding)] rounded-lg border cursor-pointer hover:border-ring transition-all ${
  action.priority === 'urgent' ? 'bg-[var(--destructive)]/5 border-red-500/20' :
  action.priority === 'high' ? 'bg-orange-500/5 border-orange-500/20' :
  action.priority === 'medium' ? 'bg-yellow-500/5 border-yellow-500/20' :
  'bg-[var(--primary)]/5 border-[var(--secondary)]/[0.2]'
  }`}
  >
- <div className="flex items-start justify-between gap-2">
+ <div className="flex items-start justify-between gap-[var(--spacing-small-gap)]">
  <p className="text-sm flex-1">{action.text}</p>
  <Clock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
  </div>
@@ -573,11 +573,11 @@ export function ComplianceRiskPage() {
  {/* Active Risks Table */}
  <div className="bg-card border border-border rounded-lg p-6">
  <div className="flex items-center justify-between mb-6">
- <h2 className="text-xl flex items-center gap-2">
+ <h2 className="text-xl flex items-center gap-[var(--spacing-small-gap)]">
  <Shield className="w-5 h-5 text-orange-500" />
  المخاطر النشطة
  </h2>
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  {[
  { id: 'all', label: 'الكل' },
  { id: 'compliance', label: 'الامتثال' },
@@ -600,7 +600,7 @@ export function ComplianceRiskPage() {
  </div>
  </div>
 
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {filteredRisks.map((risk) => (
  <div
  key={risk.id}
@@ -609,7 +609,7 @@ export function ComplianceRiskPage() {
  >
  <div className="flex items-start justify-between gap-4">
  <div className="flex-1">
- <div className="flex items-center gap-3 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className={`px-2 py-1 rounded-lg text-xs font-medium ${getSeverityColor(risk.severity)} ${getSeverityBg(risk.severity)}`}>
  {getSeverityLabel(risk.severity)}
  </span>
@@ -640,7 +640,7 @@ export function ComplianceRiskPage() {
  <div className="p-6 border-b border-border">
  <div className="flex items-start justify-between">
  <div>
- <div className="flex items-center gap-3 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className={`px-3 py-1 rounded-lg font-medium ${getSeverityColor(selectedRisk.severity)} ${getSeverityBg(selectedRisk.severity)}`}>
  {getSeverityLabel(selectedRisk.severity)}
  </span>
@@ -650,7 +650,7 @@ export function ComplianceRiskPage() {
  </div>
  <button
  onClick={() => setSelectedRisk(null)}
- className="p-2 hover:bg-muted rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors"
  >
  <XCircle className="w-5 h-5" />
  </button>
@@ -684,14 +684,14 @@ export function ComplianceRiskPage() {
 
  <div>
  <h3 className="font-medium mb-3">الإجراءات المقترحة</h3>
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {[
  'مراجعة السياسات والإجراءات الحالية',
  'تعيين فريق متخصص للمعالجة',
  'وضع خطة زمنية للتنفيذ',
  'إعداد تقرير دوري للإدارة'
  ].map((action, index) => (
- <div key={index} className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+ <div key={index} className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted/50 rounded-lg">
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />
  <span>{action}</span>
  </div>
@@ -700,7 +700,7 @@ export function ComplianceRiskPage() {
  </div>
  </div>
 
- <div className="p-6 border-t border-border flex gap-3 justify-end">
+ <div className="p-6 border-t border-border flex gap-[var(--spacing-small-gap)] justify-end">
  <button
  onClick={() => setSelectedRisk(null)}
  className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"

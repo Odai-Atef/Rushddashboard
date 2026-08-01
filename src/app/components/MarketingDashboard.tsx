@@ -96,46 +96,46 @@ export function MarketingDashboard() {
  return (
  <div className="space-y-6 md:space-y-8">
  {/* Header */}
- <div className="border-b border-border pb-6">
- <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">لوحة التسويق</h2>
- <p className="text-muted-foreground text-base">تحليل أداء الحملات التسويقية والعائد على الاستثمار</p>
+ <div className="border-b border-[var(--border)] pb-6">
+ <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">لوحة التسويق</h2>
+ <p className="text-[var(--text-muted)] text-base">تحليل أداء الحملات التسويقية والعائد على الاستثمار</p>
  </div>
 
  {/* KPI Cards */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-grid-gap)] items-stretch">
  {kpis.map((kpi, index) => {
  const Icon = kpi.icon;
  return (
- <div key={index} className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-200">
- <div className="flex items-center justify-between mb-4">
- <div className={`p-3 ${kpi.bgColor} rounded-lg`}>
+ <div key={index} className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] dark:hover:shadow-[var(--shadow-lg)] transition-all duration-200">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <div className={`p-[var(--spacing-card-padding)] ${kpi.bgColor} rounded-[var(--radius-button)]`}>
  <Icon className={`w-5 h-5 ${kpi.color}`} />
  </div>
- <div className={`flex items-center gap-1 text-sm ${kpi.isPositive ? 'text-[var(--primary)]' : 'text-[var(--destructive)]'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] text-sm ${kpi.isPositive ? 'text-[var(--primary)]' : 'text-[var(--destructive)]'}`}>
  {kpi.isPositive ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
  {kpi.change}
  </div>
  </div>
- <h3 className="text-muted-foreground text-sm mb-2">{kpi.title}</h3>
- <p className="text-3xl font-bold text-foreground tracking-tight">{kpi.value}</p>
+ <h3 className="text-[var(--text-muted)] text-sm mb-2">{kpi.title}</h3>
+ <p className="text-3xl font-bold text-[var(--text-primary)] tracking-tight">{kpi.value}</p>
  </div>
  );
  })}
  </div>
 
  {/* AI Marketing Insight */}
- <div className="bg-gradient-to-l from-[var(--secondary)]/[0.05] via-[var(--secondary)]/[0.05] to-transparent border border-[var(--secondary)]/[0.2] rounded-2xl p-6">
+ <div className="bg-gradient-to-l from-[var(--secondary)]/[0.05] via-[var(--secondary)]/[0.05] to-transparent border border-[var(--secondary)]/[0.2] rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-[var(--secondary)] to-purple-600 rounded-[var(--radius-card)]">
  <Sparkles className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="text-lg">رؤية تسويقية</h3>
  <span className="px-2 py-1 bg-[var(--primary)]/20 text-[var(--secondary)] text-xs rounded-full">AI</span>
  </div>
- <p className="text-muted-foreground leading-relaxed">
- <span className="text-foreground font-medium">إعلانات جوجل</span> تحقق أعلى عائد استثمار (315%) مع تكلفة تحويل أقل.
+ <p className="text-[var(--text-muted)] leading-relaxed">
+ <span className="text-[var(--text-primary)] font-medium">إعلانات جوجل</span> تحقق أعلى عائد استثمار (315%) مع تكلفة تحويل أقل.
  معدل التحويل تحسن بنسبة <span className="text-[var(--primary)] font-medium">21%</span> بعد تحسين الصفحات المقصودة.
  <span className="text-[var(--warning)] font-medium"> 43% من الزوار</span> يغادرون في مرحلة العملاء المحتملين - نحتاج تحسين استراتيجية التأهيل.
  </p>
@@ -145,17 +145,17 @@ export function MarketingDashboard() {
 
  {/* Campaign Performance Cards */}
  <div>
- <h3 className="text-lg mb-4">أداء الحملات</h3>
+ <h3 className="text-lg mb-[var(--spacing-section-gap)]">أداء الحملات</h3>
  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
  {campaigns.map((campaign) => (
- <div key={campaign.id} className="bg-[var(--card)] border border-border/80/50 rounded-xl p-5 hover:shadow-md dark:hover:shadow-lg transition-all duration-200">
- <div className="flex items-start justify-between mb-4">
+ <div key={campaign.id} className="bg-[var(--card)] border border-[var(--border)] rounded-[var(--radius-card)] p-5 hover:shadow-[var(--shadow-lg)] dark:hover:shadow-[var(--shadow-lg)] transition-all duration-200">
+ <div className="flex items-start justify-between mb-[var(--spacing-section-gap)]">
  <div className="flex-1">
  <h4 className="font-medium mb-2">{campaign.name}</h4>
  <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs ${
  campaign.status === 'active'
  ? 'bg-[var(--primary)]/[0.2] text-[var(--primary)]'
- : 'bg-muted text-muted-foreground'
+ : 'bg-muted text-[var(--text-muted)]'
  }`}>
  {campaign.status === 'active' ? 'نشطة' : 'مكتملة'}
  </span>
@@ -163,15 +163,15 @@ export function MarketingDashboard() {
  </div>
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
  <div>
- <p className="text-xs text-muted-foreground mb-1">الإنفاق</p>
+ <p className="text-xs text-[var(--text-muted)] mb-1">الإنفاق</p>
  <p className="font-medium">{campaign.spend.toLocaleString()} ر.س</p>
  </div>
  <div>
- <p className="text-xs text-muted-foreground mb-1">التحويلات</p>
+ <p className="text-xs text-[var(--text-muted)] mb-1">التحويلات</p>
  <p className="font-medium">{campaign.conversions}</p>
  </div>
  <div>
- <p className="text-xs text-muted-foreground mb-1">ROI</p>
+ <p className="text-xs text-[var(--text-muted)] mb-1">ROI</p>
  <p className="font-medium text-[var(--primary)]">{campaign.roi}%</p>
  </div>
  </div>
@@ -181,12 +181,12 @@ export function MarketingDashboard() {
  </div>
 
  {/* Charts */}
- <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+ <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {/* ROI Trend */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg mb-1">اتجاه العائد على الاستثمار</h3>
- <p className="text-sm text-muted-foreground">ROI والإنفاق التسويقي الشهري</p>
+ <p className="text-sm text-[var(--text-muted)]">ROI والإنفاق التسويقي الشهري</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <LineChart data={roiTrendData}>
@@ -241,23 +241,23 @@ export function MarketingDashboard() {
  </div>
 
  {/* Conversion Funnel */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg mb-1">قمع التحويل</h3>
- <p className="text-sm text-muted-foreground">رحلة العميل من الزائر إلى العميل</p>
+ <p className="text-sm text-[var(--text-muted)]">رحلة العميل من الزائر إلى العميل</p>
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {funnelData.map((stage, index) => {
  const percentage = index === 0 ? 100 : ((stage.value / funnelData[0].value) * 100);
  return (
  <div key={stage.stage}>
  <div className="flex items-center justify-between mb-1">
  <span className="text-sm font-medium">{stage.stage}</span>
- <span className="text-sm text-muted-foreground">{stage.value.toLocaleString()}</span>
+ <span className="text-sm text-[var(--text-muted)]">{stage.value.toLocaleString()}</span>
  </div>
- <div className="relative h-8 bg-muted rounded-lg overflow-hidden">
+ <div className="relative h-8 bg-muted rounded-[var(--radius-button)] overflow-hidden">
  <div
- className="absolute inset-y-0 right-0 rounded-lg flex items-center justify-center text-[var(--primary-foreground)] text-xs font-medium"
+ className="absolute inset-y-0 right-0 rounded-[var(--radius-button)] flex items-center justify-center text-[var(--primary-foreground)] text-xs font-medium"
  style={{
  width: `${percentage}%`,
  backgroundColor: stage.fill
@@ -274,19 +274,19 @@ export function MarketingDashboard() {
  </div>
 
  {/* Campaign ROI Table */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 shadow-sm overflow-hidden">
- <div className="p-6 border-b border-border">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
+ <div className="p-6 border-b border-[var(--border)]">
  <h3 className="text-lg">عائد الاستثمار حسب الحملة</h3>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead className="bg-secondary/50">
  <tr>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الحملة</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الإنفاق</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">التحويلات</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">تكلفة التحويل</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">ROI</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الحملة</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الإنفاق</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">التحويلات</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">تكلفة التحويل</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">ROI</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -295,13 +295,13 @@ export function MarketingDashboard() {
  <td className="px-6 py-4">
  <p className="font-medium">{campaign.name}</p>
  </td>
- <td className="px-6 py-4 text-muted-foreground">
+ <td className="px-6 py-4 text-[var(--text-muted)]">
  {campaign.spend.toLocaleString()} ر.س
  </td>
- <td className="px-6 py-4 text-muted-foreground">
+ <td className="px-6 py-4 text-[var(--text-muted)]">
  {campaign.conversions} تحويل
  </td>
- <td className="px-6 py-4 text-muted-foreground">
+ <td className="px-6 py-4 text-[var(--text-muted)]">
  {(campaign.spend / campaign.conversions).toFixed(0)} ر.س
  </td>
  <td className="px-6 py-4">

@@ -158,7 +158,7 @@ export function CharityAssessmentRoadmapPage() {
  if (isLoading) {
  return (
  <div className="min-h-full bg-background flex items-center justify-center">
- <div className="flex flex-col items-center gap-4">
+ <div className="flex flex-col items-center gap-[var(--spacing-grid-gap)]">
  <Loader2 className="w-10 h-10 animate-spin text-[var(--secondary)]" />
  <p className="text-muted-foreground">جاري تحميل خطة التطوير...</p>
  </div>
@@ -169,7 +169,7 @@ export function CharityAssessmentRoadmapPage() {
  if (error) {
  return (
  <div className="min-h-full bg-background flex items-center justify-center p-8">
- <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center max-w-md">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-8 text-center max-w-md">
  <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
  <h2 className="text-xl font-semibold mb-2">تعذر تحميل الخطة</h2>
  <p className="text-muted-foreground mb-6">{error}</p>
@@ -236,7 +236,7 @@ export function CharityAssessmentRoadmapPage() {
  {/* Header */}
  <div className="bg-card border-b border-border">
  <div className="max-w-7xl mx-auto p-8">
- <div className="flex items-center justify-between mb-4 flex-wrap gap-4">
+ <div className="flex items-center justify-between mb-4 flex-wrap gap-[var(--spacing-grid-gap)]">
  <div>
  <h1 className="text-3xl font-bold mb-2">خارطة الطريق للتحسين</h1>
  <p className="text-muted-foreground">
@@ -244,7 +244,7 @@ export function CharityAssessmentRoadmapPage() {
  </p>
  </div>
  {!isCaptureMode && (
- <div className="flex gap-3 report-exclude flex-wrap">
+ <div className="flex gap-[var(--spacing-small-gap)] report-exclude flex-wrap">
  <button
  onClick={() =>
  navigate(
@@ -253,7 +253,7 @@ export function CharityAssessmentRoadmapPage() {
  : '/dashboard/charity-assessment/results'
  )
  }
- className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
  >
  <ArrowRight className="w-4 h-4" />
  العودة للنتائج
@@ -263,16 +263,16 @@ export function CharityAssessmentRoadmapPage() {
  </div>
 
  {/* Stats */}
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
- <div className="bg-[var(--card)] rounded-2xl p-5 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
- <div className="p-2.5 rounded-xl bg-muted/80 w-fit mb-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-grid-gap)] items-stretch">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/80 w-fit mb-4">
  <Target className="w-6 h-6 text-muted-foreground" />
  </div>
  <p className="text-sm text-muted-foreground mb-1">إجمالي المبادرات</p>
  <p className="text-3xl font-bold text-foreground tracking-tight">{initiatives.length}</p>
  </div>
- <div className="bg-[var(--card)] rounded-2xl p-5 border border-[var(--secondary)]/[0.2]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
- <div className="p-2.5 rounded-xl bg-[var(--secondary)]/[0.08] w-fit mb-4">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.2]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08] w-fit mb-4">
  <Clock className="w-6 h-6 text-purple-600" />
  </div>
  <p className="text-sm text-muted-foreground mb-1">المدة الإجمالية</p>
@@ -285,10 +285,10 @@ export function CharityAssessmentRoadmapPage() {
  {/* Main Content */}
  <div className="max-w-7xl mx-auto p-8">
  {/* Overall Score & Duration */}
- <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
- <div className="bg-card border border-border rounded-xl p-6">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)] mb-6">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)]">
  <h3 className="text-lg font-semibold mb-4">نتيجة التقييم العامة</h3>
- <div className="flex items-center gap-4">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)]">
  <div
  className={`w-20 h-20 rounded-full flex items-center justify-center border-4 ${
  isQualified ? 'bg-[var(--secondary)]/[0.08] border-[var(--secondary)]/[0.2]' : 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.2]'
@@ -313,9 +313,9 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  </div>
 
- <div className="bg-card border border-border rounded-xl p-6">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)]">
  <h3 className="text-lg font-semibold mb-4">الجدول الزمني للتنفيذ</h3>
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <div className="text-sm text-muted-foreground">إجمالي المدة المتوقعة:</div>
  <div className="text-lg font-bold text-[var(--secondary)]">{totalDurationMonths} شهراً</div>
  </div>
@@ -335,12 +335,12 @@ export function CharityAssessmentRoadmapPage() {
 
  {/* Organizational Readiness */}
  {organizationalReadiness && (
- <div className="bg-card border border-border rounded-xl p-6 mb-6">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] mb-6">
  <h3 className="text-lg font-semibold mb-4">جاهزية المنظمة</h3>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {organizationalReadiness.strategy && (
- <div className="p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
- <div className="flex items-center gap-2 mb-2">
+ <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  1
  </span>
@@ -352,8 +352,8 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  )}
  {organizationalReadiness.governance && (
- <div className="p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
- <div className="flex items-center gap-2 mb-2">
+ <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  2
  </span>
@@ -365,8 +365,8 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  )}
  {organizationalReadiness.operations && (
- <div className="p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
- <div className="flex items-center gap-2 mb-2">
+ <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  3
  </span>
@@ -378,8 +378,8 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  )}
  {organizationalReadiness.dataAndDigital && (
- <div className="p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
- <div className="flex items-center gap-2 mb-2">
+ <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  4
  </span>
@@ -391,8 +391,8 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  )}
  {organizationalReadiness.sustainability && (
- <div className="p-4 border border-border rounded-lg hover:bg-muted/50 transition-colors">
- <div className="flex items-center gap-2 mb-2">
+ <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  5
  </span>
@@ -408,9 +408,9 @@ export function CharityAssessmentRoadmapPage() {
  )}
 
  {/* Roadmap Items */}
- <div className="space-y-4 mb-8">
+ <div className="space-y-[var(--spacing-section-gap)] mb-8">
  {initiatives.length === 0 ? (
- <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center text-muted-foreground">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-8 text-center text-muted-foreground">
  لا توجد مبادرات متاحة في خطة التطوير
  </div>
  ) : (
@@ -421,10 +421,10 @@ export function CharityAssessmentRoadmapPage() {
  return (
  <div
  key={initiative.id}
- className={`border rounded-xl p-6 ${getPriorityBg(initiative.priority)}`}
+ className={`border rounded-xl p-[var(--spacing-card-padding)] ${getPriorityBg(initiative.priority)}`}
  >
- <div className="flex items-start gap-4">
- <div className="flex flex-col items-center gap-2">
+ <div className="flex items-start gap-[var(--spacing-grid-gap)]">
+ <div className="flex flex-col items-center gap-[var(--spacing-small-gap)]">
  <div
  className={`w-10 h-10 rounded-full flex items-center justify-center ${
  initiative.status === 'completed'
@@ -448,9 +448,9 @@ export function CharityAssessmentRoadmapPage() {
  </div>
 
  <div className="flex-1">
- <div className="flex items-start justify-between mb-3 flex-wrap gap-4">
+ <div className="flex items-start justify-between mb-3 flex-wrap gap-[var(--spacing-grid-gap)]">
  <div>
- <div className="flex items-center gap-2 mb-2 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2 flex-wrap">
  <h3 className="text-lg font-semibold">{initiative.title}</h3>
  </div>
  <p className="text-sm text-muted-foreground">المحور: {formatPhaseLabel(initiative.area)}</p>
@@ -460,17 +460,17 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  <div className="text-left">
  <p className="text-sm text-muted-foreground mb-1">المدة</p>
- <div className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4" />
  <span className="font-medium">{initiative.duration}</span>
  </div>
  </div>
  </div>
 
- <div className="grid grid-cols-1 gap-4 mb-4">
- <div className="bg-card/50 rounded-lg p-3">
+ <div className="grid grid-cols-1 gap-[var(--spacing-grid-gap)] mb-4">
+ <div className="bg-card/50 rounded-lg p-[var(--spacing-card-padding)]">
  <p className="text-xs text-muted-foreground mb-1">النتيجة المتوقعة</p>
- <p className="font-medium flex items-center gap-2">
+ <p className="font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Target className="w-4 h-4 text-muted-foreground" />
  {initiative.outcome}
  </p>
@@ -496,9 +496,9 @@ export function CharityAssessmentRoadmapPage() {
  {initiative.tasks.length > 0 && (
  <div className="mb-4">
  <div className="text-sm font-medium mb-2">المهام الرئيسية:</div>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-small-gap)]">
  {initiative.tasks.map((task, idx) => (
- <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+ <div key={idx} className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-muted-foreground">
  <div className="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0">
  <span className="text-xs">{idx + 1}</span>
  </div>
@@ -513,9 +513,9 @@ export function CharityAssessmentRoadmapPage() {
  {initiative.kpis && initiative.kpis.length > 0 && (
  <div>
  <div className="text-sm font-medium mb-2">مؤشرات - KPI:</div>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-small-gap)]">
  {initiative.kpis.map((kpi, idx) => (
- <div key={idx} className="flex items-center gap-2 text-sm text-muted-foreground">
+ <div key={idx} className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-muted-foreground">
  <div className="w-5 h-5 rounded-full border-2 border-border flex items-center justify-center flex-shrink-0">
  <span className="text-xs">{idx + 1}</span>
  </div>
@@ -535,15 +535,15 @@ export function CharityAssessmentRoadmapPage() {
 
  {/* AI Recommendations */}
  <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-8">
- <div className="flex items-start gap-4">
+ <div className="flex items-start gap-[var(--spacing-grid-gap)]">
  <Brain className="w-8 h-8 text-purple-500 flex-shrink-0" />
  <div className="flex-1">
  <h3 className="text-xl font-semibold mb-3">توصيات الذكاء الاصطناعي</h3>
  {llmRecommendations ? (
- <div className="space-y-6">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {llmRecommendations.highPriority && (
- <div className="space-y-2">
- <h4 className="font-medium text-[var(--destructive)] flex items-center gap-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <h4 className="font-medium text-[var(--destructive)] flex items-center gap-[var(--spacing-small-gap)]">
  <Zap className="w-5 h-5 text-red-500 flex-shrink-0" />
  أولوية عالية
  </h4>
@@ -553,8 +553,8 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  )}
  {llmRecommendations.mediumPriority && (
- <div className="space-y-2">
- <h4 className="font-medium text-yellow-700 flex items-center gap-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <h4 className="font-medium text-yellow-700 flex items-center gap-[var(--spacing-small-gap)]">
  <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0" />
  أولوية متوسطة
  </h4>
@@ -564,8 +564,8 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  )}
  {llmRecommendations.longTermDevelopment && (
- <div className="space-y-2">
- <h4 className="font-medium text-[var(--secondary)] flex items-center gap-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <h4 className="font-medium text-[var(--secondary)] flex items-center gap-[var(--spacing-small-gap)]">
  <Zap className="w-5 h-5 text-[var(--secondary)] flex-shrink-0" />
  تطوير طويل المدى
  </h4>
@@ -576,11 +576,11 @@ export function CharityAssessmentRoadmapPage() {
  )}
  </div>
  ) : (
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <p className="text-muted-foreground">
  بناءً على تحليل شامل لنتائج تقييمك ومقارنتها بأفضل الممارسات في القطاع، نوصي بالبدء بالمبادرات ذات الأولوية العالية لتحقيق أسرع تحسن ممكن.
  </p>
- <div className="flex items-start gap-2">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
  <p className="text-sm">
  إتمام المبادرات ذات الأولوية العالية سيرفع درجة جاهزيتك الإجمالية بشكل ملحوظ.

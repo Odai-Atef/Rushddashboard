@@ -8,7 +8,7 @@ function Table({ className, ...props }: React.ComponentProps<"table">) {
  return (
  <div
  data-slot="table-container"
- className="relative w-full overflow-x-auto rounded-[var(--radius-table)] border border-[var(--border)]"
+ className="relative w-full overflow-x-auto rounded-[var(--radius-table)] border border-[var(--border)] shadow-[var(--shadow-[var(--shadow-sm)])] bg-[var(--card)]"
  >
  <table
  data-slot="table"
@@ -28,7 +28,7 @@ function TableHeader({ className, ...props }: React.ComponentProps<"thead">) {
  <thead
  data-slot="table-header"
  className={cn(
- "bg-[var(--hover)]",
+ "bg-[#F8FAFC] sticky top-0 z-10",
  "[&_tr]:border-b [&_tr]:border-[var(--border)]",
  className,
  )}
@@ -69,7 +69,8 @@ function TableRow({ className, ...props }: React.ComponentProps<"tr">) {
  data-slot="table-row"
  className={cn(
  "border-b border-[var(--border)] transition-colors duration-[var(--transition-duration)]",
- "hover:bg-[var(--hover)]",
+ "bg-[var(--card)] hover:bg-[#F8FAFC]",
+ "even:bg-[#FCFCFD]",
  "data-[state=selected]:bg-[var(--primary)]/[0.08]",
  className,
  )}
@@ -83,7 +84,7 @@ function TableHead({ className, ...props }: React.ComponentProps<"th">) {
  <th
  data-slot="table-head"
  className={cn(
- "h-11 px-4 align-middle font-semibold whitespace-nowrap text-[var(--text-secondary)] uppercase text-xs tracking-wider",
+ "h-14 px-4 align-middle font-semibold whitespace-nowrap text-[var(--text-secondary)] text-sm",
  "[&[role=checkbox]]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
  className,
  )}
@@ -97,8 +98,8 @@ function TableCell({ className, ...props }: React.ComponentProps<"td">) {
  <td
  data-slot="table-cell"
  className={cn(
- "p-4 align-middle whitespace-nowrap transition-colors duration-[var(--transition-duration)]",
- "text-[var(--text-secondary)]",
+ "p-[var(--spacing-card-padding)] align-middle whitespace-nowrap transition-colors duration-[var(--transition-duration)]",
+ "text-[var(--text-primary)]",
  "[&[role=checkbox]]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
  className,
  )}

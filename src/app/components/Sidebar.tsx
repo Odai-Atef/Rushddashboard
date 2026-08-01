@@ -124,7 +124,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
  // Exact sidebar colors: #0B2742 (light), #081A2E (dark)
  'bg-[#0B2742]',
  // Border
- 'border-l border-[var(--primary-foreground)]/[0.1]',
+ 'border-l border-[var(--primary-foreground)]/[0.08]',
  // Glass effect in dark mode
  isDark && 'backdrop-blur-md',
  isCollapsed ? 'w-[80px]' : 'w-[280px]',
@@ -148,7 +148,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
  <button
  onClick={() => setIsCollapsed(!isCollapsed)}
  className={cn(
- 'absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
+ 'absolute left-2 top-1/2 -translate-y-1/2 p-[var(--spacing-small-gap)].5 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
  'text-[var(--primary-foreground)]/50 hover:text-[var(--primary-foreground)] hover:bg-[var(--card)]/10',
  'focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 focus:ring-offset-0'
  )}
@@ -159,8 +159,8 @@ export function Sidebar({ activeView, className }: SidebarProps) {
  </div>
 
  {/* Navigation */}
- <nav className="flex-1 p-3 overflow-y-auto" aria-label="التنقل الرئيسي">
- <ul className="space-y-1">
+ <nav className="flex-1 p-[var(--spacing-card-padding)] overflow-y-auto" aria-label="التنقل الرئيسي">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {visibleItems.map((item) => {
  const Icon = item.icon;
  const isActive = activeView === item.id;
@@ -171,20 +171,19 @@ export function Sidebar({ activeView, className }: SidebarProps) {
  to={item.linkTo ?? item.path}
  title={item.label}
  className={cn(
- 'group w-full flex items-center gap-3 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
+ 'group w-full flex items-center gap-[var(--spacing-small-gap)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
  'text-right focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/50 focus:ring-offset-0',
  isCollapsed ? 'justify-center px-2 py-3' : 'px-4 py-3',
  isActive
  ? [
- // Active state — primary color background, white text
+ // Active state — primary color background, white text, smooth animation
  'bg-[var(--primary)] text-[var(--primary-foreground)]',
  'shadow-[var(--shadow-md)]',
- '',
- '',
+ 'font-semibold',
  ]
  : [
  // Inactive — white text with subtle hover
- 'text-[var(--primary-foreground)]/80 hover:text-[var(--primary-foreground)] hover:bg-[var(--card)]/10',
+ 'text-[var(--primary-foreground)]/70 hover:text-[var(--primary-foreground)] hover:bg-[var(--card)]/10',
  'transition-all duration-[var(--transition-duration)]',
  ]
  )}

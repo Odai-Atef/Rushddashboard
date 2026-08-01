@@ -18,7 +18,7 @@ export function ProjectJourneyPage() {
  <p className="text-muted-foreground mb-6">
  هذه الصفحة قيد التطوير. سيتم إضافة ميزات إدارة المشاريع الكاملة قريباً.
  </p>
- <div className="flex gap-3 justify-center">
+ <div className="flex gap-[var(--spacing-small-gap)] justify-center">
  <button className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors">
  إنشاء مشروع جديد
  </button>

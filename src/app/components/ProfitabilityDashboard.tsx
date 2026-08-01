@@ -150,27 +150,27 @@ export function ProfitabilityDashboard() {
  return (
  <div className="space-y-6 md:space-y-8">
  {/* Header */}
- <div className="border-b border-border pb-6">
- <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-2">لوحة الربحية</h2>
- <p className="text-muted-foreground text-base">تحليل تنفيذي شامل للأداء المالي والربحية</p>
+ <div className="border-b border-[var(--border)] pb-6">
+ <h2 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)] mb-2">لوحة الربحية</h2>
+ <p className="text-[var(--text-muted)] text-base">تحليل تنفيذي شامل للأداء المالي والربحية</p>
  </div>
 
  {/* KPI Cards */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 items-stretch">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[var(--spacing-grid-gap)] items-stretch">
  {kpis.map((kpi, index) => {
  const Icon = kpi.icon;
  return (
- <div key={index} className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm hover:shadow-xl transition-all duration-300">
- <div className="flex items-center justify-between mb-4">
- <div className={`p-3 ${kpi.bgColor} rounded-lg`}>
+ <div key={index} className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-xl transition-all duration-300">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <div className={`p-[var(--spacing-card-padding)] ${kpi.bgColor} rounded-[var(--radius-button)]`}>
  <Icon className={`w-5 h-5 ${kpi.color}`} />
  </div>
- <div className={`flex items-center gap-1 text-sm font-medium ${kpi.isPositive ? 'text-[var(--primary)]' : 'text-[var(--destructive)]'}`}>
+ <div className={`flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium ${kpi.isPositive ? 'text-[var(--primary)]' : 'text-[var(--destructive)]'}`}>
  {kpi.isPositive ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
  {kpi.change}
  </div>
  </div>
- <h3 className="text-muted-foreground text-sm mb-2">{kpi.title}</h3>
+ <h3 className="text-[var(--text-muted)] text-sm mb-2">{kpi.title}</h3>
  <p className="text-2xl font-bold">{kpi.value}</p>
  </div>
  );
@@ -178,32 +178,32 @@ export function ProfitabilityDashboard() {
  </div>
 
  {/* AI Financial Insights Panel */}
- <div className="bg-gradient-to-l from-[var(--secondary)]/[0.05] via-[var(--secondary)]/[0.05] to-transparent border border-[var(--secondary)]/[0.2] rounded-2xl p-6">
+ <div className="bg-gradient-to-l from-[var(--secondary)]/[0.05] via-[var(--secondary)]/[0.05] to-transparent border border-[var(--secondary)]/[0.2] rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-[var(--secondary)] to-purple-600 rounded-[var(--radius-card)]">
  <Sparkles className="w-7 h-7 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <h3 className="text-xl font-medium">التحليل المالي الذكي</h3>
  <span className="px-2 py-1 bg-[var(--primary)]/20 text-[var(--secondary)] text-xs rounded-full">AI Executive</span>
  </div>
- <p className="text-foreground leading-relaxed mb-4">
+ <p className="text-[var(--text-primary)] leading-relaxed mb-[var(--spacing-section-gap)]">
  الأداء المالي <span className="font-bold text-[var(--primary)]">إيجابي بقوة</span> مع نمو 22.4% في صافي الربح وتحسن هامش الربح إلى 36.5%.
  <span className="font-bold text-[var(--primary)]"> فرع الرياض</span> يحقق أعلى ربحية بهامش 42% ويجب التركيز على نقل أفضل الممارسات للفروع الأخرى.
- <span className="font-bold text-foreground"> الخدمات الاستشارية</span> تحقق هامش ربح استثنائي 50.6% وتمثل فرصة نمو كبيرة.
+ <span className="font-bold text-[var(--text-primary)]"> الخدمات الاستشارية</span> تحقق هامش ربح استثنائي 50.6% وتمثل فرصة نمو كبيرة.
  </p>
- <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-[var(--card)]/50/50 rounded-xl border border-border">
+ <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-[var(--card)]/50/50 rounded-[var(--radius-card)] border border-[var(--border)]">
  <div className="text-center">
- <p className="text-sm text-muted-foreground mb-1">العائد على الاستثمار</p>
+ <p className="text-sm text-[var(--text-muted)] mb-1">العائد على الاستثمار</p>
  <p className="text-2xl font-bold text-[var(--primary)]">57.5%</p>
  </div>
- <div className="text-center border-x border-border">
- <p className="text-sm text-muted-foreground mb-1">نمو الربح الشهري</p>
+ <div className="text-center border-x border-[var(--border)]">
+ <p className="text-sm text-[var(--text-muted)] mb-1">نمو الربح الشهري</p>
  <p className="text-2xl font-bold text-[var(--secondary)]">+17.3%</p>
  </div>
  <div className="text-center">
- <p className="text-sm text-muted-foreground mb-1">الكفاءة التشغيلية</p>
+ <p className="text-sm text-[var(--text-muted)] mb-1">الكفاءة التشغيلية</p>
  <p className="text-2xl font-bold text-[var(--secondary)]">92/100</p>
  </div>
  </div>
@@ -212,12 +212,12 @@ export function ProfitabilityDashboard() {
  </div>
 
  {/* Charts Section */}
- <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+ <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {/* Profit Trend Chart */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg font-medium mb-1">الاتجاه المالي</h3>
- <p className="text-sm text-muted-foreground">تطور الأرباح والإيرادات والتكاليف</p>
+ <p className="text-sm text-[var(--text-muted)]">تطور الأرباح والإيرادات والتكاليف</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <LineChart data={profitTrendData}>
@@ -289,10 +289,10 @@ export function ProfitabilityDashboard() {
  </div>
 
  {/* Cost Breakdown */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg font-medium mb-1">هيكل التكاليف</h3>
- <p className="text-sm text-muted-foreground">توزيع التكاليف التشغيلية</p>
+ <p className="text-sm text-[var(--text-muted)]">توزيع التكاليف التشغيلية</p>
  </div>
  <ResponsiveContainer width="100%" height={240}>
  <PieChart>
@@ -321,16 +321,16 @@ export function ProfitabilityDashboard() {
  />
  </PieChart>
  </ResponsiveContainer>
- <div className="grid grid-cols-1 gap-2 mt-4">
+ <div className="grid grid-cols-1 gap-[var(--spacing-small-gap)] mt-4">
  {costBreakdownData.map((item, index) => (
- <div key={index} className="flex items-center justify-between p-2 rounded-lg hover:bg-secondary/50 transition-colors">
- <div className="flex items-center gap-2">
+ <div key={index} className="flex items-center justify-between p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] hover:bg-secondary/50 transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }}></div>
  <span className="text-sm">{item.name}</span>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-sm font-medium">{item.value.toLocaleString()} ر.س</span>
- <span className="text-sm text-muted-foreground">
+ <span className="text-sm text-[var(--text-muted)]">
  {((item.value / totalCosts) * 100).toFixed(1)}%
  </span>
  </div>
@@ -341,12 +341,12 @@ export function ProfitabilityDashboard() {
  </div>
 
  {/* Branch & Channel Profitability */}
- <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+ <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {/* Branch Profitability */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg font-medium mb-1">ربحية الفروع</h3>
- <p className="text-sm text-muted-foreground">مقارنة الأرباح والهوامش حسب الفرع</p>
+ <p className="text-sm text-[var(--text-muted)]">مقارنة الأرباح والهوامش حسب الفرع</p>
  </div>
  <ResponsiveContainer width="100%" height={300}>
  <BarChart data={branchProfitability} layout="vertical">
@@ -384,18 +384,18 @@ export function ProfitabilityDashboard() {
  </div>
 
  {/* Channel Profitability */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
  <div className="mb-6">
  <h3 className="text-lg font-medium mb-1">القنوات الأعلى ربحية</h3>
- <p className="text-sm text-muted-foreground">الأرباح والهوامش حسب قناة البيع</p>
+ <p className="text-sm text-[var(--text-muted)]">الأرباح والهوامش حسب قناة البيع</p>
  </div>
  <div className="space-y-4">
  {channelData.map((channel, index) => (
- <div key={index} className="space-y-2">
+ <div key={index} className="space-y-[var(--spacing-small-gap)]">
  <div className="flex items-center justify-between">
  <span className="text-sm font-medium">{channel.channel}</span>
- <div className="flex items-center gap-3">
- <span className="text-sm text-muted-foreground">{channel.profit.toLocaleString()} ر.س</span>
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <span className="text-sm text-[var(--text-muted)]">{channel.profit.toLocaleString()} ر.س</span>
  <span className="text-sm font-bold text-[var(--primary)]">{channel.margin}%</span>
  </div>
  </div>
@@ -412,37 +412,37 @@ export function ProfitabilityDashboard() {
  </div>
 
  {/* Top Profitable Services Table */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 shadow-sm overflow-hidden">
- <div className="p-6 border-b border-border">
- <div className="flex items-center gap-2 mb-1">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] shadow-[var(--shadow-card)] overflow-hidden">
+ <div className="p-6 border-b border-[var(--border)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <Layers className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="text-lg font-medium">الخدمات الأعلى ربحية</h3>
  </div>
- <p className="text-sm text-muted-foreground">تحليل الربحية حسب الخدمة أو المنتج</p>
+ <p className="text-sm text-[var(--text-muted)]">تحليل الربحية حسب الخدمة أو المنتج</p>
  </div>
  <div className="overflow-x-auto">
  <table className="w-full">
  <thead className="bg-secondary/50">
  <tr>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">#</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الخدمة</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الإيرادات</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">التكاليف</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الربح</th>
- <th className="px-6 py-4 text-right text-sm font-medium text-muted-foreground">الهامش</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">#</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الخدمة</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الإيرادات</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">التكاليف</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الربح</th>
+ <th className="px-6 py-4 text-right text-sm font-medium text-[var(--text-muted)]">الهامش</th>
  </tr>
  </thead>
  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
  {topServices.map((service) => (
  <tr key={service.id} className="hover:bg-secondary/50 transition-colors">
- <td className="px-6 py-4 text-sm text-muted-foreground">{service.id}</td>
+ <td className="px-6 py-4 text-sm text-[var(--text-muted)]">{service.id}</td>
  <td className="px-6 py-4">
  <p className="font-medium">{service.service}</p>
  </td>
- <td className="px-6 py-4 text-muted-foreground">
+ <td className="px-6 py-4 text-[var(--text-muted)]">
  {service.revenue.toLocaleString()} ر.س
  </td>
- <td className="px-6 py-4 text-muted-foreground">
+ <td className="px-6 py-4 text-[var(--text-muted)]">
  {service.cost.toLocaleString()} ر.س
  </td>
  <td className="px-6 py-4">
@@ -467,62 +467,62 @@ export function ProfitabilityDashboard() {
  </div>
 
  {/* Risk Alerts & Recommendations */}
- <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 md:gap-6">
+ <div className="grid grid-cols-1 xl:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  {/* Risk Alerts */}
- <div className="bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-6">
+ <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Shield className="w-5 h-5 text-[var(--warning)]" />
  <h3 className="text-lg font-medium">تنبيهات المخاطر المالية</h3>
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {riskAlerts.map((alert) => (
- <div key={alert.id} className={`p-4 rounded-lg ${getRiskColor(alert.type)}`}>
+ <div key={alert.id} className={`p-4 rounded-[var(--radius-button)] ${getRiskColor(alert.type)}`}>
  <h4 className="text-sm font-medium mb-2">{alert.title}</h4>
- <p className="text-sm text-muted-foreground mb-2">{alert.description}</p>
- <p className="text-xs text-muted-foreground">{alert.impact}</p>
+ <p className="text-sm text-[var(--text-muted)] mb-2">{alert.description}</p>
+ <p className="text-xs text-[var(--text-muted)]">{alert.impact}</p>
  </div>
  ))}
  </div>
  </div>
 
  {/* Recommendations */}
- <div className="bg-gradient-to-l from-[var(--primary)]/[0.05] to-transparent border border-[var(--primary)]/[0.2] rounded-2xl p-6">
+ <div className="bg-gradient-to-l from-[var(--primary)]/[0.05] to-transparent border border-[var(--primary)]/[0.2] rounded-[var(--radius-card)] p-6">
  <div className="flex items-start gap-4">
- <div className="p-3 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl">
+ <div className="p-[var(--spacing-card-padding)] bg-gradient-to-br from-green-500 to-emerald-600 rounded-[var(--radius-card)]">
  <Target className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <h3 className="text-lg font-medium">التوصيات الإستراتيجية</h3>
  <span className="px-2 py-1 bg-[var(--primary)]/[0.2] text-[var(--primary)] text-xs rounded-full">
  أولوية عالية
  </span>
  </div>
- <div className="space-y-3">
- <div className="flex items-start gap-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <CheckCircle className="w-4 h-4 text-[var(--primary)] flex-shrink-0 mt-0.5" />
  <p className="text-sm leading-relaxed">
- التركيز على <span className="font-medium text-foreground">الخدمات الاستشارية</span> ذات هامش الـ 50.6% لزيادة الربحية بنسبة 28%
+ التركيز على <span className="font-medium text-[var(--text-primary)]">الخدمات الاستشارية</span> ذات هامش الـ 50.6% لزيادة الربحية بنسبة 28%
  </p>
  </div>
- <div className="flex items-start gap-2">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <CheckCircle className="w-4 h-4 text-[var(--primary)] flex-shrink-0 mt-0.5" />
  <p className="text-sm leading-relaxed">
- نقل أفضل الممارسات من <span className="font-medium text-foreground">فرع الرياض</span> للفروع الأخرى لرفع الهوامش بمعدل 8%
+ نقل أفضل الممارسات من <span className="font-medium text-[var(--text-primary)]">فرع الرياض</span> للفروع الأخرى لرفع الهوامش بمعدل 8%
  </p>
  </div>
- <div className="flex items-start gap-2">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <CheckCircle className="w-4 h-4 text-[var(--primary)] flex-shrink-0 mt-0.5" />
  <p className="text-sm leading-relaxed">
- مراجعة <span className="font-medium text-foreground">التكاليف التشغيلية</span> وتطبيق الأتمتة لتوفير 180K ر.س سنوياً
+ مراجعة <span className="font-medium text-[var(--text-primary)]">التكاليف التشغيلية</span> وتطبيق الأتمتة لتوفير 180K ر.س سنوياً
  </p>
  </div>
  </div>
- <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-[var(--primary)]/[0.2]">
- <button className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-lg transition-colors text-sm">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)] mt-4 pt-4 border-t border-[var(--primary)]/[0.2]">
+ <button className="px-4 py-2 bg-[var(--primary)] hover:bg-[var(--primary)]/90 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors text-sm">
  تطبيق التوصيات
  </button>
- <button className="px-4 py-2 border border-border hover:bg-muted dark:hover:bg-muted rounded-lg transition-colors text-sm">
+ <button className="px-4 py-2 border border-[var(--border)] hover:bg-muted dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors text-sm">
  عرض التفاصيل
  </button>
  </div>

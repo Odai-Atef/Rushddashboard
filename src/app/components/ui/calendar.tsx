@@ -16,13 +16,13 @@ function Calendar({
  return (
  <DayPicker
  showOutsideDays={showOutsideDays}
- className={cn("p-3", className)}
+ className={cn("p-[var(--spacing-card-padding)]", className)}
  classNames={{
- months: "flex flex-col sm:flex-row gap-2",
- month: "flex flex-col gap-4",
+ months: "flex flex-col sm:flex-row gap-[var(--spacing-small-gap)]",
+ month: "flex flex-col gap-[var(--spacing-grid-gap)]",
  caption: "flex justify-center pt-1 relative items-center w-full",
  caption_label: "text-sm font-medium text-[var(--text-primary)]",
- nav: "flex items-center gap-1",
+ nav: "flex items-center gap-[var(--spacing-small-gap)]",
  nav_button: cn(
  buttonVariants({ variant: "outline" }),
  "size-7 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-[var(--hover)]",

@@ -165,7 +165,7 @@ export function NotificationsPage() {
  <div className="max-w-6xl mx-auto p-6" dir="rtl">
  {/* Header */}
  <div className="flex items-center justify-between mb-8">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-10 h-10 rounded-xl bg-[var(--warning)]/[0.08] flex items-center justify-center">
  <Bell className="w-5 h-5 text-[var(--warning)]" />
  </div>
@@ -176,11 +176,11 @@ export function NotificationsPage() {
  </p>
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <button
  onClick={handleMarkAllAsReadClick}
  disabled={unreadCount === 0 || loading}
- className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
  >
  <CheckCircle className="w-4 h-4" />
  تحديد الكل كمقروء
@@ -188,7 +188,7 @@ export function NotificationsPage() {
  <button
  onClick={() => fetchNotifications({ page: 1 })}
  disabled={loading}
- className="flex items-center gap-2 px-4 py-2 text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
  >
  <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
  تحديث
@@ -198,7 +198,7 @@ export function NotificationsPage() {
 
  {/* Error State */}
  {error && (
- <div className="mb-6 p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl text-[var(--destructive)] flex items-center gap-3">
+ <div className="mb-6 p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl text-[var(--destructive)] flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5" />
  <span>{error}</span>
  <button
@@ -213,7 +213,7 @@ export function NotificationsPage() {
  {/* Filters */}
  <div className="flex flex-wrap items-center gap-4 mb-6">
  {/* Status Filter */}
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Filter className="w-4 h-4 text-muted-foreground" />
  <select
  value={selectedStatus}
@@ -227,7 +227,7 @@ export function NotificationsPage() {
  </div>
 
  {/* Priority Filter */}
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-4 h-4 text-muted-foreground" />
  <select
  value={selectedPriority}
@@ -243,7 +243,7 @@ export function NotificationsPage() {
  </div>
 
  {/* Category Filter */}
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Package className="w-4 h-4 text-muted-foreground" />
  <select
  value={selectedCategory}
@@ -260,7 +260,7 @@ export function NotificationsPage() {
  </div>
 
  {/* Notifications List */}
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {loading && notifications.length === 0 && (
  <div className="flex items-center justify-center py-12">
  <Loader2 className="w-8 h-8 animate-spin text-[var(--secondary)]" />
@@ -277,7 +277,7 @@ export function NotificationsPage() {
  key={notification.id}
  onClick={() => setSelectedNotification(notification)}
  className={cn(
- 'group relative p-5 rounded-xl border transition-all cursor-pointer hover:shadow-md',
+ 'group relative p-5 rounded-xl border transition-all cursor-pointer hover:shadow-[var(--shadow-lg)]',
  isUnread ? 'bg-card border-l-4 border-l-amber-500' : 'bg-muted/30 border-transparent'
  )}
  >
@@ -292,7 +292,7 @@ export function NotificationsPage() {
 
  {/* Content */}
  <div className="flex-1 min-w-0">
- <div className="flex items-center gap-2 mb-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <span
  className="text-xs font-semibold px-2 py-0.5 rounded-full"
  style={{
@@ -319,7 +319,7 @@ export function NotificationsPage() {
  </p>
 
  <div className="flex items-center gap-4 text-xs text-muted-foreground">
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-3 h-3" />
  {formatRelativeTime(notification.createdAt)}
  </span>
@@ -327,7 +327,7 @@ export function NotificationsPage() {
  </div>
 
  {/* Actions */}
- <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity"
+ <div className="flex items-center gap-[var(--spacing-small-gap)] opacity-0 group-hover:opacity-100 transition-opacity"
  >
  {isUnread && (
  <button
@@ -335,14 +335,14 @@ export function NotificationsPage() {
  e.stopPropagation();
  handleMarkAsReadClick(notification.id);
  }}
- className="p-2 hover:bg-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
  title="تحديد كمقروء"
  >
  <CheckCircle className="w-4 h-4 text-[var(--primary)]" />
  </button>
  )}
  <button
- className="p-2 hover:bg-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
  title="عرض التفاصيل"
  >
  <Eye className="w-4 h-4" />
@@ -368,7 +368,7 @@ export function NotificationsPage() {
  <button
  onClick={handleLoadMore}
  disabled={loading}
- className="px-6 py-3 border rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center gap-2"
+ className="px-6 py-3 border rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center gap-[var(--spacing-small-gap)]"
  >
  {loading ? (
  <>
@@ -389,7 +389,7 @@ export function NotificationsPage() {
  <div className="p-6">
  {/* Modal Header */}
  <div className="flex items-center justify-between mb-6">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div
  className="w-10 h-10 rounded-lg flex items-center justify-center"
  style={{ background: getCategoryColor(selectedNotification.type) + '15' }}
@@ -414,7 +414,7 @@ export function NotificationsPage() {
  </div>
  <button
  onClick={() => setSelectedNotification(null)}
- className="p-2 hover:bg-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
  >
  <X className="w-5 h-5" />
  </button>
@@ -426,13 +426,13 @@ export function NotificationsPage() {
 
  {selectedNotification.payload && Object.keys(selectedNotification.payload).length > 0 && (
  <div className="bg-muted rounded-xl p-4 hidden">
- <h4 className="font-semibold mb-3 flex items-center gap-2">
+ <h4 className="font-semibold mb-3 flex items-center gap-[var(--spacing-small-gap)]">
  <Activity className="w-4 h-4" />
  بيانات إضافية
  </h4>
- <div className="grid grid-cols-2 gap-3">
+ <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)]">
  {Object.entries(selectedNotification.payload).map(([key, value]) => (
- <div key={key} className="bg-background rounded-lg p-3">
+ <div key={key} className="bg-background rounded-lg p-[var(--spacing-card-padding)]">
  <div className="text-xs text-muted-foreground mb-1">{key}</div>
  <div className="text-sm font-medium">{String(value)}</div>
  </div>
@@ -442,12 +442,12 @@ export function NotificationsPage() {
  )}
 
  <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2 border-t">
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4" />
  تاريخ الإنشاء: {new Date(selectedNotification.createdAt).toLocaleDateString('ar-SA')}
  </span>
  {selectedNotification.readAt && (
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <CheckCircle className="w-4 h-4 text-[var(--primary)]" />
  تم القراءة: {new Date(selectedNotification.readAt).toLocaleDateString('ar-SA')}
  </span>
@@ -456,14 +456,14 @@ export function NotificationsPage() {
  </div>
 
  {/* Modal Footer */}
- <div className="flex items-center gap-3 mt-6 pt-4 border-t">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mt-6 pt-4 border-t">
  {selectedNotification.status !== 'READ' && (
  <button
  onClick={() => {
  handleMarkAsReadClick(selectedNotification.id);
  setSelectedNotification(null);
  }}
- className="flex items-center gap-2 px-6 py-2.5 border border-border hover:bg-accent rounded-lg transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-6 py-2.5 border border-border hover:bg-accent rounded-lg transition-colors"
  >
  <CheckCircle className="w-4 h-4" />
  تحديد كمقروء

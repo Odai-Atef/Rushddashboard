@@ -103,7 +103,7 @@ export function MultiSelect({
  type="button"
  disabled={disabled}
  className={cn(
- "flex w-full items-center justify-between gap-2 rounded-lg border px-4 py-2.5 text-sm shadow-sm transition-colors duration-200 ease-in-out",
+ "flex w-full items-center justify-between gap-[var(--spacing-small-gap)] rounded-lg border px-4 py-2.5 text-sm shadow-[var(--shadow-sm)] transition-colors duration-200 ease-in-out",
  "bg-[var(--card)]",
  "text-[var(--text-primary)]",
  "border-[var(--border)]",
@@ -115,7 +115,7 @@ export function MultiSelect({
  className
  )}
  >
- <span className="flex flex-wrap items-center gap-1.5 overflow-hidden">
+ <span className="flex flex-wrap items-center gap-[var(--spacing-small-gap)].5 overflow-hidden">
  {selectedOptions.length === 0 ? (
  <span className="text-[var(--text-muted)]">{placeholder}</span>
  ) : (
@@ -123,7 +123,7 @@ export function MultiSelect({
  <span
  key={option.value}
  className={cn(
- "inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium transition-colors",
+ "inline-flex items-center gap-[var(--spacing-small-gap)] rounded-md px-2 py-0.5 text-xs font-medium transition-colors",
  "bg-emerald-100 text-[var(--primary)]"
  )}
  onClick={(e) => {
@@ -144,7 +144,7 @@ export function MultiSelect({
  className="w-[var(--radix-popover-trigger-width)] p-0"
  align="start"
  >
- <Command className="rounded-lg border shadow-md bg-[var(--card)] border-[var(--border)]">
+ <Command className="rounded-lg border shadow-[var(--shadow-md)] bg-[var(--card)] border-[var(--border)]">
  <CommandInput
  placeholder={searchPlaceholder}
  value={search}

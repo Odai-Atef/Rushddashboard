@@ -354,8 +354,8 @@ export function AssessmentPage() {
 
  if (isLoadingAssessment) {
  return (
- <div className="min-h-full bg-background p-6 flex items-center justify-center">
- <div className="flex flex-col items-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] flex items-center justify-center">
+ <div className="flex flex-col items-center gap-[var(--spacing-grid-gap)]">
  <Loader2 className="w-8 h-8 text-primary animate-spin" />
  <p className="text-muted-foreground">جارٍ تحميل فئات التقييم...</p>
  </div>
@@ -365,7 +365,7 @@ export function AssessmentPage() {
 
  if (assessmentError) {
  return (
- <div className="min-h-full bg-background p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-8 max-w-lg w-full text-center">
  <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
  <h2 className="text-xl font-bold mb-2">تعذر تحميل التقييم</h2>
@@ -383,7 +383,7 @@ export function AssessmentPage() {
 
  if (assessmentCategories.length === 0) {
  return (
- <div className="min-h-full bg-background p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-8 max-w-lg w-full text-center">
  <Info className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
  <h2 className="text-xl font-bold mb-2">
@@ -412,11 +412,11 @@ export function AssessmentPage() {
  };
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div className="max-w-4xl mx-auto">
  {/* Category Steps */}
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6 mb-6">
- <div className="flex items-stretch gap-2 overflow-x-auto pb-2">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] mb-6">
+ <div className="flex items-stretch gap-[var(--spacing-small-gap)] overflow-x-auto pb-2">
  {assessmentCategories.map((cat, idx) => {
  const Icon = resolveApiIcon(cat.icon);
  const catProgress = assessmentProgress[cat.id] ?? {
@@ -428,7 +428,7 @@ export function AssessmentPage() {
  <button
  key={cat.id}
  onClick={() => setCurrentAssessmentStep(idx)}
- className={`flex flex-1 basis-0 min-w-0 flex-col items-center justify-center gap-1 px-2 py-3 rounded-lg transition-colors ${
+ className={`flex flex-1 basis-0 min-w-0 flex-col items-center justify-center gap-[var(--spacing-small-gap)] px-2 py-3 rounded-lg transition-colors ${
  idx === currentAssessmentStep
  ? 'bg-primary/10 border-2 border-primary'
  : catProgress.isComplete
@@ -436,7 +436,7 @@ export function AssessmentPage() {
  : 'bg-secondary border border-border'
  }`}
  >
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div
  className={`w-8 h-8 rounded-full flex items-center justify-center ${
  idx === currentAssessmentStep
@@ -481,9 +481,9 @@ export function AssessmentPage() {
  </div>
 
  {/* Form Card */}
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-4 sm:p-8">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] sm:p-8">
  {/* Category Header */}
- <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-6 sm:mb-8">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center gap-[var(--spacing-grid-gap)] mb-6 sm:mb-8">
  <div
  className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center flex-shrink-0"
  style={{ backgroundColor: `${currentCategory.color}20` }}
@@ -518,7 +518,7 @@ export function AssessmentPage() {
  </div>
 
  {(answersLoadError || saveAnswersError) && (
- <div className="mb-6 p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-lg flex items-start gap-3">
+ <div className="mb-6 p-[var(--spacing-card-padding)] bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-lg flex items-start gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--destructive)] mt-0.5 flex-shrink-0" />
  <p className="text-[var(--destructive)] text-sm">
  {saveAnswersError || answersLoadError}
@@ -529,7 +529,7 @@ export function AssessmentPage() {
  {/* Dynamic Questions */}
  <div className="space-y-8">
  {currentCategory.questions.length === 0 && (
- <div className="p-6 bg-secondary rounded-lg text-center text-muted-foreground">
+ <div className="p-[var(--spacing-card-padding)] bg-secondary rounded-lg text-center text-muted-foreground">
  لا توجد أسئلة في هذا القسم
  </div>
  )}
@@ -544,7 +544,7 @@ export function AssessmentPage() {
  !(Array.isArray(answer) && answer.length === 0);
  const showRequiredError =
  q.isRequired && !isAnswered && touchedQuestionIds.has(q.id);
- const questionWrapperClass = `p-6 bg-secondary rounded-lg transition-all ${
+ const questionWrapperClass = `p-[var(--spacing-card-padding)] bg-secondary rounded-lg transition-all ${
  showRequiredError
  ? 'border-2 border-red-500 bg-[var(--destructive)]/[0.08]'
  : q.isRequired && !isAnswered
@@ -573,7 +573,7 @@ export function AssessmentPage() {
  هذا السؤال مطلوب
  </p>
  )}
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() =>
  setAnswer(currentCategory.id, q.id, 'yes')
@@ -647,10 +647,10 @@ export function AssessmentPage() {
  هذا السؤال مطلوب
  </p>
  )}
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
  </div>
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  {[1, 2, 3, 4, 5].map((num) => (
  <button
  key={num}
@@ -673,7 +673,7 @@ export function AssessmentPage() {
  </div>
  <div className="min-h-[3.25rem] mt-2">
  {scoreDescription && (
- <p className="text-sm text-muted-foreground bg-primary/10 border border-primary/20 rounded-lg p-3 animate-in fade-in slide-in-from-top-1 duration-200">
+ <p className="text-sm text-muted-foreground bg-primary/10 border border-primary/20 rounded-lg p-[var(--spacing-card-padding)] animate-in fade-in slide-in-from-top-1 duration-200">
  {scoreDescription}
  </p>
  )}
@@ -711,11 +711,11 @@ export function AssessmentPage() {
  لا توجد خيارات متاحة
  </p>
  ) : (
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {choices.map((option) => (
  <label
  key={option}
- className="flex items-center gap-3 p-3 border border-border rounded-lg hover:bg-[var(--card)] cursor-pointer"
+ className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-[var(--card)] cursor-pointer"
  >
  <input
  type="checkbox"
@@ -750,7 +750,7 @@ export function AssessmentPage() {
  <div
  key={q.id}
  id={`question-${q.id}`}
- className="p-6 bg-secondary border border-border rounded-lg"
+ className="p-[var(--spacing-card-padding)] bg-secondary border border-border rounded-lg"
  >
  <label className="block font-medium mb-2">
  {qIdx + 1}. {q.questionText}
@@ -766,7 +766,7 @@ export function AssessmentPage() {
  هذا السؤال مطلوب
  </p>
  )}
- <div className="flex items-start gap-3 mb-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] mb-3">
  <Upload className="w-5 h-5 text-primary mt-0.5" />
  <div className="flex-1">
  <p className="font-medium text-foreground mb-1">
@@ -823,7 +823,7 @@ export function AssessmentPage() {
  <button
  onClick={handleAssessmentNext}
  disabled={isSavingAnswers || isLoadingAssessment}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isSavingAnswers ? (
  <>

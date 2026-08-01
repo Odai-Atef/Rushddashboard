@@ -41,7 +41,7 @@ function SelectTrigger({
  data-slot="select-trigger"
  data-size={size}
  className={cn(
- "flex w-full items-center justify-between gap-2 rounded-[var(--radius-input)] border px-4 py-2.5 text-sm whitespace-nowrap shadow-sm",
+ "flex w-full items-center justify-between gap-[var(--spacing-small-gap)] rounded-[var(--radius-input)] border px-4 py-2.5 text-sm whitespace-nowrap shadow-[var(--shadow-sm)]",
  "bg-[var(--input-background)]",
  "text-[var(--text-primary)]",
  "border-[var(--border)]",
@@ -53,7 +53,7 @@ function SelectTrigger({
  "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-[var(--muted)]",
  "aria-invalid:border-[var(--destructive)] aria-invalid:ring-[var(--destructive)]/20",
  "data-[size=default]:h-11 data-[size=sm]:h-9",
- "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2",
+ "*:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-[var(--spacing-small-gap)]",
  "[&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
  "hover:border-[var(--text-muted)]",
  className,
@@ -79,7 +79,7 @@ function SelectContent({
  <SelectPrimitive.Content
  data-slot="select-content"
  className={cn(
- "relative z-50 max-h-[var(--radix-select-content-available-height)] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-[var(--radius-card)] border shadow-[var(--shadow-lg)]",
+ "relative z-50 max-h-[var(--radix-select-content-available-height)] min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-[var(--radius-card)] border shadow-[var(--shadow-[var(--shadow-lg)])]",
  "bg-[var(--card)]",
  "text-[var(--card-foreground)]",
  "border-[var(--border)]",
@@ -94,7 +94,7 @@ function SelectContent({
  <SelectScrollUpButton />
  <SelectPrimitive.Viewport
  className={cn(
- "p-1",
+ "p-[var(--spacing-small-gap)]",
  position === "popper" &&
  "h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)] scroll-my-1",
  )}
@@ -133,7 +133,7 @@ function SelectItem({
  <SelectPrimitive.Item
  data-slot="select-item"
  className={cn(
- "relative flex w-full cursor-default items-center gap-2 rounded-[var(--radius-button)] py-2 pr-8 pl-3 text-sm outline-none select-none",
+ "relative flex w-full cursor-default items-center gap-[var(--spacing-small-gap)] rounded-[var(--radius-button)] py-2 pr-8 pl-3 text-sm outline-none select-none",
  "text-[var(--text-primary)]",
  "focus:bg-[var(--primary)]/[0.08] focus:text-[var(--primary)]",
  "data-[disabled]:pointer-events-none data-[disabled]:opacity-50",

@@ -8,10 +8,11 @@ function Input({ className, type, ...props }: React.ComponentProps<"input">) {
  type={type}
  data-slot="input"
  className={cn(
- "flex h-11 w-full min-w-0 rounded-[var(--radius-input)] border px-4 py-2.5 text-base shadow-sm",
+ "flex h-12 w-full min-w-0 rounded-[var(--radius-input)] border px-4 py-3 text-base shadow-[var(--shadow-sm)]",
  "bg-[var(--input-background)]",
  "text-[var(--text-primary)]",
  "border-[var(--border)]",
+ "hover:border-[#CBD5E1]",
  "placeholder:text-[var(--text-muted)]",
  "selection:bg-[var(--primary)] selection:text-[var(--primary-foreground)]",
  "transition-all duration-[var(--transition-duration)] ease-in-out",

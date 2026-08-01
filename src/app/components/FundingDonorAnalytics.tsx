@@ -72,16 +72,16 @@ export function FundingDonorAnalytics() {
  {/* Header */}
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div>
- <h1 className="text-2xl text-foreground">تحليلات التمويل والجهات المانحة</h1>
- <p className="text-muted-foreground text-sm mt-1">التمويل المُحقَّق • نمو المانحين • معدلات التحويل • التوزيع الجغرافي</p>
+ <h1 className="text-2xl text-[var(--text-primary)]">تحليلات التمويل والجهات المانحة</h1>
+ <p className="text-[var(--text-muted)] text-sm mt-1">التمويل المُحقَّق • نمو المانحين • معدلات التحويل • التوزيع الجغرافي</p>
  </div>
- <div className="flex items-center gap-2">
- <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-border rounded-lg px-3 py-2 bg-background text-foreground">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-[var(--border)] rounded-[var(--radius-button)] px-3 py-2 bg-[var(--background)] text-[var(--text-primary)]">
  <option value="3months">آخر 3 أشهر</option>
  <option value="6months">آخر 6 أشهر</option>
  <option value="1year">آخر سنة</option>
  </select>
- <button className="flex items-center gap-2 px-3 py-2 text-sm bg-primary text-primary-foreground rounded-lg hover:opacity-90">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-2 text-sm bg-primary text-primary-foreground rounded-[var(--radius-button)] hover:opacity-90">
  <Download className="w-4 h-4" /> تصدير
  </button>
  </div>
@@ -97,12 +97,12 @@ export function FundingDonorAnalytics() {
  ].map((card, i) => {
  const Icon = card.icon;
  return (
- <div key={i} className={`bg-[var(--card)] rounded-2xl border border-border/80/50 p-5 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
- <div className="p-2.5 rounded-xl bg-muted/80 w-fit mb-4">
+ <div key={i} className={`bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-5 shadow-[var(--shadow-card)] transition-all duration-200 hover:shadow-[var(--shadow-lg)] flex flex-col justify-between h-full`}>
+ <div className="p-[var(--spacing-small-gap)].5 rounded-[var(--radius-card)] bg-muted/80 w-fit mb-[var(--spacing-section-gap)]">
  <Icon className={`w-6 h-6 ${card.color}`} />
  </div>
- <p className="text-3xl font-bold text-foreground tracking-tight">{card.value}</p>
- <p className="text-sm text-muted-foreground mt-1.5">{card.label}</p>
+ <p className="text-[var(--text-card-number)] font-bold text-[var(--text-primary)] tracking-tight">{card.value}</p>
+ <p className="text-sm text-[var(--text-muted)] mt-1.5">{card.label}</p>
  </div>
  );
  })}
@@ -110,8 +110,8 @@ export function FundingDonorAnalytics() {
 
  {/* Funding Secured vs Target */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
- <div className="lg:col-span-2 bg-card border border-border rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">التمويل المُحقَّق مقابل الهدف (ر.س)</h2>
+ <div className="lg:col-span-2 bg-card border border-[var(--border)] rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">التمويل المُحقَّق مقابل الهدف (ر.س)</h2>
  <ResponsiveContainer width="100%" height={240}>
  <AreaChart data={fundingSecuredData}>
  <defs>
@@ -132,8 +132,8 @@ export function FundingDonorAnalytics() {
  </div>
 
  {/* Conversion Rate */}
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">معدل تحويل الفرص</h2>
+ <div className="bg-card border border-[var(--border)] rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">معدل تحويل الفرص</h2>
  <ResponsiveContainer width="100%" height={200}>
  <LineChart data={opportunityConversion}>
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -143,7 +143,7 @@ export function FundingDonorAnalytics() {
  <Line type="monotone" dataKey="rate" name="معدل التحويل" stroke="#6366f1" strokeWidth={2.5} dot={{ fill: '#6366f1', r: 3 }} />
  </LineChart>
  </ResponsiveContainer>
- <div className="mt-3 p-3 bg-[var(--secondary)]/[0.08] rounded-lg border border-[var(--secondary)]/[0.2]">
+ <div className="mt-3 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-[var(--radius-button)] border border-[var(--secondary)]/[0.2]">
  <p className="text-xs text-[var(--secondary)]">ارتفع المعدل +13% خلال 6 أشهر</p>
  </div>
  </div>
@@ -151,8 +151,8 @@ export function FundingDonorAnalytics() {
 
  {/* Donor Growth & Category Breakdown */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">نمو المانحين</h2>
+ <div className="bg-card border border-[var(--border)] rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">نمو المانحين</h2>
  <ResponsiveContainer width="100%" height={220}>
  <BarChart data={donorGrowthData}>
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -167,10 +167,10 @@ export function FundingDonorAnalytics() {
  </ResponsiveContainer>
  </div>
 
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-4">
- <Tag className="w-4 h-4 text-muted-foreground" />
- <h2 className="text-foreground">التمويل حسب القطاع</h2>
+ <div className="bg-card border border-[var(--border)] rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-[var(--spacing-section-gap)]">
+ <Tag className="w-4 h-4 text-[var(--text-muted)]" />
+ <h2 className="text-[var(--text-primary)]">التمويل حسب القطاع</h2>
  </div>
  <div className="flex gap-4">
  <ResponsiveContainer width="50%" height={200}>
@@ -183,12 +183,12 @@ export function FundingDonorAnalytics() {
  <Tooltip formatter={v => `${fmt(Number(v))} ر.س`} />
  </PieChart>
  </ResponsiveContainer>
- <div className="flex-1 space-y-2 py-2">
+ <div className="flex-1 space-y-[var(--spacing-small-gap)] py-2">
  {fundingByCategory.map((item, i) => (
  <div key={i} className="flex items-center justify-between text-sm">
- <span className="text-foreground">{fmt(item.value)}</span>
- <div className="flex items-center gap-1.5">
- <span className="text-muted-foreground">{item.name}</span>
+ <span className="text-[var(--text-primary)]">{fmt(item.value)}</span>
+ <div className="flex items-center gap-[var(--spacing-small-gap)].5">
+ <span className="text-[var(--text-muted)]">{item.name}</span>
  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
  </div>
  </div>
@@ -200,41 +200,41 @@ export function FundingDonorAnalytics() {
 
  {/* Regional & Top Donors */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center gap-2 mb-4">
- <MapPin className="w-4 h-4 text-muted-foreground" />
- <h2 className="text-foreground">التمويل حسب المنطقة</h2>
+ <div className="bg-card border border-[var(--border)] rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-[var(--spacing-section-gap)]">
+ <MapPin className="w-4 h-4 text-[var(--text-muted)]" />
+ <h2 className="text-[var(--text-primary)]">التمويل حسب المنطقة</h2>
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {fundingByRegion.map((region, i) => (
  <div key={i}>
  <div className="flex items-center justify-between mb-1 text-sm">
- <span className="text-muted-foreground">{region.projects} مشروع</span>
- <div className="flex items-center gap-2">
- <span className="text-foreground">{fmt(region.amount)} ر.س</span>
- <span className="text-muted-foreground">{region.region}</span>
+ <span className="text-[var(--text-muted)]">{region.projects} مشروع</span>
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <span className="text-[var(--text-primary)]">{fmt(region.amount)} ر.س</span>
+ <span className="text-[var(--text-muted)]">{region.region}</span>
  </div>
  </div>
  <div className="h-2 bg-muted rounded-full overflow-hidden">
- <div className="h-full bg-gradient-to-l from-blue-500 to-indigo-600 rounded-full" style={{ width: `${(region.amount / 4700000) * 100}%` }} />
+ <div className="h-full bg-gradient-to-l from-[var(--secondary)] to-indigo-600 rounded-full" style={{ width: `${(region.amount / 4700000) * 100}%` }} />
  </div>
  </div>
  ))}
  </div>
  </div>
 
- <div className="bg-card border border-border rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">أبرز الجهات المانحة</h2>
- <div className="space-y-3">
+ <div className="bg-card border border-[var(--border)] rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">أبرز الجهات المانحة</h2>
+ <div className="space-y-[var(--spacing-small-gap)]">
  {topDonors.map((donor, i) => (
- <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/30 transition-colors">
- <div className="flex items-center gap-2">
+ <div key={i} className="flex items-center justify-between p-[var(--spacing-card-padding)] rounded-[var(--radius-button)] border border-[var(--border)] hover:bg-muted/30 transition-colors">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-[var(--primary)]">{donor.amount}</span>
  <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--secondary)]/[0.08] text-[var(--secondary)]">{donor.type}</span>
  </div>
  <div className="text-right">
- <p className="text-sm text-foreground">{donor.name}</p>
- <p className="text-xs text-muted-foreground">{donor.projects} مشاريع</p>
+ <p className="text-sm text-[var(--text-primary)]">{donor.name}</p>
+ <p className="text-xs text-[var(--text-muted)]">{donor.projects} مشاريع</p>
  </div>
  </div>
  ))}

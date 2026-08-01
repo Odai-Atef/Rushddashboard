@@ -68,7 +68,7 @@ export function DashboardLayout() {
  onMenuClick={() => setIsMobileNavOpen(true)}
  />
 
- <main className="flex-1 overflow-y-auto overflow-x-hidden">
+ <main className="flex-1 overflow-y-auto overflow-x-hidden bg-[var(--background)] p-[var(--spacing-page-padding)]">
  <Outlet />
  </main>
  </div>

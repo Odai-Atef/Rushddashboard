@@ -237,12 +237,12 @@ export function SLAPage() {
  if (error || !pkg) {
  return (
  <div className="max-w-3xl mx-auto px-6 py-12" dir="rtl">
- <div className="p-6 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl text-center">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl text-center">
  <AlertTriangle className="w-8 h-8 text-red-500 mx-auto mb-3" />
  <h2 className="text-lg font-bold text-[var(--destructive)] mb-2">{error || "تعذر تحميل الباقة"}</h2>
  <Link
  to="/packages"
- className="inline-flex items-center gap-2 text-[var(--secondary)] hover:underline mt-4"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] text-[var(--secondary)] hover:underline mt-4"
  >
  <ArrowRight size={16} />
  العودة إلى الباقات
@@ -257,35 +257,35 @@ export function SLAPage() {
  return (
  <div className="max-w-3xl mx-auto px-6 py-8" dir="rtl">
  {/* Header */}
- <div className="flex items-center gap-2 mb-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Link
  to="/packages"
- className="inline-flex items-center gap-2 text-[var(--secondary)] hover:underline text-sm font-medium"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] text-[var(--secondary)] hover:underline text-sm font-medium"
  >
  <ArrowRight size={16} />
  العودة إلى الباقات
  </Link>
  </div>
 
- <div className="bg-[var(--card)] rounded-2xl border border-slate-200 p-8 mb-8 shadow-sm">
+ <div className="bg-[var(--card)] rounded-2xl border border-[var(--border)] p-8 mb-8 shadow-sm">
  <h1 className="text-2xl font-bold text-foreground mb-2">{pkg.name}</h1>
  <p className="text-muted-foreground mb-6">{pkg.description}</p>
 
- <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+ <div className="grid grid-cols-2 md:grid-cols-4 gap-[var(--spacing-grid-gap)] mb-8">
  {[
  { label: "السعر السنوي", value: `${pkg.priceAnnual.toLocaleString("ar-SA")} ريال` },
  { label: "السعر الشهري", value: `${pkg.priceMonthly.toLocaleString("ar-SA")} ريال` },
  { label: "عدد المشاريع", value: `${pkg.projectLimit} مشروع` },
  { label: "مستوى SLA", value: pkg.sla.level },
  ].map((item, i) => (
- <div key={i} className="bg-muted rounded-xl p-4 text-center">
+ <div key={i} className="bg-muted rounded-xl p-[var(--spacing-card-padding)] text-center">
  <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
  <div className="text-sm font-bold text-foreground">{item.value}</div>
  </div>
  ))}
  </div>
 
- <div className="flex flex-wrap gap-2">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
  <Link
  to="/auth/login"
  className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-xl font-bold hover:bg-[var(--primary)]/90 transition-colors"
@@ -296,7 +296,7 @@ export function SLAPage() {
  </div>
 
  {/* SLA Summary Cards */}
- <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-8">
+ <div className="grid grid-cols-2 md:grid-cols-3 gap-[var(--spacing-small-gap)] mb-8">
  {[
  { label: "مستوى SLA", value: pkg.sla.level },
  { label: "وقت الاستجابة", value: pkg.sla.responseTime },
@@ -305,7 +305,7 @@ export function SLAPage() {
  { label: "ساعات الدعم", value: pkg.sla.supportHours },
  { label: "ساعات استشارية", value: `${pkg.consultingHours} ساعة` },
  ].map((item, i) => (
- <div key={i} className="bg-muted rounded-xl p-3">
+ <div key={i} className="bg-muted rounded-xl p-[var(--spacing-card-padding)]">
  <div className="text-xs text-muted-foreground mb-1">{item.label}</div>
  <div className="text-sm font-bold text-foreground">{item.value}</div>
  </div>
@@ -313,7 +313,7 @@ export function SLAPage() {
  </div>
 
  {/* Package Features */}
- <div className="bg-[var(--card)] rounded-2xl border border-slate-200 p-8 mb-8 shadow-sm">
+ <div className="bg-[var(--card)] rounded-2xl border border-[var(--border)] p-8 mb-8 shadow-sm">
  <h2 className="text-xl font-bold text-foreground mb-6">تفاصيل الباقة</h2>
 
  <div className="space-y-8">
@@ -321,9 +321,9 @@ export function SLAPage() {
  {feat.benefits && feat.benefits.length > 0 && (
  <div>
  <h4 className="text-base font-bold text-foreground mb-3">المزايا الرئيسية</h4>
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {feat.benefits.map((b, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+ <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
  <Check size={14} className="mt-1 text-[var(--primary)] shrink-0" />
  <span>{b}</span>
  </li>
@@ -336,9 +336,9 @@ export function SLAPage() {
  {feat.services && feat.services.length > 0 && (
  <div>
  <h4 className="text-base font-bold text-foreground mb-3">الخدمات المتضمنة</h4>
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {feat.services.map((s, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+ <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
  {s.included ? (
  <Check size={14} className="mt-1 text-[var(--primary)] shrink-0" />
  ) : (
@@ -357,9 +357,9 @@ export function SLAPage() {
  {feat.goals && feat.goals.length > 0 && (
  <div>
  <h4 className="text-base font-bold text-foreground mb-3">الأهداف المرتقبة</h4>
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {feat.goals.map((g, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+ <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
  <Check size={14} className="mt-1 text-[var(--secondary)] shrink-0" />
  <span>{g}</span>
  </li>
@@ -372,9 +372,9 @@ export function SLAPage() {
  {feat.outcomes && feat.outcomes.length > 0 && (
  <div>
  <h4 className="text-base font-bold text-foreground mb-3">النتائج المتوقعة</h4>
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {feat.outcomes.map((o, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+ <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
  <Check size={14} className="mt-1 text-[var(--secondary)] shrink-0" />
  <span>{o}</span>
  </li>
@@ -387,9 +387,9 @@ export function SLAPage() {
  {feat.exclusions && feat.exclusions.length > 0 && (
  <div>
  <h4 className="text-base font-bold text-foreground mb-3">الاستثناءات</h4>
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {feat.exclusions.map((e, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+ <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-muted-foreground">
  <XCircle size={14} className="mt-1 text-red-400 shrink-0" />
  <span>{e}</span>
  </li>
@@ -402,9 +402,9 @@ export function SLAPage() {
  {feat.suitableFor && feat.suitableFor.length > 0 && (
  <div>
  <h4 className="text-base font-bold text-foreground mb-3">مناسب لـ</h4>
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {feat.suitableFor.map((s, i) => (
- <li key={i} className="flex items-start gap-2 text-sm text-[var(--text-secondary)]">
+ <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
  <Check size={14} className="mt-1 text-[var(--warning)] shrink-0" />
  <span>{s}</span>
  </li>
@@ -416,8 +416,8 @@ export function SLAPage() {
  </div>
 
  {/* SLA Agreement */}
- <div className="bg-[var(--card)] rounded-2xl border border-slate-200 p-8 shadow-sm">
- <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-2">
+ <div className="bg-[var(--card)] rounded-2xl border border-[var(--border)] p-8 shadow-sm">
+ <h2 className="text-xl font-bold text-foreground mb-6 flex items-center gap-[var(--spacing-small-gap)]">
  <Shield size={22} className="text-[var(--secondary)]" />
  اتفاقية مستوى الخدمة (SLA)
  </h2>

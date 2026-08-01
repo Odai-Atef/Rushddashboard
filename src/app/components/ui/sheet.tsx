@@ -59,7 +59,7 @@ function SheetContent({
  <SheetPrimitive.Content
  data-slot="sheet-content"
  className={cn(
- "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-[var(--shadow-xl)] transition-all duration-[var(--transition-duration)]",
+ "data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-[var(--spacing-grid-gap)] shadow-[var(--shadow-xl)] transition-all duration-[var(--transition-duration)]",
  "bg-[var(--card)] text-[var(--card-foreground)]",
  side === "right" &&
  "data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 h-full w-3/4 border-l border-[var(--border)] sm:max-w-sm rounded-l-[var(--radius-dialog)]",
@@ -76,7 +76,7 @@ function SheetContent({
  {children}
  <SheetPrimitive.Close
  className={cn(
- "absolute top-4 right-4 rounded-[var(--radius-button)] p-1.5 opacity-70 transition-all duration-[var(--transition-duration)]",
+ "absolute top-4 right-4 rounded-[var(--radius-button)] p-[var(--spacing-small-gap)].5 opacity-70 transition-all duration-[var(--transition-duration)]",
  "hover:opacity-100 hover:bg-[var(--hover)]",
  "focus:outline-none focus:ring-2 focus:ring-[var(--ring)]/30 focus:ring-offset-2 focus:ring-offset-background",
  "disabled:pointer-events-none",
@@ -95,7 +95,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
  return (
  <div
  data-slot="sheet-header"
- className={cn("flex flex-col gap-1.5 p-[var(--spacing-card-padding)]", className)}
+ className={cn("flex flex-col gap-[var(--spacing-small-gap)].5 p-[var(--spacing-card-padding)]", className)}
  {...props}
  />
  );
@@ -106,7 +106,7 @@ function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
  <div
  data-slot="sheet-footer"
  className={cn(
- "mt-auto flex flex-col gap-2 p-[var(--spacing-card-padding)] border-t border-[var(--border)]",
+ "mt-auto flex flex-col gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] border-t border-[var(--border)]",
  className,
  )}
  {...props}

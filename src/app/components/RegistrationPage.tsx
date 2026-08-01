@@ -285,7 +285,7 @@ export function RegistrationPage() {
 
  {/* Terms and Conditions */}
  <div>
- <label className="flex items-start gap-3 cursor-pointer">
+ <label className="flex items-start gap-[var(--spacing-small-gap)] cursor-pointer">
  <input
  type="checkbox"
  checked={formData.agreeToTerms}
@@ -313,7 +313,7 @@ export function RegistrationPage() {
  <button
  type="submit"
  disabled={isLoading}
- className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isLoading ? (
  <>
@@ -343,7 +343,7 @@ export function RegistrationPage() {
  </div>
 
  {/* Right Side - Benefits */}
- <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
+ <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-[var(--secondary)] to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
  {/* Decorative circles */}
  <div className="absolute top-20 right-20 w-64 h-64 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
  <div className="absolute bottom-20 left-20 w-96 h-96 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
@@ -360,27 +360,27 @@ export function RegistrationPage() {
 
  {/* Benefits */}
  <div className="space-y-4">
- <div className="flex items-center gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>تحليل فوري للبيانات بدعم الذكاء الاصطناعي</span>
  </div>
 
- <div className="flex items-center gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>لوحات تحكم تفاعلية وتقارير متقدمة</span>
  </div>
 
- <div className="flex items-center gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>توصيات تنفيذية قابلة للتطبيق مباشرة</span>
  </div>
 
- <div className="flex items-center gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>دعم فني متخصص 24/7</span>
  </div>
 
- <div className="flex items-center gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>أمان وحماية بيانات على مستوى المؤسسات</span>
  </div>

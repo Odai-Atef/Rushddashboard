@@ -233,7 +233,7 @@ export function LoginPage() {
  <button
  type="submit"
  disabled={isLoading}
- className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isLoading ? (
  <>
@@ -263,7 +263,7 @@ export function LoginPage() {
  </div>
 
  {/* Right Side - Product Intro */}
- <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
+ <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-[var(--secondary)] to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
  {/* Decorative circles */}
  <div className="absolute top-20 right-20 w-64 h-64 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
  <div className="absolute bottom-20 left-20 w-96 h-96 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
@@ -280,8 +280,8 @@ export function LoginPage() {
 
  {/* Features */}
  <div className="space-y-4">
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <Sparkles className="w-5 h-5" />
  </div>
  <div>
@@ -290,8 +290,8 @@ export function LoginPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <TrendingUp className="w-5 h-5" />
  </div>
  <div>
@@ -300,8 +300,8 @@ export function LoginPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <Target className="w-5 h-5" />
  </div>
  <div>
@@ -310,8 +310,8 @@ export function LoginPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <BarChart3 className="w-5 h-5" />
  </div>
  <div>

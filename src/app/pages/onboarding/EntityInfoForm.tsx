@@ -197,7 +197,7 @@ export function EntityInfoForm() {
 
  return (
  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-8">
- <form className="space-y-6">
+ <form className="space-y-[var(--spacing-section-gap)]">
  {/* Organization Name */}
  <div>
  <label className="block text-sm font-medium mb-2">اسم الجهه *</label>
@@ -217,7 +217,7 @@ export function EntityInfoForm() {
  </div>
 
  {/* License Number & Registration Date */}
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium mb-2">رقم الترخيص *</label>
  <input
@@ -320,7 +320,7 @@ export function EntityInfoForm() {
  type="button"
  onClick={handleSave}
  disabled={isSaving}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isSaving ? (
  <>

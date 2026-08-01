@@ -166,14 +166,14 @@ export function DonorsPage() {
  {/* Header */}
  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
  <div className="w-full">
- <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">لوحة قاعدة الجهات المانحة</h1>
+ <h1 className="text-2xl sm:text-[var(--text-card-number)] font-bold mb-1 sm:mb-2">لوحة قاعدة الجهات المانحة</h1>
  <p className="text-muted-foreground text-sm sm:text-base">نظرة شاملة على الجهات المانحة وفرص التمويل</p>
  </div>
  </div>
 
  {/* KPI Cards */}
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
- <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
+ <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-[var(--shadow-lg)] transition-shadow">
  <div className="flex items-center justify-between mb-3">
  <div className="p-3 bg-chart-1/10 rounded-lg">
  <Building2 className="w-5 h-5 text-chart-1" />
@@ -183,37 +183,37 @@ export function DonorsPage() {
  +12%
  </span>
  </div>
- <p className="text-2xl sm:text-3xl font-bold">{stats.totalDonors}</p>
+ <p className="text-2xl sm:text-[var(--text-card-number)] font-bold">{stats.totalDonors}</p>
  <p className="text-xs sm:text-sm text-muted-foreground mt-1">إجمالي الجهات المانحة</p>
  </div>
 
- <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
+ <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-[var(--shadow-lg)] transition-shadow">
  <div className="flex items-center justify-between mb-3">
  <div className="p-3 bg-chart-2/10 rounded-lg">
  <CheckCircle2 className="w-5 h-5 text-chart-2" />
  </div>
  </div>
- <p className="text-2xl sm:text-3xl font-bold text-[var(--primary)]">{stats.withContact}</p>
+ <p className="text-2xl sm:text-[var(--text-card-number)] font-bold text-[var(--primary)]">{stats.withContact}</p>
  <p className="text-xs sm:text-sm text-muted-foreground mt-1">جهات بها بيانات تواصل</p>
  </div>
 
- <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
+ <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-[var(--shadow-lg)] transition-shadow">
  <div className="flex items-center justify-between mb-3">
  <div className="p-3 bg-chart-3/10 rounded-lg">
  <Target className="w-5 h-5 text-chart-3" />
  </div>
  </div>
- <p className="text-2xl sm:text-3xl font-bold text-chart-3">{stats.totalFundingAreas}</p>
+ <p className="text-2xl sm:text-[var(--text-card-number)] font-bold text-chart-3">{stats.totalFundingAreas}</p>
  <p className="text-xs sm:text-sm text-muted-foreground mt-1">مجالات تمويل مسجلة</p>
  </div>
 
- <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-lg transition-shadow">
+ <div className="bg-card border border-border rounded-xl p-4 sm:p-6 hover:shadow-[var(--shadow-lg)] transition-shadow">
  <div className="flex items-center justify-between mb-3">
  <div className="p-3 bg-chart-4/10 rounded-lg">
  <AlertCircle className="w-5 h-5 text-chart-4" />
  </div>
  </div>
- <p className="text-2xl sm:text-3xl font-bold text-chart-4">{stats.withWebsite}</p>
+ <p className="text-2xl sm:text-[var(--text-card-number)] font-bold text-chart-4">{stats.withWebsite}</p>
  <p className="text-xs sm:text-sm text-muted-foreground mt-1">جهات لديها موقع إلكتروني</p>
  </div>
  </div>
@@ -337,7 +337,7 @@ export function DonorsPage() {
  <ArrowRight className="w-5 h-5" />
  </button>
  <div>
- <h1 className="text-3xl font-bold mb-2">قاعدة الجهات المانحة</h1>
+ <h1 className="text-[var(--text-card-number)] font-bold mb-2">قاعدة الجهات المانحة</h1>
  <p className="text-muted-foreground">تصفح وابحث في قائمة الجهات المانحة</p>
  </div>
  </div>

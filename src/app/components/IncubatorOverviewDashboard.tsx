@@ -55,7 +55,7 @@ const recentActivity = [
 const alerts = [
  { id: 1, level: 'high', title: 'فرص تمويل تنتهي قريباً', desc: '7 فرص تمويل ستنتهي خلال 48 ساعة', color: 'border-red-300 bg-[var(--destructive)]/[0.08]' },
  { id: 2, level: 'medium', title: 'جمعيات تحتاج متابعة', desc: '23 جمعية لم تستكمل خطة التطوير منذ 30 يومًا', color: 'border-amber-300 bg-[var(--warning)]/[0.08]' },
- { id: 3, level: 'low', title: 'مشاريع معلّقة في الاعتماد', desc: '14 مشروعاً ينتظر الاعتماد أكثر من 7 أيام', color: 'border-blue-300 bg-[var(--secondary)]/[0.08]' },
+ { id: 3, level: 'low', title: 'مشاريع معلّقة في الاعتماد', desc: '14 مشروعاً ينتظر الاعتماد أكثر من 7 أيام', color: 'border-[var(--secondary)]/30 bg-[var(--secondary)]/[0.08]' },
 ];
 
 const insights = [
@@ -79,25 +79,25 @@ export function IncubatorOverviewDashboard() {
  {/* Header */}
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div>
- <h1 className="text-3xl md:text-4xl font-bold text-foreground">لوحة القيادة التنفيذية الشاملة</h1>
- <p className="text-muted-foreground mt-1 text-sm">نظرة 360° على أداء الحاضنة • آخر تحديث: الآن</p>
+ <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">لوحة القيادة التنفيذية الشاملة</h1>
+ <p className="text-[var(--text-muted)] mt-1 text-sm">نظرة 360° على أداء الحاضنة • آخر تحديث: الآن</p>
  </div>
- <div className="flex items-center gap-2 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-wrap">
  <select
  value={dateRange}
  onChange={e => setDateRange(e.target.value)}
- className="text-sm border border-border rounded-xl px-3 py-2 bg-[var(--card)] text-foreground"
+ className="text-sm border border-[var(--border)] rounded-[var(--radius-card)] px-3 py-2 bg-[var(--card)] text-[var(--text-primary)]"
  >
  <option value="1month">آخر شهر</option>
  <option value="3months">آخر 3 أشهر</option>
  <option value="6months">آخر 6 أشهر</option>
  <option value="1year">آخر سنة</option>
  </select>
- <button onClick={() => handleExport('excel')} className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-xl bg-background hover:bg-muted dark:hover:bg-muted text-foreground transition-colors">
+ <button onClick={() => handleExport('excel')} className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-2 text-sm border border-[var(--border)] rounded-[var(--radius-card)] bg-[var(--background)] hover:bg-muted dark:hover:bg-muted text-[var(--text-primary)] transition-colors">
  <Download className="w-4 h-4" />
  Excel
  </button>
- <button onClick={() => handleExport('pdf')} className="flex items-center gap-2 px-3 py-2 text-sm bg-[var(--primary)] text-[var(--primary-foreground)] rounded-xl hover:opacity-90 transition-opacity">
+ <button onClick={() => handleExport('pdf')} className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-2 text-sm bg-[var(--primary)] text-[var(--primary-foreground)] rounded-[var(--radius-card)] hover:opacity-90 transition-opacity">
  <Download className="w-4 h-4" />
  PDF
  </button>
@@ -105,13 +105,13 @@ export function IncubatorOverviewDashboard() {
  </div>
 
  {/* KPI Grid */}
- <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3">
+ <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-[var(--spacing-small-gap)]">
  {kpis.map((kpi, i) => {
  const Icon = kpi.icon;
  return (
- <div key={i} className={`rounded-xl border p-4 ${kpi.bg} ${kpi.border} transition-shadow hover:shadow-md`}>
+ <div key={i} className={`rounded-[var(--radius-card)] border p-4 ${kpi.bg} ${kpi.border} transition-shadow hover:shadow-[var(--shadow-lg)]`}>
  <div className="flex items-start justify-between mb-2">
- <div className={`p-2 rounded-xl bg-background/60`}>
+ <div className={`p-[var(--spacing-small-gap)] rounded-[var(--radius-card)] bg-[var(--background)]/60`}>
  <Icon className={`w-4 h-4 ${kpi.color}`} />
  </div>
  <span className={`flex items-center gap-0.5 text-xs ${kpi.isPositive ? 'text-[var(--primary)]' : 'text-red-500'}`}>
@@ -120,7 +120,7 @@ export function IncubatorOverviewDashboard() {
  </span>
  </div>
  <p className={`text-xl ${kpi.color}`}>{kpi.value}</p>
- <p className="text-xs text-muted-foreground mt-1 leading-tight">{kpi.title}</p>
+ <p className="text-xs text-[var(--text-muted)] mt-1 leading-tight">{kpi.title}</p>
  </div>
  );
  })}
@@ -129,10 +129,10 @@ export function IncubatorOverviewDashboard() {
  {/* Charts Row */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
  {/* Trend Chart */}
- <div className="lg:col-span-2 u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <h2 className="text-foreground">اتجاهات النمو</h2>
- <span className="text-xs text-muted-foreground">آخر 6 أشهر</span>
+ <div className="lg:col-span-2 u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <h2 className="text-[var(--text-primary)]">اتجاهات النمو</h2>
+ <span className="text-xs text-[var(--text-muted)]">آخر 6 أشهر</span>
  </div>
  <ResponsiveContainer width="100%" height={240}>
  <AreaChart data={trendData}>
@@ -158,14 +158,14 @@ export function IncubatorOverviewDashboard() {
  </div>
 
  {/* Pipeline Funnel */}
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">مسار المؤسسات</h2>
- <div className="space-y-3">
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">مسار المؤسسات</h2>
+ <div className="space-y-[var(--spacing-small-gap)]">
  {pipelineData.map((item, i) => (
  <div key={i}>
  <div className="flex justify-between text-sm mb-1">
- <span className="text-muted-foreground">{item.name}</span>
- <span className="text-foreground">{item.value}</span>
+ <span className="text-[var(--text-muted)]">{item.name}</span>
+ <span className="text-[var(--text-primary)]">{item.value}</span>
  </div>
  <div className="h-2 bg-muted rounded-full overflow-hidden">
  <div
@@ -176,7 +176,7 @@ export function IncubatorOverviewDashboard() {
  </div>
  ))}
  </div>
- <div className="mt-4 p-3 bg-[var(--primary)]/[0.08] rounded-xl border border-[var(--primary)]/[0.2]">
+ <div className="mt-4 p-[var(--spacing-card-padding)] bg-[var(--primary)]/[0.08] rounded-[var(--radius-card)] border border-[var(--primary)]/[0.2]">
  <p className="text-xs text-[var(--primary)]">معدل التحويل الكلي: <span className="font-semibold">36%</span></p>
  </div>
  </div>
@@ -185,24 +185,24 @@ export function IncubatorOverviewDashboard() {
  {/* Bottom Row */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
  {/* Recent Activity */}
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <h2 className="text-foreground">النشاط الأخير</h2>
- <button className="text-xs text-[var(--primary)] hover:underline flex items-center gap-1">
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <h2 className="text-[var(--text-primary)]">النشاط الأخير</h2>
+ <button className="text-xs text-[var(--primary)] hover:underline flex items-center gap-[var(--spacing-small-gap)]">
  عرض الكل <ChevronRight className="w-3 h-3" />
  </button>
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {recentActivity.map(item => {
  const Icon = item.icon;
  return (
- <div key={item.id} className="flex items-start gap-3">
- <div className="p-1.5 rounded-xl bg-muted flex-shrink-0">
+ <div key={item.id} className="flex items-start gap-[var(--spacing-small-gap)]">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-[var(--radius-card)] bg-muted flex-shrink-0">
  <Icon className={`w-3.5 h-3.5 ${item.color}`} />
  </div>
  <div className="flex-1 min-w-0">
- <p className="text-sm text-foreground leading-snug">{item.text}</p>
- <p className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
+ <p className="text-sm text-[var(--text-primary)] leading-snug">{item.text}</p>
+ <p className="text-xs text-[var(--text-muted)] mt-0.5 flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-3 h-3" />{item.time}
  </p>
  </div>
@@ -213,32 +213,32 @@ export function IncubatorOverviewDashboard() {
  </div>
 
  {/* Alerts */}
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <h2 className="text-foreground">التنبيهات</h2>
- <Bell className="w-4 h-4 text-muted-foreground" />
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <h2 className="text-[var(--text-primary)]">التنبيهات</h2>
+ <Bell className="w-4 h-4 text-[var(--text-muted)]" />
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {alerts.map(alert => (
- <div key={alert.id} className={`p-3 rounded-xl border ${alert.color}`}>
- <p className="text-sm text-foreground">{alert.title}</p>
- <p className="text-xs text-muted-foreground mt-1">{alert.desc}</p>
+ <div key={alert.id} className={`p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] border ${alert.color}`}>
+ <p className="text-sm text-[var(--text-primary)]">{alert.title}</p>
+ <p className="text-xs text-[var(--text-muted)] mt-1">{alert.desc}</p>
  </div>
  ))}
  </div>
  </div>
 
  {/* Quick Insights */}
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <div className="flex items-center justify-between mb-4">
- <h2 className="text-foreground">رؤى سريعة</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <div className="flex items-center justify-between mb-[var(--spacing-section-gap)]">
+ <h2 className="text-[var(--text-primary)]">رؤى سريعة</h2>
  <Zap className="w-4 h-4 text-[var(--warning)]" />
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {insights.map((insight, i) => (
- <div key={i} className="flex items-start gap-2 p-3 rounded-xl bg-secondary/50">
+ <div key={i} className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-secondary/50">
  <div className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${insight.positive === true ? 'bg-[var(--primary)]/[0.08]0' : insight.positive === false ? 'bg-[var(--destructive)]' : 'bg-[var(--primary)]'}`} />
- <p className="text-sm text-foreground leading-snug">{insight.text}</p>
+ <p className="text-sm text-[var(--text-primary)] leading-snug">{insight.text}</p>
  </div>
  ))}
  </div>

@@ -44,7 +44,7 @@ export function ConfirmDialog({
  <AlertDialogDescription>{description}</AlertDialogDescription>
  ) : null}
  </AlertDialogHeader>
- <AlertDialogFooter className="flex-col-reverse gap-2 sm:flex-row sm:justify-start">
+ <AlertDialogFooter className="flex-col-reverse gap-[var(--spacing-small-gap)] sm:flex-row sm:justify-start">
  <AlertDialogCancel onClick={onCancel}>{cancelLabel}</AlertDialogCancel>
  <AlertDialogAction
  onClick={onConfirm}

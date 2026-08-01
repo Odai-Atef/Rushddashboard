@@ -240,7 +240,7 @@ export function AIAnalysisHistoryPage() {
  {/* Header */}
  <div className="flex items-center justify-between">
  <div>
- <h1 className="text-3xl flex items-center gap-3">
+ <h1 className="text-[var(--text-page-title)] flex items-center gap-[var(--spacing-small-gap)]">
  <FileText className="w-8 h-8 text-[var(--secondary)]" />
  التحليلات السابقة
  </h1>
@@ -248,7 +248,7 @@ export function AIAnalysisHistoryPage() {
  </div>
  <button
  onClick={() => navigate('/dashboard/ai-analysis/start')}
- className="flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
  >
  <Sparkles className="w-5 h-5" />
  تحليل جديد
@@ -257,7 +257,7 @@ export function AIAnalysisHistoryPage() {
 
  {/* Search and Filters */}
  <div className="bg-card border border-border rounded-lg p-4">
- <div className="flex flex-col md:flex-row gap-4">
+ <div className="flex flex-col md:flex-row gap-[var(--spacing-grid-gap)]">
  <div className="flex-1 relative">
  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
  <input
@@ -303,7 +303,7 @@ export function AIAnalysisHistoryPage() {
  </div>
 
  {/* Analysis Grid */}
- <div className="grid grid-cols-1 gap-4">
+ <div className="grid grid-cols-1 gap-[var(--spacing-grid-gap)]">
  {filteredAnalyses.map((analysis) => {
  const CategoryIcon = getCategoryIcon(analysis.category);
  const StatusIcon = getStatusIcon(analysis.status);
@@ -314,16 +314,16 @@ export function AIAnalysisHistoryPage() {
  className="bg-card border border-border rounded-lg p-5 hover:border-ring/50 transition-all cursor-pointer group"
  onClick={() => setSelectedAnalysis(analysis)}
  >
- <div className="flex items-start gap-4">
- <div className={`p-3 rounded-lg ${getCategoryBg(analysis.category)} flex-shrink-0`}>
+ <div className="flex items-start gap-[var(--spacing-grid-gap)]">
+ <div className={`p-[var(--spacing-card-padding)] rounded-lg ${getCategoryBg(analysis.category)} flex-shrink-0`}>
  <CategoryIcon className={`w-6 h-6 ${getCategoryColor(analysis.category)}`} />
  </div>
 
  <div className="flex-1 min-w-0">
- <div className="flex items-start justify-between gap-4 mb-2">
+ <div className="flex items-start justify-between gap-[var(--spacing-grid-gap)] mb-2">
  <h3 className="font-medium text-lg">{analysis.title}</h3>
  <div
- className={`flex items-center gap-2 px-3 py-1 rounded-full text-sm ${
+ className={`flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 rounded-full text-sm ${
  analysis.status === 'completed'
  ? 'bg-[var(--primary)]/[0.1]'
  : analysis.status === 'running'
@@ -340,12 +340,12 @@ export function AIAnalysisHistoryPage() {
  </div>
  </div>
 
- <div className="flex items-center gap-4 mb-3 text-sm text-muted-foreground">
- <div className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)] mb-3 text-sm text-muted-foreground">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4" />
  {analysis.date}
  </div>
- <div className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-4 h-4" />
  {analysis.duration}
  </div>
@@ -361,19 +361,19 @@ export function AIAnalysisHistoryPage() {
  <p className="text-muted-foreground text-sm mb-3 line-clamp-2">{analysis.summary}</p>
 
  {analysis.status === 'completed' && (
- <div className="flex items-center gap-6 mb-4 text-sm">
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)] mb-4 text-sm">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Sparkles className="w-4 h-4 text-[var(--secondary)]" />
  <span className="text-muted-foreground">{analysis.insights} رؤية</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Target className="w-4 h-4 text-[var(--primary)]" />
  <span className="text-muted-foreground">{analysis.recommendations} توصية</span>
  </div>
  </div>
  )}
 
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {analysis.status === 'completed' && (
  <>
  <button
@@ -381,7 +381,7 @@ export function AIAnalysisHistoryPage() {
  e.stopPropagation();
  handleContinue(analysis.id);
  }}
- className="flex items-center gap-2 px-3 py-1.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)] transition-colors text-sm"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)] transition-colors text-sm"
  >
  <Play className="w-4 h-4" />
  متابعة
@@ -391,7 +391,7 @@ export function AIAnalysisHistoryPage() {
  e.stopPropagation();
  handleRerun(analysis.id);
  }}
- className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
  >
  <RotateCcw className="w-4 h-4" />
  إعادة التشغيل
@@ -404,7 +404,7 @@ export function AIAnalysisHistoryPage() {
  e.stopPropagation();
  handleRerun(analysis.id);
  }}
- className="flex items-center gap-2 px-3 py-1.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)] transition-colors text-sm"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)] transition-colors text-sm"
  >
  <RotateCcw className="w-4 h-4" />
  إعادة المحاولة
@@ -412,7 +412,7 @@ export function AIAnalysisHistoryPage() {
  )}
  {analysis.status === 'running' && (
  <button
- className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg text-sm cursor-not-allowed opacity-50"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-muted rounded-lg text-sm cursor-not-allowed opacity-50"
  disabled
  >
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -423,7 +423,7 @@ export function AIAnalysisHistoryPage() {
  onClick={(e) => {
  e.stopPropagation();
  }}
- className="flex items-center gap-2 px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-muted hover:bg-muted/80 rounded-lg transition-colors text-sm"
  >
  <Download className="w-4 h-4" />
  تصدير
@@ -433,7 +433,7 @@ export function AIAnalysisHistoryPage() {
  e.stopPropagation();
  handleDelete(analysis.id);
  }}
- className="flex items-center gap-2 px-3 py-1.5 bg-[var(--destructive)]/10 text-red-500 hover:bg-[var(--destructive)]/20 rounded-lg transition-colors text-sm"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1.5 bg-[var(--destructive)]/10 text-red-500 hover:bg-[var(--destructive)]/20 rounded-lg transition-colors text-sm"
  >
  <Trash2 className="w-4 h-4" />
  حذف
@@ -475,18 +475,18 @@ export function AIAnalysisHistoryPage() {
  <div className="bg-card border border-border rounded-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto">
  <div className="p-6 border-b border-border">
  <div className="flex items-start justify-between">
- <div className="flex items-start gap-4">
+ <div className="flex items-start gap-[var(--spacing-grid-gap)]">
  {(() => {
  const CategoryIcon = getCategoryIcon(selectedAnalysis.category);
  return (
- <div className={`p-3 rounded-lg ${getCategoryBg(selectedAnalysis.category)}`}>
+ <div className={`p-[var(--spacing-card-padding)] rounded-lg ${getCategoryBg(selectedAnalysis.category)}`}>
  <CategoryIcon className={`w-6 h-6 ${getCategoryColor(selectedAnalysis.category)}`} />
  </div>
  );
  })()}
  <div>
- <h2 className="text-2xl mb-2">{selectedAnalysis.title}</h2>
- <div className="flex items-center gap-4 text-sm text-muted-foreground">
+ <h2 className="text-[var(--text-section-title)] mb-2">{selectedAnalysis.title}</h2>
+ <div className="flex items-center gap-[var(--spacing-grid-gap)] text-sm text-muted-foreground">
  <span>{selectedAnalysis.date}</span>
  <span>{selectedAnalysis.type}</span>
  </div>
@@ -494,7 +494,7 @@ export function AIAnalysisHistoryPage() {
  </div>
  <button
  onClick={() => setSelectedAnalysis(null)}
- className="p-2 hover:bg-muted rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors"
  >
  <X className="w-5 h-5" />
  </button>
@@ -507,7 +507,7 @@ export function AIAnalysisHistoryPage() {
  {(() => {
  const StatusIcon = getStatusIcon(selectedAnalysis.status);
  return (
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <StatusIcon
  className={`w-5 h-5 ${getStatusColor(selectedAnalysis.status)} ${
  selectedAnalysis.status === 'running' ? 'animate-spin' : ''
@@ -525,7 +525,7 @@ export function AIAnalysisHistoryPage() {
  </div>
 
  {selectedAnalysis.status === 'completed' && (
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
  <div className="bg-muted/50 rounded-lg p-4">
  <p className="text-sm text-muted-foreground mb-1">المدة</p>
  <p className="text-xl font-medium">{selectedAnalysis.duration}</p>
@@ -544,13 +544,13 @@ export function AIAnalysisHistoryPage() {
  {selectedAnalysis.status === 'completed' && (
  <div>
  <h3 className="font-medium mb-3">الرؤى الرئيسية</h3>
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {[
  'نمو المبيعات بنسبة 15% مقارنة بالربع السابق',
  'تحسن معدل التحويل من 2.3% إلى 3.1%',
  'انخفاض تكلفة اكتساب العملاء بنسبة 12%',
  ].map((insight, index) => (
- <div key={index} className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+ <div key={index} className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted/50 rounded-lg">
  <Sparkles className="w-5 h-5 text-[var(--secondary)] flex-shrink-0 mt-0.5" />
  <span className="text-sm">{insight}</span>
  </div>
@@ -560,7 +560,7 @@ export function AIAnalysisHistoryPage() {
  )}
  </div>
 
- <div className="p-6 border-t border-border flex gap-3">
+ <div className="p-6 border-t border-border flex gap-[var(--spacing-small-gap)]">
  {selectedAnalysis.status === 'completed' && (
  <>
  <button
@@ -568,7 +568,7 @@ export function AIAnalysisHistoryPage() {
  handleContinue(selectedAnalysis.id);
  setSelectedAnalysis(null);
  }}
- className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
  >
  <Play className="w-5 h-5" />
  متابعة التحليل
@@ -578,7 +578,7 @@ export function AIAnalysisHistoryPage() {
  handleRerun(selectedAnalysis.id);
  setSelectedAnalysis(null);
  }}
- className="flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
  >
  <RotateCcw className="w-5 h-5" />
  إعادة التشغيل
@@ -591,13 +591,13 @@ export function AIAnalysisHistoryPage() {
  handleRerun(selectedAnalysis.id);
  setSelectedAnalysis(null);
  }}
- className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
  >
  <RotateCcw className="w-5 h-5" />
  إعادة المحاولة
  </button>
  )}
- <button className="flex items-center justify-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+ <button className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
  <Download className="w-5 h-5" />
  تصدير
  </button>
@@ -606,7 +606,7 @@ export function AIAnalysisHistoryPage() {
  setSelectedAnalysis(null);
  handleDelete(selectedAnalysis.id);
  }}
- className="flex items-center justify-center gap-2 px-4 py-2 bg-[var(--destructive)]/10 text-red-500 hover:bg-[var(--destructive)]/20 rounded-lg transition-colors"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--destructive)]/10 text-red-500 hover:bg-[var(--destructive)]/20 rounded-lg transition-colors"
  >
  <Trash2 className="w-5 h-5" />
  حذف
@@ -623,8 +623,8 @@ export function AIAnalysisHistoryPage() {
  <div className="fixed inset-0 bg-[var(--text-primary)]/[0.5] z-50" onClick={() => setShowDeleteConfirm(null)} />
  <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
  <div className="bg-card border border-border rounded-xl w-full max-w-md p-6">
- <div className="flex items-center gap-3 mb-4">
- <div className="p-3 bg-[var(--destructive)]/10 rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--destructive)]/10 rounded-lg">
  <AlertTriangle className="w-6 h-6 text-red-500" />
  </div>
  <div>
@@ -635,7 +635,7 @@ export function AIAnalysisHistoryPage() {
  <p className="text-muted-foreground mb-6">
  لن تتمكن من استعادة هذا التحليل بعد الحذف. سيتم حذف جميع البيانات والرؤى المرتبطة به نهارياً.
  </p>
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setShowDeleteConfirm(null)}
  className="flex-1 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"

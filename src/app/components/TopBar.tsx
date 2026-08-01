@@ -216,11 +216,11 @@ export function TopBar({
  return (
  <header
  className={cn(
- 'flex items-center justify-between h-16 px-[var(--spacing-page-padding)] transition-all duration-[var(--transition-duration)] theme-fade',
- // Exact topbar colors: #FFFFFF (light), #081A2E (dark)
- 'bg-[var(--card)]',
+ 'flex items-center justify-between h-[68px] px-[var(--spacing-page-padding)] transition-all duration-[var(--transition-duration)] theme-fade',
+ // Exact topbar colors: #FFFFFF (light), #0F172A (dark)
+ 'bg-[var(--topbar)]',
  // Text colors
- 'text-[#1E293B]',
+ 'text-[var(--topbar-foreground)]',
  // Border & shadow
  'border-b border-[var(--border)]',
  'shadow-[var(--shadow-sm)]',
@@ -230,12 +230,12 @@ export function TopBar({
  {/* ---------------------------------------------------------- */}
  {/* LEFT — Logo + Branding */}
  {/* ---------------------------------------------------------- */}
- <div className="flex items-center gap-3 shrink-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] shrink-0">
  {/* Mobile hamburger (lg and below) */}
  <button
  onClick={onMenuClick}
  className={cn(
- 'lg:hidden p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
+ 'lg:hidden p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
  isDark
  ? 'hover:bg-[var(--card)]/10 text-[var(--primary-foreground)]'
  : 'hover:bg-[var(--hover)] text-[var(--text-primary)]'
@@ -246,17 +246,17 @@ export function TopBar({
  </button>
 
  {/* Logo */}
- <div className="flex items-center gap-2.5">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <img
  src="/logo.png"
  alt="منصة رشد"
- className="w-9 h-9 object-contain drop-shadow-sm"
+ className="w-10 h-10 object-contain drop-shadow-sm"
  />
  <div className="hidden sm:block leading-tight">
- <p className="font-bold text-sm tracking-tight text-[var(--text-primary)]">
+ <p className="font-bold text-[15px] tracking-tight text-[var(--text-primary)]">
  Rushd
  </p>
- <p className="text-xs font-medium text-[var(--text-muted)]/60">
+ <p className="text-xs font-medium text-[var(--text-muted)]">
  Rushd Virtual Incubator
  </p>
  </div>
@@ -280,7 +280,7 @@ export function TopBar({
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder="ابحث..."
  className={cn(
- 'w-full rounded-[var(--radius-input)] pr-10 pl-4 py-2 text-sm transition-all duration-[var(--transition-duration)]',
+ 'w-full h-12 rounded-[var(--radius-input)] pr-10 pl-4 text-sm transition-all duration-[var(--transition-duration)]',
  'focus:outline-none focus:ring-2',
  isDark
  ? 'bg-[var(--card)]/10 border border-[var(--primary-foreground)]/[0.1] text-[var(--primary-foreground)] placeholder:text-[var(--primary-foreground)]/40 focus:ring-[var(--primary)]/40'
@@ -308,7 +308,7 @@ export function TopBar({
  <button
  onClick={() => setSearchOpen(true)}
  className={cn(
- 'p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
+ 'p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)]',
  isDark
  ? 'hover:bg-[var(--card)]/10 text-[var(--primary-foreground)]/70'
  : 'hover:bg-[var(--hover)] text-[var(--text-muted)]'
@@ -359,13 +359,13 @@ export function TopBar({
  {/* ---------------------------------------------------------- */}
  {/* RIGHT — Actions */}
  {/* ---------------------------------------------------------- */}
- <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-small-gap)] shrink-0">
  {/* Notifications */}
  <DropdownMenu.Root>
  <DropdownMenu.Trigger asChild>
  <button
  className={cn(
- 'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] btn-scale',
+ 'relative p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] btn-scale',
  isDark
  ? 'hover:bg-[var(--card)]/10 text-[var(--primary-foreground)]/80'
  : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
@@ -383,7 +383,7 @@ export function TopBar({
  <DropdownMenu.Portal>
  <DropdownMenu.Content
  className={cn(
- 'border rounded-[var(--radius-dialog)] shadow-[var(--shadow-xl)] p-2 w-96 z-50 overflow-hidden',
+ 'border rounded-[var(--radius-dialog)] shadow-[var(--shadow-xl)] p-[var(--spacing-small-gap)] w-96 z-50 overflow-hidden',
  isDark
  ? 'bg-[var(--card)]/95 backdrop-blur-md border-[var(--primary-foreground)]/[0.1]'
  : 'bg-[var(--card)] border-[var(--border)]'
@@ -395,7 +395,7 @@ export function TopBar({
  {/* Header */}
  <div
  className={cn(
- 'p-3 flex items-center justify-between',
+ 'p-[var(--spacing-card-padding)] flex items-center justify-between',
  isDark ? 'border-b border-[var(--primary-foreground)]/[0.1]' : 'border-b border-[var(--border)]'
  )}
  >
@@ -457,7 +457,7 @@ export function TopBar({
  isUnread && (isDark ? 'bg-[var(--card)]/5' : 'bg-[var(--warning)]/[0.08]/50')
  )}
  >
- <div className="flex items-start gap-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <div
  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
  style={{ background: color + '15' }}
@@ -465,7 +465,7 @@ export function TopBar({
  <Icon className="w-4 h-4" style={{ color }} />
  </div>
  <div className="flex-1 min-w-0">
- <div className="flex items-center gap-2 mb-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <p
  className={cn(
  'font-medium text-sm truncate',
@@ -508,14 +508,14 @@ export function TopBar({
  {recentNotifications.length > 0 && (
  <div
  className={cn(
- 'p-2',
+ 'p-[var(--spacing-small-gap)]',
  isDark ? 'border-t border-[var(--primary-foreground)]/[0.1]' : 'border-t border-[var(--border)]'
  )}
  >
  <button
  onClick={() => navigate('/dashboard/notifications')}
  className={cn(
- 'w-full flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-[var(--radius-button)] transition-colors duration-[var(--transition-duration)]',
+ 'w-full flex items-center justify-center gap-[var(--spacing-small-gap)] px-3 py-2 text-sm rounded-[var(--radius-button)] transition-colors duration-[var(--transition-duration)]',
  isDark
  ? 'text-[var(--primary)] hover:bg-[var(--card)]/10'
  : 'text-[var(--primary)] hover:bg-[var(--hover-primary)]'
@@ -533,7 +533,7 @@ export function TopBar({
  {/* Messages icon */}
  <button
  className={cn(
- 'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] hidden sm:flex btn-scale',
+ 'relative p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] hidden sm:flex btn-scale',
  isDark
  ? 'hover:bg-[var(--card)]/10 text-[var(--primary-foreground)]/80'
  : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
@@ -547,7 +547,7 @@ export function TopBar({
  {/* Downloads icon */}
  <button
  className={cn(
- 'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] hidden md:flex btn-scale',
+ 'relative p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] hidden md:flex btn-scale',
  isDark
  ? 'hover:bg-[var(--card)]/10 text-[var(--primary-foreground)]/80'
  : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
@@ -562,7 +562,7 @@ export function TopBar({
  onClick={handleThemeToggle}
  title={themeLabel(theme)}
  className={cn(
- 'relative p-2 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] btn-scale',
+ 'relative p-[var(--spacing-small-gap)] rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] btn-scale',
  isDark
  ? 'hover:bg-[var(--card)]/10 text-[var(--primary-foreground)]/80'
  : 'hover:bg-[var(--hover)] text-[var(--text-secondary)]'
@@ -577,7 +577,7 @@ export function TopBar({
  <DropdownMenu.Trigger asChild>
  <button
  className={cn(
- 'flex items-center gap-2 p-1 pr-2 rounded-[var(--radius-card)] transition-all duration-[var(--transition-duration)]',
+ 'flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-small-gap)] pr-2 rounded-[var(--radius-card)] transition-all duration-[var(--transition-duration)]',
  isDark
  ? 'hover:bg-[var(--card)]/10'
  : 'hover:bg-[var(--hover)]'
@@ -604,7 +604,7 @@ export function TopBar({
  <DropdownMenu.Portal>
  <DropdownMenu.Content
  className={cn(
- 'border rounded-[var(--radius-dialog)] shadow-[var(--shadow-xl)] p-2 w-56 z-50',
+ 'border rounded-[var(--radius-dialog)] shadow-[var(--shadow-xl)] p-[var(--spacing-small-gap)] w-56 z-50',
  isDark
  ? 'bg-[var(--card)]/95 backdrop-blur-md border-[var(--primary-foreground)]/[0.1]'
  : 'bg-[var(--card)] border-[var(--border)]'
@@ -653,7 +653,7 @@ export function TopBar({
  {/* Logout */}
  <DropdownMenu.Item
  className={cn(
- 'px-3 py-2 rounded-[var(--radius-button)] cursor-pointer outline-none transition-colors duration-[var(--transition-duration)] flex items-center gap-2 text-sm',
+ 'px-3 py-2 rounded-[var(--radius-button)] cursor-pointer outline-none transition-colors duration-[var(--transition-duration)] flex items-center gap-[var(--spacing-small-gap)] text-sm',
  isDark
  ? 'hover:bg-[var(--danger)]/10 text-[var(--danger)]'
  : 'hover:bg-[var(--destructive)]/[0.08] text-[var(--danger)]'

@@ -32,7 +32,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">أولاً: التعريفات</h3>
  <p>يقصد بالمصطلحات التالية المعاني المبينة أمام كل منها ما لم يقتض السياق خلاف ذلك:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li><strong>المنصة:</strong> منصة حاضنة رشد الافتراضية.</li>
  <li><strong>الحاضنة:</strong> الجهة المالكة والمشغلة للمنصة.</li>
  <li><strong>المستخدم:</strong> الجمعية أو الجهه أو الجهة المسجلة في المنصة.</li>
@@ -49,7 +49,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">ثالثاً: أهلية التسجيل</h3>
  <p>يقر المستخدم عند التسجيل بما يلي:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>صحة البيانات المدخلة.</li>
  <li>امتلاكه الصلاحية النظامية للتسجيل نيابة عن الجهة.</li>
  <li>الالتزام بجميع الأنظمة واللوائح ذات العلاقة.</li>
@@ -67,7 +67,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <h3 className="font-bold mb-2">خامساً: حماية البيانات والخصوصية</h3>
  <p>تلتزم الحاضنة بحماية البيانات الشخصية والمؤسسية للمستخدمين وفق الأنظمة المعمول بها في المملكة العربية السعودية وأفضل الممارسات الدولية. ويجوز للحاضنة جمع البيانات اللازمة لتقديم الخدمات وتحسين الأداء وتشغيل المنصة بصورة آمنة.</p>
  <p className="mt-2">ولا يتم بيع أو تأجير أو مشاركة بيانات المستخدمين مع أي طرف ثالث إلا في الحالات التالية:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>وجود موافقة من المستخدم.</li>
  <li>وجود متطلب نظامي أو قضائي.</li>
  <li>متطلبات الجهات الرقابية المختصة.</li>
@@ -78,7 +78,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">سادساً: أمن المعلومات</h3>
  <p>تلتزم الحاضنة بتطبيق الإجراءات الفنية والتنظيمية المناسبة لحماية البيانات من:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>الوصول غير المصرح به.</li>
  <li>التعديل أو الإتلاف غير المشروع.</li>
  <li>الاختراقات الإلكترونية.</li>
@@ -95,7 +95,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">ثامناً: التزامات المستخدم</h3>
  <p>يلتزم المستخدم بما يلي:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>عدم إساءة استخدام المنصة.</li>
  <li>عدم محاولة اختراق الأنظمة أو تجاوز الصلاحيات.</li>
  <li>عدم تحميل أي ملفات ضارة أو برمجيات خبيثة.</li>
@@ -107,7 +107,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">تاسعاً: التعاملات الإلكترونية</h3>
  <p>يوافق المستخدم على أن:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>جميع الموافقات الإلكترونية تعتبر ملزمة نظاماً.</li>
  <li>السجلات الإلكترونية المعتمدة داخل المنصة تعد حجة معتبرة بين الأطراف.</li>
  <li>الإشعارات الإلكترونية الصادرة عبر المنصة أو البريد الإلكتروني أو الرسائل النصية تعد وسائل تبليغ رسمية.</li>
@@ -122,7 +122,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">الحادي عشر: إخلاء المسؤولية</h3>
  <p>تبذل الحاضنة أفضل الجهود المهنية في تقديم الخدمات وتحقيق أعلى مستويات الجودة، إلا أنها لا تضمن:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>حصول المستخدم على تمويل أو دعم.</li>
  <li>اعتماد المشاريع لدى أي جهة مانحة.</li>
  <li>قبول طلبات التقديم أو المنح.</li>
@@ -134,7 +134,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">الثاني عشر: حدود المسؤولية</h3>
  <p>لا تتحمل الحاضنة أي مسؤولية عن:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>القرارات الإدارية الخاصة بالمستخدم.</li>
  <li>استخدام المخرجات بصورة مخالفة للتوصيات.</li>
  <li>البيانات غير الصحيحة المقدمة من المستخدم.</li>
@@ -151,7 +151,7 @@ export function TermsModal({ children }: TermsModalProps) {
  <section>
  <h3 className="font-bold mb-2">الرابع عشر: النظام الواجب التطبيق</h3>
  <p>تخضع هذه الأحكام والشروط لأنظمة المملكة العربية السعودية، بما في ذلك:</p>
- <ul className="list-disc list-inside space-y-1 mt-2">
+ <ul className="list-disc list-inside space-y-[var(--spacing-small-gap)] mt-2">
  <li>نظام التعاملات الإلكترونية.</li>
  <li>نظام حماية البيانات الشخصية (PDPL).</li>
  <li>نظام مكافحة الجرائم المعلوماتية.</li>

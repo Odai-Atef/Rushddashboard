@@ -35,7 +35,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
  visibleToasts={5}
  toastOptions={{
  duration: 4000,
- className: "group pointer-events-auto relative flex w-full max-w-sm items-center gap-3 overflow-hidden rounded-lg border p-4 shadow-lg transition-all",
+ className: "group pointer-events-auto relative flex w-full max-w-sm items-center gap-[var(--spacing-small-gap)] overflow-hidden rounded-lg border p-[var(--spacing-card-padding)] shadow-[var(--shadow-lg)] transition-all",
  }}
  className="toaster group"
  style={

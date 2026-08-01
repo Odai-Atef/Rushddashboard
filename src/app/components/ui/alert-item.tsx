@@ -62,7 +62,7 @@ export function AlertItem({
  return (
  <div
  className={cn(
- 'p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] cursor-pointer transition-all duration-[var(--transition-duration)] hover:translate-y-[-1px] hover:shadow-[var(--shadow-sm)]',
+ 'p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] cursor-pointer transition-all duration-[var(--transition-duration)] hover:translate-y-[-1px] hover:shadow-[var(--shadow-[var(--shadow-sm)])]',
  alertStyles[type],
  className
  )}
@@ -75,7 +75,7 @@ export function AlertItem({
  }
  }}
  >
- <div className="flex items-start justify-between gap-2 mb-2">
+ <div className="flex items-start justify-between gap-[var(--spacing-small-gap)] mb-2">
  <h4 className="font-bold text-[var(--text-primary)] text-base">{title}</h4>
  <span
  className={cn(

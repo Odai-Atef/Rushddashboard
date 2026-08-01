@@ -294,7 +294,7 @@ export function ProjectEditPage() {
 
  if (!isProjectManager) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
@@ -302,7 +302,7 @@ export function ProjectEditPage() {
 
  if (isLoadingProject) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
@@ -310,11 +310,11 @@ export function ProjectEditPage() {
 
  if (error) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex flex-col items-center justify-center gap-[var(--spacing-grid-gap)]">
  <div className="text-[var(--destructive)] text-center">{error}</div>
  <button
  onClick={() => refetch()}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <RotateCcw className="w-4 h-4" />
  إعادة المحاولة
@@ -328,12 +328,12 @@ export function ProjectEditPage() {
  }
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
- <div className="space-y-6 max-w-4xl mx-auto">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
+ <div className="space-y-[var(--spacing-section-gap)] max-w-4xl mx-auto">
  <div className="mb-6">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${projectId}`)}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى تفاصيل المشروع
@@ -343,7 +343,7 @@ export function ProjectEditPage() {
  </div>
 
  <div className="bg-[var(--card)] rounded-xl border border-border shadow-sm p-8">
- <form className="space-y-6" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
+ <form className="space-y-[var(--spacing-section-gap)]" onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}>
  {saveError && (
  <div className="bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] text-[var(--destructive)] px-4 py-3 rounded-lg">
  {saveError}
@@ -405,7 +405,7 @@ export function ProjectEditPage() {
  />
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium mb-2">الميزانية التقديرية (ر.س) *</label>
  {getFieldError('budget') && <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('budget')}</p>}
@@ -430,7 +430,7 @@ export function ProjectEditPage() {
  </div>
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium mb-2">عدد المستفيدين *</label>
  {getFieldError('beneficiariesCount') && <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('beneficiariesCount')}</p>}
@@ -459,7 +459,7 @@ export function ProjectEditPage() {
 
  <input type="hidden" value={formData.organizationId} readOnly />
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-sm font-medium mb-2">حالة المشروع *</label>
  {getFieldError('status') && <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('status')}</p>}
@@ -517,7 +517,7 @@ export function ProjectEditPage() {
  )}
  </div>
 
- <div className="space-y-4 pt-4 border-t">
+ <div className="space-y-[var(--spacing-section-gap)] pt-4 border-t">
  <h3 className="text-lg font-semibold">بيانات إضافية للمدير</h3>
  <div>
  <label className="block text-sm font-medium mb-2">نص الدراسة (Markdown)</label>
@@ -552,7 +552,7 @@ export function ProjectEditPage() {
  <button
  type="submit"
  disabled={isSaving}
- className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 disabled:bg-[var(--primary)]/[0.6] disabled:cursor-not-allowed transition-colors font-medium flex items-center gap-2"
+ className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 disabled:bg-[var(--primary)]/[0.6] disabled:cursor-not-allowed transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Save className="w-5 h-5" />
  {isSaving ? 'جاري الحفظ...' : 'حفظ التعديلات'}

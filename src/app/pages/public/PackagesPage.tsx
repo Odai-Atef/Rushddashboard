@@ -108,13 +108,13 @@ export function PackagesPage() {
  </div>
 
  {error && (
- <div className="mb-8 p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex items-center gap-3 text-[var(--destructive)]">
+ <div className="mb-8 p-[var(--spacing-card-padding)] bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex items-center gap-[var(--spacing-small-gap)] text-[var(--destructive)]">
  <AlertTriangle className="w-5 h-5" />
  <span>{error}</span>
  </div>
  )}
 
- <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-grid-gap)] items-stretch">
  {packages.map((pkg, idx) => {
  const Icon = accentIcons[idx % accentIcons.length];
  const accent = accentColors[idx % accentColors.length];
@@ -164,7 +164,7 @@ export function PackagesPage() {
 
  {/* SLA Badge */}
  <div
- className="flex items-center gap-2 mb-4 p-3 rounded-xl cursor-pointer hover:bg-opacity-100 transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] mb-4 p-[var(--spacing-card-padding)] rounded-xl cursor-pointer hover:bg-opacity-100 transition-colors"
  style={{ background: `${accent}08` }}
  >
  <Shield size={16} color={accent} />
@@ -186,9 +186,9 @@ export function PackagesPage() {
  عرض تفاصيل الباقة والـ SLA
  </Link>
 
- <div className="space-y-3 pr-1 flex-1 overflow-y-auto min-h-[200px]">
+ <div className="space-y-[var(--spacing-small-gap)] pr-1 flex-1 overflow-y-auto min-h-[200px]">
  {featuresList.map((feature, i) => (
- <div key={i} className="flex items-center gap-2.5">
+ <div key={i} className="flex items-center gap-[var(--spacing-small-gap)].5">
  <div
  className="w-5 h-5 rounded-full flex items-center justify-center"
  style={{ background: `${accent}15` }}

@@ -14,7 +14,7 @@ function Checkbox({
  <CheckboxPrimitive.Root
  data-slot="checkbox"
  className={cn(
- "peer size-5 shrink-0 rounded-[5px] border shadow-sm",
+ "peer size-5 shrink-0 rounded-[5px] border shadow-[var(--shadow-sm)]",
  "bg-[var(--card)]",
  "border-[var(--border)]",
  "text-[var(--primary-foreground)]",

@@ -110,9 +110,9 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
  return (
  <div
  key={slot.id}
- className="p-3 flex items-center justify-between hover:bg-secondary transition-colors"
+ className="p-[var(--spacing-card-padding)] flex items-center justify-between hover:bg-secondary transition-colors"
  >
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <FileText className={`w-5 h-5 ${isPresent ? 'text-[var(--secondary)]' : 'text-muted-foreground'}`} />
  <div>
  <div className="font-medium text-base">{slot.label}</div>
@@ -128,10 +128,10 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
  )}
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {isPresent ? (
  <>
- <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[var(--primary)]">
+ <span className="inline-flex items-center gap-[var(--spacing-small-gap)].5 text-sm font-medium text-[var(--primary)]">
  <CheckCircle2 className="w-4 h-4" />
  مُرفق
  </span>
@@ -141,7 +141,7 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
  </>
  ) : (
  <span
- className={`inline-flex items-center gap-1.5 text-sm font-medium ${
+ className={`inline-flex items-center gap-[var(--spacing-small-gap)].5 text-sm font-medium ${
  slot.required ? 'text-[var(--destructive)]' : 'text-muted-foreground'
  }`}
  >
@@ -155,10 +155,10 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
  };
 
  return (
- <div className="space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {/* Required documents */}
  <div>
- <h4 className="text-sm font-semibold text-[var(--destructive)] mb-2 flex items-center gap-2">
+ <h4 className="text-sm font-semibold text-[var(--destructive)] mb-2 flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-4 h-4" />
  المستندات الإلزامية
  </h4>
@@ -263,7 +263,7 @@ function SortableHeader({
  className="text-right cursor-pointer select-none hover:bg-muted transition-colors"
  onClick={() => onSort(column)}
  >
- <div className="flex items-center justify-start gap-1 w-full">
+ <div className="flex items-center justify-start gap-[var(--spacing-small-gap)] w-full">
  <span>{label}</span>
  {isActive ? (
  sortOrder === 'asc' ? (
@@ -511,7 +511,7 @@ export function UserActivationPage() {
  const renderError = () => (
  <div className="bg-[var(--card)] rounded-xl border border-border shadow-sm p-8 text-center">
  <div className="text-[var(--destructive)] mb-4">{error}</div>
- <Button onClick={() => refetch()} className="flex items-center gap-2 mx-auto">
+ <Button onClick={() => refetch()} className="flex items-center gap-[var(--spacing-small-gap)] mx-auto">
  <RotateCcw className="w-4 h-4" />
  إعادة المحاولة
  </Button>
@@ -521,7 +521,7 @@ export function UserActivationPage() {
  const renderEmpty = () => (
  <div className="bg-[var(--card)] rounded-xl border border-border shadow-sm p-12 text-center">
  <p className="text-muted-foreground mb-4">لا يوجد جهات مطابقة للمعايير المحددة.</p>
- <div className="flex items-center justify-center gap-2">
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
  <Button variant="outline" onClick={() => clearSearch()}>
  مسح البحث
  </Button>
@@ -549,12 +549,12 @@ export function UserActivationPage() {
  };
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6" dir="rtl">
- <div className="space-y-4 sm:space-y-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]" dir="rtl">
+ <div className="space-y-[var(--spacing-section-gap)] sm:space-y-[var(--spacing-section-gap)]">
  {/* Header */}
- <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-[var(--spacing-small-gap)]">
  <div>
- <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2 flex items-center gap-3">
+ <h1 className="text-xl sm:text-3xl font-bold mb-1 sm:mb-2 flex items-center gap-[var(--spacing-small-gap)]">
  <Users className="w-6 sm:w-8 h-6 sm:h-8 text-[var(--secondary)]" />
  إدارة تفعيل الجهات
  </h1>
@@ -563,8 +563,8 @@ export function UserActivationPage() {
  </div>
 
  {/* Filters */}
- <div className="bg-[var(--card)] rounded-xl p-3 sm:p-4 border border-border shadow-sm">
- <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+ <div className="bg-[var(--card)] rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
+ <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)]">
  <div className="flex-1 relative">
  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
  <input
@@ -590,7 +590,7 @@ export function UserActivationPage() {
  ))}
  </select>
  </div>
- <div className="flex flex-col sm:flex-row gap-2">
+ <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)]">
  <Button onClick={() => applySearch()} className="w-full sm:w-auto py-3 min-h-[44px]">بحث</Button>
  {(pendingSearch || pendingStatus) && (
  <Button variant="outline" onClick={() => { clearSearch(); clearStatus(); }} className="w-full sm:w-auto py-3 min-h-[44px]">
@@ -673,12 +673,12 @@ export function UserActivationPage() {
  <div className="text-xs text-muted-foreground">{formatRelativeTime(user.organization?.updatedAt)}</div>
  </TableCell>
  <TableCell>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Button
  variant="outline"
  size="sm"
  onClick={() => handleOpenModal(user)}
- className="flex items-center gap-1.5"
+ className="flex items-center gap-[var(--spacing-small-gap)].5"
  >
  <Eye className="w-4 h-4" />
  عرض
@@ -689,7 +689,7 @@ export function UserActivationPage() {
  variant="outline"
  size="sm"
  onClick={() => handleOpenOrgModal(user)}
- className="flex items-center gap-1.5"
+ className="flex items-center gap-[var(--spacing-small-gap)].5"
  >
  <Building2 className="w-4 h-4" />
  عرض الجهة
@@ -702,7 +702,7 @@ export function UserActivationPage() {
  processingOrgIds.has(user.organization.id)
  }
  onClick={() => handleSyncOrg(user.organization.id)}
- className="flex items-center gap-1.5"
+ className="flex items-center gap-[var(--spacing-small-gap)].5"
  >
  {syncingOrgId === user.organization.id ||
  processingOrgIds.has(user.organization.id) ? (
@@ -740,7 +740,7 @@ export function UserActivationPage() {
  <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
  <DialogContent className="max-h-[90vh] overflow-y-auto" style={{ maxWidth: '72rem', width: 'calc(100% - 2rem)' }} dir="rtl">
  <DialogHeader>
- <DialogTitle className="text-xl flex items-center gap-2">
+ <DialogTitle className="text-xl flex items-center gap-[var(--spacing-small-gap)]">
  <Building2 className="w-5 h-5" />
  بيانات الجهة والمستخدم
  </DialogTitle>
@@ -750,33 +750,33 @@ export function UserActivationPage() {
  </DialogHeader>
 
  {selectedUser && (
- <div className="space-y-6 py-4">
+ <div className="space-y-[var(--spacing-section-gap)] py-4">
  {/* User Info */}
- <div className="bg-secondary rounded-lg p-4 space-y-3">
+ <div className="bg-secondary rounded-lg p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)]">
  <h3 className="font-semibold text-foreground">معلومات المستخدم</h3>
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
- <div className="flex items-center gap-2">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-grid-gap)] text-sm">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Users className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">الاسم:</span>
  <span className="font-medium">{selectedUser.fullName}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Mail className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">البريد:</span>
  <span className="font-medium">{selectedUser.email}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Phone className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">الهاتف:</span>
  <span className="font-medium">{selectedUser.phone || '-'}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">تاريخ التسجيل:</span>
  <span className="font-medium">{formatDate(selectedUser.createdAt)}</span>
  </div>
  {selectedUser.actionRequired && (
- <div className="sm:col-span-2 flex items-start gap-2 p-3 bg-[var(--warning)]/[0.08] border border-[var(--warning)]/[0.3] rounded-lg">
+ <div className="sm:col-span-2 flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-[var(--warning)]/[0.08] border border-[var(--warning)]/[0.3] rounded-lg">
  <AlertTriangle className="w-4 h-4 text-[var(--warning)] shrink-0 mt-0.5" />
  <div>
  <span className="text-amber-800 font-medium">الإجراء المطلوب:</span>
@@ -788,31 +788,31 @@ export function UserActivationPage() {
  </div>
 
  {/* Organization Info */}
- <div className="bg-secondary rounded-lg p-4 space-y-3">
+ <div className="bg-secondary rounded-lg p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)]">
  <h3 className="font-semibold text-foreground">معلومات الجهة</h3>
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
- <div className="flex items-center gap-2">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-grid-gap)] text-sm">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Building2 className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">الاسم:</span>
  <span className="font-medium">{selectedUser.organization?.name || '-'}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <FileText className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">رقم الترخيص:</span>
  <span className="font-medium">{selectedUser.organization?.licenseNumber || '-'}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <MapPin className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">المدينة:</span>
  <span className="font-medium">{selectedUser.organization?.city || '-'}</span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4 text-muted-foreground" />
  <span className="text-muted-foreground">تاريخ التسجيل:</span>
  <span className="font-medium">{formatDate(selectedUser.organization?.registrationDate)}</span>
  </div>
  {selectedUser.organization?.website && (
- <div className="sm:col-span-2 flex items-center gap-2">
+ <div className="sm:col-span-2 flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-muted-foreground">الموقع الإلكتروني:</span>
  <a
  href={selectedUser.organization.website}
@@ -828,15 +828,15 @@ export function UserActivationPage() {
  </div>
 
  {/* Document Checklist */}
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <h3 className="font-semibold text-foreground">قائمة المستندات</h3>
  <DocumentChecklist documents={selectedUser.documents || []} />
  </div>
 
  {/* Reject Comment */}
  {actionMode === 'reject' && (
- <div className="space-y-2">
- <label className="text-sm font-medium text-foreground flex items-center gap-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <label className="text-sm font-medium text-foreground flex items-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-4 h-4 text-red-500" />
  سبب الرفض / التعليق المطلوب من الجهة
  </label>
@@ -852,8 +852,8 @@ export function UserActivationPage() {
 
  {/* Inline Confirmation Panels */}
  {actionMode === 'confirm-approve' && selectedUser && (
- <div className="p-4 bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg space-y-3">
- <div className="flex items-start gap-3">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <CheckCircle className="w-5 h-5 text-[var(--secondary)] shrink-0 mt-0.5" />
  <div>
  <h4 className="font-bold text-foreground">تأكيد تفعيل الجهة</h4>
@@ -862,7 +862,7 @@ export function UserActivationPage() {
  </p>
  </div>
  </div>
- <div className="flex items-center justify-end gap-2">
+ <div className="flex items-center justify-end gap-[var(--spacing-small-gap)]">
  <Button
  variant="outline"
  onClick={() => setActionMode('view')}
@@ -887,8 +887,8 @@ export function UserActivationPage() {
  )}
 
  {actionMode === 'confirm-reject' && selectedUser && (
- <div className="p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-lg space-y-3">
- <div className="flex items-start gap-3">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-lg space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-5 h-5 text-[var(--destructive)] shrink-0 mt-0.5" />
  <div>
  <h4 className="font-bold text-foreground">تأكيد طلب الإجراء</h4>
@@ -897,7 +897,7 @@ export function UserActivationPage() {
  </p>
  </div>
  </div>
- <div className="flex items-center justify-end gap-2">
+ <div className="flex items-center justify-end gap-[var(--spacing-small-gap)]">
  <Button
  variant="outline"
  onClick={() => setActionMode('view')}
@@ -918,7 +918,7 @@ export function UserActivationPage() {
  </div>
  )}
 
- <DialogFooter className="gap-2">
+ <DialogFooter className="gap-[var(--spacing-small-gap)]">
  <Button variant="outline" onClick={handleCloseModal} disabled={isSubmitting}>
  إغلاق
  </Button>
@@ -984,8 +984,8 @@ export function UserActivationPage() {
  <Dialog open={isOrgModalOpen} onOpenChange={setIsOrgModalOpen}>
  <DialogContent className="max-h-[90vh] overflow-y-auto" style={{ maxWidth: '72rem', width: 'calc(100% - 2rem)' }} dir="rtl">
  <DialogHeader>
- <DialogTitle className="text-xl flex items-center gap-2 justify-between">
- <div className="flex items-center gap-2">
+ <DialogTitle className="text-xl flex items-center gap-[var(--spacing-small-gap)] justify-between">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Building2 className="w-5 h-5" />
  بيانات الجهة المستخرجة بالذكاء الاصطناعي
  </div>
@@ -1005,7 +1005,7 @@ export function UserActivationPage() {
  </DialogHeader>
 
  {orgInfoLoading ? (
- <div className="py-12 flex items-center justify-center gap-2" dir="rtl">
+ <div className="py-12 flex items-center justify-center gap-[var(--spacing-small-gap)]" dir="rtl">
  <Loader2 className="w-6 h-6 animate-spin text-[var(--secondary)]" />
  <span className="text-muted-foreground">جاري تحميل بيانات الجهة...</span>
  </div>
@@ -1021,7 +1021,7 @@ export function UserActivationPage() {
  </div>
  )}
 
- <DialogFooter className="gap-2">
+ <DialogFooter className="gap-[var(--spacing-small-gap)]">
  <Button variant="outline" onClick={handleCloseOrgModal}>
  إغلاق
  </Button>

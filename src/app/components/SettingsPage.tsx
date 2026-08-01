@@ -73,14 +73,14 @@ export function SettingsPage() {
  <div className="h-full flex gap-6 p-6">
  {/* Sidebar Navigation */}
  <aside className="w-64 bg-card border border-border rounded-lg p-4 flex-shrink-0 h-fit sticky top-6">
- <div className="flex items-center gap-3 mb-6 pb-4 border-b border-border">
- <div className="p-2 bg-primary/10 rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6 pb-4 border-b border-border">
+ <div className="p-[var(--spacing-small-gap)] bg-primary/10 rounded-lg">
  <SettingsIcon className="w-5 h-5 text-primary" />
  </div>
  <h2 className="text-lg font-semibold">الإعدادات</h2>
  </div>
 
- <nav className="space-y-1">
+ <nav className="space-y-[var(--spacing-small-gap)]">
  {sections.map((section) => {
  const Icon = section.icon;
  const isActive = activeSection === section.id;
@@ -90,7 +90,7 @@ export function SettingsPage() {
  key={section.id}
  onClick={() => setActiveSection(section.id)}
  className={cn(
- 'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors text-right text-sm',
+ 'w-full flex items-center gap-[var(--spacing-small-gap)] px-3 py-2.5 rounded-lg transition-colors text-right text-sm',
  isActive
  ? 'bg-primary/10 text-primary font-medium'
  : 'text-foreground hover:bg-accent'
@@ -116,7 +116,7 @@ export function SettingsPage() {
 
  <div className="bg-card border border-border rounded-lg p-6">
  <div className="flex items-center gap-6 mb-6">
- <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-[var(--primary-foreground)] text-2xl font-bold">
+ <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-[var(--secondary)] flex items-center justify-center text-[var(--primary-foreground)] text-2xl font-bold">
  {getInitials(user?.fullName ?? '')}
  </div>
  <div>
@@ -167,7 +167,7 @@ export function SettingsPage() {
  </div>
 
  <div className="flex justify-end mt-6 pt-4 border-t border-border">
- <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+ <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-4 h-4" />
  <span>حفظ التغييرات</span>
  </button>
@@ -237,7 +237,7 @@ export function SettingsPage() {
  </div>
 
  <div className="flex justify-end pt-4 border-t border-border">
- <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+ <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-4 h-4" />
  <span>حفظ التغييرات</span>
  </button>
@@ -258,7 +258,7 @@ export function SettingsPage() {
  <div className="space-y-4">
  <div>
  <label className="block text-sm font-medium mb-3">لغة الواجهة</label>
- <div className="grid grid-cols-2 gap-3">
+ <div className="grid grid-cols-2 gap-[var(--spacing-small-gap)]">
  <button className="p-4 border-2 border-primary bg-primary/5 rounded-lg text-right">
  <div className="flex items-center justify-between">
  <div>
@@ -311,7 +311,7 @@ export function SettingsPage() {
  </div>
 
  <div className="flex justify-end mt-6 pt-4 border-t border-border">
- <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+ <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-4 h-4" />
  <span>حفظ التغييرات</span>
  </button>
@@ -331,7 +331,7 @@ export function SettingsPage() {
  <div className="bg-card border border-border rounded-lg p-6 space-y-6">
  <div>
  <label className="block text-sm font-medium mb-3">وضع العرض</label>
- <div className="grid grid-cols-3 gap-3">
+ <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)]">
  <button className="p-4 border-2 border-primary bg-primary/5 rounded-lg">
  <div className="w-full h-20 bg-gradient-to-br from-background to-muted dark:from-gray-800 dark:to-gray-900 rounded-lg mb-3 border border-border"></div>
  <p className="font-medium text-sm">فاتح</p>
@@ -352,7 +352,7 @@ export function SettingsPage() {
 
  <div>
  <label className="block text-sm font-medium mb-3">اللون الرئيسي</label>
- <div className="grid grid-cols-8 gap-2">
+ <div className="grid grid-cols-8 gap-[var(--spacing-small-gap)]">
  {[
  'bg-[var(--primary)]',
  'bg-purple-600',
@@ -390,7 +390,7 @@ export function SettingsPage() {
  </div>
 
  <div className="flex justify-end pt-4 border-t border-border">
- <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+ <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-4 h-4" />
  <span>حفظ التغييرات</span>
  </button>
@@ -468,7 +468,7 @@ export function SettingsPage() {
  </div>
 
  <div className="flex justify-end pt-4 border-t border-border">
- <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+ <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-4 h-4" />
  <span>حفظ التغييرات</span>
  </button>
@@ -541,7 +541,7 @@ export function SettingsPage() {
  </div>
 
  <div className="bg-[var(--primary)]/10 border border-[var(--secondary)]/[0.2] rounded-lg p-4">
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--secondary)] flex-shrink-0 mt-0.5" />
  <div>
  <p className="text-sm font-medium text-[var(--secondary)]">
@@ -555,7 +555,7 @@ export function SettingsPage() {
  </div>
 
  <div className="flex justify-end pt-4 border-t border-border">
- <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+ <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-4 h-4" />
  <span>حفظ التغييرات</span>
  </button>
@@ -653,7 +653,7 @@ export function SettingsPage() {
  </div>
 
  <div className="flex justify-end pt-4 border-t border-border">
- <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2">
+ <button className="px-6 py-2.5 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-4 h-4" />
  <span>حفظ التغييرات</span>
  </button>
@@ -704,7 +704,7 @@ export function SettingsPage() {
  <div className="pt-4 border-t border-border">
  <h3 className="font-medium mb-4">المصادقة الثنائية</h3>
  <div className="flex items-center justify-between p-4 bg-[var(--primary)]/[0.1] border border-[var(--primary)]/[0.2] rounded-lg">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-10 h-10 rounded-full bg-[var(--primary)]/[0.2] flex items-center justify-center">
  <Check className="w-5 h-5 text-[var(--primary)]" />
  </div>
@@ -721,7 +721,7 @@ export function SettingsPage() {
 
  <div className="pt-4 border-t border-border">
  <h3 className="font-medium mb-4">الجلسات النشطة</h3>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
  <div>
  <p className="font-medium text-sm">Chrome على Windows</p>
@@ -764,7 +764,7 @@ export function SettingsPage() {
  </button>
  </div>
 
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <div className="border border-border rounded-lg p-4">
  <div className="flex items-center justify-between mb-3">
  <div>
@@ -775,16 +775,16 @@ export function SettingsPage() {
  5 مستخدمين
  </span>
  </div>
- <div className="grid grid-cols-3 gap-2 text-xs">
- <span className="flex items-center gap-1">
+ <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  عرض جميع التقارير
  </span>
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  تعديل الإعدادات
  </span>
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  إدارة المستخدمين
  </span>
@@ -801,16 +801,16 @@ export function SettingsPage() {
  12 مستخدم
  </span>
  </div>
- <div className="grid grid-cols-3 gap-2 text-xs">
- <span className="flex items-center gap-1">
+ <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  عرض التقارير
  </span>
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  إنشاء تحليلات
  </span>
- <span className="flex items-center gap-1 text-muted-foreground">
+ <span className="flex items-center gap-[var(--spacing-small-gap)] text-muted-foreground">
  <AlertCircle className="w-3 h-3" />
  تعديل محدود
  </span>
@@ -827,16 +827,16 @@ export function SettingsPage() {
  8 مستخدمين
  </span>
  </div>
- <div className="grid grid-cols-3 gap-2 text-xs">
- <span className="flex items-center gap-1">
+ <div className="grid grid-cols-3 gap-[var(--spacing-small-gap)] text-xs">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Check className="w-3 h-3 text-[var(--primary)]" />
  عرض اللوحات
  </span>
- <span className="flex items-center gap-1 text-muted-foreground">
+ <span className="flex items-center gap-[var(--spacing-small-gap)] text-muted-foreground">
  <AlertCircle className="w-3 h-3" />
  بدون تعديل
  </span>
- <span className="flex items-center gap-1 text-muted-foreground">
+ <span className="flex items-center gap-[var(--spacing-small-gap)] text-muted-foreground">
  <AlertCircle className="w-3 h-3" />
  بدون تصدير
  </span>
@@ -863,7 +863,7 @@ export function SettingsPage() {
  </button>
  </div>
 
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <div className="border border-border rounded-lg p-4">
  <div className="flex items-center justify-between mb-3">
  <div>
@@ -872,19 +872,19 @@ export function SettingsPage() {
  </div>
  <button className="text-xs text-destructive hover:underline">حذف</button>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="flex-1 px-3 py-2 bg-muted rounded-lg font-mono text-sm">
  {showApiKey ? 'rushd_sk_live_1a2b3c4d5e6f7g8h9i0j' : '••••••••••••••••••••••••'}
  </div>
  <button
  onClick={() => setShowApiKey(!showApiKey)}
- className="p-2 hover:bg-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
  >
  {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
  </button>
  <button
  onClick={handleCopyApiKey}
- className="p-2 hover:bg-accent rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
  >
  {copiedKey ? <Check className="w-4 h-4 text-[var(--primary)]" /> : <Copy className="w-4 h-4" />}
  </button>
@@ -904,14 +904,14 @@ export function SettingsPage() {
  </div>
  <button className="text-xs text-destructive hover:underline">حذف</button>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="flex-1 px-3 py-2 bg-muted rounded-lg font-mono text-sm">
  ••••••••••••••••••••••••
  </div>
- <button className="p-2 hover:bg-accent rounded-lg transition-colors">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors">
  <Eye className="w-4 h-4" />
  </button>
- <button className="p-2 hover:bg-accent rounded-lg transition-colors">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors">
  <Copy className="w-4 h-4" />
  </button>
  </div>
@@ -924,7 +924,7 @@ export function SettingsPage() {
  </div>
 
  <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--warning)] flex-shrink-0 mt-0.5" />
  <div>
  <p className="text-sm font-medium text-[var(--warning)]">
@@ -960,7 +960,7 @@ export function SettingsPage() {
  <p className="text-sm text-muted-foreground">قاعدة البيانات والمصادقة</p>
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-xs bg-[var(--primary)]/[0.1] text-[var(--primary)] px-3 py-1 rounded-full">
  متصل
  </span>
@@ -980,7 +980,7 @@ export function SettingsPage() {
  <p className="text-sm text-muted-foreground">معالجة المدفوعات</p>
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-xs bg-[var(--primary)]/[0.1] text-[var(--primary)] px-3 py-1 rounded-full">
  متصل
  </span>
@@ -1000,7 +1000,7 @@ export function SettingsPage() {
  <p className="text-sm text-muted-foreground">إشعارات الفريق</p>
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-xs bg-secondary0/10 text-muted-foreground px-3 py-1 rounded-full">
  غير متصل
  </span>
@@ -1020,7 +1020,7 @@ export function SettingsPage() {
  <p className="text-sm text-muted-foreground">تصدير البيانات</p>
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-xs bg-secondary0/10 text-muted-foreground px-3 py-1 rounded-full">
  غير متصل
  </span>
@@ -1040,7 +1040,7 @@ export function SettingsPage() {
  <p className="text-sm text-muted-foreground">أتمتة سير العمل</p>
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-xs bg-secondary0/10 text-muted-foreground px-3 py-1 rounded-full">
  غير متصل
  </span>

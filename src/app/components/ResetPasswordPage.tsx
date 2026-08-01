@@ -119,8 +119,8 @@ export function ResetPasswordPage() {
  <div className="w-full max-w-md">
  {/* Logo */}
  <div className="mb-8">
- <div className="flex items-center gap-3 mb-2">
- <div className="p-2 bg-gradient-to-br from-purple-500 to-blue-600 rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
+ <div className="p-[var(--spacing-small-gap)] bg-gradient-to-br from-purple-500 to-[var(--secondary)] rounded-lg">
  <Sparkles className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
  <h1 className="text-2xl font-bold">منصة رشد</h1>
@@ -130,7 +130,7 @@ export function ResetPasswordPage() {
 
  {/* Missing/Invalid Token Error State */}
  {status === 'error' && !isLoading && (
- <div className="mb-6 p-4 bg-[var(--destructive)]/10 border border-red-500/20 rounded-lg flex items-start gap-3">
+ <div className="mb-6 p-4 bg-[var(--destructive)]/10 border border-red-500/20 rounded-lg flex items-start gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--destructive)] flex-shrink-0 mt-0.5" />
  <div className="flex-1">
  <p className="text-sm text-[var(--destructive)] mb-3">
@@ -209,11 +209,11 @@ export function ResetPasswordPage() {
  </div>
 
  {/* Password Strength Rules */}
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {ruleChecks.map((check, index) => (
  <div
  key={index}
- className={`flex items-center gap-2 text-sm transition-colors ${
+ className={`flex items-center gap-[var(--spacing-small-gap)] text-sm transition-colors ${
  check.satisfied
  ? 'text-[var(--primary)]'
  : 'text-muted-foreground'
@@ -287,7 +287,7 @@ export function ResetPasswordPage() {
  <button
  type="submit"
  disabled={!canSubmit}
- className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isLoading ? (
  <>
@@ -316,7 +316,7 @@ export function ResetPasswordPage() {
  </div>
 
  {/* Right Side - Security Info */}
- <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
+ <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-[var(--secondary)] to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
  {/* Decorative circles */}
  <div className="absolute top-20 right-20 w-64 h-64 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
  <div className="absolute bottom-20 left-20 w-96 h-96 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
@@ -333,8 +333,8 @@ export function ResetPasswordPage() {
 
  {/* Security Features */}
  <div className="space-y-4">
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <Shield className="w-5 h-5" />
  </div>
  <div>
@@ -343,8 +343,8 @@ export function ResetPasswordPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <CheckCircle className="w-5 h-5" />
  </div>
  <div>
@@ -353,8 +353,8 @@ export function ResetPasswordPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <CheckCircle className="w-5 h-5" />
  </div>
  <div>
@@ -363,8 +363,8 @@ export function ResetPasswordPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <CheckCircle className="w-5 h-5" />
  </div>
  <div>

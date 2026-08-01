@@ -688,7 +688,7 @@ export function ProjectDetailsPage() {
 
  if (isLoading) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
@@ -696,11 +696,11 @@ export function ProjectDetailsPage() {
 
  if (error) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex flex-col items-center justify-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex flex-col items-center justify-center gap-[var(--spacing-grid-gap)]">
  <div className="text-[var(--destructive)] text-center">{error}</div>
  <button
  onClick={() => refetch()}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <RotateCcw className="w-4 h-4" />
  إعادة المحاولة
@@ -740,12 +740,12 @@ export function ProjectDetailsPage() {
  packageStatusMap[project.packageId] === rawStatus;
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
- <div className="space-y-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
+ <div className="space-y-[var(--spacing-section-gap)]">
  <div className="mb-6">
  <button
  onClick={() => navigate('/dashboard/project-management/list')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى قائمة المشاريع
@@ -753,28 +753,28 @@ export function ProjectDetailsPage() {
  <div className="flex items-start justify-between">
  <div className="flex-1">
  <h1 className="text-3xl font-bold mb-2">{project.name}</h1>
- <div className="flex items-center gap-4 text-sm text-muted-foreground flex-wrap">
- <span className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)] text-sm text-muted-foreground flex-wrap">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Building2 className="w-4 h-4" />
  {getOrganizationName(project)}
  </span>
  {project.packageName ? (
- <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--secondary)]/[0.08] text-[var(--secondary)] rounded-full text-xs font-medium">
+ <span className="inline-flex items-center gap-[var(--spacing-small-gap)] px-2 py-0.5 bg-[var(--secondary)]/[0.08] text-[var(--secondary)] rounded-full text-xs font-medium">
  {project.packageName}
  </span>
  ) : (
- <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium">
+ <span className="inline-flex items-center gap-[var(--spacing-small-gap)] px-2 py-0.5 bg-muted text-muted-foreground rounded-full text-xs font-medium">
  غير محددة
  </span>
  )}
  </div>
  </div>
- <div className="flex gap-3 flex-wrap">
+ <div className="flex gap-[var(--spacing-small-gap)] flex-wrap">
  {isProjectManager && (
  <>
  <button
  onClick={() => navigate(`/dashboard/project-management/edit/${projectId}`)}
- className="px-4 py-2 bg-[var(--text-primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--card)] transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--text-primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--card)] transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Edit className="w-5 h-5" />
  تعديل
@@ -782,7 +782,7 @@ export function ProjectDetailsPage() {
  {(isDraftProject || displayStatus === 'incubator-modifications' || displayStatus === 'offer-approved') && (
  <button
  onClick={handleOpenPlan}
- className="px-4 py-2 bg-purple-600 text-[var(--primary-foreground)] rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-purple-600 text-[var(--primary-foreground)] rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Sparkles className="w-5 h-5" />
  إنشاء دراسة باستخدام الذكاء الاصطناعي
@@ -792,7 +792,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleApproveDraftClick}
  disabled={submitLoading}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {submitLoading ? (
  <Loader2 className="w-5 h-5 animate-spin" />
@@ -806,7 +806,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleOpenSendDesign}
  disabled={sendDesignLoading}
- className="px-4 py-2 bg-teal-600 text-[var(--primary-foreground)] rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-teal-600 text-[var(--primary-foreground)] rounded-lg hover:bg-teal-700 transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <Send className="w-5 h-5" />
  إرسال التصميم إلى الجهة الخيرية
@@ -815,7 +815,7 @@ export function ProjectDetailsPage() {
  {(rawStatus === 'DESIGN_APPROVED' || rawStatus === 'READY_DONOR') && (
  <button
  onClick={handleSearchDonorsClick}
- className="px-4 py-2 bg-violet-600 text-[var(--primary-foreground)] rounded-lg hover:bg-violet-700 transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-violet-600 text-[var(--primary-foreground)] rounded-lg hover:bg-violet-700 transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Sparkles className="w-5 h-5" />
  بحث عن المانحين
@@ -826,7 +826,7 @@ export function ProjectDetailsPage() {
  {showReviewButton && (
  <button
  onClick={handleOpenReview}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Eye className="w-5 h-5" />
  مراجعة مسودة المشروع
@@ -836,7 +836,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleGeneratePresentation}
  disabled={presentationLoading}
- className="px-4 py-2 bg-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {presentationLoading ? (
  <Loader2 className="w-5 h-5 animate-spin" />
@@ -849,7 +849,7 @@ export function ProjectDetailsPage() {
  {showDesignReviewButton && (
  <button
  onClick={handleOpenDesignReview}
- className="px-4 py-2 bg-purple-600 text-[var(--primary-foreground)] rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-purple-600 text-[var(--primary-foreground)] rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Eye className="w-5 h-5" />
  اعتماد تصميم المشروع
@@ -859,7 +859,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleRequestRedesign}
  disabled={redesignLoading}
- className="px-4 py-2 bg-orange-600 text-[var(--primary-foreground)] rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-orange-600 text-[var(--primary-foreground)] rounded-lg hover:bg-orange-700 transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {redesignLoading ? (
  <Loader2 className="w-5 h-5 animate-spin" />
@@ -872,7 +872,7 @@ export function ProjectDetailsPage() {
  {showOfferReviewButton && (
  <button
  onClick={handleOpenOfferReview}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <FileText className="w-5 h-5" />
  اعتماد عرض السعر
@@ -881,7 +881,7 @@ export function ProjectDetailsPage() {
  {showCompleteButton && (
  <button
  onClick={handleCompleteProject}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-2"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <CheckCircle className="w-5 h-5" />
  إكمال المشروع
@@ -891,8 +891,8 @@ export function ProjectDetailsPage() {
  </div>
  </div>
 
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-stretch">
- <div className="bg-[var(--card)] rounded-2xl p-6 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)] mb-6 items-stretch">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div className="flex items-start justify-between">
  <div>
  <p className="text-sm text-muted-foreground mb-3">حالة المشروع</p>
@@ -903,19 +903,19 @@ export function ProjectDetailsPage() {
  {status.label}
  </span>
  </div>
- <div className="p-2.5 rounded-xl bg-muted/80">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/80">
  <Activity className="w-6 h-6 text-muted-foreground" />
  </div>
  </div>
  </div>
- <div className="bg-[var(--card)] rounded-2xl p-6 border border-[var(--secondary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-3">
  <p className="text-sm text-muted-foreground">نسبة الإنجاز</p>
- <div className="p-2.5 rounded-xl bg-[var(--secondary)]/[0.08]/10">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08]/10">
  <TrendingUp className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  </div>
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
  <div
  className="h-full bg-[var(--primary)]"
@@ -927,28 +927,28 @@ export function ProjectDetailsPage() {
  </div>
  </div>
 
- <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
- <div className="lg:col-span-2 space-y-6">
- <div className="bg-card rounded-xl p-6 border border-border">
+ <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
+ <div className="lg:col-span-2 space-y-[var(--spacing-section-gap)]">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h2 className="text-xl font-semibold mb-4">نظرة عامة</h2>
  <p className="text-foreground leading-relaxed">{project.description}</p>
  </div>
 
- <div className="bg-card rounded-xl p-6 border border-border">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h2 className="text-xl font-semibold mb-4">معلومات المشروع</h2>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <p className="text-sm text-muted-foreground mb-1">الفئة المستهدفة</p>
  <p className="font-medium">{toDisplayString(project.beneficiaries)}</p>
  </div>
  <div>
  <p className="text-sm text-muted-foreground mb-1">النطاق الجغرافي</p>
- <p className="font-medium flex items-center gap-1">
+ <p className="font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <MapPin className="w-4 h-4 text-muted-foreground" />
  {toDisplayString(project.geographicScope)}
  </p>
  </div>
- <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:col-span-2">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)] md:col-span-2">
  <div>
  <p className="text-sm text-muted-foreground mb-1">عدد المستفيدين</p>
  <p className="font-medium">
@@ -964,7 +964,7 @@ export function ProjectDetailsPage() {
  {(project.fundingAreaIds?.length > 0 || project.fundingAreas?.length > 0) && (
  <div>
  <p className="text-sm text-muted-foreground mb-1">مجالات المشاريع</p>
- <div className="flex flex-wrap gap-2">
+ <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
  {(project.fundingAreas || project.fundingAreaIds?.map((id) => ({ id, name: id })) || []).map((area: FundingAreaInfo | { id: string; name: string }) => (
  <span
  key={area.id}
@@ -980,14 +980,14 @@ export function ProjectDetailsPage() {
  </div>
  </div>
 
- <div className="bg-[var(--card)] rounded-2xl p-6 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md">
  <div className="flex items-center justify-between mb-5">
  <h2 className="text-xl font-semibold text-foreground">ملخص الميزانية</h2>
- <div className="p-2.5 rounded-xl bg-[var(--primary)]/[0.08]/[0.08]0/10">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--primary)]/[0.08]/[0.08]0/10">
  <DollarSign className="w-6 h-6 text-[var(--primary)]" />
  </div>
  </div>
- <div className="flex items-center justify-between p-5 bg-secondary/60 rounded-xl">
+ <div className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-secondary/60 rounded-xl">
  <span className="text-muted-foreground text-sm">إجمالي الميزانية</span>
  <span className="text-3xl font-bold text-foreground tracking-tight">
  {getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س
@@ -996,8 +996,8 @@ export function ProjectDetailsPage() {
  </div>
 
  {(project.llmResponseText || project.presentationResponseText) && (
- <div className="bg-card rounded-xl p-6 border border-border">
- <div className="flex items-center gap-4 border-b border-border mb-4">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)] border-b border-border mb-4">
  {project.llmResponseText && (
  <button
  onClick={() => setActiveDocTab('study')}
@@ -1030,7 +1030,7 @@ export function ProjectDetailsPage() {
  </div>
  )}
  {activeDocTab === 'presentation' && project.presentationResponseText && (
- <div dir="rtl" className="bg-[var(--card)] rounded-xl border border-border p-6 min-h-[300px] text-right">
+ <div dir="rtl" className="bg-[var(--card)] rounded-xl border border-border p-[var(--spacing-card-padding)] min-h-[300px] text-right">
  <div
  className="prose prose-sm max-w-none w-full break-words [&>*]:text-right"
  dangerouslySetInnerHTML={{ __html: project.presentationResponseText }}
@@ -1041,11 +1041,11 @@ export function ProjectDetailsPage() {
  )}
 
  {project.budgets && project.budgets.length > 0 && (
- <div className="bg-card rounded-xl p-6 border border-border">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h2 className="text-xl font-semibold mb-4">تفاصيل الميزانية</h2>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {project.budgets.map((budget) => (
- <div key={budget.id} className="flex items-center justify-between p-3 bg-secondary rounded-lg">
+ <div key={budget.id} className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
  <span className="font-medium">{budget.category}</span>
  <div className="text-sm text-muted-foreground">
  مخصص: {budget.allocated.toLocaleString('ar-SA')} / منفق: {budget.spent.toLocaleString('ar-SA')} {budget.currencyCode}
@@ -1057,17 +1057,17 @@ export function ProjectDetailsPage() {
  )}
 
  {project.milestones && project.milestones.length > 0 && (
- <div className="bg-card rounded-xl p-6 border border-border">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h2 className="text-xl font-semibold mb-4">المعالم الرئيسية</h2>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {project.milestones.map((milestone) => (
- <div key={milestone.id} className="p-3 bg-secondary rounded-lg">
+ <div key={milestone.id} className="p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
  <div className="flex items-center justify-between mb-2">
  <span className="font-medium">{milestone.title}</span>
  <span className="text-xs px-2 py-1 bg-[var(--secondary)]/[0.1] text-[var(--secondary)] rounded-full">{milestone.status}</span>
  </div>
  <p className="text-sm text-muted-foreground mb-2">{milestone.description}</p>
- <div className="flex items-center gap-2 text-xs text-muted-foreground">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-xs text-muted-foreground">
  <span>تاريخ الاستحقاق: {new Date(milestone.dueDate).toLocaleDateString('ar-SA')}</span>
  <span>التقدم: {milestone.progress}%</span>
  </div>
@@ -1078,34 +1078,34 @@ export function ProjectDetailsPage() {
  )}
  </div>
 
- <div className="space-y-6">
- <div className="bg-card rounded-xl p-6 border border-border">
+ <div className="space-y-[var(--spacing-section-gap)]">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h3 className="font-semibold mb-4">إجراءات سريعة</h3>
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <button
  onClick={() => navigate(`/dashboard/project-management/lifecycle/${project.id}`)}
- className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
+ className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <GitBranch className="w-5 h-5 text-muted-foreground" />
  <span>رحلة المشروع</span>
  </button>
  <button
  onClick={() => navigate(`/dashboard/project-management/versions/${project.id}`)}
- className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
+ className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Inbox className="w-5 h-5 text-muted-foreground" />
  <span>البريد الوارد</span>
  </button>
  <button
  onClick={() => navigate(`/dashboard/collaboration/${project.id}/chat`)}
- className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
+ className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <MessageSquare className="w-5 h-5 text-muted-foreground" />
  <span>المحادثة</span>
  </button>
  <button
  onClick={() => navigate(`/dashboard/project-management/activity/${project.id}`)}
- className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-3"
+ className="w-full px-4 py-3 text-right border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Activity className="w-5 h-5 text-muted-foreground" />
  <span>النشاط</span>
@@ -1113,11 +1113,11 @@ export function ProjectDetailsPage() {
  </div>
  </div>
 
- <div className="bg-card rounded-xl p-6 border border-border">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h3 className="font-semibold mb-4">الفريق المسؤول</h3>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {['مدير المشروع', 'مسؤول مالي', 'ممثل الجمعية'].map((role) => (
- <div className="flex items-center gap-3 p-3 bg-secondary rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
  <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center">
  <User className="w-5 h-5 text-[var(--secondary)]" />
  </div>
@@ -1130,9 +1130,9 @@ export function ProjectDetailsPage() {
  </div>
 
  {project.activities && project.activities.length > 0 && (
- <div className="bg-card rounded-xl p-6 border border-border">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h3 className="font-semibold mb-4">آخر الأنشطة</h3>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {project.activities.slice(0, 5).map((activity) => (
  <div key={activity.id} className="text-sm">
  <p className="font-medium">{activity.action}</p>
@@ -1150,22 +1150,22 @@ export function ProjectDetailsPage() {
  </div>
 
  {planOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div
  className="absolute inset-0 bg-[var(--text-primary)]/[0.6]"
  onClick={() => setPlanOpen(false)}
  />
  <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] max-w-[90vw] bg-[var(--card)] rounded-xl shadow-2xl overflow-hidden text-right">
- <div className="flex items-center justify-between p-6 border-b border-border bg-[var(--card)]">
+ <div className="flex items-center justify-between p-[var(--spacing-card-padding)] border-b border-border bg-[var(--card)]">
  <div>
  <h2 className="text-xl font-semibold">خطة المشروع</h2>
  <p className="text-sm text-muted-foreground mt-1">تحرير ومعاينة خطة المشروع</p>
  </div>
- <div className="flex items-center gap-3">
- <div className="flex items-center bg-muted rounded-lg p-1 ml-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <div className="flex items-center bg-muted rounded-lg p-[var(--spacing-small-gap)] ml-2">
  <button
  onClick={() => setPlanView('preview')}
- className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${
+ className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] transition-colors ${
  planView === 'preview'
  ? 'bg-[var(--card)] text-[var(--secondary)] shadow-sm'
  : 'text-muted-foreground hover:text-foreground'
@@ -1176,7 +1176,7 @@ export function ProjectDetailsPage() {
  </button>
  <button
  onClick={() => setPlanView('edit')}
- className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-2 transition-colors ${
+ className={`px-3 py-1.5 rounded-md text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] transition-colors ${
  planView === 'edit'
  ? 'bg-[var(--card)] text-[var(--secondary)] shadow-sm'
  : 'text-muted-foreground hover:text-foreground'
@@ -1189,7 +1189,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleSavePlan}
  disabled={isSaving || planMarkdown === loadedPlanMarkdown}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isSaving ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1201,7 +1201,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleDownloadWord}
  disabled={wordLoading}
- className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {wordLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1212,20 +1212,20 @@ export function ProjectDetailsPage() {
  </button>
  <button
  onClick={() => setPlanOpen(false)}
- className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+ className="p-[var(--spacing-small-gap)] text-muted-foreground hover:text-foreground transition-colors"
  >
  ✕
  </button>
  </div>
  </div>
 
- <div className="flex-1 overflow-y-auto p-6 bg-secondary">
+ <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-secondary">
  {planLoading ? (
  <div className="flex items-center justify-center h-full">
  <Loader2 className="w-8 h-8 animate-spin text-[var(--secondary)]" />
  </div>
  ) : planView === 'preview' ? (
- <div className="prose prose-sm max-w-none text-right w-full break-words bg-card rounded-xl p-6 border border-border min-h-full [&>*]:text-right">
+ <div className="prose prose-sm max-w-none text-right w-full break-words bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border min-h-full [&>*]:text-right">
  <Markdown remarkPlugins={[remarkGfm]}>{planMarkdown || '\u00A0'}</Markdown>
  </div>
  ) : (
@@ -1246,34 +1246,34 @@ export function ProjectDetailsPage() {
  )}
 
  {reviewOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div
  className="absolute inset-0 bg-[var(--text-primary)]/[0.6]"
  onClick={handleCloseReview}
  />
  <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] max-w-[90vw] bg-[var(--card)] rounded-xl shadow-2xl overflow-hidden text-right">
- <div className="flex items-center justify-between p-6 border-b border-border bg-[var(--card)]">
+ <div className="flex items-center justify-between p-[var(--spacing-card-padding)] border-b border-border bg-[var(--card)]">
  <div>
  <h2 className="text-xl font-semibold">مراجعة مسودة المشروع</h2>
  <p className="text-sm text-muted-foreground mt-1">يرجى مراجعة الدراسة المُولدة ثم اختيار القرار المناسب</p>
  </div>
  <button
  onClick={handleCloseReview}
- className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+ className="p-[var(--spacing-small-gap)] text-muted-foreground hover:text-foreground transition-colors"
  >
  ✕
  </button>
  </div>
 
- <div className="flex-1 overflow-y-auto p-6 bg-secondary">
+ <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-secondary">
  {reviewStep === 'view' ? (
- <div className="space-y-6">
- <div className="prose prose-sm max-w-none text-right w-full break-words bg-card rounded-xl p-6 border border-border min-h-full [&>*]:text-right">
+ <div className="space-y-[var(--spacing-section-gap)]">
+ <div className="prose prose-sm max-w-none text-right w-full break-words bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border min-h-full [&>*]:text-right">
  <Markdown remarkPlugins={[remarkGfm]}>{getProjectStudy() || 'لا توجد دراسة مُولدة لهذا المشروع'}</Markdown>
  </div>
  </div>
  ) : (
- <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
+ <div className="space-y-[var(--spacing-section-gap)] max-w-2xl mx-auto bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h3 className="text-lg font-semibold">طلب تعديلات</h3>
  <p className="text-sm text-muted-foreground">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
  <textarea
@@ -1287,7 +1287,7 @@ export function ProjectDetailsPage() {
  )}
  </div>
 
- <div className="p-6 border-t border-border bg-[var(--card)] flex items-center justify-between gap-3 flex-wrap">
+ <div className="p-[var(--spacing-card-padding)] border-t border-border bg-[var(--card)] flex items-center justify-between gap-[var(--spacing-small-gap)] flex-wrap">
  {reviewStep === 'view' ? (
  <>
  <button
@@ -1296,17 +1296,17 @@ export function ProjectDetailsPage() {
  >
  إلغاء
  </button>
- <div className="flex items-center gap-3 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-wrap">
  <button
  onClick={() => setReviewStep('notes')}
- className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2"
+ className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  طلب تعديلات
  </button>
  <button
  onClick={handleConfirmApprove}
  disabled={decisionLoading}
- className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {decisionLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1326,7 +1326,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={() => handleCharityDecision('INCUBATOR_MODIFICATIONS')}
  disabled={decisionLoading || !reviewNotes.trim()}
- className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {decisionLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1341,36 +1341,36 @@ export function ProjectDetailsPage() {
  )}
 
  {designReviewOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div
  className="absolute inset-0 bg-[var(--text-primary)]/[0.6]"
  onClick={handleCloseDesignReview}
  />
  <div dir="rtl" className="relative z-10 flex flex-col w-full max-w-xl max-h-[80vh] bg-[var(--card)] rounded-xl shadow-2xl overflow-hidden text-right">
- <div className="flex items-center justify-between p-6 border-b border-border bg-[var(--card)]">
+ <div className="flex items-center justify-between p-[var(--spacing-card-padding)] border-b border-border bg-[var(--card)]">
  <div>
  <h2 className="text-xl font-semibold">اعتماد تصميم المشروع</h2>
  <p className="text-sm text-muted-foreground mt-1">يرجى مراجعة التصميم المعروض أدناه ثم اختيار القرار المناسب</p>
  </div>
  <button
  onClick={handleCloseDesignReview}
- className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+ className="p-[var(--spacing-small-gap)] text-muted-foreground hover:text-foreground transition-colors"
  >
  ✕
  </button>
  </div>
 
- <div className="flex-1 overflow-y-auto p-6 bg-secondary">
+ <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-secondary">
  {designStep === 'view' ? (
- <div className="space-y-6 w-full">
- <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-4">
+ <div className="space-y-[var(--spacing-section-gap)] w-full">
+ <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-[var(--spacing-card-padding)]">
  <p className="text-sm text-foreground mb-3">
  الملف التسويقي جاهز الآن يمكنك تحميله ومراجعته بالضغط على تحميل وبعدها يمكنك اعتماده أو طلب تعديل
  </p>
  <button
  onClick={handleDownloadDesignPresentation}
  disabled={designPresentationDownloadLoading}
- className="px-4 py-2 bg-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {designPresentationDownloadLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1382,7 +1382,7 @@ export function ProjectDetailsPage() {
  </div>
  </div>
  ) : (
- <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
+ <div className="space-y-[var(--spacing-section-gap)] max-w-2xl mx-auto bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h3 className="text-lg font-semibold">طلب تعديل على التصميم</h3>
  <p className="text-sm text-muted-foreground">يرجى إرسال ملاحظات توضيحية حول التعديلات المطلوبة.</p>
  <textarea
@@ -1392,7 +1392,7 @@ export function ProjectDetailsPage() {
  rows={6}
  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-ring text-right resize-none"
  />
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <label className="text-sm font-medium text-foreground">ملاحظات داخلية (اختياري)</label>
  <textarea
  value={designInternalNotes}
@@ -1406,7 +1406,7 @@ export function ProjectDetailsPage() {
  )}
  </div>
 
- <div className="p-6 border-t border-border bg-[var(--card)] flex items-center justify-between gap-3 flex-wrap">
+ <div className="p-[var(--spacing-card-padding)] border-t border-border bg-[var(--card)] flex items-center justify-between gap-[var(--spacing-small-gap)] flex-wrap">
  {designStep === 'view' ? (
  <>
  <button
@@ -1415,17 +1415,17 @@ export function ProjectDetailsPage() {
  >
  إلغاء
  </button>
- <div className="flex items-center gap-3 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-wrap">
  <button
  onClick={() => setDesignStep('notes')}
- className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2"
+ className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  طلب تعديل
  </button>
  <button
  onClick={handleConfirmDesignApprove}
  disabled={designDecisionLoading}
- className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {designDecisionLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1445,7 +1445,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={() => handleDesignDecision('DESIGN_REJECTED')}
  disabled={designDecisionLoading || !designNotes.trim()}
- className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-yellow-500 text-[var(--primary-foreground)] rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {designDecisionLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1460,13 +1460,13 @@ export function ProjectDetailsPage() {
  )}
 
  {offerReviewOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div
  className="absolute inset-0 bg-[var(--text-primary)]/[0.6]"
  onClick={handleCloseOfferReview}
  />
  <div dir="rtl" className="relative z-10 flex flex-col w-full h-[90vh] bg-[var(--card)] rounded-xl shadow-2xl overflow-hidden text-right">
- <div className="flex items-center justify-between p-6 border-b border-border bg-[var(--card)]">
+ <div className="flex items-center justify-between p-[var(--spacing-card-padding)] border-b border-border bg-[var(--card)]">
  <div>
  <h2 className="text-xl font-semibold">اعتماد عرض السعر</h2>
  <p className="text-sm text-muted-foreground mt-1">
@@ -1479,16 +1479,16 @@ export function ProjectDetailsPage() {
  </div>
  <button
  onClick={handleCloseOfferReview}
- className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+ className="p-[var(--spacing-small-gap)] text-muted-foreground hover:text-foreground transition-colors"
  >
  ✕
  </button>
  </div>
 
- <div className="flex-1 overflow-y-auto p-6 bg-secondary">
+ <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-secondary">
  {offerStep === 'view' && (
- <div className="space-y-6 max-w-3xl mx-auto">
- <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-xl p-6 text-center space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)] max-w-3xl mx-auto">
+ <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-xl p-[var(--spacing-card-padding)] text-center space-y-[var(--spacing-section-gap)]">
  <FileText className="w-16 h-16 text-[var(--secondary)] mx-auto" />
  <div>
  <h3 className="text-lg font-semibold text-foreground mb-1">عرض السعر</h3>
@@ -1497,7 +1497,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleDownloadPriceOffer}
  disabled={offerDownloadLoading}
- className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {offerDownloadLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1511,13 +1511,13 @@ export function ProjectDetailsPage() {
  )}
 
  {offerStep === 'approve' && (
- <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
+ <div className="space-y-[var(--spacing-section-gap)] max-w-2xl mx-auto bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h3 className="text-lg font-semibold">رفع عرض السعر الموقع</h3>
  <p className="text-sm text-muted-foreground">يرجى رفع نسخة عرض السعر الموقع بصيغة PDF أو Word فقط (بحد أقصى 10 ميجابايت).</p>
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <label className="block text-sm font-medium text-foreground">الملف الموقع</label>
  <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-border rounded-lg cursor-pointer hover:bg-secondary transition-colors">
- <div className="flex flex-col items-center gap-2 text-muted-foreground">
+ <div className="flex flex-col items-center gap-[var(--spacing-small-gap)] text-muted-foreground">
  <Upload className="w-8 h-8" />
  <span className="text-sm font-medium">
  {offerFile ? offerFile.name : 'انقر لاختيار ملف PDF أو Word'}
@@ -1535,7 +1535,7 @@ export function ProjectDetailsPage() {
  <p className="text-sm text-[var(--destructive)]">{offerFileError}</p>
  )}
  </div>
- <div className="space-y-2">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <label className="text-sm font-medium text-foreground">ملاحظات داخلية (اختياري)</label>
  <textarea
  value={offerInternalNotes}
@@ -1549,7 +1549,7 @@ export function ProjectDetailsPage() {
  )}
 
  {offerStep === 'reject' && (
- <div className="space-y-4 max-w-2xl mx-auto bg-card rounded-xl p-6 border border-border">
+ <div className="space-y-[var(--spacing-section-gap)] max-w-2xl mx-auto bg-card rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <h3 className="text-lg font-semibold">رفض عرض السعر</h3>
  <p className="text-sm text-muted-foreground">يرجى توضيح سبب رفض عرض السعر ليتم إرساله إلى مدير المشروع.</p>
  <textarea
@@ -1563,7 +1563,7 @@ export function ProjectDetailsPage() {
  )}
  </div>
 
- <div className="p-6 border-t border-border bg-[var(--card)] flex items-center justify-between gap-3 flex-wrap">
+ <div className="p-[var(--spacing-card-padding)] border-t border-border bg-[var(--card)] flex items-center justify-between gap-[var(--spacing-small-gap)] flex-wrap">
  {offerStep === 'view' ? (
  <>
  <button
@@ -1572,16 +1572,16 @@ export function ProjectDetailsPage() {
  >
  إلغاء
  </button>
- <div className="flex items-center gap-3 flex-wrap">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] flex-wrap">
  <button
  onClick={() => setOfferStep('reject')}
- className="px-5 py-2.5 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors text-sm font-medium flex items-center gap-2"
+ className="px-5 py-2.5 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  رفض
  </button>
  <button
  onClick={() => setOfferStep('approve')}
- className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-2"
+ className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  موافقة
  </button>
@@ -1598,7 +1598,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleApprovePriceOffer}
  disabled={offerDecisionLoading || !offerFile}
- className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {offerDecisionLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1617,7 +1617,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleRejectPriceOffer}
  disabled={offerDecisionLoading || !offerRejectReason.trim()}
- className="px-5 py-2.5 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {offerDecisionLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1632,35 +1632,35 @@ export function ProjectDetailsPage() {
  )}
 
  {sendDesignOpen && (
- <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+ <div className="fixed inset-0 z-50 flex items-center justify-center p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div
  className="absolute inset-0 bg-[var(--text-primary)]/[0.6]"
  onClick={handleCloseSendDesign}
  />
  <div dir="rtl" className="relative z-10 flex flex-col w-full max-w-2xl max-h-[90vh] bg-[var(--card)] rounded-xl shadow-2xl overflow-hidden text-right">
- <div className="flex items-center justify-between p-6 border-b border-border bg-[var(--card)]">
+ <div className="flex items-center justify-between p-[var(--spacing-card-padding)] border-b border-border bg-[var(--card)]">
  <div>
  <h2 className="text-xl font-semibold">إرسال التصميم إلى الجهة الخيرية</h2>
  </div>
  <button
  onClick={handleCloseSendDesign}
- className="p-2 text-muted-foreground hover:text-foreground transition-colors"
+ className="p-[var(--spacing-small-gap)] text-muted-foreground hover:text-foreground transition-colors"
  >
  ✕
  </button>
  </div>
 
- <div className="flex-1 overflow-y-auto p-6 bg-secondary space-y-5">
- <p className="text-sm text-muted-foreground bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-4">
+ <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-secondary space-y-5">
+ <p className="text-sm text-muted-foreground bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-[var(--spacing-card-padding)]">
  إذا لم تقم برفع ملف جديد، سيتم إرسال الملف التسويقي المولد تلقائياً إلى الجهة الخيرية. إذا قمت برفع ملف، فسيُرسل بدلاً من الملف الافتراضي. بالاعتماد، سيتم إرسال التصميم إلى العميل.
  </p>
 
- <div className="bg-[var(--card)] rounded-xl p-5 border border-border space-y-3">
+ <div className="bg-[var(--card)] rounded-xl p-[var(--spacing-card-padding)] border border-border space-y-[var(--spacing-small-gap)]">
  <h3 className="font-medium">الملف التسويقي المولد</h3>
  <button
  onClick={handleDownloadGeneratedPresentation}
  disabled={presentationDownloadLoading}
- className="px-4 py-2 bg-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 bg-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:bg-indigo-700 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {presentationDownloadLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -1671,10 +1671,10 @@ export function ProjectDetailsPage() {
  </button>
  </div>
 
- <div className="bg-[var(--card)] rounded-xl p-5 border border-border space-y-3">
+ <div className="bg-[var(--card)] rounded-xl p-[var(--spacing-card-padding)] border border-border space-y-[var(--spacing-small-gap)]">
  <h3 className="font-medium">ملف التصميم البديل (اختياري)</h3>
- <label className="flex flex-col gap-2 cursor-pointer">
- <div className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-foreground">
+ <label className="flex flex-col gap-[var(--spacing-small-gap)] cursor-pointer">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium text-foreground">
  <Upload className="w-4 h-4" />
  <span>اختر ملف PPTX أو PDF</span>
  </div>
@@ -1693,7 +1693,7 @@ export function ProjectDetailsPage() {
  )}
  </div>
 
- <div className="bg-[var(--card)] rounded-xl p-5 border border-border space-y-3">
+ <div className="bg-[var(--card)] rounded-xl p-[var(--spacing-card-padding)] border border-border space-y-[var(--spacing-small-gap)]">
  <label className="block text-sm font-medium text-foreground">ملاحظات (اختياري)</label>
  <textarea
  value={sendDesignNotes}
@@ -1705,7 +1705,7 @@ export function ProjectDetailsPage() {
  <p className="text-xs text-muted-foreground text-left">{sendDesignNotes.length}/2000</p>
  </div>
 
- <div className="bg-[var(--card)] rounded-xl p-5 border border-border space-y-3">
+ <div className="bg-[var(--card)] rounded-xl p-[var(--spacing-card-padding)] border border-border space-y-[var(--spacing-small-gap)]">
  <label className="block text-sm font-medium text-foreground">ملاحظات داخلية (اختياري)</label>
  <textarea
  value={sendDesignInternalNotes}
@@ -1718,7 +1718,7 @@ export function ProjectDetailsPage() {
  </div>
  </div>
 
- <div className="p-6 border-t border-border bg-[var(--card)] flex items-center justify-between gap-3 flex-wrap">
+ <div className="p-[var(--spacing-card-padding)] border-t border-border bg-[var(--card)] flex items-center justify-between gap-[var(--spacing-small-gap)] flex-wrap">
  <button
  onClick={handleCloseSendDesign}
  className="px-5 py-2.5 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
@@ -1728,7 +1728,7 @@ export function ProjectDetailsPage() {
  <button
  onClick={handleConfirmSendDesign}
  disabled={sendDesignLoading || !!sendDesignFileError}
- className="px-5 py-2.5 bg-teal-600 text-[var(--primary-foreground)] rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-5 py-2.5 bg-teal-600 text-[var(--primary-foreground)] rounded-lg hover:bg-teal-700 transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {sendDesignLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />

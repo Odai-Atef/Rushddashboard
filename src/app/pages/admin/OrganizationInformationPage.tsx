@@ -34,7 +34,7 @@ export function OrganizationInformationPage() {
 
  if (isLoading) {
  return (
- <div className="min-h-[60vh] flex flex-col items-center justify-center gap-3" dir="rtl">
+ <div className="min-h-[60vh] flex flex-col items-center justify-center gap-[var(--spacing-small-gap)]" dir="rtl">
  <Loader2 className="w-8 h-8 animate-spin text-[var(--secondary)]" />
  <p className="text-muted-foreground">جاري تحميل بيانات المنظمة...</p>
  </div>
@@ -43,14 +43,14 @@ export function OrganizationInformationPage() {
 
  if (error) {
  return (
- <div className="max-w-4xl mx-auto p-4" dir="rtl">
- <div className="flex items-center gap-2 mb-6">
+ <div className="max-w-4xl mx-auto p-[var(--spacing-card-padding)]" dir="rtl">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/manage/org')}>
  <ArrowRight className="w-4 h-4 ml-1" />
  العودة لإدارة الجهات
  </Button>
  </div>
- <div className="p-6 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex flex-col items-center text-center gap-3">
+ <div className="p-[var(--spacing-card-padding)] bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl flex flex-col items-center text-center gap-[var(--spacing-small-gap)]">
  <AlertTriangle className="w-10 h-10 text-[var(--destructive)]" />
  <h2 className="text-lg font-semibold text-red-900">تعذر تحميل البيانات</h2>
  <p className="text-sm text-red-800 max-w-md">{error}</p>
@@ -65,8 +65,8 @@ export function OrganizationInformationPage() {
 
  if (!data) {
  return (
- <div className="max-w-4xl mx-auto p-4" dir="rtl">
- <div className="flex items-center gap-2 mb-6">
+ <div className="max-w-4xl mx-auto p-[var(--spacing-card-padding)]" dir="rtl">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/manage/org')}>
  <ArrowRight className="w-4 h-4 ml-1" />
  العودة لإدارة الجهات
@@ -89,17 +89,17 @@ export function OrganizationInformationPage() {
  }
 
  return (
- <div className="max-w-6xl mx-auto p-3 sm:p-4 space-y-4 sm:space-y-6" dir="rtl">
+ <div className="max-w-6xl mx-auto p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] space-y-[var(--spacing-section-gap)] sm:space-y-[var(--spacing-section-gap)]" dir="rtl">
  {/* Header */}
- <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
- <div className="flex items-center gap-2">
+ <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-[var(--spacing-grid-gap)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Button variant="outline" size="sm" onClick={() => navigate('/dashboard/manage/org')}>
  <ArrowRight className="w-4 h-4 ml-1" />
  العودة لإدارة الجهات
  </Button>
  <h1 className="text-xl font-bold text-foreground">بيانات الجهة المستخرجة</h1>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Badge className={statusMeta.className}>
  <StatusIcon className="w-3.5 h-3.5 ml-1" />
  {statusMeta.label}

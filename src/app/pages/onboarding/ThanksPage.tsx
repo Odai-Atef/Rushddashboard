@@ -24,8 +24,8 @@ export function ThanksPage() {
 
  if (isNotQualified) {
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="max-w-lg w-full bg-[var(--card)] rounded-2xl shadow-sm border border-border p-6 sm:p-8 text-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
+ <div className="max-w-lg w-full bg-[var(--card)] rounded-2xl shadow-sm border border-border p-[var(--spacing-card-padding)] sm:p-8 text-center">
  <div className="w-20 h-20 bg-[var(--destructive)]/[0.1] rounded-full flex items-center justify-center mx-auto mb-6">
  <AlertCircle className="w-10 h-10 text-[var(--destructive)]" />
  </div>
@@ -35,7 +35,7 @@ export function ThanksPage() {
  <br />
  لإجراء التقييم مرة أخرى، يرجى الضغط على الزر أدناه.
  </p>
- <div className="bg-[var(--destructive)]/[0.08] rounded-xl p-4 mb-6 flex items-start gap-3 text-right">
+ <div className="bg-[var(--destructive)]/[0.08] rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-start gap-[var(--spacing-small-gap)] text-right">
  <RefreshCw className="w-5 h-5 text-[var(--destructive)] mt-0.5 flex-shrink-0" />
  <p className="text-sm text-[var(--destructive)]">
  يمكنك مراجعة إجاباتك والمستندات المرفوعة ثم إعادة التقييم للحصول على نتيجة أفضل.
@@ -43,7 +43,7 @@ export function ThanksPage() {
  </div>
  <button
  onClick={handleReEvaluate}
- className="w-full px-6 py-3 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors font-medium flex items-center justify-center gap-2"
+ className="w-full px-6 py-3 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)]"
  >
  <RefreshCw className="w-5 h-5" />
  إعادة التقييم
@@ -54,8 +54,8 @@ export function ThanksPage() {
  }
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6 flex items-center justify-center">
- <div className="max-w-lg w-full bg-[var(--card)] rounded-2xl shadow-sm border border-border p-6 sm:p-8 text-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] flex items-center justify-center">
+ <div className="max-w-lg w-full bg-[var(--card)] rounded-2xl shadow-sm border border-border p-[var(--spacing-card-padding)] sm:p-8 text-center">
  <div className="w-20 h-20 bg-[var(--primary)]/[0.1] rounded-full flex items-center justify-center mx-auto mb-6">
  <CheckCircle2 className="w-10 h-10 text-[var(--primary)]" />
  </div>
@@ -63,7 +63,7 @@ export function ThanksPage() {
  <p className="text-muted-foreground mb-6">
  تم إنشاء/تحديث ملف الجهه بنجاح. يمكنك الآن بدء التقييم لتفعيل الجهه من إنشاء المشاريع.
  </p>
- <div className="bg-secondary rounded-xl p-4 mb-6 flex items-start gap-3 text-left">
+ <div className="bg-secondary rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-start gap-[var(--spacing-small-gap)] text-left">
  <Sparkles className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
  <p className="text-sm text-primary">
  يستغرق التقييم بضع دقائق. تأكد من الإجابة بدقة لتحصل على نتيجة دقيقة وخطة تطوير مخصصة.
@@ -71,7 +71,7 @@ export function ThanksPage() {
  </div>
  <button
  onClick={handleStartAssessment}
- className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center justify-center gap-2"
+ className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)]"
  >
  <Play className="w-5 h-5" />
  بدء التقييم

@@ -281,7 +281,7 @@ export function OrgRegistrationPage() {
  return (
  <div className="min-h-screen flex">
  {/* Left Side - Form */}
- <div className="flex-[1.2] flex items-center justify-center p-4 lg:p-8 bg-background overflow-y-auto">
+ <div className="flex-[1.2] flex items-center justify-center p-[var(--spacing-card-padding)] lg:p-8 bg-background overflow-y-auto">
  <div className="w-full max-w-3xl py-4 lg:py-8">
  {/* Logo */}
  <div className="mb-6 text-center">
@@ -301,7 +301,7 @@ export function OrgRegistrationPage() {
 
  {/* API Error */}
  {apiError && (
- <div className="mb-6 p-4 bg-[var(--destructive)]/10 border border-red-500/20 rounded-lg">
+ <div className="mb-6 p-[var(--spacing-card-padding)] bg-[var(--destructive)]/10 border border-red-500/20 rounded-lg">
  <p
  className="text-sm text-[var(--destructive)]"
  dangerouslySetInnerHTML={{ __html: apiError }}
@@ -453,7 +453,7 @@ export function OrgRegistrationPage() {
  </div>
 
  {/* Password */}
- <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-[var(--spacing-grid-gap)]">
  <div>
  <label htmlFor="password" className="block text-sm font-medium mb-2">
  كلمة المرور *
@@ -509,7 +509,7 @@ export function OrgRegistrationPage() {
 
  {/* Terms and Conditions */}
  <div>
- <label className="flex items-start gap-3 cursor-pointer">
+ <label className="flex items-start gap-[var(--spacing-small-gap)] cursor-pointer">
  <input
  type="checkbox"
  checked={formData.agreeToTerms}
@@ -535,7 +535,7 @@ export function OrgRegistrationPage() {
  <button
  type="submit"
  disabled={isLoading}
- className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isLoading ? (
  <>
@@ -579,24 +579,24 @@ export function OrgRegistrationPage() {
  استفد من قوة الذكاء الاصطناعي لاتخاذ قرارات أعمال أفضل وأسرع
  </p>
 
- <div className="space-y-3">
- <div className="flex items-center gap-3 p-3 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="space-y-[var(--spacing-small-gap)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>تحليل فوري للبيانات بدعم الذكاء الاصطناعي</span>
  </div>
- <div className="flex items-center gap-3 p-3 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>لوحات تحكم تفاعلية وتقارير متقدمة</span>
  </div>
- <div className="flex items-center gap-3 p-3 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>توصيات تنفيذية قابلة للتطبيق مباشرة</span>
  </div>
- <div className="flex items-center gap-3 p-3 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>دعم فني متخصص 24/7</span>
  </div>
- <div className="flex items-center gap-3 p-3 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
  <CheckCircle className="w-6 h-6 flex-shrink-0" />
  <span>أمان وحماية بيانات على مستوى المؤسسات</span>
  </div>

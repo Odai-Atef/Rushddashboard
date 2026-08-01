@@ -163,7 +163,7 @@ export function ProfilePage() {
  };
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  {isSaving && (
  <div className="fixed inset-0 bg-[var(--card)]/80 z-50 flex items-center justify-center">
  <Loader2 className="w-8 h-8 text-primary animate-spin" />
@@ -182,13 +182,13 @@ export function ProfilePage() {
  </div>
 
  {/* Form Card */}
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-4 sm:p-8">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] sm:p-8">
  <div className="mb-6">
  <h1 className="text-2xl sm:text-3xl font-bold mb-2">الملف التعريفي للجمعية</h1>
  <p className="text-muted-foreground">معلومات تفصيلية عن نشاط الجمعية وبرامجها</p>
  </div>
 
- <form className="space-y-6">
+ <form className="space-y-[var(--spacing-section-gap)]">
  {/* Organization Overview */}
  <div>
  <label className="block text-sm font-medium mb-2">نبذة عن الجمعية *</label>
@@ -292,7 +292,7 @@ export function ProfilePage() {
  {/* Team Statistics */}
  <div>
  <label className="block text-sm font-medium mb-4">حجم الفريق والمتطوعين</label>
- <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-grid-gap)]">
  <div>
  <label className="block text-xs text-muted-foreground mb-2">عدد الموظفين</label>
  <div className="relative">
@@ -342,11 +342,11 @@ export function ProfilePage() {
  </div>
 
  {/* Action Buttons */}
- <div className="flex items-center justify-between pt-4 sm:pt-6 border-t flex-col sm:flex-row gap-3">
+ <div className="flex items-center justify-between pt-4 sm:pt-6 border-t flex-col sm:flex-row gap-[var(--spacing-small-gap)]">
  <button
  type="button"
  onClick={() => goToStep('registration')}
- className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-start"
+ className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-[var(--spacing-small-gap)] w-full sm:w-auto justify-center sm:justify-start"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع
@@ -355,7 +355,7 @@ export function ProfilePage() {
  type="button"
  onClick={handleProfileNext}
  disabled={isSaving}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto justify-center sm:justify-start"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto justify-center sm:justify-start"
  >
  {isSaving ? (
  <>

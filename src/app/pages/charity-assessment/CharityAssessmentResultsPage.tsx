@@ -204,7 +204,7 @@ export function CharityAssessmentResultsPage() {
  if (isLoading || documentsMissing === null) {
  return (
  <div className="min-h-full bg-background flex items-center justify-center">
- <div className="flex flex-col items-center gap-4">
+ <div className="flex flex-col items-center gap-[var(--spacing-grid-gap)]">
  <Loader2 className="w-10 h-10 animate-spin text-[var(--secondary)]" />
  <p className="text-muted-foreground">جاري تحميل نتائج التقييم...</p>
  </div>
@@ -215,13 +215,13 @@ export function CharityAssessmentResultsPage() {
  if (error) {
  return (
  <div className="min-h-full bg-background flex items-center justify-center p-8">
- <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center max-w-md">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-8 text-center max-w-md">
  <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
  <h2 className="text-xl font-semibold mb-2">تعذر تحميل النتائج</h2>
  <p className="text-muted-foreground mb-6">{error}</p>
  <button
  onClick={() => refetch()}
- className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة المحاولة
@@ -234,7 +234,7 @@ export function CharityAssessmentResultsPage() {
  if (!data) {
  return (
  <div className="min-h-full bg-background flex items-center justify-center p-8">
- <div className="bg-card border border-border rounded-xl p-6 sm:p-6 sm:p-8 text-center max-w-md">
+ <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-8 text-center max-w-md">
  <AlertTriangle className="w-12 h-12 text-yellow-500 mx-auto mb-4" />
  <h2 className="text-xl font-semibold mb-2">لا توجد نتائج</h2>
  <p className="text-muted-foreground">لم يتم العثور على نتائج تقييم لهذه المنظمة.</p>
@@ -475,11 +475,11 @@ export function CharityAssessmentResultsPage() {
  : 'تم إكمال التقييم بنجاح'}
  </p>
  </div>
- <div className="flex gap-3 flex-wrap items-center">
+ <div className="flex gap-[var(--spacing-small-gap)] flex-wrap items-center">
  <button
  onClick={handleExportPDF}
  disabled={isExporting}
- className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
  >
  {isExporting ? (
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -490,7 +490,7 @@ export function CharityAssessmentResultsPage() {
  </button>
  <button
  onClick={() => navigate('/dashboard/charity-assessment/assessment')}
- className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة التقييم
@@ -500,7 +500,7 @@ export function CharityAssessmentResultsPage() {
  onClick={() =>
  navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}&from=results`)
  }
- className="flex items-center gap-2 px-4 py-2 bg-amber-500 hover:bg-amber-600 text-[var(--primary-foreground)] rounded-lg transition-colors animate-pulse"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-amber-500 hover:bg-amber-600 text-[var(--primary-foreground)] rounded-lg transition-colors animate-pulse"
  >
  أكمل ملف جهتك
  </button>
@@ -509,10 +509,10 @@ export function CharityAssessmentResultsPage() {
  </div>
 
  {/* Overall Score */}
- <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
- <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-grid-gap)]">
+ <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-[var(--spacing-card-padding)]">
  <p className="text-[var(--secondary)]/[0.4] mb-2">درجة الجاهزية الإجمالية</p>
- <div className="flex items-end gap-3">
+ <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <span className="text-5xl font-bold">{overallScore}%</span>
  <span
  className={`px-3 py-1 ${readinessLevel.bg}/20 border border-[var(--primary-foreground)]/[0.2] rounded-full text-sm mb-2`}
@@ -522,7 +522,7 @@ export function CharityAssessmentResultsPage() {
  </div>
  </div>
 
- <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6 md:col-span-2">
+ <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-[var(--spacing-card-padding)] md:col-span-2">
  <p className="text-[var(--secondary)]/[0.4] mb-2">التقييم العام</p>
  <p className="text-2xl font-semibold leading-relaxed">
  {data.comments?.overall?.ar || data.qualificationMessage || 'تم إكمال التقييم بنجاح'}
@@ -534,9 +534,9 @@ export function CharityAssessmentResultsPage() {
 
  {/* Main Content / Exportable Report */}
  <div ref={reportRef} data-report-root className="max-w-7xl mx-auto p-8">
- <div data-report-section className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:p-6 mb-6 sm:mb-8">
+ <div data-report-section className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--spacing-grid-gap)] sm:p-[var(--spacing-card-padding)] mb-6 sm:mb-8">
  {/* Radar Chart */}
- <div className="lg:col-span-2 bg-card border border-border rounded-xl p-6">
+ <div className="lg:col-span-2 bg-card border border-border rounded-xl p-[var(--spacing-card-padding)]">
  <h2 className="text-xl font-semibold mb-6">نظرة شاملة على الأداء</h2>
  {radarData.length > 0 ? (
  <ResponsiveContainer width="100%" height={400}>
@@ -570,15 +570,15 @@ export function CharityAssessmentResultsPage() {
  </div>
 
  {/* Quick Stats */}
- <div className="space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)]">
  <button
  onClick={() => {
  document.getElementById('strengths-section')?.scrollIntoView({ behavior: 'smooth' });
  }}
- className="bg-[var(--card)] border border-border/80/50 rounded-2xl p-6 text-right w-full shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
+ className="bg-[var(--card)] border border-border/80/50 rounded-2xl p-[var(--spacing-card-padding)] text-right w-full shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
  >
  <div className="flex items-center justify-between mb-5">
- <div className="p-2.5 rounded-xl bg-[var(--warning)]/[0.1]">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--warning)]/[0.1]">
  <Star className="w-6 h-6 text-[var(--warning)]" />
  </div>
  <Award className="w-6 h-6 text-[var(--secondary)]" />
@@ -591,10 +591,10 @@ export function CharityAssessmentResultsPage() {
  onClick={() => {
  document.getElementById('gaps-section')?.scrollIntoView({ behavior: 'smooth' });
  }}
- className="bg-[var(--card)] border border-border/80/50 rounded-2xl p-6 text-right w-full shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
+ className="bg-[var(--card)] border border-border/80/50 rounded-2xl p-[var(--spacing-card-padding)] text-right w-full shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
  >
  <div className="flex items-center justify-between mb-5">
- <div className="p-2.5 rounded-xl bg-[var(--warning)]/[0.1]">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--warning)]/[0.1]">
  <AlertTriangle className="w-6 h-6 text-[var(--warning)]" />
  </div>
  <Target className="w-6 h-6 text-red-500" />
@@ -609,10 +609,10 @@ export function CharityAssessmentResultsPage() {
  navigate(`/dashboard/charity-assessment/roadmap/${organizationId}`);
  }
  }}
- className="bg-[var(--card)] border border-border/80/50 rounded-2xl p-6 text-right w-full shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
+ className="bg-[var(--card)] border border-border/80/50 rounded-2xl p-[var(--spacing-card-padding)] text-right w-full shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
  >
  <div className="flex items-center justify-between mb-5">
- <div className="p-2.5 rounded-xl bg-[var(--secondary)]/[0.08]">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08]">
  <Lightbulb className="w-6 h-6 text-purple-600" />
  </div>
  <Sparkles className="w-6 h-6 text-[var(--secondary)]" />
@@ -624,7 +624,7 @@ export function CharityAssessmentResultsPage() {
  </div>
 
  {/* Benchmark Comparison */}
- <div data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+ <div data-report-section className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] mb-6 sm:mb-8">
  <h2 className="text-xl font-semibold mb-6">المقارنة المعيارية</h2>
  <ResponsiveContainer width="100%" height={300}>
  <BarChart data={benchmarkData}>
@@ -642,22 +642,22 @@ export function CharityAssessmentResultsPage() {
  </div>
 
  {/* Strengths */}
- <div id="strengths-section" data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
- <div className="flex items-center gap-3 mb-6">
+ <div id="strengths-section" data-report-section className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] mb-6 sm:mb-8">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Star className="w-6 h-6 text-yellow-500" />
  <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
  </div>
  {llmStrengthsAnalysis && (
  <p className="text-muted-foreground leading-relaxed mb-6">{llmStrengthsAnalysis}</p>
  )}
- <div className="space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {strengths.length > 0 ? (
  strengths.map((strength, index) => {
  const title = typeof strength === 'string' ? strength : strength.area;
  const score = typeof strength === 'string' ? undefined : strength.score;
  const insight = typeof strength === 'string' ? undefined : strength.insight;
  return (
- <div key={index} className="bg-[var(--primary)]/5 border border-[var(--primary)]/[0.2] rounded-lg p-5">
+ <div key={index} className="bg-[var(--primary)]/5 border border-[var(--primary)]/[0.2] rounded-lg p-[var(--spacing-card-padding)]">
  <div className="flex items-start justify-between mb-3">
  <div>
  <h3 className="font-medium mb-1">{title}</h3>
@@ -687,23 +687,23 @@ export function CharityAssessmentResultsPage() {
  </div>
 
  {/* Gaps */}
- <div id="gaps-section" data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
- <div className="flex items-center gap-3 mb-6">
+ <div id="gaps-section" data-report-section className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] mb-6 sm:mb-8">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <AlertTriangle className="w-6 h-6 text-orange-500" />
  <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
  </div>
  {llmGapAnalysis ? (
  <p className="text-muted-foreground leading-relaxed">{llmGapAnalysis}</p>
  ) : (
- <div className="space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {weaknesses.length > 0 ? (
  weaknesses.map((gap, index) => {
  const severityClasses = getSeverityClasses(gap.severity);
  return (
- <div key={index} className={`border rounded-lg p-5 ${severityClasses.wrapper}`}>
+ <div key={index} className={`border rounded-lg p-[var(--spacing-card-padding)] ${severityClasses.wrapper}`}>
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="font-medium">{gap.area}</h3>
  <span className={`px-2 py-0.5 rounded-lg text-xs ${severityClasses.badge}`}>
  {severityClasses.label}
@@ -713,7 +713,7 @@ export function CharityAssessmentResultsPage() {
  <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
  )}
  {gap.recommendation && (
- <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] bg-card/50 rounded-lg p-[var(--spacing-card-padding)]">
  <Lightbulb className="w-4 h-4 text-[var(--secondary)] flex-shrink-0 mt-0.5" />
  <p className="text-sm">{gap.recommendation}</p>
  </div>
@@ -732,7 +732,7 @@ export function CharityAssessmentResultsPage() {
 
  {/* Progress Tracking */}
  {progressData && progressData.length > 0 && (
- <div data-report-section className="bg-card border border-border rounded-xl p-4 sm:p-6 mb-6 sm:mb-8">
+ <div data-report-section className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] mb-6 sm:mb-8">
  <h2 className="text-xl font-semibold mb-6">تتبع التقدم</h2>
  <ResponsiveContainer width="100%" height={300}>
  <RechartsLineChart data={progressData}>
@@ -754,14 +754,14 @@ export function CharityAssessmentResultsPage() {
  )}
 
  {/* CTA */}
- <div data-report-exclude className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-[var(--secondary)]/[0.2] rounded-xl p-6 sm:p-6 sm:p-8 text-center">
+ <div data-report-exclude className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-[var(--secondary)]/[0.2] rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-8 text-center">
  <h3 className="text-2xl font-semibold mb-3">جاهز للخطوة التالية؟</h3>
  <p className="text-muted-foreground mb-6">
  استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك
  </p>
  <button
  onClick={() => navigate(`/dashboard/charity-assessment/roadmap/${organizationId}`)}
- className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
  >
  عرض خارطة الطريق
  <ChevronRight className="w-5 h-5" />

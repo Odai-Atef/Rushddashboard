@@ -87,16 +87,16 @@ export function CharityAnalyticsDashboard() {
  {/* Header */}
  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
  <div>
- <h1 className="text-3xl md:text-4xl font-bold text-foreground">تحليلات الجمعيات</h1>
- <p className="text-muted-foreground text-sm mt-1">نمو الجمعيات • التأهيل • التفاعل • الرضا</p>
+ <h1 className="text-3xl md:text-4xl font-bold text-[var(--text-primary)]">تحليلات الجمعيات</h1>
+ <p className="text-[var(--text-muted)] text-sm mt-1">نمو الجمعيات • التأهيل • التفاعل • الرضا</p>
  </div>
- <div className="flex items-center gap-2">
- <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-border rounded-xl px-3 py-2 bg-[var(--card)] text-foreground">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <select value={dateRange} onChange={e => setDateRange(e.target.value)} className="text-sm border border-[var(--border)] rounded-[var(--radius-card)] px-3 py-2 bg-[var(--card)] text-[var(--text-primary)]">
  <option value="3months">آخر 3 أشهر</option>
  <option value="6months">آخر 6 أشهر</option>
  <option value="1year">آخر سنة</option>
  </select>
- <button className="flex items-center gap-2 px-3 py-2 text-sm bg-[var(--primary)] text-[var(--primary-foreground)] rounded-xl hover:opacity-90">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-2 text-sm bg-[var(--primary)] text-[var(--primary-foreground)] rounded-[var(--radius-card)] hover:opacity-90">
  <Download className="w-4 h-4" /> تصدير
  </button>
  </div>
@@ -112,12 +112,12 @@ export function CharityAnalyticsDashboard() {
  ].map((card, i) => {
  const Icon = card.icon;
  return (
- <div key={i} className={`rounded-xl border border-border p-4 ${card.bg}`}>
- <div className={`p-2 rounded-xl bg-background/60 w-fit mb-2`}>
+ <div key={i} className={`rounded-[var(--radius-card)] border border-[var(--border)] p-4 ${card.bg}`}>
+ <div className={`p-[var(--spacing-small-gap)] rounded-[var(--radius-card)] bg-[var(--background)]/60 w-fit mb-2`}>
  <Icon className={`w-5 h-5 ${card.color}`} />
  </div>
  <p className={`text-2xl ${card.color}`}>{card.value}</p>
- <p className="text-xs text-muted-foreground mt-1">{card.label}</p>
+ <p className="text-xs text-[var(--text-muted)] mt-1">{card.label}</p>
  </div>
  );
  })}
@@ -125,8 +125,8 @@ export function CharityAnalyticsDashboard() {
 
  {/* Growth & Qualified vs Non-Qualified */}
  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
- <div className="lg:col-span-2 u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">نمو الجمعيات</h2>
+ <div className="lg:col-span-2 u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">نمو الجمعيات</h2>
  <ResponsiveContainer width="100%" height={240}>
  <AreaChart data={charityGrowthData}>
  <defs>
@@ -150,8 +150,8 @@ export function CharityAnalyticsDashboard() {
  </ResponsiveContainer>
  </div>
 
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm flex flex-col items-center">
- <h2 className="text-foreground mb-4 w-full">مؤهلة مقابل غير مؤهلة</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] flex flex-col items-center">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)] w-full">مؤهلة مقابل غير مؤهلة</h2>
  <ResponsiveContainer width="100%" height={180}>
  <PieChart>
  <Pie data={qualifiedData} cx="50%" cy="50%" innerRadius={55} outerRadius={80} dataKey="value" paddingAngle={3}>
@@ -164,10 +164,10 @@ export function CharityAnalyticsDashboard() {
  </ResponsiveContainer>
  <div className="flex gap-4 mt-2">
  {qualifiedData.map((item, i) => (
- <div key={i} className="flex items-center gap-1.5 text-sm">
+ <div key={i} className="flex items-center gap-[var(--spacing-small-gap)].5 text-sm">
  <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: item.color }} />
- <span className="text-muted-foreground">{item.name}</span>
- <span className="text-foreground">{item.value}</span>
+ <span className="text-[var(--text-muted)]">{item.name}</span>
+ <span className="text-[var(--text-primary)]">{item.value}</span>
  </div>
  ))}
  </div>
@@ -175,9 +175,9 @@ export function CharityAnalyticsDashboard() {
  </div>
 
  {/* Assessment & Development Plans */}
- <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">نتائج تقييم الجاهزية</h2>
+ <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">نتائج تقييم الجاهزية</h2>
  <ResponsiveContainer width="100%" height={220}>
  <BarChart data={assessmentResults} layout="vertical">
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false} />
@@ -189,19 +189,19 @@ export function CharityAnalyticsDashboard() {
  </ResponsiveContainer>
  </div>
 
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">تقدم خطط التطوير</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">تقدم خطط التطوير</h2>
  <div className="space-y-4">
  {developmentPlans.map((plan, i) => (
  <div key={i}>
  <div className="flex items-center justify-between mb-1">
  <span className={`text-xs px-2 py-0.5 rounded-full ${statusColor(plan.status)}`}>{plan.status}</span>
- <div className="flex items-center gap-2">
- <span className="text-sm text-foreground">{plan.name}</span>
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <span className="text-sm text-[var(--text-primary)]">{plan.name}</span>
  </div>
  </div>
- <div className="flex items-center gap-3">
- <span className="text-xs text-muted-foreground w-8">{plan.progress}%</span>
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <span className="text-xs text-[var(--text-muted)] w-8">{plan.progress}%</span>
  <div className="flex-1">
  <ProgressBar value={plan.progress} color={progressColor(plan.progress)} />
  </div>
@@ -213,9 +213,9 @@ export function CharityAnalyticsDashboard() {
  </div>
 
  {/* Engagement & Satisfaction */}
- <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">مستويات تفاعل الجمعيات</h2>
+ <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">مستويات تفاعل الجمعيات</h2>
  <ResponsiveContainer width="100%" height={220}>
  <BarChart data={engagementData}>
  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
@@ -230,19 +230,19 @@ export function CharityAnalyticsDashboard() {
  </ResponsiveContainer>
  </div>
 
- <div className="u003cREPLACEu003e rounded-2xl p-5 md:p-6 shadow-sm">
- <h2 className="text-foreground mb-4">رضا الجمعيات</h2>
+ <div className="u003cREPLACEu003e rounded-[var(--radius-card)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)]">
+ <h2 className="text-[var(--text-primary)] mb-[var(--spacing-section-gap)]">رضا الجمعيات</h2>
  <div className="space-y-4 mt-2">
  {satisfactionData.map((item, i) => (
  <div key={i}>
  <div className="flex items-center justify-between mb-1">
- <div className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {[1, 2, 3, 4, 5].map(s => (
- <Star key={s} className={`w-3 h-3 ${s <= Math.round(item.score) ? 'text-[var(--warning)] fill-amber-400' : 'text-muted-foreground'}`} />
+ <Star key={s} className={`w-3 h-3 ${s <= Math.round(item.score) ? 'text-[var(--warning)] fill-amber-400' : 'text-[var(--text-muted)]'}`} />
  ))}
- <span className="text-sm text-muted-foreground mr-1">{item.score}</span>
+ <span className="text-sm text-[var(--text-muted)] mr-1">{item.score}</span>
  </div>
- <span className="text-sm text-foreground">{item.category}</span>
+ <span className="text-sm text-[var(--text-primary)]">{item.category}</span>
  </div>
  <ProgressBar value={(item.score / 5) * 100} color="bg-amber-400" />
  </div>

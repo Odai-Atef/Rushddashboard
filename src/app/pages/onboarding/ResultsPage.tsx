@@ -180,7 +180,7 @@ export function ResultsPage() {
 
  if (isLoadingResults) {
  return (
- <div className="min-h-full bg-background p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="text-center">
  <Loader2 className="w-12 h-12 text-primary animate-spin mx-auto mb-4" />
  <p className="text-muted-foreground">جاري تحميل النتائج...</p>
@@ -191,7 +191,7 @@ export function ResultsPage() {
 
  if (resultsError) {
  return (
- <div className="min-h-full bg-background p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="max-w-md w-full bg-[var(--card)] rounded-xl shadow-sm border border-[var(--destructive)]/[0.3] p-8 text-center">
  <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
  <h2 className="text-xl font-bold mb-2">تعذر تحميل النتائج</h2>
@@ -225,7 +225,7 @@ export function ResultsPage() {
 
  if ((localStatus ?? assessmentStatus) && (localStatus ?? assessmentStatus)?.status !== 'COMPLETED' && !isivResult) {
  return (
- <div className="min-h-full bg-background p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="max-w-2xl w-full bg-[var(--card)] rounded-xl shadow-sm border border-border p-8 text-center">
  <Info className="w-12 h-12 text-[var(--secondary)] mx-auto mb-4" />
  <h2 className="text-2xl font-bold mb-2">
@@ -256,13 +256,13 @@ export function ResultsPage() {
  }
 
  return (
- <div ref={reportContainerRef} className="min-h-full bg-background p-3 sm:p-6">
+ <div ref={reportContainerRef} className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div className="max-w-6xl mx-auto">
  {/* Header */}
- <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-4 sm:p-8 mb-6 text-[var(--primary-foreground)]">
- <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+ <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl p-[var(--spacing-card-padding)] sm:p-8 mb-6 text-[var(--primary-foreground)]">
+ <div className="flex flex-col sm:flex-row items-center justify-between gap-[var(--spacing-grid-gap)]">
  <div>
- <div className="inline-flex items-center gap-2 bg-[var(--card)]/20 px-3 py-1 rounded-full mb-3">
+ <div className="inline-flex items-center gap-[var(--spacing-small-gap)] bg-[var(--card)]/20 px-3 py-1 rounded-full mb-3">
  <Sparkles className="w-4 h-4" />
  <span className="text-sm">نتائج التقييم</span>
  </div>
@@ -276,7 +276,7 @@ export function ResultsPage() {
  <div className="text-sm">من 100</div>
  </div>
  </div>
- <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full font-medium ${statusOption.bgClass} ${statusOption.textClass}`}>
+ <div className={`inline-flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 rounded-full font-medium ${statusOption.bgClass} ${statusOption.textClass}`}>
  <Award className="w-4 h-4" />
  <span>{displayMessage}</span>
  </div>
@@ -285,9 +285,9 @@ export function ResultsPage() {
  </div>
 
  {/* Qualification Status */}
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-4 sm:p-6 mb-6">
- <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
- <div className="flex items-center gap-4">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] mb-6">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-[var(--spacing-grid-gap)]">
+ <div className="flex items-center gap-[var(--spacing-grid-gap)]">
  <div className={`w-16 h-16 rounded-full flex items-center justify-center bg-opacity-10 ${statusOption.bgClass.replace('bg-', 'bg-').replace('-400', '-50')}`}>
  <statusOption.icon className={`w-8 h-8 ${statusOption.textClass.replace('900', '600')}`} />
  </div>
@@ -299,7 +299,7 @@ export function ResultsPage() {
  {isQualified && (
  <button
  onClick={() => goToStep('roadmap')}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  عرض خطة التطوير
  <ArrowRight className="w-5 h-5" />
@@ -309,8 +309,8 @@ export function ResultsPage() {
  </div>
 
  {/* Charts */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 items-stretch">
- <div className="bg-[var(--card)] rounded-2xl shadow-sm border border-border/80/50 p-6 transition-all duration-200 hover:shadow-md">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-[var(--spacing-grid-gap)] sm:gap-[var(--spacing-grid-gap)] mb-6 items-stretch">
+ <div className="bg-[var(--card)] rounded-2xl shadow-sm border border-border/80/50 p-[var(--spacing-card-padding)] transition-all duration-200 hover:shadow-md">
  <h3 className="text-lg font-semibold text-foreground mb-4">التحليل الشامل</h3>
  {radarData.length > 0 ? (
  <ResponsiveContainer width="100%" height={300}>
@@ -326,12 +326,12 @@ export function ResultsPage() {
  )}
  </div>
 
- <div className="bg-[var(--card)] rounded-2xl shadow-sm border border-border/80/50 p-6 transition-all duration-200 hover:shadow-md">
+ <div className="bg-[var(--card)] rounded-2xl shadow-sm border border-border/80/50 p-[var(--spacing-card-padding)] transition-all duration-200 hover:shadow-md">
  <h3 className="text-lg font-semibold text-foreground mb-4">الأبعاد التفصيلية</h3>
  {categoryScores.length > 0 ? (
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-grid-gap)] items-stretch">
  {categoryScores.map((cs) => (
- <div key={cs.categoryId} className="bg-card/60 rounded-xl border border-border p-4 flex flex-col justify-between h-full" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
+ <div key={cs.categoryId} className="bg-card/60 rounded-xl border border-border p-[var(--spacing-card-padding)] flex flex-col justify-between h-full" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
  <div className="flex items-center justify-between mb-3">
  <span className="text-sm font-medium text-foreground">{cs.categoryName}</span>
  <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${cs.color}20`, color: cs.color }}>
@@ -352,26 +352,26 @@ export function ResultsPage() {
  </div>
 
  {/* Diagnostic Feedback */}
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
- <div className="lg:col-span-3 bg-[var(--card)] rounded-xl shadow-sm border border-border p-6">
+ <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-grid-gap)] sm:gap-[var(--spacing-grid-gap)] mb-6">
+ <div className="lg:col-span-3 bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)]">
  <h3 className="text-lg font-semibold mb-3">التشخيص</h3>
  <p className="text-foreground leading-relaxed">{isivResult?.diagnosis || 'لا يوجد تشخيص متاح.'}</p>
  </div>
 
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6">
- <h3 className="text-lg font-semibold mb-3 flex items-center gap-2 text-[var(--primary)]">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)]">
+ <h3 className="text-lg font-semibold mb-3 flex items-center gap-[var(--spacing-small-gap)] text-[var(--primary)]">
  <CheckCircle2 className="w-5 h-5" />
  نقاط القوة
  </h3>
  {strengths.length > 0 ? (
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {strengths.map((strength, idx) => {
  const isObject = typeof strength === 'object';
  const label = isObject ? (strength as StrengthItem).area : (strength as string);
  const insight = isObject ? (strength as StrengthItem).insight : null;
  return (
- <li key={idx} className="flex flex-col gap-1 text-foreground">
- <div className="flex items-start gap-2">
+ <li key={idx} className="flex flex-col gap-[var(--spacing-small-gap)] text-foreground">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Check className="w-4 h-4 text-[var(--primary)] mt-0.5 flex-shrink-0" />
  <span className="font-medium">{label}</span>
  </div>
@@ -385,21 +385,21 @@ export function ResultsPage() {
  )}
  </div>
 
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6">
- <h3 className="text-lg font-semibold mb-3 flex items-center gap-2 text-[var(--destructive)]">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)]">
+ <h3 className="text-lg font-semibold mb-3 flex items-center gap-[var(--spacing-small-gap)] text-[var(--destructive)]">
  <AlertCircle className="w-5 h-5" />
  مجالات التحسين
  </h3>
  {weaknesses.length > 0 ? (
- <ul className="space-y-2">
+ <ul className="space-y-[var(--spacing-small-gap)]">
  {weaknesses.map((weakness, idx) => {
  const isObject = typeof weakness === 'object';
  const label = isObject ? (weakness as WeaknessItem).area : (weakness as string);
  const insight = isObject ? (weakness as WeaknessItem).insight : null;
  const severity = isObject ? (weakness as WeaknessItem).severity : null;
  return (
- <li key={idx} className="flex flex-col gap-1 text-foreground">
- <div className="flex items-start gap-2">
+ <li key={idx} className="flex flex-col gap-[var(--spacing-small-gap)] text-foreground">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <X className="w-4 h-4 text-[var(--destructive)] mt-0.5 flex-shrink-0" />
  <span className="font-medium">{label}</span>
  {severity && <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--destructive)]/[0.1] text-[var(--destructive)]">{severity}</span>}
@@ -414,9 +414,9 @@ export function ResultsPage() {
  )}
  </div>
 
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-6">
+ <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)]">
  <h3 className="text-lg font-semibold mb-4">المقارنة المعيارية</h3>
- <div className="space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)]">
  <div>
  <div className="flex items-center justify-between mb-2">
  <span className="text-sm font-medium">مؤسستك</span>
@@ -449,7 +449,7 @@ export function ResultsPage() {
  </div>
 
  {/* Action Buttons */}
- <div className="report-exclude flex flex-col sm:flex-row gap-3 sm:gap-4">
+ <div className="report-exclude flex flex-col sm:flex-row gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)]">
  <button
  onClick={() => goToStep('analysis')}
  className="flex-1 px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium"
@@ -459,7 +459,7 @@ export function ResultsPage() {
  <button
  onClick={handleDownloadReport}
  disabled={isDownloading}
- className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isDownloading ? (
  <Loader2 className="w-5 h-5 animate-spin" />

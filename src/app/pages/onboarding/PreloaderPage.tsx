@@ -120,7 +120,7 @@ export function PreloaderPage() {
 
  if (cooldownInfo?.blocked) {
  return (
- <div className="min-h-full bg-background p-6 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="max-w-xl w-full">
  <div className="bg-[var(--card)] rounded-xl shadow-lg border border-border p-10 text-center">
  <div className="w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -151,7 +151,7 @@ export function PreloaderPage() {
  }
 
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-6 flex items-center justify-center">
+ <div className="min-h-full bg-gradient-to-br from-blue-50 to-indigo-50 p-[var(--spacing-card-padding)] flex items-center justify-center">
  <div className="max-w-2xl w-full">
  <div className="bg-[var(--card)] rounded-xl shadow-lg border border-border p-12 text-center">
  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-6 animate-pulse">
@@ -179,7 +179,7 @@ export function PreloaderPage() {
  </div>
  </div>
 
- <div className="space-y-3 text-right">
+ <div className="space-y-[var(--spacing-small-gap)] text-right">
  {[
  { threshold: 20, label: 'تحليل الإجابات' },
  { threshold: 50, label: 'مراجعة معلومات الجهة' },
@@ -189,7 +189,7 @@ export function PreloaderPage() {
  return (
  <div
  key={item.label}
- className={`flex items-center gap-3 p-3 rounded-lg ${
+ className={`flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] rounded-lg ${
  done ? 'bg-[var(--primary)]/[0.08]' : 'bg-secondary'
  }`}
  >

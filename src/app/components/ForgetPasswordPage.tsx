@@ -81,7 +81,7 @@ export function ForgetPasswordPage() {
 
  {/* Error Message */}
  {status === 'error' && (
- <div className="mb-6 p-4 bg-[var(--destructive)]/10 border border-red-500/20 rounded-lg flex items-start gap-3">
+ <div className="mb-6 p-4 bg-[var(--destructive)]/10 border border-red-500/20 rounded-lg flex items-start gap-[var(--spacing-small-gap)]">
  <AlertCircle className="w-5 h-5 text-[var(--destructive)] flex-shrink-0 mt-0.5" />
  <p className="text-sm text-[var(--destructive)]">{errorMessage}</p>
  </div>
@@ -117,7 +117,7 @@ export function ForgetPasswordPage() {
  <button
  type="submit"
  disabled={isLoading}
- className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+ className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isLoading ? (
  <>
@@ -164,7 +164,7 @@ export function ForgetPasswordPage() {
  </div>
 
  {/* Actions */}
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <button
  onClick={() => navigate('/auth/login')}
  className="w-full py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
@@ -186,7 +186,7 @@ export function ForgetPasswordPage() {
  </div>
 
  {/* Right Side - Security Info */}
- <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-blue-600 to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
+ <div className="hidden lg:flex flex-1 bg-gradient-to-br from-purple-500 via-[var(--secondary)] to-cyan-600 p-12 items-center justify-center relative overflow-hidden">
  {/* Decorative circles */}
  <div className="absolute top-20 right-20 w-64 h-64 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
  <div className="absolute bottom-20 left-20 w-96 h-96 bg-[var(--card)]/10 rounded-full blur-3xl"></div>
@@ -203,8 +203,8 @@ export function ForgetPasswordPage() {
 
  {/* Security Features */}
  <div className="space-y-4">
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <CheckCircle className="w-5 h-5" />
  </div>
  <div>
@@ -213,8 +213,8 @@ export function ForgetPasswordPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <CheckCircle className="w-5 h-5" />
  </div>
  <div>
@@ -223,8 +223,8 @@ export function ForgetPasswordPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <CheckCircle className="w-5 h-5" />
  </div>
  <div>
@@ -233,8 +233,8 @@ export function ForgetPasswordPage() {
  </div>
  </div>
 
- <div className="flex items-start gap-3 p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
- <div className="p-2 bg-[var(--card)]/20 rounded-lg flex-shrink-0">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-4 bg-[var(--card)]/10 backdrop-blur-sm rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-[var(--card)]/20 rounded-lg flex-shrink-0">
  <CheckCircle className="w-5 h-5" />
  </div>
  <div>

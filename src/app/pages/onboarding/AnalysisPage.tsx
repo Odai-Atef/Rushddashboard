@@ -95,13 +95,13 @@ export function AnalysisPage() {
  ];
 
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div className="max-w-5xl mx-auto">
  {/* Header */}
  <div className="mb-6 sm:mb-8">
  <button
  onClick={() => goToStep('results')}
- className="text-primary hover:text-primary font-medium flex items-center gap-2 mb-4"
+ className="text-primary hover:text-primary font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى النتائج
@@ -114,28 +114,28 @@ export function AnalysisPage() {
 
  {/* Strengths */}
  <div className="mb-6 sm:mb-8">
- <div className="flex items-center gap-3 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <div className="w-10 h-10 bg-[var(--primary)]/[0.08] rounded-lg flex items-center justify-center">
  <Star className="w-5 h-5 text-[var(--primary)]" />
  </div>
  <h2 className="text-xl sm:text-2xl font-bold">نقاط القوة</h2>
  </div>
- <div className="space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {strengths.map((item, idx) => {
  const Icon = item.icon;
  return (
  <div
  key={idx}
- className="bg-[var(--card)] rounded-2xl shadow-sm border border-[var(--primary)]/[0.3] p-4 sm:p-6 transition-all duration-200 hover:shadow-md"
+ className="bg-[var(--card)] rounded-2xl shadow-sm border border-[var(--primary)]/[0.3] p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] transition-all duration-200 hover:shadow-md"
  >
- <div className="flex items-start gap-4">
+ <div className="flex items-start gap-[var(--spacing-grid-gap)]">
  <div className="w-12 h-12 bg-[var(--primary)]/[0.08] rounded-xl flex items-center justify-center flex-shrink-0">
  <Icon className="w-6 h-6 text-[var(--primary)]" />
  </div>
  <div className="flex-1">
  <div className="flex items-center justify-between mb-2">
  <h3 className="text-lg font-semibold text-foreground">{item.area}</h3>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-3xl font-bold text-[var(--primary)] tracking-tight">
  {item.score}
  </span>
@@ -143,7 +143,7 @@ export function AnalysisPage() {
  </div>
  </div>
  <p className="text-muted-foreground">{item.insight}</p>
- <div className="flex items-center gap-2 mt-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mt-3">
  <CheckCircle2 className="w-4 h-4 text-[var(--primary)]" />
  <span className="text-sm text-[var(--primary)] font-medium">
  أداء ممتاز - استمروا في الحفاظ على هذا المستوى
@@ -159,13 +159,13 @@ export function AnalysisPage() {
 
  {/* Weaknesses */}
  <div className="mb-6 sm:mb-8">
- <div className="flex items-center gap-3 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <div className="w-10 h-10 bg-[var(--destructive)]/[0.08] rounded-lg flex items-center justify-center">
  <AlertTriangle className="w-5 h-5 text-[var(--destructive)]" />
  </div>
  <h2 className="text-xl sm:text-2xl font-bold">مجالات التحسين</h2>
  </div>
- <div className="space-y-4">
+ <div className="space-y-[var(--spacing-section-gap)]">
  {weaknesses.map((item, idx) => {
  const Icon = item.icon;
  const severityConfig =
@@ -188,9 +188,9 @@ export function AnalysisPage() {
  return (
  <div
  key={idx}
- className={`bg-[var(--card)] rounded-2xl shadow-sm border-2 ${severityConfig.border.replace('200', '80')} dark:${severityConfig.border.replace('200', '500/30')} p-4 sm:p-6 transition-all duration-200 hover:shadow-md`}
+ className={`bg-[var(--card)] rounded-2xl shadow-sm border-2 ${severityConfig.border.replace('200', '80')} dark:${severityConfig.border.replace('200', '500/30')} p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] transition-all duration-200 hover:shadow-md`}
  >
- <div className="flex items-start gap-4">
+ <div className="flex items-start gap-[var(--spacing-grid-gap)]">
  <div
  className={`w-12 h-12 ${severityConfig.bg} rounded-xl flex items-center justify-center flex-shrink-0`}
  >
@@ -198,7 +198,7 @@ export function AnalysisPage() {
  </div>
  <div className="flex-1">
  <div className="flex items-center justify-between mb-2">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <h3 className="text-lg font-semibold text-foreground">{item.area}</h3>
  <span
  className={`text-xs px-2 py-1 rounded-full font-medium ${severityConfig.badge}`}
@@ -206,7 +206,7 @@ export function AnalysisPage() {
  {severityConfig.label}
  </span>
  </div>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className={`text-3xl font-bold tracking-tight ${severityConfig.text}`}>
  {item.score}
  </span>
@@ -215,7 +215,7 @@ export function AnalysisPage() {
  </div>
  <p className="text-muted-foreground mb-3">{item.insight}</p>
  <div
- className={`flex items-center gap-2 p-3 ${severityConfig.bg} rounded-lg`}
+ className={`flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] ${severityConfig.bg} rounded-lg`}
  >
  <Lightbulb className={`w-4 h-4 ${severityConfig.text}`} />
  <span className={`text-sm font-medium ${severityConfig.text.replace('600', '900')}`}>
@@ -231,8 +231,8 @@ export function AnalysisPage() {
  </div>
 
  {/* AI Recommendations */}
- <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-6 border border-[var(--secondary)]/[0.3]">
- <div className="flex items-start gap-4">
+ <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.3]">
+ <div className="flex items-start gap-[var(--spacing-grid-gap)]">
  <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center flex-shrink-0">
  <Brain className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
@@ -245,7 +245,7 @@ export function AnalysisPage() {
  </p>
  <button
  onClick={() => goToStep('roadmap')}
- className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-2"
+ className="px-6 py-3 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  عرض خطة التطوير الكاملة
  <ArrowRight className="w-5 h-5" />

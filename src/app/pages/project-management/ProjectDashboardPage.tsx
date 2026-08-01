@@ -136,7 +136,7 @@ export function ProjectDashboardPage() {
 
  if (isLoading || isCheckingQualification || notificationsLoading) {
  return (
- <div className="min-h-full bg-background p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] lg:p-8 flex items-center justify-center">
  <div className="w-8 h-8 border-4 border-ring border-t-transparent rounded-full animate-spin" />
  </div>
  );
@@ -166,8 +166,8 @@ export function ProjectDashboardPage() {
  : '/dashboard/charity-assessment';
 
  return (
- <div className="min-h-full bg-background p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
- <div className="bg-card rounded-xl border border-[var(--destructive)]/[0.3] shadow-sm p-6 sm:p-12 text-center max-w-lg mx-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] lg:p-8 flex flex-col items-center justify-center gap-[var(--spacing-grid-gap)]">
+ <div className="bg-card rounded-xl border border-[var(--destructive)]/[0.3] shadow-sm p-[var(--spacing-card-padding)] sm:p-12 text-center max-w-lg mx-4">
  <AlertTriangle className="w-12 sm:w-16 h-12 sm:h-16 text-red-500 mx-auto mb-4 sm:mb-6" />
  <h2 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4 text-[var(--destructive)]">{title}</h2>
  <p className="text-muted-foreground mb-4 sm:mb-6 text-sm sm:text-base">{subtitle}</p>
@@ -185,7 +185,7 @@ export function ProjectDashboardPage() {
  )}
  <button
  onClick={() => navigate(ctaPath)}
- className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-2 mx-auto"
+ className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] mx-auto"
  >
  {cta}
  </button>
@@ -201,7 +201,7 @@ export function ProjectDashboardPage() {
  }
  if (!isProjectManager) {
  return (
- <div className="min-h-full bg-background p-4 sm:p-6 lg:p-8 flex flex-col items-center justify-center gap-4">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] lg:p-8 flex flex-col items-center justify-center gap-[var(--spacing-grid-gap)]">
  <div className="text-[var(--destructive)] text-center">{error || 'لا توجد بيانات'}</div>
  </div>
  );
@@ -219,10 +219,10 @@ export function ProjectDashboardPage() {
  };
 
  return (
- <div className="min-h-full bg-background p-4 sm:p-6 lg:p-8">
- <div className="space-y-4 sm:space-y-6 md:space-y-8">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] lg:p-8">
+ <div className="space-y-[var(--spacing-section-gap)] sm:space-y-[var(--spacing-section-gap)] md:space-y-8">
  {/* Header */}
- <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+ <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-[var(--spacing-small-gap)]">
  <div className="w-full">
  <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">لوحة المشاريع</h1>
  <p className="text-muted-foreground text-sm sm:text-base">نظرة شاملة على جميع المشاريع والأنشطة</p>
@@ -230,7 +230,7 @@ export function ProjectDashboardPage() {
  {(roleSlug === 'entity-managers' || roleSlug === 'project-managers') && (
  <button
  onClick={() => navigate('/dashboard/project-management/create')}
- className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-2 shrink-0"
+ className="w-full sm:w-auto px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] shrink-0"
  >
  <Plus className="w-4 sm:w-5 h-4 sm:h-5" />
  مشروع جديد
@@ -239,12 +239,12 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Quick Actions */}
- <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
  <h3 className="text-lg font-semibold text-foreground mb-4">إجراءات سريعة</h3>
- <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+ <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => navigate('/dashboard/project-management/list')}
- className="p-3 sm:p-4 border-2 border-dashed border-border rounded-xl hover:border-emerald-500 hover:bg-[var(--primary)]/[0.08] dark:hover:bg-[var(--primary)]/[0.08]0/10 transition-colors text-center"
+ className="p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border-2 border-dashed border-border rounded-xl hover:border-emerald-500 hover:bg-[var(--primary)]/[0.08] dark:hover:bg-[var(--primary)]/[0.08]0/10 transition-colors text-center"
  >
  <List className="w-5 sm:w-6 h-5 sm:h-6 text-muted-foreground mx-auto mb-2" />
  <p className="font-medium text-sm">عرض جميع المشاريع</p>
@@ -252,7 +252,7 @@ export function ProjectDashboardPage() {
  {(roleSlug === 'entity-managers' || roleSlug === 'project-managers') && (
  <button
  onClick={() => navigate('/dashboard/project-management/create')}
- className="p-3 sm:p-4 border-2 border-dashed border-border rounded-xl hover:border-emerald-500 hover:bg-[var(--primary)]/[0.08] dark:hover:bg-[var(--primary)]/[0.08]0/10 transition-colors text-center"
+ className="p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border-2 border-dashed border-border rounded-xl hover:border-emerald-500 hover:bg-[var(--primary)]/[0.08] dark:hover:bg-[var(--primary)]/[0.08]0/10 transition-colors text-center"
  >
  <Plus className="w-5 sm:w-6 h-5 sm:h-6 text-muted-foreground mx-auto mb-2" />
  <p className="font-medium text-sm">إنشاء مشروع جديد</p>
@@ -260,7 +260,7 @@ export function ProjectDashboardPage() {
  )}
  <button
  onClick={() => navigate('/dashboard/project-management/reporting')}
- className="p-3 sm:p-4 border-2 border-dashed border-border rounded-xl hover:border-emerald-500 hover:bg-[var(--primary)]/[0.08] dark:hover:bg-[var(--primary)]/[0.08]0/10 transition-colors text-center"
+ className="p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border-2 border-dashed border-border rounded-xl hover:border-emerald-500 hover:bg-[var(--primary)]/[0.08] dark:hover:bg-[var(--primary)]/[0.08]0/10 transition-colors text-center"
  >
  <BarChart3 className="w-5 sm:w-6 h-5 sm:h-6 text-muted-foreground mx-auto mb-2" />
  <p className="font-medium text-sm">التقارير الإدارية</p>
@@ -269,11 +269,11 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Stats Cards */}
- <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4 md:gap-6 items-stretch">
+ <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)] md:gap-[var(--spacing-grid-gap)] items-stretch">
  {/* Total Projects */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div>
- <div className="p-2.5 rounded-xl bg-muted/80 w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/80 w-fit mb-4">
  <Briefcase className="w-6 h-6 text-muted-foreground" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">إجمالي المشاريع</p>
@@ -282,9 +282,9 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Active Projects */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-[var(--secondary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md dark:hover:shadow-ring/10 flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md dark:hover:shadow-ring/10 flex flex-col justify-between h-full">
  <div>
- <div className="p-2.5 rounded-xl bg-[var(--secondary)]/[0.08]/10 w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08]/10 w-fit mb-4">
  <Activity className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">المشاريع النشطة</p>
@@ -293,9 +293,9 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Drafts */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div>
- <div className="p-2.5 rounded-xl bg-muted/80 w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/80 w-fit mb-4">
  <FileText className="w-6 h-6 text-muted-foreground" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">مسودات</p>
@@ -304,9 +304,9 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Awaiting Approval */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-[var(--warning)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--warning)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div>
- <div className="p-2.5 rounded-xl bg-[var(--warning)]/[0.1] w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--warning)]/[0.1] w-fit mb-4">
  <Clock className="w-6 h-6 text-[var(--warning)]" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">بانتظار الموافقة</p>
@@ -315,9 +315,9 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Approved */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-[var(--primary)]/[0.3] shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--primary)]/[0.3] shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div>
- <div className="p-2.5 rounded-xl bg-[var(--primary)]/[0.08] w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--primary)]/[0.08] w-fit mb-4">
  <CheckCircle2 className="w-6 h-6 text-[var(--primary)]" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">معتمد</p>
@@ -326,9 +326,9 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Funded */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-[var(--primary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--primary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div>
- <div className="p-2.5 rounded-xl bg-[var(--primary)]/[0.08]/[0.08]0/10 w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--primary)]/[0.08]/[0.08]0/10 w-fit mb-4">
  <DollarSign className="w-6 h-6 text-[var(--primary)]" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">ممول</p>
@@ -337,9 +337,9 @@ export function ProjectDashboardPage() {
  </div>
 
  {/* Completed */}
- <div className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-[var(--secondary)]/[0.2]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+ <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.2]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div>
- <div className="p-2.5 rounded-xl bg-[var(--secondary)]/[0.08] w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08] w-fit mb-4">
  <Target className="w-6 h-6 text-purple-600" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">مكتمل</p>
@@ -350,7 +350,7 @@ export function ProjectDashboardPage() {
 
  {/* Status Distribution Cards (for PM) */}
  {isProjectManager && statusDistribution.length > 0 && (
- <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 items-stretch">
+ <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-[var(--spacing-small-gap)] items-stretch">
  {statusDistribution
  .filter((item) => item.value > 0)
  .map((item, idx) => {
@@ -363,9 +363,9 @@ export function ProjectDashboardPage() {
  return (
  <div
  key={idx}
- className="bg-[var(--card)] rounded-2xl p-4 sm:p-6 border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full"
+ className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border/80/50 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full"
  >
- <div className="p-2.5 rounded-xl w-fit mb-4" style={{ backgroundColor: `${config.color}15` }}>
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl w-fit mb-4" style={{ backgroundColor: `${config.color}15` }}>
  <Activity className="w-6 h-6" style={{ color: config.color }} />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">{config.label}</p>
@@ -380,7 +380,7 @@ export function ProjectDashboardPage() {
 
  {/* Status Distribution Chart */}
  {isProjectManager && (
- <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
  <h3 className="text-lg font-semibold text-foreground mb-4">توزيع حالات المشاريع</h3>
  <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
  {statusDistribution.length > 0 ? (
@@ -403,7 +403,7 @@ export function ProjectDashboardPage() {
  )}
 
  {!isProjectManager && statusDistribution.length > 0 && (
- <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
  <h3 className="text-lg font-semibold text-foreground mb-4">توزيع حالات المشاريع</h3>
  <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
  <ResponsiveContainer width="100%" height={300} minWidth={300}>
@@ -420,8 +420,8 @@ export function ProjectDashboardPage() {
  )}
 
  {/* Recent Activity + Notifications */}
- <div className={`grid gap-4 sm:gap-6 ${isProjectManager ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
- <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
+ <div className={`grid gap-[var(--spacing-grid-gap)] sm:gap-[var(--spacing-grid-gap)] ${isProjectManager ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
  <div className="flex items-center justify-between mb-4">
  <h3 className="text-base sm:text-lg font-semibold">النشاط الأخير</h3>
  <button
@@ -431,12 +431,12 @@ export function ProjectDashboardPage() {
  عرض الكل
  </button>
  </div>
- <div className="space-y-3 sm:space-y-4">
+ <div className="space-y-[var(--spacing-small-gap)] sm:space-y-[var(--spacing-section-gap)]">
  {recentActivity.length > 0 ? (
  recentActivity.map((activity, idx) => (
  <div
  key={idx}
- className="flex items-start gap-3 p-2 sm:p-3 hover:bg-secondary rounded-lg transition-colors"
+ className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-small-gap)] sm:p-[var(--spacing-card-padding)] hover:bg-secondary rounded-lg transition-colors"
  >
  <div className="w-8 h-8 bg-[var(--secondary)]/[0.1]/20 rounded-full flex items-center justify-center flex-shrink-0">
  <User className="w-4 h-4 text-[var(--secondary)]" />
@@ -458,9 +458,9 @@ export function ProjectDashboardPage() {
  </div>
 
  {isProjectManager && (
- <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+ <h3 className="text-base sm:text-lg font-semibold flex items-center gap-[var(--spacing-small-gap)]">
  <Bell className="w-5 h-5 text-[var(--warning)]" />
  إشعارات تتطلب إجراء
  {unreadCount > 0 && (
@@ -476,7 +476,7 @@ export function ProjectDashboardPage() {
  عرض الكل
  </button>
  </div>
- <div className="space-y-3 sm:space-y-4">
+ <div className="space-y-[var(--spacing-small-gap)] sm:space-y-[var(--spacing-section-gap)]">
  {notifications.filter((n) => n.status !== 'READ').length > 0 ? (
  notifications
  .filter((n) => n.status !== 'READ')
@@ -485,7 +485,7 @@ export function ProjectDashboardPage() {
  <div
  key={notification.id}
  onClick={() => navigate('/dashboard/notifications')}
- className="flex items-start gap-3 p-3 hover:bg-secondary dark:hover:bg-muted rounded-xl transition-colors cursor-pointer border-r-4 border-r-amber-500"
+ className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] hover:bg-secondary dark:hover:bg-muted rounded-xl transition-colors cursor-pointer border-r-4 border-r-amber-500"
  >
  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-amber-100">
  <AlertTriangle className="w-4 h-4 text-[var(--warning)]" />
@@ -507,9 +507,9 @@ export function ProjectDashboardPage() {
 
  {/* Latest Notifications (for PM) */}
  {isProjectManager && (
- <div className="bg-card rounded-xl p-4 sm:p-6 border border-border shadow-sm">
+ <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
  <div className="flex items-center justify-between mb-4">
- <h3 className="text-base sm:text-lg font-semibold flex items-center gap-2">
+ <h3 className="text-base sm:text-lg font-semibold flex items-center gap-[var(--spacing-small-gap)]">
  <Bell className="w-5 h-5 text-[var(--secondary)]" />
  أحدث الإشعارات
  </h3>
@@ -520,7 +520,7 @@ export function ProjectDashboardPage() {
  عرض الكل
  </button>
  </div>
- <div className="space-y-3 sm:space-y-4">
+ <div className="space-y-[var(--spacing-small-gap)] sm:space-y-[var(--spacing-section-gap)]">
  {notifications.length > 0 ? (
  notifications.slice(0, 5).map((notification) => {
  const isUnread = notification.status !== 'READ';
@@ -528,7 +528,7 @@ export function ProjectDashboardPage() {
  <div
  key={notification.id}
  onClick={() => navigate('/dashboard/notifications')}
- className={`flex items-start gap-3 p-3 hover:bg-secondary dark:hover:bg-muted rounded-xl transition-colors cursor-pointer ${
+ className={`flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] hover:bg-secondary dark:hover:bg-muted rounded-xl transition-colors cursor-pointer ${
  isUnread ? 'bg-[var(--warning)]/[0.08]/50 border-r-4 border-r-amber-500' : ''
  }`}
  >

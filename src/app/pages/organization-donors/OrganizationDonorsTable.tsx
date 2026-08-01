@@ -130,7 +130,7 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
  className="text-right px-4 py-3 text-sm font-semibold text-muted-foreground whitespace-nowrap cursor-pointer hover:text-foreground transition-colors"
  onClick={() => handleSort(col.key)}
  >
- <div className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  {col.label}
  <ArrowUpDown className="w-3.5 h-3.5 opacity-50" />
  </div>
@@ -148,7 +148,7 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
  onClick={() => onRowClick?.(donor)}
  >
  <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[var(--primary-foreground)] text-xs">
  {donor.name?.charAt(0)}
  </div>
@@ -164,20 +164,20 @@ export function OrganizationDonorsTable({ donors, onRowClick }: OrganizationDono
  {donor.organizationName || '-'}
  </td>
  <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
- <div className="flex items-center gap-1.5">
+ <div className="flex items-center gap-[var(--spacing-small-gap)].5">
  <Coins className="w-3.5 h-3.5 text-muted-foreground" />
  {formatCurrency(donor.projectBudget, donor.projectCurrencyCode)}
  </div>
  </td>
  <td className="px-4 py-3 text-sm text-foreground whitespace-nowrap">
- <div className="flex items-center gap-1.5">
+ <div className="flex items-center gap-[var(--spacing-small-gap)].5">
  <Calendar className="w-3.5 h-3.5 text-muted-foreground" />
  {timeAgo(donor.proposalSubmissionDate)}
  </div>
  </td>
  <td className="px-4 py-3 whitespace-nowrap">
  <span
- className="inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full font-medium"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] text-xs px-2 py-1 rounded-full font-medium"
  style={{ backgroundColor: statusCfg.bg, color: statusCfg.color }}
  >
  {statusCfg.label}

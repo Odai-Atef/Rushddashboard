@@ -125,7 +125,7 @@ export function AIProjectInnovationModule() {
  <div className="space-y-6">
  {/* Header */}
  <div className="text-center mb-8">
- <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--primary-foreground)] px-4 py-2 rounded-full mb-4">
+ <div className="inline-flex items-center gap-[var(--spacing-small-gap)] bg-gradient-to-r from-[var(--secondary)] to-indigo-600 text-[var(--primary-foreground)] px-4 py-2 rounded-full mb-4">
  <Sparkles className="w-4 h-4" />
  <span className="text-sm font-medium">مدعوم بالذكاء الاصطناعي</span>
  </div>
@@ -134,33 +134,33 @@ export function AIProjectInnovationModule() {
  </div>
 
  {/* Organization Context */}
- <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-[var(--secondary)]/[0.3]">
+ <div className="bg-gradient-to-r from-[var(--secondary)]/10 to-indigo-50 rounded-xl p-6 border border-[var(--secondary)]/[0.3]">
  <div className="flex items-center justify-between mb-4">
  <h2 className="text-lg font-semibold text-foreground">سياق الجهه</h2>
- <div className="flex items-center gap-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-sm text-muted-foreground">درجة الجاهزية</span>
- <div className="flex items-center gap-2 px-3 py-1 bg-card rounded-full">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] px-3 py-1 bg-card rounded-full">
  <div className="w-2 h-2 bg-[var(--primary)] rounded-full"></div>
  <span className="text-sm font-bold text-[var(--primary)]">{organization.readinessScore}%</span>
  </div>
  </div>
  </div>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
- <div className="flex items-center gap-3 bg-card rounded-lg p-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] bg-card rounded-lg p-4">
  <Building2 className="w-5 h-5 text-[var(--secondary)]" />
  <div>
  <p className="text-xs text-muted-foreground">الجهه</p>
  <p className="font-medium">{organization.name}</p>
  </div>
  </div>
- <div className="flex items-center gap-3 bg-card rounded-lg p-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] bg-card rounded-lg p-4">
  <Users className="w-5 h-5 text-[var(--secondary)]" />
  <div>
  <p className="text-xs text-muted-foreground">المستفيدون</p>
  <p className="font-medium">{organization.beneficiaries}</p>
  </div>
  </div>
- <div className="flex items-center gap-3 bg-card rounded-lg p-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] bg-card rounded-lg p-4">
  <MapPin className="w-5 h-5 text-[var(--secondary)]" />
  <div>
  <p className="text-xs text-muted-foreground">النطاق الجغرافي</p>
@@ -180,12 +180,12 @@ export function AIProjectInnovationModule() {
  }}
  className="group relative bg-card rounded-xl p-8 border-2 border-border hover:border-primary hover:shadow-xl transition-all text-right"
  >
- <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+ <div className="w-16 h-16 bg-gradient-to-br from-[var(--secondary)] to-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
  <Plus className="w-8 h-8 text-[var(--primary-foreground)]" />
  </div>
  <h3 className="text-xl font-bold mb-2">إنشاء مشروع جديد</h3>
  <p className="text-muted-foreground mb-4">ابدأ من الصفر واستخدم الذكاء الاصطناعي لإنشاء مشروع كامل</p>
- <div className="flex items-center gap-2 text-[var(--secondary)] font-medium">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-[var(--secondary)] font-medium">
  <span>ابدأ الآن</span>
  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
  </div>
@@ -204,7 +204,7 @@ export function AIProjectInnovationModule() {
  </div>
  <h3 className="text-xl font-bold mb-2">تحسين مشروع موجود</h3>
  <p className="text-muted-foreground mb-4">ارفع جودة مشروعك وزد فرص التمويل بالذكاء الاصطناعي</p>
- <div className="flex items-center gap-2 text-[var(--primary)] font-medium">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-[var(--primary)] font-medium">
  <span>حسّن الآن</span>
  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
  </div>
@@ -223,7 +223,7 @@ export function AIProjectInnovationModule() {
  </div>
  <h3 className="text-xl font-bold mb-2">تجهيز للمانحين</h3>
  <p className="text-muted-foreground mb-4">حضّر مشروعك للعرض على المانحين بمعايير احترافية</p>
- <div className="flex items-center gap-2 text-purple-600 font-medium">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] text-purple-600 font-medium">
  <span>جهّز الآن</span>
  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
  </div>
@@ -232,11 +232,11 @@ export function AIProjectInnovationModule() {
 
  {/* AI Insights Panel */}
  <div className="bg-card rounded-xl p-6 border border-border shadow-sm">
- <div className="flex items-center gap-2 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <Brain className="w-5 h-5 text-indigo-600" />
  <h3 className="text-lg font-semibold">رؤى ذكية</h3>
  </div>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {opportunities.map((opp, idx) => {
  const Icon = opp.icon;
  return (
@@ -333,7 +333,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-8">
  <button
  onClick={() => setCurrentView('studio')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى الاستوديو
@@ -350,7 +350,7 @@ export function AIProjectInnovationModule() {
  </div>
  <div className="h-2 bg-muted rounded-full overflow-hidden">
  <div
- className="h-full bg-gradient-to-r from-blue-500 to-indigo-600 transition-all duration-300"
+ className="h-full bg-gradient-to-r from-[var(--secondary)] to-indigo-600 transition-all duration-300"
  style={{ width: `${progress}%` }}
  ></div>
  </div>
@@ -400,7 +400,7 @@ export function AIProjectInnovationModule() {
  placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن..."
  />
  <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg p-4">
- <div className="flex items-start gap-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Lightbulb className="w-5 h-5 text-[var(--secondary)] mt-0.5" />
  <div>
  <p className="text-sm font-medium text-[var(--secondary)]/[0.9] mb-1">اقتراح الذكاء الاصطناعي</p>
@@ -519,20 +519,20 @@ export function AIProjectInnovationModule() {
  setCurrentView('studio');
  }
  }}
- className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-2"
+ className="px-6 py-3 text-muted-foreground hover:text-foreground font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع
  </button>
- <div className="flex gap-3">
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-5 h-5" />
  حفظ المسودة
  </button>
  {wizardStep < totalSteps ? (
  <button
  onClick={() => setWizardStep(wizardStep + 1)}
- className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2"
+ className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  التالي
  <ChevronLeft className="w-5 h-5" />
@@ -541,7 +541,7 @@ export function AIProjectInnovationModule() {
  <button
  onClick={handleGenerate}
  disabled={isGenerating}
- className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-colors font-medium flex items-center gap-2 disabled:opacity-50"
+ className="px-6 py-3 bg-gradient-to-r from-[var(--secondary)] to-indigo-600 text-[var(--primary-foreground)] rounded-lg hover:from-[var(--secondary)]/90 hover:to-indigo-700 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50"
  >
  {isGenerating ? (
  <>
@@ -562,23 +562,23 @@ export function AIProjectInnovationModule() {
 
  {/* Generation Progress */}
  {isGenerating && (
- <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-8 border border-[var(--secondary)]/[0.3]">
+ <div className="bg-gradient-to-r from-[var(--secondary)]/10 to-indigo-50 rounded-xl p-8 border border-[var(--secondary)]/[0.3]">
  <div className="text-center">
- <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+ <div className="w-16 h-16 bg-gradient-to-br from-[var(--secondary)] to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
  <Brain className="w-8 h-8 text-[var(--primary-foreground)]" />
  </div>
  <h3 className="text-xl font-bold mb-2">الذكاء الاصطناعي يعمل على مشروعك</h3>
  <p className="text-muted-foreground mb-6">يتم تحليل المعلومات وإنشاء مشروع احترافي كامل...</p>
- <div className="space-y-2 text-sm text-foreground">
- <div className="flex items-center justify-center gap-2">
+ <div className="space-y-[var(--spacing-small-gap)] text-sm text-foreground">
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
  <CheckCircle2 className="w-4 h-4 text-[var(--primary)]" />
  <span>تحليل المتطلبات</span>
  </div>
- <div className="flex items-center justify-center gap-2">
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
  <CheckCircle2 className="w-4 h-4 text-[var(--primary)]" />
  <span>إنشاء الأهداف</span>
  </div>
- <div className="flex items-center justify-center gap-2">
+ <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
  <RefreshCw className="w-4 h-4 text-[var(--secondary)] animate-spin" />
  <span>كتابة الأنشطة والتسليمات</span>
  </div>
@@ -606,7 +606,7 @@ export function AIProjectInnovationModule() {
  <div>
  <button
  onClick={() => setCurrentView('wizard')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى المعالج
@@ -614,17 +614,17 @@ export function AIProjectInnovationModule() {
  <h1 className="text-3xl font-bold mb-2">مساحة عمل المشروع</h1>
  <p className="text-muted-foreground">راجع وعدّل المشروع الذي أنشأه الذكاء الاصطناعي</p>
  </div>
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setCurrentView('readiness')}
- className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-2"
+ className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <BarChart3 className="w-5 h-5" />
  تقييم الجاهزية
  </button>
  <button
  onClick={() => setCurrentView('review')}
- className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2"
+ className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Send className="w-5 h-5" />
  إرسال للمراجعة
@@ -634,7 +634,7 @@ export function AIProjectInnovationModule() {
 
  {/* AI Confidence Badge */}
  <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <div className="w-12 h-12 bg-[var(--primary)] rounded-full flex items-center justify-center">
  <CheckCircle2 className="w-6 h-6 text-[var(--primary-foreground)]" />
  </div>
@@ -652,37 +652,37 @@ export function AIProjectInnovationModule() {
  <div className="p-6">
  <div className="flex items-start justify-between mb-4">
  <div className="flex-1">
- <div className="flex items-center gap-3 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="text-lg font-semibold">{section.title}</h3>
  <span className="text-xs px-2 py-1 bg-[var(--primary)]/[0.1] text-[var(--primary)] rounded-full">
  AI: {section.aiConfidence}%
  </span>
  </div>
  </div>
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setEditingSection(section.id)}
- className="p-2 hover:bg-muted rounded-lg transition-colors"
+ className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors"
  title="تعديل"
  >
  <Edit className="w-5 h-5 text-muted-foreground" />
  </button>
- <button className="p-2 hover:bg-muted rounded-lg transition-colors" title="إعادة إنشاء">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors" title="إعادة إنشاء">
  <RefreshCw className="w-5 h-5 text-muted-foreground" />
  </button>
- <button className="p-2 hover:bg-muted rounded-lg transition-colors" title="إضافة تعليق">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors" title="إضافة تعليق">
  <MessageSquare className="w-5 h-5 text-muted-foreground" />
  </button>
  </div>
  </div>
  {editingSection === section.id ? (
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <textarea
  defaultValue={section.content}
  rows={4}
  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring resize-none"
  />
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setEditingSection(null)}
  className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors text-sm font-medium"
@@ -708,18 +708,18 @@ export function AIProjectInnovationModule() {
  {/* Quick Actions */}
  <div className="bg-card rounded-xl p-6 border border-border">
  <h3 className="font-semibold mb-4">إجراءات إضافية</h3>
- <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
- <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-3">
+ <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-small-gap)]">
+ <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]">
  <Download className="w-5 h-5 text-muted-foreground" />
  <span>تصدير PDF</span>
  </button>
- <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-3">
+ <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]">
  <Copy className="w-5 h-5 text-muted-foreground" />
  <span>نسخ المحتوى</span>
  </button>
  <button
  onClick={() => setCurrentView('versions')}
- className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-3"
+ className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]"
  >
  <GitBranch className="w-5 h-5 text-muted-foreground" />
  <span>عرض الإصدارات</span>
@@ -737,7 +737,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('studio')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى الاستوديو
@@ -759,7 +759,7 @@ export function AIProjectInnovationModule() {
  {/* Comparison View */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
  <div className="bg-card rounded-xl p-6 border border-border">
- <div className="flex items-center gap-2 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <FileText className="w-5 h-5 text-muted-foreground" />
  <h3 className="font-semibold">النسخة الأصلية</h3>
  </div>
@@ -769,7 +769,7 @@ export function AIProjectInnovationModule() {
  </div>
 
  <div className="bg-card rounded-xl p-6 border-2 border-[var(--primary)]">
- <div className="flex items-center gap-2 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <Sparkles className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="font-semibold text-[var(--primary)]/[0.9]">النسخة المحسّنة</h3>
  <span className="text-xs px-2 py-1 bg-[var(--primary)]/[0.1] text-[var(--primary)] rounded-full">+45% تحسين</span>
@@ -812,7 +812,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('studio')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى الاستوديو
@@ -834,7 +834,7 @@ export function AIProjectInnovationModule() {
  const Icon = section.icon;
  return (
  <div key={idx} className="bg-card rounded-xl p-6 border border-border">
- <div className="flex items-center gap-3 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
  <Icon className="w-5 h-5 text-[var(--secondary)]" />
  </div>
@@ -848,18 +848,18 @@ export function AIProjectInnovationModule() {
 
  {/* Actions */}
  <div className="bg-card rounded-xl p-6 border border-border">
- <div className="flex gap-3">
- <button className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Download className="w-5 h-5" />
  تصدير PDF
  </button>
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Edit className="w-5 h-5" />
  تعديل
  </button>
  <button
  onClick={() => setCurrentView('review')}
- className="px-6 py-3 border border-ring text-[var(--secondary)] rounded-lg hover:bg-[var(--secondary)]/[0.08] transition-colors font-medium flex items-center gap-2"
+ className="px-6 py-3 border border-ring text-[var(--secondary)] rounded-lg hover:bg-[var(--secondary)]/[0.08] transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Send className="w-5 h-5" />
  إرسال للاعتماد
@@ -877,7 +877,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('workspace')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى مساحة العمل
@@ -888,7 +888,7 @@ export function AIProjectInnovationModule() {
 
  {/* Review Status */}
  <div className="bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.3] rounded-xl p-6">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Clock className="w-8 h-8 text-[var(--warning)]" />
  <div>
  <p className="font-semibold text-yellow-900">قيد المراجعة</p>
@@ -900,7 +900,7 @@ export function AIProjectInnovationModule() {
  {/* Version Comparison */}
  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
  <div className="bg-card rounded-xl p-6 border border-border">
- <div className="flex items-center gap-2 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <Sparkles className="w-5 h-5 text-[var(--secondary)]" />
  <h3 className="font-semibold">نسخة الذكاء الاصطناعي</h3>
  </div>
@@ -910,7 +910,7 @@ export function AIProjectInnovationModule() {
  </div>
 
  <div className="bg-card rounded-xl p-6 border-2 border-[var(--primary)]">
- <div className="flex items-center gap-2 mb-4">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />
  <h3 className="font-semibold text-[var(--primary)]/[0.9]">النسخة المعدّلة</h3>
  </div>
@@ -932,20 +932,20 @@ export function AIProjectInnovationModule() {
 
  {/* Actions */}
  <div className="bg-card rounded-xl p-6 border border-border">
- <div className="flex gap-3">
- <button className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors font-medium flex items-center gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <CheckCircle2 className="w-5 h-5" />
  اعتماد
  </button>
- <button className="px-6 py-3 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors font-medium flex items-center gap-2">
+ <button className="px-6 py-3 bg-[var(--destructive)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--destructive)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <X className="w-5 h-5" />
  رفض
  </button>
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Edit className="w-5 h-5" />
  طلب تعديلات
  </button>
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <RefreshCw className="w-5 h-5" />
  إعادة إنشاء
  </button>
@@ -968,7 +968,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('workspace')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى مساحة العمل
@@ -978,9 +978,9 @@ export function AIProjectInnovationModule() {
  </div>
 
  {/* Current Version Badge */}
- <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-6 text-[var(--primary-foreground)]">
+ <div className="bg-gradient-to-r from-[var(--secondary)] to-indigo-600 rounded-xl p-6 text-[var(--primary-foreground)]">
  <div className="flex items-center justify-between">
- <div className="flex items-center gap-3">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <GitBranch className="w-8 h-8" />
  <div>
  <p className="text-[var(--secondary)]/[0.4] text-sm mb-1">الإصدار الحالي</p>
@@ -1001,11 +1001,11 @@ export function AIProjectInnovationModule() {
  }`}>
  <div className="flex items-start justify-between mb-4">
  <div className="flex items-center gap-4">
- <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
+ <div className="w-12 h-12 bg-gradient-to-br from-[var(--secondary)] to-indigo-600 rounded-lg flex items-center justify-center">
  <span className="text-[var(--primary-foreground)] font-bold">v{version.version}</span>
  </div>
  <div>
- <div className="flex items-center gap-3 mb-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  <h3 className="text-lg font-semibold">الإصدار {version.version}</h3>
  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
  version.status === 'approved' ? 'bg-[var(--primary)]/[0.1] text-[var(--primary)]' :
@@ -1016,26 +1016,26 @@ export function AIProjectInnovationModule() {
  </span>
  </div>
  <div className="flex items-center gap-4 text-sm text-muted-foreground">
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Brain className="w-4 h-4" />
  {version.aiModel}
  </span>
- <span className="flex items-center gap-1">
+ <span className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4" />
  {version.date}
  </span>
  </div>
  </div>
  </div>
- <div className="flex gap-2">
- <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors">
  <Eye className="w-5 h-5 text-muted-foreground" />
  </button>
- <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors">
  <Download className="w-5 h-5 text-muted-foreground" />
  </button>
  {version.status !== 'approved' && (
- <button className="p-2 hover:bg-muted rounded-lg transition-colors">
+ <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg transition-colors">
  <RefreshCw className="w-5 h-5 text-muted-foreground" />
  </button>
  )}
@@ -1066,7 +1066,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('workspace')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-2 mb-4"
+ className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى مساحة العمل
@@ -1077,7 +1077,7 @@ export function AIProjectInnovationModule() {
 
  {/* Overall Score */}
  <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-8 text-[var(--primary-foreground)] text-center">
- <div className="inline-flex items-center gap-2 bg-[var(--card)]/20 px-4 py-2 rounded-full mb-4">
+ <div className="inline-flex items-center gap-[var(--spacing-small-gap)] bg-[var(--card)]/20 px-4 py-2 rounded-full mb-4">
  <Award className="w-4 h-4" />
  <span className="text-sm">درجة الجاهزية الإجمالية</span>
  </div>
@@ -1128,12 +1128,12 @@ export function AIProjectInnovationModule() {
  {/* Missing Info */}
  <div className="bg-[var(--warning)]/[0.1] border border-[var(--warning)]/[0.3] rounded-xl p-6">
  <h3 className="font-semibold text-yellow-900 mb-4">معلومات ناقصة</h3>
- <ul className="space-y-2">
- <li className="flex items-center gap-2 text-sm text-yellow-800">
+ <ul className="space-y-[var(--spacing-small-gap)]">
+ <li className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-yellow-800">
  <AlertCircle className="w-4 h-4" />
  <span>يُنصح بإضافة مؤشرات أداء إضافية لقياس الأثر</span>
  </li>
- <li className="flex items-center gap-2 text-sm text-yellow-800">
+ <li className="flex items-center gap-[var(--spacing-small-gap)] text-sm text-yellow-800">
  <AlertCircle className="w-4 h-4" />
  <span>توضيح خطة التخفيف من المخاطر</span>
  </li>
@@ -1142,21 +1142,21 @@ export function AIProjectInnovationModule() {
 
  {/* Primary Actions */}
  <div className="bg-card rounded-xl p-6 border border-border">
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setCurrentView('review')}
- className="px-8 py-4 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors font-medium flex items-center gap-2"
+ className="px-8 py-4 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/[0.9] transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Send className="w-5 h-5" />
  إرسال للموافقة
  </button>
- <button className="px-8 py-4 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-2">
+ <button className="px-8 py-4 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Users className="w-5 h-5" />
  إرسال للجمعية
  </button>
  <button
  onClick={() => setCurrentView('workspace')}
- className="px-8 py-4 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-2"
+ className="px-8 py-4 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Edit className="w-5 h-5" />
  متابعة التعديل
@@ -1169,7 +1169,7 @@ export function AIProjectInnovationModule() {
 
  // Render views
  return (
- <div className="min-h-full bg-background p-3 sm:p-6">
+ <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-6">
  {currentView === 'studio' && <StudioView />}
  {currentView === 'wizard' && <WizardView />}
  {currentView === 'workspace' && <WorkspaceView />}

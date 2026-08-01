@@ -15,7 +15,7 @@
  --font-size: 16px;
 
  /* Core backgrounds */
- --background: #F8FAFC;
+ --background: #F5F7FB;
  --foreground: #1E293B;
  --card: #FFFFFF;
  --card-foreground: #1E293B;
@@ -34,7 +34,7 @@
  --muted: #F1F5F9;
  --muted-foreground: #64748B;
  --surface: #FFFFFF;
- --surface-secondary: #F1F5F9;
+ --surface-secondary: #F8FAFC;
 
  /* Destructive */
  --destructive: #DC2626;
@@ -43,7 +43,7 @@
  /* Borders & inputs */
  --border: #E2E8F0;
  --input: #E2E8F0;
- --input-background: #F8FAFC;
+ --input-background: #FFFFFF;
  --switch-background: #CBD5E1;
 
  /* Hover */

@@ -344,10 +344,10 @@ export function CharityAssessmentPage() {
  // Start Screen
  if (currentView === 'start') {
  return (
- <div className="min-h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
+ <div className="min-h-full bg-gradient-to-br from-[var(--secondary)]/10 to-purple-50 dark:from-background dark:to-muted flex items-center justify-center p-6">
  <div className="max-w-4xl w-full">
  <div className="text-center mb-8">
- <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl mb-6">
+ <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[var(--secondary)] to-purple-500 rounded-2xl mb-6">
  <Sparkles className="w-10 h-10 text-[var(--primary-foreground)]" />
  </div>
  <h1 className="text-4xl font-bold mb-4">تقييم ISIV</h1>
@@ -365,7 +365,7 @@ export function CharityAssessmentPage() {
  {dimensions.map((dim) => {
  const Icon = dim.icon;
  return (
- <div key={dim.id} className="flex items-center gap-3 p-4 bg-muted/50 rounded-lg">
+ <div key={dim.id} className="flex items-center gap-[var(--spacing-small-gap)] p-4 bg-muted/50 rounded-lg">
  <Icon className="w-5 h-5 text-[var(--secondary)]" />
  <div>
  <span className="font-medium">{dim.name}</span>
@@ -387,7 +387,7 @@ export function CharityAssessmentPage() {
 
  <div className="bg-card border border-border rounded-xl p-8 mb-6">
  <h3 className="font-semibold mb-4">ما الذي ستحصل عليه:</h3>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  {[
  'تقييم شامل عبر 4 أبعاد استراتيجية (ISIV)',
  'درجة إجمالية من 120 نقطة مع حالة التأهيل',
@@ -396,7 +396,7 @@ export function CharityAssessmentPage() {
  'توصيات مدعومة بالذكاء الاصطناعي',
  'مقارنة مع معايير القطاع'
  ].map((item, index) => (
- <div key={index} className="flex items-start gap-3">
+ <div key={index} className="flex items-start gap-[var(--spacing-small-gap)]">
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)] flex-shrink-0 mt-0.5" />
  <span>{item}</span>
  </div>
@@ -407,7 +407,7 @@ export function CharityAssessmentPage() {
  <div className="flex gap-4">
  <button
  onClick={() => setCurrentView('assessment')}
- className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all text-lg font-medium"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-4 bg-gradient-to-r from-[var(--secondary)] to-purple-600 text-[var(--primary-foreground)] rounded-xl hover:from-[var(--secondary)]/90 hover:to-purple-700 transition-all text-lg font-medium"
  >
  <Play className="w-5 h-5" />
  بدء التقييم
@@ -447,14 +447,14 @@ export function CharityAssessmentPage() {
  القسم {currentStep + 1} من {categories.length}
  </p>
  </div>
- <button className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors">
  <Save className="w-4 h-4" />
  حفظ ومتابعة لاحقاً
  </button>
  </div>
  <div className="w-full bg-muted rounded-full h-2">
  <div
- className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all"
+ className="bg-gradient-to-r from-[var(--secondary)] to-purple-500 h-2 rounded-full transition-all"
  style={{ width: `${progress}%` }}
  />
  </div>
@@ -464,7 +464,7 @@ export function CharityAssessmentPage() {
  {/* Questions */}
  <div className="max-w-4xl mx-auto p-6">
  <div className="bg-card border border-border rounded-xl p-8 mb-6">
- <div className="flex items-center gap-3 mb-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  {(() => {
  const Icon = currentCategory.icon;
  return <Icon className="w-6 h-6 text-[var(--secondary)]" />;
@@ -480,7 +480,7 @@ export function CharityAssessmentPage() {
  </p>
 
  {q.type === 'yesno' && (
- <div className="flex gap-3">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button className="flex-1 px-4 py-3 border-2 border-[var(--primary)] text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1] transition-colors">
  نعم
  </button>
@@ -513,8 +513,8 @@ export function CharityAssessmentPage() {
 
  {/* AI Insights */}
  {showAIInsights && (
- <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-6 mb-6">
- <div className="flex items-start gap-3">
+ <div className="bg-gradient-to-br from-purple-500/10 to-[var(--secondary)]/10 border border-purple-500/20 rounded-xl p-6 mb-6">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Brain className="w-6 h-6 text-purple-500 flex-shrink-0" />
  <div>
  <h4 className="font-medium mb-2">ملاحظة من الذكاء الاصطناعي</h4>
@@ -535,7 +535,7 @@ export function CharityAssessmentPage() {
  {currentStep > 0 && (
  <button
  onClick={() => setCurrentStep(currentStep - 1)}
- className="flex items-center gap-2 px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors"
  >
  <ArrowRight className="w-5 h-5" />
  السابق
@@ -549,7 +549,7 @@ export function CharityAssessmentPage() {
  setCurrentView('results');
  }
  }}
- className="flex-1 flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 bg-gradient-to-r from-[var(--secondary)] to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-[var(--secondary)]/90 hover:to-purple-700 transition-all"
  >
  {currentStep < categories.length - 1 ? 'التالي' : 'إنهاء التقييم'}
  <ArrowLeft className="w-5 h-5" />
@@ -565,25 +565,25 @@ export function CharityAssessmentPage() {
  return (
  <div className="min-h-full bg-background">
  {/* Header */}
- <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)]">
+ <div className="bg-gradient-to-r from-[var(--secondary)] to-purple-600 text-[var(--primary-foreground)]">
  <div className="max-w-7xl mx-auto p-8">
  <div className="flex items-start justify-between mb-6">
  <div>
  <h1 className="text-3xl font-bold mb-2">نتائج تقييم الجاهزية</h1>
  <p className="text-[var(--secondary)]/[0.4]">تم إكمال التقييم بنجاح • تم التحديث في 11 مايو 2026</p>
  </div>
- <div className="flex gap-3">
- <button className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors">
+ <div className="flex gap-[var(--spacing-small-gap)]">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors">
  <Download className="w-4 h-4" />
  تصدير PDF
  </button>
- <button className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors">
+ <button className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors">
  <Share2 className="w-4 h-4" />
  مشاركة
  </button>
  <button
  onClick={() => setCurrentView('assessment')}
- className="flex items-center gap-2 px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors"
  >
  <RefreshCw className="w-4 h-4" />
  إعادة التقييم
@@ -595,7 +595,7 @@ export function CharityAssessmentPage() {
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
  <p className="text-[var(--secondary)]/[0.4] mb-2">درجة الجاهزية الإجمالية</p>
- <div className="flex items-end gap-3">
+ <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <span className="text-5xl font-bold">{overallScore}%</span>
  <span className={`px-3 py-1 ${readinessLevel.bg}/20 border border-[var(--primary-foreground)]/[0.2] rounded-full text-sm mb-2`}>
  {readinessLevel.label}
@@ -605,7 +605,7 @@ export function CharityAssessmentPage() {
 
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
  <p className="text-[var(--secondary)]/[0.4] mb-2">مقارنة بمتوسط القطاع</p>
- <div className="flex items-end gap-2">
+ <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <TrendingUp className="w-6 h-6 mb-1" />
  <span className="text-3xl font-bold">+5%</span>
  </div>
@@ -614,7 +614,7 @@ export function CharityAssessmentPage() {
 
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
  <p className="text-[var(--secondary)]/[0.4] mb-2">التقدم منذ آخر تقييم</p>
- <div className="flex items-end gap-2">
+ <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <Activity className="w-6 h-6 mb-1" />
  <span className="text-3xl font-bold">+8%</span>
  </div>
@@ -693,7 +693,7 @@ export function CharityAssessmentPage() {
 
  {/* Strengths */}
  <div className="bg-card border border-border rounded-xl p-6 mb-8">
- <div className="flex items-center gap-3 mb-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <Star className="w-6 h-6 text-yellow-500" />
  <h2 className="text-xl font-semibold">نقاط القوة الرئيسية</h2>
  </div>
@@ -722,7 +722,7 @@ export function CharityAssessmentPage() {
 
  {/* Gaps */}
  <div className="bg-card border border-border rounded-xl p-6 mb-8">
- <div className="flex items-center gap-3 mb-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-6">
  <AlertTriangle className="w-6 h-6 text-orange-500" />
  <h2 className="text-xl font-semibold">تحليل الفجوات</h2>
  </div>
@@ -735,14 +735,14 @@ export function CharityAssessmentPage() {
  }`}>
  <div className="flex items-start justify-between mb-3">
  <div className="flex-1">
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="font-medium">{gap.category}</h3>
  <span className={`px-2 py-0.5 rounded-lg text-xs ${getSeverityColor(gap.severity)}`}>
  {gap.severity === 'critical' ? 'حرج' : gap.severity === 'high' ? 'عالي' : 'متوسط'}
  </span>
  </div>
  <p className="text-sm text-muted-foreground mb-3">{gap.issue}</p>
- <div className="flex items-start gap-2 bg-card/50 rounded-lg p-3">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] bg-card/50 rounded-lg p-[var(--spacing-card-padding)]">
  <Lightbulb className="w-4 h-4 text-[var(--secondary)] flex-shrink-0 mt-0.5" />
  <p className="text-sm">{gap.recommendation}</p>
  </div>
@@ -769,14 +769,14 @@ export function CharityAssessmentPage() {
  </div>
 
  {/* CTA */}
- <div className="bg-gradient-to-br from-blue-500/10 to-purple-500/10 border border-[var(--secondary)]/[0.2] rounded-xl p-8 text-center">
+ <div className="bg-gradient-to-br from-[var(--secondary)]/10 to-purple-500/10 border border-[var(--secondary)]/[0.2] rounded-xl p-8 text-center">
  <h3 className="text-2xl font-semibold mb-3">جاهز للخطوة التالية؟</h3>
  <p className="text-muted-foreground mb-6">
  استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك
  </p>
  <button
  onClick={() => setCurrentView('roadmap')}
- className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] px-6 py-3 bg-gradient-to-r from-[var(--secondary)] to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-[var(--secondary)]/90 hover:to-purple-700 transition-all"
  >
  عرض خارطة الطريق
  <ChevronRight className="w-5 h-5" />
@@ -801,7 +801,7 @@ export function CharityAssessmentPage() {
  </div>
  <button
  onClick={() => setCurrentView('results')}
- className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
+ className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
  >
  <ArrowRight className="w-4 h-4" />
  العودة للنتائج
@@ -840,7 +840,7 @@ export function CharityAssessmentPage() {
  {roadmapItems.map((item, index) => (
  <div key={item.id} className={`border rounded-xl p-6 ${getPriorityBg(item.priority)}`}>
  <div className="flex items-start gap-4">
- <div className="flex flex-col items-center gap-2">
+ <div className="flex flex-col items-center gap-[var(--spacing-small-gap)]">
  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${
  item.status === 'completed' ? 'bg-[var(--primary)]' :
  item.status === 'in-progress' ? 'bg-[var(--primary)]' : 'bg-muted'
@@ -861,7 +861,7 @@ export function CharityAssessmentPage() {
  <div className="flex-1">
  <div className="flex items-start justify-between mb-3">
  <div>
- <div className="flex items-center gap-2 mb-2">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <h3 className="text-lg font-semibold">{item.title}</h3>
  <span className={`px-2 py-0.5 rounded-lg text-xs ${getPriorityColor(item.priority)}`}>
  أولوية {getPriorityLabel(item.priority)}
@@ -871,7 +871,7 @@ export function CharityAssessmentPage() {
  </div>
  <div className="text-left">
  <p className="text-sm text-muted-foreground mb-1">موعد الانتهاء</p>
- <div className="flex items-center gap-1">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <Calendar className="w-4 h-4" />
  <span className="font-medium">{item.dueDate}</span>
  </div>
@@ -879,11 +879,11 @@ export function CharityAssessmentPage() {
  </div>
 
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
- <div className="bg-card/50 rounded-lg p-3">
+ <div className="bg-card/50 rounded-lg p-[var(--spacing-card-padding)]">
  <p className="text-xs text-muted-foreground mb-1">الجهد المطلوب</p>
  <p className="font-medium">{item.effort}</p>
  </div>
- <div className="bg-card/50 rounded-lg p-3">
+ <div className="bg-card/50 rounded-lg p-[var(--spacing-card-padding)]">
  <p className="text-xs text-muted-foreground mb-1">التأثير المتوقع</p>
  <p className="font-medium">{item.impact}</p>
  </div>
@@ -901,7 +901,7 @@ export function CharityAssessmentPage() {
  </div>
  )}
 
- <div className="flex gap-2">
+ <div className="flex gap-[var(--spacing-small-gap)]">
  <button className="px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)] transition-colors text-sm">
  عرض التفاصيل
  </button>
@@ -918,16 +918,16 @@ export function CharityAssessmentPage() {
  </div>
 
  {/* AI Recommendations */}
- <div className="mt-8 bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-8">
+ <div className="mt-8 bg-gradient-to-br from-purple-500/10 to-[var(--secondary)]/10 border border-purple-500/20 rounded-xl p-8">
  <div className="flex items-start gap-4">
  <Brain className="w-8 h-8 text-purple-500 flex-shrink-0" />
  <div>
  <h3 className="text-xl font-semibold mb-3">توصيات الذكاء الاصطناعي</h3>
- <div className="space-y-3">
+ <div className="space-y-[var(--spacing-small-gap)]">
  <p className="text-muted-foreground">
  بناءً على تحليل شامل لنتائج تقييمك ومقارنتها بأفضل الممارسات في القطاع، نوصي بالبدء بـ "تطوير البنية التحتية التقنية" و "إنشاء إطار إدارة المخاطر" كأولوية قصوى.
  </p>
- <div className="flex items-start gap-2">
+ <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
  <p className="text-sm">
  إتمام هاتين المبادرتين سيرفع درجة جاهزيتك الإجمالية من <strong>73%</strong> إلى <strong>81%</strong> المتوقعة.
