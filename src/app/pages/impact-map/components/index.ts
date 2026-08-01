@@ -12,6 +12,8 @@ export { ImpactHeader } from './ImpactHeader';
 export { ImpactStatsGrid } from './ImpactStatsGrid';
 export { ImpactMapSection } from './ImpactMapSection';
 export { ImpactSidebar } from './ImpactSidebar';
+export { ImpactLeftPanel } from './ImpactLeftPanel';
+export { ImpactRightPanel } from './ImpactRightPanel';
 export { ImpactSROISection } from './ImpactSROISection';
 export { ImpactSectorSection } from './ImpactSectorSection';
 export { ImpactProjectsSection } from './ImpactProjectsSection';

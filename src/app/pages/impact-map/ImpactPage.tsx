@@ -19,6 +19,8 @@ import {
   ImpactHeader,
   ImpactStatsGrid,
   ImpactMapSection,
+  ImpactLeftPanel,
+  ImpactRightPanel,
   ImpactSidebar,
   ImpactSROISection,
   ImpactSectorSection,
@@ -157,11 +159,23 @@ export function ImpactPage() {
         />
       </section>
 
-      {/* Map & Analytics Panel */}
+      {/* Map Row — Three balanced columns */}
       <section aria-label="الخارطة ولوحة التحليلات">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-[var(--spacing-grid-gap)] items-stretch">
-          {/* Map — takes 8 columns on desktop */}
-          <div className="lg:col-span-8 flex flex-col h-full min-h-[420px] md:min-h-[550px] lg:min-h-[650px]">
+          {/* Left Analytics — 3 columns */}
+          <div className="hidden lg:flex lg:col-span-3 flex-col h-full min-h-[420px] md:min-h-[550px] lg:min-h-[720px]">
+            <ImpactLeftPanel
+              summaryMetrics={mockImpactSummaryMetrics}
+              quickStatistics={mockQuickStatistics}
+              isLoading={isLoading}
+              isError={isError}
+              onRetry={handleRetry}
+              className="h-full overflow-y-auto"
+            />
+          </div>
+
+          {/* Map — 6 columns, visually dominant */}
+          <div className="lg:col-span-6 flex flex-col h-full min-h-[420px] md:min-h-[550px] lg:min-h-[720px]">
             <ImpactMapSection
               regions={mockRegions}
               isLoading={isLoading}
@@ -173,26 +187,39 @@ export function ImpactPage() {
             />
           </div>
 
-          {/* Right Analytics Panel */}
-          <div className="lg:col-span-4 flex flex-col h-full">
-            <ImpactSidebar
-              summaryMetrics={mockImpactSummaryMetrics}
+          {/* Right Analytics — 3 columns */}
+          <div className="hidden lg:flex lg:col-span-3 flex-col h-full min-h-[420px] md:min-h-[550px] lg:min-h-[720px]">
+            <ImpactRightPanel
               beneficiaryCategories={mockBeneficiaryCategories}
               regionalSummary={mockRegionalSummary}
-              latestProjects={mockLatestProjects}
-              recentActivity={mockRecentActivity}
+              isLoading={isLoading}
+              isError={isError}
+              onRetry={handleRetry}
+              className="h-full overflow-y-auto"
+            />
+          </div>
+
+          {/* Tablet/Mobile: full-width widgets stacked below map */}
+          <div className="lg:hidden flex flex-col gap-[var(--spacing-grid-gap)]">
+            <ImpactLeftPanel
+              summaryMetrics={mockImpactSummaryMetrics}
               quickStatistics={mockQuickStatistics}
               isLoading={isLoading}
               isError={isError}
               onRetry={handleRetry}
-              onViewProject={handleViewProject}
-              className="h-full overflow-y-auto"
+            />
+            <ImpactRightPanel
+              beneficiaryCategories={mockBeneficiaryCategories}
+              regionalSummary={mockRegionalSummary}
+              isLoading={isLoading}
+              isError={isError}
+              onRetry={handleRetry}
             />
           </div>
         </div>
       </section>
 
-      {/* Bottom Analytics Section */}
+      {/* Bottom Analytics Row — starts immediately after map row */}
       <section aria-label="التحليلات السفلية">
         <ImpactProjectsSection
           latestSupportedProjects={mockLatestSupportedProjects}
@@ -205,9 +232,9 @@ export function ImpactPage() {
         />
       </section>
 
-      {/* Beneficiaries Distribution & SROI Trend */}
-      <section aria-label="توزيع المستفيدين والعائد الاجتماعي">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+      {/* Detailed Analytics Row */}
+      <section aria-label="التحليلات التفصيلية">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
           <ImpactBeneficiariesSection
             data={beneficiariesDistribution}
             isLoading={isLoading}
@@ -216,18 +243,6 @@ export function ImpactPage() {
           />
           <ImpactSROISection
             sroiData={mockSROI}
-            isLoading={isLoading}
-            isError={isError}
-            onRetry={handleRetry}
-          />
-        </div>
-      </section>
-
-      {/* Projects by Sector & Funding Growth */}
-      <section aria-label="المشاريع حسب القطاع ونمو التمويل">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
-          <ImpactSectorSection
-            sectors={mockSectors}
             isLoading={isLoading}
             isError={isError}
             onRetry={handleRetry}
@@ -241,25 +256,47 @@ export function ImpactPage() {
         </div>
       </section>
 
-      {/* Regional Impact */}
-      <section aria-label="الأثر الإقليمي">
-        <ImpactRegionalSection
-          data={regionalImpactData}
-          isLoading={isLoading}
-          isError={isError}
-          onRetry={handleRetry}
-        />
+      {/* Sector & Regional Breakdown Row */}
+      <section aria-label="التحليل حسب القطاع والمنطقة">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+          <ImpactSectorSection
+            sectors={mockSectors}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={handleRetry}
+          />
+          <ImpactRegionalSection
+            data={regionalImpactData}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={handleRetry}
+          />
+        </div>
       </section>
 
-      {/* Recent Projects */}
-      <section aria-label="أحدث المشاريع">
-        <ImpactProjectsSection
-          projects={mockProjects}
-          isLoading={isLoading}
-          isError={isError}
-          onRetry={handleRetry}
-          onViewAll={handleViewAllProjects}
-        />
+      {/* Additional Widgets Row */}
+      <section aria-label="الأدوات والنشاطات الإضافية">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+          <ImpactSidebar
+            summaryMetrics={mockImpactSummaryMetrics}
+            beneficiaryCategories={mockBeneficiaryCategories}
+            regionalSummary={mockRegionalSummary}
+            latestProjects={mockLatestProjects}
+            recentActivity={mockRecentActivity}
+            quickStatistics={mockQuickStatistics}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={handleRetry}
+            onViewProject={handleViewProject}
+          />
+          <ImpactProjectsSection
+            projects={mockProjects}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={handleRetry}
+            onViewAll={handleViewAllProjects}
+          />
+        </div>
       </section>
     </div>
   );
