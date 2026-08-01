@@ -499,39 +499,37 @@ export function OrganizationDocumentsForm() {
         </div>
 
         {/* Upload Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                <FileText className="w-5 h-5 text-blue-600" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 items-stretch">
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">
-                  {completedRequiredCount}/{requiredSlots.length}
-                </p>
-                <p className="text-sm text-gray-600">مستندات مطلوبة</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{completedRequiredCount}/{requiredSlots.length}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">مستندات مطلوبة</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-green-50 rounded-lg flex items-center justify-center">
-                <CheckCircle2 className="w-5 h-5 text-green-600" />
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{uploadedCount}</p>
-                <p className="text-sm text-gray-600">تم الرفع</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{uploadedCount}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">تم الرفع</p>
               </div>
             </div>
           </div>
-          <div className="bg-white rounded-lg p-4 border border-gray-200">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-yellow-50 rounded-lg flex items-center justify-center">
-                <Clock className="w-5 h-5 text-yellow-600" />
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+            <div className="flex items-center gap-4">
+              <div className="w-12 h-12 bg-yellow-50 dark:bg-yellow-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
               </div>
               <div>
-                <p className="text-2xl font-bold">{pendingReviewCount}</p>
-                <p className="text-sm text-gray-600">قيد المراجعة</p>
+                <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{pendingReviewCount}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">قيد المراجعة</p>
               </div>
             </div>
           </div>

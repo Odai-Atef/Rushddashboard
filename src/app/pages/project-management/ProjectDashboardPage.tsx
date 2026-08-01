@@ -269,53 +269,88 @@ export function ProjectDashboardPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4">
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
-            <Briefcase className="w-6 sm:w-8 h-6 sm:h-8 text-gray-400 mb-2" />
-            <p className="text-2xl sm:text-3xl font-bold text-gray-900">{stats.total}</p>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">إجمالي المشاريع</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-4 items-stretch">
+          {/* Total Projects */}
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10 flex flex-col justify-between h-full">
+            <div>
+              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 w-fit mb-4">
+                <Briefcase className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">إجمالي المشاريع</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{stats.total}</p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-blue-200 shadow-sm">
-            <Activity className="w-6 sm:w-8 h-6 sm:h-8 text-blue-600 mb-2" />
-            <p className="text-2xl sm:text-3xl font-bold text-blue-600">{stats.active}</p>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">المشاريع النشطة</p>
+          {/* Active Projects */}
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-blue-200/80 dark:border-blue-500/30 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-blue-500/10 flex flex-col justify-between h-full">
+            <div>
+              <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-500/10 w-fit mb-4">
+                <Activity className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">المشاريع النشطة</p>
+              <p className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 tracking-tight">{stats.active}</p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-gray-200 shadow-sm">
-            <FileText className="w-6 sm:w-8 h-6 sm:h-8 text-gray-400 mb-2" />
-            <p className="text-2xl sm:text-3xl font-bold text-gray-600">{stats.draft}</p>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">مسودات</p>
+          {/* Drafts */}
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10 flex flex-col justify-between h-full">
+            <div>
+              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 w-fit mb-4">
+                <FileText className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">مسودات</p>
+              <p className="text-2xl sm:text-3xl font-bold text-gray-600 dark:text-gray-300 tracking-tight">{stats.draft}</p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-yellow-200 shadow-sm">
-            <Clock className="w-6 sm:w-8 h-6 sm:h-8 text-yellow-600 mb-2" />
-            <p className="text-2xl sm:text-3xl font-bold text-yellow-600">{stats.awaitingApproval}</p>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">بانتظار الموافقة</p>
+          {/* Awaiting Approval */}
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-yellow-200/80 dark:border-yellow-500/30 shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-yellow-500/10 flex flex-col justify-between h-full">
+            <div>
+              <div className="p-2.5 rounded-xl bg-yellow-50 dark:bg-yellow-500/10 w-fit mb-4">
+                <Clock className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">بانتظار الموافقة</p>
+              <p className="text-2xl sm:text-3xl font-bold text-yellow-600 dark:text-yellow-400 tracking-tight">{stats.awaitingApproval}</p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-green-200 shadow-sm">
-            <CheckCircle2 className="w-6 sm:w-8 h-6 sm:h-8 text-green-600 mb-2" />
-            <p className="text-2xl sm:text-3xl font-bold text-green-600">{stats.approved}</p>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">معتمد</p>
+          {/* Approved */}
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-green-200/80 dark:border-green-500/30 shadow-sm dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-green-500/10 flex flex-col justify-between h-full">
+            <div>
+              <div className="p-2.5 rounded-xl bg-green-50 dark:bg-green-500/10 w-fit mb-4">
+                <CheckCircle2 className="w-6 h-6 text-green-600 dark:text-green-400" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">معتمد</p>
+              <p className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-400 tracking-tight">{stats.approved}</p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-emerald-200 shadow-sm">
-            <DollarSign className="w-6 sm:w-8 h-6 sm:h-8 text-emerald-600 mb-2" />
-            <p className="text-2xl sm:text-3xl font-bold text-emerald-600">{stats.funded}</p>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">ممول</p>
+          {/* Funded */}
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-emerald-200/80 dark:border-emerald-500/30 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10 flex flex-col justify-between h-full">
+            <div>
+              <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10 w-fit mb-4">
+                <DollarSign className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">ممول</p>
+              <p className="text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">{stats.funded}</p>
+            </div>
           </div>
 
-          <div className="bg-white rounded-xl p-4 sm:p-6 border border-purple-200 shadow-sm">
-            <Target className="w-6 sm:w-8 h-6 sm:h-8 text-purple-600 mb-2" />
-            <p className="text-2xl sm:text-3xl font-bold text-purple-600">{stats.completed}</p>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">مكتمل</p>
+          {/* Completed */}
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-purple-200/80 dark:border-purple-500/30 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-purple-500/10 flex flex-col justify-between h-full">
+            <div>
+              <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-500/10 w-fit mb-4">
+                <Target className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">مكتمل</p>
+              <p className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400 tracking-tight">{stats.completed}</p>
+            </div>
           </div>
         </div>
 
         {/* Status Distribution Cards (for PM) */}
         {isProjectManager && statusDistribution.length > 0 && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 items-stretch">
             {statusDistribution
               .filter((item) => item.value > 0)
               .map((item, idx) => {
@@ -328,14 +363,14 @@ export function ProjectDashboardPage() {
                 return (
                   <div
                     key={idx}
-                    className="bg-white rounded-xl p-4 sm:p-6 border shadow-sm"
+                    className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10 flex flex-col justify-between h-full"
                   >
-                    <Activity className="w-6 sm:w-8 h-6 sm:h-8 mb-2" style={{ color: config.color }} />
-                    <p className="text-2xl sm:text-3xl font-bold" style={{ color: config.color }}>
+                    <div className="p-2.5 rounded-xl w-fit mb-4" style={{ backgroundColor: `${config.color}15` }}>
+                      <Activity className="w-6 h-6" style={{ color: config.color }} />
+                    </div>
+                    <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mb-1.5">{config.label}</p>
+                    <p className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: config.color }}>
                       {item.value}
-                    </p>
-                    <p className="text-xs sm:text-sm text-gray-600 mt-1">
-                      {config.label}
                     </p>
                   </div>
                 );

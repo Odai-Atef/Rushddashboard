@@ -575,28 +575,32 @@ export function CharityAssessmentResultsPage() {
               onClick={() => {
                 document.getElementById('strengths-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="bg-card border border-border rounded-xl p-6 text-right w-full hover:bg-accent/50 transition-colors cursor-pointer"
+              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-yellow-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-yellow-500/10 cursor-pointer flex flex-col justify-between h-full"
             >
-              <div className="flex items-center justify-between mb-4">
-                <Star className="w-8 h-8 text-yellow-500" />
+              <div className="flex items-center justify-between mb-5">
+                <div className="p-2.5 rounded-xl bg-yellow-50 dark:bg-yellow-500/10">
+                  <Star className="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
+                </div>
                 <Award className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-2xl font-bold mb-1">{strengths.length}</p>
-              <p className="text-sm text-muted-foreground">نقاط قوة رئيسية</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1.5 tracking-tight">{strengths.length}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">نقاط قوة رئيسية</p>
             </button>
 
             <button
               onClick={() => {
                 document.getElementById('gaps-section')?.scrollIntoView({ behavior: 'smooth' });
               }}
-              className="bg-card border border-border rounded-xl p-6 text-right w-full hover:bg-accent/50 transition-colors cursor-pointer"
+              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-orange-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-orange-500/10 cursor-pointer flex flex-col justify-between h-full"
             >
-              <div className="flex items-center justify-between mb-4">
-                <AlertTriangle className="w-8 h-8 text-orange-500" />
+              <div className="flex items-center justify-between mb-5">
+                <div className="p-2.5 rounded-xl bg-orange-50 dark:bg-orange-500/10">
+                  <AlertTriangle className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+                </div>
                 <Target className="w-6 h-6 text-red-500" />
               </div>
-              <p className="text-2xl font-bold mb-1">{weaknesses.length}</p>
-              <p className="text-sm text-muted-foreground">تحليل الفجوات</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1.5 tracking-tight">{weaknesses.length}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">تحليل الفجوات</p>
             </button>
 
             <button
@@ -605,14 +609,16 @@ export function CharityAssessmentResultsPage() {
                   navigate(`/dashboard/charity-assessment/roadmap/${organizationId}`);
                 }
               }}
-              className="bg-card border border-border rounded-xl p-6 text-right w-full hover:bg-accent/50 transition-colors cursor-pointer"
+              className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border border-gray-200/80 dark:border-gray-700/50 rounded-2xl p-6 text-right w-full shadow-sm dark:shadow-lg dark:shadow-purple-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-purple-500/10 cursor-pointer flex flex-col justify-between h-full"
             >
-              <div className="flex items-center justify-between mb-4">
-                <Lightbulb className="w-8 h-8 text-purple-500" />
+              <div className="flex items-center justify-between mb-5">
+                <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-500/10">
+                  <Lightbulb className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                </div>
                 <Sparkles className="w-6 h-6 text-blue-500" />
               </div>
-              <p className="text-2xl font-bold mb-1">{recommendations.length}</p>
-              <p className="text-sm text-muted-foreground">توصيات مخصصة</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white mb-1.5 tracking-tight">{recommendations.length}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400">توصيات مخصصة</p>
             </button>
           </div>
         </div>

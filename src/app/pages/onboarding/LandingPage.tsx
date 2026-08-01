@@ -23,29 +23,29 @@ export function LandingPage() {
         </div>
 
         {/* Benefits */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-4">
-              <Target className="w-6 h-6 text-blue-600" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 items-stretch">
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 border border-gray-200/80 dark:border-gray-700/50 transition-all duration-200 hover:shadow-md flex flex-col justify-start h-full">
+            <div className="w-14 h-14 bg-blue-50 dark:bg-blue-500/10 rounded-xl flex items-center justify-center mb-5">
+              <Target className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
-            <h3 className="font-semibold text-lg mb-2">تقييم شامل</h3>
-            <p className="text-gray-600 text-sm">تقييم متعمق لـ 9 محاور رئيسية لقياس جاهزية مؤسستك</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">تقييم شامل</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">تقييم متعمق لـ 9 محاور رئيسية لقياس جاهزية مؤسستك</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="w-12 h-12 bg-green-500/10 rounded-lg flex items-center justify-center mb-4">
-              <Brain className="w-6 h-6 text-green-600" />
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 shadow-sm dark:shadow-lg dark:shadow-green-500/5 border border-gray-200/80 dark:border-gray-700/50 transition-all duration-200 hover:shadow-md flex flex-col justify-start h-full">
+            <div className="w-14 h-14 bg-green-50 dark:bg-green-500/10 rounded-xl flex items-center justify-center mb-5">
+              <Brain className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
-            <h3 className="font-semibold text-lg mb-2">تحليل ذكي</h3>
-            <p className="text-gray-600 text-sm">تحليل مدعوم بالذكاء الاصطناعي مع توصيات مخصصة</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">تحليل ذكي</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">تحليل مدعوم بالذكاء الاصطناعي مع توصيات مخصصة</p>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-            <div className="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-4">
-              <Award className="w-6 h-6 text-purple-600" />
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 border border-gray-200/80 dark:border-gray-700/50 transition-all duration-200 hover:shadow-md flex flex-col justify-start h-full">
+            <div className="w-14 h-14 bg-purple-50 dark:bg-purple-500/10 rounded-xl flex items-center justify-center mb-5">
+              <Award className="w-8 h-8 text-purple-600 dark:text-purple-400" />
             </div>
-            <h3 className="font-semibold text-lg mb-2">خطة تطوير</h3>
-            <p className="text-gray-600 text-sm">خارطة طريق واضحة للتطوير والتحسين المستمر</p>
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">خطة تطوير</h3>
+            <p className="text-gray-500 dark:text-gray-400 text-sm">خارطة طريق واضحة للتطوير والتحسين المستمر</p>
           </div>
         </div>
 

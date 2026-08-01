@@ -13,12 +13,11 @@ export interface DashboardSectionProps {
  * DashboardSection Component
  *
  * A reusable grid section layout with configurable columns and gap.
- * 
+ * Ensures equal-height cards using items-stretch.
+ *
  * @example
  * ```tsx
  * <DashboardSection columns={4} gap="md">
- *   <StatCard ... />
- *   <StatCard ... />
  *   <StatCard ... />
  *   <StatCard ... />
  * </DashboardSection>
@@ -49,13 +48,25 @@ export function DashboardSection({
     <div className={cn('space-y-4', className)}>
       {(title || description) && (
         <div>
-          {title && <h3 className="text-xl font-semibold">{title}</h3>}
+          {title && (
+            <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+              {title}
+            </h3>
+          )}
           {description && (
-            <p className="text-sm text-muted-foreground">{description}</p>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              {description}
+            </p>
           )}
         </div>
       )}
-      <div className={cn('grid', gridCols[columns], gapSizes[gap])}>
+      <div
+        className={cn(
+          'grid items-stretch',
+          gridCols[columns],
+          gapSizes[gap]
+        )}
+      >
         {children}
       </div>
     </div>

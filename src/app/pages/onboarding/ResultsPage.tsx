@@ -309,9 +309,9 @@ export function ResultsPage() {
         </div>
 
         {/* Charts */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold mb-4">التحليل الشامل</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 items-stretch">
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 dark:border-gray-700/50 p-6 dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">التحليل الشامل</h3>
             {radarData.length > 0 ? (
               <ResponsiveContainer width="100%" height={300}>
                 <RadarChart data={radarData}>
@@ -322,31 +322,31 @@ export function ResultsPage() {
                 </RadarChart>
               </ResponsiveContainer>
             ) : (
-              <p className="text-gray-500 text-center py-12">لا توجد بيانات للرسم البياني</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-12">لا توجد بيانات للرسم البياني</p>
             )}
           </div>
 
-          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-            <h3 className="text-lg font-semibold mb-4">الأبعاد التفصيلية</h3>
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-gray-200/80 dark:border-gray-700/50 p-6 dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-emerald-500/10">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">الأبعاد التفصيلية</h3>
             {categoryScores.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-stretch">
                 {categoryScores.map((cs) => (
-                  <div key={cs.categoryId} className="rounded-lg border border-gray-200 p-4" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">{cs.categoryName}</span>
+                  <div key={cs.categoryId} className="bg-gray-50 dark:bg-gray-800/60 rounded-xl border border-gray-200 dark:border-gray-700 p-4 flex flex-col justify-between h-full" style={{ borderRightWidth: 4, borderRightColor: cs.color }}>
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{cs.categoryName}</span>
                       <span className="px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: `${cs.color}20`, color: cs.color }}>
                         {cs.score} / {cs.maxScore}
                       </span>
                     </div>
                     <div className="flex items-end justify-between">
-                      <div className="text-2xl font-bold" style={{ color: cs.color }}>{cs.score}</div>
-                      <div className="text-sm text-gray-600">{cs.score}%</div>
+                      <div className="text-3xl font-bold tracking-tight" style={{ color: cs.color }}>{cs.score}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-400">{cs.score}%</div>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-center py-12">لا توجد بيانات للأبعاد</p>
+              <p className="text-gray-500 dark:text-gray-400 text-center py-12">لا توجد بيانات للأبعاد</p>
             )}
           </div>
         </div>

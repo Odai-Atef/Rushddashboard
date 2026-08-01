@@ -75,7 +75,7 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
         {[
           { label: 'جهات مانحة موصى بها', value: '28', sub: '+5 هذا الأسبوع', icon: Users, color: 'text-violet-600', bg: 'bg-violet-50 dark:bg-violet-950/40', border: 'border-violet-100 dark:border-violet-900' },
           { label: 'فرص تطابق عالي', value: '9', sub: 'نسبة تطابق ≥80%', icon: Star, color: 'text-amber-500', bg: 'bg-amber-50 dark:bg-amber-950/40', border: 'border-amber-100 dark:border-amber-900' },
@@ -84,16 +84,16 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
         ].map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className={`rounded-xl border p-4 ${card.bg} ${card.border}`}>
-              <div className="flex items-start justify-between mb-3">
-                <div className={`p-2 rounded-lg bg-background/60`}>
-                  <Icon className={`w-5 h-5 ${card.color}`} />
+            <div key={i} className={`bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80">
+                  <Icon className={`w-6 h-6 ${card.color}`} />
                 </div>
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground" />
+                <ArrowUpRight className="w-4 h-4 text-gray-400 dark:text-gray-500" />
               </div>
-              <p className={`text-2xl ${card.color}`}>{card.value}</p>
-              <p className="text-xs text-foreground mt-0.5">{card.label}</p>
-              <p className="text-xs text-muted-foreground mt-1">{card.sub}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{card.value}</p>
+              <p className="text-sm text-gray-900 dark:text-gray-200 mt-1">{card.label}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{card.sub}</p>
             </div>
           );
         })}

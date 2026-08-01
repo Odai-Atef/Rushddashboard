@@ -182,26 +182,26 @@ export function OpportunitiesDashboard() {
             return (
               <div
                 key={opp.id}
-                className="bg-card border border-border rounded-xl p-6 hover:shadow-xl transition-shadow"
+                className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-6 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 hover:shadow-md dark:hover:shadow-purple-500/10 transition-all duration-200 flex flex-col justify-between h-full"
               >
                 {/* Header */}
                 <div className="flex items-start gap-3 mb-4">
-                  <div className="p-3 bg-primary/10 rounded-lg">
-                    <Icon className="w-6 h-6 text-primary" />
+                  <div className="p-3 bg-purple-50 dark:bg-purple-500/10 rounded-xl">
+                    <Icon className="w-6 h-6 text-purple-600 dark:text-purple-400" />
                   </div>
                   <div className="flex-1">
-                    <h4 className="text-lg font-medium mb-2">{opp.title}</h4>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{opp.description}</p>
+                    <h4 className="text-lg font-medium text-gray-900 dark:text-white mb-2">{opp.title}</h4>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{opp.description}</p>
                   </div>
                 </div>
 
                 {/* Opportunity Score */}
                 <div className="mb-4">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm text-muted-foreground">درجة الفرصة</span>
-                    <span className="text-lg font-bold text-purple-600">{opp.opportunityScore}/100</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">درجة الفرصة</span>
+                    <span className="text-3xl font-bold text-purple-600 dark:text-purple-400 tracking-tight">{opp.opportunityScore}/100</span>
                   </div>
-                  <div className="h-2 bg-muted rounded-full overflow-hidden">
+                  <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                     <div
                       className="h-full bg-gradient-to-l from-purple-500 to-blue-600 rounded-full"
                       style={{ width: `${opp.opportunityScore}%` }}
@@ -222,27 +222,27 @@ export function OpportunitiesDashboard() {
                 </div>
 
                 {/* Metrics */}
-                <div className="grid grid-cols-3 gap-4 py-4 border-t border-border">
+                <div className="grid grid-cols-3 gap-4 py-4 border-t border-gray-200 dark:border-gray-700">
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">العائد المتوقع</p>
-                    <p className="font-medium text-green-600">{opp.expectedRevenue}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">العائد المتوقع</p>
+                    <p className="font-medium text-green-600 dark:text-green-400">{opp.expectedRevenue}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">الاستثمار</p>
-                    <p className="font-medium">{opp.investment}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">الاستثمار</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{opp.investment}</p>
                   </div>
                   <div>
-                    <p className="text-xs text-muted-foreground mb-1">المدة</p>
-                    <p className="font-medium">{opp.timeline}</p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">المدة</p>
+                    <p className="font-medium text-gray-900 dark:text-white">{opp.timeline}</p>
                   </div>
                 </div>
 
                 {/* Actions */}
                 <div className="flex gap-2 mt-4">
-                  <button className="flex-1 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors text-sm">
+                  <button className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors text-sm">
                     دراسة الفرصة
                   </button>
-                  <button className="px-4 py-2 border border-border hover:bg-accent rounded-lg transition-colors text-sm">
+                  <button className="px-4 py-2 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-lg transition-colors text-sm text-gray-700 dark:text-gray-300">
                     التفاصيل
                   </button>
                 </div>

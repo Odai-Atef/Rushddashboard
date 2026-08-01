@@ -263,14 +263,20 @@ export function CharityAssessmentRoadmapPage() {
           </div>
 
           {/* Stats */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-muted/50 rounded-lg p-4">
-              <p className="text-sm text-muted-foreground mb-1">إجمالي المبادرات</p>
-              <p className="text-2xl font-bold">{initiatives.length}</p>
+          <div className="grid grid-cols-2 gap-4 items-stretch">
+            <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 w-fit mb-4">
+                <Target className="w-6 h-6 text-gray-600 dark:text-gray-300" />
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">إجمالي المبادرات</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{initiatives.length}</p>
             </div>
-            <div className="bg-purple-500/10 rounded-lg p-4">
-              <p className="text-sm text-muted-foreground mb-1">المدة الإجمالية</p>
-              <p className="text-2xl font-bold text-purple-500">{totalDurationMonths} شهر</p>
+            <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-5 border border-purple-200/80 dark:border-purple-500/30 shadow-sm dark:shadow-lg dark:shadow-purple-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+              <div className="p-2.5 rounded-xl bg-purple-50 dark:bg-purple-500/10 w-fit mb-4">
+                <Clock className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+              </div>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mb-1">المدة الإجمالية</p>
+              <p className="text-3xl font-bold text-purple-600 dark:text-purple-400 tracking-tight">{totalDurationMonths} شهر</p>
             </div>
           </div>
         </div>

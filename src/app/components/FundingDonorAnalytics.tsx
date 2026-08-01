@@ -88,7 +88,7 @@ export function FundingDonorAnalytics() {
       </div>
 
       {/* Summary Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-stretch">
         {[
           { label: 'إجمالي التمويل', value: '12.4M ر.س', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-50 dark:bg-emerald-950/40' },
           { label: 'إجمالي المانحين', value: '3,847', icon: Users, color: 'text-blue-600', bg: 'bg-blue-50 dark:bg-blue-950/40' },
@@ -97,12 +97,12 @@ export function FundingDonorAnalytics() {
         ].map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className={`rounded-xl border border-border p-4 ${card.bg}`}>
-              <div className="p-2 rounded-lg bg-background/60 w-fit mb-2">
-                <Icon className={`w-5 h-5 ${card.color}`} />
+            <div key={i} className={`bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full`}>
+              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 w-fit mb-4">
+                <Icon className={`w-6 h-6 ${card.color}`} />
               </div>
-              <p className={`text-2xl ${card.color}`}>{card.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{card.label}</p>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{card.value}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-1.5">{card.label}</p>
             </div>
           );
         })}

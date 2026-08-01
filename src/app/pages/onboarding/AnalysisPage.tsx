@@ -126,26 +126,26 @@ export function AnalysisPage() {
               return (
                 <div
                   key={idx}
-                  className="bg-white rounded-xl shadow-sm border-2 border-green-200 p-4 sm:p-6"
+                  className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border border-green-200/80 dark:border-green-500/30 p-4 sm:p-6 dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md dark:hover:shadow-green-500/10"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center flex-shrink-0">
-                      <Icon className="w-6 h-6 text-green-600" />
+                    <div className="w-12 h-12 bg-green-50 dark:bg-green-500/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <Icon className="w-6 h-6 text-green-600 dark:text-green-400" />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
-                        <h3 className="text-lg font-semibold">{item.area}</h3>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{item.area}</h3>
                         <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold text-green-600">
+                          <span className="text-3xl font-bold text-green-600 dark:text-green-400 tracking-tight">
                             {item.score}
                           </span>
-                          <span className="text-gray-500">/100</span>
+                          <span className="text-gray-500 dark:text-gray-400">/100</span>
                         </div>
                       </div>
-                      <p className="text-gray-600">{item.insight}</p>
+                      <p className="text-gray-600 dark:text-gray-300">{item.insight}</p>
                       <div className="flex items-center gap-2 mt-3">
-                        <CheckCircle2 className="w-4 h-4 text-green-600" />
-                        <span className="text-sm text-green-700 font-medium">
+                        <CheckCircle2 className="w-4 h-4 text-green-600 dark:text-green-400" />
+                        <span className="text-sm text-green-700 dark:text-green-400 font-medium">
                           أداء ممتاز - استمروا في الحفاظ على هذا المستوى
                         </span>
                       </div>
@@ -188,18 +188,18 @@ export function AnalysisPage() {
               return (
                 <div
                   key={idx}
-                  className={`bg-white rounded-xl shadow-sm border-2 ${severityConfig.border} p-4 sm:p-6`}
+                  className={`bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl shadow-sm border-2 ${severityConfig.border.replace('200', '80')} dark:${severityConfig.border.replace('200', '500/30')} p-4 sm:p-6 dark:shadow-lg transition-all duration-200 hover:shadow-md`}
                 >
                   <div className="flex items-start gap-4">
                     <div
-                      className={`w-12 h-12 ${severityConfig.bg} rounded-lg flex items-center justify-center flex-shrink-0`}
+                      className={`w-12 h-12 ${severityConfig.bg} dark:bg-opacity-20 rounded-xl flex items-center justify-center flex-shrink-0`}
                     >
                       <Icon className={`w-6 h-6 ${severityConfig.text}`} />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-3">
-                          <h3 className="text-lg font-semibold">{item.area}</h3>
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{item.area}</h3>
                           <span
                             className={`text-xs px-2 py-1 rounded-full font-medium ${severityConfig.badge}`}
                           >
@@ -207,15 +207,15 @@ export function AnalysisPage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-2">
-                          <span className={`text-2xl font-bold ${severityConfig.text}`}>
+                          <span className={`text-3xl font-bold tracking-tight ${severityConfig.text}`}>
                             {item.score}
                           </span>
-                          <span className="text-gray-500">/100</span>
+                          <span className="text-gray-500 dark:text-gray-400">/100</span>
                         </div>
                       </div>
-                      <p className="text-gray-600 mb-3">{item.insight}</p>
+                      <p className="text-gray-600 dark:text-gray-300 mb-3">{item.insight}</p>
                       <div
-                        className={`flex items-center gap-2 p-3 ${severityConfig.bg} rounded-lg`}
+                        className={`flex items-center gap-2 p-3 ${severityConfig.bg} dark:bg-opacity-20 rounded-lg`}
                       >
                         <Lightbulb className={`w-4 h-4 ${severityConfig.text}`} />
                         <span className={`text-sm font-medium ${severityConfig.text.replace('600', '900')}`}>

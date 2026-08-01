@@ -178,22 +178,22 @@ export function InventoryDashboard() {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
         {kpis.map((kpi, index) => {
           const Icon = kpi.icon;
           return (
-            <div key={index} className="bg-card border border-border rounded-xl p-6 hover:shadow-xl transition-all duration-300">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`p-3 ${kpi.bgColor} rounded-lg`}>
-                  <Icon className={`w-5 h-5 ${kpi.color}`} />
+            <div key={index} className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-6 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 hover:shadow-md dark:hover:shadow-emerald-500/10 transition-all duration-200 flex flex-col justify-between h-full">
+              <div className="flex items-start justify-between mb-5">
+                <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80">
+                  <Icon className={`w-6 h-6 ${kpi.color}`} />
                 </div>
-                <div className={`flex items-center gap-1 text-sm font-medium ${kpi.isPositive ? 'text-green-600' : 'text-red-600'}`}>
-                  {kpi.isPositive ? <ArrowUpRight className="w-4 h-4" /> : <ArrowDownRight className="w-4 h-4" />}
+                <div className={`flex items-center gap-1 text-sm font-medium px-2 py-1 rounded-full ${kpi.isPositive ? 'text-green-700 bg-green-100 dark:text-green-400 dark:bg-green-500/20' : 'text-red-700 bg-red-100 dark:text-red-400 dark:bg-red-500/20'}`}>
+                  {kpi.isPositive ? <ArrowUpRight className="w-3.5 h-3.5" /> : <ArrowDownRight className="w-3.5 h-3.5" />}
                   {kpi.change}
                 </div>
               </div>
-              <h3 className="text-muted-foreground text-sm mb-2">{kpi.title}</h3>
-              <p className="text-2xl font-bold">{kpi.value}</p>
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-1.5">{kpi.title}</h3>
+              <p className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{kpi.value}</p>
             </div>
           );
         })}
@@ -216,18 +216,18 @@ export function InventoryDashboard() {
               معدل الدوران تحسن إلى <span className="font-bold text-green-600">6.8</span> مما يدل على تحسن الكفاءة التشغيلية.
               <span className="font-bold text-foreground"> 4 منتجات</span> متوقع نفاذها خلال أقل من 3 أيام.
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-card/50 rounded-lg border border-border">
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-1">القيمة المعرضة للخطر</p>
-                <p className="text-2xl font-bold text-red-600">475K ر.س</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-white/70 dark:bg-gray-800/60 rounded-xl border border-border/50 items-stretch">
+              <div className="bg-white dark:bg-gray-900/60 rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg dark:shadow-red-500/5 transition-all duration-200 hover:shadow-md text-center flex flex-col justify-between h-full">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">القيمة المعرضة للخطر</p>
+                <p className="text-3xl font-bold text-red-600 dark:text-red-400 tracking-tight">475K ر.س</p>
               </div>
-              <div className="text-center border-x border-border">
-                <p className="text-sm text-muted-foreground mb-1">معدل الدوران</p>
-                <p className="text-2xl font-bold text-green-600">6.8</p>
+              <div className="bg-white dark:bg-gray-900/60 rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg dark:shadow-green-500/5 transition-all duration-200 hover:shadow-md text-center flex flex-col justify-between h-full">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">معدل الدوران</p>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400 tracking-tight">6.8</p>
               </div>
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground mb-1">الكفاءة التشغيلية</p>
-                <p className="text-2xl font-bold text-blue-600">85%</p>
+              <div className="bg-white dark:bg-gray-900/60 rounded-2xl border border-gray-200/80 dark:border-gray-700/50 p-5 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md text-center flex flex-col justify-between h-full">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">الكفاءة التشغيلية</p>
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400 tracking-tight">85%</p>
               </div>
             </div>
           </div>
@@ -236,32 +236,30 @@ export function InventoryDashboard() {
 
       {/* Product Risk Cards */}
       <div>
-        <h3 className="text-lg font-medium mb-4">تصنيف المخاطر</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-4">تصنيف المخاطر</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
           {productRisks.map((risk) => {
             const Icon = risk.icon;
             return (
               <div
                 key={risk.id}
-                className={`relative bg-card border-2 ${risk.borderColor} rounded-xl p-5 hover:shadow-xl transition-all duration-300 overflow-hidden group`}
+                className="relative bg-white dark:bg-gray-900/60 dark:backdrop-blur-md border-2 rounded-2xl p-5 hover:shadow-lg dark:hover:shadow-xl transition-all duration-200 overflow-hidden group flex flex-col justify-between h-full"
+                style={{ borderColor: risk.borderColor.replace('border-', '') === 'orange-500' ? 'rgba(249, 115, 22, 0.5)' : risk.borderColor.replace('border-', '') === 'red-500' ? 'rgba(239, 68, 68, 0.5)' : risk.borderColor.replace('border-', '') === 'yellow-500' ? 'rgba(234, 179, 8, 0.5)' : 'rgba(59, 130, 246, 0.5)' }}
               >
-                {/* Gradient background on hover */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${risk.color} opacity-0 group-hover:opacity-5 transition-opacity`}></div>
-
                 <div className="relative">
-                  <div className={`inline-flex p-3 rounded-lg bg-gradient-to-br ${risk.color} mb-3`}>
+                  <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${risk.color} mb-3`}>
                     <Icon className="w-6 h-6 text-white" />
                   </div>
 
-                  <h4 className="font-medium text-lg mb-1">{risk.title}</h4>
+                  <h4 className="font-medium text-lg text-gray-900 dark:text-white mb-1">{risk.title}</h4>
                   <div className="flex items-baseline gap-2 mb-3">
-                    <span className="text-3xl font-bold">{risk.count}</span>
-                    <span className="text-sm text-muted-foreground">منتج</span>
+                    <span className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{risk.count}</span>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">منتج</span>
                   </div>
 
-                  <p className="text-sm text-muted-foreground mb-3">{risk.description}</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{risk.description}</p>
 
-                  <div className={`inline-flex px-3 py-1 ${risk.bgColor} rounded-full`}>
+                  <div className={`inline-flex px-3 py-1 ${risk.bgColor} dark:bg-opacity-20 rounded-full`}>
                     <span className="text-sm font-medium">{risk.value}</span>
                   </div>
                 </div>

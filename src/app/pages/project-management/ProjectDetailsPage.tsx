@@ -891,26 +891,38 @@ export function ProjectDetailsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <p className="text-sm text-gray-600 mb-2">حالة المشروع</p>
-            <span
-              className="inline-block px-3 py-1 rounded-full text-sm font-medium"
-              style={{ backgroundColor: status.bg, color: status.color }}
-            >
-              {status.label}
-            </span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 items-stretch">
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">حالة المشروع</p>
+                <span
+                  className="inline-block px-4 py-1.5 rounded-full text-sm font-medium"
+                  style={{ backgroundColor: status.bg, color: status.color }}
+                >
+                  {status.label}
+                </span>
+              </div>
+              <div className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80">
+                <Activity className="w-6 h-6 text-gray-500 dark:text-gray-400" />
+              </div>
+            </div>
           </div>
-          <div className="bg-white rounded-xl p-6 border border-gray-200">
-            <p className="text-sm text-gray-600 mb-2">نسبة الإنجاز</p>
+          <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 border border-blue-200/80 dark:border-blue-500/30 shadow-sm dark:shadow-lg dark:shadow-blue-500/5 transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
+            <div className="flex items-start justify-between mb-3">
+              <p className="text-sm text-gray-500 dark:text-gray-400">نسبة الإنجاز</p>
+              <div className="p-2.5 rounded-xl bg-blue-50 dark:bg-blue-500/10">
+                <TrendingUp className="w-6 h-6 text-blue-600 dark:text-blue-400" />
+              </div>
+            </div>
             <div className="flex items-center gap-3">
-              <div className="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div className="flex-1 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-blue-600"
+                  className="h-full bg-blue-600 dark:bg-blue-500"
                   style={{ width: `${project.progress}%` }}
                 ></div>
               </div>
-              <span className="text-2xl font-bold text-blue-600">{project.progress}%</span>
+              <span className="text-3xl font-bold text-blue-600 dark:text-blue-400 tracking-tight">{project.progress}%</span>
             </div>
           </div>
         </div>
@@ -968,11 +980,16 @@ export function ProjectDetailsPage() {
               </div>
             </div>
 
-            <div className="bg-white rounded-xl p-6 border border-gray-200">
-              <h2 className="text-xl font-semibold mb-4">ملخص الميزانية</h2>
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                <span className="text-gray-600">إجمالي الميزانية</span>
-                <span className="text-2xl font-bold text-gray-900">
+            <div className="bg-white dark:bg-gray-900/60 dark:backdrop-blur-md rounded-2xl p-6 border border-gray-200/80 dark:border-gray-700/50 shadow-sm dark:shadow-lg dark:shadow-emerald-500/5 transition-all duration-200 hover:shadow-md">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">ملخص الميزانية</h2>
+                <div className="p-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-500/10">
+                  <DollarSign className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                </div>
+              </div>
+              <div className="flex items-center justify-between p-5 bg-gray-50 dark:bg-gray-800/60 rounded-xl">
+                <span className="text-gray-600 dark:text-gray-400 text-sm">إجمالي الميزانية</span>
+                <span className="text-3xl font-bold text-gray-900 dark:text-white tracking-tight">
                   {getBudgetAmount(project.budget).toLocaleString('ar-SA')} ر.س
                 </span>
               </div>
