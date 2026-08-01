@@ -4,6 +4,8 @@
  * Completely redesigned header that serves as one of the strongest
  * visual elements of the application. Premium, spacious, professional,
  * executive, modern, and minimal.
+ * 
+ * Theme-aware: uses semantic CSS variables for full light/dark support.
  */
 import { useEffect, useCallback, useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -236,9 +238,7 @@ export function TopBar({
         'relative flex items-center justify-center',
         'w-10 h-10 rounded-xl',
         'transition-all duration-200 ease-out',
-        isDark
-          ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
-          : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]',
+        'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]',
         hiddenOn === 'sm' && 'hidden sm:flex',
         hiddenOn === 'md' && 'hidden md:flex'
       )}
@@ -250,14 +250,176 @@ export function TopBar({
             'absolute -top-0.5 -right-0.5',
             'min-w-[18px] h-[18px] px-1',
             'flex items-center justify-center',
-            'rounded-full text-[10px] font-bold text-white',
-            'bg-emerald-500 shadow-sm'
+            'rounded-full text-[10px] font-bold',
+            'bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm'
           )}
         >
           {badge > 99 ? '99+' : badge}
         </span>
       )}
     </button>
+  );
+
+  /* ================================================================ */
+  /*  NOTIFICATION DROPDOWN CONTENT — Shared between mobile/desktop   */
+  /* ================================================================ */
+  const NotificationDropdownContent = ({ width = 'w-80' }: { width?: string }) => (
+    <DropdownMenu.Content
+      className={cn(
+        'border rounded-2xl shadow-xl p-2 z-50 overflow-hidden',
+        'bg-[var(--popover)] border-[var(--border)] text-[var(--popover-foreground)]',
+        width
+      )}
+      sideOffset={8}
+      align="end"
+      dir="rtl"
+    >
+      {/* Header */}
+      <div className="px-3 py-3 flex items-center justify-between border-b border-[var(--border)]">
+        <h3 className="font-semibold text-sm text-[var(--foreground)]">
+          الإشعارات
+        </h3>
+        {unreadCount > 0 && (
+          <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-[var(--primary)]/10 text-[var(--primary)]">
+            {unreadCount} غير مقروء
+          </span>
+        )}
+      </div>
+
+      {/* List */}
+      <div className="py-1 max-h-[320px] overflow-y-auto">
+        {loading && recentNotifications.length === 0 ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-5 h-5 animate-spin text-[var(--muted-foreground)]" />
+          </div>
+        ) : recentNotifications.length === 0 ? (
+          <div className="text-center py-8 px-4">
+            <Bell className="w-8 h-8 mx-auto mb-2 opacity-40 text-[var(--muted-foreground)]" />
+            <p className="text-sm text-[var(--muted-foreground)]">لا توجد إشعارات</p>
+          </div>
+        ) : (
+          recentNotifications.map((notification) => {
+            const Icon = getPriorityIcon(notification.priority);
+            const color = getPriorityColor(notification.priority);
+            const isUnread = notification.status !== 'READ';
+
+            return (
+              <div
+                key={notification.id}
+                onClick={() => handleNotificationClick(notification)}
+                className={cn(
+                  'px-3 py-3 rounded-xl cursor-pointer transition-colors duration-200',
+                  'hover:bg-[var(--hover)]',
+                  isUnread && 'bg-[var(--primary)]/[0.03]'
+                )}
+              >
+                <div className="flex items-start gap-3">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
+                    style={{ background: color + '15' }}
+                  >
+                    <Icon className="w-4 h-4" style={{ color }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className={cn('font-medium text-sm truncate', isUnread ? 'text-[var(--foreground)]' : 'text-[var(--muted-foreground)]')}>
+                        {notification.title}
+                      </p>
+                      {isUnread && <span className="w-2 h-2 rounded-full bg-[var(--primary)] shrink-0" />}
+                    </div>
+                    <p className="text-xs line-clamp-2 mb-1 text-[var(--muted-foreground)]">
+                      {notification.body}
+                    </p>
+                    <span className="text-xs text-[var(--muted-foreground)]">
+                      {formatRelativeTime(notification.createdAt)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })
+        )}
+      </div>
+
+      {/* Footer */}
+      {recentNotifications.length > 0 && (
+        <div className="p-2 border-t border-[var(--border)]">
+          <button
+            onClick={() => navigate('/dashboard/notifications')}
+            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm rounded-xl transition-colors duration-200 text-[var(--primary)] hover:bg-[var(--hover)]"
+          >
+            عرض الكل
+            <ExternalLink className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
+    </DropdownMenu.Content>
+  );
+
+  /* ================================================================ */
+  /*  USER DROPDOWN CONTENT — Shared between mobile/desktop            */
+  /* ================================================================ */
+  const UserDropdownContent = () => (
+    <DropdownMenu.Content
+      className={cn(
+        'border rounded-2xl shadow-xl p-2 z-50',
+        'bg-[var(--popover)] border-[var(--border)] text-[var(--popover-foreground)]'
+      )}
+      sideOffset={8}
+      align="end"
+      dir="rtl"
+    >
+      {/* User info */}
+      <div className="flex items-center gap-3 px-3 py-3 mb-2">
+        <Avatar.Root
+          className={cn(
+            'w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0',
+            'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
+          )}
+        >
+          <Avatar.Fallback className="text-sm">
+            {getInitials(user?.fullName ?? '')}
+          </Avatar.Fallback>
+        </Avatar.Root>
+        <div className="min-w-0">
+          <p className="font-semibold text-sm truncate text-[var(--foreground)]">
+            {displayName(user)}
+          </p>
+          <p className="text-xs truncate text-[var(--muted-foreground)]">
+            {user?.email ?? ''}
+          </p>
+        </div>
+      </div>
+
+      <DropdownMenu.Separator className="h-px my-2 bg-[var(--border)]" />
+
+      {/* Profile link */}
+      {!isProjectManager && (
+        <DropdownMenu.Item
+          className="px-3 py-2.5 rounded-xl cursor-pointer outline-none transition-colors duration-200 text-sm text-[var(--foreground)] hover:bg-[var(--hover)]"
+          onSelect={() => navigate('/dashboard/onboarding/info?tab=info')}
+        >
+          الملف الشخصي
+        </DropdownMenu.Item>
+      )}
+
+      {/* Theme info */}
+      <div className="px-3 py-2 text-xs flex items-center gap-2 text-[var(--muted-foreground)]">
+        <ThemeIcon className="w-3.5 h-3.5" />
+        <span>{themeLabel(theme)}</span>
+      </div>
+
+      <DropdownMenu.Separator className="h-px my-2 bg-[var(--border)]" />
+
+      {/* Logout */}
+      <DropdownMenu.Item
+        className="px-3 py-2.5 rounded-xl cursor-pointer outline-none transition-colors duration-200 flex items-center gap-2 text-sm text-[var(--destructive)] hover:bg-[var(--destructive)]/[0.08]"
+        onSelect={handleLogout}
+      >
+        <LogOut className="w-4 h-4" />
+        <span>تسجيل الخروج</span>
+      </DropdownMenu.Item>
+    </DropdownMenu.Content>
   );
 
   /* ================================================================ */
@@ -272,9 +434,7 @@ export function TopBar({
           className={cn(
             'flex items-center justify-center w-10 h-10 rounded-xl',
             'transition-all duration-200',
-            isDark
-              ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
-              : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+            'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
           )}
           aria-label="القائمة"
         >
@@ -290,7 +450,7 @@ export function TopBar({
             )}
           />
           <div className="leading-tight">
-            <p className="font-semibold text-sm tracking-tight text-[#1E293B] dark:text-white">
+            <p className="font-semibold text-sm tracking-tight text-[var(--foreground)]">
               Rushd
             </p>
           </div>
@@ -306,9 +466,7 @@ export function TopBar({
             className={cn(
               'flex items-center justify-center w-10 h-10 rounded-xl',
               'transition-all duration-200',
-              isDark
-                ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
-                : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+              'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
             )}
             aria-label="بحث"
           >
@@ -317,10 +475,7 @@ export function TopBar({
         ) : (
           <div className="relative flex-1 max-w-[200px]">
             <Search
-              className={cn(
-                'absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none',
-                isDark ? 'text-[#7C95AA]' : 'text-[#94A3B8]'
-              )}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 pointer-events-none text-[var(--muted-foreground)]"
             />
             <input
               autoFocus
@@ -330,10 +485,8 @@ export function TopBar({
               placeholder="بحث..."
               className={cn(
                 'w-full h-9 rounded-lg pr-9 pl-8 text-sm',
-                'focus:outline-none focus:ring-2',
-                isDark
-                  ? 'bg-[#102942] border border-white/[0.08] text-white placeholder:text-[#7C95AA] focus:ring-[var(--primary)]/40'
-                  : 'bg-white border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:ring-[var(--primary)]/30'
+                'focus:outline-none focus:ring-2 focus:ring-[var(--ring)]/30',
+                'bg-[var(--input-background)] border border-[var(--input)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)]'
               )}
             />
             <button
@@ -341,10 +494,7 @@ export function TopBar({
                 setSearchOpen(false);
                 setSearchQuery('');
               }}
-              className={cn(
-                'absolute left-2 top-1/2 -translate-y-1/2',
-                isDark ? 'text-[#7C95AA] hover:text-white' : 'text-[#94A3B8] hover:text-[#1E293B]'
-              )}
+              className="absolute left-2 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
               aria-label="إغلاق البحث"
             >
               <X className="w-3.5 h-3.5" />
@@ -359,120 +509,20 @@ export function TopBar({
               className={cn(
                 'relative flex items-center justify-center w-10 h-10 rounded-xl',
                 'transition-all duration-200',
-                isDark
-                  ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
-                  : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+                'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
               )}
               aria-label="الإشعارات"
             >
               <Bell className="w-5 h-5" />
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full text-[10px] font-bold text-white bg-emerald-500 shadow-sm">
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full text-[10px] font-bold bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm">
                   {unreadCount > 99 ? '99+' : unreadCount}
                 </span>
               )}
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className={cn(
-                'border rounded-2xl shadow-xl p-2 w-80 z-50 overflow-hidden',
-                isDark
-                  ? 'bg-[rgba(8,26,46,0.94)] backdrop-blur-[20px] border-white/[0.08]'
-                  : 'bg-white border-[#E2E8F0]'
-              )}
-              sideOffset={8}
-              align="end"
-              dir="rtl"
-            >
-              {/* Header */}
-              <div
-                className={cn(
-                  'px-3 py-3 flex items-center justify-between',
-                  isDark ? 'border-b border-white/[0.08]' : 'border-b border-[#E2E8F0]'
-                )}
-              >
-                <h3 className={cn('font-semibold text-sm', isDark ? 'text-white' : 'text-[#1E293B]')}>
-                  الإشعارات
-                </h3>
-                {unreadCount > 0 && (
-                  <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                    {unreadCount} غير مقروء
-                  </span>
-                )}
-              </div>
-
-              {/* List */}
-              <div className="py-1 max-h-[320px] overflow-y-auto">
-                {loading && recentNotifications.length === 0 ? (
-                  <div className="flex items-center justify-center py-8">
-                    <Loader2 className={cn('w-5 h-5 animate-spin', isDark ? 'text-[#B7C7D8]/40' : 'text-[#94A3B8]')} />
-                  </div>
-                ) : recentNotifications.length === 0 ? (
-                  <div className="text-center py-8 px-4">
-                    <Bell className={cn('w-8 h-8 mx-auto mb-2 opacity-40', isDark ? 'text-[#B7C7D8]' : 'text-[#94A3B8]')} />
-                    <p className={cn('text-sm', isDark ? 'text-[#B7C7D8]/50' : 'text-[#94A3B8]')}>لا توجد إشعارات</p>
-                  </div>
-                ) : (
-                  recentNotifications.map((notification) => {
-                    const Icon = getPriorityIcon(notification.priority);
-                    const color = getPriorityColor(notification.priority);
-                    const isUnread = notification.status !== 'READ';
-
-                    return (
-                      <div
-                        key={notification.id}
-                        onClick={() => handleNotificationClick(notification)}
-                        className={cn(
-                          'px-3 py-3 rounded-xl cursor-pointer transition-colors duration-200',
-                          isDark ? 'hover:bg-white/[0.08]' : 'hover:bg-[#F1F5F9]',
-                          isUnread && (isDark ? 'bg-white/[0.03]' : 'bg-emerald-50/50')
-                        )}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                            style={{ background: color + '15' }}
-                          >
-                            <Icon className="w-4 h-4" style={{ color }} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <p className={cn('font-medium text-sm truncate', isUnread ? 'text-[#1E293B] dark:text-white' : 'text-[#64748B] dark:text-[#B7C7D8]/60')}>
-                                {notification.title}
-                              </p>
-                              {isUnread && <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />}
-                            </div>
-                            <p className={cn('text-xs line-clamp-2 mb-1', isDark ? 'text-[#B7C7D8]/60' : 'text-[#64748B]')}>
-                              {notification.body}
-                            </p>
-                            <span className={cn('text-xs', isDark ? 'text-[#7C95AA]' : 'text-[#94A3B8]')}>
-                              {formatRelativeTime(notification.createdAt)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-
-              {/* Footer */}
-              {recentNotifications.length > 0 && (
-                <div className={cn('p-2', isDark ? 'border-t border-white/[0.08]' : 'border-t border-[#E2E8F0]')}>
-                  <button
-                    onClick={() => navigate('/dashboard/notifications')}
-                    className={cn(
-                      'w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm rounded-xl transition-colors duration-200',
-                      isDark ? 'text-[var(--primary)] hover:bg-white/[0.08]' : 'text-[var(--primary)] hover:bg-[#F1F5F9]'
-                    )}
-                  >
-                    عرض الكل
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              )}
-            </DropdownMenu.Content>
+            <NotificationDropdownContent />
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
 
@@ -483,9 +533,7 @@ export function TopBar({
           className={cn(
             'relative flex items-center justify-center w-10 h-10 rounded-xl',
             'transition-all duration-200',
-            isDark
-              ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
-              : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+            'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
           )}
           aria-label={`تبديل الوضع الحالي: ${themeLabel(theme)}`}
         >
@@ -493,13 +541,12 @@ export function TopBar({
         </button>
 
         {/* User Profile */}
-
         <DropdownMenu.Root>
           <DropdownMenu.Trigger asChild>
             <button
               className={cn(
                 'flex items-center gap-2 p-1 pr-2 rounded-xl transition-all duration-200',
-                isDark ? 'hover:bg-white/[0.08]' : 'hover:bg-[#F1F5F9]'
+                'hover:bg-[var(--hover)]'
               )}
             >
               <Avatar.Root
@@ -515,54 +562,7 @@ export function TopBar({
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className={cn(
-                'border rounded-2xl shadow-xl p-2 w-56 z-50',
-                isDark
-                  ? 'bg-[rgba(8,26,46,0.94)] backdrop-blur-[20px] border-white/[0.08]'
-                  : 'bg-white border-[#E2E8F0]'
-              )}
-              sideOffset={8}
-              align="end"
-              dir="rtl"
-            >
-              {/* User info */}
-              <div className={cn('px-3 py-2 mb-2', isDark ? 'border-b border-white/[0.08]' : 'border-b border-[#E2E8F0]')}>
-                <p className={cn('font-semibold text-sm', isDark ? 'text-white' : 'text-[#1E293B]')}>
-                  {displayName(user)}
-                </p>
-                <p className="text-xs truncate text-[#64748B] dark:text-[#7C95AA]">
-                  {user?.email ?? ''}
-                </p>
-              </div>
-
-              {/* Profile link */}
-              {!isProjectManager && (
-                <DropdownMenu.Item
-                  className={cn(
-                    'px-3 py-2.5 rounded-xl cursor-pointer outline-none transition-colors duration-200 text-sm',
-                    isDark ? 'hover:bg-white/[0.08] text-[#B7C7D8]' : 'hover:bg-[#F1F5F9] text-[#1E293B]'
-                  )}
-                  onSelect={() => navigate('/dashboard/onboarding/info?tab=info')}
-                >
-                  الملف الشخصي
-                </DropdownMenu.Item>
-              )}
-
-              <DropdownMenu.Separator className={cn('h-px my-2', isDark ? 'bg-white/[0.08]' : 'bg-[#E2E8F0]')} />
-
-              {/* Logout */}
-              <DropdownMenu.Item
-                className={cn(
-                  'px-3 py-2.5 rounded-xl cursor-pointer outline-none transition-colors duration-200 flex items-center gap-2 text-sm',
-                  isDark ? 'hover:bg-red-500/10 text-red-400' : 'hover:bg-red-50 text-red-600'
-                )}
-                onSelect={handleLogout}
-              >
-                <LogOut className="w-4 h-4" />
-                <span>تسجيل الخروج</span>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
+            <UserDropdownContent />
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
       </div>
@@ -588,10 +588,10 @@ export function TopBar({
             )}
           />
           <div className="leading-tight">
-            <p className="font-bold text-[15px] tracking-tight text-[#1E293B] dark:text-white">
+            <p className="font-bold text-[15px] tracking-tight text-[var(--foreground)]">
               Rushd
             </p>
-            <p className="text-xs font-medium text-[#64748B] dark:text-[#B7C7D8]">
+            <p className="text-xs font-medium text-[var(--muted-foreground)]">
               Rushd Virtual Incubator
             </p>
           </div>
@@ -604,10 +604,7 @@ export function TopBar({
       <div className="flex-1 flex justify-center max-w-xl mx-8">
         <div className="relative w-full max-w-[520px]">
           <Search
-            className={cn(
-              'absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] pointer-events-none',
-              isDark ? 'text-[#7C95AA]' : 'text-[#94A3B8]'
-            )}
+            className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] pointer-events-none text-[var(--muted-foreground)]"
           />
           <input
             type="text"
@@ -617,10 +614,8 @@ export function TopBar({
             className={cn(
               'w-full h-[46px] rounded-[14px] pr-11 pl-10 text-sm',
               'transition-all duration-200 ease-out',
-              'focus:outline-none',
-              isDark
-                ? 'bg-[#102942] border border-white/[0.08] text-white placeholder:text-[#7C95AA] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_rgba(var(--primary-rgb),0.15)]'
-                : 'bg-white border border-[#E2E8F0] text-[#1E293B] placeholder:text-[#94A3B8] focus:border-[var(--primary)] focus:shadow-[0_0_0_3px_rgba(var(--primary-rgb),0.1)]'
+              'focus:outline-none focus:ring-2 focus:ring-[var(--ring)]/30',
+              'bg-[var(--input-background)] border border-[var(--input)] text-[var(--foreground)] placeholder:text-[var(--muted-foreground)]'
             )}
           />
           {searchQuery && (
@@ -630,9 +625,7 @@ export function TopBar({
                 'absolute left-3 top-1/2 -translate-y-1/2',
                 'w-6 h-6 flex items-center justify-center rounded-full',
                 'transition-colors duration-200',
-                isDark
-                  ? 'text-[#7C95AA] hover:text-white hover:bg-white/[0.08]'
-                  : 'text-[#94A3B8] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+                'text-[var(--muted-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
               )}
               aria-label="مسح البحث"
             >
@@ -654,9 +647,7 @@ export function TopBar({
                 'relative flex items-center justify-center',
                 'w-10 h-10 rounded-xl',
                 'transition-all duration-200 ease-out',
-                isDark
-                  ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
-                  : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+                'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
               )}
               aria-label="الإشعارات"
             >
@@ -667,8 +658,8 @@ export function TopBar({
                     'absolute -top-0.5 -right-0.5',
                     'min-w-[18px] h-[18px] px-1',
                     'flex items-center justify-center',
-                    'rounded-full text-[10px] font-bold text-white',
-                    'bg-emerald-500 shadow-sm'
+                    'rounded-full text-[10px] font-bold',
+                    'bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm'
                   )}
                 >
                   {unreadCount > 99 ? '99+' : unreadCount}
@@ -677,105 +668,7 @@ export function TopBar({
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className={cn(
-                'border rounded-2xl shadow-xl p-2 w-96 z-50 overflow-hidden',
-                isDark
-                  ? 'bg-[rgba(8,26,46,0.94)] backdrop-blur-[20px] border-white/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.35)]'
-                  : 'bg-white border-[#E2E8F0] shadow-[0_8px_24px_rgba(15,23,42,0.08)]'
-              )}
-              sideOffset={8}
-              align="end"
-              dir="rtl"
-            >
-              {/* Header */}
-              <div
-                className={cn(
-                  'px-4 py-3 flex items-center justify-between',
-                  isDark ? 'border-b border-white/[0.08]' : 'border-b border-[#E2E8F0]'
-                )}
-              >
-                <h3 className={cn('font-semibold text-sm', isDark ? 'text-white' : 'text-[#1E293B]')}>
-                  الإشعارات
-                </h3>
-                {unreadCount > 0 && (
-                  <span className="text-xs px-2.5 py-1 rounded-full font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
-                    {unreadCount} غير مقروء
-                  </span>
-                )}
-              </div>
-
-              {/* List */}
-              <div className="py-1 max-h-[400px] overflow-y-auto">
-                {loading && recentNotifications.length === 0 ? (
-                  <div className="flex items-center justify-center py-8">
-                    <Loader2 className={cn('w-5 h-5 animate-spin', isDark ? 'text-[#B7C7D8]/40' : 'text-[#94A3B8]')} />
-                  </div>
-                ) : recentNotifications.length === 0 ? (
-                  <div className="text-center py-8 px-4">
-                    <Bell className={cn('w-8 h-8 mx-auto mb-2 opacity-40', isDark ? 'text-[#B7C7D8]' : 'text-[#94A3B8]')} />
-                    <p className={cn('text-sm', isDark ? 'text-[#B7C7D8]/50' : 'text-[#94A3B8]')}>لا توجد إشعارات</p>
-                  </div>
-                ) : (
-                  recentNotifications.map((notification) => {
-                    const Icon = getPriorityIcon(notification.priority);
-                    const color = getPriorityColor(notification.priority);
-                    const isUnread = notification.status !== 'READ';
-
-                    return (
-                      <div
-                        key={notification.id}
-                        onClick={() => handleNotificationClick(notification)}
-                        className={cn(
-                          'px-3 py-3 rounded-xl cursor-pointer transition-colors duration-200',
-                          isDark ? 'hover:bg-white/[0.08]' : 'hover:bg-[#F1F5F9]',
-                          isUnread && (isDark ? 'bg-white/[0.03]' : 'bg-emerald-50/50')
-                        )}
-                      >
-                        <div className="flex items-start gap-3">
-                          <div
-                            className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                            style={{ background: color + '15' }}
-                          >
-                            <Icon className="w-4 h-4" style={{ color }} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <p className={cn('font-medium text-sm truncate', isUnread ? 'text-[#1E293B] dark:text-white' : 'text-[#64748B] dark:text-[#B7C7D8]/60')}>
-                                {notification.title}
-                              </p>
-                              {isUnread && <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />}
-                            </div>
-                            <p className={cn('text-xs line-clamp-2 mb-1', isDark ? 'text-[#B7C7D8]/60' : 'text-[#64748B]')}>
-                              {notification.body}
-                            </p>
-                            <span className={cn('text-xs', isDark ? 'text-[#7C95AA]' : 'text-[#94A3B8]')}>
-                              {formatRelativeTime(notification.createdAt)}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })
-                )}
-              </div>
-
-              {/* Footer */}
-              {recentNotifications.length > 0 && (
-                <div className={cn('p-2', isDark ? 'border-t border-white/[0.08]' : 'border-t border-[#E2E8F0]')}>
-                  <button
-                    onClick={() => navigate('/dashboard/notifications')}
-                    className={cn(
-                      'w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm rounded-xl transition-colors duration-200',
-                      isDark ? 'text-[var(--primary)] hover:bg-white/[0.08]' : 'text-[var(--primary)] hover:bg-[#F1F5F9]'
-                    )}
-                  >
-                    عرض الكل
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              )}
-            </DropdownMenu.Content>
+            <NotificationDropdownContent width="w-96" />
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
 
@@ -801,9 +694,7 @@ export function TopBar({
             'relative flex items-center justify-center',
             'w-10 h-10 rounded-xl',
             'transition-all duration-200 ease-out',
-            isDark
-              ? 'text-[#D8E4F0] hover:text-white hover:bg-white/[0.08]'
-              : 'text-[#475569] hover:text-[#1E293B] hover:bg-[#F1F5F9]'
+            'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
           )}
           aria-label={`تبديل الوضع الحالي: ${themeLabel(theme)}`}
         >
@@ -811,7 +702,7 @@ export function TopBar({
         </button>
 
         {/* Divider */}
-        <div className={cn('w-px h-6 mx-1', isDark ? 'bg-white/[0.08]' : 'bg-[#E2E8F0]')} />
+        <div className="w-px h-6 mx-1 bg-[var(--border)]" />
 
         {/* User Profile */}
         <DropdownMenu.Root>
@@ -820,7 +711,7 @@ export function TopBar({
               className={cn(
                 'flex items-center gap-3 pl-1 pr-3 py-1 rounded-xl',
                 'transition-all duration-200 ease-out',
-                isDark ? 'hover:bg-white/[0.08]' : 'hover:bg-[#F1F5F9]'
+                'hover:bg-[var(--hover)]'
               )}
             >
               <Avatar.Root
@@ -834,90 +725,20 @@ export function TopBar({
                 </Avatar.Fallback>
               </Avatar.Root>
               <div className="hidden xl:block text-right leading-tight">
-                <p className={cn('text-sm font-semibold', isDark ? 'text-white' : 'text-[#1E293B]')}>
+                <p className="text-sm font-semibold text-[var(--foreground)]">
                   {displayName(user)}
                 </p>
-                <p className="text-xs text-[#64748B] dark:text-[#7C95AA]">
+                <p className="text-xs text-[var(--muted-foreground)]">
                   {user?.email?.split('@')[0] ?? ''}
                 </p>
               </div>
               <ChevronDown
-                className={cn(
-                  'w-3.5 h-3.5 hidden xl:block',
-                  isDark ? 'text-[#7C95AA]' : 'text-[#94A3B8]'
-                )}
+                className="w-3.5 h-3.5 hidden xl:block text-[var(--muted-foreground)]"
               />
             </button>
           </DropdownMenu.Trigger>
           <DropdownMenu.Portal>
-            <DropdownMenu.Content
-              className={cn(
-                'border rounded-2xl shadow-xl p-2 w-64 z-50',
-                isDark
-                  ? 'bg-[rgba(8,26,46,0.94)] backdrop-blur-[20px] border-white/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.35)]'
-                  : 'bg-white border-[#E2E8F0] shadow-[0_8px_24px_rgba(15,23,42,0.08)]'
-              )}
-              sideOffset={8}
-              align="end"
-              dir="rtl"
-            >
-              {/* User info */}
-              <div className="flex items-center gap-3 px-3 py-3 mb-2">
-                <Avatar.Root
-                  className={cn(
-                    'w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold shrink-0',
-                    'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
-                  )}
-                >
-                  <Avatar.Fallback className="text-sm">
-                    {getInitials(user?.fullName ?? '')}
-                  </Avatar.Fallback>
-                </Avatar.Root>
-                <div className="min-w-0">
-                  <p className={cn('font-semibold text-sm truncate', isDark ? 'text-white' : 'text-[#1E293B]')}>
-                    {displayName(user)}
-                  </p>
-                  <p className="text-xs truncate text-[#64748B] dark:text-[#7C95AA]">
-                    {user?.email ?? ''}
-                  </p>
-                </div>
-              </div>
-
-              <DropdownMenu.Separator className={cn('h-px my-2', isDark ? 'bg-white/[0.08]' : 'bg-[#E2E8F0]')} />
-
-              {/* Profile link */}
-              {!isProjectManager && (
-                <DropdownMenu.Item
-                  className={cn(
-                    'px-3 py-2.5 rounded-xl cursor-pointer outline-none transition-colors duration-200 text-sm',
-                    isDark ? 'hover:bg-white/[0.08] text-[#B7C7D8]' : 'hover:bg-[#F1F5F9] text-[#1E293B]'
-                  )}
-                  onSelect={() => navigate('/dashboard/onboarding/info?tab=info')}
-                >
-                  الملف الشخصي
-                </DropdownMenu.Item>
-              )}
-
-              {/* Theme info */}
-              <div className={cn('px-3 py-2 text-xs flex items-center gap-2', isDark ? 'text-[#7C95AA]' : 'text-[#94A3B8]')}>
-                <ThemeIcon className="w-3.5 h-3.5" />
-                <span>{themeLabel(theme)}</span>
-              </div>
-
-              <DropdownMenu.Separator className={cn('h-px my-2', isDark ? 'bg-white/[0.08]' : 'bg-[#E2E8F0]')} />
-
-              {/* Logout */}
-              <DropdownMenu.Item
-                className={cn(
-                  'px-3 py-2.5 rounded-xl cursor-pointer outline-none transition-colors duration-200 flex items-center gap-2 text-sm',
-                  isDark ? 'hover:bg-red-500/10 text-red-400' : 'hover:bg-red-50 text-red-600'
-                )}
-                onSelect={handleLogout}
-              >
-                <LogOut className="w-4 h-4" />
-                <span>تسجيل الخروج</span>
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
+            <UserDropdownContent />
           </DropdownMenu.Portal>
         </DropdownMenu.Root>
       </div>
@@ -930,9 +751,7 @@ export function TopBar({
       className={cn(
         'fixed top-0 right-0 left-0 z-40',
         'transition-all duration-200 ease-out',
-        isDark
-          ? 'bg-[rgba(8,26,46,0.94)] backdrop-blur-[20px] border-b border-white/[0.08] shadow-[0_8px_24px_rgba(0,0,0,0.35)]'
-          : 'bg-white border-b border-[#E2E8F0] shadow-[0_2px_10px_rgba(15,23,42,0.05)]',
+        'bg-[var(--topbar)] border-b border-[var(--border)] shadow-[var(--shadow-sm)]',
         className
       )}
     >

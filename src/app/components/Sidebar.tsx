@@ -94,15 +94,15 @@ function Tooltip({
             : 'opacity-0 -translate-x-2 pointer-events-none'
         )}
         style={{
-          background: '#1E293B',
-          color: '#F8FAFC',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+          background: 'var(--card)',
+          color: 'var(--card-foreground)',
+          boxShadow: 'var(--shadow-lg)',
         }}
       >
         {label}
         <span
           className="absolute right-[-4px] top-1/2 -translate-y-1/2 w-2 h-2 rotate-45"
-          style={{ background: '#1E293B' }}
+          style={{ background: 'var(--card)' }}
         />
       </div>
     </div>
@@ -346,14 +346,14 @@ export function Sidebar({ activeView, className }: SidebarProps) {
         className
       )}
       style={{
-        background: isDark ? '#081A2E' : '#0B2742',
-        boxShadow: '4px 0 24px rgba(0,0,0,0.15)',
+        background: 'var(--sidebar)',
+        boxShadow: 'var(--shadow-lg)',
       }}
     >
       {/* ── Logo Section ───────────────────────────────────────── */}
       <div
         className="flex-shrink-0"
-        style={{ borderBottom: '1px solid rgba(255,255,255,0.08)' }}
+        style={{ borderBottom: '1px solid var(--sidebar-border)' }}
       >
         <div
           className={cn(
@@ -371,8 +371,8 @@ export function Sidebar({ activeView, className }: SidebarProps) {
               isCollapsed
                 ? 'top-2 left-1/2 -translate-x-1/2'
                 : 'top-6 left-4',
-              'text-[#94A3B8] hover:text-white hover:bg-white/[0.08]',
-              'focus:outline-none focus:ring-2 focus:ring-[#1FA97A]/50 focus:ring-offset-0'
+              'text-[var(--sidebar-foreground)]/60 hover:text-[var(--sidebar-foreground)] hover:bg-[var(--sidebar-accent)]',
+              'focus:outline-none focus:ring-2 focus:ring-[var(--sidebar-ring)]/50 focus:ring-offset-0'
             )}
             aria-label={isCollapsed ? 'توسيع القائمة' : 'طي القائمة'}
           >
@@ -402,17 +402,16 @@ export function Sidebar({ activeView, className }: SidebarProps) {
             {!isCollapsed && (
               <div className="flex flex-col items-center gap-0.5 mt-2">
                 <h1
-                  className="text-white font-bold tracking-wide leading-tight"
+                  className="font-bold tracking-wide leading-tight text-[var(--sidebar-foreground)]"
                   style={{ fontSize: '20px', fontWeight: 700 }}
                 >
                   منصة رشد
                 </h1>
                 <p
-                  className="leading-tight"
+                  className="leading-tight text-[var(--sidebar-foreground)]/60"
                   style={{
                     fontSize: '13px',
                     fontWeight: 400,
-                    color: '#7C95AA',
                   }}
                 >
                   Rushd Virtual Incubator
@@ -439,14 +438,13 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   <div
                     className="w-1.5 h-1.5 rounded-full"
                     style={{
-                      background: isDark ? '#1FC7A6' : '#1FA97A',
+                      background: 'var(--sidebar-primary)',
                       opacity: 0.7,
                     }}
                   />
                   <span
-                    className="text-[11px] font-semibold uppercase tracking-wider"
+                    className="text-[11px] font-semibold uppercase tracking-wider text-[var(--sidebar-foreground)]/50"
                     style={{
-                      color: isDark ? 'var(--text-secondary)' : 'var(--text-secondary)',
                       letterSpacing: '0.05em',
                     }}
                   >
@@ -470,7 +468,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                       onMouseLeave={() => setHoveredItem(null)}
                       className={cn(
                         'group relative flex items-center transition-all duration-200 ease-out',
-                        'focus:outline-none focus:ring-2 focus:ring-[#1FA97A]/40 focus:ring-offset-0',
+                        'focus:outline-none focus:ring-2 focus:ring-[var(--sidebar-ring)]/40 focus:ring-offset-0',
                         isCollapsed ? 'justify-center px-0' : 'gap-[14px] px-[18px]',
                         isCollapsed ? 'w-[52px] h-[52px] mx-auto' : 'w-full'
                       )}
@@ -479,23 +477,19 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                         borderRadius: '14px',
                         ...(isActive
                           ? {
-                              background: isDark
-                                ? 'linear-gradient(135deg, #1FC7A6 0%, #109D82 100%)'
-                                : 'linear-gradient(135deg, #1FA97A 0%, #0F9B70 100%)',
-                              color: '#FFFFFF',
+                              background: 'var(--sidebar-primary)',
+                              color: 'var(--sidebar-primary-foreground)',
                               fontWeight: 600,
-                              boxShadow: isDark
-                                ? '0 0 20px rgba(31,199,166,0.18)'
-                                : '0 8px 20px rgba(31,169,122,0.30)',
+                              boxShadow: 'var(--shadow-md)',
                             }
                           : {
-                              color: isItemHovered ? '#FFFFFF' : '#E8EEF5',
+                              color: isItemHovered
+                                ? 'var(--sidebar-foreground)'
+                                : 'var(--sidebar-foreground)',
                               fontWeight: 500,
                               ...(isItemHovered
                                 ? {
-                                    background: isDark
-                                      ? 'rgba(255,255,255,0.06)'
-                                      : 'rgba(255,255,255,0.08)',
+                                    background: 'var(--sidebar-accent)',
                                   }
                                 : {}),
                             }),
@@ -515,10 +509,10 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                           )}
                           style={{
                             color: isActive
-                              ? '#FFFFFF'
+                              ? 'var(--sidebar-primary-foreground)'
                               : isItemHovered
-                                ? '#FFFFFF'
-                                : '#D8E4F0',
+                                ? 'var(--sidebar-foreground)'
+                                : 'var(--sidebar-foreground)',
                             filter:
                               isActive && isDark
                                 ? 'drop-shadow(0 0 4px rgba(255,255,255,0.4))'
@@ -536,10 +530,10 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                             fontSize: '16px',
                             fontWeight: isActive ? 600 : 500,
                             color: isActive
-                              ? '#FFFFFF'
+                              ? 'var(--sidebar-primary-foreground)'
                               : isItemHovered
-                                ? '#FFFFFF'
-                                : '#E8EEF5',
+                                ? 'var(--sidebar-foreground)'
+                                : 'var(--sidebar-foreground)',
                           }}
                         >
                           {item.label}
@@ -569,7 +563,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
       {/* ── Footer ─────────────────────────────────────────────── */}
       <div
         className="flex-shrink-0"
-        style={{ borderTop: '1px solid rgba(255,255,255,0.08)' }}
+        style={{ borderTop: '1px solid var(--sidebar-border)' }}
       >
         <div
           className={cn(
@@ -582,7 +576,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
             className="w-full mb-4"
             style={{
               height: '1px',
-              background: 'rgba(255,255,255,0.08)',
+              background: 'var(--sidebar-border)',
             }}
           />
 
@@ -597,7 +591,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   onMouseLeave={() => setHoveredItem(null)}
                   className={cn(
                     'group flex items-center transition-all duration-200 ease-out',
-                    'focus:outline-none focus:ring-2 focus:ring-[#1FA97A]/40 focus:ring-offset-0',
+                    'focus:outline-none focus:ring-2 focus:ring-[var(--sidebar-ring)]/40 focus:ring-offset-0',
                     isCollapsed
                       ? 'justify-center w-[52px] h-[52px] mx-auto'
                       : 'gap-[14px] px-[18px] w-full'
@@ -605,11 +599,11 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   style={{
                     height: '48px',
                     borderRadius: '14px',
-                    color: isHovered ? '#FFFFFF' : '#94A3B8',
+                    color: isHovered
+                      ? 'var(--sidebar-foreground)'
+                      : 'var(--sidebar-foreground)',
                     background: isHovered
-                      ? isDark
-                        ? 'rgba(255,255,255,0.06)'
-                        : 'rgba(255,255,255,0.08)'
+                      ? 'var(--sidebar-accent)'
                       : 'transparent',
                   }}
                 >
@@ -624,13 +618,12 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                         'transition-all duration-200',
                         isCollapsed ? 'w-5 h-5' : 'w-[18px] h-[18px]'
                       )}
-                      style={{ color: isHovered ? '#FFFFFF' : '#94A3B8' }}
+                      style={{ color: isHovered ? 'var(--sidebar-foreground)' : 'var(--sidebar-foreground)' }}
                     />
                   </span>
                   {!isCollapsed && (
                     <span
-                      className="whitespace-nowrap text-sm font-medium"
-                      style={{ color: isHovered ? '#FFFFFF' : '#94A3B8' }}
+                      className="whitespace-nowrap text-sm font-medium text-[var(--sidebar-foreground)]"
                     >
                       الدعم
                     </span>
@@ -657,7 +650,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   onMouseLeave={() => setHoveredItem(null)}
                   className={cn(
                     'group flex items-center transition-all duration-200 ease-out',
-                    'focus:outline-none focus:ring-2 focus:ring-[#1FA97A]/40 focus:ring-offset-0',
+                    'focus:outline-none focus:ring-2 focus:ring-[var(--sidebar-ring)]/40 focus:ring-offset-0',
                     isCollapsed
                       ? 'justify-center w-[52px] h-[52px] mx-auto'
                       : 'gap-[14px] px-[18px] w-full'
@@ -665,11 +658,11 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   style={{
                     height: '48px',
                     borderRadius: '14px',
-                    color: isHovered ? '#FFFFFF' : '#94A3B8',
+                    color: isHovered
+                      ? 'var(--sidebar-foreground)'
+                      : 'var(--sidebar-foreground)',
                     background: isHovered
-                      ? isDark
-                        ? 'rgba(255,255,255,0.06)'
-                        : 'rgba(255,255,255,0.08)'
+                      ? 'var(--sidebar-accent)'
                       : 'transparent',
                   }}
                 >
@@ -684,13 +677,12 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                         'transition-all duration-200',
                         isCollapsed ? 'w-5 h-5' : 'w-[18px] h-[18px]'
                       )}
-                      style={{ color: isHovered ? '#FFFFFF' : '#94A3B8' }}
+                      style={{ color: isHovered ? 'var(--sidebar-foreground)' : 'var(--sidebar-foreground)' }}
                     />
                   </span>
                   {!isCollapsed && (
                     <span
-                      className="whitespace-nowrap text-sm font-medium"
-                      style={{ color: isHovered ? '#FFFFFF' : '#94A3B8' }}
+                      className="whitespace-nowrap text-sm font-medium text-[var(--sidebar-foreground)]"
                     >
                       الإعدادات
                     </span>
@@ -717,7 +709,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   onMouseLeave={() => setHoveredItem(null)}
                   className={cn(
                     'group flex items-center transition-all duration-200 ease-out',
-                    'focus:outline-none focus:ring-2 focus:ring-red-500/40 focus:ring-offset-0',
+                    'focus:outline-none focus:ring-2 focus:ring-[var(--destructive)]/40 focus:ring-offset-0',
                     isCollapsed
                       ? 'justify-center w-[52px] h-[52px] mx-auto'
                       : 'gap-[14px] px-[18px] w-full'
@@ -725,12 +717,13 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                   style={{
                     height: '48px',
                     borderRadius: '14px',
-                    color: isHovered ? '#EF4444' : '#94A3B8',
+                    color: isHovered
+                      ? 'var(--destructive)'
+                      : 'var(--sidebar-foreground)',
                     background: isHovered
-                      ? isDark
-                        ? 'rgba(239,68,68,0.08)'
-                        : 'rgba(239,68,68,0.06)'
+                      ? 'var(--destructive)'
                       : 'transparent',
+                    opacity: isHovered ? 1 : 0.7,
                   }}
                 >
                   <span
@@ -744,13 +737,13 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                         'transition-all duration-200',
                         isCollapsed ? 'w-5 h-5' : 'w-[18px] h-[18px]'
                       )}
-                      style={{ color: isHovered ? '#EF4444' : '#94A3B8' }}
+                      style={{ color: isHovered ? 'var(--destructive)' : 'var(--sidebar-foreground)' }}
                     />
                   </span>
                   {!isCollapsed && (
                     <span
                       className="whitespace-nowrap text-sm font-medium"
-                      style={{ color: isHovered ? '#EF4444' : '#94A3B8' }}
+                      style={{ color: isHovered ? 'var(--destructive)' : 'var(--sidebar-foreground)' }}
                     >
                       تسجيل الخروج
                     </span>
@@ -772,18 +765,16 @@ export function Sidebar({ activeView, className }: SidebarProps) {
           {!isCollapsed && (
             <div
               className="mt-4 flex items-center justify-center gap-2 px-4 py-3 rounded-xl"
-              style={{ background: 'rgba(255,255,255,0.03)' }}
+              style={{ background: 'var(--sidebar-accent)' }}
             >
               <div className="flex flex-col items-center gap-1">
                 <span
-                  className="text-[10px] font-medium"
-                  style={{ color: '#7C95AA' }}
+                  className="text-[10px] font-medium text-[var(--sidebar-foreground)]/50"
                 >
                   ضمن مبادرات
                 </span>
                 <span
-                  className="text-[11px] font-bold"
-                  style={{ color: '#1FA97A' }}
+                  className="text-[11px] font-bold text-[var(--sidebar-primary)]"
                 >
                   رؤية السعودية 2030
                 </span>
@@ -797,10 +788,9 @@ export function Sidebar({ activeView, className }: SidebarProps) {
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
                 style={{
-                  background:
-                    'linear-gradient(135deg, #1FA97A 0%, #0F9B70 100%)',
-                  color: '#FFFFFF',
-                  boxShadow: '0 4px 12px rgba(31,169,122,0.30)',
+                  background: 'var(--sidebar-primary)',
+                  color: 'var(--sidebar-primary-foreground)',
+                  boxShadow: 'var(--shadow-md)',
                 }}
               >
                 ر
