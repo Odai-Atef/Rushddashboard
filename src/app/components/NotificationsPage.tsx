@@ -162,25 +162,25 @@ export function NotificationsPage() {
  };
 
  return (
- <div className="max-w-6xl mx-auto p-6" dir="rtl">
+ <div className="max-w-6xl mx-auto px-4 py-6 sm:px-6 lg:px-8" dir="rtl">
  {/* Header */}
- <div className="flex items-center justify-between mb-8">
+ <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6 sm:mb-8">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
- <div className="w-10 h-10 rounded-xl bg-[var(--warning)]/[0.08] flex items-center justify-center">
+ <div className="w-10 h-10 rounded-xl bg-[var(--warning)]/[0.08] flex items-center justify-center shrink-0">
  <Bell className="w-5 h-5 text-[var(--warning)]" />
  </div>
  <div>
- <h1 className="text-2xl font-bold">الإشعارات والتنبيهات</h1>
+ <h1 className="text-xl sm:text-2xl font-bold">الإشعارات والتنبيهات</h1>
  <p className="text-sm text-muted-foreground">
  لديك {unreadCount} إشعار{unreadCount !== 1 ? 'ات' : ''} غير مقروءة
  </p>
  </div>
  </div>
- <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-[var(--spacing-small-gap)]">
  <button
  onClick={handleMarkAllAsReadClick}
  disabled={unreadCount === 0 || loading}
- className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2.5 min-h-[44px] text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
  >
  <CheckCircle className="w-4 h-4" />
  تحديد الكل كمقروء
@@ -188,7 +188,7 @@ export function NotificationsPage() {
  <button
  onClick={() => fetchNotifications({ page: 1 })}
  disabled={loading}
- className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2.5 min-h-[44px] text-sm border rounded-lg hover:bg-accent transition-colors disabled:opacity-50"
  >
  <RefreshCw className={cn('w-4 h-4', loading && 'animate-spin')} />
  تحديث
@@ -198,12 +198,14 @@ export function NotificationsPage() {
 
  {/* Error State */}
  {error && (
- <div className="mb-6 p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl text-[var(--destructive)] flex items-center gap-[var(--spacing-small-gap)]">
- <AlertTriangle className="w-5 h-5" />
- <span>{error}</span>
+ <div className="mb-6 p-4 bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] rounded-xl text-[var(--destructive)] flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-[var(--spacing-small-gap)]">
+ <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <AlertTriangle className="w-5 h-5 shrink-0" />
+ <span className="text-sm">{error}</span>
+ </div>
  <button
  onClick={() => fetchNotifications({ page: 1 })}
- className="mr-auto text-sm font-medium hover:underline"
+ className="mr-auto text-sm font-medium hover:underline min-h-[44px] flex items-center"
  >
  إعادة المحاولة
  </button>
@@ -211,14 +213,14 @@ export function NotificationsPage() {
  )}
 
  {/* Filters */}
- <div className="flex flex-wrap items-center gap-4 mb-6">
+ <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center gap-3 sm:gap-4 mb-6">
  {/* Status Filter */}
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
- <Filter className="w-4 h-4 text-muted-foreground" />
+ <Filter className="w-4 h-4 text-muted-foreground shrink-0" />
  <select
  value={selectedStatus}
  onChange={(e) => setSelectedStatus(e.target.value as StatusFilter)}
- className="px-3 py-2 border rounded-lg text-sm bg-background"
+ className="px-3 py-2 min-h-[44px] border rounded-lg text-sm bg-background w-full sm:w-auto"
  >
  <option value="all">جميع الحالات</option>
  <option value="unread">غير مقروء</option>
@@ -228,11 +230,11 @@ export function NotificationsPage() {
 
  {/* Priority Filter */}
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
- <AlertTriangle className="w-4 h-4 text-muted-foreground" />
+ <AlertTriangle className="w-4 h-4 text-muted-foreground shrink-0" />
  <select
  value={selectedPriority}
  onChange={(e) => setSelectedPriority(e.target.value as PriorityFilter)}
- className="px-3 py-2 border rounded-lg text-sm bg-background"
+ className="px-3 py-2 min-h-[44px] border rounded-lg text-sm bg-background w-full sm:w-auto"
  >
  <option value="all">جميع الأولويات</option>
  <option value="URGENT">عاجل</option>
@@ -244,11 +246,11 @@ export function NotificationsPage() {
 
  {/* Category Filter */}
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
- <Package className="w-4 h-4 text-muted-foreground" />
+ <Package className="w-4 h-4 text-muted-foreground shrink-0" />
  <select
  value={selectedCategory}
  onChange={(e) => setSelectedCategory(e.target.value as CategoryFilter)}
- className="px-3 py-2 border rounded-lg text-sm bg-background"
+ className="px-3 py-2 min-h-[44px] border rounded-lg text-sm bg-background w-full sm:w-auto"
  >
  <option value="all">جميع الأنواع</option>
  <option value="system_update">تحديث النظام</option>
@@ -277,22 +279,22 @@ export function NotificationsPage() {
  key={notification.id}
  onClick={() => setSelectedNotification(notification)}
  className={cn(
- 'group relative p-5 rounded-xl border transition-all cursor-pointer hover:shadow-[var(--shadow-lg)]',
- isUnread ? 'bg-card border-l-4 border-l-amber-500' : 'bg-muted/30 border-transparent'
+ 'group relative p-4 sm:p-5 rounded-xl border transition-all cursor-pointer hover:shadow-[var(--shadow-lg)]',
+ isUnread ? 'bg-card border-r-4 border-r-amber-500' : 'bg-muted/30 border-transparent'
  )}
  >
- <div className="flex items-start gap-4">
+ <div className="flex items-start gap-3 sm:gap-4">
  {/* Icon */}
  <div
  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
  style={{ background: getCategoryColor(notification.type) + '15' }}
  >
- <CategoryIcon className="w-5 h-5" style={{ color: getCategoryColor(notification.type) }} />
+ <CategoryIcon className="w-4 h-4 sm:w-5 sm:h-5" style={{ color: getCategoryColor(notification.type) }} />
  </div>
 
  {/* Content */}
- <div className="flex-1 min-w-0">
- <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
+ <div className="flex-1 min-w-0 overflow-hidden">
+ <div className="flex flex-wrap items-center gap-[var(--spacing-small-gap)] mb-1">
  <span
  className="text-xs font-semibold px-2 py-0.5 rounded-full"
  style={{
@@ -306,11 +308,11 @@ export function NotificationsPage() {
  {getCategoryLabel(notification.type)}
  </span>
  {isUnread && (
- <span className="w-2 h-2 rounded-full bg-amber-500"></span>
+ <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0"></span>
  )}
  </div>
 
- <h3 className={cn('font-semibold mb-1', isUnread ? 'text-foreground' : 'text-muted-foreground')}>
+ <h3 className={cn('text-sm sm:text-base font-semibold mb-1', isUnread ? 'text-foreground' : 'text-muted-foreground')}>
  {notification.title}
  </h3>
 
@@ -320,14 +322,14 @@ export function NotificationsPage() {
 
  <div className="flex items-center gap-4 text-xs text-muted-foreground">
  <span className="flex items-center gap-[var(--spacing-small-gap)]">
- <Clock className="w-3 h-3" />
+ <Clock className="w-3 h-3 shrink-0" />
  {formatRelativeTime(notification.createdAt)}
  </span>
  </div>
  </div>
 
  {/* Actions */}
- <div className="flex items-center gap-[var(--spacing-small-gap)] opacity-0 group-hover:opacity-100 transition-opacity"
+ <div className="flex sm:items-center gap-[var(--spacing-small-gap)] opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity shrink-0"
  >
  {isUnread && (
  <button
@@ -335,14 +337,14 @@ export function NotificationsPage() {
  e.stopPropagation();
  handleMarkAsReadClick(notification.id);
  }}
- className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
+ className="p-2 min-h-[44px] min-w-[44px] hover:bg-accent rounded-lg transition-colors flex items-center justify-center"
  title="تحديد كمقروء"
  >
  <CheckCircle className="w-4 h-4 text-[var(--primary)]" />
  </button>
  )}
  <button
- className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
+ className="p-2 min-h-[44px] min-w-[44px] hover:bg-accent rounded-lg transition-colors flex items-center justify-center"
  title="عرض التفاصيل"
  >
  <Eye className="w-4 h-4" />
@@ -368,7 +370,7 @@ export function NotificationsPage() {
  <button
  onClick={handleLoadMore}
  disabled={loading}
- className="px-6 py-3 border rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center gap-[var(--spacing-small-gap)]"
+ className="w-full sm:w-auto px-6 py-3 min-h-[44px] border rounded-lg hover:bg-accent transition-colors disabled:opacity-50 flex items-center justify-center gap-[var(--spacing-small-gap)]"
  >
  {loading ? (
  <>
@@ -384,14 +386,14 @@ export function NotificationsPage() {
 
  {/* Notification Detail Modal */}
  {selectedNotification && (
- <div className="fixed inset-0 bg-[var(--text-primary)]/[0.5] flex items-center justify-center z-50 p-4">
- <div className="bg-background rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
- <div className="p-6">
+ <div className="fixed inset-0 bg-[var(--text-primary)]/[0.5] flex items-end sm:items-center justify-center z-50 p-0 sm:p-4">
+ <div className="bg-background rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[85vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl">
+ <div className="p-4 sm:p-6">
  {/* Modal Header */}
- <div className="flex items-center justify-between mb-6">
- <div className="flex items-center gap-[var(--spacing-small-gap)]">
+ <div className="flex items-center justify-between gap-2 mb-4 sm:mb-6">
+ <div className="flex items-center gap-[var(--spacing-small-gap)] min-w-0">
  <div
- className="w-10 h-10 rounded-lg flex items-center justify-center"
+ className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
  style={{ background: getCategoryColor(selectedNotification.type) + '15' }}
  >
  {(() => {
@@ -399,7 +401,7 @@ export function NotificationsPage() {
  return <Icon className="w-5 h-5" style={{ color: getCategoryColor(selectedNotification.type) }} />;
  })()}
  </div>
- <div>
+ <div className="min-w-0">
  <span
  className="text-xs font-semibold px-2 py-0.5 rounded-full inline-block mb-1"
  style={{
@@ -409,12 +411,12 @@ export function NotificationsPage() {
  >
  {getPriorityConfig(selectedNotification.priority).label}
  </span>
- <h2 className="text-xl font-bold">{selectedNotification.title}</h2>
+ <h2 className="text-lg sm:text-xl font-bold truncate">{selectedNotification.title}</h2>
  </div>
  </div>
  <button
  onClick={() => setSelectedNotification(null)}
- className="p-[var(--spacing-small-gap)] hover:bg-accent rounded-lg transition-colors"
+ className="p-2 min-h-[44px] min-w-[44px] hover:bg-accent rounded-lg transition-colors flex items-center justify-center shrink-0"
  >
  <X className="w-5 h-5" />
  </button>
@@ -456,14 +458,14 @@ export function NotificationsPage() {
  </div>
 
  {/* Modal Footer */}
- <div className="flex items-center gap-[var(--spacing-small-gap)] mt-6 pt-4 border-t">
+ <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-[var(--spacing-small-gap)] mt-6 pt-4 border-t">
  {selectedNotification.status !== 'READ' && (
  <button
  onClick={() => {
  handleMarkAsReadClick(selectedNotification.id);
  setSelectedNotification(null);
  }}
- className="flex items-center gap-[var(--spacing-small-gap)] px-6 py-2.5 border border-border hover:bg-accent rounded-lg transition-colors"
+ className="flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-2.5 min-h-[44px] border border-border hover:bg-accent rounded-lg transition-colors"
  >
  <CheckCircle className="w-4 h-4" />
  تحديد كمقروء
@@ -471,7 +473,7 @@ export function NotificationsPage() {
  )}
  <button
  onClick={() => setSelectedNotification(null)}
- className="px-6 py-2.5 border border-border hover:bg-accent rounded-lg transition-colors"
+ className="px-6 py-2.5 min-h-[44px] border border-border hover:bg-accent rounded-lg transition-colors flex items-center justify-center"
  >
  إغلاق
  </button>
