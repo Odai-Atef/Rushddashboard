@@ -433,7 +433,7 @@ export function AssessmentPage() {
  ? 'bg-primary/10 border-2 border-primary'
  : catProgress.isComplete
  ? 'bg-[var(--primary)]/[0.08] border border-green-200'
- : 'bg-secondary border border-border'
+  : 'bg-muted border border-border'
  }`}
  >
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
@@ -529,9 +529,9 @@ export function AssessmentPage() {
  {/* Dynamic Questions */}
  <div className="space-y-8">
  {currentCategory.questions.length === 0 && (
- <div className="p-[var(--spacing-card-padding)] bg-secondary rounded-lg text-center text-muted-foreground">
- لا توجد أسئلة في هذا القسم
- </div>
+  <div className="p-[var(--spacing-card-padding)] bg-muted rounded-lg text-center text-muted-foreground">
+  لا توجد أسئلة في هذا القسم
+  </div>
  )}
 
  {currentCategory.questions.map((q, qIdx) => {
@@ -544,13 +544,13 @@ export function AssessmentPage() {
  !(Array.isArray(answer) && answer.length === 0);
  const showRequiredError =
  q.isRequired && !isAnswered && touchedQuestionIds.has(q.id);
- const questionWrapperClass = `p-[var(--spacing-card-padding)] bg-secondary rounded-lg transition-all ${
- showRequiredError
- ? 'border-2 border-red-500 bg-[var(--destructive)]/[0.08]'
- : q.isRequired && !isAnswered
- ? 'border-2 border-transparent'
- : ''
- }`;
+  const questionWrapperClass = `p-[var(--spacing-card-padding)] bg-muted rounded-lg transition-all ${
+  showRequiredError
+  ? 'border-2 border-red-500 bg-[var(--destructive)]/[0.08]'
+  : q.isRequired && !isAnswered
+  ? 'border-2 border-transparent'
+  : ''
+  }`;
 
  if (q.questionType === 'YES_NO') {
  return (
@@ -750,7 +750,7 @@ export function AssessmentPage() {
  <div
  key={q.id}
  id={`question-${q.id}`}
- className="p-[var(--spacing-card-padding)] bg-secondary border border-border rounded-lg"
+  className="p-[var(--spacing-card-padding)] bg-muted border border-border rounded-lg"
  >
  <label className="block font-medium mb-2">
  {qIdx + 1}. {q.questionText}
