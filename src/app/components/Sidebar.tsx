@@ -305,8 +305,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
         ? [
             { id: 'project-management-dashboard', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
             { id: 'impact-map', label: 'خارطة الأثر', icon: MapPin, path: '/dashboard/impact-map' },
-            { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
-            ...commonNavItems.filter((item) => item.id !== 'project-management'),
+            ...commonNavItems.filter((item) => item.id !== 'project-management' && item.id !== 'collaboration'),
           ]
         : [
             { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
