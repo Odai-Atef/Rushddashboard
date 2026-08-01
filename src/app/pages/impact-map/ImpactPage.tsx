@@ -21,13 +21,14 @@ import {
   ImpactMapSection,
   ImpactLeftPanel,
   ImpactRightPanel,
-  ImpactSidebar,
   ImpactSROISection,
   ImpactSectorSection,
   ImpactBeneficiariesSection,
   ImpactFundingSection,
   ImpactRegionalSection,
   ImpactProjectsSection,
+  LatestProjects,
+  RecentActivity,
 } from './components';
 import {
   mockKPIs,
@@ -52,7 +53,6 @@ import {
   mockTopPerformingRegions,
   mockBottomKpiMetrics,
 } from './mock';
-import { cn } from '@/app/utils/cn';
 import { useAuth } from '@/app/layouts/RootLayout';
 import './styles/impact-theme.css';
 
@@ -219,22 +219,9 @@ export function ImpactPage() {
         </div>
       </section>
 
-      {/* Bottom Analytics Row — starts immediately after map row */}
-      <section aria-label="التحليلات السفلية">
-        <ImpactProjectsSection
-          latestSupportedProjects={mockLatestSupportedProjects}
-          topPerformingRegions={mockTopPerformingRegions}
-          bottomKpiMetrics={mockBottomKpiMetrics}
-          isLoading={isLoading}
-          isError={isError}
-          onRetry={handleRetry}
-          onViewProject={handleViewProject}
-        />
-      </section>
-
-      {/* Detailed Analytics Row */}
+      {/* Row 3: Detailed Analytics — 3 medium cards */}
       <section aria-label="التحليلات التفصيلية">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
           <ImpactBeneficiariesSection
             data={beneficiariesDistribution}
             isLoading={isLoading}
@@ -256,7 +243,7 @@ export function ImpactPage() {
         </div>
       </section>
 
-      {/* Sector & Regional Breakdown Row */}
+      {/* Row 4: Sector + Regional */}
       <section aria-label="التحليل حسب القطاع والمنطقة">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
           <ImpactSectorSection
@@ -274,29 +261,49 @@ export function ImpactPage() {
         </div>
       </section>
 
-      {/* Additional Widgets Row */}
-      <section aria-label="الأدوات والنشاطات الإضافية">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
-          <ImpactSidebar
-            summaryMetrics={mockImpactSummaryMetrics}
-            beneficiaryCategories={mockBeneficiaryCategories}
-            regionalSummary={mockRegionalSummary}
-            latestProjects={mockLatestProjects}
-            recentActivity={mockRecentActivity}
-            quickStatistics={mockQuickStatistics}
+      {/* Row 5: Bottom KPI Strip + Projects Table + Regional Ranking */}
+      <section aria-label="المشاريع والأداء الإقليمي">
+        <div className="space-y-[var(--spacing-grid-gap)]">
+          <ImpactProjectsSection
+            latestSupportedProjects={mockLatestSupportedProjects}
+            topPerformingRegions={mockTopPerformingRegions}
+            bottomKpiMetrics={mockBottomKpiMetrics}
             isLoading={isLoading}
             isError={isError}
             onRetry={handleRetry}
             onViewProject={handleViewProject}
           />
-          <ImpactProjectsSection
-            projects={mockProjects}
+        </div>
+      </section>
+
+      {/* Row 6: Latest Projects + Recent Activity */}
+      <section aria-label="المشاريع والنشاطات الأخيرة">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-[var(--spacing-grid-gap)]">
+          <LatestProjects
+            projects={mockLatestProjects}
             isLoading={isLoading}
             isError={isError}
             onRetry={handleRetry}
-            onViewAll={handleViewAllProjects}
+            onViewProject={handleViewProject}
+          />
+          <RecentActivity
+            activities={mockRecentActivity}
+            isLoading={isLoading}
+            isError={isError}
+            onRetry={handleRetry}
           />
         </div>
+      </section>
+
+      {/* Row 7: Recent Projects (full-width list) */}
+      <section aria-label="أحدث المشاريع المدعومة">
+        <ImpactProjectsSection
+          projects={mockProjects}
+          isLoading={isLoading}
+          isError={isError}
+          onRetry={handleRetry}
+          onViewAll={handleViewAllProjects}
+        />
       </section>
     </div>
   );

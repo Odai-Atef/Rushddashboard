@@ -7,18 +7,13 @@
  * 
  * Theme-aware: uses semantic CSS variables for full light/dark support.
  */
-import { useEffect, useCallback, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import {
   Search,
   Bell,
   Menu,
   LogOut,
-  CheckCircle,
-  AlertTriangle,
-  Info,
-  Loader2,
-  ExternalLink,
   Sun,
   Moon,
   Monitor,
@@ -33,7 +28,9 @@ import { useNotificationRealtime } from '@/api/hooks/useNotificationRealtime';
 import { useTheme } from '../hooks/useTheme';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import * as Avatar from '@radix-ui/react-avatar';
+import { NotificationCenter } from './NotificationCenter';
 import type { Notification } from '@/api/services/notification-service';
+
 
 /* ------------------------------------------------------------------ */
 /* Types                                                              */
@@ -61,48 +58,6 @@ function getInitials(fullName: string | null | undefined): string {
 
 function displayName(user: { fullName?: string | null; email?: string | null } | null | undefined): string {
   return user?.fullName ?? user?.email ?? 'المستخدم';
-}
-
-function getPriorityIcon(priority: string) {
-  switch (priority) {
-    case 'URGENT':
-    case 'HIGH':
-      return AlertTriangle;
-    case 'MEDIUM':
-      return Info;
-    case 'LOW':
-    default:
-      return CheckCircle;
-  }
-}
-
-function getPriorityColor(priority: string): string {
-  switch (priority) {
-    case 'URGENT':
-      return '#DC2626';
-    case 'HIGH':
-      return '#EA580C';
-    case 'MEDIUM':
-      return '#CA8A04';
-    case 'LOW':
-    default:
-      return 'var(--info)';
-  }
-}
-
-function formatRelativeTime(dateString: string): string {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMins = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMs / 3600000);
-  const diffDays = Math.floor(diffMs / 86400000);
-
-  if (diffMins < 1) return 'الآن';
-  if (diffMins < 60) return `منذ ${diffMins} دقيقة`;
-  if (diffHours < 24) return `منذ ${diffHours} ساعة`;
-  if (diffDays < 7) return `منذ ${diffDays} يوم`;
-  return date.toLocaleDateString('ar-SA');
 }
 
 /* ------------------------------------------------------------------ */
@@ -165,6 +120,7 @@ export function TopBar({
     fetchNotifications,
     fetchUnreadCount,
     markAsRead,
+    markAllAsRead,
   } = useNotifications();
 
   const { showNotificationToast } = useNotificationToast();
@@ -191,8 +147,11 @@ export function TopBar({
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
+  /* --- Notifications panel --------------------------------------- */
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationTriggerRef = useRef<HTMLButtonElement | null>(null);
+
   /* --- Derived ----------------------------------------------------- */
-  const recentNotifications = notifications.slice(0, 5);
   const ThemeIcon = themeIcon(theme);
 
   /* --- Handlers ---------------------------------------------------- */
@@ -205,6 +164,10 @@ export function TopBar({
     if (notification.status !== 'READ') {
       await markAsRead(notification.id);
     }
+    navigate('/dashboard/notifications');
+  };
+
+  const handleViewAllNotifications = () => {
     navigate('/dashboard/notifications');
   };
 
@@ -259,99 +222,21 @@ export function TopBar({
   );
 
   /* ================================================================ */
-  /*  NOTIFICATION DROPDOWN CONTENT — Shared between mobile/desktop   */
+  /*  NOTIFICATION CENTER — Modern popover / drawer                    */
   /* ================================================================ */
-  const NotificationDropdownContent = ({ width = 'w-80' }: { width?: string }) => (
-    <DropdownMenu.Content
-      className={cn(
-        'border rounded-2xl shadow-xl p-2 z-50 overflow-hidden',
-        'bg-[var(--popover)] border-[var(--border)] text-[var(--popover-foreground)]',
-        width
-      )}
-      sideOffset={8}
-      align="end"
-      dir="rtl"
-    >
-      {/* Header */}
-      <div className="px-3 py-3 flex items-center justify-between border-b border-[var(--border)]">
-        <h3 className="font-semibold text-sm text-[var(--foreground)]">
-          الإشعارات
-        </h3>
-        {unreadCount > 0 && (
-          <span className="text-xs px-2 py-0.5 rounded-full font-semibold bg-[var(--primary)]/10 text-[var(--primary)]">
-            {unreadCount} غير مقروء
-          </span>
-        )}
-      </div>
-
-      {/* List */}
-      <div className="py-1 max-h-[320px] overflow-y-auto">
-        {loading && recentNotifications.length === 0 ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-5 h-5 animate-spin text-[var(--muted-foreground)]" />
-          </div>
-        ) : recentNotifications.length === 0 ? (
-          <div className="text-center py-8 px-4">
-            <Bell className="w-8 h-8 mx-auto mb-2 opacity-40 text-[var(--muted-foreground)]" />
-            <p className="text-sm text-[var(--muted-foreground)]">لا توجد إشعارات</p>
-          </div>
-        ) : (
-          recentNotifications.map((notification) => {
-            const Icon = getPriorityIcon(notification.priority);
-            const color = getPriorityColor(notification.priority);
-            const isUnread = notification.status !== 'READ';
-
-            return (
-              <div
-                key={notification.id}
-                onClick={() => handleNotificationClick(notification)}
-                className={cn(
-                  'px-3 py-3 rounded-xl cursor-pointer transition-colors duration-200',
-                  'hover:bg-[var(--hover)]',
-                  isUnread && 'bg-[var(--primary)]/[0.03]'
-                )}
-              >
-                <div className="flex items-start gap-3">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-0.5"
-                    style={{ background: color + '15' }}
-                  >
-                    <Icon className="w-4 h-4" style={{ color }} />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <p className={cn('font-medium text-sm truncate', isUnread ? 'text-[var(--foreground)]' : 'text-[var(--muted-foreground)]')}>
-                        {notification.title}
-                      </p>
-                      {isUnread && <span className="w-2 h-2 rounded-full bg-[var(--primary)] shrink-0" />}
-                    </div>
-                    <p className="text-xs line-clamp-2 mb-1 text-[var(--muted-foreground)]">
-                      {notification.body}
-                    </p>
-                    <span className="text-xs text-[var(--muted-foreground)]">
-                      {formatRelativeTime(notification.createdAt)}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            );
-          })
-        )}
-      </div>
-
-      {/* Footer */}
-      {recentNotifications.length > 0 && (
-        <div className="p-2 border-t border-[var(--border)]">
-          <button
-            onClick={() => navigate('/dashboard/notifications')}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 text-sm rounded-xl transition-colors duration-200 text-[var(--primary)] hover:bg-[var(--hover)]"
-          >
-            عرض الكل
-            <ExternalLink className="w-3.5 h-3.5" />
-          </button>
-        </div>
-      )}
-    </DropdownMenu.Content>
+  const NotificationPanel = () => (
+    <NotificationCenter
+      notifications={notifications}
+      unreadCount={unreadCount}
+      loading={loading}
+      isOpen={notificationsOpen}
+      onOpenChange={setNotificationsOpen}
+      onMarkAsRead={markAsRead}
+      onMarkAllAsRead={markAllAsRead}
+      onViewAll={handleViewAllNotifications}
+      onViewNotification={handleNotificationClick}
+      triggerRef={notificationTriggerRef}
+    />
   );
 
   /* ================================================================ */
@@ -501,28 +386,25 @@ export function TopBar({
         )}
 
         {/* Notifications */}
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <button
-              className={cn(
-                'relative flex items-center justify-center w-10 h-10 rounded-xl',
-                'transition-all duration-200',
-                'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
-              )}
-              aria-label="الإشعارات"
-            >
-              <Bell className="w-5 h-5" />
-              {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full text-[10px] font-bold bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm">
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
-              )}
-            </button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <NotificationDropdownContent />
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+        <button
+          ref={notificationTriggerRef}
+          onClick={() => setNotificationsOpen(true)}
+          className={cn(
+            'relative flex items-center justify-center w-10 h-10 rounded-xl',
+            'transition-all duration-200',
+            'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
+          )}
+          aria-label="الإشعارات"
+          aria-expanded={notificationsOpen}
+          aria-haspopup="dialog"
+        >
+          <Bell className="w-5 h-5" />
+          {unreadCount > 0 && (
+            <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full text-[10px] font-bold bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm">
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
+        </button>
 
         {/* Theme Toggle */}
         <button
@@ -638,37 +520,34 @@ export function TopBar({
       {/* ---------------------------------------------------------- */}
       <div className="flex items-center gap-3 shrink-0 min-w-[200px] justify-end">
         {/* Notifications */}
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>
-            <button
+        <button
+          ref={notificationTriggerRef}
+          onClick={() => setNotificationsOpen(true)}
+          className={cn(
+            'relative flex items-center justify-center',
+            'w-10 h-10 rounded-xl',
+            'transition-all duration-200 ease-out',
+            'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
+          )}
+          aria-label="الإشعارات"
+          aria-expanded={notificationsOpen}
+          aria-haspopup="dialog"
+        >
+          <Bell className="w-[18px] h-[18px]" />
+          {unreadCount > 0 && (
+            <span
               className={cn(
-                'relative flex items-center justify-center',
-                'w-10 h-10 rounded-xl',
-                'transition-all duration-200 ease-out',
-                'text-[var(--topbar-foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]'
+                'absolute -top-0.5 -right-0.5',
+                'min-w-[18px] h-[18px] px-1',
+                'flex items-center justify-center',
+                'rounded-full text-[10px] font-bold',
+                'bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm'
               )}
-              aria-label="الإشعارات"
             >
-              <Bell className="w-[18px] h-[18px]" />
-              {unreadCount > 0 && (
-                <span
-                  className={cn(
-                    'absolute -top-0.5 -right-0.5',
-                    'min-w-[18px] h-[18px] px-1',
-                    'flex items-center justify-center',
-                    'rounded-full text-[10px] font-bold',
-                    'bg-[var(--primary)] text-[var(--primary-foreground)] shadow-sm'
-                  )}
-                >
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
-              )}
-            </button>
-          </DropdownMenu.Trigger>
-          <DropdownMenu.Portal>
-            <NotificationDropdownContent width="w-96" />
-          </DropdownMenu.Portal>
-        </DropdownMenu.Root>
+              {unreadCount > 99 ? '99+' : unreadCount}
+            </span>
+          )}
+        </button>
 
         {/* Theme Toggle */}
         <button
@@ -731,16 +610,19 @@ export function TopBar({
 
   /* ---------------------------------------------------------------- */
   return (
-    <header
-      className={cn(
-        'fixed top-0 right-0 left-0 z-40',
-        'transition-all duration-200 ease-out',
-        'bg-[var(--topbar)] border-b border-[var(--border)] shadow-[var(--shadow-sm)]',
-        className
-      )}
-    >
-      <DesktopHeader />
-      <MobileHeader />
-    </header>
+    <>
+      <header
+        className={cn(
+          'fixed top-0 right-0 left-0 z-40',
+          'transition-all duration-200 ease-out',
+          'bg-[var(--topbar)] border-b border-[var(--border)] shadow-[var(--shadow-sm)]',
+          className
+        )}
+      >
+        <DesktopHeader />
+        <MobileHeader />
+      </header>
+      <NotificationPanel />
+    </>
   );
 }
