@@ -198,13 +198,13 @@ export const AmChartsMap: React.FC<AmChartsMapProps> = ({
 
       circle.adapters.add('radius', (_radius, target) => {
         const dataItem = target.dataItem;
-        if (!dataItem) return 8;
+        if (!dataItem || typeof dataItem.get !== 'function') return 8;
         return getMarkerSize(Number(dataItem.get('value') ?? 0));
       });
 
       circle.adapters.add('fill', (_fill, target) => {
         const dataItem = target.dataItem;
-        if (!dataItem) return am5.color(0x1fa97a);
+        if (!dataItem || typeof dataItem.get !== 'function') return am5.color(0x1fa97a);
         return getImpactColor(Number(dataItem.get('value') ?? 0));
       });
 
@@ -214,8 +214,9 @@ export const AmChartsMap: React.FC<AmChartsMapProps> = ({
       });
 
       circle.events.on('click', (ev) => {
-        const dataItem = ev.target.dataItem;
-        if (!dataItem || !onRegionClick) return;
+        const target = ev.target;
+        const dataItem = target.dataItem;
+        if (!dataItem || typeof dataItem.get !== 'function' || !onRegionClick) return;
         const id = dataItem.get('id') as string;
         const name = dataItem.get('name') as string;
         onRegionClick(id, name);
@@ -279,23 +280,6 @@ export const AmChartsMap: React.FC<AmChartsMapProps> = ({
     }));
 
     series.data.setAll(data);
-
-    // Apply per-marker radius & colour via adapter
-    series.bullets.each((bullet) => {
-      const sprite = bullet.get('sprite');
-      if (sprite instanceof am5.Circle) {
-        sprite.adapters.add('radius', (radius, target) => {
-          const dataItem = target.dataItem;
-          if (!dataItem) return radius;
-          return getMarkerSize(Number(dataItem.get('value') ?? 0));
-        });
-        sprite.adapters.add('fill', (fill, target) => {
-          const dataItem = target.dataItem;
-          if (!dataItem) return fill;
-          return getImpactColor(Number(dataItem.get('value') ?? 0));
-        });
-      }
-    });
   }, [regionMarkers]);
 
   /* ── Update selected region highlight ─────────────────────── */
