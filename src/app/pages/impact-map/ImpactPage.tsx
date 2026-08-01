@@ -159,9 +159,9 @@ export function ImpactPage() {
 
       {/* Map & Analytics Panel */}
       <section aria-label="الخارطة ولوحة التحليلات">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
-          {/* Map — takes 2 columns on desktop */}
-          <div className="lg:col-span-2">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-[var(--spacing-grid-gap)] items-stretch">
+          {/* Map — takes 8 columns on desktop */}
+          <div className="lg:col-span-8 flex flex-col h-full min-h-[420px] md:min-h-[550px] lg:min-h-[650px]">
             <ImpactMapSection
               regions={mockRegions}
               isLoading={isLoading}
@@ -169,11 +169,12 @@ export function ImpactPage() {
               onRetry={handleRetry}
               selectedRegionId={selectedRegionId}
               onRegionSelect={handleRegionSelect}
+              className="h-full"
             />
           </div>
 
           {/* Right Analytics Panel */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-4 flex flex-col h-full">
             <ImpactSidebar
               summaryMetrics={mockImpactSummaryMetrics}
               beneficiaryCategories={mockBeneficiaryCategories}
@@ -185,6 +186,7 @@ export function ImpactPage() {
               isError={isError}
               onRetry={handleRetry}
               onViewProject={handleViewProject}
+              className="h-full overflow-y-auto"
             />
           </div>
         </div>

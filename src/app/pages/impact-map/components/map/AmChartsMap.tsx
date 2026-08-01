@@ -7,10 +7,19 @@ import saudiArabiaLow from '@amcharts/amcharts5-geodata/saudiArabiaLow';
 
 // ─── Types ──────────────────────────────────────────────────────
 
+export interface RegionMarker {
+  id: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+  value: number; // 0-100 impact score
+}
+
 export interface AmChartsMapProps {
   onRegionClick?: (regionId: string, regionName: string) => void;
   selectedRegion?: string | null;
   impactData?: Record<string, number>; // regionId -> impact score (0-100)
+  regionMarkers?: RegionMarker[];
   isLoading?: boolean;
   isError?: boolean;
   onRetry?: () => void;
@@ -48,12 +57,18 @@ function getImpactColor(value: number): am5.Color {
   return am5.color(0xef4444);                   // Low – red
 }
 
+function getMarkerSize(value: number): number {
+  // Map 0-100 impact score to a visible radius range (8px-24px)
+  return Math.max(8, Math.min(24, 8 + value / 6.25));
+}
+
 // ─── Component ──────────────────────────────────────────────────
 
 export const AmChartsMap: React.FC<AmChartsMapProps> = ({
   onRegionClick,
   selectedRegion,
   impactData = {},
+  regionMarkers = [],
   isLoading,
   isError,
   onRetry,
@@ -65,6 +80,7 @@ export const AmChartsMap: React.FC<AmChartsMapProps> = ({
   const rootRef = useRef<am5.Root | null>(null);
   const chartRef = useRef<am5map.MapChart | null>(null);
   const polygonSeriesRef = useRef<am5map.MapPolygonSeries | null>(null);
+  const pointSeriesRef = useRef<am5map.MapPointSeries | null>(null);
 
   /* ── Initialise amCharts (run once) ─────────────────────────── */
   useEffect(() => {
@@ -158,6 +174,56 @@ export const AmChartsMap: React.FC<AmChartsMapProps> = ({
       onRegionClick(internalId, regionName);
     });
 
+    // ─── Point series for region capital markers ───────────────
+    const pointSeries = chart.series.push(
+      am5map.MapPointSeries.new(root, {
+        latitudeField: 'latitude',
+        longitudeField: 'longitude',
+        valueField: 'value',
+      })
+    );
+    pointSeriesRef.current = pointSeries;
+
+    pointSeries.bullets.push(() => {
+      const circle = am5.Circle.new(root, {
+        radius: 8,
+        fill: am5.color(0x1fa97a),
+        fillOpacity: 0.85,
+        stroke: am5.color(0xffffff),
+        strokeWidth: 2,
+        tooltipText: '{name}\nالأثر: {value}',
+        interactive: true,
+        cursorOverStyle: 'pointer',
+      });
+
+      circle.adapters.add('radius', (_radius, target) => {
+        const dataItem = target.dataItem;
+        if (!dataItem) return 8;
+        return getMarkerSize(Number(dataItem.get('value') ?? 0));
+      });
+
+      circle.adapters.add('fill', (_fill, target) => {
+        const dataItem = target.dataItem;
+        if (!dataItem) return am5.color(0x1fa97a);
+        return getImpactColor(Number(dataItem.get('value') ?? 0));
+      });
+
+      circle.states.create('hover', {
+        scale: 1.2,
+        fillOpacity: 1,
+      });
+
+      circle.events.on('click', (ev) => {
+        const dataItem = ev.target.dataItem;
+        if (!dataItem || !onRegionClick) return;
+        const id = dataItem.get('id') as string;
+        const name = dataItem.get('name') as string;
+        onRegionClick(id, name);
+      });
+
+      return am5.Bullet.new(root, { sprite: circle });
+    });
+
     // Animation
     chart.appear(1000, 100);
 
@@ -166,6 +232,7 @@ export const AmChartsMap: React.FC<AmChartsMapProps> = ({
       rootRef.current = null;
       chartRef.current = null;
       polygonSeriesRef.current = null;
+      pointSeriesRef.current = null;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading, isError]);
@@ -200,6 +267,36 @@ export const AmChartsMap: React.FC<AmChartsMapProps> = ({
     }));
     series.data.setAll(regionData);
   }, [impactData]);
+
+  /* ── Update region markers (re-run when markers change) ───── */
+  useEffect(() => {
+    if (!pointSeriesRef.current) return;
+
+    const series = pointSeriesRef.current;
+    const data = regionMarkers.map((marker) => ({
+      ...marker,
+      radius: getMarkerSize(marker.value),
+    }));
+
+    series.data.setAll(data);
+
+    // Apply per-marker radius & colour via adapter
+    series.bullets.each((bullet) => {
+      const sprite = bullet.get('sprite');
+      if (sprite instanceof am5.Circle) {
+        sprite.adapters.add('radius', (radius, target) => {
+          const dataItem = target.dataItem;
+          if (!dataItem) return radius;
+          return getMarkerSize(Number(dataItem.get('value') ?? 0));
+        });
+        sprite.adapters.add('fill', (fill, target) => {
+          const dataItem = target.dataItem;
+          if (!dataItem) return fill;
+          return getImpactColor(Number(dataItem.get('value') ?? 0));
+        });
+      }
+    });
+  }, [regionMarkers]);
 
   /* ── Update selected region highlight ─────────────────────── */
   useEffect(() => {

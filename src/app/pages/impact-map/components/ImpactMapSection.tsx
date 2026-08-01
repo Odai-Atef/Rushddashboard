@@ -3,6 +3,7 @@ import { cn } from '@/app/utils/cn';
 import { ImpactCard } from './ImpactCard';
 import { AmChartsMap, MapSkeleton, MapErrorState, MapEmptyState } from './map';
 import type { Region } from '../types';
+import type { RegionMarker } from './map/AmChartsMap';
 
 export interface ImpactMapSectionProps {
   regions: Region[];
@@ -22,6 +23,17 @@ function buildImpactData(regions: Region[]): Record<string, number> {
     data[r.id] = r.sroiValue ? Math.min(r.sroiValue * 20, 100) : 0;
   }
   return data;
+}
+
+/** Build map-point data for region capitals */
+function buildRegionMarkers(regions: Region[], impactData: Record<string, number>): RegionMarker[] {
+  return regions.map((r) => ({
+    id: r.id,
+    name: r.name,
+    latitude: r.coordinates[0],
+    longitude: r.coordinates[1],
+    value: impactData[r.id] ?? 0,
+  }));
 }
 
 export function ImpactMapSection({
@@ -111,16 +123,22 @@ export function ImpactMapSection({
     [regions]
   );
 
+  const regionMarkers = React.useMemo(
+    () => buildRegionMarkers(regions, impactData),
+    [regions, impactData]
+  );
+
   return (
     <ImpactCard
       title="الخارطة التفاعلية"
-      description="انقر على المنطقة لعرض التفاصيل"
+      description="انقر على المنطقة أو النقطة لعرض التفاصيل"
       className={cn('animate-fade-in', className)}
     >
       <AmChartsMap
         onRegionClick={handleRegionClick}
         selectedRegion={selectedRegionId ?? null}
         impactData={impactData}
+        regionMarkers={regionMarkers}
         isLoading={isLoading}
         isError={isError}
         onRetry={onRetry}

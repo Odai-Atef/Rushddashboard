@@ -44,7 +44,7 @@ export function ImpactSidebar({
   return (
     <aside
       className={cn(
-        'w-full lg:w-[380px] xl:w-[420px]',
+        'w-full',
         'flex-shrink-0',
         'space-y-6',
         'animate-fade-in',

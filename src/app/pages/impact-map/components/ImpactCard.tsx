@@ -47,7 +47,7 @@ export function ImpactCard({
           )}
         </div>
       )}
-      <div className={cn('flex-1', !title && !description && !headerAction && 'p-[var(--spacing-card-padding)]')}>
+      <div className={cn('flex-1 flex flex-col min-h-0', !title && !description && !headerAction && 'p-[var(--spacing-card-padding)]')}>
         {isLoading ? (
           <div className="animate-pulse space-y-3 p-[var(--spacing-card-padding)]">
             <div className="h-4 bg-[var(--hover)] rounded w-3/4" />
