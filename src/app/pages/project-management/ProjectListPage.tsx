@@ -214,7 +214,7 @@ export function ProjectListPage() {
  <p className="text-muted-foreground mb-4">لا توجد مشاريع مطابقة للمعايير المحددة.</p>
  <button
  onClick={() => clearFilters()}
- className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors font-medium"
+ className="px-4 py-2 border border-border rounded-lg hover:bg-[var(--hover)] transition-colors duration-[var(--transition-duration)] font-medium"
  >
  مسح المعايير
  </button>
@@ -356,36 +356,36 @@ export function ProjectListPage() {
  <div className="bg-card rounded-xl border border-border shadow-sm overflow-hidden">
  <div className="overflow-x-auto -mx-4 sm:mx-0 px-4 sm:px-0">
  <table className="w-full">
- <thead className="bg-secondary border-b border-border">
+ <thead className="bg-[var(--surface-secondary)] border-b border-[var(--border)] sticky top-0 z-10">
  <tr>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">اسم المشروع</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">الجهه</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">المنشئ</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">الباقة</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">الحالة</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">آخر تحديث</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">عدد التعديلات</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase">التقدم</th>
- <th className="px-6 py-3 text-right text-xs font-medium text-muted-foreground uppercase"></th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">اسم المشروع</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">الجهه</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">المنشئ</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">الباقة</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">الحالة</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">آخر تحديث</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">عدد التعديلات</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">التقدم</th>
+ <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide"></th>
  </tr>
  </thead>
- <tbody className="divide-y divide-gray-200">
+ <tbody className="divide-y divide-[var(--border)]">
  {projects.map((project) => {
  const status = statusConfig[getDisplayStatus(project.status)];
  return (
- <tr key={project.id} className="hover:bg-secondary transition-colors">
- <td className="px-6 py-4">
+ <tr key={project.id} className="bg-[var(--card)] even:bg-[var(--surface-secondary)] hover:bg-[var(--hover)] transition-colors duration-[var(--transition-duration)]">
+ <td className="px-6 py-5">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
- className="font-medium text-[var(--secondary)] hover:text-[var(--secondary)] text-right"
+ className="font-medium text-[var(--foreground)] hover:text-[var(--primary)] transition-colors duration-[var(--transition-duration)] text-right"
  >
  {project.name}
  </button>
  </td>
- <td className="px-6 py-4 text-sm text-muted-foreground">{getProjectOrganization(project)}</td>
- <td className="px-6 py-4 text-sm text-muted-foreground">{getProjectCreator(project)}</td>
- <td className="px-6 py-4 text-sm text-muted-foreground">{project.packageName || project.packageId || 'غير محددة'}</td>
- <td className="px-6 py-4">
+ <td className="px-6 py-5 text-sm text-[var(--text-secondary)]">{getProjectOrganization(project)}</td>
+ <td className="px-6 py-5 text-sm text-[var(--text-secondary)]">{getProjectCreator(project)}</td>
+ <td className="px-6 py-5 text-sm text-[var(--text-secondary)]">{project.packageName || project.packageId || 'غير محددة'}</td>
+ <td className="px-6 py-5">
  <span
  className="text-xs px-2 py-1 rounded-full font-medium"
  style={{ backgroundColor: status.bg, color: status.color }}
@@ -393,13 +393,13 @@ export function ProjectListPage() {
  {status.label}
  </span>
  </td>
- <td className="px-6 py-4 text-sm text-muted-foreground whitespace-nowrap">
+ <td className="px-6 py-5 text-sm text-[var(--text-secondary)] whitespace-nowrap">
  {timeAgo(project.updatedAt)}
  </td>
- <td className="px-6 py-4 text-sm text-muted-foreground whitespace-nowrap">
+ <td className="px-6 py-5 text-sm text-[var(--text-secondary)] whitespace-nowrap">
  {typeof project.modificationsCount === 'number' ? project.modificationsCount.toLocaleString('ar-SA') : '0'}
  </td>
- <td className="px-6 py-4">
+ <td className="px-6 py-5">
  <div className="flex items-center gap-[var(--spacing-small-gap)] min-w-[140px]">
  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
  <div
@@ -407,10 +407,10 @@ export function ProjectListPage() {
  style={{ width: `${project.progress}%` }}
  />
  </div>
- <span className="text-xs font-medium text-muted-foreground">{project.progress}%</span>
+ <span className="text-xs font-medium text-[var(--text-muted)]">{project.progress}%</span>
  </div>
  </td>
- <td className="px-6 py-4">
+ <td className="px-6 py-5">
  <div className="flex items-center justify-end gap-[var(--spacing-small-gap)] flex-wrap">
  {shouldShowPinIcon(project) && (
  <div className="relative flex items-center justify-center w-6 h-6">
@@ -420,14 +420,14 @@ export function ProjectListPage() {
  )}
  <a
  href={`/dashboard/project-management/details/${project.id}`}
- className="inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-[var(--hover)] hover:text-[var(--primary)] transition-colors"
  >
  <Eye className="w-3.5 h-3.5" />
  عرض
  </a>
  <Link
  to={`/dashboard/collaboration/${project.id}/chat`}
- className="relative inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
+ className="relative inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-[var(--hover)] hover:text-[var(--primary)] transition-colors"
  >
  <MessageSquare className="w-3.5 h-3.5" />
  متابعة تحديثات المشروع - شات
@@ -440,7 +440,7 @@ export function ProjectListPage() {
  {isProjectManager && (
  <a
  href={`/dashboard/project-management/edit/${project.id}`}
- className="inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-secondary hover:text-primary transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)].5 px-3 py-1.5 text-xs font-medium text-foreground bg-card border border-border rounded-lg hover:bg-[var(--hover)] hover:text-[var(--primary)] transition-colors"
  >
  <Pencil className="w-3.5 h-3.5" />
  تعديل
@@ -512,7 +512,7 @@ export function ProjectListPage() {
  <div className="w-48 flex-shrink-0">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
- className="font-medium text-sm text-[var(--secondary)] hover:text-[var(--secondary)] text-right"
+ className="font-medium text-sm text-[var(--foreground)] hover:text-[var(--primary)] transition-colors duration-[var(--transition-duration)] text-right"
  >
  {project.name}
  </button>
@@ -606,7 +606,7 @@ export function ProjectListPage() {
  <div className="flex gap-[var(--spacing-small-gap)] w-full sm:w-auto">
  <button
  onClick={() => navigate('/dashboard/project-management')}
- className="flex-1 sm:flex-none px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors font-medium text-sm sm:text-base"
+ className="flex-1 sm:flex-none px-4 py-2 border border-border rounded-lg hover:bg-[var(--hover)] transition-colors duration-[var(--transition-duration)] font-medium text-sm sm:text-base"
  >
  لوحة القيادة
  </button>
