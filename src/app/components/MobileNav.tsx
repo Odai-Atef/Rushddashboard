@@ -23,7 +23,12 @@ import {
   Brain,
   MessageSquare,
   Building2,
-  BarChart3
+  BarChart3,
+  FolderKanban,
+  Activity,
+  Ticket,
+  CreditCard,
+  HeartHandshake,
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { useAuth } from '../layouts/RootLayout';
@@ -44,10 +49,17 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
     { id: 'charity-assessment', label: 'تقييم الجاهزية', icon: ClipboardCheck, path: '/dashboard/charity-assessment' },
     { id: 'charity-assessment-results', label: 'نتائج تقييم الجاهزية', icon: BarChart3, path: '/dashboard/charity-assessment/results' },
     { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management/list' },
-    { id: 'donors', label: 'قاعدة الجهات المانحة', icon: Database, path: '/dashboard/donors' },
+    { id: 'donors', label: 'قاعدة الجهات المانحة', icon: HeartHandshake, path: '/dashboard/donors' },
     { id: 'organization-donors', label: 'الجهات المانحة', icon: Building2, path: '/dashboard/organization-donors' },
     { id: 'manage-org', label: 'إدارة تفعيل الجهات', icon: Users, path: '/dashboard/manage/org' },
+    { id: 'manage-subscriptions', label: 'إدارة الاشتراكات', icon: CreditCard, path: '/dashboard/manage/subscriptions' },
+    { id: 'manage-coupons', label: 'إدارة الكوبونات', icon: Ticket, path: '/dashboard/manage/coupons' },
     { id: 'pricing', label: 'الباقات والأسعار', icon: Package, path: '/dashboard/pricing' },
+    { id: 'incubator-overview', label: 'نظرة شاملة للحاضنة', icon: BarChart3, path: '/dashboard/incubator-overview' },
+    { id: 'charity-analytics', label: 'تحليلات الجمعيات', icon: Building2, path: '/dashboard/charity-analytics' },
+    { id: 'project-analytics', label: 'تحليلات المشاريع', icon: FolderKanban, path: '/dashboard/project-analytics' },
+    { id: 'funding-analytics', label: 'تحليلات التمويل والمانحين', icon: DollarSign, path: '/dashboard/funding-analytics' },
+    { id: 'operations-analytics', label: 'تحليلات التشغيل والأداء', icon: Activity, path: '/dashboard/operations-analytics' },
     { id: 'executive', label: 'لوحة القيادة التنفيذية', icon: LayoutDashboard, path: '/dashboard' },
     { id: 'ai-analysis', label: 'المحلل التنفيذي الذكي', icon: Sparkles, path: '/dashboard/ai-analysis' },
     { id: 'ai-innovation', label: 'استوديو المشاريع الذكي', icon: Brain, path: '/dashboard/ai-innovation' },
