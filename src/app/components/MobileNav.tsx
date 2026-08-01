@@ -12,7 +12,6 @@ import {
  Sparkles,
  DollarSign,
  Warehouse,
- Settings,
  Bell,
  Database,
  ShieldAlert,
@@ -82,7 +81,6 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
  { id: 'marketing', label: 'لوحة التسويق', icon: TrendingUp, path: '/dashboard/marketing' },
  { id: 'recommendations', label: 'لوحة التوصيات', icon: Lightbulb, path: '/dashboard/recommendations' },
  { id: 'opportunities', label: 'لوحة الفرص', icon: FileCheck, path: '/dashboard/opportunities' },
- { id: 'settings', label: 'الإعدادات', icon: Settings, path: '/dashboard/settings' },
  ];
 
  const navItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = roleSlug === 'project-managers'

@@ -22,7 +22,6 @@ import {
   Sparkles,
   DollarSign,
   Warehouse,
-  Settings,
   Bell,
   Database,
   ShieldAlert,
@@ -40,8 +39,6 @@ import {
   Ticket,
   CreditCard,
   Menu,
-  LogOut,
-  LifeBuoy,
   MapPin,
 } from 'lucide-react';
 import { cn } from '../utils/cn';
@@ -571,200 +568,10 @@ export function Sidebar({ activeView, className }: SidebarProps) {
             isCollapsed ? 'px-[18px] py-4' : 'px-6 py-5'
           )}
         >
-          {/* Divider */}
-          <div
-            className="w-full mb-4"
-            style={{
-              height: '1px',
-              background: 'var(--sidebar-border)',
-            }}
-          />
-
-          {/* Footer items */}
-          <div className={cn('flex flex-col', isCollapsed ? 'gap-2' : 'gap-1')}>
-            {/* Support */}
-            {(() => {
-              const isHovered = hoveredItem === 'footer-support';
-              const btn = (
-                <button
-                  onMouseEnter={() => setHoveredItem('footer-support')}
-                  onMouseLeave={() => setHoveredItem(null)}
-                  className={cn(
-                    'group flex items-center transition-all duration-200 ease-out',
-                    'focus:outline-none focus:ring-2 focus:ring-[var(--sidebar-ring)]/40 focus:ring-offset-0',
-                    isCollapsed
-                      ? 'justify-center w-[52px] h-[52px] mx-auto'
-                      : 'gap-[14px] px-[18px] w-full'
-                  )}
-                  style={{
-                    height: '48px',
-                    borderRadius: '14px',
-                    color: isHovered
-                      ? 'var(--sidebar-foreground)'
-                      : 'var(--sidebar-foreground)',
-                    background: isHovered
-                      ? 'var(--sidebar-accent)'
-                      : 'transparent',
-                  }}
-                >
-                  <span
-                    className={cn(
-                      'flex items-center justify-center flex-shrink-0',
-                      isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
-                    )}
-                  >
-                    <LifeBuoy
-                      className={cn(
-                        'transition-all duration-200',
-                        isCollapsed ? 'w-5 h-5' : 'w-[18px] h-[18px]'
-                      )}
-                      style={{ color: isHovered ? 'var(--sidebar-foreground)' : 'var(--sidebar-foreground)' }}
-                    />
-                  </span>
-                  {!isCollapsed && (
-                    <span
-                      className="whitespace-nowrap text-sm font-medium text-[var(--sidebar-foreground)]"
-                    >
-                      الدعم
-                    </span>
-                  )}
-                </button>
-              );
-              if (isCollapsed) {
-                return (
-                  <Tooltip key="support" label="الدعم" visible={isHovered}>
-                    {btn}
-                  </Tooltip>
-                );
-              }
-              return btn;
-            })()}
-
-            {/* Settings */}
-            {(() => {
-              const isHovered = hoveredItem === 'footer-settings';
-              const btn = (
-                <button
-                  onClick={() => navigate('/dashboard/settings')}
-                  onMouseEnter={() => setHoveredItem('footer-settings')}
-                  onMouseLeave={() => setHoveredItem(null)}
-                  className={cn(
-                    'group flex items-center transition-all duration-200 ease-out',
-                    'focus:outline-none focus:ring-2 focus:ring-[var(--sidebar-ring)]/40 focus:ring-offset-0',
-                    isCollapsed
-                      ? 'justify-center w-[52px] h-[52px] mx-auto'
-                      : 'gap-[14px] px-[18px] w-full'
-                  )}
-                  style={{
-                    height: '48px',
-                    borderRadius: '14px',
-                    color: isHovered
-                      ? 'var(--sidebar-foreground)'
-                      : 'var(--sidebar-foreground)',
-                    background: isHovered
-                      ? 'var(--sidebar-accent)'
-                      : 'transparent',
-                  }}
-                >
-                  <span
-                    className={cn(
-                      'flex items-center justify-center flex-shrink-0',
-                      isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
-                    )}
-                  >
-                    <Settings
-                      className={cn(
-                        'transition-all duration-200',
-                        isCollapsed ? 'w-5 h-5' : 'w-[18px] h-[18px]'
-                      )}
-                      style={{ color: isHovered ? 'var(--sidebar-foreground)' : 'var(--sidebar-foreground)' }}
-                    />
-                  </span>
-                  {!isCollapsed && (
-                    <span
-                      className="whitespace-nowrap text-sm font-medium text-[var(--sidebar-foreground)]"
-                    >
-                      الإعدادات
-                    </span>
-                  )}
-                </button>
-              );
-              if (isCollapsed) {
-                return (
-                  <Tooltip key="settings" label="الإعدادات" visible={isHovered}>
-                    {btn}
-                  </Tooltip>
-                );
-              }
-              return btn;
-            })()}
-
-            {/* Logout */}
-            {(() => {
-              const isHovered = hoveredItem === 'footer-logout';
-              const btn = (
-                <button
-                  onClick={handleLogout}
-                  onMouseEnter={() => setHoveredItem('footer-logout')}
-                  onMouseLeave={() => setHoveredItem(null)}
-                  className={cn(
-                    'group flex items-center transition-all duration-200 ease-out',
-                    'focus:outline-none focus:ring-2 focus:ring-[var(--destructive)]/40 focus:ring-offset-0',
-                    isCollapsed
-                      ? 'justify-center w-[52px] h-[52px] mx-auto'
-                      : 'gap-[14px] px-[18px] w-full'
-                  )}
-                  style={{
-                    height: '48px',
-                    borderRadius: '14px',
-                    color: isHovered
-                      ? 'var(--destructive)'
-                      : 'var(--sidebar-foreground)',
-                    background: isHovered
-                      ? 'var(--destructive)'
-                      : 'transparent',
-                    opacity: isHovered ? 1 : 0.7,
-                  }}
-                >
-                  <span
-                    className={cn(
-                      'flex items-center justify-center flex-shrink-0',
-                      isCollapsed ? 'w-6 h-6' : 'w-5 h-5'
-                    )}
-                  >
-                    <LogOut
-                      className={cn(
-                        'transition-all duration-200',
-                        isCollapsed ? 'w-5 h-5' : 'w-[18px] h-[18px]'
-                      )}
-                      style={{ color: isHovered ? 'var(--destructive)' : 'var(--sidebar-foreground)' }}
-                    />
-                  </span>
-                  {!isCollapsed && (
-                    <span
-                      className="whitespace-nowrap text-sm font-medium"
-                      style={{ color: isHovered ? 'var(--destructive)' : 'var(--sidebar-foreground)' }}
-                    >
-                      تسجيل الخروج
-                    </span>
-                  )}
-                </button>
-              );
-              if (isCollapsed) {
-                return (
-                  <Tooltip key="logout" label="تسجيل الخروج" visible={isHovered}>
-                    {btn}
-                  </Tooltip>
-                );
-              }
-              return btn;
-            })()}
-          </div>
-
           {/* Vision 2030 branding */}
           {!isCollapsed && (
             <div
-              className="mt-4 flex items-center justify-center gap-2 px-4 py-3 rounded-xl"
+              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl"
               style={{ background: 'var(--sidebar-accent)' }}
             >
               <div className="flex flex-col items-center gap-1">
@@ -784,7 +591,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
 
           {/* Collapsed branding dot */}
           {isCollapsed && (
-            <div className="mt-3 flex justify-center">
+            <div className="flex justify-center">
               <div
                 className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
                 style={{
