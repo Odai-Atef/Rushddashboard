@@ -1,0 +1,58 @@
+/* ============================================================
+ Impact Map — Map-Specific Type Definitions
+ ============================================================ */
+
+/** Impact intensity level for regions and markers */
+export type ImpactLevel = 'very-high' | 'high' | 'medium' | 'low' | 'very-low';
+
+/** Map region with SVG path, stats, and metadata */
+export interface MapRegion {
+  id: string;
+  name: string;
+  nameAr: string;
+  path: string;
+  /** Approximate center of the region within the SVG viewBox (0-1000 scale) */
+  centerX: number;
+  centerY: number;
+  projects: number;
+  beneficiaries: number;
+  funding: number;
+  impactScore: number;
+  sroi: number;
+  lastUpdated: string;
+  impactLevel: ImpactLevel;
+}
+
+/** Impact marker placed on a region */
+export interface MapMarker {
+  id: string;
+  regionId: string;
+  /** X position in SVG viewBox (0-1000) */
+  x: number;
+  /** Y position in SVG viewBox (0-1000) */
+  y: number;
+  projectCount: number;
+  impactLevel: ImpactLevel;
+}
+
+/** Legend item for the impact intensity scale */
+export interface MapLegendItem {
+  level: ImpactLevel;
+  label: string;
+  labelAr: string;
+  color: string;
+  projectCount: number;
+}
+
+/** Selected region detail panel payload */
+export interface SelectedRegion {
+  region: MapRegion;
+  recentProject: string;
+}
+
+/** Map view state (zoom + pan) */
+export interface MapViewState {
+  zoom: number;
+  panX: number;
+  panY: number;
+}

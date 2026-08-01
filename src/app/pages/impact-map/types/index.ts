@@ -179,6 +179,22 @@ export interface ImpactFilters {
 }
 
 /* ──────────────────────────────────────────────────────────────── */
+/*  Chart Types                                                     */
+/* ──────────────────────────────────────────────────────────────── */
+
+export type {
+  ChartPoint,
+  ChartSeries,
+  PieSlice,
+  BarItem,
+  TrendPoint,
+  TooltipData,
+  LegendItem,
+  FundingMonth,
+  RegionalData,
+} from './charts';
+
+/* ──────────────────────────────────────────────────────────────── */
 /*  UI State                                                        */
 /* ──────────────────────────────────────────────────────────────── */
 
