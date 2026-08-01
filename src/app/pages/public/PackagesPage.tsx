@@ -159,7 +159,7 @@ export function PackagesPage() {
  {pkg.priceAnnual.toLocaleString("ar-SA")}
  </span>
  <span className="text-base text-muted-foreground mr-2">ريال/سنة</span>
- <p className="text-sm text-[var(--text-muted)] mt-1">{pkg.projectLimit} مشاريع</p>
+  <p className="text-sm text-card-foreground mt-1">{pkg.projectLimit} مشاريع</p>
  </div>
 
  {/* SLA Badge */}
@@ -169,12 +169,12 @@ export function PackagesPage() {
  >
  <Shield size={16} color={accent} />
  <div className="flex-1">
- <div className="text-xs font-semibold text-[var(--text-secondary)]">
- اتفاقية مستوى الخدمة
- </div>
- <div className="text-xs text-muted-foreground">
- {pkg.sla || "مستوى أساسي"}
- </div>
+  <div className="text-xs font-semibold text-card-foreground">
+  اتفاقية مستوى الخدمة
+  </div>
+  <div className="text-xs text-muted-foreground">
+  {pkg.sla || "مستوى أساسي"}
+  </div>
  </div>
  </div>
 
@@ -195,7 +195,7 @@ export function PackagesPage() {
  >
  <Check size={12} color={accent} strokeWidth={2.5} />
  </div>
- <span className="text-sm text-secondary">{feature}</span>
+  <span className="text-sm text-card-foreground">{feature}</span>
  </div>
  ))}
  </div>

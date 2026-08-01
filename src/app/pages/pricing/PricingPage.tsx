@@ -464,30 +464,30 @@ export function PricingPage() {
  </div>
 
  {/* Support contact — shown on all pricing views */}
- <div className="mb-10 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
- <p className="text-sm text-[var(--secondary)]/[0.8] mb-3 font-medium text-center">
- واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
- </p>
- <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
- <a
- href="tel:+966556534433"
- className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
- >
- <Phone className="w-4 h-4" />
- اتصل بنا
- </a>
- <a
- href="https://wa.me/+966556534433"
- target="_blank"
- rel="noopener noreferrer"
- className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
- >
- <MessageCircle className="w-4 h-4" />
- واتساب
- </a>
- </div>
- <p className="text-xs text-[var(--secondary)] mt-2 text-center" dir="ltr">+966 55 653 4433</p>
- </div>
+  <div className="mb-10 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
+  <p className="text-sm text-[var(--secondary-foreground)] mb-3 font-medium text-center">
+  واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
+  </p>
+  <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
+  <a
+  href="tel:+966556534433"
+  className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary-foreground)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
+  >
+  <Phone className="w-4 h-4" />
+  اتصل بنا
+  </a>
+  <a
+  href="https://wa.me/+966556534433"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
+  >
+  <MessageCircle className="w-4 h-4" />
+  واتساب
+  </a>
+  </div>
+  <p className="text-xs text-[var(--secondary-foreground)] mt-2 text-center" dir="ltr">+966 55 653 4433</p>
+  </div>
 
  {activeSubscription && (
  <div className="mb-8 p-[var(--spacing-card-padding)] rounded-xl bg-[var(--primary)]/[0.08] border border-green-200 text-[var(--primary)]/[0.8] flex items-start gap-[var(--spacing-small-gap)]">
@@ -608,7 +608,7 @@ export function PricingPage() {
  {pkg.priceMonthly.toLocaleString("ar-SA")}
  </span>
  <span className="text-base text-muted-foreground mr-2">ريال/شهر</span>
- <p className="text-sm text-[var(--text-muted)] mt-1">{pkg.projectLimit} مشاريع</p>
+  <p className="text-sm text-card-foreground mt-1">{pkg.projectLimit} مشاريع</p>
  </div>
 
  {/* SLA Badge */}
@@ -619,8 +619,8 @@ export function PricingPage() {
  >
  <Shield size={16} color={accent} />
  <div className="flex-1">
- <div className="text-xs font-semibold text-[var(--text-secondary)]">اتفاقية مستوى الخدمة</div>
- <div className="text-xs text-muted-foreground">{pkg.sla || 'مستوى أساسي'}</div>
+  <div className="text-xs font-semibold text-card-foreground">اتفاقية مستوى الخدمة</div>
+  <div className="text-xs text-muted-foreground">{pkg.sla || 'مستوى أساسي'}</div>
  </div>
  </div>
 
@@ -643,16 +643,16 @@ export function PricingPage() {
  </button>
 
  {/* Alternative: checkout via website (new tab) */}
- <button
- onClick={() => window.open(`/pricing/checkout/${pkg.id}`, '_blank')}
- className="w-full py-2 text-sm text-muted-foreground hover:text-[var(--text-secondary)] transition-colors mb-6"
- >
- أو اشترك عبر الموقع ↗
- </button>
+  <button
+  onClick={() => window.open(`/pricing/checkout/${pkg.id}`, '_blank')}
+  className="w-full py-2 text-sm text-muted-foreground hover:text-card-foreground transition-colors mb-6"
+  >
+  أو اشترك عبر الموقع ↗
+  </button>
  </>
  )}
  {isCurrentPackage && (
- <div className="w-full py-3.5 rounded-xl text-[var(--primary)] bg-emerald-100 font-bold text-base mb-3 text-center">
+  <div className="w-full py-3.5 rounded-xl text-[var(--primary)] bg-emerald-100/90 font-bold text-base mb-3 text-center">
  باقتك الحالية
  </div>
  )}
@@ -672,7 +672,7 @@ export function PricingPage() {
  >
  <Check size={12} color={accent} strokeWidth={2.5} />
  </div>
- <span className="text-sm text-secondary">{benefit}</span>
+  <span className="text-sm text-card-foreground">{benefit}</span>
  </div>
  ))}
  </div>
@@ -697,7 +697,7 @@ export function PricingPage() {
  >
  <AlertTriangle size={12} color={accent} strokeWidth={2.5} />
  </div>
- <span className="text-sm text-secondary">{note}</span>
+  <span className="text-sm text-card-foreground">{note}</span>
  </div>
  ))}
  </div>
@@ -773,10 +773,10 @@ export function PricingPage() {
  <h4 className="text-base font-bold text-foreground mb-3">المزايا الرئيسية</h4>
  <ul className="space-y-[var(--spacing-small-gap)]">
  {selectedPkg.features.benefits.map((b, i) => (
- <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
- <Check size={14} className="mt-1 text-[var(--primary)] shrink-0" />
- <span>{b}</span>
- </li>
+  <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-card-foreground">
+  <Check size={14} className="mt-1 text-[var(--primary)] shrink-0" />
+  <span>{b}</span>
+  </li>
  ))}
  </ul>
  </div>
@@ -794,7 +794,7 @@ export function PricingPage() {
  ) : (
  <XCircle size={14} className="mt-1 text-[var(--text-muted)] shrink-0" />
  )}
- <span className={s.included ? "" : "text-[var(--text-muted)] line-through"}>{s.name}</span>
+  <span className={s.included ? "text-card-foreground" : "text-muted-foreground line-through"}>{s.name}</span>
  </li>
  ))}
  </ul>
@@ -807,10 +807,10 @@ export function PricingPage() {
  <h4 className="text-base font-bold text-foreground mb-3">الأهداف المرتقبة</h4>
  <ul className="space-y-[var(--spacing-small-gap)]">
  {selectedPkg.features.goals.map((g, i) => (
- <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
- <Check size={14} className="mt-1 text-[var(--secondary)] shrink-0" />
- <span>{g}</span>
- </li>
+  <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-card-foreground">
+  <Check size={14} className="mt-1 text-[var(--secondary)] shrink-0" />
+  <span>{g}</span>
+  </li>
  ))}
  </ul>
  </div>
@@ -822,10 +822,10 @@ export function PricingPage() {
  <h4 className="text-base font-bold text-foreground mb-3">النتائج المتوقعة</h4>
  <ul className="space-y-[var(--spacing-small-gap)]">
  {selectedPkg.features.outcomes.map((o, i) => (
- <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
- <Check size={14} className="mt-1 text-[var(--secondary)] shrink-0" />
- <span>{o}</span>
- </li>
+  <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-card-foreground">
+  <Check size={14} className="mt-1 text-[var(--secondary)] shrink-0" />
+  <span>{o}</span>
+  </li>
  ))}
  </ul>
  </div>
@@ -837,10 +837,10 @@ export function PricingPage() {
  <h4 className="text-base font-bold text-foreground mb-3">الاستثناءات</h4>
  <ul className="space-y-[var(--spacing-small-gap)]">
  {selectedPkg.features.exclusions.map((e, i) => (
- <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-muted-foreground">
- <XCircle size={14} className="mt-1 text-red-400 shrink-0" />
- <span>{e}</span>
- </li>
+  <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-muted-foreground">
+  <XCircle size={14} className="mt-1 text-destructive shrink-0" />
+  <span>{e}</span>
+  </li>
  ))}
  </ul>
  </div>
@@ -852,10 +852,10 @@ export function PricingPage() {
  <h4 className="text-base font-bold text-foreground mb-3">مناسب لـ</h4>
  <ul className="space-y-[var(--spacing-small-gap)]">
  {selectedPkg.features.suitableFor.map((s, i) => (
- <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--text-secondary)]">
- <Check size={14} className="mt-1 text-[var(--warning)] shrink-0" />
- <span>{s}</span>
- </li>
+  <li key={i} className="flex items-start gap-[var(--spacing-small-gap)] text-sm text-card-foreground">
+  <Check size={14} className="mt-1 text-[var(--warning)] shrink-0" />
+  <span>{s}</span>
+  </li>
  ))}
  </ul>
  </div>
@@ -871,9 +871,9 @@ export function PricingPage() {
  onChange={(e) => setSlaAccepted(e.target.checked)}
  className="w-5 h-5 mt-0.5 text-[var(--secondary)] rounded-lg focus:ring-ring"
  />
- <span className="text-sm text-[var(--text-secondary)] leading-relaxed">
- قرأت ووافقت على اتفاقية مستوى الخدمة (SLA) وأقر بأنني فهمت جميع التزاماتي والتزامات المنصة الموضحة أعلاه.
- </span>
+  <span className="text-sm text-card-foreground leading-relaxed">
+  قرأت ووافقت على اتفاقية مستوى الخدمة (SLA) وأقر بأنني فهمت جميع التزاماتي والتزامات المنصة الموضحة أعلاه.
+  </span>
  </label>
  </div>
  </>
@@ -897,11 +897,11 @@ export function PricingPage() {
  </span>
  </div>
  {activeSubscription?.packageId === selectedPkg.id ? (
- <div className="w-full py-3.5 rounded-xl text-[var(--primary)] bg-emerald-100 font-bold text-base text-center">
+  <div className="w-full py-3.5 rounded-xl text-[var(--primary)] bg-emerald-100/90 font-bold text-base text-center">
  هذه باقتك الحالية
  </div>
  ) : activeSubscription ? (
- <div className="w-full py-3.5 rounded-xl text-secondary bg-[var(--hover)] font-bold text-base text-center">
+  <div className="w-full py-3.5 rounded-xl text-card-foreground bg-[var(--hover)] font-bold text-base text-center">
  لديك اشتراك نشط. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
  </div>
  ) : (
