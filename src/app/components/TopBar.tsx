@@ -826,7 +826,7 @@ export function TopBar({
               <Avatar.Root
                 className={cn(
                   'w-9 h-9 rounded-full flex items-center justify-center text-sm font-semibold',
-                  'bg-gradient-to-br from-emerald-500 to-blue-500 text-white shadow-sm'
+                  'bg-gradient-to-br from-emerald-500 to-[var(--secondary)] text-white'
                 )}
               >
                 <Avatar.Fallback className="text-sm">
