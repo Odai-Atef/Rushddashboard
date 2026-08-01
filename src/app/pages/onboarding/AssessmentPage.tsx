@@ -414,71 +414,71 @@ export function AssessmentPage() {
  return (
  <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
  <div className="max-w-4xl mx-auto">
- {/* Category Steps */}
- <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] mb-6">
- <div className="flex items-stretch gap-[var(--spacing-small-gap)] overflow-x-auto pb-2">
- {assessmentCategories.map((cat, idx) => {
- const Icon = resolveApiIcon(cat.icon);
- const catProgress = assessmentProgress[cat.id] ?? {
- answered: 0,
- total: cat.questions.length,
- isComplete: false,
- };
- return (
- <button
- key={cat.id}
- onClick={() => setCurrentAssessmentStep(idx)}
- className={`flex flex-1 basis-0 min-w-0 flex-col items-center justify-center gap-[var(--spacing-small-gap)] px-2 py-3 rounded-lg transition-colors ${
- idx === currentAssessmentStep
- ? 'bg-primary/10 border-2 border-primary'
- : catProgress.isComplete
- ? 'bg-[var(--primary)]/[0.08] border border-green-200'
-  : 'bg-muted border border-border'
- }`}
- >
- <div className="flex items-center gap-[var(--spacing-small-gap)]">
- <div
- className={`w-8 h-8 rounded-full flex items-center justify-center ${
- idx === currentAssessmentStep
- ? 'bg-primary/10'
- : catProgress.isComplete
- ? 'bg-[var(--primary)]/[0.1]'
- : 'bg-muted'
- }`}
- >
- <Icon
- className={`w-4 h-4 ${
- idx === currentAssessmentStep
- ? 'text-primary'
- : catProgress.isComplete
- ? 'text-[var(--primary)]'
- : 'text-muted-foreground'
- }`}
- />
- </div>
- <span
- className={`text-sm font-medium text-center ${
- idx === currentAssessmentStep
- ? 'text-foreground'
- : catProgress.isComplete
- ? 'text-[var(--primary)]/[0.9]'
- : 'text-muted-foreground'
- }`}
- >
- {cat.name}
- </span>
- {catProgress.isComplete && (
- <CheckCircle2 className="w-4 h-4 text-[var(--primary)]" />
- )}
- </div>
- <span className="text-xs text-muted-foreground">
- {catProgress.answered} / {catProgress.total}
- </span>
- </button>
- );
- })}
- </div>
- </div>
+  {/* Category Steps */}
+  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] mb-6">
+  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-[var(--spacing-small-gap)]">
+  {assessmentCategories.map((cat, idx) => {
+  const Icon = resolveApiIcon(cat.icon);
+  const catProgress = assessmentProgress[cat.id] ?? {
+  answered: 0,
+  total: cat.questions.length,
+  isComplete: false,
+  };
+  return (
+  <button
+  key={cat.id}
+  onClick={() => setCurrentAssessmentStep(idx)}
+  className={`flex flex-col items-center justify-center gap-[var(--spacing-small-gap)] px-2 py-3 rounded-lg transition-colors ${
+  idx === currentAssessmentStep
+  ? 'bg-primary/10 border-2 border-primary'
+  : catProgress.isComplete
+  ? 'bg-[var(--primary)]/[0.08] border border-green-200'
+   : 'bg-muted border border-border'
+  }`}
+  >
+  <div className="flex items-center gap-[var(--spacing-small-gap)]">
+  <div
+  className={`w-8 h-8 rounded-full flex items-center justify-center ${
+  idx === currentAssessmentStep
+  ? 'bg-primary/10'
+  : catProgress.isComplete
+  ? 'bg-[var(--primary)]/[0.1]'
+  : 'bg-muted'
+  }`}
+  >
+  <Icon
+  className={`w-4 h-4 ${
+  idx === currentAssessmentStep
+  ? 'text-primary'
+  : catProgress.isComplete
+  ? 'text-[var(--primary)]'
+  : 'text-muted-foreground'
+  }`}
+  />
+  </div>
+  <span
+  className={`text-sm font-medium text-center ${
+  idx === currentAssessmentStep
+  ? 'text-foreground'
+  : catProgress.isComplete
+  ? 'text-[var(--primary)]/[0.9]'
+  : 'text-muted-foreground'
+  }`}
+  >
+  {cat.name}
+  </span>
+  {catProgress.isComplete && (
+  <CheckCircle2 className="w-4 h-4 text-[var(--primary)]" />
+  )}
+  </div>
+  <span className="text-xs text-muted-foreground">
+  {catProgress.answered} / {catProgress.total}
+  </span>
+  </button>
+  );
+  })}
+  </div>
+  </div>
 
  {/* Form Card */}
  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-border p-[var(--spacing-card-padding)] sm:p-8">
