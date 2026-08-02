@@ -42,7 +42,7 @@ export function CharityAssessmentWizardPage() {
  </div>
  <div className="w-full bg-muted rounded-full h-2">
  <div
- className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all"
+ className="bg-gradient-to-r from-[var(--secondary)] to-[var(--chart-3)] h-2 rounded-full transition-all"
  style={{ width: `${progress}%` }}
  />
  </div>
@@ -101,16 +101,16 @@ export function CharityAssessmentWizardPage() {
 
  {/* AI Insights */}
  {showAIInsights && (
- <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-[var(--spacing-card-padding)] mb-6">
+ <div className="bg-gradient-to-br from-[var(--chart-3)]/10 to-[var(--secondary)]/10 border border-[var(--chart-3)]/20 rounded-xl p-[var(--spacing-card-padding)] mb-6">
  <div className="flex items-start gap-[var(--spacing-small-gap)]">
- <Brain className="w-6 h-6 text-purple-500 flex-shrink-0" />
+ <Brain className="w-6 h-6 text-[var(--chart-3)] flex-shrink-0" />
  <div>
  <h4 className="font-medium mb-2">ملاحظة من الذكاء الاصطناعي</h4>
  <p className="text-sm text-muted-foreground mb-3">
  بناءً على إجاباتك السابقة، نلاحظ أن لديكم أساس قوي في {currentCategory.name}.
  للحصول على تقييم دقيق، يُنصح بالإجابة على جميع الأسئلة بموضوعية.
  </p>
- <button className="text-sm text-purple-500 hover:underline">
+ <button className="text-sm text-[var(--chart-3)] hover:underline">
  معرفة المزيد عن كيفية التقييم
  </button>
  </div>
@@ -137,7 +137,7 @@ export function CharityAssessmentWizardPage() {
  navigate(`/dashboard/charity-assessment/results/${organizationId}`);
  }
  }}
- className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all"
+ className="flex-1 flex items-center justify-center gap-[var(--spacing-small-gap)] px-6 py-3 bg-gradient-to-r from-[var(--secondary)] to-[var(--chart-3)] text-[var(--primary-foreground)] rounded-lg hover:from-[var(--secondary)]/90 hover:to-[var(--chart-3)]/90 transition-all"
  >
  {currentStep < categories.length - 1 ? 'التالي' : 'إنهاء التقييم'}
  <ArrowLeft className="w-5 h-5" />

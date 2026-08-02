@@ -28,7 +28,7 @@ interface LoadedEvaluation {
 
 const priorityConfig: Record<string, { bg: string; text: string; label: string }> = {
  high: { bg: 'bg-[var(--destructive)]/[0.1]', text: 'text-[var(--destructive)]', label: 'أولوية عالية' },
- medium: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'أولوية متوسطة' },
+ medium: { bg: 'bg-[var(--warning)]/10', text: 'text-[var(--warning)]', label: 'أولوية متوسطة' },
  low: { bg: 'bg-muted/[0.1]', text: 'text-[var(--secondary)]', label: 'أولوية منخفضة' },
 };
 
@@ -42,9 +42,9 @@ const statusConfig: Record<string, { bg: string; text: string; label: string; ic
 function getPriorityColor(priority: string) {
  switch (priority) {
  case 'high':
- return 'text-red-500';
+ return 'text-[var(--destructive)]';
  case 'medium':
- return 'text-yellow-500';
+ return 'text-[var(--warning)]';
  default:
  return 'text-[var(--secondary)]';
  }
@@ -53,9 +53,9 @@ function getPriorityColor(priority: string) {
 function getPriorityBg(priority: string) {
  switch (priority) {
  case 'high':
- return 'bg-[var(--destructive)]/10 border-red-500/20';
+ return 'bg-[var(--destructive)]/10 border-[var(--destructive)]/20';
  case 'medium':
- return 'bg-yellow-500/10 border-yellow-500/20';
+ return 'bg-[var(--warning)]/10 border-[var(--warning)]/20';
  default:
  return 'bg-[var(--primary)]/10 border-[var(--secondary)]/[0.2]';
  }
@@ -170,7 +170,7 @@ export function CharityAssessmentRoadmapPage() {
  return (
  <div className="min-h-full bg-background flex items-center justify-center p-8">
  <div className="bg-card border border-border rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] sm:p-8 text-center max-w-md">
- <AlertTriangle className="w-12 h-12 text-red-500 mx-auto mb-4" />
+ <AlertTriangle className="w-12 h-12 text-[var(--destructive)] mx-auto mb-4" />
  <h2 className="text-xl font-semibold mb-2">تعذر تحميل الخطة</h2>
  <p className="text-muted-foreground mb-6">{error}</p>
  <button
@@ -273,10 +273,10 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.2]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/[0.08] w-fit mb-4">
- <Clock className="w-6 h-6 text-purple-600" />
+ <Clock className="w-6 h-6 text-[var(--chart-3)]" />
  </div>
  <p className="text-sm text-muted-foreground mb-1">المدة الإجمالية</p>
- <p className="text-3xl font-bold text-purple-600 tracking-tight">{totalDurationMonths} شهر</p>
+ <p className="text-3xl font-bold text-[var(--chart-3)] tracking-tight">{totalDurationMonths} شهر</p>
  </div>
  </div>
  </div>
@@ -321,7 +321,7 @@ export function CharityAssessmentRoadmapPage() {
  </div>
  <div className="h-2 bg-muted rounded-full overflow-hidden">
  <div
- className="h-full bg-gradient-to-r from-blue-500 to-indigo-600"
+ className="h-full bg-gradient-to-r from-[var(--secondary)] to-[var(--chart-3)]"
  style={{ width: `${roadmap?.overallProgress ?? 0}%` }}
  ></div>
  </div>
@@ -534,9 +534,9 @@ export function CharityAssessmentRoadmapPage() {
  </div>
 
  {/* AI Recommendations */}
- <div className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-xl p-8">
+ <div className="bg-gradient-to-br from-[var(--chart-3)]/10 to-[var(--secondary)]/10 border border-[var(--chart-3)]/20 rounded-xl p-8">
  <div className="flex items-start gap-[var(--spacing-grid-gap)]">
- <Brain className="w-8 h-8 text-purple-500 flex-shrink-0" />
+ <Brain className="w-8 h-8 text-[var(--chart-3)] flex-shrink-0" />
  <div className="flex-1">
  <h3 className="text-xl font-semibold mb-3">توصيات الذكاء الاصطناعي</h3>
  {llmRecommendations ? (
@@ -544,7 +544,7 @@ export function CharityAssessmentRoadmapPage() {
  {llmRecommendations.highPriority && (
  <div className="space-y-[var(--spacing-small-gap)]">
  <h4 className="font-medium text-[var(--destructive)] flex items-center gap-[var(--spacing-small-gap)]">
- <Zap className="w-5 h-5 text-red-500 flex-shrink-0" />
+ <Zap className="w-5 h-5 text-[var(--destructive)] flex-shrink-0" />
  أولوية عالية
  </h4>
  <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
@@ -554,8 +554,8 @@ export function CharityAssessmentRoadmapPage() {
  )}
  {llmRecommendations.mediumPriority && (
  <div className="space-y-[var(--spacing-small-gap)]">
- <h4 className="font-medium text-yellow-700 flex items-center gap-[var(--spacing-small-gap)]">
- <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0" />
+ <h4 className="font-medium text-[var(--warning)] flex items-center gap-[var(--spacing-small-gap)]">
+ <Zap className="w-5 h-5 text-[var(--warning)] flex-shrink-0" />
  أولوية متوسطة
  </h4>
  <p className="text-muted-foreground whitespace-pre-wrap leading-relaxed">
@@ -581,7 +581,7 @@ export function CharityAssessmentRoadmapPage() {
  بناءً على تحليل شامل لنتائج تقييمك ومقارنتها بأفضل الممارسات في القطاع، نوصي بالبدء بالمبادرات ذات الأولوية العالية لتحقيق أسرع تحسن ممكن.
  </p>
  <div className="flex items-start gap-[var(--spacing-small-gap)]">
- <Zap className="w-5 h-5 text-yellow-500 flex-shrink-0 mt-0.5" />
+ <Zap className="w-5 h-5 text-[var(--warning)] flex-shrink-0 mt-0.5" />
  <p className="text-sm">
  إتمام المبادرات ذات الأولوية العالية سيرفع درجة جاهزيتك الإجمالية بشكل ملحوظ.
  </p>

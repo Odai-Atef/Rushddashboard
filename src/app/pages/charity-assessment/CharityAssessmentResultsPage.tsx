@@ -457,7 +457,7 @@ export function CharityAssessmentResultsPage() {
   return (
     <div className="min-h-full bg-background">
       {/* Header - intentionally outside the exported report */}
-      <div className="bg-gradient-to-r from-[var(--secondary)] to-purple-600 text-[var(--primary-foreground)]">
+      <div className="bg-gradient-to-r from-[var(--secondary)] to-[var(--chart-3)] text-[var(--primary-foreground)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           <div className="flex items-start justify-between mb-6">
             <div>
@@ -751,14 +751,14 @@ export function CharityAssessmentResultsPage() {
         )}
 
         {/* CTA */}
-        <div data-report-exclude className="bg-gradient-to-br from-[var(--secondary)]/10 to-purple-500/10 border border-[var(--secondary)]/[0.2] rounded-xl p-[var(--spacing-card-padding)] text-center">
+        <div data-report-exclude className="bg-gradient-to-br from-[var(--secondary)]/10 to-[var(--chart-3)]/10 border border-[var(--secondary)]/[0.2] rounded-xl p-[var(--spacing-card-padding)] text-center">
           <h3 className="text-xl sm:text-2xl font-semibold mb-3 text-card-foreground">جاهز للخطوة التالية؟</h3>
           <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
             استعرض خارطة الطريق المخصصة لتحسين جاهزية منظمتك
           </p>
           <button
             onClick={() => navigate(`/dashboard/charity-assessment/roadmap/${organizationId}`)}
-            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-[var(--secondary)] to-purple-600 text-[var(--primary-foreground)] rounded-lg hover:from-[var(--secondary)]/90 hover:to-purple-700 transition-all text-sm sm:text-base w-full sm:w-auto justify-center"
+            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 bg-gradient-to-r from-[var(--secondary)] to-[var(--chart-3)] text-[var(--primary-foreground)] rounded-lg hover:from-[var(--secondary)]/90 hover:to-[var(--chart-3)]/90 transition-all text-sm sm:text-base w-full sm:w-auto justify-center"
           >
             عرض خارطة الطريق
             <ChevronRight className="w-5 h-5" />
