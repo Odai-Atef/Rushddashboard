@@ -22,6 +22,7 @@ import {
  MessageSquare,
  CheckCircle,
  TrendingUp,
+ DollarSign,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
