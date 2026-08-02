@@ -171,7 +171,7 @@ export function SubscriptionsListPage() {
  <button
  type="button"
  onClick={clearFilters}
- className="flex items-center justify-center sm:justify-start gap-[var(--spacing-small-gap)] px-3 py-2.5 min-h-[44px] text-sm text-[var(--destructive)] hover:bg-[var(--destructive)]/[0.08] rounded-lg transition-colors w-full sm:w-auto"
+  className="flex items-center justify-center sm:justify-start gap-[var(--spacing-small-gap)] px-3 py-2.5 min-h-[44px] text-sm text-[var(--destructive)] rounded-lg transition-colors w-full sm:w-auto"
  >
  <X className="w-4 h-4" />
  مسح الفلاتر
@@ -229,7 +229,7 @@ export function SubscriptionsListPage() {
  </thead>
  <tbody className="divide-y divide-[var(--border)]">
  {subscriptions.map((subscription) => (
- <tr key={subscription.id} className="hover:bg-[var(--hover)]">
+  <tr key={subscription.id}>
  <td className="px-4 py-3">
  {subscription.organization ? (
  <div>
