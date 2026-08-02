@@ -297,8 +297,8 @@ function getStatusBadgeClass(status: string) {
  switch (status.toLowerCase()) {
  case 'active':
  return `${base} bg-[var(--primary)]/[0.1] text-[var(--primary)]/[0.8]`;
- case 'trial':
- return `${base} bg-[var(--secondary)]/[0.1] text-[var(--secondary)]/[0.8]`;
+  case 'trial':
+  return `${base} bg-[var(--secondary)]/[0.1] text-[var(--secondary-foreground)]`;
  case 'pending':
  return `${base} bg-yellow-100 text-yellow-800`;
  case 'expired':
