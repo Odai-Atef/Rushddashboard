@@ -463,31 +463,31 @@ export function PricingPage() {
  </p>
  </div>
 
- {/* Support contact — shown on all pricing views */}
-  <div className="mb-10 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
-  <p className="text-sm text-[var(--secondary-foreground)] mb-3 font-medium text-center">
-  واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
-  </p>
-  <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
-  <a
-  href="tel:+966556534433"
-  className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary-foreground)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
-  >
-  <Phone className="w-4 h-4" />
-  اتصل بنا
-  </a>
-  <a
-  href="https://wa.me/+966556534433"
-  target="_blank"
-  rel="noopener noreferrer"
-  className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
-  >
-  <MessageCircle className="w-4 h-4" />
-  واتساب
-  </a>
-  </div>
-  <p className="text-xs text-[var(--secondary-foreground)] mt-2 text-center" dir="ltr">+966 55 653 4433</p>
-  </div>
+  {/* Support contact — shown on all pricing views */}
+   <div className="mb-10 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
+   <p className="text-sm text-foreground mb-3 font-medium text-center">
+   واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
+   </p>
+   <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
+   <a
+   href="tel:+966556534433"
+   className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-foreground text-sm font-medium transition-colors"
+   >
+   <Phone className="w-4 h-4" />
+   اتصل بنا
+   </a>
+   <a
+   href="https://wa.me/+966556534433"
+   target="_blank"
+   rel="noopener noreferrer"
+   className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
+   >
+   <MessageCircle className="w-4 h-4" />
+   واتساب
+   </a>
+   </div>
+   <p className="text-xs text-foreground mt-2 text-center" dir="ltr">+966 55 653 4433</p>
+   </div>
 
  {activeSubscription && (
  <div className="mb-8 p-[var(--spacing-card-padding)] rounded-xl bg-[var(--primary)]/[0.08] border border-green-200 text-[var(--primary)]/[0.8] flex items-start gap-[var(--spacing-small-gap)]">
