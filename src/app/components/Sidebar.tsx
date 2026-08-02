@@ -389,10 +389,11 @@ export function Sidebar({ activeView, className }: SidebarProps) {
 
               {/* Items */}
               <ul className="flex flex-col" style={{ gap: '6px' }}>
-                {group.items.map((item) => {
+                {group.items.map((item, itemIndex) => {
                   const Icon = item.icon;
                   const isActive = activeView === item.id;
                   const isItemHovered = hoveredItem === item.id;
+                  const isFirstItem = groupIndex === 0 && itemIndex === 0;
 
                   const navContent = (
                     <NavLink
@@ -404,17 +405,20 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                         'group relative flex items-center transition-all duration-200 ease-out',
                         'focus:outline-none focus:ring-2 focus:ring-[var(--sidebar-ring)]/40 focus:ring-offset-0',
                         isCollapsed ? 'justify-center px-0' : 'gap-[14px] px-[18px]',
-                        isCollapsed ? 'w-[52px] h-[52px] mx-auto' : 'w-full'
+                        isCollapsed ? 'w-[52px] h-[52px] mx-auto' : 'w-full',
+                        isActive ? 'active-nav-item' : ''
                       )}
                       style={{
                         height: '52px',
                         borderRadius: '14px',
+                        marginTop: isFirstItem ? '8px' : undefined,
                         ...(isActive
                           ? {
                               background: 'var(--sidebar-primary)',
                               color: 'var(--sidebar-primary-foreground)',
                               fontWeight: 600,
                               boxShadow: 'var(--shadow-md)',
+                              borderRight: '3px solid var(--sidebar-primary-foreground)',
                             }
                           : {
                               color: isItemHovered
@@ -429,6 +433,14 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                             }),
                       }}
                     >
+                      {/* Active indicator dot */}
+                      {isActive && (
+                        <span
+                          className="absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-6 rounded-full"
+                          style={{ background: 'var(--sidebar-primary-foreground)' }}
+                        />
+                      )}
+
                       {/* Icon */}
                       <span
                         className={cn(
