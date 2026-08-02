@@ -63,7 +63,7 @@ export function ThanksPage() {
  <p className="text-muted-foreground mb-6">
  تم إنشاء/تحديث ملف الجهه بنجاح. يمكنك الآن بدء التقييم لتفعيل الجهه من إنشاء المشاريع.
  </p>
- <div className="bg-secondary rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-start gap-[var(--spacing-small-gap)] text-left">
+ <div className="bg-muted rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-start gap-[var(--spacing-small-gap)] text-left">
  <Sparkles className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
  <p className="text-sm text-primary">
  يستغرق التقييم بضع دقائق. تأكد من الإجابة بدقة لتحصل على نتيجة دقيقة وخطة تطوير مخصصة.

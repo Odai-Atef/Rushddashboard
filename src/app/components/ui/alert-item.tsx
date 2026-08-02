@@ -41,7 +41,7 @@ export function AlertItem({
  const alertStyles: Record<AlertType, string> = {
  urgent: 'border-l-4 border-l-[var(--danger)] bg-[var(--danger)]/[0.06] hover:bg-[var(--danger)]/[0.1]',
  warning: 'border-l-4 border-l-[var(--warning)] bg-[var(--warning)]/[0.06]/[0.12] hover:bg-[var(--warning)]/[0.1]',
- info: 'border-l-4 border-l-[var(--secondary)] bg-[var(--secondary)]/[0.06]/[0.12] hover:bg-[var(--secondary)]/[0.1]',
+ info: 'border-l-4 border-l-[var(--secondary)] bg-muted/[0.06]/[0.12] hover:bg-muted/[0.1]',
  success: 'border-l-4 border-l-[var(--primary)] bg-[var(--primary)]/[0.06]/[0.12] hover:bg-[var(--primary)]/[0.1] dark:hover:bg-[var(--primary)]/[0.18]',
  };
 
@@ -56,7 +56,7 @@ export function AlertItem({
  critical: 'bg-[var(--danger)]/10 text-[var(--danger)]',
  high: 'bg-[var(--warning)]/[0.1] text-[var(--warning)]',
  medium: 'bg-[var(--warning)]/10 text-[var(--warning)]',
- low: 'bg-[var(--secondary)]/10 text-[var(--secondary)]',
+ low: 'bg-muted/10 text-[var(--secondary)]',
  };
 
  return (

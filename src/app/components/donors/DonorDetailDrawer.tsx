@@ -29,7 +29,7 @@ interface DonorDetailDrawerProps {
 }
 
 const TYPE_COLORS: Record<string, string> = {
- FOUNDATION: 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]',
+ FOUNDATION: 'bg-muted/[0.1] text-[var(--secondary)]',
  GOVERNMENT: 'bg-[var(--info)]/[0.1] text-[var(--info)]',
  PRIVATE: 'bg-[var(--warning)]/[0.1] text-[var(--warning)]',
  INTERNATIONAL: 'bg-[var(--info)]/[0.1] text-[var(--info)]',

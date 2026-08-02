@@ -18,7 +18,7 @@ const alertVariants = cva(
  danger:
  "bg-[var(--destructive)]/10 border-[var(--destructive)]/20 text-[var(--destructive)]",
  info:
- "bg-[var(--secondary)]/10 border-[var(--secondary)]/20 text-[var(--secondary)]",
+ "bg-muted/10 border-[var(--secondary)]/20 text-[var(--secondary)]",
  },
  },
  defaultVariants: {

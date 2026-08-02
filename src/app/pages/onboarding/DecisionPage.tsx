@@ -113,21 +113,21 @@ export function DecisionPage() {
  <div className="mb-8">
  <h2 className="text-xl font-semibold mb-4 text-center">الخطوات القادمة</h2>
  <div className="space-y-[var(--spacing-small-gap)]">
- <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
  <div>
  <div className="font-medium">إنشاء حساب الجمعية</div>
  <div className="text-sm text-muted-foreground">سجّل الدخول إلى منصة الحاضنة وأكمل ملفك التعريفي</div>
  </div>
  </div>
- <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
  <div>
  <div className="font-medium">الاجتماع التعريفي</div>
  <div className="text-sm text-muted-foreground">سيتواصل معك فريق الحاضنة لتحديد موعد الاجتماع التعريفي</div>
  </div>
  </div>
- <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
+ <div className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
  <div>
  <div className="font-medium">بدء خطة التطوير</div>
@@ -138,7 +138,7 @@ export function DecisionPage() {
  </div>
 
  {/* Contact Info */}
- <div className="bg-secondary border border-border rounded-xl p-[var(--spacing-card-padding)] mb-8">
+ <div className="bg-muted border border-border rounded-xl p-[var(--spacing-card-padding)] mb-8">
  <h3 className="font-semibold mb-3 flex items-center gap-[var(--spacing-small-gap)]">
  <Mail className="w-5 h-5 text-primary" />
  معلومات التواصل
@@ -164,7 +164,7 @@ export function DecisionPage() {
  <button
  onClick={handleDownloadReport}
  disabled={isDownloading}
- className="flex-1 px-6 py-4 border-2 border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
+ className="flex-1 px-6 py-4 border-2 border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isDownloading ? (
  <Loader2 className="w-5 h-5 animate-spin" />

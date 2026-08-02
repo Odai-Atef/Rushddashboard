@@ -245,14 +245,14 @@ export function ProjectListPage() {
  <button
  onClick={() => setPage(pagination.page - 1)}
  disabled={pagination.page <= 1}
- className="p-[var(--spacing-small-gap)] border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+ className="p-[var(--spacing-small-gap)] border border-border rounded-lg hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <ChevronRight className="w-5 h-5" />
  </button>
  <button
  onClick={() => setPage(pagination.page + 1)}
  disabled={pagination.page >= pagination.totalPages}
- className="p-[var(--spacing-small-gap)] border border-border rounded-lg hover:bg-secondary disabled:opacity-50 disabled:cursor-not-allowed"
+ className="p-[var(--spacing-small-gap)] border border-border rounded-lg hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed"
  >
  <ChevronLeft className="w-5 h-5" />
  </button>
@@ -659,7 +659,7 @@ export function ProjectListPage() {
 
  <button
  onClick={() => setShowFilters(!showFilters)}
- className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm sm:text-base shrink-0 ${showFilters ? 'border-ring text-[var(--secondary)] bg-[var(--secondary)]/[0.08]' : 'border-border hover:bg-secondary'}`}
+ className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm sm:text-base shrink-0 ${showFilters ? 'border-ring text-[var(--secondary)] bg-muted/[0.08]' : 'border-border hover:bg-muted'}`}
  >
  <Filter className="w-5 h-5" />
  تصفية

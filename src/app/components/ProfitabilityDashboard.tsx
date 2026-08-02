@@ -103,7 +103,7 @@ export function ProfitabilityDashboard() {
  isPositive: true,
  icon: Target,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]/10'
+ bgColor: 'bg-muted/[0.08]/10'
  },
  {
  title: 'صافي الربح',
@@ -130,7 +130,7 @@ export function ProfitabilityDashboard() {
  isPositive: true,
  icon: MapPin,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]'
+ bgColor: 'bg-muted/[0.08]'
  },
  ];
 

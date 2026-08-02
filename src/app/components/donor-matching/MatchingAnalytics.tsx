@@ -81,8 +81,8 @@ export function MatchingAnalytics() {
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
  {[
  { label: 'معدل نجاح التطابق', value: '62%', change: '+24%', icon: Target, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]' },
- { label: 'إجمالي التطابقات', value: '247', change: '+89', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
- { label: 'فرص مفتوحة الآن', value: '67', change: '+8', icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
+ { label: 'إجمالي التطابقات', value: '247', change: '+89', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
+ { label: 'فرص مفتوحة الآن', value: '67', change: '+8', icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
  { label: 'معدل التحويل', value: '38.4%', change: '+12%', icon: ArrowUpRight, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]' },
  ].map((card, i) => {
  const Icon = card.icon;

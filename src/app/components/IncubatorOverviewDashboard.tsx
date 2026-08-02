@@ -11,20 +11,20 @@ import {
 } from 'recharts';
 
 const kpis = [
- { title: 'الجمعيات المسجلة', value: '247', change: '+18', isPositive: true, icon: Building2, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
+ { title: 'الجمعيات المسجلة', value: '247', change: '+18', isPositive: true, icon: Building2, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
  { title: 'الجمعيات المؤهلة', value: '183', change: '+12', isPositive: true, icon: CheckCircle, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]', border: 'border-[var(--primary)]/[0.2]' },
  { title: 'غير المؤهلة', value: '64', change: '-4', isPositive: false, icon: XCircle, color: 'text-red-500', bg: 'bg-[var(--destructive)]/[0.08]', border: 'border-[var(--destructive)]/[0.2]' },
- { title: 'مشاريع الذكاء الاصطناعي', value: '1,240', change: '+89', isPositive: true, icon: Sparkles, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
- { title: 'المشاريع المحسّنة', value: '896', change: '+67', isPositive: true, icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.1]', border: 'border-[var(--secondary)]/[0.2]' },
+ { title: 'مشاريع الذكاء الاصطناعي', value: '1,240', change: '+89', isPositive: true, icon: Sparkles, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
+ { title: 'المشاريع المحسّنة', value: '896', change: '+67', isPositive: true, icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.1]', border: 'border-[var(--secondary)]/[0.2]' },
  { title: 'المشاريع المعتمدة', value: '412', change: '+34', isPositive: true, icon: ThumbsUp, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.1]', border: 'border-[var(--primary)]/[0.2]' },
  { title: 'جاهزة للتمويل', value: '198', change: '+21', isPositive: true, icon: Wallet, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]', border: 'border-[var(--warning)]/[0.2]' },
- { title: 'مشاريع مُقدَّمة', value: '156', change: '+18', isPositive: true, icon: Send, color: 'text-indigo-600', bg: 'bg-[var(--secondary)]/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
+ { title: 'مشاريع مُقدَّمة', value: '156', change: '+18', isPositive: true, icon: Send, color: 'text-indigo-600', bg: 'bg-muted/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
  { title: 'مشاريع ممولة', value: '89', change: '+11', isPositive: true, icon: Handshake, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]', border: 'border-green-100' },
  { title: 'إجمالي المانحين', value: '3,847', change: '+234', isPositive: true, icon: Users, color: 'text-[var(--destructive)]', bg: 'bg-[var(--destructive)]/[0.1]', border: 'border-[var(--destructive)]/[0.2]' },
  { title: 'فرص التمويل المفتوحة', value: '67', change: '+8', isPositive: true, icon: Target, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.1]', border: 'border-[var(--warning)]/[0.2]' },
  { title: 'الفرص الفائتة', value: '23', change: '+3', isPositive: false, icon: AlertCircle, color: 'text-[var(--destructive)]', bg: 'bg-[var(--destructive)]/[0.1]', border: 'border-[var(--destructive)]/[0.2]' },
  { title: 'إجمالي التمويل المُحقَّق', value: '12.4M ر.س', change: '+18.7%', isPositive: true, icon: DollarSign, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]', border: 'border-[var(--primary)]/[0.2]' },
- { title: 'نسبة تحقيق الهدف', value: '74.3%', change: '+5.2%', isPositive: true, icon: Percent, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.1]', border: 'border-[var(--secondary)]/[0.2]' },
+ { title: 'نسبة تحقيق الهدف', value: '74.3%', change: '+5.2%', isPositive: true, icon: Percent, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.1]', border: 'border-[var(--secondary)]/[0.2]' },
 ];
 
 const trendData = [
@@ -55,7 +55,7 @@ const recentActivity = [
 const alerts = [
  { id: 1, level: 'high', title: 'فرص تمويل تنتهي قريباً', desc: '7 فرص تمويل ستنتهي خلال 48 ساعة', color: 'border-red-300 bg-[var(--destructive)]/[0.08]' },
  { id: 2, level: 'medium', title: 'جمعيات تحتاج متابعة', desc: '23 جمعية لم تستكمل خطة التطوير منذ 30 يومًا', color: 'border-amber-300 bg-[var(--warning)]/[0.08]' },
- { id: 3, level: 'low', title: 'مشاريع معلّقة في الاعتماد', desc: '14 مشروعاً ينتظر الاعتماد أكثر من 7 أيام', color: 'border-[var(--secondary)]/30 bg-[var(--secondary)]/[0.08]' },
+ { id: 3, level: 'low', title: 'مشاريع معلّقة في الاعتماد', desc: '14 مشروعاً ينتظر الاعتماد أكثر من 7 أيام', color: 'border-[var(--secondary)]/30 bg-muted/[0.08]' },
 ];
 
 const insights = [

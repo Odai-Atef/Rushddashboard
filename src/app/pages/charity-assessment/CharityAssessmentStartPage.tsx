@@ -125,7 +125,7 @@ export function CharityAssessmentStartPage() {
  );
  })}
  </div>
- <div className="mt-4 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-lg">
+ <div className="mt-4 p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-lg">
  <p className="text-sm text-muted-foreground">
  <strong>ISIV</strong> = <strong>I</strong>nstitutional Building + <strong>S</strong>ustainability + <strong>I</strong>ntelligence + <strong>V</strong>alue
  </p>

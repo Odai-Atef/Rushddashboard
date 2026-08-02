@@ -62,7 +62,7 @@ export function MarketingDashboard() {
  isPositive: true,
  icon: MousePointerClick,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]/10'
+ bgColor: 'bg-muted/[0.08]/10'
  },
  {
  title: 'تكلفة التسويق',
@@ -89,7 +89,7 @@ export function MarketingDashboard() {
  isPositive: true,
  icon: TrendingUp,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]'
+ bgColor: 'bg-muted/[0.08]'
  },
  ];
 

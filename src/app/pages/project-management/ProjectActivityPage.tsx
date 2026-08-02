@@ -89,7 +89,7 @@ export function ProjectActivityPage() {
  <div className="space-y-[var(--spacing-section-gap)]">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${project.id}`)}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى تفاصيل المشروع
@@ -97,7 +97,7 @@ export function ProjectActivityPage() {
  <h1 className="text-3xl font-bold mb-4">سجل النشاط</h1>
  <div className="bg-card rounded-xl p-8 border border-border">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-8">
- <div className="w-12 h-12 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
+ <div className="w-12 h-12 bg-muted/[0.1] rounded-lg flex items-center justify-center">
  <Activity className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  <div>
@@ -130,7 +130,7 @@ export function ProjectActivityPage() {
  )}
  </div>
 
- <div className="flex-1 bg-secondary rounded-xl p-[var(--spacing-card-padding)] border border-border">
+ <div className="flex-1 bg-muted rounded-xl p-[var(--spacing-card-padding)] border border-border">
  <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-[var(--spacing-small-gap)] mb-3">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span

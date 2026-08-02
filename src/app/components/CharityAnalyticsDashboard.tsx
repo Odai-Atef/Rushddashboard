@@ -67,7 +67,7 @@ function ProgressBar({ value, color = 'bg-[var(--primary)]' }: { value: number; 
 
 function statusColor(status: string) {
  if (status === 'ممتاز') return 'text-[var(--primary)] bg-[var(--primary)]/[0.08]';
- if (status === 'جيد') return 'text-[var(--secondary)] bg-[var(--secondary)]/[0.08]';
+ if (status === 'جيد') return 'text-[var(--secondary)] bg-muted/[0.08]';
  if (status === 'متوسط') return 'text-[var(--warning)] bg-[var(--warning)]/[0.08]';
  return 'text-red-500 bg-[var(--destructive)]/[0.08]';
 }
@@ -105,9 +105,9 @@ export function CharityAnalyticsDashboard() {
  {/* Summary Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
  {[
- { label: 'إجمالي الجمعيات', value: '247', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
+ { label: 'إجمالي الجمعيات', value: '247', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
  { label: 'معدل التأهيل', value: '74.1%', icon: Award, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]' },
- { label: 'متوسط التفاعل', value: '68%', icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
+ { label: 'متوسط التفاعل', value: '68%', icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
  { label: 'متوسط الرضا', value: '4.0/5', icon: Star, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]' },
  ].map((card, i) => {
  const Icon = card.icon;

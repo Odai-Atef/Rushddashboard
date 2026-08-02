@@ -124,7 +124,7 @@ export function OpportunitiesDashboard() {
  const getImpactColor = (impact: string) => {
  switch (impact) {
  case 'high':
- return 'bg-[var(--secondary)]/[0.2] text-[var(--secondary)]';
+ return 'bg-muted/[0.2] text-[var(--secondary)]';
  case 'medium':
  return 'bg-[var(--primary)]/20 text-[var(--secondary)]';
  default:
@@ -162,7 +162,7 @@ export function OpportunitiesDashboard() {
  <div className="flex-1">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <h3 className="text-xl">توصية الفرص</h3>
- <span className="px-2 py-1 bg-[var(--secondary)]/[0.2] text-[var(--secondary)] text-xs rounded-full">AI</span>
+ <span className="px-2 py-1 bg-muted/[0.2] text-[var(--secondary)] text-xs rounded-full">AI</span>
  </div>
  <p className="text-[var(--text-primary)] leading-relaxed mb-[var(--spacing-section-gap)]">
  تم تحديد <span className="font-bold text-[var(--secondary)]">6 فرص نمو استراتيجية</span> بإجمالي إيرادات متوقعة 15.9M ر.س.
@@ -186,7 +186,7 @@ export function OpportunitiesDashboard() {
  >
  {/* Header */}
  <div className="flex items-start gap-[var(--spacing-small-gap)] mb-[var(--spacing-section-gap)]">
- <div className="p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-[var(--radius-card)]">
+ <div className="p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-[var(--radius-card)]">
  <Icon className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  <div className="flex-1">
@@ -239,10 +239,10 @@ export function OpportunitiesDashboard() {
 
  {/* Actions */}
  <div className="flex gap-[var(--spacing-small-gap)] mt-4">
- <button className="flex-1 px-4 py-2 bg-[var(--secondary)] hover:bg-[var(--secondary)]/90 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors text-sm">
+ <button className="flex-1 px-4 py-2 bg-muted hover:bg-muted/90 text-[var(--primary-foreground)] rounded-[var(--radius-button)] transition-colors text-sm">
  دراسة الفرصة
  </button>
- <button className="px-4 py-2 border border-[var(--border)] hover:bg-secondary dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors text-sm text-[var(--text-primary)]">
+ <button className="px-4 py-2 border border-[var(--border)] hover:bg-muted dark:hover:bg-muted rounded-[var(--radius-button)] transition-colors text-sm text-[var(--text-primary)]">
  التفاصيل
  </button>
  </div>

@@ -190,7 +190,7 @@ export function PreloaderPage() {
  <div
  key={item.label}
  className={`flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] rounded-lg ${
- done ? 'bg-[var(--primary)]/[0.08]' : 'bg-secondary'
+ done ? 'bg-[var(--primary)]/[0.08]' : 'bg-muted'
  }`}
  >
  {done ? (

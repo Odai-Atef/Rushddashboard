@@ -194,7 +194,7 @@ export function PaymentCallbackPage() {
  );
  default:
  return (
- <div className="w-20 h-20 rounded-full bg-[var(--secondary)]/[0.08] flex items-center justify-center mb-6">
+ <div className="w-20 h-20 rounded-full bg-muted/[0.08] flex items-center justify-center mb-6">
  <Loader2 className="w-10 h-10 text-[var(--secondary)] animate-spin" />
  </div>
  );
@@ -275,14 +275,14 @@ export function PaymentCallbackPage() {
  )}
 
  {result !== 'success' && result !== 'verifying' && (
- <div className="mt-6 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right">
- <p className="text-sm text-[var(--secondary)]/[0.8] mb-3 font-medium">
+ <div className="mt-6 p-[var(--spacing-card-padding)] bg-muted/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right">
+ <p className="text-sm text-foreground mb-3 font-medium">
  واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
  </p>
  <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
  <a
  href="tel:+966556534433"
- className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-[var(--secondary)]/[0.1] transition-colors"
+ className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-[var(--secondary)] text-sm font-medium hover:bg-muted/[0.1] transition-colors"
  >
  <Phone className="w-4 h-4" />
  اتصل بنا

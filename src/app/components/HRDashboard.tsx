@@ -75,7 +75,7 @@ export function HRDashboard() {
  isPositive: true,
  icon: Calendar,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]/10'
+ bgColor: 'bg-muted/[0.08]/10'
  },
  {
  title: 'متوسط أداء الموظفين',
@@ -102,7 +102,7 @@ export function HRDashboard() {
  isPositive: true,
  icon: GraduationCap,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]'
+ bgColor: 'bg-muted/[0.08]'
  },
  ];
 

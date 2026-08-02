@@ -245,7 +245,7 @@ export function AIProjectInnovationModule() {
  className={`flex items-start gap-4 p-4 rounded-lg border-2 ${
  opp.priority === 'high' ? 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.3]' :
  opp.priority === 'medium' ? 'bg-[var(--warning)]/[0.1] border-[var(--warning)]/[0.3]' :
- 'bg-[var(--secondary)]/[0.08] border-[var(--secondary)]/[0.3]'
+ 'bg-muted/[0.08] border-[var(--secondary)]/[0.3]'
  }`}
  >
  <Icon className={`w-6 h-6 flex-shrink-0 ${
@@ -260,7 +260,7 @@ export function AIProjectInnovationModule() {
  <span className={`text-xs px-2 py-1 rounded-full font-medium ${
  opp.priority === 'high' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' :
  opp.priority === 'medium' ? 'bg-[var(--warning)]/[0.1] text-[var(--warning)]' :
- 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]'
+ 'bg-muted/[0.1] text-[var(--secondary)]'
  }`}>
  {opp.priority === 'high' ? 'عاجل' : opp.priority === 'medium' ? 'مهم' : 'مقترح'}
  </span>
@@ -333,7 +333,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-8">
  <button
  onClick={() => setCurrentView('studio')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى الاستوديو
@@ -373,7 +373,7 @@ export function AIProjectInnovationModule() {
  onClick={() => setWizardData({ ...wizardData, category: cat.id })}
  className={`p-6 rounded-xl border-2 transition-all text-right ${
  wizardData.category === cat.id
- ? 'border-ring bg-[var(--secondary)]/[0.08]'
+ ? 'border-ring bg-muted/[0.08]'
  : 'border-border hover:border-ring/50'
  }`}
  >
@@ -399,12 +399,12 @@ export function AIProjectInnovationModule() {
  className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-ring resize-none"
  placeholder="مثال: الأسر المحتاجة، الأيتام، كبار السن..."
  />
- <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg p-4">
+ <div className="bg-muted/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg p-4">
  <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <Lightbulb className="w-5 h-5 text-[var(--secondary)] mt-0.5" />
  <div>
- <p className="text-sm font-medium text-[var(--secondary)]/[0.9] mb-1">اقتراح الذكاء الاصطناعي</p>
- <p className="text-sm text-[var(--secondary)]/[0.8]">بناءً على تصنيف مشروعك، قد تكون الفئة المستهدفة: "الأسر ذات الدخل المحدود، الأرامل، والأيتام في مدينة الرياض"</p>
+ <p className="text-sm font-medium text-foreground mb-1">اقتراح الذكاء الاصطناعي</p>
+ <p className="text-sm text-foreground">بناءً على تصنيف مشروعك، قد تكون الفئة المستهدفة: "الأسر ذات الدخل المحدود، الأرامل، والأيتام في مدينة الرياض"</p>
  </div>
  </div>
  </div>
@@ -448,7 +448,7 @@ export function AIProjectInnovationModule() {
  onClick={() => setWizardData({ ...wizardData, budgetRange: budget.value })}
  className={`p-6 rounded-xl border-2 transition-all text-right ${
  wizardData.budgetRange === budget.value
- ? 'border-ring bg-[var(--secondary)]/[0.08]'
+ ? 'border-ring bg-muted/[0.08]'
  : 'border-border hover:border-ring/50'
  }`}
  >
@@ -480,7 +480,7 @@ export function AIProjectInnovationModule() {
  onClick={() => setWizardData({ ...wizardData, duration: dur.value })}
  className={`p-6 rounded-xl border-2 transition-all text-center ${
  wizardData.duration === dur.value
- ? 'border-ring bg-[var(--secondary)]/[0.08]'
+ ? 'border-ring bg-muted/[0.08]'
  : 'border-border hover:border-ring/50'
  }`}
  >
@@ -525,7 +525,7 @@ export function AIProjectInnovationModule() {
  رجوع
  </button>
  <div className="flex gap-[var(--spacing-small-gap)]">
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Save className="w-5 h-5" />
  حفظ المسودة
  </button>
@@ -606,7 +606,7 @@ export function AIProjectInnovationModule() {
  <div>
  <button
  onClick={() => setCurrentView('wizard')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى المعالج
@@ -617,7 +617,7 @@ export function AIProjectInnovationModule() {
  <div className="flex gap-[var(--spacing-small-gap)]">
  <button
  onClick={() => setCurrentView('readiness')}
- className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors flex items-center gap-[var(--spacing-small-gap)]"
+ className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors flex items-center gap-[var(--spacing-small-gap)]"
  >
  <BarChart3 className="w-5 h-5" />
  تقييم الجاهزية
@@ -691,7 +691,7 @@ export function AIProjectInnovationModule() {
  </button>
  <button
  onClick={() => setEditingSection(null)}
- className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
+ className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm font-medium"
  >
  إلغاء
  </button>
@@ -709,17 +709,17 @@ export function AIProjectInnovationModule() {
  <div className="bg-card rounded-xl p-6 border border-border">
  <h3 className="font-semibold mb-4">إجراءات إضافية</h3>
  <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-small-gap)]">
- <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="p-4 border border-border rounded-lg hover:bg-muted transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]">
  <Download className="w-5 h-5 text-muted-foreground" />
  <span>تصدير PDF</span>
  </button>
- <button className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="p-4 border border-border rounded-lg hover:bg-muted transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]">
  <Copy className="w-5 h-5 text-muted-foreground" />
  <span>نسخ المحتوى</span>
  </button>
  <button
  onClick={() => setCurrentView('versions')}
- className="p-4 border border-border rounded-lg hover:bg-secondary transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]"
+ className="p-4 border border-border rounded-lg hover:bg-muted transition-colors text-right flex items-center gap-[var(--spacing-small-gap)]"
  >
  <GitBranch className="w-5 h-5 text-muted-foreground" />
  <span>عرض الإصدارات</span>
@@ -737,7 +737,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('studio')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى الاستوديو
@@ -812,7 +812,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('studio')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى الاستوديو
@@ -835,7 +835,7 @@ export function AIProjectInnovationModule() {
  return (
  <div key={idx} className="bg-card rounded-xl p-6 border border-border">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
- <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
+ <div className="w-10 h-10 bg-muted/[0.1] rounded-lg flex items-center justify-center">
  <Icon className="w-5 h-5 text-[var(--secondary)]" />
  </div>
  <h3 className="text-xl font-semibold">{section.title}</h3>
@@ -853,13 +853,13 @@ export function AIProjectInnovationModule() {
  <Download className="w-5 h-5" />
  تصدير PDF
  </button>
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Edit className="w-5 h-5" />
  تعديل
  </button>
  <button
  onClick={() => setCurrentView('review')}
- className="px-6 py-3 border border-ring text-[var(--secondary)] rounded-lg hover:bg-[var(--secondary)]/[0.08] transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
+ className="px-6 py-3 border border-ring text-[var(--secondary)] rounded-lg hover:bg-muted/[0.08] transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Send className="w-5 h-5" />
  إرسال للاعتماد
@@ -877,7 +877,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('workspace')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى مساحة العمل
@@ -941,11 +941,11 @@ export function AIProjectInnovationModule() {
  <X className="w-5 h-5" />
  رفض
  </button>
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <Edit className="w-5 h-5" />
  طلب تعديلات
  </button>
- <button className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
+ <button className="px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]">
  <RefreshCw className="w-5 h-5" />
  إعادة إنشاء
  </button>
@@ -968,7 +968,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('workspace')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى مساحة العمل
@@ -983,7 +983,7 @@ export function AIProjectInnovationModule() {
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <GitBranch className="w-8 h-8" />
  <div>
- <p className="text-[var(--secondary)]/[0.4] text-sm mb-1">الإصدار الحالي</p>
+ <p className="text-foreground text-sm mb-1">الإصدار الحالي</p>
  <p className="text-2xl font-bold">v3.0</p>
  </div>
  </div>
@@ -1066,7 +1066,7 @@ export function AIProjectInnovationModule() {
  <div className="mb-6">
  <button
  onClick={() => setCurrentView('workspace')}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى مساحة العمل
@@ -1156,7 +1156,7 @@ export function AIProjectInnovationModule() {
  </button>
  <button
  onClick={() => setCurrentView('workspace')}
- className="px-8 py-4 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
+ className="px-8 py-4 border border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)]"
  >
  <Edit className="w-5 h-5" />
  متابعة التعديل

@@ -267,7 +267,7 @@ export function ResultsPage() {
  <span className="text-sm">نتائج التقييم</span>
  </div>
  <h1 className="text-2xl sm:text-4xl font-bold mb-2">تهانينا! تم إكمال التقييم</h1>
- <p className="text-[var(--secondary)]/[0.4]">تم تحليل مؤسستك بنجاح. اطّلع على النتائج التفصيلية أدناه</p>
+ <p className="text-foreground">تم تحليل مؤسستك بنجاح. اطّلع على النتائج التفصيلية أدناه</p>
  </div>
  <div className="text-center">
  <div className="w-32 h-32 bg-[var(--card)]/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-2">
@@ -459,7 +459,7 @@ export function ResultsPage() {
  <button
  onClick={handleDownloadReport}
  disabled={isDownloading}
- className="px-6 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isDownloading ? (
  <Loader2 className="w-5 h-5 animate-spin" />

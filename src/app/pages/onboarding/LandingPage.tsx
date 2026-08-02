@@ -41,7 +41,7 @@ export function LandingPage() {
  </div>
 
  <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] shadow-sm border border-border/80/50 transition-all duration-200 hover:shadow-md flex flex-col justify-start h-full">
- <div className="w-14 h-14 bg-[var(--secondary)]/[0.08] rounded-xl flex items-center justify-center mb-5">
+ <div className="w-14 h-14 bg-muted/[0.08] rounded-xl flex items-center justify-center mb-5">
  <Award className="w-8 h-8 text-purple-600" />
  </div>
  <h3 className="text-xl font-semibold text-foreground mb-2">خطة تطوير</h3>
@@ -92,7 +92,7 @@ export function LandingPage() {
  ابدأ التقييم
  <ArrowRight className="w-5 h-5" />
  </button>
- <button className="px-8 py-3 border border-border rounded-lg hover:bg-secondary transition-colors font-medium">
+ <button className="px-8 py-3 border border-border rounded-lg hover:bg-muted transition-colors font-medium">
  اعرف المزيد
  </button>
  </div>

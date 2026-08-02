@@ -177,7 +177,7 @@ export function RoadmapPage() {
  <button
  onClick={handleDownloadPlan}
  disabled={isDownloading}
- className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isDownloading ? (
  <Loader2 className="w-5 h-5 animate-spin" />
@@ -254,7 +254,7 @@ export function RoadmapPage() {
  {recommendations.map((rec: EvaluationRecommendation, idx: number) => (
  <div
  key={idx}
- className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-secondary transition-colors"
+ className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted transition-colors"
  >
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <span className="w-6 h-6 rounded-full text-[var(--primary)]/[0.4] text-primary flex items-center justify-center text-xs font-bold">
@@ -321,7 +321,7 @@ export function RoadmapPage() {
  </div>
  </div>
 
- <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)] mb-4 p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
+ <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)] mb-4 p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <div>
  <div className="text-xs text-muted-foreground mb-1">الجهة المسؤولة</div>
  <div className="font-medium flex items-center gap-[var(--spacing-small-gap)]">

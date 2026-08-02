@@ -91,8 +91,8 @@ export function FundingDonorAnalytics() {
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 items-stretch">
  {[
  { label: 'إجمالي التمويل', value: '12.4M ر.س', icon: DollarSign, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]' },
- { label: 'إجمالي المانحين', value: '3,847', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
- { label: 'تحقيق الهدف', value: '74.3%', icon: Target, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
+ { label: 'إجمالي المانحين', value: '3,847', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
+ { label: 'تحقيق الهدف', value: '74.3%', icon: Target, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
  { label: 'معدل التحويل', value: '74%', icon: TrendingUp, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]' },
  ].map((card, i) => {
  const Icon = card.icon;
@@ -143,7 +143,7 @@ export function FundingDonorAnalytics() {
  <Line type="monotone" dataKey="rate" name="معدل التحويل" stroke="#6366f1" strokeWidth={2.5} dot={{ fill: '#6366f1', r: 3 }} />
  </LineChart>
  </ResponsiveContainer>
- <div className="mt-3 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-[var(--radius-button)] border border-[var(--secondary)]/[0.2]">
+ <div className="mt-3 p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-[var(--radius-button)] border border-[var(--secondary)]/[0.2]">
  <p className="text-xs text-[var(--secondary)]">ارتفع المعدل +13% خلال 6 أشهر</p>
  </div>
  </div>
@@ -230,7 +230,7 @@ export function FundingDonorAnalytics() {
  <div key={i} className="flex items-center justify-between p-[var(--spacing-card-padding)] rounded-[var(--radius-button)] border border-[var(--border)] hover:bg-muted/30 transition-colors">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <span className="text-[var(--primary)]">{donor.amount}</span>
- <span className="text-xs px-2 py-0.5 rounded-full bg-[var(--secondary)]/[0.08] text-[var(--secondary)]">{donor.type}</span>
+ <span className="text-xs px-2 py-0.5 rounded-full bg-muted/[0.08] text-[var(--secondary)]">{donor.type}</span>
  </div>
  <div className="text-right">
  <p className="text-sm text-[var(--text-primary)]">{donor.name}</p>

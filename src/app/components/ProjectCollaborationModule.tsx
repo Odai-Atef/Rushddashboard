@@ -937,7 +937,7 @@ function ChatView({
  {/* Message Input */}
  <div className="p-4 border-t border-border">
  {replyPreview && (
- <div className="mb-2 p-[var(--spacing-small-gap)] bg-secondary border border-border rounded-lg flex items-center justify-between">
+ <div className="mb-2 p-[var(--spacing-small-gap)] bg-muted border border-border rounded-lg flex items-center justify-between">
  <div className="text-sm text-muted-foreground truncate max-w-md">
  <span className="font-medium text-foreground">رد على:</span>{' '}
  {replyPreview}
@@ -1144,7 +1144,7 @@ function MessageBubble({
  </div>
  )}
  {!isOwn && (
- <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center flex-shrink-0">
+ <div className="w-10 h-10 bg-muted/[0.1] rounded-full flex items-center justify-center flex-shrink-0">
  <User className="w-5 h-5 text-primary" />
  </div>
  )}
@@ -1232,7 +1232,7 @@ function MessageBubble({
  </div>
  )}
  {!isOwn && (
- <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center flex-shrink-0">
+ <div className="w-10 h-10 bg-muted/[0.1] rounded-full flex items-center justify-center flex-shrink-0">
  <User className="w-5 h-5 text-primary" />
  </div>
  )}
@@ -1382,7 +1382,7 @@ const DiscussionsView = () => {
 
  const statusBadgeClass = (status: DiscussionStatus) => {
  switch (status) {
- case 'OPEN': return 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]';
+ case 'OPEN': return 'bg-muted/[0.1] text-[var(--secondary)]';
  case 'RESOLVED': return 'bg-[var(--primary)]/[0.1] text-[var(--primary)]';
  case 'CLOSED': return 'bg-muted text-foreground';
  default: return 'bg-muted text-foreground';
@@ -1654,13 +1654,13 @@ const DiscussionsView = () => {
  return (
  <div
  key={reply.id}
- className={`bg-secondary p-4 rounded-lg ${
+ className={`bg-muted p-4 rounded-lg ${
  reply.isAccepted ? 'border-2 border-green-400' : 'border border-border'
  }`}
  >
  <div className="flex items-center justify-between mb-2">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
- <div className="w-6 h-6 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center">
+ <div className="w-6 h-6 bg-muted/[0.1] rounded-full flex items-center justify-center">
  <User className="w-3 h-3 text-primary" />
  </div>
  <span className="text-sm font-medium">{reply.authorUserId}</span>
@@ -1938,7 +1938,7 @@ const DiscussionsView = () => {
  </div>
  {selectedFile && (
  <div className="space-y-[var(--spacing-small-gap)]">
- <div className="flex items-center justify-between bg-secondary p-[var(--spacing-card-padding)] rounded-lg">
+ <div className="flex items-center justify-between bg-muted p-[var(--spacing-card-padding)] rounded-lg">
  <span className="text-sm font-medium">{selectedFile.name}</span>
  <span className="text-sm text-muted-foreground">{formatBytes(selectedFile.size)}</span>
  </div>
@@ -2098,7 +2098,7 @@ const DiscussionsView = () => {
  <p className="text-xs text-muted-foreground mb-1">{file.uploadedByUserId}</p>
  <p className="text-xs text-muted-foreground mb-3">{formatDateTime(file.createdAt)}</p>
  {file.projectStage && (
- <span className="px-3 py-1 bg-[var(--secondary)]/[0.1] text-[var(--secondary)] text-xs rounded-full mb-4">
+ <span className="px-3 py-1 bg-muted/[0.1] text-[var(--secondary)] text-xs rounded-full mb-4">
  {file.projectStage}
  </span>
  )}
@@ -2148,7 +2148,7 @@ const DiscussionsView = () => {
  <td className="p-4 text-sm">{formatDateTime(file.createdAt)}</td>
  <td className="p-4">
  {file.projectStage && (
- <span className="px-3 py-1 bg-[var(--secondary)]/[0.1] text-[var(--secondary)] text-xs rounded-full">
+ <span className="px-3 py-1 bg-muted/[0.1] text-[var(--secondary)] text-xs rounded-full">
  {file.projectStage}
  </span>
  )}
@@ -2217,7 +2217,7 @@ const DiscussionsView = () => {
 
  const getStatusColor = (status: string) => {
  switch (status) {
- case 'open': return 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]';
+ case 'open': return 'bg-muted/[0.1] text-[var(--secondary)]';
  case 'in-progress': return 'bg-[var(--warning)]/[0.1] text-[var(--warning)]';
  case 'resolved': return 'bg-[var(--primary)]/[0.1] text-[var(--primary)]';
  case 'rejected': return 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]';
@@ -2513,7 +2513,7 @@ const DiscussionsView = () => {
  } hover:shadow-[var(--shadow-lg)] transition-shadow`}
  >
  <div className="flex items-start gap-4">
- <div className={`p-[var(--spacing-card-padding)] rounded-full ${!notif.read ? 'bg-primary/10' : 'bg-secondary'}`}>
+ <div className={`p-[var(--spacing-card-padding)] rounded-full ${!notif.read ? 'bg-primary/10' : 'bg-muted'}`}>
  {getNotificationIcon(notif.type)}
  </div>
  <div className="flex-1">
@@ -2711,7 +2711,7 @@ const DiscussionsView = () => {
  <td className="p-4">
  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
  member.rating === 'ممتاز' ? 'bg-[var(--primary)]/[0.1] text-[var(--primary)]' :
- member.rating === 'جيد جداً' ? 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]' :
+ member.rating === 'جيد جداً' ? 'bg-muted/[0.1] text-[var(--secondary)]' :
  'bg-[var(--warning)]/[0.1] text-[var(--warning)]'
  }`}>
  {member.rating}
@@ -2790,13 +2790,13 @@ const DiscussionsView = () => {
  <div className="flex items-center justify-between">
  <div>
  <h2 className="text-[var(--text-section-title)] font-bold mb-2">درجة صحة التعاون الإجمالية</h2>
- <p className="text-[var(--secondary)]/[0.4]">تقييم شامل لجودة التواصل والمشاركة</p>
+ <p className="text-foreground">تقييم شامل لجودة التواصل والمشاركة</p>
  </div>
  <div className="text-center">
  <div className="relative w-32 h-32">
  <svg className="w-full h-full" viewBox="0 0 100 100">
  <circle
- className="text-[var(--secondary)]/[0.3]"
+ className="text-foreground"
  strokeWidth="10"
  stroke="currentColor"
  fill="transparent"
@@ -2953,9 +2953,9 @@ const DiscussionsView = () => {
  { name: 'خالد سعيد', messages: 30, discussions: 8, files: 5, score: 78 },
  { name: 'سارة علي', messages: 38, discussions: 10, files: 7, score: 85 }
  ].map((member, idx) => (
- <div key={idx} className="flex items-center justify-between p-4 bg-secondary rounded-lg">
+ <div key={idx} className="flex items-center justify-between p-4 bg-muted rounded-lg">
  <div className="flex items-center gap-4 flex-1">
- <div className="w-12 h-12 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center">
+ <div className="w-12 h-12 bg-muted/[0.1] rounded-full flex items-center justify-center">
  <User className="w-6 h-6 text-primary" />
  </div>
  <div className="flex-1">
@@ -3171,7 +3171,7 @@ const DiscussionsView = () => {
  {/* Quick Actions */}
  <div className="flex gap-[var(--spacing-small-gap)] mt-3">
  {activity.type === 'message' && (
- <button className="text-xs px-3 py-1 bg-primary/10 text-primary rounded-lg hover:bg-[var(--secondary)]/[0.1]">
+ <button className="text-xs px-3 py-1 bg-primary/10 text-primary rounded-lg hover:bg-muted/[0.1]">
  عرض المحادثة
  </button>
  )}
@@ -3180,13 +3180,13 @@ const DiscussionsView = () => {
  <button className="text-xs px-3 py-1 bg-[var(--primary)]/[0.08] text-[var(--primary)] rounded-lg hover:bg-[var(--primary)]/[0.1]">
  تحميل
  </button>
- <button className="text-xs px-3 py-1 bg-secondary text-muted-foreground rounded-lg hover:bg-muted">
+ <button className="text-xs px-3 py-1 bg-muted text-muted-foreground rounded-lg hover:bg-muted">
  معاينة
  </button>
  </>
  )}
  {activity.type === 'discussion' && (
- <button className="text-xs px-3 py-1 bg-[var(--secondary)]/[0.08] text-[var(--info)] rounded-lg hover:bg-[var(--info)]/20">
+ <button className="text-xs px-3 py-1 bg-muted/[0.08] text-[var(--info)] rounded-lg hover:bg-[var(--info)]/20">
  عرض النقاش
  </button>
  )}

@@ -45,7 +45,7 @@ export function getExtractionStatusMeta(status: string) {
  return {
  label: 'قيد المعالجة',
  icon: Loader2,
- className: 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.3]',
+ className: 'bg-muted/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.3]',
  };
  case 'FAILED':
  return {

@@ -12,7 +12,7 @@ const buttonVariants = cva(
  default:
  "bg-[var(--primary)] text-[var(--primary-foreground)] hover:bg-[var(--primary)]/90 hover:scale-[1.02] shadow-[var(--shadow-[var(--shadow-sm)])] hover:shadow-[var(--shadow-[var(--shadow-md)])]",
  secondary:
- "bg-[var(--secondary)] text-[var(--secondary-foreground)] hover:bg-[var(--secondary)]/90 hover:scale-[1.02] shadow-[var(--shadow-[var(--shadow-sm)])]",
+ "bg-muted text-[var(--secondary-foreground)] hover:bg-muted/90 hover:scale-[1.02] shadow-[var(--shadow-[var(--shadow-sm)])]",
  destructive:
  "bg-[var(--destructive)] text-[var(--destructive-foreground)] hover:bg-[var(--destructive)]/90 hover:scale-[1.02] shadow-[var(--shadow-[var(--shadow-sm)])]",
  outline:

@@ -105,11 +105,11 @@ export function OperationsPerformanceDashboard() {
  {/* KPI Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
  {[
- { label: 'متوسط استجابة الفريق', value: '11.3', unit: ' ساعة', icon: Clock, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
- { label: 'متوسط استجابة الجمعيات', value: '22.7', unit: ' ساعة', icon: Users, color: 'text-indigo-600', bg: 'bg-[var(--secondary)]/[0.08]' },
+ { label: 'متوسط استجابة الفريق', value: '11.3', unit: ' ساعة', icon: Clock, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
+ { label: 'متوسط استجابة الجمعيات', value: '22.7', unit: ' ساعة', icon: Users, color: 'text-indigo-600', bg: 'bg-muted/[0.08]' },
  { label: 'امتثال SLA', value: '91', unit: '%', icon: Shield, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]' },
  { label: 'متوسط دورات المراجعة', value: '2.4', unit: '', icon: RefreshCw, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]' },
- { label: 'درجة صحة التعاون', value: '80', unit: '/100', icon: Activity, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]' },
+ { label: 'درجة صحة التعاون', value: '80', unit: '/100', icon: Activity, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]' },
  ].map((card, i) => {
  const Icon = card.icon;
  return (

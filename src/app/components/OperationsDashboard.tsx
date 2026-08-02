@@ -79,7 +79,7 @@ export function OperationsDashboard() {
  isPositive: true,
  icon: Zap,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]/10'
+ bgColor: 'bg-muted/[0.08]/10'
  },
  {
  title: 'معدل الأخطاء',
@@ -106,7 +106,7 @@ export function OperationsDashboard() {
  isPositive: true,
  icon: Activity,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]'
+ bgColor: 'bg-muted/[0.08]'
  },
  ];
 

@@ -73,7 +73,7 @@ export function CustomersDashboard() {
  isPositive: true,
  icon: Users,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]/10'
+ bgColor: 'bg-muted/[0.08]/10'
  },
  {
  title: 'معدل التسرب',
@@ -100,7 +100,7 @@ export function CustomersDashboard() {
  isPositive: true,
  icon: AlertCircle,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]'
+ bgColor: 'bg-muted/[0.08]'
  },
  ];
 

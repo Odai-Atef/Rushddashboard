@@ -170,7 +170,7 @@ export function SubmissionPreparation({ donorId, onNavigate }: SubmissionPrepara
  <button
  onClick={() => handleGenerate(item.id)}
  disabled={isGenerating && generatedItem === item.id}
- className="flex items-center gap-1 text-xs px-2 py-0.5 bg-[var(--secondary)]/[0.1] text-[var(--secondary)] rounded-full border border-[var(--secondary)]/[0.3] hover:bg-[var(--secondary)]/[0.2] transition-colors disabled:opacity-70"
+ className="flex items-center gap-1 text-xs px-2 py-0.5 bg-muted/[0.1] text-[var(--secondary)] rounded-full border border-[var(--secondary)]/[0.3] hover:bg-muted/[0.2] transition-colors disabled:opacity-70"
  >
  {isGenerating && generatedItem === item.id
  ? <Loader2 className="w-3 h-3 animate-spin" />

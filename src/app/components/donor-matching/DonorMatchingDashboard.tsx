@@ -30,8 +30,8 @@ const trendData = [
 const recommendedActions = [
  { id: 1, priority: 'عاجل', action: 'أكمل وثيقة خطة الاستدامة المطلوبة من صندوق الملك عبدالعزيز', deadline: 'خلال 3 أيام', icon: AlertTriangle, color: 'text-red-500', bg: 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.3]' },
  { id: 2, priority: 'مهم', action: 'راجع معايير أهلية جهه أرامكو وقدّم ملف التسجيل', deadline: 'خلال أسبوع', icon: CheckCircle2, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08] border-[var(--warning)]/[0.3]' },
- { id: 3, priority: 'مقترح', action: 'حسّن درجة تأثير المشروع لرفع نسبة التطابق بنسبة 12%', deadline: 'قبل التقديم', icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08] border-[var(--secondary)]/[0.3]' },
- { id: 4, priority: 'مقترح', action: 'أضف بيانات المستفيدين التفصيلية لتحسين التطابق الجغرافي', deadline: 'هذا الأسبوع', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08] border-[var(--secondary)]/[0.3]' },
+ { id: 3, priority: 'مقترح', action: 'حسّن درجة تأثير المشروع لرفع نسبة التطابق بنسبة 12%', deadline: 'قبل التقديم', icon: TrendingUp, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08] border-[var(--secondary)]/[0.3]' },
+ { id: 4, priority: 'مقترح', action: 'أضف بيانات المستفيدين التفصيلية لتحسين التطابق الجغرافي', deadline: 'هذا الأسبوع', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08] border-[var(--secondary)]/[0.3]' },
 ];
 
 const topMatches = [
@@ -77,10 +77,10 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
  {/* KPI Cards */}
  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 items-stretch">
  {[
- { label: 'جهات مانحة موصى بها', value: '28', sub: '+5 هذا الأسبوع', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
+ { label: 'جهات مانحة موصى بها', value: '28', sub: '+5 هذا الأسبوع', icon: Users, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
  { label: 'فرص تطابق عالي', value: '9', sub: 'نسبة تطابق ≥80%', icon: Star, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]', border: 'border-[var(--warning)]/[0.2]' },
  { label: 'فرص تمويل مفتوحة', value: '67', sub: '7 تنتهي قريباً', icon: Wallet, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]', border: 'border-[var(--primary)]/[0.2]' },
- { label: 'درجة الجاهزية للتمويل', value: '79%', sub: '+4% من الشهر الماضي', icon: Target, color: 'text-[var(--secondary)]', bg: 'bg-[var(--secondary)]/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
+ { label: 'درجة الجاهزية للتمويل', value: '79%', sub: '+4% من الشهر الماضي', icon: Target, color: 'text-[var(--secondary)]', bg: 'bg-muted/[0.08]', border: 'border-[var(--secondary)]/[0.2]' },
  ].map((card, i) => {
  const Icon = card.icon;
  return (
@@ -164,7 +164,7 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
  <Tooltip formatter={v => `${v}%`} />
  </RadarChart>
  </ResponsiveContainer>
- <div className="mt-2 flex items-center justify-between p-3 bg-[var(--secondary)]/[0.08] rounded-lg border border-[var(--secondary)]/[0.2]">
+ <div className="mt-2 flex items-center justify-between p-3 bg-muted/[0.08] rounded-lg border border-[var(--secondary)]/[0.2]">
  <button onClick={() => onNavigate('readiness')} className="text-xs text-indigo-600 flex items-center gap-1">
  تحسين <ChevronRight className="w-3 h-3" />
  </button>
@@ -188,7 +188,7 @@ export function DonorMatchingDashboard({ onNavigate }: DonorMatchingDashboardPro
  <div className="flex-1 text-right">
  <div className="flex items-center justify-end gap-2 mb-1">
  <span className="text-xs text-muted-foreground flex items-center gap-1"><Clock className="w-3 h-3" />{action.deadline}</span>
- <span className={`text-xs px-2 py-0.5 rounded-full ${action.priority === 'عاجل' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : action.priority === 'مهم' ? 'bg-amber-100 text-[var(--warning)]' : 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]'}`}>
+ <span className={`text-xs px-2 py-0.5 rounded-full ${action.priority === 'عاجل' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : action.priority === 'مهم' ? 'bg-amber-100 text-[var(--warning)]' : 'bg-muted/[0.1] text-[var(--secondary)]'}`}>
  {action.priority}
  </span>
  </div>

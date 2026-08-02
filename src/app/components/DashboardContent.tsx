@@ -158,7 +158,7 @@ export function DashboardContent({ activeView }: DashboardContentProps) {
 
  <div className="bg-[var(--card)] rounded-[var(--radius-card)] border border-[var(--border)] p-[var(--spacing-card-padding)] shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-lg)] hover:translate-y-[-2px] transition-all duration-[var(--transition-duration)] flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-5">
- <div className="p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-[var(--secondary)]/[0.08]">
+ <div className="p-[var(--spacing-card-padding)] rounded-[var(--radius-card)] bg-muted/[0.08]">
  <Users className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  <div className="flex items-center gap-[var(--spacing-small-gap)] text-sm font-medium px-2.5 py-1 rounded-[var(--radius-badge)] text-[var(--primary)] bg-[var(--primary)]/[0.12]">

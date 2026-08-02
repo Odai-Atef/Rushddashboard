@@ -119,7 +119,7 @@ export function FundingReadinessAssessment({ onNavigate }: FundingReadinessAsses
  <div className="flex items-start justify-between gap-2 mb-2">
  <div className="flex gap-1.5">
  {req.canGenerate && (
- <button className="flex items-center gap-1 text-xs px-2 py-0.5 bg-[var(--secondary)]/[0.1] text-[var(--secondary)] rounded-full border border-[var(--secondary)]/[0.3]">
+ <button className="flex items-center gap-1 text-xs px-2 py-0.5 bg-muted/[0.1] text-[var(--secondary)] rounded-full border border-[var(--secondary)]/[0.3]">
  <Sparkles className="w-3 h-3" /> توليد بالذكاء الاصطناعي
  </button>
  )}
@@ -221,7 +221,7 @@ export function FundingReadinessAssessment({ onNavigate }: FundingReadinessAsses
  </div>
  <div className="flex items-center gap-2 flex-1 text-right">
  <span className="text-sm text-foreground">{risk.risk}</span>
- <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${risk.level === 'high' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : risk.level === 'medium' ? 'bg-amber-100 text-[var(--warning)]' : 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]'}`}>
+ <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${risk.level === 'high' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : risk.level === 'medium' ? 'bg-amber-100 text-[var(--warning)]' : 'bg-muted/[0.1] text-[var(--secondary)]'}`}>
  {risk.level === 'high' ? 'عالي' : risk.level === 'medium' ? 'متوسط' : 'منخفض'}
  </span>
  </div>

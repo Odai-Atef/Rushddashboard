@@ -465,7 +465,7 @@ export function CharityAssessmentResultsPage() {
  <div className="flex items-start justify-between mb-6">
  <div>
  <h1 className="text-3xl font-bold mb-2">نتائج تقييم الجاهزية</h1>
- <p className="text-[var(--secondary)]/[0.4]">
+ <p className="text-foreground">
  {assessedAt
  ? `تم إكمال التقييم بنجاح • تم التحديث في ${assessedAt.toLocaleDateString('ar-SA', {
  year: 'numeric',
@@ -511,7 +511,7 @@ export function CharityAssessmentResultsPage() {
  {/* Overall Score */}
  <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-grid-gap)]">
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-[var(--spacing-card-padding)]">
- <p className="text-[var(--secondary)]/[0.4] mb-2">درجة الجاهزية الإجمالية</p>
+ <p className="text-foreground mb-2">درجة الجاهزية الإجمالية</p>
  <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <span className="text-5xl font-bold">{overallScore}%</span>
  <span
@@ -523,7 +523,7 @@ export function CharityAssessmentResultsPage() {
  </div>
 
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-[var(--spacing-card-padding)] md:col-span-2">
- <p className="text-[var(--secondary)]/[0.4] mb-2">التقييم العام</p>
+ <p className="text-foreground mb-2">التقييم العام</p>
  <p className="text-2xl font-semibold leading-relaxed">
  {data.comments?.overall?.ar || data.qualificationMessage || 'تم إكمال التقييم بنجاح'}
  </p>
@@ -612,7 +612,7 @@ export function CharityAssessmentResultsPage() {
  className="bg-[var(--card)] border border-border/80/50 rounded-2xl p-[var(--spacing-card-padding)] text-right w-full shadow-sm transition-all duration-200 hover:shadow-md cursor-pointer flex flex-col justify-between h-full"
  >
  <div className="flex items-center justify-between mb-5">
- <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08]">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/[0.08]">
  <Lightbulb className="w-6 h-6 text-purple-600" />
  </div>
  <Sparkles className="w-6 h-6 text-[var(--secondary)]" />

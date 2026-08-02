@@ -17,11 +17,11 @@ interface DonorDetailDrawerProps {
 
 const STATUS_CONFIG: Record<string, { label: string; colorClass: string; bgClass: string }> = {
  MATCHED: { label: 'مطابق', colorClass: 'text-[var(--primary)]', bgClass: 'bg-[var(--primary)]/[0.1] border-[var(--primary)]/[0.2]' },
- SUBMITTED: { label: 'تم الإرسال', colorClass: 'text-[var(--secondary)]', bgClass: 'bg-[var(--secondary)]/[0.1] border-[var(--secondary)]/[0.2]' },
+ SUBMITTED: { label: 'تم الإرسال', colorClass: 'text-[var(--secondary)]', bgClass: 'bg-muted/[0.1] border-[var(--secondary)]/[0.2]' },
  ACCEPTED: { label: 'تم القبول', colorClass: 'text-[var(--primary)]', bgClass: 'bg-[var(--primary)]/[0.1] border-[var(--primary)]/[0.2]' },
  REJECTED: { label: 'تم الاعتذار', colorClass: 'text-[var(--destructive)]', bgClass: 'bg-[var(--destructive)]/[0.1] border-[var(--destructive)]/[0.2]' },
  FUNDED: { label: 'تم التمويل', colorClass: 'text-[var(--warning)]', bgClass: 'bg-[var(--warning)]/[0.1] border-[var(--warning)]/[0.2]' },
- GENERATED: { label: 'تم إنشاء الخطة', colorClass: 'text-[var(--secondary)]', bgClass: 'bg-[var(--secondary)]/[0.1] border-[var(--secondary)]/[0.2]' },
+ GENERATED: { label: 'تم إنشاء الخطة', colorClass: 'text-[var(--secondary)]', bgClass: 'bg-muted/[0.1] border-[var(--secondary)]/[0.2]' },
 };
 
 export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, projectId, isExecution }: DonorDetailDrawerProps) {
@@ -114,14 +114,14 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
  </div>
 
  {/* Score */}
- <div className="mb-6 p-4 bg-[var(--secondary)]/[0.08] rounded-xl border border-[var(--secondary)]/[0.15]">
+ <div className="mb-6 p-4 bg-muted/[0.08] rounded-xl border border-[var(--secondary)]/[0.15]">
  <div className="flex items-center justify-between mb-2">
  <span className="text-sm font-medium text-muted-foreground">درجة التطابق</span>
  <span className="text-lg font-bold text-[var(--secondary)]">{donor.matchingScore}%</span>
  </div>
  <div className="h-2 bg-muted rounded-full overflow-hidden">
  <div
- className="h-full bg-[var(--secondary)] rounded-full transition-all"
+ className="h-full bg-muted rounded-full transition-all"
  style={{ width: `${donor.matchingScore}%` }}
  />
  </div>
@@ -140,7 +140,7 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
  {donor.source === 'online' ? 'عبر الإنترنت' : donor.source === 'offline' ? 'قواعد البيانات' : donor.source || 'غير محدد'}
  </span>
  {donor.source === 'MANUAL' && (
- <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-[var(--secondary)]/[0.1] text-[var(--secondary)] mr-2">
+ <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-muted/[0.1] text-[var(--secondary)] mr-2">
  تمت الإضافة يدوياً
  </span>
  )}
@@ -180,7 +180,7 @@ export function DonorDetailDrawer({ donor, isOpen, onClose, onStatusChange, proj
  <button
  onClick={handleGeneratePlan}
  disabled={generatingId === donor.id}
- className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-[var(--secondary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--secondary)]/90 transition-colors disabled:opacity-50"
+ className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs bg-muted text-[var(--primary-foreground)] rounded-lg hover:bg-muted/90 transition-colors disabled:opacity-50"
  >
  {generatingId === donor.id ? (
  <FileText className="w-3.5 h-3.5 animate-spin" />

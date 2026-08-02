@@ -29,12 +29,12 @@ interface LoadedEvaluation {
 const priorityConfig: Record<string, { bg: string; text: string; label: string }> = {
  high: { bg: 'bg-[var(--destructive)]/[0.1]', text: 'text-[var(--destructive)]', label: 'أولوية عالية' },
  medium: { bg: 'bg-yellow-100', text: 'text-yellow-700', label: 'أولوية متوسطة' },
- low: { bg: 'bg-[var(--secondary)]/[0.1]', text: 'text-[var(--secondary)]', label: 'أولوية منخفضة' },
+ low: { bg: 'bg-muted/[0.1]', text: 'text-[var(--secondary)]', label: 'أولوية منخفضة' },
 };
 
 const statusConfig: Record<string, { bg: string; text: string; label: string; icon: typeof Clock }> = {
  'not-started': { bg: 'bg-muted', text: 'text-foreground', label: 'لم يبدأ', icon: Clock },
- 'in-progress': { bg: 'bg-[var(--secondary)]/[0.1]', text: 'text-[var(--secondary)]', label: 'قيد التنفيذ', icon: Activity },
+ 'in-progress': { bg: 'bg-muted/[0.1]', text: 'text-[var(--secondary)]', label: 'قيد التنفيذ', icon: Activity },
  completed: { bg: 'bg-[var(--primary)]/[0.1]', text: 'text-[var(--primary)]', label: 'مكتملة', icon: CheckCircle2 },
  delayed: { bg: 'bg-[var(--destructive)]/[0.1]', text: 'text-[var(--destructive)]', label: 'متأخرة', icon: AlertTriangle },
 };
@@ -272,7 +272,7 @@ export function CharityAssessmentRoadmapPage() {
  <p className="text-3xl font-bold text-foreground tracking-tight">{initiatives.length}</p>
  </div>
  <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.2]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
- <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08] w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/[0.08] w-fit mb-4">
  <Clock className="w-6 h-6 text-purple-600" />
  </div>
  <p className="text-sm text-muted-foreground mb-1">المدة الإجمالية</p>
@@ -291,7 +291,7 @@ export function CharityAssessmentRoadmapPage() {
  <div className="flex items-center gap-[var(--spacing-grid-gap)]">
  <div
  className={`w-20 h-20 rounded-full flex items-center justify-center border-4 ${
- isQualified ? 'bg-[var(--secondary)]/[0.08] border-[var(--secondary)]/[0.2]' : 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.2]'
+ isQualified ? 'bg-muted/[0.08] border-[var(--secondary)]/[0.2]' : 'bg-[var(--destructive)]/[0.08] border-[var(--destructive)]/[0.2]'
  }`}
  >
  <span
@@ -341,7 +341,7 @@ export function CharityAssessmentRoadmapPage() {
  {organizationalReadiness.strategy && (
  <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
- <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
+ <span className="w-6 h-6 rounded-full bg-muted/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  1
  </span>
  <span className="text-sm font-medium text-muted-foreground">الاستراتيجية</span>
@@ -354,7 +354,7 @@ export function CharityAssessmentRoadmapPage() {
  {organizationalReadiness.governance && (
  <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
- <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
+ <span className="w-6 h-6 rounded-full bg-muted/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  2
  </span>
  <span className="text-sm font-medium text-muted-foreground">الحوكمة</span>
@@ -367,7 +367,7 @@ export function CharityAssessmentRoadmapPage() {
  {organizationalReadiness.operations && (
  <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
- <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
+ <span className="w-6 h-6 rounded-full bg-muted/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  3
  </span>
  <span className="text-sm font-medium text-muted-foreground">العمليات</span>
@@ -380,7 +380,7 @@ export function CharityAssessmentRoadmapPage() {
  {organizationalReadiness.dataAndDigital && (
  <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
- <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
+ <span className="w-6 h-6 rounded-full bg-muted/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  4
  </span>
  <span className="text-sm font-medium text-muted-foreground">البيانات والرقمنة</span>
@@ -393,7 +393,7 @@ export function CharityAssessmentRoadmapPage() {
  {organizationalReadiness.sustainability && (
  <div className="p-[var(--spacing-card-padding)] border border-border rounded-lg hover:bg-muted/50 transition-colors">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
- <span className="w-6 h-6 rounded-full bg-[var(--secondary)]/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
+ <span className="w-6 h-6 rounded-full bg-muted/[0.1] text-[var(--secondary)] flex items-center justify-center text-xs font-bold">
  5
  </span>
  <span className="text-sm font-medium text-muted-foreground">الاستدامة</span>

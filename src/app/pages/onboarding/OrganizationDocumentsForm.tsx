@@ -553,7 +553,7 @@ export function OrganizationDocumentsForm() {
 
  {/* Redirect message from results page */}
  {redirectMessage && (
- <div className="bg-secondary border border-border rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-start gap-[var(--spacing-small-gap)]">
+ <div className="bg-muted border border-border rounded-xl p-[var(--spacing-card-padding)] mb-6 flex items-start gap-[var(--spacing-small-gap)]">
  <Info className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
  <span className="text-primary">{redirectMessage}</span>
  </div>
@@ -720,7 +720,7 @@ export function OrganizationDocumentsForm() {
  ? 'border-2 border-green-200 bg-[var(--primary)]/[0.08]/50'
  : isError
  ? 'border-2 border-red-300 bg-[var(--destructive)]/[0.08]/50'
- : 'border border-border hover:bg-secondary'
+ : 'border border-border hover:bg-muted'
  }`}
  >
  <div className="flex items-center gap-[var(--spacing-small-gap)] min-w-0">
@@ -801,7 +801,7 @@ export function OrganizationDocumentsForm() {
  <button
  onClick={() => handleSelectFile(doc.id)}
  disabled={hasPendingUploads}
- className="px-4 py-2 border border-border rounded-lg hover:bg-secondary transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
+ className="px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors text-sm font-medium flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-50 disabled:cursor-not-allowed"
  >
  {isUploading ? (
  <>

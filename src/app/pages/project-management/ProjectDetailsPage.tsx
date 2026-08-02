@@ -761,7 +761,7 @@ export function ProjectDetailsPage() {
  {getOrganizationName(project)}
  </span>
  {project.packageName ? (
- <span className="inline-flex items-center gap-[var(--spacing-small-gap)] px-2 py-0.5 bg-[var(--secondary)]/[0.08] text-[var(--secondary)] rounded-full text-xs font-medium">
+ <span className="inline-flex items-center gap-[var(--spacing-small-gap)] px-2 py-0.5 bg-muted/[0.08] text-[var(--secondary)] rounded-full text-xs font-medium">
  {project.packageName}
  </span>
  ) : (
@@ -913,7 +913,7 @@ export function ProjectDetailsPage() {
  <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.3]/80 shadow-sm flex flex-col justify-between h-full">
  <div className="flex items-start justify-between mb-3">
  <p className="text-sm text-muted-foreground">نسبة الإنجاز</p>
- <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08]/10">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/[0.08]/10">
  <TrendingUp className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  </div>
@@ -970,7 +970,7 @@ export function ProjectDetailsPage() {
  {(project.fundingAreas || project.fundingAreaIds?.map((id) => ({ id, name: id })) || []).map((area: FundingAreaInfo | { id: string; name: string }) => (
  <span
  key={area.id}
- className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-[var(--secondary)]/[0.1] text-[var(--secondary)]"
+ className="inline-block px-3 py-1 rounded-full text-sm font-medium bg-muted/[0.1] text-[var(--secondary)]"
  >
  {area.nameAr || area.name}
  </span>
@@ -1066,7 +1066,7 @@ export function ProjectDetailsPage() {
  <div key={milestone.id} className="p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <div className="flex items-center justify-between mb-2">
  <span className="font-medium">{milestone.title}</span>
- <span className="text-xs px-2 py-1 bg-[var(--secondary)]/[0.1] text-[var(--secondary)] rounded-full">{milestone.status}</span>
+ <span className="text-xs px-2 py-1 bg-muted/[0.1] text-[var(--secondary)] rounded-full">{milestone.status}</span>
  </div>
  <p className="text-sm text-muted-foreground mb-2">{milestone.description}</p>
  <div className="flex items-center gap-[var(--spacing-small-gap)] text-xs text-muted-foreground">
@@ -1120,7 +1120,7 @@ export function ProjectDetailsPage() {
  <div className="space-y-[var(--spacing-small-gap)]">
  {['مدير المشروع', 'مسؤول مالي', 'ممثل الجمعية'].map((role) => (
  <div className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted rounded-lg">
- <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center">
+ <div className="w-10 h-10 bg-muted/[0.1] rounded-full flex items-center justify-center">
  <User className="w-5 h-5 text-[var(--secondary)]" />
  </div>
  <div className="flex-1">
@@ -1365,7 +1365,7 @@ export function ProjectDetailsPage() {
  <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-muted">
  {designStep === 'view' ? (
  <div className="space-y-[var(--spacing-section-gap)] w-full">
- <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-[var(--spacing-card-padding)]">
+ <div className="bg-muted/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-[var(--spacing-card-padding)]">
  <p className="text-sm text-foreground mb-3">
  الملف التسويقي جاهز الآن يمكنك تحميله ومراجعته بالضغط على تحميل وبعدها يمكنك اعتماده أو طلب تعديل
  </p>
@@ -1490,7 +1490,7 @@ export function ProjectDetailsPage() {
  <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-muted">
  {offerStep === 'view' && (
  <div className="space-y-[var(--spacing-section-gap)] max-w-3xl mx-auto">
- <div className="bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-xl p-[var(--spacing-card-padding)] text-center space-y-[var(--spacing-section-gap)]">
+ <div className="bg-muted/[0.08] border border-[var(--secondary)]/[0.2] rounded-xl p-[var(--spacing-card-padding)] text-center space-y-[var(--spacing-section-gap)]">
  <FileText className="w-16 h-16 text-[var(--secondary)] mx-auto" />
  <div>
  <h3 className="text-lg font-semibold text-foreground mb-1">عرض السعر</h3>
@@ -1653,7 +1653,7 @@ export function ProjectDetailsPage() {
  </div>
 
  <div className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] bg-muted space-y-5">
- <p className="text-sm text-muted-foreground bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-[var(--spacing-card-padding)]">
+ <p className="text-sm text-muted-foreground bg-muted/[0.08] border border-[var(--secondary)]/[0.2] rounded-lg p-[var(--spacing-card-padding)]">
  إذا لم تقم برفع ملف جديد، سيتم إرسال الملف التسويقي المولد تلقائياً إلى الجهة الخيرية. إذا قمت برفع ملف، فسيُرسل بدلاً من الملف الافتراضي. بالاعتماد، سيتم إرسال التصميم إلى العميل.
  </p>
 

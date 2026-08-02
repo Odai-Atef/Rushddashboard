@@ -464,7 +464,7 @@ export function PricingPage() {
  </div>
 
   {/* Support contact — shown on all pricing views */}
-   <div className="mb-10 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
+   <div className="mb-10 p-[var(--spacing-card-padding)] bg-muted/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
    <p className="text-sm text-foreground mb-3 font-medium text-center">
    واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
    </p>
@@ -863,7 +863,7 @@ export function PricingPage() {
  </div>
 
  {/* Terms Checkbox */}
- <div className="mt-6 p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-xl border border-[var(--secondary)]/[0.2]">
+ <div className="mt-6 p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-xl border border-[var(--secondary)]/[0.2]">
  <label className="flex items-start gap-[var(--spacing-small-gap)] cursor-pointer">
  <input
  type="checkbox"

@@ -72,7 +72,7 @@ export function OrganizationInformationPage() {
  العودة لإدارة الجهات
  </Button>
  </div>
- <div className="p-8 bg-secondary border border-border rounded-xl text-center">
+ <div className="p-8 bg-muted border border-border rounded-xl text-center">
  <Building2 className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
  <h2 className="text-lg font-semibold text-foreground mb-1">لا توجد بيانات مستخرجة</h2>
  <p className="text-sm text-muted-foreground mb-4">

@@ -493,8 +493,8 @@ export function DonorDatabaseModule() {
  { donor: 'USAID', update: 'تحديث متطلبات التقديم', time: 'منذ يوم', icon: RefreshCw },
  { donor: 'جهه الملك عبدالله', update: 'تمديد موعد التقديم', time: 'منذ يومين', icon: Calendar }
  ].map((item, idx) => (
- <div key={idx} className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
- <div className="p-[var(--spacing-small-gap)] bg-[var(--secondary)]/[0.1] rounded-lg">
+ <div key={idx} className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted rounded-lg">
+ <div className="p-[var(--spacing-small-gap)] bg-muted/[0.1] rounded-lg">
  <item.icon className="w-4 h-4 text-primary" />
  </div>
  <div className="flex-1">
@@ -587,7 +587,7 @@ export function DonorDatabaseModule() {
 
  const getDonorTypeColor = (type: string) => {
  const colors: Record<string, string> = {
- 'international': 'bg-[var(--secondary)]/[0.1] text-primary/80',
+ 'international': 'bg-muted/[0.1] text-primary/80',
  'local': 'bg-[var(--primary)]/[0.1] text-[var(--primary)]',
  'government': 'bg-purple-100 text-purple-700',
  'private': 'bg-yellow-100 text-yellow-700',
@@ -674,7 +674,7 @@ export function DonorDatabaseModule() {
  <tr key={donor.id} className="border-b border-border hover:bg-[var(--hover)]">
  <td className="p-4">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
- <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
+ <div className="w-10 h-10 bg-muted/[0.1] rounded-lg flex items-center justify-center">
  <Building2 className="w-5 h-5 text-primary" />
  </div>
  <div>
@@ -740,7 +740,7 @@ export function DonorDatabaseModule() {
  {donors.map((donor) => (
  <div key={donor.id} className="bg-card rounded-xl p-6 border border-border hover:shadow-lg transition-shadow">
  <div className="flex items-start justify-between mb-4">
- <div className="w-12 h-12 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
+ <div className="w-12 h-12 bg-muted/[0.1] rounded-lg flex items-center justify-center">
  <Building2 className="w-6 h-6 text-primary" />
  </div>
  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDonorTypeColor(donor.type)}`}>
@@ -891,17 +891,17 @@ export function DonorDatabaseModule() {
  </h3>
  <div className="flex gap-[var(--spacing-small-gap)]">
  {donor.socialMedia.twitter && (
- <a href={`https://twitter.com/${donor.socialMedia.twitter}`} target="_blank" rel="noopener noreferrer" className="p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-lg hover:bg-primary/20">
+ <a href={`https://twitter.com/${donor.socialMedia.twitter}`} target="_blank" rel="noopener noreferrer" className="p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-lg hover:bg-primary/20">
  <Twitter className="w-5 h-5 text-primary" />
  </a>
  )}
  {donor.socialMedia.linkedin && (
- <a href={`https://linkedin.com/company/${donor.socialMedia.linkedin}`} target="_blank" rel="noopener noreferrer" className="p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-lg hover:bg-primary/20">
+ <a href={`https://linkedin.com/company/${donor.socialMedia.linkedin}`} target="_blank" rel="noopener noreferrer" className="p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-lg hover:bg-primary/20">
  <Linkedin className="w-5 h-5 text-primary" />
  </a>
  )}
  {donor.socialMedia.facebook && (
- <a href={`https://facebook.com/${donor.socialMedia.facebook}`} target="_blank" rel="noopener noreferrer" className="p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] rounded-lg hover:bg-primary/20">
+ <a href={`https://facebook.com/${donor.socialMedia.facebook}`} target="_blank" rel="noopener noreferrer" className="p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-lg hover:bg-primary/20">
  <Facebook className="w-5 h-5 text-primary" />
  </a>
  )}
@@ -916,7 +916,7 @@ export function DonorDatabaseModule() {
  </h3>
  <div className="flex flex-wrap gap-[var(--spacing-small-gap)]">
  {donor.fundingAreas.map((area, idx) => (
- <span key={idx} className="px-4 py-2 bg-[var(--secondary)]/[0.1] text-primary/80 rounded-lg font-medium">
+ <span key={idx} className="px-4 py-2 bg-muted/[0.1] text-primary/80 rounded-lg font-medium">
  {area}
  </span>
  ))}
@@ -949,7 +949,7 @@ export function DonorDatabaseModule() {
  <p className="text-sm text-muted-foreground mb-1">الحد الأدنى</p>
  <p className="text-2xl font-bold text-[var(--primary)]">{donor.minFunding.toLocaleString()} ريال</p>
  </div>
- <div className="p-4 bg-[var(--secondary)]/[0.08] rounded-lg">
+ <div className="p-4 bg-muted/[0.08] rounded-lg">
  <p className="text-sm text-muted-foreground mb-1">الحد الأقصى</p>
  <p className="text-2xl font-bold text-primary">{donor.maxFunding.toLocaleString()} ريال</p>
  </div>
@@ -997,7 +997,7 @@ export function DonorDatabaseModule() {
  setSelectedOpportunity(opp.id);
  setCurrentView('opportunity-details');
  }}
- className="w-full text-right p-[var(--spacing-card-padding)] bg-secondary rounded-lg hover:bg-[var(--secondary)]/[0.08] transition-colors"
+ className="w-full text-right p-[var(--spacing-card-padding)] bg-muted rounded-lg hover:bg-muted/[0.08] transition-colors"
  >
  <p className="font-medium text-sm mb-1">{opp.name}</p>
  <div className="flex items-center justify-between">
@@ -1025,7 +1025,7 @@ export function DonorDatabaseModule() {
  { type: 'call', date: '2026-05-28', note: 'مكالمة تنسيقية' },
  { type: 'meeting', date: '2026-05-15', note: 'اجتماع تعريفي' }
  ].map((item, idx) => (
- <div key={idx} className="p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
+ <div key={idx} className="p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1">
  {item.type === 'email' && <Mail className="w-4 h-4 text-primary" />}
  {item.type === 'call' && <Phone className="w-4 h-4 text-[var(--primary)]" />}
@@ -1073,7 +1073,7 @@ export function DonorDatabaseModule() {
  'eligible': 'bg-[var(--primary)]/[0.1] text-[var(--primary)]',
  'partially-eligible': 'bg-yellow-100 text-yellow-700',
  'not-eligible': 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]',
- 'needs-review': 'bg-[var(--secondary)]/[0.1] text-primary/80'
+ 'needs-review': 'bg-muted/[0.1] text-primary/80'
  };
  return colors[status] || 'bg-muted text-foreground';
  };
@@ -1239,7 +1239,7 @@ export function DonorDatabaseModule() {
  </h3>
  <div className="space-y-[var(--spacing-small-gap)]">
  {opportunities.map((opp) => (
- <div key={opp.id} className="flex items-center gap-4 p-4 bg-secondary rounded-lg">
+ <div key={opp.id} className="flex items-center gap-4 p-4 bg-muted rounded-lg">
  <div className="text-center">
  <div className="w-16 h-16 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg flex flex-col items-center justify-center">
  <span className="text-2xl font-bold">{new Date(opp.closingDate).getDate()}</span>
@@ -1354,7 +1354,7 @@ export function DonorDatabaseModule() {
  <div className={`p-6 rounded-xl ${
  opportunity.status === 'closing-soon' ? 'bg-[var(--warning)]/[0.1] border-2 border-[var(--warning)]/[0.3]' :
  opportunity.status === 'open' ? 'bg-[var(--primary)]/[0.08] border-2 border-green-200' :
- 'bg-secondary border-2 border-border'
+ 'bg-muted border-2 border-border'
  }`}>
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
@@ -1372,7 +1372,7 @@ export function DonorDatabaseModule() {
  <span className={`px-4 py-2 rounded-full font-medium ${
  opportunity.eligibilityStatus === 'eligible' ? 'bg-[var(--primary)]/[0.1] text-[var(--primary)]' :
  opportunity.eligibilityStatus === 'partially-eligible' ? 'bg-yellow-100 text-yellow-700' :
- 'bg-[var(--secondary)]/[0.1] text-primary/80'
+ 'bg-muted/[0.1] text-primary/80'
  }`}>
  {opportunity.eligibilityStatus === 'eligible' ? 'مؤهل' :
  opportunity.eligibilityStatus === 'partially-eligible' ? 'مؤهل جزئياً' :
@@ -1404,7 +1404,7 @@ export function DonorDatabaseModule() {
  <p className="text-sm text-muted-foreground mb-1">الحد الأدنى</p>
  <p className="text-2xl font-bold text-[var(--primary)]">{opportunity.minAmount.toLocaleString()} ريال</p>
  </div>
- <div className="p-4 bg-[var(--secondary)]/[0.08] rounded-lg">
+ <div className="p-4 bg-muted/[0.08] rounded-lg">
  <p className="text-sm text-muted-foreground mb-1">الحد الأقصى</p>
  <p className="text-2xl font-bold text-primary">{opportunity.maxAmount.toLocaleString()} ريال</p>
  </div>
@@ -1434,7 +1434,7 @@ export function DonorDatabaseModule() {
  </h3>
  <div className="space-y-[var(--spacing-small-gap)]">
  {opportunity.requiredDocuments.map((doc, idx) => (
- <div key={idx} className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
+ <div key={idx} className="flex items-center gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <CheckCircle2 className="w-5 h-5 text-[var(--primary)]" />
  <span>{doc}</span>
  </div>
@@ -1488,7 +1488,7 @@ export function DonorDatabaseModule() {
  'انتظار الرد (4-6 أسابيع)'
  ].map((step, idx) => (
  <div key={idx} className="flex items-start gap-[var(--spacing-small-gap)]">
- <div className="w-8 h-8 bg-[var(--secondary)]/[0.1] rounded-full flex items-center justify-center flex-shrink-0">
+ <div className="w-8 h-8 bg-muted/[0.1] rounded-full flex items-center justify-center flex-shrink-0">
  <span className="font-bold text-primary">{idx + 1}</span>
  </div>
  <p className="pt-1">{step}</p>
@@ -1504,16 +1504,16 @@ export function DonorDatabaseModule() {
  ملاحظات داخلية
  </h3>
  <div className="space-y-[var(--spacing-small-gap)]">
- <div className="p-4 bg-[var(--secondary)]/[0.08] rounded-lg border border-[var(--secondary)]/[0.3]">
+ <div className="p-4 bg-muted/[0.08] rounded-lg border border-[var(--secondary)]/[0.3]">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-2">
  <Info className="w-5 h-5 text-primary" />
- <span className="font-medium text-[var(--secondary)]/[0.9]">توصية</span>
+ <span className="font-medium text-foreground">توصية</span>
  </div>
- <p className="text-sm text-[var(--secondary)]/[0.8]">
+ <p className="text-sm text-foreground">
  هذه الفرصة مناسبة جداً لبرنامج الأسر المنتجة - يُنصح بالتقديم فوراً
  </p>
  </div>
- <button className="w-full px-4 py-2 border-2 border-dashed border-border rounded-lg hover:border-ring hover:bg-[var(--secondary)]/[0.08] text-muted-foreground hover:text-primary transition-colors">
+ <button className="w-full px-4 py-2 border-2 border-dashed border-border rounded-lg hover:border-ring hover:bg-muted/[0.08] text-muted-foreground hover:text-primary transition-colors">
  + إضافة ملاحظة جديدة
  </button>
  </div>
@@ -1555,7 +1555,7 @@ export function DonorDatabaseModule() {
  className="w-full text-right hover:bg-[var(--hover)] p-[var(--spacing-card-padding)] rounded-lg transition-colors"
  >
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
- <div className="w-10 h-10 bg-[var(--secondary)]/[0.1] rounded-lg flex items-center justify-center">
+ <div className="w-10 h-10 bg-muted/[0.1] rounded-lg flex items-center justify-center">
  <Building2 className="w-5 h-5 text-primary" />
  </div>
  <div className="flex-1">
@@ -1588,7 +1588,7 @@ export function DonorDatabaseModule() {
  { name: 'برنامج الأسر المنتجة', match: 95 },
  { name: 'مشروع التدريب المهني', match: 78 }
  ].map((project, idx) => (
- <div key={idx} className="p-[var(--spacing-card-padding)] bg-secondary rounded-lg">
+ <div key={idx} className="p-[var(--spacing-card-padding)] bg-muted rounded-lg">
  <div className="flex items-center justify-between mb-2">
  <p className="font-medium text-sm">{project.name}</p>
  <span className="text-xs font-semibold text-[var(--primary)]">{project.match}%</span>
@@ -1736,7 +1736,7 @@ export function DonorDatabaseModule() {
  } hover:shadow-lg transition-shadow`}
  >
  <div className="flex items-start gap-4">
- <div className={`p-[var(--spacing-card-padding)] rounded-full ${!alert.read ? 'bg-[var(--secondary)]/[0.08]' : 'bg-secondary'}`}>
+ <div className={`p-[var(--spacing-card-padding)] rounded-full ${!alert.read ? 'bg-muted/[0.08]' : 'bg-muted'}`}>
  {getAlertIcon(alert.type)}
  </div>
  <div className="flex-1">
@@ -1805,19 +1805,19 @@ export function DonorDatabaseModule() {
  إعدادات التنبيهات
  </h3>
  <div className="space-y-[var(--spacing-small-gap)]">
- <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-secondary rounded-lg cursor-pointer">
+ <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-muted rounded-lg cursor-pointer">
  <span>تنبيهات الفرص الجديدة</span>
  <input type="checkbox" defaultChecked className="w-5 h-5" />
  </label>
- <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-secondary rounded-lg cursor-pointer">
+ <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-muted rounded-lg cursor-pointer">
  <span>تنبيهات المواعيد النهائية</span>
  <input type="checkbox" defaultChecked className="w-5 h-5" />
  </label>
- <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-secondary rounded-lg cursor-pointer">
+ <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-muted rounded-lg cursor-pointer">
  <span>تنبيهات تطابق المشاريع</span>
  <input type="checkbox" defaultChecked className="w-5 h-5" />
  </label>
- <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-secondary rounded-lg cursor-pointer">
+ <label className="flex items-center justify-between p-[var(--spacing-card-padding)] bg-muted rounded-lg cursor-pointer">
  <span>تنبيهات البريد الإلكتروني</span>
  <input type="checkbox" className="w-5 h-5" />
  </label>

@@ -148,7 +148,7 @@ export function AIRecommendedDonors({
  <div className="space-y-5">
  {/* Project Info */}
  {(isLoadingProject || project || projectError) && (
- <div className="p-4 rounded-xl bg-secondary border border-border">
+ <div className="p-4 rounded-xl bg-muted border border-border">
  {isLoadingProject && (
  <div className="flex items-center gap-2 text-sm text-muted-foreground">
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -262,7 +262,7 @@ export function AIRecommendedDonors({
  <span
  className={`inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full ${
  donor.source === 'online'
- ? 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]'
+ ? 'bg-muted/[0.1] text-[var(--secondary)]'
  : donor.source === 'MANUAL'
  ? 'bg-sky-100 text-[var(--secondary)]'
  : 'bg-[var(--hover)] text-[var(--text-secondary)]'
@@ -280,7 +280,7 @@ export function AIRecommendedDonors({
  </div>
 
  {/* AI Note */}
- <div className="flex items-start gap-2 mb-3 p-2.5 rounded-lg bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.2]"
+ <div className="flex items-start gap-2 mb-3 p-2.5 rounded-lg bg-muted/[0.08] border border-[var(--secondary)]/[0.2]"
  >
  <Sparkles className="w-3.5 h-3.5 text-[var(--secondary)] mt-0.5 flex-shrink-0" />
  <p className="text-xs text-[var(--secondary)] text-right">{donor.description || 'لا يوجد وصف'}</p>

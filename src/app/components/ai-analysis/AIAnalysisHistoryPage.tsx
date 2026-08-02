@@ -170,11 +170,11 @@ const getCategoryBg = (category: Analysis['category']) => {
  case 'sales': return 'bg-[var(--primary)]/[0.1]';
  case 'customers': return 'bg-[var(--info)]/[0.1]';
  case 'operations': return 'bg-[var(--warning)]/[0.1]';
- case 'marketing': return 'bg-[var(--secondary)]/[0.1]';
+ case 'marketing': return 'bg-muted/[0.1]';
  case 'profitability': return 'bg-[var(--primary)]/[0.1]';
  case 'inventory': return 'bg-[var(--warning)]/[0.1]';
  case 'risks': return 'bg-[var(--destructive)]/[0.1]';
- case 'executive': return 'bg-[var(--secondary)]/[0.1]';
+ case 'executive': return 'bg-muted/[0.1]';
  }
 };
 

@@ -66,7 +66,7 @@ export function InfoPage() {
  'w-1/2 flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-4 text-center font-medium transition-colors',
  isActive
  ? 'bg-primary/10 text-primary border-b-2 border-primary'
- : 'text-muted-foreground hover:bg-secondary hover:text-foreground border-b-2 border-transparent'
+ : 'text-muted-foreground hover:bg-muted hover:text-foreground border-b-2 border-transparent'
  )}
  >
  <Icon className="w-5 h-5" />

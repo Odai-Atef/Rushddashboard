@@ -59,7 +59,7 @@ export function SalesDashboard() {
  isPositive: true,
  icon: DollarSign,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]/10'
+ bgColor: 'bg-muted/[0.08]/10'
  },
  {
  title: 'معدل التحويل',
@@ -86,7 +86,7 @@ export function SalesDashboard() {
  isPositive: false,
  icon: TrendingUp,
  color: 'text-[var(--secondary)]',
- bgColor: 'bg-[var(--secondary)]/[0.08]'
+ bgColor: 'bg-muted/[0.08]'
  },
  ];
 

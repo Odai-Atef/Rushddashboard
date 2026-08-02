@@ -419,7 +419,7 @@ export function ProjectCreatePage() {
         <div className="mb-4 sm:mb-6">
           <button
             onClick={() => navigate('/dashboard/project-management/list')}
-            className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-3 sm:mb-4 text-sm sm:text-base"
+            className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-3 sm:mb-4 text-sm sm:text-base"
           >
             <ChevronRight className="w-4 sm:w-5 h-4 sm:h-5" />
             رجوع إلى قائمة المشاريع
@@ -459,7 +459,7 @@ export function ProjectCreatePage() {
                   <p className="text-[var(--destructive)] text-sm mb-1">{organizationError}</p>
                 )}
                 {isLoadingOrganization ? (
-                  <div className="w-full px-4 py-3 border border-border rounded-lg bg-secondary text-muted-foreground">
+                  <div className="w-full px-4 py-3 border border-border rounded-lg bg-muted text-muted-foreground">
                     جاري تحميل الجهات...
                   </div>
                 ) : (
@@ -499,7 +499,7 @@ export function ProjectCreatePage() {
               <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
               {getFieldError('fundingAreaIds') && <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('fundingAreaIds')}</p>}
               {isLoadingFundingAreas ? (
-                <div className="w-full px-4 py-3 border border-border rounded-lg bg-secondary text-muted-foreground">
+                <div className="w-full px-4 py-3 border border-border rounded-lg bg-muted text-muted-foreground">
                   جاري تحميل مجالات المشاريع...
                 </div>
               ) : fundingAreas.length === 0 ? (

@@ -58,7 +58,7 @@ const defaultDonor = donorData['1'];
 
 function DimensionCard({ dim }: { dim: any }) {
  const Icon = dim.icon;
- const colorMap = { excellent: { bar: 'bg-[var(--primary)]/[0.08]0', badge: 'text-[var(--primary)] bg-emerald-100', text: 'ممتاز' }, good: { bar: 'bg-[var(--primary)]', badge: 'text-[var(--secondary)] bg-[var(--secondary)]/[0.1]', text: 'جيد' }, medium: { bar: 'bg-amber-500', badge: 'text-[var(--warning)] bg-amber-100', text: 'متوسط' }, low: { bar: 'bg-red-400', badge: 'text-[var(--destructive)] bg-[var(--destructive)]/[0.1]', text: 'منخفض' } };
+ const colorMap = { excellent: { bar: 'bg-[var(--primary)]/[0.08]0', badge: 'text-[var(--primary)] bg-emerald-100', text: 'ممتاز' }, good: { bar: 'bg-[var(--primary)]', badge: 'text-[var(--secondary)] bg-muted/[0.1]', text: 'جيد' }, medium: { bar: 'bg-amber-500', badge: 'text-[var(--warning)] bg-amber-100', text: 'متوسط' }, low: { bar: 'bg-red-400', badge: 'text-[var(--destructive)] bg-[var(--destructive)]/[0.1]', text: 'منخفض' } };
  const c = colorMap[dim.status as keyof typeof colorMap] || colorMap.medium;
  return (
  <div className="p-4 rounded-xl border border-border bg-card hover:border-primary/20 transition-colors">
@@ -187,7 +187,7 @@ export function MatchAnalysis({ donorId, onNavigate }: MatchAnalysisProps) {
  </div>
  <div className="space-y-3">
  {donor.aiRecommendations.map((rec: any, i: number) => (
- <div key={i} className={`flex items-start gap-3 p-3 rounded-lg border ${rec.type === 'success' ? 'bg-[var(--primary)]/[0.08] border-[var(--primary)]/[0.3]' : rec.type === 'warning' ? 'bg-[var(--warning)]/[0.08] border-[var(--warning)]/[0.3]' : 'bg-[var(--secondary)]/[0.08] border-[var(--secondary)]/[0.3]'}`}>
+ <div key={i} className={`flex items-start gap-3 p-3 rounded-lg border ${rec.type === 'success' ? 'bg-[var(--primary)]/[0.08] border-[var(--primary)]/[0.3]' : rec.type === 'warning' ? 'bg-[var(--warning)]/[0.08] border-[var(--warning)]/[0.3]' : 'bg-muted/[0.08] border-[var(--secondary)]/[0.3]'}`}>
  {rec.type === 'success' ? <TrendingUp className="w-4 h-4 text-[var(--primary)] flex-shrink-0 mt-0.5" /> : rec.type === 'warning' ? <AlertCircle className="w-4 h-4 text-[var(--warning)] flex-shrink-0 mt-0.5" /> : <Lightbulb className="w-4 h-4 text-[var(--secondary)] flex-shrink-0 mt-0.5" />}
  <p className="text-sm text-foreground text-right flex-1">{rec.text}</p>
  </div>
@@ -202,7 +202,7 @@ export function MatchAnalysis({ donorId, onNavigate }: MatchAnalysisProps) {
  <div className="space-y-2">
  {donor.gaps.map((gap: any, i: number) => (
  <div key={i} className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/30">
- <span className={`text-xs px-2 py-0.5 rounded-full ${gap.severity === 'high' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : gap.severity === 'medium' ? 'bg-amber-100 text-[var(--warning)]' : 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)]'}`}>
+ <span className={`text-xs px-2 py-0.5 rounded-full ${gap.severity === 'high' ? 'bg-[var(--destructive)]/[0.1] text-[var(--destructive)]' : gap.severity === 'medium' ? 'bg-amber-100 text-[var(--warning)]' : 'bg-muted/[0.1] text-[var(--secondary)]'}`}>
  {gap.severity === 'high' ? 'ضروري' : gap.severity === 'medium' ? 'مهم' : 'مقترح'}
  </span>
  <span className="text-sm text-foreground">{gap.label}</span>

@@ -110,7 +110,7 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
  return (
  <div
  key={slot.id}
- className="p-[var(--spacing-card-padding)] flex items-center justify-between hover:bg-secondary transition-colors"
+ className="p-[var(--spacing-card-padding)] flex items-center justify-between hover:bg-muted transition-colors"
  >
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <FileText className={`w-5 h-5 ${isPresent ? 'text-[var(--secondary)]' : 'text-muted-foreground'}`} />
@@ -650,12 +650,12 @@ export function UserActivationPage() {
  <button
  type="button"
  onClick={() => orgId && navigate(`/dashboard/charity-assessment/results/${orgId}`)}
- className="inline-flex items-center justify-center rounded-full bg-[var(--secondary)]/[0.08] px-2.5 py-0.5 text-sm font-medium text-[var(--secondary)] hover:text-[var(--secondary)]/[0.8] hover:bg-[var(--secondary)]/[0.1] transition-colors"
+ className="inline-flex items-center justify-center rounded-full bg-muted/[0.08] px-2.5 py-0.5 text-sm font-medium text-[var(--secondary)] hover:text-foreground hover:bg-muted/[0.1] transition-colors"
  >
  {user.organization!.lastEvaluationScore}%
  </button>
  ) : (
- <span className="inline-flex items-center justify-center rounded-full bg-[var(--secondary)]/[0.08] px-2.5 py-0.5 text-sm font-medium text-[var(--secondary)]">
+ <span className="inline-flex items-center justify-center rounded-full bg-muted/[0.08] px-2.5 py-0.5 text-sm font-medium text-[var(--secondary)]">
  {user.organization!.lastEvaluationScore}%
  </span>
  )
@@ -752,7 +752,7 @@ export function UserActivationPage() {
  {selectedUser && (
  <div className="space-y-[var(--spacing-section-gap)] py-4">
  {/* User Info */}
- <div className="bg-secondary rounded-lg p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)]">
+ <div className="bg-muted rounded-lg p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)]">
  <h3 className="font-semibold text-foreground">معلومات المستخدم</h3>
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-grid-gap)] text-sm">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
@@ -788,7 +788,7 @@ export function UserActivationPage() {
  </div>
 
  {/* Organization Info */}
- <div className="bg-secondary rounded-lg p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)]">
+ <div className="bg-muted rounded-lg p-[var(--spacing-card-padding)] space-y-[var(--spacing-small-gap)]">
  <h3 className="font-semibold text-foreground">معلومات الجهة</h3>
  <div className="grid grid-cols-1 sm:grid-cols-2 gap-[var(--spacing-grid-gap)] text-sm">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
@@ -852,7 +852,7 @@ export function UserActivationPage() {
 
  {/* Inline Confirmation Panels */}
  {actionMode === 'confirm-approve' && selectedUser && (
- <div className="p-[var(--spacing-card-padding)] bg-[var(--secondary)]/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg space-y-[var(--spacing-small-gap)]">
+ <div className="p-[var(--spacing-card-padding)] bg-muted/[0.08] border border-[var(--secondary)]/[0.3] rounded-lg space-y-[var(--spacing-small-gap)]">
  <div className="flex items-start gap-[var(--spacing-small-gap)]">
  <CheckCircle className="w-5 h-5 text-[var(--secondary)] shrink-0 mt-0.5" />
  <div>

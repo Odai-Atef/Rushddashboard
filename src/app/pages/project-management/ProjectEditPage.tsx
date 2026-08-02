@@ -333,7 +333,7 @@ export function ProjectEditPage() {
  <div className="mb-6">
  <button
  onClick={() => navigate(`/dashboard/project-management/details/${projectId}`)}
- className="text-[var(--secondary)] hover:text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
+ className="text-[var(--secondary)] font-medium flex items-center gap-[var(--spacing-small-gap)] mb-4"
  >
  <ChevronRight className="w-5 h-5" />
  رجوع إلى تفاصيل المشروع
@@ -366,7 +366,7 @@ export function ProjectEditPage() {
  <label className="block text-sm font-medium mb-2">مجالات المشاريع *</label>
  {getFieldError('fundingAreaIds') && <p className="text-[var(--destructive)] text-sm mb-1">{getFieldError('fundingAreaIds')}</p>}
  {isLoadingFundingAreas ? (
- <div className="w-full px-4 py-3 border border-border rounded-lg bg-secondary text-muted-foreground">
+ <div className="w-full px-4 py-3 border border-border rounded-lg bg-muted text-muted-foreground">
  جاري تحميل مجالات المشاريع...
  </div>
  ) : fundingAreas.length === 0 ? (

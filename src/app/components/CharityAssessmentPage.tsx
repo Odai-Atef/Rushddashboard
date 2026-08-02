@@ -375,7 +375,7 @@ export function CharityAssessmentPage() {
  );
  })}
  </div>
- <div className="mt-4 p-4 bg-[var(--secondary)]/[0.08] rounded-lg">
+ <div className="mt-4 p-4 bg-muted/[0.08] rounded-lg">
  <p className="text-sm text-muted-foreground">
  <strong>ISIV</strong> = <strong>I</strong>nstitutional Building + <strong>S</strong>ustainability + <strong>I</strong>ntelligence + <strong>V</strong>alue
  </p>
@@ -570,7 +570,7 @@ export function CharityAssessmentPage() {
  <div className="flex items-start justify-between mb-6">
  <div>
  <h1 className="text-3xl font-bold mb-2">نتائج تقييم الجاهزية</h1>
- <p className="text-[var(--secondary)]/[0.4]">تم إكمال التقييم بنجاح • تم التحديث في 11 مايو 2026</p>
+ <p className="text-foreground">تم إكمال التقييم بنجاح • تم التحديث في 11 مايو 2026</p>
  </div>
  <div className="flex gap-[var(--spacing-small-gap)]">
  <button className="flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)]/10 hover:bg-[var(--card)]/20 rounded-lg transition-colors">
@@ -594,7 +594,7 @@ export function CharityAssessmentPage() {
  {/* Overall Score */}
  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
- <p className="text-[var(--secondary)]/[0.4] mb-2">درجة الجاهزية الإجمالية</p>
+ <p className="text-foreground mb-2">درجة الجاهزية الإجمالية</p>
  <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <span className="text-5xl font-bold">{overallScore}%</span>
  <span className={`px-3 py-1 ${readinessLevel.bg}/20 border border-[var(--primary-foreground)]/[0.2] rounded-full text-sm mb-2`}>
@@ -604,21 +604,21 @@ export function CharityAssessmentPage() {
  </div>
 
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
- <p className="text-[var(--secondary)]/[0.4] mb-2">مقارنة بمتوسط القطاع</p>
+ <p className="text-foreground mb-2">مقارنة بمتوسط القطاع</p>
  <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <TrendingUp className="w-6 h-6 mb-1" />
  <span className="text-3xl font-bold">+5%</span>
  </div>
- <p className="text-sm text-[var(--secondary)]/[0.4] mt-2">أعلى من المتوسط</p>
+ <p className="text-sm text-foreground mt-2">أعلى من المتوسط</p>
  </div>
 
  <div className="bg-[var(--card)]/10 backdrop-blur rounded-xl p-6">
- <p className="text-[var(--secondary)]/[0.4] mb-2">التقدم منذ آخر تقييم</p>
+ <p className="text-foreground mb-2">التقدم منذ آخر تقييم</p>
  <div className="flex items-end gap-[var(--spacing-small-gap)]">
  <Activity className="w-6 h-6 mb-1" />
  <span className="text-3xl font-bold">+8%</span>
  </div>
- <p className="text-sm text-[var(--secondary)]/[0.4] mt-2">تحسن ملحوظ</p>
+ <p className="text-sm text-foreground mt-2">تحسن ملحوظ</p>
  </div>
  </div>
  </div>

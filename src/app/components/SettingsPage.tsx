@@ -972,7 +972,7 @@ export function SettingsPage() {
  <div className="border border-border rounded-lg p-4">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-4">
- <div className="w-12 h-12 rounded-lg bg-[var(--secondary)] flex items-center justify-center text-[var(--primary-foreground)] font-bold">
+ <div className="w-12 h-12 rounded-lg bg-muted flex items-center justify-center text-[var(--primary-foreground)] font-bold">
  ST
  </div>
  <div>

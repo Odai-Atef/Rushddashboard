@@ -86,7 +86,7 @@ export function ProjectAnalyticsDashboard() {
  {/* Summary Cards */}
  <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
  {[
- { label: 'إجمالي المشاريع', value: '2,480', icon: GitBranch, color: 'text-indigo-600', bg: 'bg-[var(--secondary)]/[0.08]' },
+ { label: 'إجمالي المشاريع', value: '2,480', icon: GitBranch, color: 'text-indigo-600', bg: 'bg-muted/[0.08]' },
  { label: 'معدل الاعتماد', value: '33.2%', icon: TrendingUp, color: 'text-[var(--primary)]', bg: 'bg-[var(--primary)]/[0.08]' },
  { label: 'متوسط زمن الاعتماد', value: '11 يوم', icon: Clock, color: 'text-[var(--warning)]', bg: 'bg-[var(--warning)]/[0.08]' },
  { label: 'مشاريع متأخرة', value: '41', icon: AlertTriangle, color: 'text-[var(--destructive)]', bg: 'bg-[var(--destructive)]/[0.08]' },

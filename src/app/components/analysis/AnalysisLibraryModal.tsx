@@ -40,7 +40,7 @@ const getComplexityColor = (complexity: string) => {
  case 'بسيط':
  return 'bg-[var(--primary)]/[0.1] text-[var(--primary)] border-[var(--primary)]/[0.2]';
  case 'متوسط':
- return 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
+ return 'bg-muted/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
  case 'متقدم':
  return 'bg-[var(--info)]/[0.1] text-[var(--info)] border-[var(--info)]/[0.2]';
  default:
@@ -75,7 +75,7 @@ function BadgeChip({ label }: { label: string }) {
  colorClass = 'bg-[var(--warning)]/[0.1] text-[var(--warning)] border-[var(--warning)]/[0.2]';
  } else if (label === 'رائج' || label.includes('رائج')) {
  icon = <Flame className="w-3 h-3" />;
- colorClass = 'bg-[var(--secondary)]/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
+ colorClass = 'bg-muted/[0.1] text-[var(--secondary)] border-[var(--secondary)]/[0.2]';
  } else if (label === 'AI' || label.includes('AI')) {
  icon = <Sparkles className="w-3 h-3" />;
  colorClass = 'bg-[var(--info)]/[0.1] text-[var(--info)] border-[var(--info)]/[0.2]';

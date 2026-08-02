@@ -218,7 +218,7 @@ export function RecommendationsDashboard() {
  <div className="flex-1">
  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-3">
  <h3 className="text-xl">الملخص التنفيذي من الذكاء الاصطناعي</h3>
- <span className="px-2 py-1 bg-[var(--secondary)]/[0.2] text-[var(--secondary)] text-xs rounded-full">AI Executive</span>
+ <span className="px-2 py-1 bg-muted/[0.2] text-[var(--secondary)] text-xs rounded-full">AI Executive</span>
  </div>
  <p className="text-[var(--text-primary)] leading-relaxed text-base mb-[var(--spacing-section-gap)]">
  بناءً على التحليل الشامل لجميع المؤشرات، تم تحديد <span className="font-bold text-[var(--secondary)]">6 فرص استراتيجية</span> لتحسين الأداء.

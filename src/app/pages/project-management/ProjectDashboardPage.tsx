@@ -284,7 +284,7 @@ export function ProjectDashboardPage() {
  {/* Active Projects */}
  <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.3]/80 shadow-sm transition-all duration-200 hover:shadow-md dark:hover:shadow-ring/10 flex flex-col justify-between h-full">
  <div>
- <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08]/10 w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/[0.08]/10 w-fit mb-4">
  <Activity className="w-6 h-6 text-[var(--secondary)]" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">المشاريع النشطة</p>
@@ -339,7 +339,7 @@ export function ProjectDashboardPage() {
  {/* Completed */}
  <div className="bg-[var(--card)] rounded-2xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-[var(--secondary)]/[0.2]/80 shadow-sm transition-all duration-200 hover:shadow-md flex flex-col justify-between h-full">
  <div>
- <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-[var(--secondary)]/[0.08] w-fit mb-4">
+ <div className="p-[var(--spacing-small-gap)].5 rounded-xl bg-muted/[0.08] w-fit mb-4">
  <Target className="w-6 h-6 text-purple-600" />
  </div>
  <p className="text-xs sm:text-sm text-muted-foreground mb-1.5">مكتمل</p>
@@ -436,9 +436,9 @@ export function ProjectDashboardPage() {
  recentActivity.map((activity, idx) => (
  <div
  key={idx}
- className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-small-gap)] sm:p-[var(--spacing-card-padding)] hover:bg-secondary rounded-lg transition-colors"
+ className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-small-gap)] sm:p-[var(--spacing-card-padding)] hover:bg-muted rounded-lg transition-colors"
  >
- <div className="w-8 h-8 bg-[var(--secondary)]/[0.1]/20 rounded-full flex items-center justify-center flex-shrink-0">
+ <div className="w-8 h-8 bg-muted/[0.1]/20 rounded-full flex items-center justify-center flex-shrink-0">
  <User className="w-4 h-4 text-[var(--secondary)]" />
  </div>
  <div className="flex-1 min-w-0">
@@ -485,7 +485,7 @@ export function ProjectDashboardPage() {
  <div
  key={notification.id}
  onClick={() => navigate('/dashboard/notifications')}
- className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] hover:bg-secondary dark:hover:bg-muted rounded-xl transition-colors cursor-pointer border-r-4 border-r-amber-500"
+ className="flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] hover:bg-muted dark:hover:bg-muted rounded-xl transition-colors cursor-pointer border-r-4 border-r-amber-500"
  >
  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-amber-100">
  <AlertTriangle className="w-4 h-4 text-[var(--warning)]" />
@@ -528,11 +528,11 @@ export function ProjectDashboardPage() {
  <div
  key={notification.id}
  onClick={() => navigate('/dashboard/notifications')}
- className={`flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] hover:bg-secondary dark:hover:bg-muted rounded-xl transition-colors cursor-pointer ${
+ className={`flex items-start gap-[var(--spacing-small-gap)] p-[var(--spacing-card-padding)] hover:bg-muted dark:hover:bg-muted rounded-xl transition-colors cursor-pointer ${
  isUnread ? 'bg-[var(--warning)]/[0.08]/50 border-r-4 border-r-amber-500' : ''
  }`}
  >
- <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-[var(--secondary)]/[0.1]/20">
+ <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-muted/[0.1]/20">
  <Info className="w-4 h-4 text-[var(--secondary)]" />
  </div>
  <div className="flex-1 min-w-0">

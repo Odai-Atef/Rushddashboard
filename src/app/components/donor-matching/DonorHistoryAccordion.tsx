@@ -74,7 +74,7 @@ export function DonorHistoryAccordion({ matchId }: DonorHistoryAccordionProps) {
  <div className="mt-3 border-t border-border pt-3">
  <button
  onClick={handleToggle}
- className="flex items-center gap-2 text-sm text-muted-foreground hover:text-[var(--secondary)] transition-colors"
+ className="flex items-center gap-2 text-sm text-muted-foreground transition-colors"
  >
  {isLoading ? (
  <Loader2 className="w-4 h-4 animate-spin" />
