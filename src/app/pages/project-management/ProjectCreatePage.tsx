@@ -214,12 +214,14 @@ export function ProjectCreatePage() {
   const showPricingCta =
     effectiveEligibilityReason === 'NO_ACTIVE_SUBSCRIPTION' ||
     effectiveEligibilityReason === 'PROJECT_LIMIT_REACHED';
-  const formDisabled =
+  const inputsDisabled =
     isLoading ||
-    (isEntityManager && isLoadingEligibility) ||
-    (isProjectManager && isLoadingEligibleOrganizations) ||
-    !!organizationError ||
-    !isEligible;
+    (isEntityManager && (isLoadingEligibility || !isEligible)) ||
+    (isProjectManager && isLoadingEligibleOrganizations);
+  const submitDisabled =
+    isLoading ||
+    (isEntityManager && (isLoadingEligibility || !isEligible)) ||
+    (isProjectManager && (!formData.organizationId || organizationOptions.length === 0));
 
   useEffect(() => {
     if (
@@ -408,7 +410,8 @@ export function ProjectCreatePage() {
   }
 
   const eligibilityBannerMessage =
-    (isEntityManager ? eligibilityError : eligibleOrganizationsError) || error || null;
+    (isEntityManager ? eligibilityError : null) || error || null;
+  const projectManagerOrgError = isProjectManager ? eligibleOrganizationsError : null;
 
   return (
     <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
@@ -449,7 +452,12 @@ export function ProjectCreatePage() {
             {isProjectManager && (
               <div>
                 <label className="block text-sm font-medium mb-2">الجهة *</label>
-                {organizationError && <p className="text-[var(--destructive)] text-sm mb-1">{organizationError}</p>}
+                {projectManagerOrgError && (
+                  <p className="text-[var(--destructive)] text-sm mb-1">{projectManagerOrgError}</p>
+                )}
+                {organizationError && (
+                  <p className="text-[var(--destructive)] text-sm mb-1">{organizationError}</p>
+                )}
                 {isLoadingOrganization ? (
                   <div className="w-full px-4 py-3 border border-border rounded-lg bg-secondary text-muted-foreground">
                     جاري تحميل الجهات...
@@ -458,7 +466,7 @@ export function ProjectCreatePage() {
                   <Select
                     value={formData.organizationId}
                     onValueChange={(value) => updateField('organizationId', value)}
-                    disabled={formDisabled || organizationOptions.length === 0}
+                    disabled={inputsDisabled || organizationOptions.length === 0}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder="اختر الجهة" />
@@ -467,9 +475,6 @@ export function ProjectCreatePage() {
                       {organizationOptions.map((org) => (
                         <SelectItem key={org.id} value={org.id}>
                           {org.name}
-                          {org.quota !== undefined
-                            ? ` (متبقي ${org.quota.remaining})`
-                            : ''}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -485,7 +490,7 @@ export function ProjectCreatePage() {
                 type="text"
                 value={formData.name}
                 onChange={(e) => updateField('name', e.target.value)}
-                disabled={formDisabled}
+                disabled={inputsDisabled}
                 placeholder="مثال: برنامج الأسر المنتجة"
               />
             </div>
@@ -516,7 +521,7 @@ export function ProjectCreatePage() {
                   placeholder="اختر مجالات المشاريع"
                   searchPlaceholder="ابحث في مجالات المشاريع..."
                   emptyMessage="لا توجد نتائج مطابقة"
-                  disabled={formDisabled}
+                  disabled={inputsDisabled}
                   error={!!getFieldError('fundingAreaIds')}
                   className="min-h-[46px]"
                 />
@@ -530,7 +535,7 @@ export function ProjectCreatePage() {
                 value={formData.description}
                 onChange={(e) => updateField('description', e.target.value)}
                 rows={4}
-                disabled={formDisabled}
+                disabled={inputsDisabled}
                 placeholder="اكتب وصفاً تفصيلياً للمشروع..."
               />
             </div>
@@ -543,7 +548,7 @@ export function ProjectCreatePage() {
                   type="number"
                   value={formData.budget}
                   onChange={(e) => updateField('budget', e.target.value)}
-                  disabled={formDisabled}
+                  disabled={inputsDisabled}
                   placeholder="250000"
                 />
               </div>
@@ -554,7 +559,7 @@ export function ProjectCreatePage() {
                   type="text"
                   value={formData.beneficiaries}
                   onChange={(e) => updateField('beneficiaries', e.target.value)}
-                  disabled={formDisabled}
+                  disabled={inputsDisabled}
                   placeholder="مثال: الأسر المحتاجة"
                 />
               </div>
@@ -570,7 +575,7 @@ export function ProjectCreatePage() {
                   step="1"
                   value={formData.beneficiariesCount}
                   onChange={(e) => updateField('beneficiariesCount', e.target.value)}
-                  disabled={formDisabled}
+                  disabled={inputsDisabled}
                   placeholder="مثال: 500"
                 />
               </div>
@@ -581,7 +586,7 @@ export function ProjectCreatePage() {
                   type="text"
                   value={formData.geographicScope}
                   onChange={(e) => updateField('geographicScope', e.target.value)}
-                  disabled={formDisabled}
+                  disabled={inputsDisabled}
                   placeholder="مثال: الرياض"
                 />
               </div>
@@ -603,7 +608,7 @@ export function ProjectCreatePage() {
                     type="date"
                     value={formData.startDate}
                     onChange={(e) => updateField('startDate', e.target.value)}
-                    disabled={formDisabled}
+                    disabled={inputsDisabled}
                     className="w-full bg-transparent outline-none text-sm text-foreground cursor-pointer disabled:cursor-not-allowed disabled:text-muted-foreground"
                   />
                 </div>
@@ -618,7 +623,7 @@ export function ProjectCreatePage() {
                     type="date"
                     value={formData.endDate}
                     onChange={(e) => updateField('endDate', e.target.value)}
-                    disabled={formDisabled}
+                    disabled={inputsDisabled}
                     className="w-full bg-transparent outline-none text-sm text-foreground cursor-pointer disabled:cursor-not-allowed disabled:text-muted-foreground"
                   />
                 </div>
@@ -660,7 +665,7 @@ export function ProjectCreatePage() {
               </button>
               <button
                 type="submit"
-                disabled={formDisabled}
+                disabled={submitDisabled}
                 className="px-6 py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 disabled:bg-[var(--primary)]/[0.6] disabled:cursor-not-allowed transition-colors font-medium"
               >
                 {isLoading ? 'جاري الإنشاء...' : 'إنشاء المشروع'}
