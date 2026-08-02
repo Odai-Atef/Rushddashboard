@@ -21,6 +21,7 @@ import {
  Upload,
  MessageSquare,
  CheckCircle,
+ TrendingUp,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
