@@ -2,12 +2,12 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import { Building2, Loader2, RotateCcw, FileText, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
-import apiClient from '@/api/client';
 import {
   onboardingService,
   OrganizationSummaryItem,
   PaginatedOrganizationSummaryList,
 } from '@/api/services/onboarding-service';
+import { AUTH_CONFIG } from '@/api/config';
 import {
   Table,
   TableBody,
@@ -123,35 +123,26 @@ export function ProjectOrganizationsPage() {
     setPage(newPage);
   };
 
-  const openInNewTab = (url: string) => {
-    const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
-    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-      toast.error('تم حظر نافذة التبويب الجديدة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.');
-    }
-  };
-
   const handleViewPdf = async (url: string) => {
     if (!url || viewingPdfUrl) return;
     setViewingPdfUrl(url);
     try {
-      if (/^https?:\/\//i.test(url)) {
-        openInNewTab(url);
-        return;
-      }
+      const token = typeof localStorage !== 'undefined' ? localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) : null;
+      const response = await fetch(url, {
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+      });
+      if (!response.ok) throw new Error('Failed to fetch PDF');
 
-      const response = await apiClient.get<Blob>(url, { responseType: 'blob' });
-      const blob = response.data;
-      if (!blob || blob.size === 0) {
-        openInNewTab(url);
-        return;
+      const blob = await response.blob();
+      const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+      const objectUrl = window.URL.createObjectURL(pdfBlob);
+      const newWindow = window.open(objectUrl, '_blank', 'noopener,noreferrer');
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        toast.error('تم حظر نافذة التبويب الجديدة. يرجى السماح بالنوافذ المنبثقة لهذا الموقع.');
       }
-
-      const typedBlob = new Blob([blob], { type: 'application/pdf' });
-      const objectUrl = window.URL.createObjectURL(typedBlob);
-      openInNewTab(objectUrl);
       setTimeout(() => window.URL.revokeObjectURL(objectUrl), 60000);
     } catch {
-      openInNewTab(url);
+      toast.error('فشل فتح ملف PDF. يرجى المحاولة مرة أخرى.');
     } finally {
       setViewingPdfUrl(null);
     }
@@ -194,6 +185,7 @@ export function ProjectOrganizationsPage() {
                 <Table>
                   <TableHeader>
                     <TableRow>
+                      <TableHead className="text-right w-[60px]">#</TableHead>
                       <TableHead className="text-right">اسم المنظمة</TableHead>
                       <TableHead className="text-right min-w-[200px] w-[220px] whitespace-normal">مجالات التمويل</TableHead>
                       <TableHead className="text-right">باقة الاشتراك</TableHead>
@@ -206,6 +198,7 @@ export function ProjectOrganizationsPage() {
                   <TableBody>
                     {organizations.map((org, index) => (
                       <TableRow key={index}>
+                        <TableCell className="text-muted-foreground">{(page - 1) * perPage + index + 1}</TableCell>
                         <TableCell className="font-medium">{org.organizationName}</TableCell>
                         <TableCell className="whitespace-normal break-words min-w-[200px] w-[220px]">{org.fundingAreas}</TableCell>
                         <TableCell>{org.subscriptionPlan}</TableCell>
