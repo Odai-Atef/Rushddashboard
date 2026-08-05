@@ -566,6 +566,7 @@ export interface EvaluationCooldownStatusResponse {
 export type DocumentType =
   | 'license'
   | 'financial'
+  | 'FINANCIAL_ANNUAL_REPORT'
   | 'national_address'
   | 'registration'
   | 'board_approval_letter'
@@ -573,6 +574,7 @@ export type DocumentType =
   | 'representative_authorization'
   | 'startup_associations_additional'
   | 'projects'
+  | 'ANNUAL_REPORTS'
   | 'other';
 
 /** Lifecycle status of an uploaded organization document */
@@ -599,18 +601,18 @@ export interface OrganizationDocument {
 
 /** Mapping from frontend slot IDs to backend document types */
 export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
- license: 'license',
- bank: 'financial',
- address: 'national_address',
- profile: 'registration',
- board_approval: 'board_approval_letter',
- basic_bylaws: 'basic_bylaws',
- representative_authorization: 'representative_authorization',
- startup_associations_additional: 'startup_associations_additional',
-	projects: 'projects',
-	financial: 'financial',
-	annual: 'other',
-	brand: 'other',
+  license: 'license',
+  bank: 'financial',
+  address: 'national_address',
+  profile: 'registration',
+  board_approval: 'board_approval_letter',
+  basic_bylaws: 'basic_bylaws',
+  representative_authorization: 'representative_authorization',
+  startup_associations_additional: 'startup_associations_additional',
+  projects: 'projects',
+  financial: 'FINANCIAL_ANNUAL_REPORT',
+  annual: 'ANNUAL_REPORTS',
+  brand: 'other',
 };
 
 /** Mapping from backend document type enum values to frontend slot IDs */
