@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'react-router';
 import { Building2, Loader2, RotateCcw, FileText, ExternalLink } from 'lucide-react';
 import { toast } from 'sonner';
+import apiClient from '@/api/client';
 import {
   onboardingService,
   OrganizationSummaryItem,
@@ -78,6 +79,7 @@ export function ProjectOrganizationsPage() {
   const [perPage] = useState(DEFAULT_PER_PAGE);
   const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+  const [viewingPdfUrl, setViewingPdfUrl] = useState<string | null>(null);
 
   const fetchOrganizations = useCallback(async () => {
     setLoading(true);
@@ -121,6 +123,34 @@ export function ProjectOrganizationsPage() {
     setPage(newPage);
   };
 
+  const handleViewPdf = async (url: string) => {
+    if (!url || viewingPdfUrl) return;
+    setViewingPdfUrl(url);
+    try {
+      const response = await apiClient.get<Blob>(url, { responseType: 'blob' });
+      const blob = response.data;
+      if (!blob || blob.size === 0) {
+        window.open(url, '_blank', 'noopener,noreferrer');
+        return;
+      }
+      const objectUrl = window.URL.createObjectURL(blob);
+      const newWindow = window.open(objectUrl, '_blank', 'noopener,noreferrer');
+      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+        const a = document.createElement('a');
+        a.href = objectUrl;
+        a.download = 'profile.pdf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+      setTimeout(() => window.URL.revokeObjectURL(objectUrl), 60000);
+    } catch {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } finally {
+      setViewingPdfUrl(null);
+    }
+  };
+
   const startItem = total > 0 ? (page - 1) * perPage + 1 : 0;
   const endItem = Math.min(page * perPage, total);
   const pageNumbers = getPageNumbers(page, totalPages);
@@ -159,7 +189,7 @@ export function ProjectOrganizationsPage() {
                   <TableHeader>
                     <TableRow>
                       <TableHead className="text-right">اسم المنظمة</TableHead>
-                      <TableHead className="text-right">مجالات التمويل</TableHead>
+                      <TableHead className="text-right min-w-[200px] w-[220px] whitespace-normal">مجالات التمويل</TableHead>
                       <TableHead className="text-right">باقة الاشتراك</TableHead>
                       <TableHead className="text-right">تاريخ التسجيل</TableHead>
                       <TableHead className="text-right">عدد المشاريع</TableHead>
@@ -171,23 +201,27 @@ export function ProjectOrganizationsPage() {
                     {organizations.map((org, index) => (
                       <TableRow key={index}>
                         <TableCell className="font-medium">{org.organizationName}</TableCell>
-                        <TableCell>{org.fundingAreas}</TableCell>
+                        <TableCell className="whitespace-normal break-words min-w-[200px] w-[220px]">{org.fundingAreas}</TableCell>
                         <TableCell>{org.subscriptionPlan}</TableCell>
                         <TableCell>{formatDate(org.registrationDate)}</TableCell>
                         <TableCell>{org.numberOfProjects}</TableCell>
                         <TableCell dir="ltr" className="text-right">{org.mobileNumber}</TableCell>
                         <TableCell>
                           {org.profilePdfUrl ? (
-                            <a
-                              href={org.profilePdfUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-[var(--spacing-small-gap)] text-[var(--primary)] hover:text-[var(--primary)]/80 hover:underline"
+                            <button
+                              type="button"
+                              onClick={() => handleViewPdf(org.profilePdfUrl)}
+                              disabled={viewingPdfUrl === org.profilePdfUrl}
+                              className="inline-flex items-center gap-[var(--spacing-small-gap)] text-[var(--primary)] hover:text-[var(--primary)]/80 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                              <FileText className="w-4 h-4" />
-                              عرض PDF
-                              <ExternalLink className="w-3 h-3" />
-                            </a>
+                              {viewingPdfUrl === org.profilePdfUrl ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <FileText className="w-4 h-4" />
+                              )}
+                              {viewingPdfUrl === org.profilePdfUrl ? 'جاري الفتح...' : 'عرض PDF'}
+                              {viewingPdfUrl !== org.profilePdfUrl && <ExternalLink className="w-3 h-3" />}
+                            </button>
                           ) : (
                             '-'
                           )}
