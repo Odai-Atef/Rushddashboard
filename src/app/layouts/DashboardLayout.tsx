@@ -24,6 +24,7 @@ export function DashboardLayout() {
     '/dashboard/analysis-history': 'analysis-history',
     '/dashboard/project-journey': 'project-journey',
     '/dashboard/project-management': 'project-management',
+    '/dashboard/project-management/organizations': 'project-management-organizations-list',
     '/dashboard/impact-map': 'impact-map',
     '/dashboard/collaboration': 'collaboration',
     '/dashboard/donors': 'donors',

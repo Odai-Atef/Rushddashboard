@@ -123,29 +123,51 @@ export function ProjectOrganizationsPage() {
     setPage(newPage);
   };
 
+  const openDirectFileUrl = (fileUrl: string) => {
+    const newWindow = window.open(fileUrl, '_blank', 'noopener,noreferrer');
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+      const a = document.createElement('a');
+      a.href = fileUrl;
+      a.target = '_blank';
+      a.download = 'profile.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
+
+  const openBlobUrl = (blob: Blob) => {
+    const objectUrl = window.URL.createObjectURL(blob);
+    const newWindow = window.open(objectUrl, '_blank', 'noopener,noreferrer');
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+      const a = document.createElement('a');
+      a.href = objectUrl;
+      a.download = 'profile.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+    setTimeout(() => window.URL.revokeObjectURL(objectUrl), 60000);
+  };
+
   const handleViewPdf = async (url: string) => {
     if (!url || viewingPdfUrl) return;
     setViewingPdfUrl(url);
     try {
+      if (/^https?:\/\//i.test(url)) {
+        openDirectFileUrl(url);
+        return;
+      }
+
       const response = await apiClient.get<Blob>(url, { responseType: 'blob' });
       const blob = response.data;
       if (!blob || blob.size === 0) {
-        window.open(url, '_blank', 'noopener,noreferrer');
+        openDirectFileUrl(url);
         return;
       }
-      const objectUrl = window.URL.createObjectURL(blob);
-      const newWindow = window.open(objectUrl, '_blank', 'noopener,noreferrer');
-      if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-        const a = document.createElement('a');
-        a.href = objectUrl;
-        a.download = 'profile.pdf';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-      }
-      setTimeout(() => window.URL.revokeObjectURL(objectUrl), 60000);
+      openBlobUrl(blob);
     } catch {
-      window.open(url, '_blank', 'noopener,noreferrer');
+      openDirectFileUrl(url);
     } finally {
       setViewingPdfUrl(null);
     }
