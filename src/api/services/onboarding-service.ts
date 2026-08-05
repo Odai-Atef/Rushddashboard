@@ -564,15 +564,16 @@ export interface EvaluationCooldownStatusResponse {
 
 /** Document type enum used by the backend document upload API */
 export type DocumentType =
- | 'license'
- | 'financial'
- | 'national_address'
- | 'registration'
- | 'board_approval_letter'
- | 'basic_bylaws'
- | 'representative_authorization'
- | 'startup_associations_additional'
- | 'other';
+  | 'license'
+  | 'financial'
+  | 'national_address'
+  | 'registration'
+  | 'board_approval_letter'
+  | 'basic_bylaws'
+  | 'representative_authorization'
+  | 'startup_associations_additional'
+  | 'projects'
+  | 'other';
 
 /** Lifecycle status of an uploaded organization document */
 export type DocumentStatus = 'UPLOADED' | 'PENDING_REVIEW' | string;
@@ -606,10 +607,10 @@ export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
  basic_bylaws: 'basic_bylaws',
  representative_authorization: 'representative_authorization',
  startup_associations_additional: 'startup_associations_additional',
- projects: 'other',
- financial: 'financial',
- annual: 'other',
- brand: 'other',
+	projects: 'projects',
+	financial: 'financial',
+	annual: 'other',
+	brand: 'other',
 };
 
 /** Mapping from backend document type enum values to frontend slot IDs */
@@ -635,9 +636,10 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
  representative_authorization: 'representative_authorization',
  STARTUP_ASSOCIATIONS_ADDITIONAL: 'startup_associations_additional',
  startup_associations_additional: 'startup_associations_additional',
- PROJECTS: 'projects',
- PREVIOUS_PROJECTS: 'projects',
- ANNUAL_REPORT: 'annual',
+	PROJECTS: 'projects',
+	PREVIOUS_PROJECTS: 'projects',
+	projects: 'projects',
+	ANNUAL_REPORT: 'annual',
  ANNUAL: 'annual',
  BRAND: 'brand',
  BRAND_IDENTITY: 'brand',
