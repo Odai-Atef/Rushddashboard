@@ -670,13 +670,14 @@ export type DocumentSlotId =
 
 /** Organization summary item returned by the organizations list endpoint */
 export interface OrganizationSummaryItem {
- organizationName: string;
- fundingAreas: string;
- subscriptionPlan: string;
- registrationDate: string;
- numberOfProjects: number;
- mobileNumber: string;
- profilePdfUrl: string;
+  organizationName: string;
+  fundingAreas: string;
+  subscriptionPlan: string;
+  registrationDate: string;
+  numberOfProjects: number;
+  mobileNumber: string;
+  profilePdfUrl: string;
+  previousProjectsPdfUrl: string;
 }
 
 /** Paginated list of organization summaries */

@@ -193,6 +193,7 @@ export function ProjectOrganizationsPage() {
                       <TableHead className="text-right">عدد المشاريع</TableHead>
                       <TableHead className="text-right">رقم الجوال</TableHead>
                       <TableHead className="text-right">ملف التعريف</TableHead>
+                      <TableHead className="text-right">المشاريع السابقة</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -220,6 +221,26 @@ export function ProjectOrganizationsPage() {
                               )}
                               {viewingPdfUrl === org.profilePdfUrl ? 'جاري الفتح...' : 'عرض PDF'}
                               {viewingPdfUrl !== org.profilePdfUrl && <ExternalLink className="w-3 h-3" />}
+                            </button>
+                          ) : (
+                            '-'
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          {org.previousProjectsPdfUrl ? (
+                            <button
+                              type="button"
+                              onClick={() => handleViewPdf(org.previousProjectsPdfUrl)}
+                              disabled={viewingPdfUrl === org.previousProjectsPdfUrl}
+                              className="inline-flex items-center gap-[var(--spacing-small-gap)] text-[var(--primary)] hover:text-[var(--primary)]/80 hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                              {viewingPdfUrl === org.previousProjectsPdfUrl ? (
+                                <Loader2 className="w-4 h-4 animate-spin" />
+                              ) : (
+                                <FileText className="w-4 h-4" />
+                              )}
+                              {viewingPdfUrl === org.previousProjectsPdfUrl ? 'جاري الفتح...' : 'عرض PDF'}
+                              {viewingPdfUrl !== org.previousProjectsPdfUrl && <ExternalLink className="w-3 h-3" />}
                             </button>
                           ) : (
                             '-'
