@@ -83,9 +83,10 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
  { id: 'opportunities', label: 'لوحة الفرص', icon: FileCheck, path: '/dashboard/opportunities' },
  ];
 
- const navItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = roleSlug === 'project-managers'
+  const navItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = roleSlug === 'project-managers'
  ? [
  { id: 'project-management-dashboard', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+ { id: 'project-management-organizations-list', label: 'البيانات المختصرة', icon: Building2, path: '/dashboard/project-management/organizations' },
  { id: 'impact-map', label: 'خارطة الأثر', icon: MapPin, path: '/dashboard/impact-map' },
  ...commonNavItems.filter((item) => item.id !== 'project-management' && item.id !== 'collaboration'),
  ]

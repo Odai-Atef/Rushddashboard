@@ -41,6 +41,7 @@ import { ProjectLifecyclePage } from './pages/project-management/ProjectLifecycl
 import { ProjectVersionsPage } from './pages/project-management/ProjectVersionsPage';
 import { ProjectActivityPage } from './pages/project-management/ProjectActivityPage';
 import { ProjectReportingPage } from './pages/project-management/ProjectReportingPage';
+import { ProjectOrganizationsPage } from './pages/project-management/ProjectOrganizationsPage';
 import { AIProjectInnovationModule } from './components/AIProjectInnovationModule';
 import { ProjectCollaborationModule } from './components/ProjectCollaborationModule';
 import { DonorsPage } from './components/donors/DonorsPage';
@@ -529,6 +530,14 @@ export const router = createBrowserRouter([
  element: (
  <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
  <ProjectReportingPage />
+ </RoleRouteGuard>
+ ),
+ },
+ {
+ path: 'organizations',
+ element: (
+ <RoleRouteGuard menuItems={MENU_ITEMS_FOR_GUARD}>
+ <ProjectOrganizationsPage />
  </RoleRouteGuard>
  ),
  },

@@ -29,6 +29,7 @@ export const MENU_ITEMS_FOR_GUARD: MenuItemDefinition[] = [
  { id: 'project-management-versions', label: 'إصدارات المشروع', path: '/dashboard/project-management/versions' },
  { id: 'project-management-activity', label: 'نشاط المشروع', path: '/dashboard/project-management/activity' },
  { id: 'project-management-reporting', label: 'تقارير المشاريع', path: '/dashboard/project-management/reporting' },
+ { id: 'project-management-organizations-list', label: 'البيانات المختصرة', path: '/dashboard/project-management/organizations' },
  { id: 'impact-map', label: 'خارطة الأثر', path: '/dashboard/impact-map' },
  { id: 'donors', label: 'قاعدة الجهات المانحة', path: '/dashboard/donors' },
  { id: 'organization-donors', label: 'الجهات المانحة', path: '/dashboard/organization-donors' },

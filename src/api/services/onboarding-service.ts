@@ -668,17 +668,52 @@ export type DocumentSlotId =
  | 'annual'
  | 'brand';
 
+/** Organization summary item returned by the organizations list endpoint */
+export interface OrganizationSummaryItem {
+ organizationName: string;
+ fundingAreas: string;
+ subscriptionPlan: string;
+ registrationDate: string;
+ numberOfProjects: number;
+ mobileNumber: string;
+ profilePdfUrl: string;
+}
+
+/** Paginated list of organization summaries */
+export interface PaginatedOrganizationSummaryList {
+ data: OrganizationSummaryItem[];
+ pagination: {
+ total: number;
+ page: number;
+ perPage: number;
+ totalPages: number;
+ };
+}
+
 /**
  * Onboarding Service class
  * Encapsulates all onboarding API operations
  */
 export class OnboardingService {
  /**
- * Get my organization (JWT-based)
- * GET /api/v1/onboarding/organizations/me
- */
+  * Get my organization (JWT-based)
+  * GET /api/v1/onboarding/organizations/me
+  */
  async getMyOrganization(): Promise<ApiResponse<OrganizationResponse>> {
  return apiClient.get('/api/v1/onboarding/organizations/me');
+ }
+
+ /**
+  * Get a paginated list of all organizations
+  * GET /api/v1/onboarding/organizations?page=<page>&perPage=<perPage>
+  */
+ async getOrganizations(
+ page: number = 1,
+ perPage: number = 20
+ ): Promise<ApiResponse<PaginatedOrganizationSummaryList>> {
+ return apiClient.get('/api/v1/onboarding/organizations', {
+ params: { page, perPage },
+ });
  }
 
  /**
