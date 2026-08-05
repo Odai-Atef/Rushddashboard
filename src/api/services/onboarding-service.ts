@@ -567,6 +567,7 @@ export type DocumentType =
   | 'license'
   | 'financial'
   | 'FINANCIAL_ANNUAL_REPORT'
+  | 'financial_annual_report'
   | 'national_address'
   | 'registration'
   | 'board_approval_letter'
@@ -575,6 +576,7 @@ export type DocumentType =
   | 'startup_associations_additional'
   | 'projects'
   | 'ANNUAL_REPORTS'
+  | 'annual_reports'
   | 'other';
 
 /** Lifecycle status of an uploaded organization document */
@@ -610,8 +612,8 @@ export const DOCUMENT_SLOT_MAPPING: Record<string, DocumentType> = {
   representative_authorization: 'representative_authorization',
   startup_associations_additional: 'startup_associations_additional',
   projects: 'projects',
-  financial: 'FINANCIAL_ANNUAL_REPORT',
-  annual: 'ANNUAL_REPORTS',
+  financial: 'financial_annual_report',
+  annual: 'annual_reports',
   brand: 'other',
 };
 
@@ -622,6 +624,7 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
  license: 'license',
   FINANCIAL: 'bank',
   FINANCIAL_ANNUAL_REPORT: 'financial',
+  financial_annual_report: 'financial',
   BANK_CERTIFICATE: 'bank',
   BANK_STATEMENT: 'bank',
  NATIONAL_ADDRESS: 'address',
@@ -642,8 +645,9 @@ export const BACKEND_DOCUMENT_TYPE_TO_SLOT: Record<string, DocumentSlotId> = {
 	PROJECTS: 'projects',
 	PREVIOUS_PROJECTS: 'projects',
 	projects: 'projects',
-  ANNUAL_REPORT: 'annual',
+	ANNUAL_REPORT: 'annual',
   ANNUAL_REPORTS: 'annual',
+  annual_reports: 'annual',
   ANNUAL: 'annual',
   BRAND: 'brand',
  BRAND_IDENTITY: 'brand',
