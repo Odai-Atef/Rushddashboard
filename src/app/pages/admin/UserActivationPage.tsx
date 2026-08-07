@@ -90,10 +90,12 @@ function formatRelativeTime(dateString: string): string {
 }
 
 interface DocumentChecklistProps {
- documents: OrganizationDocument[];
+  documents: OrganizationDocument[];
+  downloadingDocId: string | null;
+  onOpenDocument: (document: OrganizationDocument) => void;
 }
 
-function DocumentChecklist({ documents }: DocumentChecklistProps) {
+function DocumentChecklist({ documents, downloadingDocId, onOpenDocument }: DocumentChecklistProps) {
  const documentsBySlot = useMemo(() => {
  const map = new Map<DocumentSlotId, OrganizationDocument>();
  documents.forEach((doc) => {
@@ -140,7 +142,7 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
   variant="outline"
   size="sm"
   disabled={downloadingDocId === doc?.id}
-  onClick={() => doc && handleOpenDocument(doc)}
+  onClick={() => doc && onOpenDocument(doc)}
   className="flex items-center gap-[var(--spacing-small-gap)].5"
   >
   {downloadingDocId === doc?.id ? (
@@ -846,7 +848,11 @@ export function UserActivationPage() {
  {/* Document Checklist */}
  <div className="space-y-[var(--spacing-small-gap)]">
  <h3 className="font-semibold text-foreground">قائمة المستندات</h3>
- <DocumentChecklist documents={selectedUser.documents || []} />
+  <DocumentChecklist
+  documents={selectedUser.documents || []}
+  downloadingDocId={downloadingDocId}
+  onOpenDocument={handleOpenDocument}
+  />
  </div>
 
  {/* Reject Comment */}
