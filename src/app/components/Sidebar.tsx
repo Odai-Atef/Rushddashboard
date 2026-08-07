@@ -277,7 +277,7 @@ export function Sidebar({ activeView, className }: SidebarProps) {
     const navItems: NavItem[] =
       roleSlug === 'project-managers'
         ? [
-            { id: 'project-management-dashboard', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+            { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
             { id: 'impact-map', label: 'خارطة الأثر', icon: MapPin, path: '/dashboard/impact-map' },
             ...commonNavItems.filter((item) => item.id !== 'project-management' && item.id !== 'collaboration'),
             { id: 'project-management-organizations-list', label: 'البيانات المختصرة', icon: Building2, path: '/dashboard/project-management/organizations' },
@@ -412,35 +412,20 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                       style={{
                         height: '52px',
                         borderRadius: '14px',
-                        marginTop: isFirstItem ? '8px' : undefined,
+                        marginTop: isFirstItem ? '50px' : undefined,
+                        background: isItemHovered && !isActive ? 'var(--sidebar-accent)' : undefined,
                         ...(isActive
                           ? {
-                              background: 'var(--sidebar-primary)',
-                              color: 'var(--sidebar-primary-foreground)',
+                              borderRight: '3px solid var(--secondary)',
+                              color: 'var(--secondary)',
                               fontWeight: 600,
-                              boxShadow: 'var(--shadow-md)',
-                              borderRight: '3px solid var(--sidebar-primary-foreground)',
                             }
                           : {
-                              color: isItemHovered
-                                ? 'var(--sidebar-foreground)'
-                                : 'var(--sidebar-foreground)',
+                              color: 'var(--sidebar-foreground)',
                               fontWeight: 500,
-                              ...(isItemHovered
-                                ? {
-                                    background: 'var(--sidebar-accent)',
-                                  }
-                                : {}),
                             }),
                       }}
                     >
-                      {/* Active indicator dot */}
-                      {isActive && (
-                        <span
-                          className="absolute right-0 top-1/2 -translate-y-1/2 w-[3px] h-6 rounded-full"
-                          style={{ background: 'var(--sidebar-primary-foreground)' }}
-                        />
-                      )}
 
                       {/* Icon */}
                       <span
@@ -456,14 +441,8 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                           )}
                           style={{
                             color: isActive
-                              ? 'var(--sidebar-primary-foreground)'
-                              : isItemHovered
-                                ? 'var(--sidebar-foreground)'
-                                : 'var(--sidebar-foreground)',
-                            filter:
-                              isActive && isDark
-                                ? 'var(--sidebar-glow)'
-                                : undefined,
+                              ? 'var(--secondary)'
+                              : 'var(--sidebar-foreground)',
                           }}
                           aria-hidden="true"
                         />
@@ -477,10 +456,8 @@ export function Sidebar({ activeView, className }: SidebarProps) {
                             fontSize: '16px',
                             fontWeight: isActive ? 600 : 500,
                             color: isActive
-                              ? 'var(--sidebar-primary-foreground)'
-                              : isItemHovered
-                                ? 'var(--sidebar-foreground)'
-                                : 'var(--sidebar-foreground)',
+                              ? 'var(--secondary)'
+                              : 'var(--sidebar-foreground)',
                           }}
                         >
                           {item.label}

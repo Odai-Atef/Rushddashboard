@@ -84,12 +84,12 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
  ];
 
   const navItems: { id: string; label: string; icon: typeof UserPlus; path: string; linkTo?: string }[] = roleSlug === 'project-managers'
- ? [
- { id: 'project-management-dashboard', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
- { id: 'impact-map', label: 'خارطة الأثر', icon: MapPin, path: '/dashboard/impact-map' },
- ...commonNavItems.filter((item) => item.id !== 'project-management' && item.id !== 'collaboration'),
- { id: 'project-management-organizations-list', label: 'البيانات المختصرة', icon: Building2, path: '/dashboard/project-management/organizations' },
- ]
+  ? [
+  { id: 'project-management', label: 'إدارة المشاريع', icon: Briefcase, path: '/dashboard/project-management' },
+  { id: 'impact-map', label: 'خارطة الأثر', icon: MapPin, path: '/dashboard/impact-map' },
+  ...commonNavItems.filter((item) => item.id !== 'project-management' && item.id !== 'collaboration'),
+  { id: 'project-management-organizations-list', label: 'البيانات المختصرة', icon: Building2, path: '/dashboard/project-management/organizations' },
+  ]
  : [
  { id: 'onboarding', label: 'معلوماتي', icon: UserPlus, path: '/dashboard/onboarding/info', linkTo: '/dashboard/onboarding/info?tab=info' },
  { id: 'collaboration', label: 'التعاون والتواصل', icon: MessageSquare, path: '/dashboard/collaboration' },
@@ -169,12 +169,12 @@ export function MobileNav({ isOpen, activeView, onClose }: MobileNavProps) {
  <NavLink
  to={item.linkTo ?? item.path}
  onClick={onClose}
- className={cn(
- "w-full flex items-center gap-[var(--spacing-small-gap)] px-4 py-3.5 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] text-right",
- isActive
- ? "bg-[var(--primary)] text-[var(--primary-foreground)] font-semibold shadow-[var(--shadow-md)]"
- : "text-[var(--foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]"
- )}
+  className={cn(
+  "w-full flex items-center gap-[var(--spacing-small-gap)] px-4 py-3.5 rounded-[var(--radius-button)] transition-all duration-[var(--transition-duration)] text-right",
+  isActive
+  ? "border-r-[3px] border-[var(--secondary)] text-[var(--secondary)] font-semibold bg-transparent"
+  : "text-[var(--foreground)] hover:text-[var(--foreground)] hover:bg-[var(--hover)]"
+  )}
  >
  <span className="flex items-center justify-center w-6 h-6 flex-shrink-0">
  <Icon className="w-5 h-5" />
