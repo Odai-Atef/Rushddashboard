@@ -131,9 +131,10 @@ export function ProjectCollaborationModule() {
  const [showNewConversation, setShowNewConversation] = useState(false);
  const [newConversationTitle, setNewConversationTitle] = useState('');
  const [isCreatingConversation, setIsCreatingConversation] = useState(false);
- const [unreadOverrides, setUnreadOverrides] = useState<Record<string, number>>({});
+  const [unreadOverrides, setUnreadOverrides] = useState<Record<string, number>>({});
+  const [showChatPanel, setShowChatPanel] = useState(false);
 
- const currentUserId = user?.id || null;
+  const currentUserId = user?.id || null;
 
  const {
  conversations,
@@ -229,11 +230,12 @@ export function ProjectCollaborationModule() {
  }
  };
 
- const selectConversation = (id: string) => {
- if (!projectId) return;
- setUnreadOverrides((prev) => ({ ...prev, [id]: 0 }));
- setSearchParams({ conv: id });
- };
+  const selectConversation = (id: string) => {
+  if (!projectId) return;
+  setUnreadOverrides((prev) => ({ ...prev, [id]: 0 }));
+  setSearchParams({ conv: id });
+  setShowChatPanel(true);
+  };
 
  const currentConversation = useMemo(() => {
  return conversations.find((c) => c.id === selectedConversation) || null;
@@ -724,9 +726,9 @@ function ChatView({
  <ChevronRight className="w-5 h-5" />
  رجوع إلى قائمة المشاريع
  </button>
- <div className="h-[calc(100vh-240px)] flex gap-4 overflow-hidden">
- {/* Left Panel - Conversations */}
- <div className="w-80 bg-card rounded-xl border border-border flex flex-col overflow-hidden">
+  <div className="flex flex-col md:flex-row gap-4 overflow-hidden h-[calc(100vh-240px)] md:h-[calc(100vh-220px)] pb-[72px] md:pb-0">
+  {/* Left Panel - Conversations */}
+  <div className={`bg-card rounded-xl border border-border flex flex-col overflow-hidden w-full md:w-80 ${showChatPanel ? 'hidden md:flex' : 'flex'}`}>
  <div className="p-4 border-b border-border">
  <div className="relative mb-3">
  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -840,17 +842,26 @@ function ChatView({
  </div>
  </div>
 
- {/* Center - Messages */}
- <div className="flex-1 bg-card rounded-xl border border-border flex flex-col">
- {/* Chat Header */}
- <div className="p-4 border-b border-border flex items-center justify-between">
- <div>
- <h3 className="font-semibold">{currentConversation?.title || 'المحادثة'}</h3>
- <p className="text-sm text-muted-foreground">
- {currentConversation?.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : 'رسالة مباشرة'}
- </p>
- </div>
- <div className="flex gap-[var(--spacing-small-gap)]">
+  {/* Center - Messages */}
+  <div className={`flex-1 bg-card rounded-xl border border-border flex flex-col overflow-hidden relative ${showChatPanel ? 'flex' : 'hidden md:flex'}`}>
+  {/* Chat Header */}
+  <div className="p-4 border-b border-border flex items-center justify-between gap-2">
+  <div className="flex items-center gap-2 min-w-0">
+  <button
+  onClick={() => setShowChatPanel(false)}
+  className="md:hidden p-2 -mr-2 rounded-lg hover:bg-muted flex-shrink-0"
+  aria-label="رجوع للمحادثات"
+  >
+  <ChevronRight className="w-5 h-5" />
+  </button>
+  <div className="min-w-0">
+  <h3 className="font-semibold truncate">{currentConversation?.title || 'المحادثة'}</h3>
+  <p className="text-sm text-muted-foreground">
+  {currentConversation?.type === 'PROJECT_GROUP' ? 'محادثة المشروع' : 'رسالة مباشرة'}
+  </p>
+  </div>
+  </div>
+  <div className="flex gap-[var(--spacing-small-gap)] flex-shrink-0">
  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
  <Search className="w-5 h-5 text-muted-foreground" />
  </button>
@@ -863,7 +874,7 @@ function ChatView({
  {/* Messages */}
  <div
  ref={scrollContainerRef}
- className="flex-1 overflow-y-auto p-6 space-y-4 scroll-smooth"
+  className="flex-1 overflow-y-auto p-3 md:p-6 space-y-4 scroll-smooth"
  style={{ minHeight: 0 }}
  >
  {messagesError && (
@@ -934,9 +945,9 @@ function ChatView({
  })}
  </div>
 
- {/* Message Input */}
- <div className="p-4 border-t border-border">
- {replyPreview && (
+  {/* Message Input */}
+  <div className="p-4 border-t border-border md:static fixed bottom-0 left-0 right-0 bg-card z-20 md:z-auto md:rounded-b-xl">
+  {replyPreview && (
  <div className="mb-2 p-[var(--spacing-small-gap)] bg-muted border border-border rounded-lg flex items-center justify-between">
  <div className="text-sm text-muted-foreground truncate max-w-md">
  <span className="font-medium text-foreground">رد على:</span>{' '}
@@ -951,34 +962,41 @@ function ChatView({
  </button>
  </div>
  )}
- <div className="flex gap-[var(--spacing-small-gap)]">
- <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
- <Paperclip className="w-5 h-5 text-muted-foreground" />
- </button>
- <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
- <ImageIcon className="w-5 h-5 text-muted-foreground" />
- </button>
- <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg">
- <Mic className="w-5 h-5 text-muted-foreground" />
- </button>
- <input
- type="text"
- value={messageInput}
- onChange={(e) => setMessageInput(e.target.value)}
- onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); } }}
- placeholder="اكتب رسالتك..."
- className="flex-1 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
- />
- <button
- onClick={handleSend}
- disabled={isSending || !messageInput.trim()}
- className="px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center gap-[var(--spacing-small-gap)] disabled:opacity-60"
- >
- {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
- إرسال
- </button>
- </div>
- </div>
+  <div className="flex gap-[var(--spacing-small-gap)] items-end">
+  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg flex-shrink-0"
+  aria-label="إرفاق ملف"
+  >
+  <Paperclip className="w-5 h-5 text-muted-foreground" />
+  </button>
+  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg flex-shrink-0"
+  aria-label="إرفاق صورة"
+  >
+  <ImageIcon className="w-5 h-5 text-muted-foreground" />
+  </button>
+  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg flex-shrink-0 hidden sm:block"
+  aria-label="تسجيل صوتي"
+  >
+  <Mic className="w-5 h-5 text-muted-foreground" />
+  </button>
+  <input
+  type="text"
+  value={messageInput}
+  onChange={(e) => setMessageInput(e.target.value)}
+  onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleSend(); } }}
+  placeholder="اكتب رسالتك..."
+  className="flex-1 min-w-0 px-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
+  />
+  <button
+  onClick={handleSend}
+  disabled={isSending || !messageInput.trim()}
+  className="px-4 md:px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-60 flex-shrink-0 min-w-[44px]"
+  aria-label="إرسال"
+  >
+  {isSending ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+  <span className="hidden md:inline">إرسال</span>
+  </button>
+  </div>
+  </div>
 
  {/* Delete Confirmation */}
  {deleteTargetId && (
@@ -1111,18 +1129,18 @@ function MessageBubble({
  if (editingMessageId === msg.id) {
  return (
  <div className={`flex gap-[var(--spacing-small-gap)] ${isOwn ? 'justify-start' : 'justify-end'}`}>
- <div className={`max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
- <input
- type="text"
- value={editInput}
- onChange={(e) => setEditInput(e.target.value)}
- onKeyDown={(e) => {
- if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
- if (e.key === 'Escape') { onCancelEdit(); }
- }}
- className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring text-sm"
- autoFocus
- />
+  <div className={`max-w-[90%] sm:max-w-[85%] md:max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
+  <input
+  type="text"
+  value={editInput}
+  onChange={(e) => setEditInput(e.target.value)}
+  onKeyDown={(e) => {
+  if (e.key === 'Enter') { e.preventDefault(); onSubmitEdit(msg.id); }
+  if (e.key === 'Escape') { onCancelEdit(); }
+  }}
+  className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring text-sm"
+  autoFocus
+  />
  <div className={`flex gap-[var(--spacing-small-gap)] mt-1 ${isOwn ? 'justify-end' : 'justify-start'}`}>
  <button
  onClick={() => onSubmitEdit(msg.id)}
@@ -1157,10 +1175,10 @@ function MessageBubble({
  ref={bubbleRef}
  data-message-id={msg.id}
  className={`flex gap-[var(--spacing-small-gap)] ${isOwn ? 'justify-start' : 'justify-end'}`}
- >
- {/* Content first so in RTL own messages sit at the right edge */}
- <div className={`max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
- <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1 justify-end">
+  >
+  {/* Content first so in RTL own messages sit at the right edge */}
+  <div className={`max-w-[90%] sm:max-w-[85%] md:max-w-[75%] ${isOwn ? 'text-right' : 'text-left'}`}>
+  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-1 justify-end">
  <span className="font-medium text-sm">{msg.senderUserId === messageCurrentUserId ? 'أنت' : (msg.sender?.fullName || msg.senderUserId.slice(0, 8))}</span>
  {msg.editedAt && <span className="text-xs text-muted-foreground">(تم التعديل)</span>}
  </div>
