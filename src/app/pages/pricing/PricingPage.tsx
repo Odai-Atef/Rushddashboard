@@ -10,6 +10,8 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
 import { Check, Shield, Star, Zap, Loader2, AlertTriangle, X, ScrollText, XCircle, Phone, MessageCircle, Tag } from "lucide-react";
 import { Separator } from "@/app/components/ui/separator";
+import { toast } from "sonner";
+import { useConfirm } from "@/app/hooks/useConfirm";
 import { subscriptionService, CouponValidationResult } from "@/api/services/subscription-service";
 import { onboardingService } from "@/api/services/onboarding-service";
 import apiClient from "@/api/client";
@@ -275,7 +277,14 @@ export function PricingPage() {
   const [couponError, setCouponError] = useState('');
   const [couponSuccess, setCouponSuccess] = useState('');
 
- const checkActiveSubscription = useCallback(async () => {
+  const { confirm, dialog } = useConfirm();
+
+  const showError = useCallback((message: string) => {
+    setError(message);
+    toast.error(message);
+  }, []);
+
+  const checkActiveSubscription = useCallback(async () => {
  setCheckingSubscription(true);
  try {
  const res = await subscriptionService.getMySubscription();
@@ -410,7 +419,9 @@ export function PricingPage() {
   const handleApplyCoupon = async () => {
   const code = couponCode.trim();
   if (!code) {
-  setCouponError('الرجاء إدخال كود الخصم');
+  const msg = 'الرجاء إدخال كود الخصم';
+  setCouponError(msg);
+  toast.error(msg);
   return;
   }
   setCouponLoading(true);
@@ -419,7 +430,9 @@ export function PricingPage() {
   setAppliedCoupon(null);
   try {
   if (packages.length === 0) {
-  setCouponError('لا توجد باقات لتحديد الباقة المناسبة');
+  const msg = 'لا توجد باقات لتحديد الباقة المناسبة';
+  setCouponError(msg);
+  toast.error(msg);
   return;
   }
   // Validate against the first active package; backend returns applicable package IDs
@@ -427,23 +440,29 @@ export function PricingPage() {
   if (response.success && response.data?.data) {
   const result = (response.data as unknown as { data: CouponValidationResult }).data;
   setAppliedCoupon(result);
-  setCouponSuccess('تم تطبيق كود الخصم بنجاح');
+  const successMsg = 'تم تطبيق كود الخصم بنجاح';
+  setCouponSuccess(successMsg);
+  toast.success(successMsg);
   } else {
-  setCouponError(response.message || 'كود الخصم غير صالح');
+  const msg = response.message || 'كود الخصم غير صالح';
+  setCouponError(msg);
+  toast.error(msg);
   }
   } catch (err: any) {
-  setCouponError(err?.message || 'كود الخصم غير صالح');
+  const msg = err?.message || 'كود الخصم غير صالح';
+  setCouponError(msg);
+  toast.error(msg);
   } finally {
   setCouponLoading(false);
   }
   };
 
-  const handleRemoveCoupon = () => {
+  const handleRemoveCoupon = useCallback(() => {
   setCouponCode('');
   setAppliedCoupon(null);
   setCouponError('');
   setCouponSuccess('');
-  };
+  }, []);
 
  const handleSlaScroll = () => {
  const el = slaScrollRef.current;
@@ -458,17 +477,15 @@ export function PricingPage() {
  handleSubscribeFromDetail(selectedPkg);
  };
 
-  const handleSubscribeFromDetail = async (pkg: PackageDetailWithCoupon) => {
-  setSubscribingId(pkg.id);
-  setRequiredDocumentsMissing(false);
-  try {
+  const initiatePaymentFlow = async (pkg: PackageDetailWithCoupon, promoCode?: string) => {
   const subRes = await subscriptionService.createSubscription({
   packageId: pkg.id,
-  promoCode: appliedCoupon?.code,
+  promoCode,
   });
   const subRaw = subRes.data as unknown as { success: boolean; data: { id: string } };
   if (!subRes.success || !subRaw?.data?.id) {
-  setError(subRes.message || "فشل في إنشاء الاشتراك");
+  const msg = subRes.message || "فشل في إنشاء الاشتراك";
+  showError(msg);
   setSubscribingId(null);
   return;
   }
@@ -477,43 +494,73 @@ export function PricingPage() {
   const payRes = await subscriptionService.initiatePayment({
   subscriptionId,
   returnUrl,
-  promoCode: appliedCoupon?.code,
+  promoCode,
   });
  const payRaw = payRes.data as unknown as { success: boolean; data: { checkoutUrl: string } };
- if (!payRes.success || !payRaw?.data?.checkoutUrl) {
- setError(payRes.message || "فشل في إنشاء فاتورة الدفع");
- setSubscribingId(null);
- return;
- }
- window.open(payRaw.data.checkoutUrl, '_blank');
- let attempts = 0;
- const maxAttempts = 24;
- if (intervalRef.current) clearInterval(intervalRef.current);
- intervalRef.current = setInterval(async () => {
- attempts += 1;
- const found = await checkActiveSubscription();
- if (found || attempts >= maxAttempts) {
- if (intervalRef.current) clearInterval(intervalRef.current);
- setSubscribingId(null);
- }
- }, 5000);
- } catch (err: any) {
- const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
- const errorStatus = err?.status || err?.data?.status || err?.response?.data?.status;
- if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
- setNotStartedStatus(true);
- setError(err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.");
- } else if (errorCode === 'REQUIRED_DOCUMENTS_MISSING') {
- setRequiredDocumentsMissing(true);
- setError(err?.message || err?.data?.message || err?.response?.data?.message || "يجب رفع المستندات المطلوبة أولاً.");
- } else {
- setNotStartedStatus(false);
- setRequiredDocumentsMissing(false);
- setError(err?.message || "حدث خطأ غير متوقع");
- }
- setSubscribingId(null);
- }
- };
+  if (!payRes.success || !payRaw?.data?.checkoutUrl) {
+  const msg = payRes.message || "فشل في إنشاء فاتورة الدفع";
+  showError(msg);
+  setSubscribingId(null);
+  return;
+  }
+  window.open(payRaw.data.checkoutUrl, '_blank');
+  let attempts = 0;
+  const maxAttempts = 24;
+  if (intervalRef.current) clearInterval(intervalRef.current);
+  intervalRef.current = setInterval(async () => {
+  attempts += 1;
+  const found = await checkActiveSubscription();
+  if (found || attempts >= maxAttempts) {
+  if (intervalRef.current) clearInterval(intervalRef.current);
+  setSubscribingId(null);
+  }
+  }, 5000);
+  };
+
+  const handleSubscribeFromDetail = async (pkg: PackageDetailWithCoupon) => {
+  setSubscribingId(pkg.id);
+  setRequiredDocumentsMissing(false);
+  try {
+  await initiatePaymentFlow(pkg, appliedCoupon?.code);
+  } catch (err: any) {
+  const errorCode = err?.code || err?.data?.code || err?.response?.data?.code;
+  const errorStatus = err?.status || err?.data?.status || err?.response?.data?.status;
+
+  if (errorCode === 'PROMO_CODE_PACKAGE_NOT_ALLOWED') {
+  const proceed = await confirm({
+  title: 'كود الخصم غير متاح لهذه الباقة',
+  description: 'هل تريد المتابعة بدون تطبيق كود الخصم؟',
+  confirmLabel: 'المتابعة',
+  cancelLabel: 'إلغاء',
+  variant: 'default',
+  });
+  if (proceed) {
+  handleRemoveCoupon();
+  toast.warning('تم إزالة كود الخصم لأنه غير متاح لهذه الباقة');
+  await initiatePaymentFlow(pkg, undefined);
+  } else {
+  setSubscribingId(null);
+  }
+  return;
+  }
+
+  if (errorStatus === 'NOT_STARTED' || errorCode === 'ORGANIZATION_NOT_QUALIFIED') {
+  setNotStartedStatus(true);
+  const msg = err?.message || err?.data?.message || err?.response?.data?.message || "لم تبدأ عملية التقييم. يرجى البدء في التقييم أولاً.";
+  showError(msg);
+  } else if (errorCode === 'REQUIRED_DOCUMENTS_MISSING') {
+  setRequiredDocumentsMissing(true);
+  const msg = err?.message || err?.data?.message || err?.response?.data?.message || "يجب رفع المستندات المطلوبة أولاً.";
+  showError(msg);
+  } else {
+  setNotStartedStatus(false);
+  setRequiredDocumentsMissing(false);
+  const msg = err?.message || "حدث خطأ غير متوقع";
+  showError(msg);
+  }
+  setSubscribingId(null);
+  }
+  };
 
  if (loading) {
  return (
@@ -1106,7 +1153,9 @@ export function PricingPage() {
   )}
  </div>
  </div>
- )}
+  )}
+
+  {dialog}
  </div>
  );
 }
