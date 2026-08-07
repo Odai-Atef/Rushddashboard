@@ -496,13 +496,37 @@ export function PricingPage() {
   returnUrl,
   promoCode,
   });
- const payRaw = payRes.data as unknown as { success: boolean; data: { checkoutUrl: string } };
-  if (!payRes.success || !payRaw?.data?.checkoutUrl) {
+ const payRaw = payRes.data as unknown as { success: boolean; data: { checkoutUrl?: string; status?: string } };
+  if (!payRes.success || !payRaw?.data) {
   const msg = payRes.message || "فشل في إنشاء فاتورة الدفع";
   showError(msg);
   setSubscribingId(null);
   return;
   }
+
+  if (payRaw.data.status === 'completed') {
+  toast.success('تم تفعيل الاشتراك بنجاح');
+  let attempts = 0;
+  const maxAttempts = 24;
+  if (intervalRef.current) clearInterval(intervalRef.current);
+  intervalRef.current = setInterval(async () => {
+  attempts += 1;
+  const found = await checkActiveSubscription();
+  if (found || attempts >= maxAttempts) {
+  if (intervalRef.current) clearInterval(intervalRef.current);
+  setSubscribingId(null);
+  }
+  }, 5000);
+  return;
+  }
+
+  if (!payRaw.data.checkoutUrl) {
+  const msg = payRes.message || "فشل في إنشاء فاتورة الدفع";
+  showError(msg);
+  setSubscribingId(null);
+  return;
+  }
+
   window.open(payRaw.data.checkoutUrl, '_blank');
   let attempts = 0;
   const maxAttempts = 24;
