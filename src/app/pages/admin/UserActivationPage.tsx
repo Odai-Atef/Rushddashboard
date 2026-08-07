@@ -581,35 +581,35 @@ export function UserActivationPage() {
  </div>
 
  {/* Filters */}
- <div className="bg-[var(--card)] rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
- <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)]">
- <div className="flex-1 relative">
- <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
- <input
- type="text"
- value={pendingSearch}
- onChange={(e) => setSearch(e.target.value)}
- onKeyDown={handleSearchKeyDown}
- placeholder="بحث بالاسم أو البريد أو رقم الترخيص..."
- className="w-full pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
- />
- </div>
- <div className="relative w-full sm:min-w-[200px]">
- <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
- <select
- value={pendingStatus}
- onChange={(e) => setStatus(e.target.value)}
- className="w-full appearance-none pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-[var(--card)]"
- >
- {USER_STATUS_OPTIONS.map((option) => (
- <option key={option.value} value={option.value}>
- {option.label}
- </option>
- ))}
- </select>
- </div>
- <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)]">
- <Button onClick={() => applySearch()} className="w-full sm:w-auto py-3 min-h-[44px]">بحث</Button>
+  <div className="bg-[var(--card)] rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
+  <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)] sm:gap-[var(--spacing-grid-gap)]">
+  <div className="w-full sm:w-1/2 relative">
+  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+  <input
+  type="text"
+  value={pendingSearch}
+  onChange={(e) => setSearch(e.target.value)}
+  onKeyDown={handleSearchKeyDown}
+  placeholder="بحث بالاسم أو البريد أو رقم الترخيص..."
+  className="w-full pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+  />
+  </div>
+  <div className="relative w-full sm:w-1/2">
+  <Filter className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+  <select
+  value={pendingStatus}
+  onChange={(e) => setStatus(e.target.value)}
+  className="w-full appearance-none pr-10 pl-4 py-2.5 min-h-[44px] border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent bg-[var(--card)]"
+  >
+  {USER_STATUS_OPTIONS.map((option) => (
+  <option key={option.value} value={option.value}>
+  {option.label}
+  </option>
+  ))}
+  </select>
+  </div>
+  <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)]">
+  <Button onClick={() => applySearch()} className="w-full sm:w-auto py-3 min-h-[44px]">بحث</Button>
  {(pendingSearch || pendingStatus) && (
  <Button variant="outline" onClick={() => { clearSearch(); clearStatus(); }} className="w-full sm:w-auto py-3 min-h-[44px]">
  مسح
