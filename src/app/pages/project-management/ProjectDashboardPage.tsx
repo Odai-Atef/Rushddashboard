@@ -14,6 +14,7 @@ import {
  AlertTriangle,
  Bell,
  Info,
+  LayoutDashboard,
 } from 'lucide-react';
 import {
  BarChart,

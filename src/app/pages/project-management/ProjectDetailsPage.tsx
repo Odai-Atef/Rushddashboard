@@ -23,6 +23,7 @@ import {
  CheckCircle,
  TrendingUp,
  DollarSign,
+  FolderOpen,
 } from 'lucide-react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';

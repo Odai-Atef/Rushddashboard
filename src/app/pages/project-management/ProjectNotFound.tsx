@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import { AlertCircle, ArrowRight } from 'lucide-react';
+import { AlertCircle, ArrowLeft } from 'lucide-react';
 
 export function ProjectNotFound() {
  const navigate = useNavigate();
