@@ -19,6 +19,7 @@ import {
  AlertTriangle,
  RefreshCw,
  Pin,
+ Briefcase,
 } from 'lucide-react';
 import { useProjects } from '@/api/hooks/useProjects';
 import { ProjectFilters, ProjectStatus, statusConfig, Project } from './project-types';
@@ -362,7 +363,7 @@ export function ProjectListPage() {
  <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">الجهه</th>
  <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">المنشئ</th>
  <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">الباقة</th>
- <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">الحالة</th>
+  <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide whitespace-nowrap min-w-[140px]">الحالة</th>
  <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">آخر تحديث</th>
  <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">عدد التعديلات</th>
  <th className="px-6 py-4 text-right text-xs font-semibold text-[var(--foreground)] uppercase tracking-wide">التقدم</th>
@@ -385,14 +386,14 @@ export function ProjectListPage() {
  <td className="px-6 py-5 text-sm text-[var(--text-secondary)]">{getProjectOrganization(project)}</td>
  <td className="px-6 py-5 text-sm text-[var(--text-secondary)]">{getProjectCreator(project)}</td>
  <td className="px-6 py-5 text-sm text-[var(--text-secondary)]">{project.packageName || project.packageId || 'غير محددة'}</td>
- <td className="px-6 py-5">
- <span
- className="text-xs px-2 py-1 rounded-full font-medium"
- style={{ backgroundColor: status.bg, color: status.color }}
- >
- {status.label}
- </span>
- </td>
+  <td className="px-6 py-5 whitespace-nowrap">
+  <span
+  className="inline-block text-xs px-2.5 py-1 rounded-full font-medium whitespace-nowrap"
+  style={{ backgroundColor: status.bg, color: status.color }}
+  >
+  {status.label}
+  </span>
+  </td>
  <td className="px-6 py-5 text-sm text-[var(--text-secondary)] whitespace-nowrap">
  {timeAgo(project.updatedAt)}
  </td>
@@ -595,139 +596,144 @@ export function ProjectListPage() {
  }
  };
 
- return (
- <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
- <div className="space-y-[var(--spacing-section-gap)] sm:space-y-[var(--spacing-section-gap)]">
- <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-[var(--spacing-small-gap)]">
- <div className="w-full">
- <h1 className="text-2xl sm:text-3xl font-bold mb-1 sm:mb-2">إدارة المشاريع</h1>
- <p className="text-muted-foreground text-sm sm:text-base">{pagination.total} مشروع</p>
- </div>
- <div className="flex gap-[var(--spacing-small-gap)] w-full sm:w-auto">
- <button
- onClick={() => navigate('/dashboard/project-management')}
- className="flex-1 sm:flex-none px-4 py-2 border border-border rounded-lg hover:bg-[var(--hover)] transition-colors duration-[var(--transition-duration)] font-medium text-sm sm:text-base"
- >
- لوحة القيادة
- </button>
- {(user?.roleSlug === 'entity-managers' || user?.roleSlug === 'project-managers') && (
- <button
- onClick={() => navigate('/dashboard/project-management/create')}
- className="flex-1 sm:flex-none px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm sm:text-base"
- >
- <Plus className="w-4 sm:w-5 h-4 sm:h-5" />
- مشروع جديد
- </button>
- )}
- </div>
- </div>
+ const hasActiveFilters = pendingFilters.search || pendingFilters.status || pendingFilters.organizationId;
 
- <div className="bg-card rounded-xl p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)] border border-border shadow-sm">
- <div className="flex flex-col sm:flex-row gap-[var(--spacing-grid-gap)]">
- <div className="flex-1 relative">
- <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
- <input
- type="text"
- value={pendingFilters.search || ''}
- onChange={(e) => updateFilter('search', e.target.value)}
- onKeyDown={handleSearchKeyDown}
- placeholder="بحث في المشاريع..."
- className="w-full pr-10 pl-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent text-sm sm:text-base"
- />
- </div>
+  return (
+  <div className="min-h-full bg-background p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]" dir="rtl">
+  <div className="max-w-7xl mx-auto">
+  <div className="space-y-[var(--spacing-section-gap)] sm:space-y-[var(--spacing-section-gap)]">
+  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-[var(--spacing-small-gap)] mb-6">
+  <div className="flex items-center gap-[var(--spacing-small-gap)]">
+  <Briefcase className="w-7 h-7 text-[var(--secondary)]" />
+  <h1 className="text-xl sm:text-2xl font-bold text-foreground">إدارة المشاريع</h1>
+  </div>
+  <div className="flex items-center gap-[var(--spacing-small-gap)] w-full sm:w-auto">
+  <span className="text-sm text-muted-foreground">{pagination.total} مشروع</span>
+  <button
+  onClick={() => navigate('/dashboard/project-management')}
+  className="px-4 py-2 border border-border rounded-lg hover:bg-[var(--hover)] transition-colors duration-[var(--transition-duration)] font-medium text-sm sm:text-base"
+  >
+  لوحة القيادة
+  </button>
+  {(user?.roleSlug === 'entity-managers' || user?.roleSlug === 'project-managers') && (
+  <button
+  onClick={() => navigate('/dashboard/project-management/create')}
+  className="px-4 sm:px-6 py-2.5 sm:py-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors font-medium flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm sm:text-base"
+  >
+  <Plus className="w-4 sm:w-5 h-4 sm:h-5" />
+  مشروع جديد
+  </button>
+  )}
+  </div>
+  </div>
 
- <div className="flex gap-[var(--spacing-small-gap)] border border-border rounded-lg p-[var(--spacing-small-gap)] shrink-0">
- <button
- onClick={() => setListViewMode('list')}
- className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'list' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
- >
- <List className="w-5 h-5" />
- </button>
- <button
- onClick={() => setListViewMode('kanban')}
- className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'kanban' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
- >
- <LayoutGrid className="w-5 h-5" />
- </button>
- <button
- onClick={() => setListViewMode('timeline')}
- className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'timeline' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
- >
- <GanttChart className="w-5 h-5" />
- </button>
- </div>
+  <div className="bg-[var(--card)] rounded-xl shadow-sm border border-[var(--border)] p-[var(--spacing-card-padding)] mb-6">
+  <div className="flex flex-col sm:flex-row gap-[var(--spacing-grid-gap)] flex-wrap">
+  <div className="flex-1 min-w-0">
+  <label className="block text-sm font-medium text-foreground mb-1">بحث</label>
+  <div className="relative">
+  <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+  <input
+  type="text"
+  value={pendingFilters.search || ''}
+  onChange={(e) => updateFilter('search', e.target.value)}
+  onKeyDown={handleSearchKeyDown}
+  placeholder="بحث في المشاريع..."
+  className="w-full pr-9 pl-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+  />
+  </div>
+  </div>
 
- <button
- onClick={() => setShowFilters(!showFilters)}
- className={`px-4 py-2 border rounded-lg transition-colors flex items-center justify-center gap-[var(--spacing-small-gap)] text-sm sm:text-base shrink-0 ${showFilters ? 'border-ring text-[var(--secondary)] bg-muted/[0.08]' : 'border-border hover:bg-muted'}`}
- >
- <Filter className="w-5 h-5" />
- تصفية
- </button>
- </div>
+  <div className="w-full sm:w-48">
+  <label className="block text-sm font-medium text-foreground mb-1">الحالة</label>
+  <select
+  value={pendingFilters.status || 'all'}
+  onChange={(e) => updateStatusFilter(e.target.value)}
+  className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent"
+  >
+  {STATUS_OPTIONS.map((option) => (
+  <option key={option.value} value={option.value}>{option.label}</option>
+  ))}
+  </select>
+  </div>
 
- {showFilters && (
- <div className="mt-4 pt-4 border-t border-border">
- <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-grid-gap)]">
- <div>
- <label className="block text-sm font-medium mb-2">الحالة</label>
- <select
- value={pendingFilters.status || 'all'}
- onChange={(e) => updateStatusFilter(e.target.value)}
- className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring"
- >
- {STATUS_OPTIONS.map((option) => (
- <option key={option.value} value={option.value}>{option.label}</option>
- ))}
- </select>
- </div>
- {isProjectManager && (
- <div>
- <label className="block text-sm font-medium mb-2">الجهة</label>
- <select
- value={pendingFilters.organizationId || 'all'}
- onChange={(e) => {
- const value = e.target.value;
- const orgId = value === 'all' ? undefined : value;
- setFilters({ organizationId: orgId });
- void applyFilters({ organizationId: orgId });
- }}
- disabled={organizationsLoading}
- className="w-full px-3 py-2 border border-border rounded-lg focus:ring-2 focus:ring-ring disabled:opacity-50"
- >
- <option value="all">جميع الجهات</option>
- {organizations.map((org) => (
- <option key={org.id} value={org.id}>{org.name}</option>
- ))}
- </select>
- </div>
- )}
- </div>
+  {isProjectManager && (
+  <div className="w-full sm:w-48">
+  <label className="block text-sm font-medium text-foreground mb-1">الجهة</label>
+  <select
+  value={pendingFilters.organizationId || 'all'}
+  onChange={(e) => {
+  const value = e.target.value;
+  const orgId = value === 'all' ? undefined : value;
+  setFilters({ organizationId: orgId });
+  void applyFilters({ organizationId: orgId });
+  }}
+  disabled={organizationsLoading}
+  className="w-full px-3 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent disabled:opacity-50"
+  >
+  <option value="all">جميع الجهات</option>
+  {organizations.map((org) => (
+  <option key={org.id} value={org.id}>{org.name}</option>
+  ))}
+  </select>
+  </div>
+  )}
 
- <div className="flex justify-end gap-[var(--spacing-small-gap)] mt-4">
- <button
- onClick={() => clearFilters()}
- className="px-4 py-2 text-muted-foreground hover:text-foreground font-medium flex items-center gap-[var(--spacing-small-gap)]"
- >
- <X className="w-4 h-4" />
- مسح
- </button>
- </div>
- </div>
- )}
- </div>
+  <div className="flex items-end">
+  <div className="flex gap-[var(--spacing-small-gap)] border border-border rounded-lg p-[var(--spacing-small-gap)] shrink-0">
+  <button
+  onClick={() => setListViewMode('list')}
+  className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'list' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
+  aria-label="عرض قائمة"
+  title="عرض قائمة"
+  >
+  <List className="w-5 h-5" />
+  </button>
+  <button
+  onClick={() => setListViewMode('kanban')}
+  className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'kanban' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
+  aria-label="عرض كانبان"
+  title="عرض كانبان"
+  >
+  <LayoutGrid className="w-5 h-5" />
+  </button>
+  <button
+  onClick={() => setListViewMode('timeline')}
+  className={`p-[var(--spacing-small-gap)] rounded-lg ${listViewMode === 'timeline' ? 'bg-[var(--primary)] text-[var(--primary-foreground)]' : 'text-muted-foreground hover:bg-muted'}`}
+  aria-label="عرض timeline"
+  title="عرض timeline"
+  >
+  <GanttChart className="w-5 h-5" />
+  </button>
+  </div>
+  </div>
+
+  {hasActiveFilters && (
+  <div className="flex items-end w-full sm:w-auto">
+  <button
+  onClick={() => clearFilters()}
+  className="flex items-center justify-center sm:justify-start gap-[var(--spacing-small-gap)] px-3 py-2.5 min-h-[44px] text-sm text-[var(--destructive)] rounded-lg transition-colors w-full sm:w-auto"
+  >
+  <X className="w-4 h-4" />
+  مسح الفلاتر
+  </button>
+  </div>
+  )}
+  </div>
+  </div>
 
  {qualificationLoading || isLoading ? (
  renderLoading()
  ) : !isProjectManager && !isQualified ? (
  renderQualificationBlocker()
  ) : (
- <div className="overflow-x-auto -mx-3 sm:mx-0 px-3 sm:px-0">{renderListContent()}</div>
- )}
+  <div className="overflow-x-auto">{renderListContent()}</div>
+  )}
 
- {!isLoading && !error && projects.length > 0 && renderPagination()}
- </div>
+  {!isLoading && !error && projects.length > 0 && renderPagination()}
+  </div>
 
- </div>
+  </div>
+  </div>
  );
 }
