@@ -23,6 +23,7 @@ import {
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 import apiClient from '@/api/client';
+import { AUTH_CONFIG } from '@/api/config';
 import { useAdminUsers } from '@/api/hooks/useAdminUsers';
 import { useOrganizationInformation } from '@/api/hooks/useOrganizationInformation';
 import { AdminUser, OrganizationDocument, userService, USER_STATUS_OPTIONS } from '@/api/services/user-service';
@@ -135,9 +136,25 @@ function DocumentChecklist({ documents }: DocumentChecklistProps) {
  <CheckCircle2 className="w-4 h-4" />
  مُرفق
  </span>
- <Button variant="outline" size="sm" onClick={() => doc && handleOpenDocument(doc)}>
- عرض / تحميل
- </Button>
+  <Button
+  variant="outline"
+  size="sm"
+  disabled={downloadingDocId === doc?.id}
+  onClick={() => doc && handleOpenDocument(doc)}
+  className="flex items-center gap-[var(--spacing-small-gap)].5"
+  >
+  {downloadingDocId === doc?.id ? (
+  <>
+  <Loader2 className="w-4 h-4 animate-spin" />
+  جاري الفتح...
+  </>
+  ) : (
+  <>
+  <FileText className="w-4 h-4" />
+  عرض / تحميل
+  </>
+  )}
+  </Button>
  </>
  ) : (
  <span
@@ -310,8 +327,9 @@ export function UserActivationPage() {
  const [actionMode, setActionMode] = useState<'view' | 'reject' | 'confirm-approve' | 'confirm-reject'>('view');
  const [rejectComment, setRejectComment] = useState('');
  const [isSubmitting, setIsSubmitting] = useState(false);
- const [syncingOrgId, setSyncingOrgId] = useState<string | null>(null);
- const [processingOrgIds, setProcessingOrgIds] = useState<Set<string>>(new Set());
+  const [syncingOrgId, setSyncingOrgId] = useState<string | null>(null);
+  const [processingOrgIds, setProcessingOrgIds] = useState<Set<string>>(new Set());
+  const [downloadingDocId, setDownloadingDocId] = useState<string | null>(null);
 
  const {
  data: orgInfo,
@@ -384,59 +402,57 @@ export function UserActivationPage() {
  });
  };
 
- const openDirectFileUrl = (fileUrl: string, fileName: string) => {
- const base = apiClient.defaults.baseURL.replace(/\/$/, '');
- const path = fileUrl.startsWith('/') ? fileUrl : `/${fileUrl}`;
- const fullUrl = `${base}${path}`;
- const newWindow = window.open(fullUrl, '_blank', 'noopener,noreferrer');
- if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
- const a = document.createElement('a');
- a.href = fullUrl;
- a.download = fileName;
- document.body.appendChild(a);
- a.click();
- document.body.removeChild(a);
- toast.success('جاري تحميل المستند...');
- }
- };
+  const handleOpenDocument = async (document: OrganizationDocument) => {
+  if (!document.fileUrl?.trim()) {
+  toast.error('رابط المستند غير متوفر.');
+  return;
+  }
 
- const openBlobUrl = (blob: Blob, fileName: string) => {
- const objectUrl = window.URL.createObjectURL(blob);
- const newWindow = window.open(objectUrl, '_blank', 'noopener,noreferrer');
- if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
- const a = document.createElement('a');
- a.href = objectUrl;
- a.download = fileName;
- document.body.appendChild(a);
- a.click();
- document.body.removeChild(a);
- toast.success('جاري تحميل المستند...');
- }
- setTimeout(() => window.URL.revokeObjectURL(objectUrl), 60000);
- };
+  setDownloadingDocId(document.id);
 
- const handleOpenDocument = async (document: OrganizationDocument) => {
- try {
- const response = await apiClient.get<Blob>(document.fileUrl, {
- responseType: 'blob',
- });
+  try {
+  const isAbsoluteUrl = /^https?:\/\//i.test(document.fileUrl);
+  const baseURL = (apiClient?.defaults?.baseURL || '').replace(/\/$/, '');
+  const fileUrl = isAbsoluteUrl ? document.fileUrl : `${baseURL}${document.fileUrl.startsWith('/') ? '' : '/'}${document.fileUrl}`;
 
- const blob = response.data;
- if (!blob || blob.size === 0) {
- openDirectFileUrl(document.fileUrl, document.fileName || 'document');
- return;
- }
+  const token = typeof localStorage !== 'undefined' ? localStorage.getItem(AUTH_CONFIG.TOKEN_KEY) : null;
+  const response = await fetch(fileUrl, {
+  headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+  });
 
- openBlobUrl(blob, document.fileName || 'document');
- } catch (err) {
- const apiError = err as ApiError;
- if (apiError.statusCode === 304) {
- openDirectFileUrl(document.fileUrl, document.fileName || 'document');
- } else {
- toast.error('فشل فتح المستند. يرجى المحاولة مرة أخرى.');
- }
- }
- };
+  if (!response.ok) {
+  throw new Error(`Failed to fetch document: ${response.status}`);
+  }
+
+  const contentType = response.headers.get('content-type') || document.mimeType || 'application/octet-stream';
+  const blob = await response.blob();
+
+  if (!blob || blob.size === 0) {
+  throw new Error('Empty document');
+  }
+
+  const fileBlob = new Blob([blob], { type: contentType });
+  const objectUrl = window.URL.createObjectURL(fileBlob);
+  const fileName = document.fileName || 'document';
+
+  const newWindow = window.open(objectUrl, '_blank', 'noopener,noreferrer');
+  if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+  const a = document.createElement('a');
+  a.href = objectUrl;
+  a.download = fileName;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  toast.success('جاري تحميل المستند...');
+  }
+
+  setTimeout(() => window.URL.revokeObjectURL(objectUrl), 60000);
+  } catch {
+  toast.error('فشل فتح المستند. يرجى المحاولة مرة أخرى.');
+  } finally {
+  setDownloadingDocId(null);
+  }
+  };
 
  const canActOnUser = (status?: string | null): boolean => {
  const normalized = status?.toUpperCase() || '';
