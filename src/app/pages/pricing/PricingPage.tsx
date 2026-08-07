@@ -8,9 +8,9 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useNavigate } from "react-router";
-import { Check, Shield, Star, Zap, Loader2, AlertTriangle, X, ScrollText, XCircle, Phone, MessageCircle } from "lucide-react";
+import { Check, Shield, Star, Zap, Loader2, AlertTriangle, X, ScrollText, XCircle, Phone, MessageCircle, Tag } from "lucide-react";
 import { Separator } from "@/app/components/ui/separator";
-import { subscriptionService } from "@/api/services/subscription-service";
+import { subscriptionService, CouponValidationResult } from "@/api/services/subscription-service";
 import { onboardingService } from "@/api/services/onboarding-service";
 import apiClient from "@/api/client";
 
@@ -77,6 +77,22 @@ interface PackageItem {
  features: string;
  sla?: string;
  isActive: boolean;
+}
+
+interface CouponPreview {
+ code: string;
+ type: string;
+ valid: boolean;
+ originalAmount: number;
+ discountAmount: number;
+ finalAmount: number;
+ currency: string;
+ extraMonths: number;
+ extraProjects: number;
+}
+
+interface PackageDetailWithCoupon extends PackageDetail {
+ couponPreview?: CouponPreview;
 }
 
 const accentIcons = [Zap, Star, Shield];
@@ -245,12 +261,19 @@ export function PricingPage() {
  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
  // SLA Modal state
- const [selectedPkg, setSelectedPkg] = useState<PackageDetail | null>(null);
- const [detailLoading, setDetailLoading] = useState(false);
- const [slaModalOpen, setSlaModalOpen] = useState(false);
- const [slaAccepted, setSlaAccepted] = useState(false);
- const [slaScrollProgress, setSlaScrollProgress] = useState(0);
- const slaScrollRef = useRef<HTMLDivElement>(null);
+  const [selectedPkg, setSelectedPkg] = useState<PackageDetailWithCoupon | null>(null);
+  const [detailLoading, setDetailLoading] = useState(false);
+  const [slaModalOpen, setSlaModalOpen] = useState(false);
+  const [slaAccepted, setSlaAccepted] = useState(false);
+  const [slaScrollProgress, setSlaScrollProgress] = useState(0);
+  const slaScrollRef = useRef<HTMLDivElement>(null);
+
+  // Coupon state
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedCoupon, setAppliedCoupon] = useState<CouponValidationResult | null>(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState('');
+  const [couponSuccess, setCouponSuccess] = useState('');
 
  const checkActiveSubscription = useCallback(async () => {
  setCheckingSubscription(true);
@@ -325,61 +348,102 @@ export function PricingPage() {
  };
  }, []);
 
- const openSlaModal = async (pkg: PackageItem) => {
- setSlaAccepted(false);
- setSlaScrollProgress(0);
- setDetailLoading(true);
- setSlaModalOpen(true);
+  const openSlaModal = async (pkg: PackageItem) => {
+  setSlaAccepted(false);
+  setSlaScrollProgress(0);
+  setDetailLoading(true);
+  setSlaModalOpen(true);
 
- try {
- // Fetch full package details with SLA
- const res = await apiClient.get<PackageDetail>(`/api/v1/subscriptions/packages/${pkg.id}`);
- const detail = (res.data as unknown as { success?: boolean; data?: PackageDetail })?.data ?? res.data;
- if (detail) {
- // Parse nested JSON fields
- const parsed: PackageDetail = {
- ...detail,
- features: parsePackageFeatures(detail.features as any),
- deliverables: parseJsonArray(detail.deliverables as any),
- kpis: parseJsonArray(detail.kpis as any),
- timeline: parseJsonArray(detail.timeline as any),
- annualDeliverables: parseJsonArray(detail.annualDeliverables as any),
- };
- setSelectedPkg(parsed);
- }
- } catch (err: any) {
- console.error('[PricingPage] Failed to fetch package details:', err?.message);
- // Fallback: create minimal detail from list item
- setSelectedPkg({
- id: pkg.id,
- name: pkg.name,
- nameAr: pkg.name,
- description: pkg.description || '',
- priceMonthly: pkg.priceMonthly,
- priceAnnual: pkg.priceAnnual,
- currency: pkg.currency,
- billingCycle: 'annual',
- projectLimit: pkg.projectLimit,
- consultingHours: 0,
- features: {},
- recommended: false,
- accent: accentColors[0],
- gradientFrom: gradients[0].from,
- gradientTo: gradients[0].to,
- sla: {
- level: pkg.sla || 'مستوى أساسي',
- levelNum: 1,
- responseTime: 'غير محدد',
- resolutionTime: 'غير محدد',
- uptime: 'غير محدد',
- supportHours: 'غير محدد',
- },
- isActive: pkg.isActive,
- });
- } finally {
- setDetailLoading(false);
- }
- };
+  try {
+  // Fetch full package details with SLA and optional coupon preview
+  const url = appliedCoupon
+  ? `/api/v1/subscriptions/packages/${pkg.id}?code=${encodeURIComponent(appliedCoupon.code)}`
+  : `/api/v1/subscriptions/packages/${pkg.id}`;
+  const res = await apiClient.get<PackageDetailWithCoupon>(url);
+  const detail = (res.data as unknown as { success?: boolean; data?: PackageDetailWithCoupon })?.data ?? res.data;
+  if (detail) {
+  // Parse nested JSON fields
+  const parsed: PackageDetailWithCoupon = {
+  ...detail,
+  features: parsePackageFeatures(detail.features as any),
+  deliverables: parseJsonArray(detail.deliverables as any),
+  kpis: parseJsonArray(detail.kpis as any),
+  timeline: parseJsonArray(detail.timeline as any),
+  annualDeliverables: parseJsonArray(detail.annualDeliverables as any),
+  };
+  setSelectedPkg(parsed);
+  }
+  } catch (err: any) {
+  console.error('[PricingPage] Failed to fetch package details:', err?.message);
+  // Fallback: create minimal detail from list item
+  setSelectedPkg({
+  id: pkg.id,
+  name: pkg.name,
+  nameAr: pkg.name,
+  description: pkg.description || '',
+  priceMonthly: pkg.priceMonthly,
+  priceAnnual: pkg.priceAnnual,
+  currency: pkg.currency,
+  billingCycle: 'annual',
+  projectLimit: pkg.projectLimit,
+  consultingHours: 0,
+  features: {},
+  recommended: false,
+  accent: accentColors[0],
+  gradientFrom: gradients[0].from,
+  gradientTo: gradients[0].to,
+  sla: {
+  level: pkg.sla || 'مستوى أساسي',
+  levelNum: 1,
+  responseTime: 'غير محدد',
+  resolutionTime: 'غير محدد',
+  uptime: 'غير محدد',
+  supportHours: 'غير محدد',
+  },
+  isActive: pkg.isActive,
+  });
+  } finally {
+  setDetailLoading(false);
+  }
+  };
+
+  const handleApplyCoupon = async () => {
+  const code = couponCode.trim();
+  if (!code) {
+  setCouponError('الرجاء إدخال كود الخصم');
+  return;
+  }
+  setCouponLoading(true);
+  setCouponError('');
+  setCouponSuccess('');
+  setAppliedCoupon(null);
+  try {
+  if (packages.length === 0) {
+  setCouponError('لا توجد باقات لتحديد الباقة المناسبة');
+  return;
+  }
+  // Validate against the first active package; backend returns applicable package IDs
+  const response = await subscriptionService.validateCoupon(code, packages[0].id);
+  if (response.success && response.data?.data) {
+  const result = (response.data as unknown as { data: CouponValidationResult }).data;
+  setAppliedCoupon(result);
+  setCouponSuccess('تم تطبيق كود الخصم بنجاح');
+  } else {
+  setCouponError(response.message || 'كود الخصم غير صالح');
+  }
+  } catch (err: any) {
+  setCouponError(err?.message || 'كود الخصم غير صالح');
+  } finally {
+  setCouponLoading(false);
+  }
+  };
+
+  const handleRemoveCoupon = () => {
+  setCouponCode('');
+  setAppliedCoupon(null);
+  setCouponError('');
+  setCouponSuccess('');
+  };
 
  const handleSlaScroll = () => {
  const el = slaScrollRef.current;
@@ -394,20 +458,27 @@ export function PricingPage() {
  handleSubscribeFromDetail(selectedPkg);
  };
 
- const handleSubscribeFromDetail = async (pkg: PackageDetail) => {
- setSubscribingId(pkg.id);
- setRequiredDocumentsMissing(false);
- try {
- const subRes = await subscriptionService.createSubscription({ packageId: pkg.id });
- const subRaw = subRes.data as unknown as { success: boolean; data: { id: string } };
- if (!subRes.success || !subRaw?.data?.id) {
- setError(subRes.message || "فشل في إنشاء الاشتراك");
- setSubscribingId(null);
- return;
- }
- const subscriptionId = subRaw.data.id;
- const returnUrl = `${window.location.origin}/payment/callback`;
- const payRes = await subscriptionService.initiatePayment({ subscriptionId, returnUrl });
+  const handleSubscribeFromDetail = async (pkg: PackageDetailWithCoupon) => {
+  setSubscribingId(pkg.id);
+  setRequiredDocumentsMissing(false);
+  try {
+  const subRes = await subscriptionService.createSubscription({
+  packageId: pkg.id,
+  promoCode: appliedCoupon?.code,
+  });
+  const subRaw = subRes.data as unknown as { success: boolean; data: { id: string } };
+  if (!subRes.success || !subRaw?.data?.id) {
+  setError(subRes.message || "فشل في إنشاء الاشتراك");
+  setSubscribingId(null);
+  return;
+  }
+  const subscriptionId = subRaw.data.id;
+  const returnUrl = `${window.location.origin}/payment/callback`;
+  const payRes = await subscriptionService.initiatePayment({
+  subscriptionId,
+  returnUrl,
+  promoCode: appliedCoupon?.code,
+  });
  const payRaw = payRes.data as unknown as { success: boolean; data: { checkoutUrl: string } };
  if (!payRes.success || !payRaw?.data?.checkoutUrl) {
  setError(payRes.message || "فشل في إنشاء فاتورة الدفع");
@@ -452,10 +523,10 @@ export function PricingPage() {
  );
  }
 
- return (
- <div className="max-w-6xl mx-auto px-6 py-8" dir="rtl">
- <div className="text-center mb-12">
- <h1 className="text-3xl font-bold text-foreground mb-4">{activeSubscription ? 'باقات منصة رشد' : 'اختر الباقة المناسبة'}</h1>
+  return (
+  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8" dir="rtl">
+  <div className="text-center mb-8 sm:mb-12">
+  <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-3 sm:mb-4">{activeSubscription ? 'باقات منصة رشد' : 'اختر الباقة المناسبة'}</h1>
  <p className="text-muted-foreground text-lg">
  {activeSubscription
  ? 'لديك اشتراك نشط حالياً. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.'
@@ -463,175 +534,262 @@ export function PricingPage() {
  </p>
  </div>
 
-  {/* Support contact — shown on all pricing views */}
-   <div className="mb-10 p-[var(--spacing-card-padding)] bg-muted/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
-   <p className="text-sm text-foreground mb-3 font-medium text-center">
-   واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
+   {/* Support contact — shown on all pricing views */}
+    <div className="mb-8 sm:mb-10 p-4 sm:p-[var(--spacing-card-padding)] bg-muted/[0.08] border border-[var(--secondary)]/[0.3] rounded-xl text-right max-w-3xl mx-auto">
+    <p className="text-sm text-foreground mb-3 font-medium text-center">
+    واجهت مشكلة في الدفع؟ تواصل معنا عبر الاتصال أو واتساب
+    </p>
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-[var(--spacing-small-gap)]">
+    <a
+    href="tel:+966556534433"
+    className="w-full sm:w-auto inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-foreground text-sm font-medium transition-colors"
+    >
+    <Phone className="w-4 h-4" />
+    اتصل بنا
+    </a>
+    <a
+    href="https://wa.me/+966556534433"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="w-full sm:w-auto inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
+    >
+    <MessageCircle className="w-4 h-4" />
+    واتساب
+    </a>
+    </div>
+    <p className="text-xs text-foreground mt-2 text-center" dir="ltr">+966 55 653 4433</p>
+    </div>
+
+  {activeSubscription && (
+  <div className="mb-6 sm:mb-8 p-4 sm:p-[var(--spacing-card-padding)] rounded-xl bg-[var(--primary)]/[0.08] border border-green-200 text-[var(--primary)]/[0.8] flex items-start gap-[var(--spacing-small-gap)]">
+  <Check className="w-5 h-5 shrink-0 mt-0.5" />
+  <div>
+  <p className="font-medium text-sm sm:text-base">
+  لديك اشتراك نشط حالياً: {activeSubscription.packageName}
+  </p>
+  <p className="text-xs sm:text-sm mt-1">
+  إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
+  </p>
+  </div>
+  </div>
+  )}
+
+  {error && (
+  <div className={`mb-6 sm:mb-8 p-4 sm:p-[var(--spacing-card-padding)] rounded-xl flex items-start gap-[var(--spacing-small-gap)] ${notStartedStatus || requiredDocumentsMissing ? 'bg-[var(--warning)]/[0.08] border border-[var(--warning)]/[0.3] text-amber-800' : 'bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] text-[var(--destructive)]'}`}>
+  <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
+  <div className="flex-1">
+  <div className="space-y-[var(--spacing-small-gap)] text-sm sm:text-base">
+  <span>{error}</span>
+  {notStartedStatus && (
+  <p>
+  ابدأ التقييم الآن{" "}
+  <button
+  onClick={() => navigate('/dashboard/charity-assessment')}
+  className="inline font-medium underline hover:no-underline"
+  >
+  بالضغط هنا
+  </button>{" "}
+  وفتح صفحة تقييم الجمعية.
+  </p>
+  )}
+  {requiredDocumentsMissing && (
+  <p>
+  لإتمام الاشتراك، يرجى رفع المستندات المطلوبة{" "}
+  <button
+  onClick={() => navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}`)}
+  className="inline font-medium underline hover:no-underline"
+  >
+  بالضغط هنا
+  </button>
+  .
+  </p>
+  )}
+  </div>
+  {(notStartedStatus || requiredDocumentsMissing) && (
+  <div className="mt-3 flex flex-col sm:flex-row gap-[var(--spacing-small-gap)]">
+  {notStartedStatus && (
+  <button
+  onClick={() => navigate('/dashboard/charity-assessment')}
+  className="w-full sm:w-auto inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-amber-600 text-[var(--primary-foreground)] rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
+  >
+  ابدأ التقييم الآن
+  <Zap className="w-4 h-4" />
+  </button>
+  )}
+  {requiredDocumentsMissing && (
+  <button
+  onClick={() => navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}`)}
+  className="w-full sm:w-auto inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-amber-600 text-[var(--primary-foreground)] rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
+  >
+  رفع المستندات المطلوبة
+  <Zap className="w-4 h-4" />
+  </button>
+  )}
+  </div>
+  )}
+  </div>
+  </div>
+  )}
+
+  {/* Coupon input */}
+  {!activeSubscription && packages.length > 0 && (
+  <div className="mb-8 sm:mb-10 p-4 sm:p-[var(--spacing-card-padding)] bg-[var(--card)] border border-[var(--border)] rounded-xl max-w-3xl mx-auto">
+  <div className="flex items-start gap-[var(--spacing-small-gap)] mb-3">
+  <Tag className="w-5 h-5 text-[var(--secondary)] mt-0.5 shrink-0" />
+  <div>
+  <h3 className="text-base font-bold text-foreground">كود الخصم</h3>
+  <p className="text-sm text-muted-foreground">أدخل كود الخصم للحصول على سعر مخفض أو مزايا إضافية</p>
+  </div>
+  </div>
+  <div className="flex flex-col sm:flex-row gap-[var(--spacing-small-gap)]">
+  <div className="relative flex-1">
+  <input
+  type="text"
+  value={couponCode}
+  onChange={(e) => setCouponCode(e.target.value)}
+  placeholder="مثال: SUMMER20"
+  disabled={couponLoading}
+  className="w-full px-4 py-2.5 min-h-[44px] border border-[var(--border)] rounded-lg focus:ring-2 focus:ring-ring focus:border-transparent disabled:opacity-50"
+  />
+  </div>
+  <button
+  onClick={handleApplyCoupon}
+  disabled={couponLoading || !couponCode.trim()}
+  className="w-full sm:w-auto inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2.5 min-h-[44px] bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg hover:bg-[var(--primary)]/90 transition-colors disabled:opacity-50 text-sm font-medium"
+  >
+  {couponLoading ? (
+  <>
+  <Loader2 className="w-4 h-4 animate-spin" />
+  جاري التحقق...
+  </>
+  ) : (
+  "تطبيق"
+  )}
+  </button>
+  {appliedCoupon && (
+  <button
+  onClick={handleRemoveCoupon}
+  className="w-full sm:w-auto inline-flex items-center justify-center gap-[var(--spacing-small-gap)] px-4 py-2.5 min-h-[44px] border border-[var(--border)] text-foreground rounded-lg hover:bg-muted transition-colors text-sm font-medium"
+  >
+  <X className="w-4 h-4" />
+  إزالة
+  </button>
+  )}
+  </div>
+  {couponError && (
+  <div className="mt-3 flex items-start gap-[var(--spacing-small-gap)] text-sm text-[var(--destructive)]">
+  <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+  <span>{couponError}</span>
+  </div>
+  )}
+  {couponSuccess && (
+  <div className="mt-3 flex items-start gap-[var(--spacing-small-gap)] text-sm text-green-700">
+  <Check className="w-4 h-4 shrink-0 mt-0.5" />
+  <span>{couponSuccess}</span>
+  </div>
+  )}
+  </div>
+  )}
+
+  <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-small-gap)] ${packages.length < 3 ? 'max-w-4xl mx-auto' : ''}`}>
+  {packages.map((pkg, idx) => {
+  const Icon = accentIcons[idx % accentIcons.length];
+  const accent = accentColors[idx % accentColors.length];
+  const grad = gradients[idx % gradients.length];
+  const isRecommended = idx === 1;
+  const isCurrentPackage = activeSubscription?.packageId === pkg.id;
+
+  const couponApplicable = appliedCoupon
+  ? appliedCoupon.applicablePackageIds.length === 0 || appliedCoupon.applicablePackageIds.includes(pkg.id)
+  : false;
+  const displayOriginalMonthly = couponApplicable ? appliedCoupon?.originalAmount ?? pkg.priceMonthly : pkg.priceMonthly;
+  const displayFinalMonthly = couponApplicable ? appliedCoupon?.finalAmount ?? pkg.priceMonthly : pkg.priceMonthly;
+  const hasDiscount = couponApplicable && displayFinalMonthly < displayOriginalMonthly;
+  const extraMonths = couponApplicable ? appliedCoupon?.extraMonths ?? 0 : 0;
+  const extraProjects = couponApplicable ? appliedCoupon?.extraProjects ?? 0 : 0;
+  const showCouponNotApplicable = appliedCoupon && !couponApplicable;
+
+  return (
+  <div
+  key={pkg.id}
+  className={`rounded-2xl p-5 sm:p-6 lg:p-7 border relative transition-all hover:shadow-lg ${isCurrentPackage ? 'bg-[var(--primary)]/[0.08]/50' : 'bg-[var(--card)]'}`}
+  style={{
+  borderColor: isCurrentPackage ? '#10B981' : isRecommended ? accent : "#E2E8F0",
+  boxShadow: isCurrentPackage ? '0 16px 48px rgba(16,185,129,0.15)' : isRecommended ? `0 16px 48px ${accent}20` : "0 4px 12px rgba(0,0,0,0.05)",
+  }}
+  >
+  {isRecommended && !isCurrentPackage && (
+  <div
+  className="absolute top-3 left-3 sm:top-4 sm:left-4 text-[var(--primary-foreground)] text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full"
+  style={{ background: accent }}
+  >
+  الأكثر طلباً
+  </div>
+  )}
+  {isCurrentPackage && (
+  <div
+  className="absolute top-3 left-3 sm:top-4 sm:left-4 text-[var(--primary-foreground)] text-xs font-bold px-2.5 sm:px-3 py-1 rounded-full bg-[var(--primary)]"
+  >
+  باقتك الحالية
+  </div>
+  )}
+
+  <div
+  className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-4 sm:mb-5"
+  style={{ background: `linear-gradient(135deg, ${grad.from}, ${grad.to})` }}
+  >
+  <Icon size={22} color="#fff" className="sm:w-6 sm:h-6" />
+  </div>
+
+  <h3 className="text-lg sm:text-xl font-bold text-foreground mb-1">{pkg.name}</h3>
+  <p className="text-sm text-muted-foreground mb-4 sm:mb-5">{pkg.description}</p>
+
+   <div className="mb-5 sm:mb-6">
+   <div className="flex items-baseline gap-2 flex-wrap">
+   {hasDiscount && (
+   <span className="text-xl sm:text-2xl font-bold text-muted-foreground line-through">
+   {displayOriginalMonthly.toLocaleString("ar-SA")} ريال/شهر
+   </span>
+   )}
+   <span className="text-3xl sm:text-4xl font-extrabold" style={{ color: accent }}>
+   {displayFinalMonthly.toLocaleString("ar-SA")}
+   </span>
+   <span className="text-sm sm:text-base text-muted-foreground">ريال/شهر</span>
+   </div>
+   <p className="text-sm text-card-foreground mt-1">
+   {pkg.projectLimit} {extraProjects > 0 ? `(+ ${extraProjects} مشاريع إضافية)` : ""} مشاريع
    </p>
-   <div className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
-   <a
-   href="tel:+966556534433"
-   className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--card)] border border-ring/50 rounded-lg text-foreground text-sm font-medium transition-colors"
-   >
-   <Phone className="w-4 h-4" />
-   اتصل بنا
-   </a>
-   <a
-   href="https://wa.me/+966556534433"
-   target="_blank"
-   rel="noopener noreferrer"
-   className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-lg text-sm font-medium hover:bg-[var(--primary)]/[0.9] transition-colors"
-   >
-   <MessageCircle className="w-4 h-4" />
-   واتساب
-   </a>
+   {extraMonths > 0 && (
+   <p className="text-sm text-[var(--primary)] mt-1 font-medium">
+   مدة الاشتراك: شهر + {extraMonths} {extraMonths === 1 ? "شهر" : "أشهر"} إضافية
+   </p>
+   )}
+   {showCouponNotApplicable && (
+   <p className="text-xs text-muted-foreground mt-1">لا ينطبق على هذه الباقة</p>
+   )}
    </div>
-   <p className="text-xs text-foreground mt-2 text-center" dir="ltr">+966 55 653 4433</p>
-   </div>
-
- {activeSubscription && (
- <div className="mb-8 p-[var(--spacing-card-padding)] rounded-xl bg-[var(--primary)]/[0.08] border border-green-200 text-[var(--primary)]/[0.8] flex items-start gap-[var(--spacing-small-gap)]">
- <Check className="w-5 h-5 shrink-0 mt-0.5" />
- <div>
- <p className="font-medium">
- لديك اشتراك نشط حالياً: {activeSubscription.packageName}
- </p>
- <p className="text-sm mt-1">
- إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
- </p>
- </div>
- </div>
- )}
-
- {error && (
- <div className={`mb-8 p-[var(--spacing-card-padding)] rounded-xl flex items-start gap-[var(--spacing-small-gap)] ${notStartedStatus || requiredDocumentsMissing ? 'bg-[var(--warning)]/[0.08] border border-[var(--warning)]/[0.3] text-amber-800' : 'bg-[var(--destructive)]/[0.08] border border-[var(--destructive)]/[0.3] text-[var(--destructive)]'}`}>
- <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
- <div className="flex-1">
- <div className="space-y-[var(--spacing-small-gap)]">
- <span>{error}</span>
- {notStartedStatus && (
- <p>
- ابدأ التقييم الآن{" "}
- <button
- onClick={() => navigate('/dashboard/charity-assessment')}
- className="inline font-medium underline hover:no-underline"
- >
- بالضغط هنا
- </button>{" "}
- وفتح صفحة تقييم الجمعية.
- </p>
- )}
- {requiredDocumentsMissing && (
- <p>
- لإتمام الاشتراك، يرجى رفع المستندات المطلوبة{" "}
- <button
- onClick={() => navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}`)}
- className="inline font-medium underline hover:no-underline"
- >
- بالضغط هنا
- </button>
- .
- </p>
- )}
- </div>
- {notStartedStatus && (
- <div className="mt-3">
- <button
- onClick={() => navigate('/dashboard/charity-assessment')}
- className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-amber-600 text-[var(--primary-foreground)] rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
- >
- ابدأ التقييم الآن
- <Zap className="w-4 h-4" />
- </button>
- </div>
- )}
- {requiredDocumentsMissing && (
- <div className="mt-3">
- <button
- onClick={() => navigate(`/dashboard/onboarding/info?tab=documents&organizationId=${encodeURIComponent(organizationId || '')}`)}
- className="inline-flex items-center gap-[var(--spacing-small-gap)] px-4 py-2 bg-amber-600 text-[var(--primary-foreground)] rounded-lg hover:bg-amber-700 transition-colors text-sm font-medium"
- >
- رفع المستندات المطلوبة
- <Zap className="w-4 h-4" />
- </button>
- </div>
- )}
- </div>
- </div>
- )}
-
- <div className="grid grid-cols-1 md:grid-cols-3 gap-[var(--spacing-small-gap)] sm:p-[var(--spacing-card-padding)] sm:p-[var(--spacing-card-padding)]">
- {packages.map((pkg, idx) => {
- const Icon = accentIcons[idx % accentIcons.length];
- const accent = accentColors[idx % accentColors.length];
- const grad = gradients[idx % gradients.length];
- const isRecommended = idx === 1;
- const isCurrentPackage = activeSubscription?.packageId === pkg.id;
-
- return (
- <div
- key={pkg.id}
- className={`rounded-2xl p-7 border relative transition-all hover:shadow-lg ${isCurrentPackage ? 'bg-[var(--primary)]/[0.08]/50' : 'bg-[var(--card)]'}`}
- style={{
- borderColor: isCurrentPackage ? '#10B981' : isRecommended ? accent : "#E2E8F0",
- boxShadow: isCurrentPackage ? '0 16px 48px rgba(16,185,129,0.15)' : isRecommended ? `0 16px 48px ${accent}20` : "0 4px 12px rgba(0,0,0,0.05)",
- }}
- >
- {isRecommended && !isCurrentPackage && (
- <div
- className="absolute top-4 left-4 text-[var(--primary-foreground)] text-xs font-bold px-3 py-1 rounded-full"
- style={{ background: accent }}
- >
- الأكثر طلباً
- </div>
- )}
- {isCurrentPackage && (
- <div
- className="absolute top-4 left-4 text-[var(--primary-foreground)] text-xs font-bold px-3 py-1 rounded-full bg-[var(--primary)]"
- >
- باقتك الحالية
- </div>
- )}
-
- <div
- className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
- style={{ background: `linear-gradient(135deg, ${grad.from}, ${grad.to})` }}
- >
- <Icon size={24} color="#fff" />
- </div>
-
- <h3 className="text-xl font-bold text-foreground mb-1">{pkg.name}</h3>
- <p className="text-sm text-muted-foreground mb-5">{pkg.description}</p>
-
- <div className="mb-6">
- <span className="text-4xl font-extrabold" style={{ color: accent }}>
- {pkg.priceMonthly.toLocaleString("ar-SA")}
- </span>
- <span className="text-base text-muted-foreground mr-2">ريال/شهر</span>
-  <p className="text-sm text-card-foreground mt-1">{pkg.projectLimit} مشاريع</p>
- </div>
 
  {/* SLA Badge */}
- <div
- onClick={() => openSlaModal(pkg)}
- className="flex items-center gap-[var(--spacing-small-gap)] mb-4 p-[var(--spacing-card-padding)] rounded-xl cursor-pointer hover:bg-opacity-100 transition-colors"
- style={{ background: `${accent}08` }}
- >
- <Shield size={16} color={accent} />
- <div className="flex-1">
-  <div className="text-xs font-semibold text-card-foreground">اتفاقية مستوى الخدمة</div>
-  <div className="text-xs text-muted-foreground">{pkg.sla || 'مستوى أساسي'}</div>
- </div>
- </div>
+  <div
+  onClick={() => openSlaModal(pkg)}
+  className="flex items-center gap-[var(--spacing-small-gap)] mb-3 sm:mb-4 p-3 sm:p-[var(--spacing-card-padding)] rounded-xl cursor-pointer hover:bg-opacity-100 transition-colors"
+  style={{ background: `${accent}08` }}
+  >
+  <Shield size={16} color={accent} />
+  <div className="flex-1">
+   <div className="text-xs font-semibold text-card-foreground">اتفاقية مستوى الخدمة</div>
+   <div className="text-xs text-muted-foreground">{pkg.sla || 'مستوى أساسي'}</div>
+  </div>
+  </div>
 
- {!activeSubscription && (
- <>
- <button
- onClick={() => openSlaModal(pkg)}
- disabled={subscribingId === pkg.id}
- className="w-full py-3.5 rounded-xl text-[var(--primary-foreground)] font-bold text-base mb-3 transition-opacity hover:opacity-90 disabled:opacity-50"
- style={{ background: accent }}
- >
+  {!activeSubscription && (
+  <>
+  <button
+  onClick={() => openSlaModal(pkg)}
+  disabled={subscribingId === pkg.id}
+  className="w-full py-3 sm:py-3.5 rounded-xl text-[var(--primary-foreground)] font-bold text-base mb-3 transition-opacity hover:opacity-90 disabled:opacity-50"
+  style={{ background: accent }}
+  >
  {subscribingId === pkg.id ? (
  <span className="flex items-center justify-center gap-[var(--spacing-small-gap)]">
  <Loader2 className="w-4 h-4 animate-spin" />
@@ -715,12 +873,12 @@ export function PricingPage() {
  </div>
  )}
 
- {/* SLA / Terms Modal */}
- {slaModalOpen && (
- <div className="fixed inset-0 bg-[var(--text-primary)]/[0.5] flex items-center justify-center z-50 p-[var(--spacing-card-padding)]" dir="rtl">
- <div className="bg-[var(--card)] rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-2xl">
- {/* Header */}
- <div className="p-[var(--spacing-card-padding)] border-b border-border flex items-center justify-between">
+  {/* SLA / Terms Modal */}
+  {slaModalOpen && (
+  <div className="fixed inset-0 bg-[var(--text-primary)]/[0.5] flex items-center justify-center z-50 p-3 sm:p-[var(--spacing-card-padding)]" dir="rtl">
+  <div className="bg-[var(--card)] rounded-2xl w-full max-w-full sm:max-w-2xl max-h-[92vh] sm:max-h-[90vh] flex flex-col shadow-2xl">
+  {/* Header */}
+  <div className="p-4 sm:p-[var(--spacing-card-padding)] border-b border-border flex items-center justify-between">
  <div className="flex items-center gap-[var(--spacing-small-gap)]">
  <ScrollText className="w-6 h-6 text-[var(--secondary)]" />
  <div>
@@ -736,12 +894,12 @@ export function PricingPage() {
  </button>
  </div>
 
- {/* Content */}
- <div
- ref={slaScrollRef}
- onScroll={handleSlaScroll}
- className="flex-1 overflow-y-auto p-[var(--spacing-card-padding)] space-y-[var(--spacing-section-gap)]"
- >
+  {/* Content */}
+  <div
+  ref={slaScrollRef}
+  onScroll={handleSlaScroll}
+  className="flex-1 overflow-y-auto p-4 sm:p-[var(--spacing-card-padding)] space-y-[var(--spacing-section-gap)]"
+  >
  {detailLoading ? (
  <div className="flex items-center justify-center py-12">
  <Loader2 className="w-8 h-8 animate-spin text-[var(--secondary)]" />
@@ -863,62 +1021,89 @@ export function PricingPage() {
  </div>
 
  {/* Terms Checkbox */}
- <div className="mt-6 p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-xl border border-[var(--secondary)]/[0.2]">
- <label className="flex items-start gap-[var(--spacing-small-gap)] cursor-pointer">
- <input
- type="checkbox"
- checked={slaAccepted}
- onChange={(e) => setSlaAccepted(e.target.checked)}
- className="w-5 h-5 mt-0.5 text-[var(--secondary)] rounded-lg focus:ring-ring"
- />
-  <span className="text-sm text-card-foreground leading-relaxed">
-  قرأت ووافقت على اتفاقية مستوى الخدمة (SLA) وأقر بأنني فهمت جميع التزاماتي والتزامات المنصة الموضحة أعلاه.
-  </span>
- </label>
- </div>
+  <div className="mt-6 p-3 sm:p-[var(--spacing-card-padding)] bg-muted/[0.08] rounded-xl border border-[var(--secondary)]/[0.2]">
+  <label className="flex items-start gap-[var(--spacing-small-gap)] cursor-pointer">
+  <input
+  type="checkbox"
+  checked={slaAccepted}
+  onChange={(e) => setSlaAccepted(e.target.checked)}
+  className="w-5 h-5 mt-0.5 text-[var(--secondary)] rounded-lg focus:ring-ring shrink-0"
+  />
+   <span className="text-sm text-card-foreground leading-relaxed">
+   قرأت ووافقت على اتفاقية مستوى الخدمة (SLA) وأقر بأنني فهمت جميع التزاماتي والتزامات المنصة الموضحة أعلاه.
+   </span>
+  </label>
+  </div>
  </>
  ) : (
  <div className="text-center py-12 text-muted-foreground">تعذر تحميل تفاصيل الباقة</div>
  )}
  </div>
 
- {/* Footer with Progress */}
- {!detailLoading && selectedPkg && (
- <div className="p-[var(--spacing-card-padding)] border-t border-border">
- <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
- <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
- <div
- className="h-full bg-[var(--primary)] transition-all duration-300"
- style={{ width: `${slaScrollProgress}%` }}
- />
- </div>
- <span className="text-xs font-semibold text-muted-foreground w-10 text-left">
- {slaScrollProgress}%
- </span>
- </div>
- {activeSubscription?.packageId === selectedPkg.id ? (
-  <div className="w-full py-3.5 rounded-xl text-[var(--primary)] bg-emerald-100/90 font-bold text-base text-center">
- هذه باقتك الحالية
- </div>
- ) : activeSubscription ? (
-  <div className="w-full py-3.5 rounded-xl text-card-foreground bg-[var(--hover)] font-bold text-base text-center">
- لديك اشتراك نشط. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
- </div>
- ) : (
- <button
- onClick={confirmSlaAndProceed}
- disabled={!slaAccepted}
- className="w-full py-3.5 rounded-xl text-[var(--primary-foreground)] font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
- style={{
- background: slaAccepted ? 'var(--primary)' : 'var(--text-disabled)',
- boxShadow: slaAccepted ? '0 4px 20px rgba(var(--primary-rgb),0.3)' : 'none',
- }}
- >
- {slaAccepted ? "متابعة للدفع" : "يرجى قبول الاتفاقية أولاً"}
- </button>
- )}
- </div>
- )}
+  {/* Footer with Progress */}
+  {!detailLoading && selectedPkg && (
+  <div className="p-4 sm:p-[var(--spacing-card-padding)] border-t border-border">
+  <div className="flex items-center gap-[var(--spacing-small-gap)] mb-4">
+  <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+  <div
+  className="h-full bg-[var(--primary)] transition-all duration-300"
+  style={{ width: `${slaScrollProgress}%` }}
+  />
+  </div>
+  <span className="text-xs font-semibold text-muted-foreground w-10 text-left">
+  {slaScrollProgress}%
+  </span>
+  </div>
+
+  {/* Coupon summary in modal footer */}
+  {!activeSubscription && selectedPkg.couponPreview?.valid && (
+  <div className="mb-4 p-3 bg-[var(--primary)]/[0.06] border border-[var(--primary)]/[0.2] rounded-lg text-sm">
+  <div className="font-medium text-foreground mb-1">
+  كود الخصم: {selectedPkg.couponPreview.code}
+  </div>
+  <div className="flex items-center gap-2 flex-wrap">
+  {selectedPkg.couponPreview.discountAmount > 0 && (
+  <>
+  <span className="text-muted-foreground line-through">
+  {selectedPkg.couponPreview.originalAmount.toLocaleString("ar-SA")} ريال/شهر
+  </span>
+  <span className="font-bold text-[var(--primary)]">
+  {selectedPkg.couponPreview.finalAmount.toLocaleString("ar-SA")} ريال/شهر
+  </span>
+  </>
+  )}
+  {selectedPkg.couponPreview.discountAmount === 0 && selectedPkg.couponPreview.extraMonths > 0 && (
+  <span className="font-bold text-[var(--primary)]">
+  مدة الاشتراك: شهر + {selectedPkg.couponPreview.extraMonths} {selectedPkg.couponPreview.extraMonths === 1 ? "شهر" : "أشهر"} إضافية
+  </span>
+  )}
+  </div>
+  </div>
+  )}
+
+  {activeSubscription?.packageId === selectedPkg.id ? (
+   <div className="w-full py-3.5 rounded-xl text-[var(--primary)] bg-emerald-100/90 font-bold text-base text-center">
+  هذه باقتك الحالية
+  </div>
+  ) : activeSubscription ? (
+   <div className="w-full py-3.5 rounded-xl text-card-foreground bg-[var(--hover)] font-bold text-base text-center">
+  لديك اشتراك نشط. إذا كنت ترغب في تغيير الباقة، يرجى التواصل مع الدعم.
+  </div>
+  ) : (
+  <button
+  onClick={confirmSlaAndProceed}
+  disabled={!slaAccepted}
+  className="w-full py-3.5 rounded-xl text-[var(--primary-foreground)] font-bold text-base transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+  style={{
+  background: slaAccepted ? 'var(--primary)' : 'var(--text-disabled)',
+  boxShadow: slaAccepted ? '0 4px 20px rgba(var(--primary-rgb),0.3)' : 'none',
+  }}
+  >
+  {slaAccepted ? "متابعة للدفع" : "يرجى قبول الاتفاقية أولاً"}
+  </button>
+  )}
+  </div>
+  )}
  </div>
  </div>
  )}

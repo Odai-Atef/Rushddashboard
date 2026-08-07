@@ -54,11 +54,13 @@ export interface PaymentStatus {
 
 export interface CreateSubscriptionDto {
  packageId: string;
+ promoCode?: string;
 }
 
 export interface InitiatePaymentDto {
  subscriptionId: string;
  returnUrl: string;
+ promoCode?: string;
 }
 
 export interface RetryPaymentDto {
@@ -85,6 +87,18 @@ export interface ManagedSubscriptionListResponse {
  page: number;
  limit: number;
  totalPages: number;
+}
+
+export interface CouponValidationResult {
+ code: string;
+ type: string;
+ originalAmount: number;
+ discountAmount: number;
+ finalAmount: number;
+ currency: string;
+ extraMonths: number;
+ extraProjects: number;
+ applicablePackageIds: string[];
 }
 
 export interface Coupon {
@@ -186,11 +200,27 @@ export class SubscriptionService {
  return apiClient.post<PaymentInitiation>(`/api/v1/subscriptions/payments/${paymentId}/retry`, data, config);
  }
 
- /**
- * List subscriptions for project managers (admin)
- * GET /api/v1/admin/subscriptions
- */
- async getManagedSubscriptions(
+  /**
+   * Validate a coupon/promotion code for a package
+   * POST /api/v1/subscriptions/coupons/validate
+   */
+  async validateCoupon(
+    code: string,
+    packageId: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<{ success: boolean; data: CouponValidationResult }>> {
+    return apiClient.post<{ success: boolean; data: CouponValidationResult }>(
+      '/api/v1/subscriptions/coupons/validate',
+      { code, packageId },
+      config
+    );
+  }
+
+  /**
+   * List subscriptions for project managers (admin)
+   * GET /api/v1/admin/subscriptions
+   */
+  async getManagedSubscriptions(
  params?: Record<string, string | number | undefined>,
  config?: RequestConfig
  ): Promise<ApiResponse<{ data: ManagedSubscriptionListResponse }>> {
