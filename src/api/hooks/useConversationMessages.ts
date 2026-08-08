@@ -22,7 +22,8 @@ const DEFAULT_LIMIT = 50;
 const MAX_CONTENT_LENGTH = 10000;
 
 export interface SendMessageOptions {
- replyToId?: string;
+  replyToId?: string;
+  attachmentIds?: string[];
 }
 
 export interface UseConversationMessagesReturn {
@@ -164,31 +165,48 @@ export function useConversationMessages(
  const optimisticId = `optimistic-${++optimisticIdRef.current}`;
  const now = nextCreatedAt();
 
- const optimisticMessage: Message = {
- id: optimisticId,
- conversationId,
- senderUserId: 'me',
- content: trimmed,
- messageType: 'TEXT',
- status: 'SENDING',
- replyToId: options?.replyToId ?? null,
- isPinned: false,
- editedAt: null,
- deletedAt: null,
- createdAt: now,
- updatedAt: now,
- };
+  const optimisticAttachments: Message['attachments'] = options?.attachmentIds?.length
+      ? options.attachmentIds.map((id, index) => ({
+          id,
+          fileId: id,
+          conversationId,
+          messageId: optimisticId,
+          fileName: 'ملف مرفق',
+          fileSize: 0,
+          mimeType: 'application/pdf',
+          attachmentType: 'DOCUMENT' as const,
+          projectStage: null,
+          uploadedByUserId: 'me',
+          createdAt: now,
+        }))
+      : undefined;
+
+    const optimisticMessage: Message = {
+      id: optimisticId,
+      conversationId,
+      senderUserId: 'me',
+      content: trimmed,
+      messageType: 'TEXT',
+      status: 'SENDING',
+      replyToId: options?.replyToId ?? null,
+      isPinned: false,
+      editedAt: null,
+      deletedAt: null,
+      createdAt: now,
+      updatedAt: now,
+      attachments: optimisticAttachments,
+      };
 
  setIsSending(true);
  setMessages((prev) => sortMessages([...prev, optimisticMessage]));
 
  try {
- const dto: CreateMessageDto = {
- content: trimmed,
- messageType: 'TEXT',
- ...(options?.replyToId ? { replyToId: options.replyToId } : {}),
- attachmentIds: [],
- };
+  const dto: CreateMessageDto = {
+      content: trimmed,
+      messageType: 'TEXT',
+      ...(options?.replyToId ? { replyToId: options.replyToId } : {}),
+      attachmentIds: options?.attachmentIds ?? [],
+      };
  const response = await collaborationService.sendMessage(
  projectId,
  conversationId,
@@ -197,12 +215,15 @@ export function useConversationMessages(
 
  if (!isMountedRef.current) return;
 
- const sent = response.data;
- setMessages((prev) => {
- const withoutOptimistic = prev.filter((m) => m.id !== optimisticId);
- const merged = mergeMessages(withoutOptimistic, [sent]);
- return sortMessages(merged);
- });
+    const sent = response.data;
+    setMessages((prev) => {
+      const withoutOptimistic = prev.filter((m) => m.id !== optimisticId);
+      // If the server did not echo the attachments back, preserve them from the optimistic message
+      // so the UI keeps showing the file until the next history refresh.
+      const normalizedSent: Message = sent.attachments?.length ? sent : { ...sent, attachments: optimisticMessage.attachments };
+      const merged = mergeMessages(withoutOptimistic, [normalizedSent]);
+      return sortMessages(merged);
+    });
  } catch (err) {
  if (!isMountedRef.current) return;
  setMessages((prev) =>
@@ -242,12 +263,12 @@ export function useConversationMessages(
  );
 
  try {
- const dto: CreateMessageDto = {
- content: message.content.trim(),
- messageType: 'TEXT',
- ...(message.replyToId ? { replyToId: message.replyToId } : {}),
- attachmentIds: [],
- };
+  const dto: CreateMessageDto = {
+      content: message.content.trim(),
+      messageType: 'TEXT',
+      ...(message.replyToId ? { replyToId: message.replyToId } : {}),
+      attachmentIds: message.attachments?.map((a) => a.id) ?? [],
+      };
  const response = await collaborationService.sendMessage(
  projectId,
  conversationId,

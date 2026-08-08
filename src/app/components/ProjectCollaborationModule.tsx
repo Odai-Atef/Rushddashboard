@@ -601,11 +601,20 @@ function ChatView({
  const navigate = useNavigate();
  const effectiveCurrentUserId = currentUserId || user?.id || null;
  const [messageInput, setMessageInput] = useState('');
- const [replyToId, setReplyToId] = useState<string | null>(null);
- const [replyPreview, setReplyPreview] = useState<string | null>(null);
- const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
- const [editInput, setEditInput] = useState('');
- const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+const [replyToId, setReplyToId] = useState<string | null>(null);
+  const [replyPreview, setReplyPreview] = useState<string | null>(null);
+  const [editingMessageId, setEditingMessageId] = useState<string | null>(null);
+  const [editInput, setEditInput] = useState('');
+  const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
+
+  // PDF attachment state for chat composer
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
+  const [pendingAttachmentId, setPendingAttachmentId] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  const attachmentMutations = useAttachmentMutations(projectId);
 
  // Auto-scroll: track previous message count so we only snap to bottom when NEW messages arrive
  const prevMessageCountRef = useRef<number>(0);
@@ -667,24 +676,107 @@ function ChatView({
  return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
  }, [markVisibleUnreadMessages]);
 
- const handleSend = async () => {
- const trimmed = messageInput.trim();
- const validation = validateMessageContent(trimmed);
- if (!validation.valid) {
- toast.error(validation.error ?? 'رسالة غير صالحة');
- return;
- }
+  const MAX_CHAT_ATTACHMENT_SIZE = 20 * 1024 * 1024; // 20 MB
 
- try {
- await sendMessage(trimmed, replyToId ? { replyToId } : undefined);
- setMessageInput('');
- setReplyToId(null);
- setReplyPreview(null);
- } catch (err) {
- // Input text is preserved for retry; error toast is shown by the hook consumer via messagesError.
- toast.error(getCollaborationErrorMessage(err));
- }
- };
+  const validatePendingFile = (file: File): { valid: boolean; error?: string } => {
+    if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+      return { valid: false, error: 'يُسمح فقط بملفات PDF' };
+    }
+    if (file.size > MAX_CHAT_ATTACHMENT_SIZE) {
+      return { valid: false, error: 'حجم الملف يتجاوز 20 ميجابايت' };
+    }
+    return { valid: true };
+  };
+
+  const handleSelectFile = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validation = validatePendingFile(file);
+    if (!validation.valid) {
+      toast.error(validation.error ?? 'ملف غير صالح');
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      return;
+    }
+
+    setPendingFile(file);
+    setPendingAttachmentId(null);
+    setUploadProgress(0);
+    setIsUploading(true);
+
+    try {
+      const attachment = await attachmentMutations.upload(file, undefined, (progress) => {
+        setUploadProgress(progress.percentage);
+      });
+
+      if (!attachment) {
+        toast.error(attachmentMutations.error ?? 'فشل رفع الملف');
+        setPendingAttachmentId(null);
+      } else {
+        setPendingAttachmentId(attachment.id);
+        toast.success('تم رفع الملف بنجاح');
+      }
+    } catch (err) {
+      toast.error(getCollaborationErrorMessage(err) ?? 'فشل رفع الملف');
+      setPendingAttachmentId(null);
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+    }
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const clearPendingFile = () => {
+    setPendingFile(null);
+    setPendingAttachmentId(null);
+    setUploadProgress(0);
+    setIsUploading(false);
+  };
+
+  const handleSend = async () => {
+    const trimmed = messageInput.trim();
+
+    if (!trimmed && !pendingFile) {
+      toast.error('لا يمكن إرسال رسالة فارغة');
+      return;
+    }
+
+    if (trimmed) {
+      const validation = validateMessageContent(trimmed);
+      if (!validation.valid) {
+        toast.error(validation.error ?? 'رسالة غير صالحة');
+        return;
+      }
+    }
+
+    if (pendingFile && !pendingAttachmentId) {
+      toast.error('الملف قيد الرفع، يرجى الانتظار حتى يكتمل');
+      return;
+    }
+
+    try {
+      await sendMessage(trimmed, {
+        ...(replyToId ? { replyToId } : {}),
+        ...(pendingAttachmentId ? { attachmentIds: [pendingAttachmentId] } : {}),
+      });
+      setMessageInput('');
+      setReplyToId(null);
+      setReplyPreview(null);
+      clearPendingFile();
+    } catch (err) {
+      // Input text and pending file are preserved for retry; error toast is shown by the hook consumer via messagesError.
+      toast.error(getCollaborationErrorMessage(err));
+    }
+  };
 
  const startReply = (msg: ApiMessage) => {
  setReplyToId(msg.id);
@@ -948,35 +1040,65 @@ function ChatView({
   {/* Message Input */}
   <div className="p-4 border-t border-border md:static fixed bottom-0 left-0 right-0 bg-card z-20 md:z-auto md:rounded-b-xl">
   {replyPreview && (
- <div className="mb-2 p-[var(--spacing-small-gap)] bg-muted border border-border rounded-lg flex items-center justify-between">
- <div className="text-sm text-muted-foreground truncate max-w-md">
- <span className="font-medium text-foreground">رد على:</span>{' '}
- {replyPreview}
- </div>
- <button
- onClick={cancelReply}
- className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg"
- aria-label="إلغاء الرد"
- >
- <X className="w-4 h-4 text-muted-foreground" />
- </button>
- </div>
- )}
-  <div className="flex gap-[var(--spacing-small-gap)] items-end">
-  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg flex-shrink-0"
+  <div className="mb-2 p-[var(--spacing-small-gap)] bg-muted border border-border rounded-lg flex items-center justify-between">
+  <div className="text-sm text-muted-foreground truncate max-w-md">
+  <span className="font-medium text-foreground">رد على:</span>{' '}
+  {replyPreview}
+  </div>
+  <button
+  onClick={cancelReply}
+  className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg"
+  aria-label="إلغاء الرد"
+  >
+  <X className="w-4 h-4 text-muted-foreground" />
+  </button>
+  </div>
+  )}
+
+  {pendingFile && (
+  <div className="mb-2 p-[var(--spacing-small-gap)] bg-muted border border-border rounded-lg flex items-center justify-between">
+  <div className="flex items-center gap-[var(--spacing-small-gap)] min-w-0">
+  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary">
+  <FileText className="w-4 h-4" />
+  </div>
+  <div className="min-w-0 text-right">
+  <p className="text-sm font-medium truncate">{pendingFile.name}</p>
+  {isUploading ? (
+  <p className="text-xs text-muted-foreground">جاري الرفع... {uploadProgress}%</p>
+  ) : pendingAttachmentId ? (
+  <p className="text-xs text-muted-foreground">جاهز للإرسال</p>
+  ) : (
+  <p className="text-xs text-[var(--destructive)]">فشل الرفع</p>
+  )}
+  </div>
+  </div>
+  <button
+  onClick={clearPendingFile}
+  disabled={isUploading}
+  className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg disabled:opacity-50"
+  aria-label="إزالة الملف"
+  >
+  <X className="w-4 h-4 text-muted-foreground" />
+  </button>
+  </div>
+  )}
+
+   <div className="flex gap-[var(--spacing-small-gap)] items-end">
+  <input
+  ref={fileInputRef}
+  type="file"
+  accept=".pdf,application/pdf"
+  className="hidden"
+  onChange={handleFileChange}
+  aria-label="اختيار ملف PDF"
+  />
+   <button
+  onClick={handleSelectFile}
+  disabled={isUploading || !!pendingFile}
+  className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg flex-shrink-0 disabled:opacity-50"
   aria-label="إرفاق ملف"
   >
   <Paperclip className="w-5 h-5 text-muted-foreground" />
-  </button>
-  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg flex-shrink-0"
-  aria-label="إرفاق صورة"
-  >
-  <ImageIcon className="w-5 h-5 text-muted-foreground" />
-  </button>
-  <button className="p-[var(--spacing-small-gap)] hover:bg-muted rounded-lg flex-shrink-0 hidden sm:block"
-  aria-label="تسجيل صوتي"
-  >
-  <Mic className="w-5 h-5 text-muted-foreground" />
   </button>
   <input
   type="text"
@@ -988,7 +1110,7 @@ function ChatView({
   />
   <button
   onClick={handleSend}
-  disabled={isSending || !messageInput.trim()}
+  disabled={isSending || isUploading || (!messageInput.trim() && !pendingFile)}
   className="px-4 md:px-6 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 flex items-center justify-center gap-[var(--spacing-small-gap)] disabled:opacity-60 flex-shrink-0 min-w-[44px]"
   aria-label="إرسال"
   >
